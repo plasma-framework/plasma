@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings version="1.0"
+               xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+    <jxb:globalBindings
+         fixedAttributeAsConstantProperty="false"
+         collectionType="java.util.ArrayList"
+         choiceContentProperty="true"
+         typesafeEnumMemberName="generateError"
+         enableFailFastCheck="false"   
+         generateIsSetMethod="false"
+         underscoreBinding="asCharInWord">
+         <xjc:simple />
+    </jxb:globalBindings>
+
+
+	<jxb:bindings schemaLocation="XMLSchema.xsd" node="/xs:schema">
+	    <jxb:schemaBindings>
+	        <jxb:package name="org.plasma.xml.schema">
+	            <jxb:javadoc><![CDATA[<body>Package level documentation for package org.plasma.xml.schema</body>]]></jxb:javadoc>
+            </jxb:package>
+	    </jxb:schemaBindings>
+	    
+	    <!-- explicitly name abstract complexTypes as '*Abstract' to avoid name
+	         collisions and yet maintain a decent Java model -->
+		<jxb:bindings node="xs:complexType[@name='complexType' and @abstract='true']">
+		    <jxb:class name="AbstractComplexType"/>
+		    <jxb:property name="AbstractComplexType"/>
+		</jxb:bindings>
+		<jxb:bindings node="xs:complexType[@name='element' and @abstract='true']">
+		    <jxb:class name="AbstractElement"/>
+		    <jxb:property name="AbstractElement"/>
+		</jxb:bindings>
+		<jxb:bindings node="xs:complexType[@name='simpleType' and @abstract='true']">
+		    <jxb:class name="AbstractSimpleType"/>
+		    <jxb:property name="AbstractSimpleType"/>
+		</jxb:bindings>
+		<jxb:bindings node="xs:complexType[@name='group' and @abstract='true']">
+		    <jxb:class name="AbstractGroup"/>
+		    <jxb:property name="AbstractGroup"/>
+		</jxb:bindings>
+		<jxb:bindings node="xs:complexType[@name='attributeGroup' and @abstract='true']">
+		    <jxb:class name="AbstractAttributeGroup"/>
+		    <jxb:property name="AbstractAttributeGroup"/>
+		</jxb:bindings>
+		
+		<jxb:bindings node="xs:complexType[@name='topLevelAttribute']">
+		    <jxb:class name="TopLevelAttributeType"/>
+		    <jxb:property name="TopLevelAttributeType"/>
+		</jxb:bindings>
+
+
+	</jxb:bindings>
+	
+
+</jxb:bindings>

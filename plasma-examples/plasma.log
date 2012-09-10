@@ -1,0 +1,2051 @@
+10 Sep 2012 18:07:17,493 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:07:17,525 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:07:17,603 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:07:17,603 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:07:17,650 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:07:17,681 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:07:17,759 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:07:17,759 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:07:17,868 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:07:17,962 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:07:18,009 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:07:18,024 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:07:18,056 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:07:18,087 INFO  [main] library.Library initializing...
+10 Sep 2012 18:07:18,477 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:07:18,477 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:07:18,555 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:07:18,555 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:07:21,569 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:07:21,569 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:07:21,725 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:07:21,725 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:07:21,772 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:07:21,772 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:07:22,709 INFO  [main] bind.PlasmaQueryDataBinding loading schema chain...
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression this: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Expression xmlns:ns2="http://www.servicelabs.org/plasma/query">
+    <ns2:Term>
+        <ns2:Property name="seqId"/>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:RelationalOperator>equals</ns2:RelationalOperator>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:Literal>12</ns2:Literal>
+    </ns2:Term>
+</ns2:Expression>
+
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression other: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Expression xmlns:ns2="http://www.servicelabs.org/plasma/query">
+    <ns2:Term>
+        <ns2:Property name="seqId"/>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:RelationalOperator>greaterThan</ns2:RelationalOperator>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:Literal>13</ns2:Literal>
+    </ns2:Term>
+</ns2:Expression>
+
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression parent is null
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression this: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Expression id="synthetic" xmlns:ns2="http://www.servicelabs.org/plasma/query">
+    <ns2:Term>
+        <ns2:Expression>
+            <ns2:Term>
+                <ns2:Property name="seqId"/>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:RelationalOperator>equals</ns2:RelationalOperator>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:Literal>12</ns2:Literal>
+            </ns2:Term>
+        </ns2:Expression>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:LogicalOperator>or</ns2:LogicalOperator>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:Expression>
+            <ns2:Term>
+                <ns2:Property name="seqId"/>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:RelationalOperator>greaterThan</ns2:RelationalOperator>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:Literal>13</ns2:Literal>
+            </ns2:Term>
+        </ns2:Expression>
+    </ns2:Term>
+</ns2:Expression>
+
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression other: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Expression xmlns:ns2="http://www.servicelabs.org/plasma/query">
+    <ns2:Term>
+        <ns2:Property name="seqId"/>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:RelationalOperator>lessThan</ns2:RelationalOperator>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:Literal>14</ns2:Literal>
+    </ns2:Term>
+</ns2:Expression>
+
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression parent is null
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression synthetic parent exists
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression this: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Expression id="synthetic" xmlns:ns2="http://www.servicelabs.org/plasma/query">
+    <ns2:Term>
+        <ns2:Expression>
+            <ns2:Term>
+                <ns2:Property name="seqId"/>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:RelationalOperator>equals</ns2:RelationalOperator>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:Literal>12</ns2:Literal>
+            </ns2:Term>
+        </ns2:Expression>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:LogicalOperator>or</ns2:LogicalOperator>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:Expression>
+            <ns2:Term>
+                <ns2:Property name="seqId"/>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:RelationalOperator>greaterThan</ns2:RelationalOperator>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:Literal>13</ns2:Literal>
+            </ns2:Term>
+        </ns2:Expression>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:LogicalOperator>or</ns2:LogicalOperator>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:Expression>
+            <ns2:Term>
+                <ns2:Property name="seqId"/>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:RelationalOperator>lessThan</ns2:RelationalOperator>
+            </ns2:Term>
+            <ns2:Term>
+                <ns2:Literal>14</ns2:Literal>
+            </ns2:Term>
+        </ns2:Expression>
+    </ns2:Term>
+</ns2:Expression>
+
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression other: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Expression xmlns:ns2="http://www.servicelabs.org/plasma/query">
+    <ns2:Term>
+        <ns2:Property name="seqId"/>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:RelationalOperator>lessThan</ns2:RelationalOperator>
+    </ns2:Term>
+    <ns2:Term>
+        <ns2:Literal>15</ns2:Literal>
+    </ns2:Term>
+</ns2:Expression>
+
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression parent is null
+10 Sep 2012 18:07:22,834 INFO  [main] model.Expression synthetic parent exists
+10 Sep 2012 18:07:33,015 INFO  [main] query.QueryTestCase testSimple: 10.025
+10 Sep 2012 18:14:34,317 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:14:34,348 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:14:34,395 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:14:34,395 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:14:34,442 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:14:34,473 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:14:34,551 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:14:34,551 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:14:34,661 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:14:34,754 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:14:34,801 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:14:34,817 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:14:34,848 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:14:34,864 INFO  [main] library.Library initializing...
+10 Sep 2012 18:14:35,270 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:14:35,270 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:14:35,348 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:14:35,348 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:14:35,629 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:14:35,644 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:14:35,769 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:14:35,769 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:14:35,816 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:14:35,816 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:14:36,144 INFO  [main] bind.PlasmaQueryDataBinding loading schema chain...
+10 Sep 2012 18:14:36,925 INFO  [main] query.QueryTestCase testSimple: 0.64
+10 Sep 2012 18:15:59,365 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:15:59,396 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:15:59,443 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:15:59,443 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:15:59,506 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:15:59,521 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:15:59,599 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:15:59,599 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:15:59,709 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:15:59,802 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:15:59,849 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:15:59,865 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:15:59,896 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:15:59,927 INFO  [main] library.Library initializing...
+10 Sep 2012 18:16:00,333 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:16:00,333 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:16:00,411 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:16:00,411 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:16:00,708 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:16:00,708 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:16:00,833 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:16:00,849 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:16:00,880 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:16:00,880 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:16:01,239 INFO  [main] bind.PlasmaQueryDataBinding loading schema chain...
+10 Sep 2012 18:16:02,426 INFO  [main] query.QueryTestCase testSimple: 1.062
+10 Sep 2012 18:23:17,707 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:23:17,707 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:23:17,770 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:23:17,770 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:23:17,832 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:23:17,848 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:23:17,926 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:23:17,926 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:23:18,035 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:23:18,129 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:23:18,175 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:23:18,191 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:23:18,222 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:23:18,253 INFO  [main] library.Library initializing...
+10 Sep 2012 18:23:18,643 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:23:18,643 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:23:18,721 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:23:18,721 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:23:18,986 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:23:18,986 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:23:19,111 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:23:19,111 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:23:19,158 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:23:19,158 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:23:19,486 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:23:19,486 DEBUG [main] model.Expression using existing synthetic expr parent for concatination
+10 Sep 2012 18:23:19,501 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:23:19,501 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:23:19,501 INFO  [main] bind.PlasmaQueryDataBinding loading schema chain...
+10 Sep 2012 18:23:20,203 INFO  [main] query.QueryTestCase testSimple: 0.561
+10 Sep 2012 18:29:46,428 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:29:46,428 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:29:46,506 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:29:46,506 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:29:46,568 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:29:46,584 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:29:46,662 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:29:46,662 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:29:46,771 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:29:46,865 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:29:46,912 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:29:46,927 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:29:46,958 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:29:46,974 INFO  [main] library.Library initializing...
+10 Sep 2012 18:29:47,380 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:29:47,380 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:29:47,458 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:29:47,458 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:29:47,754 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:29:47,754 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:29:47,879 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:29:47,879 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:29:47,926 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:29:47,926 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:29:48,269 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:29:48,269 DEBUG [main] model.Expression using existing synthetic expr parent for concatination
+10 Sep 2012 18:29:48,285 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:29:48,285 DEBUG [main] model.Expression using existing synthetic expr parent for concatination
+10 Sep 2012 18:35:44,610 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:35:44,626 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:35:44,688 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:35:44,688 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:35:44,750 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:35:44,766 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:35:44,860 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:35:44,860 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:35:44,969 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:35:45,063 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:35:45,109 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:35:45,125 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:35:45,156 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:35:45,188 INFO  [main] library.Library initializing...
+10 Sep 2012 18:35:45,609 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:35:45,609 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:35:45,687 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:35:45,687 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:35:45,968 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:35:45,968 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:35:46,109 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:35:46,109 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:35:46,155 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:35:46,155 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:35:46,546 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:35:46,546 DEBUG [main] model.Expression using existing synthetic expr parent for concatination
+10 Sep 2012 18:35:46,561 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:35:46,561 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:35:46,561 INFO  [main] bind.PlasmaQueryDataBinding loading schema chain...
+10 Sep 2012 18:35:47,435 INFO  [main] query.QueryTestCase testSimple: 0.733
+10 Sep 2012 18:45:48,623 INFO  [main] model.ModelTestCase testCreateModel
+10 Sep 2012 18:45:49,107 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:45:49,123 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:45:49,185 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:45:49,185 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:45:49,248 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:45:49,263 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:45:49,373 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:45:49,373 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:45:49,498 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:45:49,591 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:45:49,654 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:45:49,654 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:45:49,701 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:45:49,732 INFO  [main] library.Library initializing...
+10 Sep 2012 18:45:50,169 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:45:50,169 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:45:50,263 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:45:50,263 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:45:50,544 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:45:50,544 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:45:50,684 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:45:50,684 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:45:50,731 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:45:50,731 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:45:51,074 INFO  [main] model.ModelTestCase returned an instance
+10 Sep 2012 18:45:51,074 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,074 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,074 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,074 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,074 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,074 INFO  [main] model.ModelTestCase testParameter
+10 Sep 2012 18:45:51,074 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,074 INFO  [main] model.ModelTestCase testCallBehaviorAction
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase testLiteralInteger
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase testLiteralUnlimitedNatural
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase testModel
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase testTypedElement
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase testTypedElement
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase testFeature
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase testActivityParameterNode
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,090 INFO  [main] model.ModelTestCase testClass
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase testProperty
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.isDerived (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.isReadOnly (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.isDerivedUnion (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.aggregation (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.isComposite (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.owningAssociation (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Property.owningAssociation->Association.ownedEnd
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.datatype (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Property.datatype->DataType.ownedAttribute
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.association (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Property.association->Association.memberEnd
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.class (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Property.class->Class.ownedAttribute
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.opposite (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Property.defaultValue (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: StructuralFeature.isReadOnly (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Feature.isStatic (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Feature.featuringClassifier (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Feature.featuringClassifier->Classifier.feature
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: RedefinableElement.isLeaf (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: RedefinableElement.redefinedElement (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: RedefinableElement.redefinitionContext (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: NamedElement.name (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: NamedElement.visibility (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: NamedElement.qualifiedName (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: NamedElement.namespace (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Element.ownedElement (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Element.owner (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Element.ownedComment (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: TypedElement.type (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: NamedElement.name (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: NamedElement.visibility (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: NamedElement.qualifiedName (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: NamedElement.namespace (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Element.ownedElement (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Element.owner (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Element.ownedComment (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: MultiplicityElement.isOrdered (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: MultiplicityElement.isUnique (required=true)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: MultiplicityElement.upper (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: MultiplicityElement.lower (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: MultiplicityElement.upperValue (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: MultiplicityElement.lowerValue (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Element.ownedElement (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Element.owner (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase Property: Element.ownedComment (required=false)
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase testObjectNode
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,106 INFO  [main] model.ModelTestCase testExpansionRegion
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase testClass
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Package.ownedType->Type.package
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Package.nestedPackage->Package.nestingPackage
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Package.nestingPackage->Package.nestedPackage
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Namespace.ownedMember->NamedElement.namespace
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Namespace.elementImport->ElementImport.importingNamespace
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Namespace.packageImport->PackageImport.importingNamespace
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Element.ownedElement->Element.owner
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Element.owner->Element.ownedElement
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Element.ownedElement->Element.owner
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase Element.owner->Element.ownedElement
+10 Sep 2012 18:45:51,121 INFO  [main] model.ModelTestCase done
+10 Sep 2012 18:45:51,480 INFO  [main] model.ProfileTestCase testExtension
+10 Sep 2012 18:45:52,074 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:45:52,089 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:45:52,152 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:45:52,152 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:45:52,214 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:45:52,230 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:45:52,339 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:45:52,339 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:45:52,448 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:45:52,542 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:45:52,604 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:45:52,620 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:45:52,651 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:45:52,682 INFO  [main] library.Library initializing...
+10 Sep 2012 18:45:53,104 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:45:53,104 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:45:53,198 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:45:53,198 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:45:53,494 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:45:53,494 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:45:53,619 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:45:53,619 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:45:53,682 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:45:53,682 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase ----------------------------
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase properties for Extension
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Extension.isRequired (required=true)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Extension.metaclass (required=true)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Extension.metaclass->Class.extension
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Extension.ownedEnd (required=true)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Association.isDerived (required=true)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Association.ownedEnd (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Association.ownedEnd->Property.owningAssociation
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Association.endType (required=true)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Association.memberEnd (required=true)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Association.memberEnd->Property.association
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Association.navigableOwnedEnd (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Classifier.attribute (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Classifier.feature (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Classifier.feature->Feature.featuringClassifier
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Classifier.general (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Classifier.inheritedMember (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Namespace.importedMember (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Namespace.elementImport (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Namespace.elementImport->ElementImport.importingNamespace
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Namespace.packageImport (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Namespace.packageImport->PackageImport.importingNamespace
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Namespace.ownedMember (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Namespace.ownedMember->NamedElement.namespace
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Namespace.member (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Namespace.ownedRule (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Namespace.ownedRule->Constraint.context
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.name (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.visibility (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.namespace (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.qualifiedName (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Element.ownedElement (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Element.owner (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Element.ownedComment (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Type.package (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Type.package->Package.ownedType
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.name (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.visibility (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.namespace (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.qualifiedName (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Element.ownedElement (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Element.owner (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Element.ownedComment (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.name (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.visibility (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.namespace (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase opposite: NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase NamedElement.qualifiedName (required=false)
+10 Sep 2012 18:45:54,025 INFO  [main] model.ProfileTestCase Element.ownedElement (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.owner (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.ownedComment (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Relationship.relatedElement (required=true)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.ownedElement (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.owner (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.ownedComment (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase ----------------------------
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase properties for Stereotype
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Stereotype.icon (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Class.extension (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Class.extension->Extension.metaclass
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Class.ownedAttribute (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Classifier.attribute (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Classifier.feature (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Classifier.feature->Feature.featuringClassifier
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Classifier.general (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Classifier.inheritedMember (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Namespace.importedMember (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Namespace.elementImport (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Namespace.elementImport->ElementImport.importingNamespace
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Namespace.packageImport (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Namespace.packageImport->PackageImport.importingNamespace
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Namespace.ownedMember (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Namespace.ownedMember->NamedElement.namespace
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Namespace.member (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Namespace.ownedRule (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Namespace.ownedRule->Constraint.context
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.name (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.visibility (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.namespace (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.qualifiedName (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.ownedElement (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.owner (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.ownedComment (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Type.package (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Type.package->Package.ownedType
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.name (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.visibility (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.namespace (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.qualifiedName (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.ownedElement (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.owner (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.ownedComment (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.name (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.visibility (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.namespace (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase NamedElement.qualifiedName (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase Element.ownedElement (required=false)
+10 Sep 2012 18:45:54,041 INFO  [main] model.ProfileTestCase opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase Element.owner (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase Element.ownedComment (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase Classifier.generalization (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase opposite: Classifier.generalization->Generalization.specific
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase Classifier.general (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase NamedElement.name (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase NamedElement.qualifiedName (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase NamedElement.namespace (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase opposite: NamedElement.namespace->Namespace.ownedMember
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase Element.ownedElement (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase opposite: Element.ownedElement->Element.owner
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase Element.owner (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase opposite: Element.owner->Element.ownedElement
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase Element.ownedComment (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase ----------------------------
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase done
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase OptimisticConcurrent.createdDate (required=true)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase OptimisticConcurrent.lastUpdatedByName (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase OptimisticConcurrent.lastUpdatedDate (required=false)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase OptimisticConcurrent.createdByName (required=true)
+10 Sep 2012 18:45:54,056 INFO  [main] model.ProfileTestCase done
+10 Sep 2012 18:45:55,368 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:45:55,383 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:45:55,446 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:45:55,446 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:45:55,508 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:45:55,524 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:45:55,633 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:45:55,633 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:45:55,743 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:45:55,836 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:45:55,899 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:45:55,914 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:45:55,945 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:45:55,977 INFO  [main] library.Library initializing...
+10 Sep 2012 18:45:56,414 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:45:56,414 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:45:56,508 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:45:56,508 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:45:56,804 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:45:56,804 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:45:56,929 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:45:56,929 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:45:56,992 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:45:56,992 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:45:58,834 INFO  [main] sdo.ProfileExportDataBinding loading schema chain...
+10 Sep 2012 18:45:58,896 INFO  [main] sdo.TaxonomyExportDataBinding loading schema chain...
+10 Sep 2012 18:45:59,739 INFO  [main] sdo.DynamicSDOModelTest testProfileExport()
+10 Sep 2012 18:45:59,771 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:45:59,771 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:45:59,833 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:45:59,849 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:45:59,895 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:45:59,927 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:00,036 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:00,036 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:00,145 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:00,239 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:00,301 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:00,317 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:00,348 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:00,364 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:00,801 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:00,801 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:00,895 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:00,895 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:01,176 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:01,176 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:01,301 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:01,301 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:01,347 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:01,347 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:01,738 INFO  [main] bind.PlasmaQueryDataBinding loading schema chain...
+10 Sep 2012 18:46:01,847 INFO  [main] sdo.DynamicSDOModelTest marshaling query: deep-profile-query
+10 Sep 2012 18:46:01,956 INFO  [main] sdo.DynamicSDOModelTest validated marshaled query: deep-profile-query
+10 Sep 2012 18:46:02,050 INFO  [main] provisioning.ProvisioningModelDataBinding loading schema chain...
+10 Sep 2012 18:46:02,175 INFO  [main] schema.SchemaDataBinding loading schema chain...
+10 Sep 2012 18:46:02,456 WARN  [main] schema.SchemaModelAssembler both value constraint and enumeration constraint found for property, http://plasma.org/platform/personalization#Element.elementType - ignoring value constraint
+10 Sep 2012 18:46:02,456 INFO  [main] sdo.DynamicSDOModelTest generating query XSD
+10 Sep 2012 18:46:02,503 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[250:68:-1] - cvc-complex-type.2.4.a: Invalid content was found starting with element 'EnumerationLiteral'. One of '{"http://www.servicelabs.org/plasma/provisioning":Alias, "http://www.servicelabs.org/plasma/provisioning":Derivation, "http://www.servicelabs.org/plasma/provisioning":Documentation}' is expected.
+10 Sep 2012 18:46:02,503 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[294:54:-1] - cvc-complex-type.2.4.a: Invalid content was found starting with element 'EnumerationLiteral'. One of '{"http://www.servicelabs.org/plasma/provisioning":Alias, "http://www.servicelabs.org/plasma/provisioning":Derivation, "http://www.servicelabs.org/plasma/provisioning":Documentation}' is expected.
+10 Sep 2012 18:46:02,503 DEBUG [main] helper.PlasmaXSDHelper Writing provisioning model to: C:\dev-plasma-git\plasma\plasma-examples\.\PlasmaXSDHelper-deep-profile-query-model.xml
+10 Sep 2012 18:46:02,503 WARN  [main] schema.SchemaModelAssembler both value constraint and enumeration constraint found for property, http://plasma.org/platform/personalization#Element.elementType - ignoring value constraint
+10 Sep 2012 18:46:02,518 INFO  [main] sdo.DynamicSDOModelTest generating query XMI
+10 Sep 2012 18:46:02,581 INFO  [main] sdo.DynamicSDOModelTest defining XSD so new export-specific types are known
+10 Sep 2012 18:46:02,581 DEBUG [main] helper.PlasmaXSDHelper unmarshaling schema
+10 Sep 2012 18:46:02,596 DEBUG [main] helper.PlasmaXSDHelper provisioning UML/XMI model
+10 Sep 2012 18:46:02,596 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@6c9220
+10 Sep 2012 18:46:02,596 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1ed7524
+10 Sep 2012 18:46:02,596 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@a5c9f1
+10 Sep 2012 18:46:02,596 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@6d23ea
+10 Sep 2012 18:46:02,596 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@150ed68
+10 Sep 2012 18:46:02,596 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1279c8
+10 Sep 2012 18:46:02,596 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@f9659d
+10 Sep 2012 18:46:02,596 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@17e5307
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@7cf883
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@9f784d
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1930ebb
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1ac1adf
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@184b3b
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@f34a08
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@818805
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@938f0
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1795327
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@4260ab
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1d88c1f
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1d761d0
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@156c69c
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@968f9
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1cae5b7
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1af7e68
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@9403a3
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@17ad30a
+10 Sep 2012 18:46:02,612 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@b5615d
+10 Sep 2012 18:46:02,643 DEBUG [main] helper.PlasmaXSDHelper Writing provisioning model to: C:\dev-plasma-git\plasma\plasma-examples\.\target\PlasmaXSDHelper-deep-profile-query-model.xml
+10 Sep 2012 18:46:02,659 DEBUG [main] helper.PlasmaXSDHelper Writing UML/XMI to: C:\dev-plasma-git\plasma\plasma-examples\.\target\PlasmaXSDHelper-deep-profile-query-model.mdxml
+10 Sep 2012 18:46:02,706 DEBUG [main] helper.PlasmaXSDHelper loading UML/XMI model
+10 Sep 2012 18:46:02,706 INFO  [main] fuml.Fuml loading artifact, http://plasma.org/test/sdo/export/profile
+10 Sep 2012 18:46:02,706 INFO  [main] io.ArtifactLoader reading http://plasma.org/test/sdo/export/profile
+10 Sep 2012 18:46:03,018 DEBUG [main] helper.PlasmaXSDHelper supplier: http://plasma.org/platform/personalization
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@6c9220
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1ed7524
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@a5c9f1
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@6d23ea
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@150ed68
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1279c8
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@f9659d
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@17e5307
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@7cf883
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@9f784d
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1930ebb
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1ac1adf
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@184b3b
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@f34a08
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@818805
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@938f0
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1795327
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@4260ab
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1d88c1f
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1d761d0
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@156c69c
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@968f9
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1cae5b7
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1af7e68
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@9403a3
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@17ad30a
+10 Sep 2012 18:46:03,018 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@b5615d
+10 Sep 2012 18:46:03,018 INFO  [main] sdo.DynamicSDOModelTest loading data
+10 Sep 2012 18:46:03,018 INFO  [main] sdo.DynamicSDOModelTest testExportTaxonomy()
+10 Sep 2012 18:46:03,096 INFO  [main] sdo.DynamicSDOModelTest marshaling query: deep-taxonomy-query
+10 Sep 2012 18:46:03,112 INFO  [main] sdo.DynamicSDOModelTest validated marshaled query: deep-taxonomy-query
+10 Sep 2012 18:46:03,127 INFO  [main] sdo.DynamicSDOModelTest generating query XSD
+10 Sep 2012 18:46:03,143 DEBUG [main] helper.PlasmaXSDHelper Writing provisioning model to: C:\dev-plasma-git\plasma\plasma-examples\.\PlasmaXSDHelper-deep-taxonomy-query-model.xml
+10 Sep 2012 18:46:03,143 INFO  [main] sdo.DynamicSDOModelTest generating query XMI
+10 Sep 2012 18:46:03,143 INFO  [main] sdo.DynamicSDOModelTest defining XSD so new export-specific types are known
+10 Sep 2012 18:46:03,143 DEBUG [main] helper.PlasmaXSDHelper unmarshaling schema
+10 Sep 2012 18:46:03,143 DEBUG [main] helper.PlasmaXSDHelper provisioning UML/XMI model
+10 Sep 2012 18:46:03,143 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@3a5635
+10 Sep 2012 18:46:03,143 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1f1e0e0
+10 Sep 2012 18:46:03,143 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@e2d0ab
+10 Sep 2012 18:46:03,158 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@f1c787
+10 Sep 2012 18:46:03,158 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1628303
+10 Sep 2012 18:46:03,158 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@877a44
+10 Sep 2012 18:46:03,158 DEBUG [main] helper.PlasmaXSDHelper Writing provisioning model to: C:\dev-plasma-git\plasma\plasma-examples\.\target\PlasmaXSDHelper-deep-taxonomy-query-model.xml
+10 Sep 2012 18:46:03,158 DEBUG [main] helper.PlasmaXSDHelper Writing UML/XMI to: C:\dev-plasma-git\plasma\plasma-examples\.\target\PlasmaXSDHelper-deep-taxonomy-query-model.mdxml
+10 Sep 2012 18:46:03,158 DEBUG [main] helper.PlasmaXSDHelper loading UML/XMI model
+10 Sep 2012 18:46:03,158 INFO  [main] fuml.Fuml loading artifact, http://plasma.org/test/sdo/export/taxonomy
+10 Sep 2012 18:46:03,158 INFO  [main] io.ArtifactLoader reading http://plasma.org/test/sdo/export/taxonomy
+10 Sep 2012 18:46:03,252 DEBUG [main] helper.PlasmaXSDHelper supplier: http://plasma.org/platform/categorization
+10 Sep 2012 18:46:03,252 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@3a5635
+10 Sep 2012 18:46:03,252 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1f1e0e0
+10 Sep 2012 18:46:03,252 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@e2d0ab
+10 Sep 2012 18:46:03,252 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@f1c787
+10 Sep 2012 18:46:03,252 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@1628303
+10 Sep 2012 18:46:03,252 WARN  [main] provisioning.SchemaProvisioningModelAssembler ignoring app-info: org.plasma.xml.schema.Appinfo@877a44
+10 Sep 2012 18:46:03,252 INFO  [main] sdo.DynamicSDOModelTest loading data
+10 Sep 2012 18:46:04,236 INFO  [main] sdo.ProfileTest testProfileQuery()
+10 Sep 2012 18:46:04,251 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:04,267 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:04,329 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:04,329 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:04,392 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:04,407 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:04,517 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:04,517 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:04,642 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:04,720 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:04,782 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:04,798 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:04,829 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:04,876 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:05,313 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:05,313 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:05,391 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:05,391 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:05,688 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:05,688 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:05,828 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:05,828 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:05,875 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:05,875 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:06,234 INFO  [main] bind.PlasmaQueryDataBinding loading schema chain...
+10 Sep 2012 18:46:06,421 INFO  [main] sdo.ProfileTest query: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Query xmlns:ns2="http://www.servicelabs.org/plasma/query">
+    <ns2:Clause>
+        <ns2:From>
+            <ns2:Entity namespaceURI="http://plasma.org/platform/personalization" name="Profile"/>
+        </ns2:From>
+    </ns2:Clause>
+    <ns2:Clause>
+        <ns2:Select>
+            <ns2:Property name="username">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>user</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="firstName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>user</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>person</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="lastName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>user</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>person</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="ssn">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>user</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>person</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>user</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>userRole</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>role</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>setting</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="value">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>setting</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>role</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>element</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="elementType">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>element</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>element</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="elementType">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>element</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>element</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="elementType">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>element</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+        </ns2:Select>
+    </ns2:Clause>
+    <ns2:Clause>
+        <ns2:Where>
+            <ns2:Expression>
+                <ns2:Term>
+                    <ns2:Property name="username">
+                        <Path>
+                            <ns2:PathNode>
+                                <ns2:PathElement>user</ns2:PathElement>
+                            </ns2:PathNode>
+                        </Path>
+                    </ns2:Property>
+                </ns2:Term>
+                <ns2:Term>
+                    <ns2:RelationalOperator>equals</ns2:RelationalOperator>
+                </ns2:Term>
+                <ns2:Term>
+                    <ns2:Literal>skippy</ns2:Literal>
+                </ns2:Term>
+            </ns2:Expression>
+            <ns2:Expression>
+                <ns2:Term>
+                    <ns2:LogicalOperator>and</ns2:LogicalOperator>
+                </ns2:Term>
+            </ns2:Expression>
+            <ns2:Expression>
+                <ns2:Term>
+                    <ns2:Property name="element">
+                        <Path>
+                            <ns2:PathNode>
+                                <ns2:PathElement>profileElementSetting</ns2:PathElement>
+                            </ns2:PathNode>
+                        </Path>
+                    </ns2:Property>
+                </ns2:Term>
+                <ns2:Term>
+                    <ns2:RelationalOperator>notEquals</ns2:RelationalOperator>
+                </ns2:Term>
+                <ns2:Term>
+                    <ns2:NullLiteral/>
+                </ns2:Term>
+            </ns2:Expression>
+        </ns2:Where>
+    </ns2:Clause>
+</ns2:Query>
+
+10 Sep 2012 18:46:09,528 INFO  [main] sdo.ProfileTest total seconds: 5.0 average seconds per graph: 5.292
+10 Sep 2012 18:46:10,902 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:10,918 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:10,980 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:10,980 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:11,043 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:11,058 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:11,168 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:11,168 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:11,277 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:11,371 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:11,417 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:11,433 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:11,464 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:11,495 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:11,933 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:11,933 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:12,011 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:12,026 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:12,323 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:12,323 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:12,448 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:12,448 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:12,495 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:12,495 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:14,368 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:14,368 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:14,446 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:14,446 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:14,509 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:14,524 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:14,649 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:14,649 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:14,790 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:14,883 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:14,946 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:14,961 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:15,008 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:15,024 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:15,445 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:15,445 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:15,539 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:15,539 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:15,820 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:15,820 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:15,945 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:15,945 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:15,992 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:15,992 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:16,382 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:46:16,382 DEBUG [main] model.Expression using existing synthetic expr parent for concatination
+10 Sep 2012 18:46:16,382 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:46:16,382 DEBUG [main] model.Expression creating synthetic expr parent for concatination
+10 Sep 2012 18:46:16,382 INFO  [main] bind.PlasmaQueryDataBinding loading schema chain...
+10 Sep 2012 18:46:17,116 INFO  [main] query.QueryTestCase testSimple: 0.578
+10 Sep 2012 18:46:18,021 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:18,021 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:18,084 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:18,084 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:18,146 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:18,162 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:18,271 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:18,271 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:18,396 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:18,490 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:18,537 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:18,568 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:18,583 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:18,615 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:19,083 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:19,083 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:19,177 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:19,177 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:19,458 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:19,458 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:19,583 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:19,583 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:19,629 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:19,629 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Boolean) converted from Boolean to Boolean (true)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Boolean) converted from String to Boolean (false)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Boolean) converted to Boolean from Boolean (true)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Boolean) converted to String from Boolean (true)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted from Byte to Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted from Double to Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted from Float to Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted from Int to Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted from Long to Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted from Short to Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted from String to Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted to Byte from Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted to Double from Byte (23.0)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted to Float from Byte (23.0)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted to Int from Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted to Long from Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted to Short from Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Byte) converted to String from Byte (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Bytes) converted from Bytes to Bytes ([B@1eeba19)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Bytes) converted from Integer to Bytes ([B@1fbe226)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Bytes) converted from String to Bytes ([B@b8f675)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Bytes) converted to Bytes from Bytes ([B@1eeba19)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Bytes) converted to Integer from Bytes (9938739662094)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Bytes) converted to String from Bytes (090A0B0C0D0E)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Character) converted from Character to Character ()
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Character) converted from String to Character (2)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Character) converted to Character from Character ()
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Character) converted to String from Character ()
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted from Decimal to Decimal (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted from Double to Decimal (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted from Float to Decimal (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted from Int to Decimal (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted from Integer to Decimal (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted from Long to Decimal (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted from String to Decimal (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted to Decimal from Decimal (23)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted to Double from Decimal (23.0)
+10 Sep 2012 18:46:19,989 INFO  [main] sdo.DataConverterTest (Decimal) converted to Float from Decimal (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Decimal) converted to Int from Decimal (23)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Decimal) converted to Integer from Decimal (23)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Decimal) converted to Long from Decimal (23)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Decimal) converted to String from Decimal (23)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted from Byte to Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted from Decimal to Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted from Double to Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted from Float to Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted from Int to Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted from Integer to Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted from Long to Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted from Short to Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted from String to Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted to Byte from Double (23)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted to Decimal from Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted to Double from Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted to Float from Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted to Int from Double (23)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted to Integer from Double (23)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted to Long from Double (23)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted to Short from Double (23)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Double) converted to String from Double (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Float) converted from Byte to Float (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Float) converted from Decimal to Float (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Float) converted from Double to Float (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Float) converted from Float to Float (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Float) converted from Int to Float (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Float) converted from Integer to Float (23.0)
+10 Sep 2012 18:46:20,004 INFO  [main] sdo.DataConverterTest (Float) converted from Long to Float (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted from Short to Float (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted from String to Float (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted to Byte from Float (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted to Decimal from Float (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted to Double from Float (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted to Float from Float (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted to Int from Float (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted to Integer from Float (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted to Long from Float (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted to Short from Float (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Float) converted to String from Float (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted from Byte to Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted from Decimal to Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted from Double to Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted from Float to Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted from Int to Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted from Integer to Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted from Long to Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted from Short to Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted from String to Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted to Byte from Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted to Decimal from Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted to Double from Int (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted to Float from Int (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted to Int from Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted to Integer from Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted to Long from Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted to Short from Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Int) converted to String from Int (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted from Bytes to Integer (9938739662094)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted from Decimal to Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted from Double to Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted from Float to Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted from Int to Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted from Integer to Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted from Long to Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted from String to Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted to Bytes from Integer ([B@1bde3d2)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted to Decimal from Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted to Double from Integer (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted to Float from Integer (23.0)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted to Int from Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted to Integer from Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted to Long from Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Integer) converted to String from Integer (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Long) converted from Byte to Long (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Long) converted from Date to Long (1347317180020)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Long) converted from Decimal to Long (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Long) converted from Double to Long (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Long) converted from Float to Long (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Long) converted from Int to Long (23)
+10 Sep 2012 18:46:20,020 INFO  [main] sdo.DataConverterTest (Long) converted from Integer to Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted from Long to Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted from Short to Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted from String to Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to Byte from Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to Date from Long (Wed Dec 31 19:00:00 EST 1969)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to Decimal from Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to Double from Long (23.0)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to Float from Long (23.0)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to Int from Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to Integer from Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to Long from Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to Short from Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Long) converted to String from Long (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted from Byte to Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted from Double to Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted from Float to Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted from Int to Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted from Long to Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted from Short to Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted from String to Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted to Byte from Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted to Double from Short (23.0)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted to Float from Short (23.0)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted to Int from Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted to Long from Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted to Short from Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (Short) converted to String from Short (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (String) converted from Boolean to String (true)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (String) converted from Byte to String (23)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (String) converted from Bytes to String (090A0B0C0D0E)
+10 Sep 2012 18:46:20,035 INFO  [main] sdo.DataConverterTest (String) converted from Character to String ()
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (String) converted from Date to String (2012-09-10T22:46:20)
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Strings) converted from String to Strings ([23])
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Strings) converted from Strings to Strings ([23, 24, 25])
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Strings) converted to String from Strings (23 24 25)
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Strings) converted to Strings from Strings ([23, 24, 25])
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Date) converted from Date to Date (Mon Sep 10 18:46:20 EDT 2012)
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Date) converted from DateTime to Date (Mon Sep 10 18:46:20 EDT 2012)
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Date) converted from Day to Date (Mon Sep 10 18:46:20 EDT 2012)
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Date) converted from Duration to Date (Mon Sep 10 18:46:20 EDT 2012)
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Date) converted from Long to Date (Wed Dec 31 19:00:00 EST 1969)
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Date) converted from Month to Date (Mon Sep 10 18:46:20 EDT 2012)
+10 Sep 2012 18:46:20,051 INFO  [main] sdo.DataConverterTest (Date) converted from MonthDay to Date (Mon Sep 10 18:46:20 EDT 2012)
+10 Sep 2012 18:46:20,863 INFO  [main] sdo.DeepFindTest testTaxonomyQuery()
+10 Sep 2012 18:46:20,925 INFO  [main] bind.PlasmaQueryDataBinding loading schema chain...
+10 Sep 2012 18:46:21,081 INFO  [main] sdo.DeepFindTest query: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Query xmlns:ns2="http://www.servicelabs.org/plasma/query">
+    <ns2:Clause>
+        <ns2:Select>
+            <ns2:Property name="version"/>
+            <ns2:Property name="id">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="definition">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="typeName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="id">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="definition">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="typeName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="id">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="definition">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="typeName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="id">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="definition">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="typeName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="id">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="definition">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="typeName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="id">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="definition">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="typeName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="id">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="definition">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="typeName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="id">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="name">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="definition">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+            <ns2:Property name="typeName">
+                <Path>
+                    <ns2:PathNode>
+                        <ns2:PathElement>category</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                    <ns2:PathNode>
+                        <ns2:PathElement>child</ns2:PathElement>
+                    </ns2:PathNode>
+                </Path>
+            </ns2:Property>
+        </ns2:Select>
+    </ns2:Clause>
+    <ns2:Clause>
+        <ns2:From>
+            <ns2:Entity namespaceURI="http://plasma.org/platform/categorization" name="Taxonomy"/>
+        </ns2:From>
+    </ns2:Clause>
+    <ns2:Clause>
+        <ns2:Where>
+            <ns2:Expression>
+                <ns2:Term>
+                    <ns2:Property name="name">
+                        <Path>
+                            <ns2:PathNode>
+                                <ns2:PathElement>category</ns2:PathElement>
+                            </ns2:PathNode>
+                        </Path>
+                    </ns2:Property>
+                </ns2:Term>
+                <ns2:Term>
+                    <ns2:RelationalOperator>equals</ns2:RelationalOperator>
+                </ns2:Term>
+                <ns2:Term>
+                    <ns2:Literal>FEA Technical Reference Model (TRM)</ns2:Literal>
+                </ns2:Term>
+            </ns2:Expression>
+        </ns2:Where>
+    </ns2:Clause>
+</ns2:Query>
+
+10 Sep 2012 18:46:21,409 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:21,409 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:21,487 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:21,487 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:21,534 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:21,550 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:21,675 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:21,675 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:21,784 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:21,878 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:21,940 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:21,956 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:21,987 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:22,018 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:22,455 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:22,455 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:22,533 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:22,533 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:22,814 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:22,814 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:23,002 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:23,002 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:23,049 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:23,049 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:23,720 INFO  [main] sdo.DeepFindTest total seconds: 2.0 average seconds per graph: 2.857
+10 Sep 2012 18:46:24,579 INFO  [main] sdo.FindTest testCountShallowGraph()
+10 Sep 2012 18:46:24,610 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:24,610 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:24,672 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:24,688 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:24,750 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:24,766 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:24,875 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:24,875 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:25,000 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:25,078 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:25,141 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:25,156 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:25,188 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:25,219 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:25,656 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:25,656 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:25,750 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:25,750 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:26,031 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:26,031 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:26,155 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:26,155 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:26,202 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:26,202 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:26,920 WARN  [main] jdbc.JDBCQueryDispatcher query range (start: 0, end: 10) ignored for count operation
+10 Sep 2012 18:46:28,560 ERROR [main] jdbc.JDBCQueryDispatcher QUERY FAILED: ORA-00923: FROM keyword not found where expected
+ 
+candidate2: CategorySDO 
+queryString: SELECT COUNT(*)t0  WHERE  
+parameters: [] 
+
+10 Sep 2012 18:46:28,560 INFO  [main] sdo.FindTest testFindShallowGraph()
+10 Sep 2012 18:46:29,715 ERROR [main] jdbc.JDBCQueryDispatcher QUERY FAILED: ORA-00936: missing expression
+ 
+candidate2: CategorySDO 
+queryString: SELECT t0.NAME FROM CTGRY t0  WHERE  AND ROWNUM >= 0 AND ROWNUM <= 10 
+parameters: [] 
+
+10 Sep 2012 18:46:30,543 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:30,558 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:30,621 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:30,621 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:30,683 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:30,699 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:30,808 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:30,808 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:30,917 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:31,011 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:31,073 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:31,073 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:31,120 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:31,151 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:31,573 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:31,573 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:31,667 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:31,667 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:31,948 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:31,948 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:32,073 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:32,073 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:32,119 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:32,119 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/common#PessimisticConcurrent
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/common#Temporal
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/common#Identifiable
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/common#OptimisticConcurrent
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/personalization#DefaultElementSetting
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/personalization#Element
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/personalization#UserRole
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/personalization#Profile
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/personalization#ProfileElementSetting
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/personalization#Role
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/personalization#Setting
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/personalization#Person
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/personalization#User
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/categorization#Category
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/categorization#Taxonomy
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/categorization#Categorization
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/categorization#CategorizationWeight
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/categorization#CategorizationNote
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://examples.com/sdo/categorization#Example
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://examples.com/sdo/categorization#ExampleCategorization
+10 Sep 2012 18:46:32,463 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Association
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#ValueSpecification
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Property
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#NamedElement
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Relationship
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Clazz
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#DirectedRelationship
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#StructuralFeature
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Classifier
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Generalization
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Feature
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#InstanceSpecification
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Slot
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#EnumerationLiteral
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Enumeration
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#PackageableType
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#DataType
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Element
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#Package
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#InstanceValue
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#LiteralString
+10 Sep 2012 18:46:32,478 INFO  [main] sdo.RepositoryTestCase http://plasma.org/platform/uml#LiteralInteger
+10 Sep 2012 18:46:33,322 INFO  [main] wsdl.WSDL11Test testVersion11()
+10 Sep 2012 18:46:33,509 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:33,525 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:33,587 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:33,587 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:33,649 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:33,665 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:33,774 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:33,774 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:33,884 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:33,977 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:34,040 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:34,055 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:34,087 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:34,102 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:34,539 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:34,539 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:34,633 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:34,633 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:34,914 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:34,914 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:35,039 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:35,039 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:35,101 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:35,101 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:35,476 INFO  [main] schema.SchemaDataBinding loading schema chain...
+10 Sep 2012 18:46:35,913 INFO  [main] v11.WSDLDataBinding loading schema chain...
+10 Sep 2012 18:46:36,788 INFO  [main] wsdl.WSDL20Test testVersion20()
+10 Sep 2012 18:46:36,928 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:36,944 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:37,006 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:37,006 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:37,069 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:37,084 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:37,178 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:37,193 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:37,303 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:37,381 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:37,459 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:37,459 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:37,490 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:37,521 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:37,943 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:37,943 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:38,037 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:38,052 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:38,318 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:38,318 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:38,442 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:38,442 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:38,489 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:38,489 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:38,895 INFO  [main] v20.WSDLDataBinding loading schema chain...
+10 Sep 2012 18:46:40,051 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:40,066 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:40,129 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:40,129 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:40,191 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:40,207 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:40,332 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:40,332 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:40,441 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:40,534 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:40,597 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:40,597 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:40,644 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:40,659 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:41,112 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:41,112 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:41,190 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:41,206 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:41,471 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:41,471 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:41,612 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:41,612 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:41,659 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:41,659 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:43,048 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:43,064 INFO  [main] io.ArtifactLoader reading Plasma_SDO_Profile.mdxml
+10 Sep 2012 18:46:43,126 INFO  [main] config.FumlConfiguration initializing...
+10 Sep 2012 18:46:43,126 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:43,189 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+10 Sep 2012 18:46:43,204 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[131:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+10 Sep 2012 18:46:43,314 INFO  [main] model.InMemoryRepository initializing...
+10 Sep 2012 18:46:43,314 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+10 Sep 2012 18:46:43,438 INFO  [main] model.InfrastructureAssembler initializing...
+10 Sep 2012 18:46:43,516 INFO  [main] model.SuperstructureAssembler initializing...
+10 Sep 2012 18:46:43,579 INFO  [main] model.fUML_SyntaxAssembler initializing...
+10 Sep 2012 18:46:43,579 INFO  [main] model.InMemoryRepository performing package merge...
+10 Sep 2012 18:46:43,626 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+10 Sep 2012 18:46:43,657 INFO  [main] library.Library initializing...
+10 Sep 2012 18:46:44,079 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+10 Sep 2012 18:46:44,079 INFO  [main] io.ArtifactLoader reading plasma-platform-common.mdxml
+10 Sep 2012 18:46:44,172 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:44,172 INFO  [main] io.ArtifactLoader reading plasma-platform-personalization.mdxml
+10 Sep 2012 18:46:44,453 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:44,453 INFO  [main] io.ArtifactLoader reading plasma-platform-categorization.mdxml
+10 Sep 2012 18:46:44,594 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+10 Sep 2012 18:46:44,594 INFO  [main] io.ArtifactLoader reading examples-categorization.mdxml
+10 Sep 2012 18:46:44,641 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+10 Sep 2012 18:46:44,641 INFO  [main] io.ArtifactLoader reading plasma-platform-uml.mdxml
+10 Sep 2012 18:46:45,109 INFO  [main] ddl.DDLModelDataBinding loading schema chain...

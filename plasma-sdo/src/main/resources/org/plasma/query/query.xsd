@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.servicelabs.org/plasma/query" 
+    xmlns:query="http://www.servicelabs.org/plasma/query"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      	
+    <xsd:complexType name="Query">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Clause" maxOccurs="unbounded"/>
+			<xsd:element type="xsd:int" name="startRange"  default="0"  minOccurs="0" maxOccurs="1"></xsd:element>
+			<xsd:element type="xsd:int" name="endRange"  default="0"  minOccurs="0" maxOccurs="1"></xsd:element>
+		</xsd:sequence>         
+	    <xsd:attribute name="name" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+    
+    <xsd:element name="Query" type="query:Query"/>
+	
+    <xsd:complexType name="Clause">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element ref="query:Select"/>
+				<xsd:element ref="query:From"/>
+				<xsd:element ref="query:Where"/>
+				<xsd:element ref="query:OrderBy"/>
+				<xsd:element ref="query:GroupBy"/>
+			</xsd:choice>
+		</xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:element name="Clause" type="query:Clause"/>
+	
+    <xsd:complexType name="Update">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Entity"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Update" type="query:Update"/>
+
+    <xsd:complexType name="Delete">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Entity"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Delete" type="query:Delete"/>
+	
+    <xsd:complexType name="Select">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element ref="query:Property"/>
+				<xsd:element ref="query:WildcardProperty"/>
+			</xsd:choice>
+			<xsd:element ref="query:TextContent" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Select" type="query:Select"/>
+		
+    <xsd:complexType name="From">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Entity"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="From" type="query:From"/>
+	
+    <xsd:complexType name="Where">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Expression" minOccurs="1" maxOccurs="unbounded"/>
+			<xsd:element ref="query:TextContent" minOccurs="0" maxOccurs="1"/>
+			<xsd:element ref="query:ImportDeclaration" minOccurs="0" maxOccurs="1"/>
+			<xsd:element ref="query:Parameter" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="query:ParameterDeclaration" minOccurs="0" maxOccurs="1"/>
+			<xsd:element ref="query:VariableDeclaration" minOccurs="0" maxOccurs="1"/>
+			<xsd:element ref="query:FilterId" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Where" type="query:Where"/>
+	
+    <xsd:complexType name="Parameter">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:element name="StringParameter" type="query:StringParameter"/>
+            <xsd:element name="IntParameter" type="query:IntParameter"/>
+            <xsd:element name="FloatParameter" type="query:FloatParameter"/>
+            <xsd:element name="DecimalParameter" type="query:DecimalParameter"/>
+            <xsd:element name="DateParameter" type="query:DateParameter"/>
+            <xsd:element name="CollectionParameter" type="query:CollectionParameter"/>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:element name="Parameter" type="query:Parameter"/>
+		
+    <xsd:complexType name="StringParameter">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="StringParameter" type="query:StringParameter"/>
+	
+    <xsd:complexType name="IntParameter">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:integer"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="IntParameter" type="query:IntParameter"/>
+	
+    <xsd:complexType name="FloatParameter">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:float"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="FloatParameter" type="query:FloatParameter"/>
+	
+    <xsd:complexType name="DecimalParameter">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:decimal"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="DecimalParameter" type="query:DecimalParameter"/>
+
+    <xsd:complexType name="DateParameter">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:date"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="DateParameter" type="query:DateParameter"/>
+
+    <xsd:complexType name="CollectionParameter">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="CollectionParameter" type="query:CollectionParameter"/>
+
+    <xsd:complexType name="FilterId">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="FilterId" type="query:FilterId"/>
+	
+    <xsd:complexType name="ParameterDeclaration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="ParameterDeclaration" type="query:ParameterDeclaration"/>
+	
+    <xsd:complexType name="VariableDeclaration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="VariableDeclaration" type="query:VariableDeclaration"/>
+	
+    <xsd:complexType name="ImportDeclaration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="ImportDeclaration" type="query:ImportDeclaration"/>
+	
+    <xsd:complexType name="TextContent">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+	            <xsd:attribute name="language" type="query:QueryLanguageValues" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="TextContent" type="query:TextContent"/>
+	
+    <xsd:complexType name="OrderBy">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Property" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="query:TextContent" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="OrderBy" type="query:OrderBy"/>
+
+    <xsd:complexType name="GroupBy">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Property" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="query:TextContent" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="GroupBy" type="query:GroupBy"/>
+    	
+    <xsd:complexType name="Expression">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Term" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Expression" type="query:Expression"/>
+	
+    <xsd:complexType name="Variable">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Property"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Variable" type="query:Variable"/>
+	
+    <xsd:complexType name="Entity">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+	    <xsd:attribute name="name" type="xsd:string" use="required"/>
+	    <xsd:attribute name="namespaceURI" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element name="Entity" type="query:Entity"/>
+    
+    <xsd:complexType name="Property">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="query:AbstractProperty">
+				<xsd:sequence>
+					<xsd:element name="Query" type="query:Query" minOccurs="0" />
+					<xsd:element name="As" type="query:Projection" minOccurs="0" />
+				</xsd:sequence>
+				<xsd:attribute name="name" type="xsd:string" use="required"/>
+				<xsd:attribute name="values" type="xsd:boolean" use="optional" default="false"/>
+				<xsd:attribute name="distinct" type="xsd:boolean" use="optional" default="false"/>
+				<xsd:attribute name="direction" type="query:SortDirectionValues" use="optional" default="ASC"/>
+				<xsd:attribute name="function" type="query:FunctionValues" use="optional" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="Property" type="query:Property"/>
+
+    <xsd:complexType name="Projection">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+ 	    <xsd:attribute name="name" type="xsd:string" use="required"/>
+ 	    <xsd:attribute name="nameType" type="query:ProjectionNameType" use="required"/>
+    </xsd:complexType>
+
+    <xsd:element name="Projection" type="query:Projection"/>
+    	
+    <xsd:complexType name="WildcardProperty">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="query:AbstractProperty">
+				<xsd:attribute name="type" type="query:WildcardPropertyTypeValues" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="WildcardProperty" type="query:WildcardProperty"/>
+	
+    <xsd:complexType name="Path">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+	    <xsd:sequence>
+		    <xsd:element ref="query:PathNode" maxOccurs="unbounded"/>
+	    </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Path" type="query:Path"/>
+
+    <xsd:complexType name="PathNode">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+	        <!-- Note use @XmlElementRef annotation to map below subclasses to one common container for abstract base class -->
+			<xsd:choice>
+				<xsd:element ref="query:PathElement" maxOccurs="1"/>
+				<xsd:element ref="query:WildcardPathElement" maxOccurs="1"/>
+			</xsd:choice>
+	        <xsd:element ref="query:Where" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="PathNode" type="query:PathNode"/>
+	
+    <xsd:complexType name="PathElement">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="query:AbstractPathElement">
+				<xsd:attribute name="index" type="xsd:int" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="PathElement" type="query:PathElement"/>
+	
+    <xsd:complexType name="WildcardPathElement">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="query:AbstractPathElement">
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="WildcardPathElement" type="query:WildcardPathElement"/>
+	
+    <xsd:complexType name="Term">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:choice>
+			<xsd:element ref="query:Query"/>
+			<xsd:element ref="query:Property"/>
+            <xsd:element ref="query:LogicalOperator"/>
+			<xsd:element ref="query:RelationalOperator"/>
+			<xsd:element ref="query:ArithmeticOperator"/>
+			<xsd:element ref="query:GroupOperator"/>
+			<xsd:element ref="query:Literal"/>
+			<xsd:element ref="query:NullLiteral"/>
+			<xsd:element ref="query:Variable"/>
+			<xsd:element ref="query:Expression"/>
+			<xsd:element ref="query:Entity"/>
+			<xsd:element ref="query:WildcardOperator"/>
+			<xsd:element ref="query:SubqueryOperator"/>
+			<xsd:element ref="query:WildcardProperty"/>
+		</xsd:choice>
+    </xsd:complexType>
+
+    <xsd:element name="Term" type="query:Term"/>
+	
+    <xsd:complexType name="RelationalOperator">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="query:RelationalOperatorValues"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="RelationalOperator" type="query:RelationalOperator"/>
+    	
+    <xsd:complexType name="ArithmeticOperator">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="query:ArithmeticOperatorValues"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="ArithmeticOperator" type="query:ArithmeticOperator"/>
+
+    <xsd:complexType name="LogicalOperator">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="query:LogicalOperatorValues"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="LogicalOperator" type="query:LogicalOperator"/>
+
+    <xsd:complexType name="GroupOperator">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="query:GroupOperatorValues"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="GroupOperator" type="query:GroupOperator"/>
+    
+    <xsd:complexType name="WildcardOperator">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="query:WildcardOperatorValues"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="WildcardOperator" type="query:WildcardOperator"/>
+
+    <xsd:complexType name="SubqueryOperator">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="query:SubqueryOperatorValues"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+    
+    <xsd:element name="SubqueryOperator" type="query:SubqueryOperator"/>
+	
+    <xsd:complexType name="Literal">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+    
+    <xsd:element name="Literal" type="query:Literal"/>
+		
+    <xsd:complexType name="NullLiteral">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:complexType>
+    
+    <xsd:element name="NullLiteral" type="query:NullLiteral"/>
+
+
+    <!-- abstract types -->
+    <xsd:complexType name="AbstractPathElement" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+    </xsd:complexType>
+    
+    <xsd:complexType name="AbstractProperty" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+		    <xsd:element name="Path" type="query:Path" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+	
+    <!-- simple types -->
+	<xsd:simpleType name="RelationalOperatorValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="equals"/>
+			<xsd:enumeration value="notEquals"/>
+			<xsd:enumeration value="greaterThan"/>
+			<xsd:enumeration value="greaterThanEquals"/>
+			<xsd:enumeration value="lessThan"/>
+			<xsd:enumeration value="lessThanEquals"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="LogicalOperatorValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="and"/>
+			<xsd:enumeration value="or"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ArithmeticOperatorValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="minus"/>
+			<xsd:enumeration value="plus"/>
+			<xsd:enumeration value="div"/>
+			<xsd:enumeration value="mod"/>
+			<xsd:enumeration value="mult"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="GroupOperatorValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="LP1"/>
+			<xsd:enumeration value="LP2"/>
+			<xsd:enumeration value="LP3"/>
+			<xsd:enumeration value="RP1"/>
+			<xsd:enumeration value="RP2"/>
+			<xsd:enumeration value="RP3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="WildcardOperatorValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="LIKE"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="SubqueryOperatorValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="IN"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="WildcardPropertyTypeValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="all"/>
+			<xsd:enumeration value="reference"/>
+			<xsd:enumeration value="data"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="SortDirectionValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ASC"/>
+			<xsd:enumeration value="DESC"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="FunctionValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="MIN"/>
+			<xsd:enumeration value="MAX"/>
+			<xsd:enumeration value="AVG"/>
+			<xsd:enumeration value="SUM"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="QueryLanguageValues">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="JDOQL"/>
+			<xsd:enumeration value="SQL"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ProjectionNameType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="logical"/>
+			<xsd:enumeration value="local"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

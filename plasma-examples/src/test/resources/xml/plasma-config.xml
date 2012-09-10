@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfg:PlasmaConfiguration  
+    xmlns:cfg="http://www.plasma.org/config">
+  
+
+    <SDO>
+        <GlobalProvisioning 
+            packageName="org.plasma.platform.sdo">
+            
+           <Interface classNamePrefix="I" constants="true"/>          
+           <Implementation classNameSuffix="SDO"
+               childPackageName="impl"/>  
+           <QueryDSL>
+               <Implementation classNamePrefix="Q"
+                   childPackageName="query"/>  
+           </QueryDSL>
+                        
+        </GlobalProvisioning>            
+    
+        <!-- default namespace used for SDO infra itself, such as SDO datatypes -->
+        <DefaultNamespace uri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"
+            artifact="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi">
+            <Provisioning packageName="org.plasma.platform.sdo"/>
+  		</DefaultNamespace>
+  		 
+        <Namespace uri="http://plasma.org/platform/common"
+            artifact="http://plasma.org/platform/common">
+            <Provisioning packageName="org.plasma.platform.sdo.common">
+                <QueryDSL generate="true"/>
+            </Provisioning>
+        </Namespace>
+        <Namespace uri="http://plasma.org/platform/personalization"
+            artifact="http://plasma.org/platform/personalization">
+            <Provisioning packageName="org.plasma.platform.sdo.personalization"/>
+        </Namespace> 
+         
+        <Namespace uri="http://plasma.org/platform/categorization"
+            artifact="http://plasma.org/platform/categorization">
+            <Provisioning packageName="org.plasma.platform.sdo.categorization">
+                <QueryDSL generate="true"/>
+            </Provisioning>
+        </Namespace>
+        <Namespace uri="http://examples.com/sdo/categorization"
+            artifact="http://plasma.org/platform/examples/categorization">
+            <Provisioning packageName="com.examples.sdo.categorization">
+                <QueryDSL generate="true"/>
+            </Provisioning>
+        </Namespace>
+        
+        <Namespace uri="http://plasma.org/platform/uml"
+            artifact="http://plasma.org/platform/uml">
+            <Provisioning packageName="org.plasma.platform.sdo.uml">
+                <QueryDSL generate="true"/>
+            </Provisioning>
+        </Namespace>
+        
+        <!-- examples -->
+        <!-- 
+        <Namespace uri="http://plasma.org/test/sdo/export/taxonomy"
+            artifact="http://plasma.org/platform/test/sdo/export/taxonomy">
+            <Provisioning packageName="org.plasma.platform.test.export.taxonomy"/>
+        </Namespace>
+        <Namespace uri="http://plasma.org/test/sdo/export/profile"
+            artifact="http://plasma.org/platform/test/sdo/export/profile">
+            <Provisioning packageName="org.plasma.platform.test.export.profile"/>
+        </Namespace>
+        -->
+        
+  		
+  	    <DataAccessService dataStoreType="RDBMS"> 	
+
+            <DataAccessProvider name="JDBC"                
+                className="org.plasma.sdo.access.provider.jdbc.JDBCDataAccessProvider">
+
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionURL">jdbc:oracle:thin:@localhost:1521:XE</Property>    
+                
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionPassword">PLASMA</Property>    
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionUserName">plasma</Property>    
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionDriverName">oracle.jdbc.driver.OracleDriver</Property>    
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionPoolMinSize">1</Property>    
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionPoolMaxSize">80</Property>    
+
+                <SequenceConfiguration suffix="_SEQ"
+                    generatorClassName="org.plasma.sdo.StoredProcSequenceGenerator"/>         
+                <Concurrency 
+                    pessimisticLockTimeoutMillis="300000"/>
+
+                <!-- links specific DAS to SDO namespace configs -->                
+                <NamespaceLink uri="http://plasma.org/platform/common"/>
+                <NamespaceLink uri="http://plasma.org/platform/personalization"/> 
+                <NamespaceLink uri="http://plasma.org/platform/categorization"/> 
+                <NamespaceLink uri="http://examples.com/sdo/categorization"/> 
+                <NamespaceLink uri="http://plasma.org/platform/uml"/>
+               
+                              
+            </DataAccessProvider>
+  		    
+            <DataAccessProvider name="JDO"                
+                className="org.plasma.sdo.access.provider.jdo.JDODataAccessProvider">
+
+                 <!--
+                <Property name="javax.jdo.option.ConnectionURL">jdbc:oracle:thin:@LTHP95204XJ:1521:XE</Property>    
+              -->
+                  <Property name="javax.jdo.option.ConnectionURL">jdbc:oracle:thin:@localhost:1521:XE</Property>    
+                
+                <Property name="javax.jdo.option.ConnectionPassword">PLASMA</Property>    
+                <Property name="javax.jdo.option.ConnectionUserName">plasma</Property>    
+                <Property name="javax.jdo.option.ConnectionDriverName">oracle.jdbc.driver.OracleDriver</Property>    
+
+                <!--
+                <Property name="javax.jdo.option.ConnectionURL">jdbc:mysql://localhost:3306/PLASMA</Property>    
+                <Property name="javax.jdo.option.ConnectionPassword">phoenix</Property>    
+                <Property name="javax.jdo.option.ConnectionUserName">root</Property>    
+                <Property name="javax.jdo.option.ConnectionDriverName">com.mysql.jdbc.Driver</Property>    
+                -->
+           
+                <Property name="javax.jdo.option.RetainValues">true</Property>
+                <Property name="javax.jdo.option.RestoreValues">true</Property>
+                <Property name="javax.jdo.option.Optimistic">true</Property>
+                <Property name="javax.jdo.option.NontransactionalWrite">false</Property>
+                <Property name="javax.jdo.option.NontransactionalRead">true</Property>
+                <Property name="javax.jdo.option.Multithreaded">true</Property>
+                <Property name="javax.jdo.option.MsWait">5000</Property>
+                <Property name="javax.jdo.option.MinPool">1</Property> 
+                <Property name="javax.jdo.option.MaxPool">80</Property> 
+                <Property name="javax.jdo.option.IgnoreCache">true</Property>
+                <Property name="javax.jdo.PersistenceManagerFactoryClass">kodo.jdo.PersistenceManagerFactoryImpl</Property>
+            
+                <!--###########################################################-->
+                <!--#Kodo specific properties - http://edocs.bea.com/wls/docs103/kodo/full/html/ref_guide_conf_kodo.html -->
+                <!--###########################################################-->
+                <Property name="kodo.FlushBeforeQueries">true</Property>
+                <!--<Property name="kodo.ConnectionFactoryProperties">MaxActive=20, MaxIdle=20, MaxCachedStatements=100</Property>-->
+                <Property name="kodo.FetchBatchSize">-1</Property>
+                
+                <!--###########################################################-->
+                <!--#Kodo jdbc properties - http://edocs.bea.com/wls/docs103/kodo/full/html/ref_guide_conf_jdbc.html -->
+                <!--###########################################################-->
+                <Property name="kodo.jdbc.DBDictionary">BatchLimit=0</Property>
+                <Property name="kodo.jdbc.ResultSetType">forward-only</Property>
+                <Property name="kodo.jdbc.FetchDirection">forward</Property>
+                <Property name="kodo.jdbc.LRSSize">query</Property>
+                <!--###########################################################-->
+                <!--#commented this property since not found it in the Kodo 4.2 documentation -->  
+                <!--###########################################################-->
+                <!--<Property name="kodo.jdbc.ForeignKeyConstraints">true</Property>-->
+            
+                <Property name="kodo.Log">log4j</Property>    
+                <!--<Property name="openjpa.Log">log4j</Property>-->    
+                <!--<Property name="kodo.Log">DefaultLevel=WARN, SQL=TRACE</Property>-->    
+    
+                <!--###########################################################-->
+                <!--#http://edocs.bea.com/wls/docs103/kodo/full/html/migration.html#migration_compatibility -->
+                <!--###########################################################-->
+                <Property name="org.apache.openjpa.Compatibility">QuotedNumbersInQueries=true</Property>
+                <Property name="kodo.Compatibility">QuotedNumbersInQueries=true</Property>
+                
+                <!--###########################################################-->
+                <!--# DATA-CACHING PROPERTIES. Note Do not comment in these -->
+                <!--# properties - they are for reference only!!!! The kodo.RemoteCommitProvider JNDI stuff -->
+                <!--# requires machine-dependant values and they are must be kept together. -->
+                <!--# For these data-caching properties uses system properties only !!!! -->
+                <!--###########################################################-->
+                <!--<Property name="kodo.DataCache">true(CacheSize=5000, SoftReferenceSize=0)</Property>-->
+                <!--<Property name="kodo.QueryCache">CacheSize=1000, SoftReferenceSize=0</Property>-->
+                <!--<Property name="kodo.RemoteCommitProvider">jms(Topic=jms/KodoCommitProvider,TopicConnectionFactory=jms/KodoTopicConnectionFactory,java.naming.factory.initial=weblogic.jndi.WLInitialContextFactory,java.naming.provider.url=t3://localhost:7001)</Property>-->
+                
+                <!--# evict from Level-II cache using persistence-manager evict() calls -->
+                <!--#commented this property since not found it in the Kodo 4.2 documentation -->  
+                <!--<Property name="kodo.PersistenceManagerImpl">EvictFromDataCache=true</Property>-->
+    
+                <SequenceConfiguration suffix="_SEQ"
+                    generatorClassName="org.plasma.sdo.StoredProcSequenceGenerator"/>         
+                <Concurrency 
+                    pessimisticLockTimeoutMillis="300000"/>
+
+                <!-- links specific DAS provisioning to SDO namespace configs -->
+                <NamespaceLink uri="http://plasma.org/platform/common"> 
+                    <Provisioning  
+                        packageName="org.plasma.platform.jpa.common"/>
+                </NamespaceLink>
+                <NamespaceLink uri="http://plasma.org/platform/personalization">  
+                    <Provisioning 
+                        packageName="org.plasma.platform.jpa.personalization"/>
+                </NamespaceLink> 
+                <NamespaceLink uri="http://plasma.org/platform/categorization"> 
+                    <Provisioning  
+                        packageName="org.plasma.platform.jpa.categorization"/>
+                </NamespaceLink>
+                <NamespaceLink uri="http://examples.com/sdo/categorization"> 
+                    <Provisioning 
+                        packageName="com.examples.jpa.categorization"/>
+                </NamespaceLink> 
+                <NamespaceLink uri="http://plasma.org/platform/uml">
+                    <Provisioning  
+                        packageName="org.plasma.platform.jpa.uml"/>
+                </NamespaceLink>  
+                 
+                <!--
+                <NamespaceLink uri="http://plasma.org/test/sdo/export/taxonomy">                 
+                    <Provisioning  
+                        packageName="org.plasma.platform.test.jpa.export.taxonomy">
+                </NamespaceLink>
+                <NamespaceLink uri="http://plasma.org/test/sdo/export/profile">
+                    <Provisioning  
+                        packageName="org.plasma.platform.test.jpa.export.profile">
+                </NamespaceLink>
+                -->                 
+                              
+            </DataAccessProvider>
+  		    	  
+  	    </DataAccessService>	
+  	      	
+    </SDO>
+    
+    <Repository> 
+        <!-- Would like to use our own namespace here (say 'http://www.servicelabs.org/plasma/sdo/profile') but MagicDraw
+            unfortunately bakes this namespace e.g. 'http://www.magicdraw.com/schemas/*'  
+            into any and every model that references a profile. You can change
+            the namespace declaration by hand in the XMI but next time the
+            model is changed, MD will change it back !!
+        -->
+        <Artifact name="Plasma_SDO_Profile.mdxml"
+            urn="Plasma_SDO_Profile.mdxml" 
+            namespaceUri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"/>
+  
+        <Artifact name="plasma-platform-common.mdxml"
+            urn="plasma-platform-common.mdxml" 
+            namespaceUri="http://plasma.org/platform/common"/>  
+        <Artifact name="plasma-platform-personalization.mdxml"
+            urn="plasma-platform-personalization.mdxml" 
+            namespaceUri="http://plasma.org/platform/personalization"/>  
+        <Artifact name="plasma-platform-categorization.mdxml"
+            urn="plasma-platform-categorization.mdxml" 
+            namespaceUri="http://plasma.org/platform/categorization"/>  
+        <Artifact name="examples-categorization.mdxml"
+            urn="examples-categorization.mdxml" 
+            namespaceUri="http://plasma.org/platform/examples/categorization"/> 
+        
+        <!-- FIXME: VisibilityKind is getting loaded as UML VisibilityKind -->
+        <Artifact name="plasma-platform-uml.mdxml"
+            urn="plasma-platform-uml.mdxml" 
+            namespaceUri="http://plasma.org/platform/uml"/>  
+
+<!--         
+        <Artifact name="taxonomy-export.mdxml"
+            urn="taxonomy-export.mdxml" 
+            namespaceUri="http://plasma.org/platform/test/sdo/export/taxonomy"/> 
+        <Artifact name="profile-export.mdxml"
+            urn="profile-export.mdxml" 
+            namespaceUri="http://plasma.org/platform/test/sdo/export/profile"/> 
+-->  
+    </Repository>
+    
+  
+</cfg:PlasmaConfiguration>   

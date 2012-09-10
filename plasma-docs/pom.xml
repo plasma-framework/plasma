@@ -1,0 +1,266 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+      <groupId>plasma</groupId>
+      <artifactId>plasma</artifactId>
+      <version>1.1.3</version>
+  </parent>
+  <groupId>plasma</groupId>
+  <artifactId>plasma-docs</artifactId>
+  <version>1.1.3</version>
+  <packaging>jar</packaging>
+
+  <name>Plasma Docs</name>
+  <description>In its initial releases, the PlasmaSDO™ implementation seeks to address the need for automation and code generation under SDO for standard enterprise Java web applications while focusing on critical operational considerations these applications face, such as optimistic and pessimistic concurrency control. The PlasmaSDO™ implementation is not bound to any integrated development environment (IDE) and provides support for standard Java™ based build tools. Note: Such operational considerations such as optimistic and pessimistic concurrency control are seen as a feature gap within various commercial and open-source SDO offerings, and are facilitated in PlasmaSDO™ by a custom UML profile and various associated SDO API extensions.</description>  
+  <licenses>
+      <license>
+          <name>Plasma License</name>
+          <url>https://github.com/terrameta/plasma/LICENSE</url>
+          <distribution>repo</distribution>
+      </license>
+  </licenses>
+  <scm>
+      <url>https://github.com/terrameta/plasma</url>
+      <connection></connection>
+  </scm>  
+  <developers>
+      <developer>
+          <id>scinnamond</id>
+          <name>Scott Cinnamond</name>
+          <email>scinnamond@gmail.com</email>
+      </developer>
+  </developers>
+  <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <repositories>
+      <repository>
+          <id>lib</id>
+          <name>lib</name>
+          <releases>
+                  <enabled>true</enabled>
+                  <checksumPolicy>ignore</checksumPolicy>
+          </releases>
+          <snapshots>
+                  <enabled>false</enabled>
+          </snapshots>
+          <url>file://${project.basedir}/lib</url>
+      </repository>
+	  <repository>
+		  <id>maven2-repository.dev.java.net</id>
+		  <name>Java.net Maven 2 Repository</name>
+		  <url>http://download.java.net/maven/2</url>
+	  </repository>
+  </repositories>
+  <pluginRepositories>                                  
+		<pluginRepository>                                
+			<id>maven2-repository.dev.java.net</id>       
+			<name>Java.net Maven 2 Repository</name>      
+			<url>http://download.java.net/maven/2</url>   
+		</pluginRepository>                               
+  </pluginRepositories>                                 
+  
+  <dependencies>     
+    
+    <!--
+        Dependencies for Plasma provisioning 
+    -->  
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>3.8.1</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>plasma</groupId>
+		<artifactId>ant</artifactId>
+		<version>1.1.8</version>
+	</dependency>
+	<dependency>
+		<groupId>commons-logging</groupId>
+		<artifactId>commons-logging</artifactId>
+		<version>1.1.1</version>
+	</dependency>
+	<dependency>
+		<groupId>joda-time</groupId>
+		<artifactId>joda-time</artifactId>
+		<version>1.6.2</version>
+	</dependency>
+	<dependency>
+		<groupId>xerces</groupId>
+		<artifactId>xerces</artifactId>
+		<version>1.4.4</version>
+	</dependency>
+	<dependency>
+		<groupId>xalan</groupId>
+		<artifactId>xalan</artifactId>
+		<version>2.6.0</version>
+	</dependency>
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.8</version>
+	</dependency>
+	<dependency>
+		<groupId>stax-utils</groupId>
+		<artifactId>stax-utils</artifactId>
+		<version>snapshot-20040917</version>
+	</dependency>
+	<dependency>
+		<groupId>com.sun.xml.stream</groupId>
+		<artifactId>sjsxp</artifactId>
+		<version>1.0.1</version>
+	</dependency>
+	<dependency>
+		<groupId>jaxen</groupId>
+		<artifactId>jaxen</artifactId>
+		<version>1.1.1</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jdom</groupId>
+		<artifactId>jdom</artifactId>
+		<version>2.0.2</version>
+	</dependency>
+	<dependency>
+		<groupId>javax.xml.bind</groupId>
+		<artifactId>jsr173_api</artifactId>
+		<version>1.0</version>
+	</dependency>
+	<dependency>
+		<groupId>javax.xml.bind</groupId>
+		<artifactId>jaxb-api</artifactId>
+		<version>2.1</version>
+	</dependency>
+	<dependency>
+		<groupId>com.sun.xml.bind</groupId>
+		<artifactId>jaxb-impl</artifactId>
+		<version>2.1.9</version>
+	</dependency>
+	<dependency>
+		<groupId>com.sun.xml.bind</groupId>
+		<artifactId>jaxb-xjc</artifactId>
+		<version>2.1.9</version>
+	</dependency>
+    <dependency>
+      <groupId>org.modeldriven</groupId>
+      <artifactId>fuml</artifactId>
+      <version>1.0</version>
+    </dependency>
+	<dependency>
+		<groupId>plasma</groupId>
+		<artifactId>javaee</artifactId>
+		<version>1.4</version>
+	</dependency>
+    <dependency>
+      <groupId>plasma</groupId>
+      <artifactId>ydoc</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>plasma</groupId>
+      <artifactId>plasma-common</artifactId>
+      <version>1.1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>plasma</groupId>
+      <artifactId>plasma-sdo</artifactId>
+      <version>1.1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>plasma</groupId>
+      <artifactId>plasma-maven-plugin</artifactId>
+      <version>1.1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>plasma</groupId>
+      <artifactId>plasma-sdo-jdbc</artifactId>
+      <version>1.1.3</version>
+    </dependency>
+    
+  </dependencies>
+	<build>
+		<finalName>plasma-docs</finalName>
+		<plugins>
+            <plugin>                                                         
+              <artifactId>maven-antrun-plugin</artifactId>                   
+              <version>1.7</version>                                         
+              <executions>                                                   
+                <execution>    
+                  <id>create_javadocs</id>                                              
+                  <phase>generate-sources</phase>                
+                  <configuration>                                            
+                    <target>                                                 
+                      <property name="compile_classpath" refid="maven.compile.classpath"/>
+                      <property name="release_suffix" value="1.1.3"/>
+                      <path id="cp">                                                                                                                                                                                                                             
+                         <pathelement path="${compile_classpath}"/>                                                                                                                                                                                                  
+                      </path>	                                                                                                                                                                                                                                       
+			          <javadoc destdir="${basedir}/target/apidocs"
+			            author="true"
+			            version="true"
+			            use="true"
+			            windowtitle="Plasma SDO ${release_suffix}"
+			        	additionalparam="-breakiterator"
+			            doclet="ydoc.doclets.YStandard"
+			            docletpath="C:/yworks-uml-doclet-3.0_01-jdk1.5/lib/ydoc.jar;C:/yworks-uml-doclet-3.0_01-jdk1.5/resources">
+			            <packageset dir="${basedir}/../plasma-common/src/main/java" defaultexcludes="yes">
+			                <include name="org/plasma/**"/>
+			            </packageset>
+			             
+			            <packageset dir="${basedir}/../plasma-sdo/target/generated-sources/java" defaultexcludes="yes">
+			                <include name="org/plasma/**"/>
+			                <include name="commonj/**"/>
+			            </packageset>
+			            <packageset dir="${basedir}/../plasma-sdo/src/main/java" defaultexcludes="yes">
+			                <include name="org/plasma/**"/>
+			                <include name="commonj/**"/>
+			            </packageset>
+			            <packageset dir="${basedir}/../plasma-sdo-jdbc/src/main/java" defaultexcludes="yes">
+			                <include name="org/plasma/**"/>
+			            </packageset>
+			            <packageset dir="${basedir}/../plasma-maven-plugin/src/main/java" defaultexcludes="yes">
+			                <include name="org/plasma/**"/>
+			            </packageset>
+			             
+			            <doclet
+			                name="ydoc.doclets.YStandard"
+			                path="C:/yworks-uml-doclet-3.0_01-jdk1.5/lib/lib/ydoc.jar${ps}C:/yworks-uml-doclet-3.0_01-jdk1.5/resources${ps}C:/yworks-uml-doclet-3.0_01-jdk1.5/doc">
+			                <param name="-author"/>
+			                <param name="-generic"/>
+			                <param name="-umlautogen"/>
+			                <param name="-filterpath" value="C:/yworks-uml-doclet-3.0_01-jdk1.5/lib/ydoc.jar"/>
+			                <param name="-filter"     value="ydoc.filters.ExcludeFilter"/>
+			                <param name="-tag" value="y.precondition"/>
+			                <param name="-tag" value="y.postcondition"/>
+			                <param name="-tag" value="y.complexity"/>
+			                <param name="-tag" value="param"/>
+			                <param name="-tag" value="return"/>
+			                <param name="-tag" value="see"/>
+			                <param name="-tag" value="y.uml"/>
+			            </doclet>
+			
+			            <doctitle><![CDATA[<h1>Plasma SDO ${release_suffix}</h1>]]></doctitle>
+			            <bottom><![CDATA[<i>PlasmaSDO&#8482; and PlasmaQuery&#8482; are trademarks of TerraMeta Software, Inc. Copyright &#169; 2011 - All Rights Reserved.</i>]]></bottom>
+			            <tag name="todo" scope="all" description="To do:"/>
+			            <group title="Plasma Packages" packages="org.plasma.*"/>
+			            <classpath refid="cp"/>
+			          </javadoc>
+			          
+ 	                  <copy overwrite="yes" file="${basedir}/src/main/resources//stylesheet.css" toFile="${basedir}/target/apidocs/stylesheet.css" />
+			    	  <jar destfile="${basedir}/target/plasma-apidocs.jar"
+			    	      basedir="${basedir}/target/apidocs">
+			    	  </jar>			          
+                    </target>                                                
+                  </configuration>                                           
+                  <goals>                                                    
+                    <goal>run</goal>                                         
+                  </goals>                                                   
+                </execution>                                                 
+
+              </executions>                                                  
+            </plugin>	
+		</plugins>
+	</build>
+</project>

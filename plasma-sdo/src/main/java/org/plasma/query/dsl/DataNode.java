@@ -1,0 +1,164 @@
+package org.plasma.query.dsl;
+
+import org.plasma.query.DataProperty;
+import org.plasma.query.Expression;
+import org.plasma.query.Query;
+import org.plasma.query.Wildcard;
+import org.plasma.query.model.AbstractProperty;
+import org.plasma.query.model.FunctionValues;
+import org.plasma.query.model.Path;
+import org.plasma.query.model.SortDirectionValues;
+import org.plasma.query.model.WildcardProperty;
+
+/**
+ * A domain query node which is a data property end point within a query graph.
+ */
+public class DataNode extends DomainEndpoint implements DataProperty {
+
+	public DataNode(PathNode source, String name) {
+		super(source, name);
+		if (this.source != null) {
+			Path path = createPath();
+			if (!Wildcard.WILDCARD_CHAR.equals(name)) {
+				if (path != null)
+					this.property = new org.plasma.query.model.Property(name,
+							path);
+				else
+					this.property = new org.plasma.query.model.Property(name);
+			} else {
+				if (path != null)
+					this.property = new WildcardProperty(path);
+				else
+					this.property = new WildcardProperty();
+			}
+		} else {
+			if (!Wildcard.WILDCARD_CHAR.equals(name))
+				this.property = new org.plasma.query.model.Property(name);
+			else
+				this.property = new WildcardProperty();
+		}
+	}
+
+	AbstractProperty getModel() {
+		return this.property;
+	}
+
+	@Override
+	public Expression eq(Object value) {
+		return org.plasma.query.model.Expression.eq(
+				(org.plasma.query.model.Property) this.property, value);
+	}
+
+	@Override
+	public Expression like(String value) {
+		return org.plasma.query.model.Expression.like(
+				(org.plasma.query.model.Property) this.property, value);
+	}
+
+	@Override
+	public Expression between(Object min, Object max) {
+		return org.plasma.query.model.Expression.between(
+				(org.plasma.query.model.Property) this.property, min, max);
+	}
+
+	@Override
+	public Expression ge(Object value) {
+		return org.plasma.query.model.Expression.ge(
+				(org.plasma.query.model.Property) this.property, value);
+	}
+
+	@Override
+	public Expression gt(Object value) {
+		return org.plasma.query.model.Expression.gt(
+				(org.plasma.query.model.Property) this.property, value);
+	}
+
+	@Override
+	public Expression le(Object value) {
+		return org.plasma.query.model.Expression.le(
+				(org.plasma.query.model.Property) this.property, value);
+	}
+
+	@Override
+	public Expression lt(Object value) {
+		return org.plasma.query.model.Expression.lt(
+				(org.plasma.query.model.Property) this.property, value);
+	}
+
+	@Override
+	public Expression ne(Object value) {
+		return org.plasma.query.model.Expression.ne(
+				(org.plasma.query.model.Property) this.property, value);
+	}
+
+	@Override
+	public Expression in(Query subquery) {
+		return org.plasma.query.model.Expression.in(
+				(org.plasma.query.model.Property) this.property,
+				subquery.getModel());
+	}
+
+	public DataProperty min() {
+		((org.plasma.query.model.Property) this.property)
+				.setFunction(FunctionValues.MIN);
+		return this;
+	}
+
+	public DataProperty max() {
+		((org.plasma.query.model.Property) this.property)
+				.setFunction(FunctionValues.MAX);
+		return this;
+	}
+
+	public DataProperty sum() {
+		((org.plasma.query.model.Property) this.property)
+				.setFunction(FunctionValues.SUM);
+		return this;
+	}
+
+	public DataProperty avg() {
+		((org.plasma.query.model.Property) this.property)
+				.setFunction(FunctionValues.AVG);
+		return this;
+	}
+
+	public DataProperty asc() {
+		((org.plasma.query.model.Property) this.property)
+				.setDirection(SortDirectionValues.ASC);
+		return this;
+	}
+
+	public DataProperty desc() {
+		((org.plasma.query.model.Property) this.property)
+				.setDirection(SortDirectionValues.DESC);
+		return this;
+	}
+
+	@Override
+	public Expression isNotNull() {
+		return ((org.plasma.query.model.Property) this.property).isNotNull();
+	}
+
+	@Override
+	public Expression isNull() {
+		return ((org.plasma.query.model.Property) this.property).isNull();
+	}
+
+	@Override
+	public Expression notIn(Query subquery) {
+		return org.plasma.query.model.Expression.notIn(
+				(org.plasma.query.model.Property) this.property,
+				subquery.getModel());
+	}
+
+	@Override
+	public String getName() {
+		return ((org.plasma.query.model.Property) this.property).getName();
+	}
+
+	@Override
+	public boolean isDistinct() {
+		return ((org.plasma.query.model.Property) this.property).isDistinct();
+	}
+
+}

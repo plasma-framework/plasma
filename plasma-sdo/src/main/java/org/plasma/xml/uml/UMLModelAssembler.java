@@ -1,0 +1,750 @@
+package org.plasma.xml.uml;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventLocator;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.jdom2.Attribute;
+import org.jdom2.CDATA;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+import org.plasma.common.bind.BindingValidationEventHandler;
+import org.plasma.config.ConfigUtils;
+import org.plasma.provisioning.Alias;
+import org.plasma.provisioning.Class;
+import org.plasma.provisioning.ClassRef;
+import org.plasma.provisioning.DataTypeRef;
+import org.plasma.provisioning.Documentation;
+import org.plasma.provisioning.Enumeration;
+import org.plasma.provisioning.EnumerationConstraint;
+import org.plasma.provisioning.EnumerationLiteral;
+import org.plasma.provisioning.Model;
+import org.plasma.provisioning.Package;
+import org.plasma.provisioning.Property;
+import org.plasma.provisioning.ProvisioningModelAssembler;
+import org.plasma.provisioning.ProvisioningModelDataBinding;
+import org.plasma.provisioning.SchemaProvisioningModelAssembler;
+import org.plasma.provisioning.ValueConstraint;
+import org.plasma.query.Query;
+import org.plasma.sdo.profile.KeyType;
+import org.plasma.sdo.profile.SDOAlias;
+import org.plasma.sdo.profile.SDOEnumerationConstraint;
+import org.plasma.sdo.profile.SDOKey;
+import org.plasma.sdo.profile.SDONamespace;
+import org.plasma.sdo.profile.SDOSort;
+import org.plasma.sdo.profile.SDOUniqueConstraint;
+import org.plasma.sdo.profile.SDOValueConstraint;
+import org.plasma.sdo.profile.SDOXmlProperty;
+import org.plasma.xml.schema.Schema;
+import org.xml.sax.SAXException;
+
+public class UMLModelAssembler {
+    private static Log log = LogFactory.getLog(
+    		UMLModelAssembler.class); 
+	
+	private String destNamespaceURI;
+	private String destNamespacePrefix;
+    private Document document;
+    private Map<String, Class> defMap = new HashMap<String, Class>();
+    private Map<String, Enumeration> enumMap = new HashMap<String, Enumeration>();
+    // FIXME: hard baked namespaces w/versions
+    private Namespace umlNs = Namespace.getNamespace("uml", "http://schema.omg.org/spec/UML/2.1.2"); 
+    private Namespace xmiNs = Namespace.getNamespace("xmi", "http://schema.omg.org/spec/XMI/2.1"); 
+    private Namespace plasmaNs = Namespace.getNamespace("Plasma_SDO_Profile", "http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"); 
+	private Element xmi;
+	private Element model;
+	private Map<String, Element> elementMap = new HashMap<String, Element>();
+	private Map<String, Element> associationElementMap = new HashMap<String, Element>();
+	private Map<String, Element> enumElementMap = new HashMap<String, Element>();
+    
+	@SuppressWarnings("unused")
+	private UMLModelAssembler() {}
+	
+    public UMLModelAssembler(Query query, String destNamespaceURI,
+    		String destNamespacePrefix) {
+		super();
+		this.destNamespaceURI = destNamespaceURI;
+		this.destNamespacePrefix = destNamespacePrefix;
+		if (destNamespaceURI == null || destNamespaceURI.trim().length() == 0)
+			throw new IllegalArgumentException("expected 'destNamespaceURI' argument");
+		if (destNamespacePrefix == null || destNamespacePrefix.trim().length() == 0)
+			throw new IllegalArgumentException("expected 'destNamespacePrefix' argument");
+		this.document = buildDocumentModel(query, 
+				this.destNamespaceURI, this.destNamespacePrefix);
+	}
+    
+    public UMLModelAssembler(Schema schema, String destNamespaceURI,
+    		String destNamespacePrefix) {
+		super();
+		this.destNamespaceURI = destNamespaceURI;
+		this.destNamespacePrefix = destNamespacePrefix;
+		if (destNamespaceURI == null || destNamespaceURI.trim().length() == 0)
+			throw new IllegalArgumentException("expected 'destNamespaceURI' argument");
+		if (destNamespacePrefix == null || destNamespacePrefix.trim().length() == 0)
+			throw new IllegalArgumentException("expected 'destNamespacePrefix' argument");
+		this.document = buildDocumentModel(schema, 
+				this.destNamespaceURI, this.destNamespacePrefix);
+	}
+
+    public UMLModelAssembler(Model model, String destNamespaceURI,
+    		String destNamespacePrefix) {
+		super();
+		this.destNamespaceURI = destNamespaceURI;
+		this.destNamespacePrefix = destNamespacePrefix;
+		if (destNamespaceURI == null || destNamespaceURI.trim().length() == 0)
+			throw new IllegalArgumentException("expected 'destNamespaceURI' argument");
+		if (destNamespacePrefix == null || destNamespacePrefix.trim().length() == 0)
+			throw new IllegalArgumentException("expected 'destNamespacePrefix' argument");
+		this.document = buildDocumentModel(model, 
+				this.destNamespaceURI, this.destNamespacePrefix);
+	}
+    
+	public Document getDocument() {
+		return this.document;
+	}
+		
+	@SuppressWarnings("deprecation")
+	public String getContent() {
+		return getContent(new XMLOutputter());
+	}
+	
+	@SuppressWarnings("deprecation")
+	public String getContent(java.lang.String indent, boolean newlines) {
+		XMLOutputter outputter = new XMLOutputter();
+		
+		outputter.getFormat().setIndent(indent);
+		
+		return getContent(outputter);
+	}
+
+	public String getContent(Format format) {
+		return getContent(new XMLOutputter(format));
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void getContent(OutputStream stream) {
+		XMLOutputter outputter = new XMLOutputter();
+		getContent(stream, outputter);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void getContent(OutputStream stream, java.lang.String indent, boolean newlines) {
+		XMLOutputter outputter = new XMLOutputter();
+		outputter.getFormat().setIndent(indent);
+		getContent(stream, outputter);
+	}
+
+	public void getContent(OutputStream stream, Format format) {
+		getContent(stream, new XMLOutputter(format));
+	}
+	
+	private String getContent(XMLOutputter outputter) {
+		String result = null;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try {
+			if (this.document == null)
+				throw new IllegalStateException("no content yet assembled");
+		    outputter.output(this.document, os);
+			os.flush();
+			result = new String(os.toByteArray());
+		} catch (java.io.IOException e) {
+		}
+		finally {
+			try {
+				os.close();
+			} catch (IOException e) {
+			}
+		}
+		return result;
+	}
+	
+	private void getContent(OutputStream stream, XMLOutputter outputter) {
+		String result = null;
+		try {
+			if (this.document == null)
+				throw new IllegalStateException("no content yet assembled");
+		    outputter.output(this.document, stream);
+		    stream.flush();
+		} catch (java.io.IOException e) {
+		}
+		finally {
+			try {
+				stream.close();
+			} catch (IOException e) {
+			}
+		}
+	}
+
+	private Document buildDocumentModel(Query query, 
+    		String destNamespaceURI, String destNamespacePrefix) 
+    {
+        ProvisioningModelAssembler stagingAssembler = new ProvisioningModelAssembler(query, 
+        		destNamespaceURI, destNamespacePrefix);
+        Model model = stagingAssembler.getModel();
+        
+ 	    if (log.isDebugEnabled()) {
+		   try {
+			    BindingValidationEventHandler debugHandler = new BindingValidationEventHandler() {
+					public int getErrorCount() {
+						return 0;
+					}
+					public boolean handleEvent(ValidationEvent ve) {
+				        ValidationEventLocator vel = ve.getLocator();
+				        
+				        String message = "Line:Col:Offset[" + vel.getLineNumber() + ":" + vel.getColumnNumber() + ":" 
+				            + String.valueOf(vel.getOffset())
+				            + "] - " + ve.getMessage();
+				        String sev = "";
+				        switch (ve.getSeverity()) {
+				        case ValidationEvent.WARNING:
+				        	sev = "WARNING";
+				            break;
+				        case ValidationEvent.ERROR:
+				        	sev = "ERROR";
+				            break;
+				        case ValidationEvent.FATAL_ERROR:
+				        	sev = "FATAL_ERROR";
+				            break;
+				        default:
+				        }
+			            log.debug(sev + " - " + message);
+				        
+				        
+				        return true;
+					}			    	
+			    };
+			    ProvisioningModelDataBinding binding = 
+				   new ProvisioningModelDataBinding(debugHandler);
+			    String xml = binding.marshal(model);
+			    binding.validate(xml);
+			    log.debug(xml);
+			} catch (JAXBException e) {
+				log.debug(e.getMessage(), e);
+			} catch (SAXException e) {
+				log.debug(e.getMessage(), e);
+			}
+	   }
+        
+       return buildDocumentModel(model, 
+        		destNamespaceURI, destNamespacePrefix);
+    }              
+
+	private Document buildDocumentModel(Schema schema, 
+    		String destNamespaceURI, String destNamespacePrefix) 
+    {
+		SchemaProvisioningModelAssembler stagingAssembler = new SchemaProvisioningModelAssembler(schema, 
+        		destNamespaceURI, destNamespacePrefix);
+        Model model = stagingAssembler.getModel();
+        return buildDocumentModel(model, destNamespaceURI, destNamespacePrefix);
+    }  
+		
+	private Document buildDocumentModel(Model model, 
+        		String destNamespaceURI, String destNamespacePrefix) 
+    {
+    	this.xmi = new Element("XMI");
+    	this.xmi.setNamespace(xmiNs);
+    	Document document = new Document(this.xmi);
+    	this.xmi.setAttribute(new Attribute("version", "2.1", xmiNs)); // FIXME - use FUML config for this, i.e which version?
+    	this.xmi.addNamespaceDeclaration(umlNs);
+    	this.xmi.addNamespaceDeclaration(xmiNs);
+    	this.xmi.addNamespaceDeclaration(plasmaNs);    	
+    	this.model = buildModel(model);
+    	
+    	// map class defs
+	    for (Class clss : model.getClazzs()) {
+	        defMap.put(clss.getUri() + "#" + clss.getName(), clss);    	
+	    } 
+
+    	// map enum defs
+	    for (Enumeration enm : model.getEnumerations()) {
+	        enumMap.put(enm.getUri() + "#" + enm.getName(), enm);    	
+	    } 
+    	
+	    for (Class clss : model.getClazzs()) {
+        	Element clssElem = buildClass(clss, this.model);        	
+        	elementMap.put(clss.getId(), clssElem);
+        	
+        	for (Property property : clss.getProperties()) {
+        		
+        		Element ownedAttribute = buildProperty(clss, property, clssElem);
+            	elementMap.put(property.getId(), ownedAttribute);        		
+         	}
+    	}
+    	
+    	// create associations
+	    for (Class clss : model.getClazzs()) {
+        	for (Property prop : clss.getProperties()) {
+        		
+        		if (prop.getType() instanceof DataTypeRef) 
+        			continue;
+        		
+        		if (associationElementMap.get(prop.getId()) != null)
+        			continue; // we created it
+        		
+    			String associationUUID = UUID.randomUUID().toString();
+    			
+    			// link assoc to both properties
+    			Element leftOwnedAttribute = elementMap.get(prop.getId());
+           	    leftOwnedAttribute.setAttribute(new Attribute("association", associationUUID));
+    			
+    			Property targetProp = getOppositeProperty(clss, prop);
+    			if (targetProp != null) {
+	    			Element rightOwnedAttribute = elementMap.get(targetProp.getId());
+	    			rightOwnedAttribute.setAttribute(new Attribute("association", associationUUID));
+	
+	    			Element association = buildAssociation(prop, targetProp, this.model, associationUUID);
+	    			
+	    			// map it to both props so we can know not to create it again
+	            	associationElementMap.put(prop.getId(), association);
+	            	associationElementMap.put(targetProp.getId(), association);
+    			}
+    			else {
+    				Class targetClass = getOppositeClass(clss, prop);
+	    			Element association = buildAssociation(prop, targetClass, this.model, associationUUID);
+	    			
+	    			// map it to both props so we can know not to create it again
+	            	associationElementMap.put(prop.getId(), association);
+    				
+    			}
+         	}
+    	}   	
+    	
+		return document;
+    }
+		
+	private Element buildModel(Model model)
+	{
+		Element rootPackageElem = null;
+
+		String[] packageNames = ConfigUtils.toPackageTokens(model.getUri());
+
+    	Element modelElem = new Element("Model");
+    	modelElem.setNamespace(umlNs);
+    	this.xmi.addContent(modelElem);
+    	modelElem.setAttribute(new Attribute("id", model.getId(), xmiNs));
+    	modelElem.setAttribute(new Attribute("name", packageNames[0]));
+    	modelElem.setAttribute(new Attribute("visibility", "public"));
+    	elementMap.put(model.getId(), modelElem);
+    	if (model.getDocumentations() != null)
+    	    for (Documentation doc : model.getDocumentations()) {
+        		addOwnedComment(modelElem, model.getId(), 
+        				doc.getBody().getValue());
+    	    }
+     	
+    	// tag the model w/a SDO namespace streotype, else tag the 
+    	// last package descendant below
+    	if (packageNames.length == 1) {
+	    	Element modelStereotype = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
+	    	this.xmi.addContent(modelStereotype);
+	    	modelStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	modelStereotype.setAttribute(new Attribute(SDONamespace.BASE__PACKAGE, model.getId()));
+	    	modelStereotype.setAttribute(new Attribute(SDONamespace.URI, this.destNamespaceURI));               	
+    	}
+    	
+    	rootPackageElem = modelElem;
+    	
+    	for (int i = 1; i < packageNames.length; i++) {
+
+        	Element pkgElem = new Element("packagedElement");
+        	rootPackageElem.addContent(pkgElem);
+        	String id = UUID.randomUUID().toString();
+        	pkgElem.setAttribute(new Attribute("type", "uml:Package", xmiNs));
+        	pkgElem.setAttribute(new Attribute("id", id, xmiNs));
+        	pkgElem.setAttribute(new Attribute("name", packageNames[i]));
+        	pkgElem.setAttribute(new Attribute("visibility", "public"));
+        	elementMap.put(id, pkgElem);
+        	
+        	if (i == packageNames.length-1) {
+	        	Element pkgStereotypeElem = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
+	        	this.xmi.addContent(pkgStereotypeElem);
+	        	pkgStereotypeElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.BASE__PACKAGE, id));
+	        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.URI, this.destNamespaceURI));               	
+        	}
+        	
+        	rootPackageElem = pkgElem;
+        	
+        }
+    	
+    	
+    	return rootPackageElem;
+	}
+	
+	private Element buildClass(Class clss, Element parent)
+	{
+    	Element clssElem = new Element("packagedElement");
+    	parent.addContent(clssElem);
+    	elementMap.put(clss.getId(), clssElem);
+    	clssElem.setAttribute(new Attribute("type", "uml:Class", xmiNs));
+   	    clssElem.setAttribute(new Attribute("id", clss.getId(), xmiNs));
+    	clssElem.setAttribute(new Attribute("name", clss.getName()));
+    	clssElem.setAttribute(new Attribute("visibility", "public"));  
+    	if (clss.getDocumentations() != null)
+    	    for (Documentation doc : clss.getDocumentations()) {
+        		addOwnedComment(clssElem, clss.getId(), 
+        				doc.getBody().getValue());
+    	    }
+    	
+    	if (clss.getAlias() != null) {
+    		addAlias(clss.getAlias(), clss.getId());
+    	}
+    	
+    	for (ClassRef baseRef : clss.getSuperClasses()) {
+        	Element generalizationElem = new Element("generalization");
+        	generalizationElem.setAttribute(new Attribute("type", "uml:Generalization", xmiNs));
+        	generalizationElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+        	clssElem.addContent(generalizationElem);
+        	Class baseClass = defMap.get(baseRef.getUri() + "#" + baseRef.getName());
+        	generalizationElem.setAttribute(new Attribute("general", baseClass.getId()));
+        	
+        	/* --for an external reference
+        	Element generalElem = new Element("general");
+        	generalizationElem.addContent(generalElem);
+        	generalElem.setAttribute(new Attribute("type", "uml:Class", xmiNs));
+        	generalElem.setAttribute(new Attribute("type", "uml:Class"));
+        	generalElem.setAttribute(new Attribute("href", baseClass.getId()));
+        	*/
+    	}
+/*
+  --for an external reference
+		<generalization xmi:type='uml:Generalization' xmi:id='_16_0_1_1707042b_1325701279933_851156_1151'>
+			<general xmi:type='uml:Class' href='plasma-platform-common.mdxml#_16_0_1_1707042b_1318367153137_813743_576'>
+			</general>
+		</generalization>
+		
+ */
+    	return clssElem;
+	}
+	
+	private void addAlias(Alias alias, String namedElementId) {
+    	Element aliasStereotype = new Element(SDOAlias.class.getSimpleName(), plasmaNs);
+    	this.xmi.addContent(aliasStereotype);
+    	aliasStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	aliasStereotype.setAttribute(new Attribute(SDOAlias.BASE__NAMED_ELEMENT, namedElementId));
+    	if (alias.getPhysicalName() != null)
+    	    aliasStereotype.setAttribute(new Attribute(SDOAlias.PHYSICAL_NAME, 
+    	    		alias.getPhysicalName()));
+    	if (alias.getLocalName() != null)
+    	    aliasStereotype.setAttribute(new Attribute(SDOAlias.LOCAL_NAME, 
+    	    		alias.getLocalName().trim()));
+    	if (alias.getBusinessName() != null)
+    	    aliasStereotype.setAttribute(new Attribute(SDOAlias.BUSINESS_NAME, 
+    	    		alias.getBusinessName().trim()));		
+	}
+
+	private Element buildProperty(Class clss, Property property, Element parentElem) {
+    	Element ownedAttribute = new Element("ownedAttribute");
+    	parentElem.addContent(ownedAttribute);
+    	ownedAttribute.setAttribute(new Attribute("type", "uml:Property", xmiNs));
+    	ownedAttribute.setAttribute(new Attribute("id", property.getId(), xmiNs));
+    	ownedAttribute.setAttribute(new Attribute("name", property.getName()));
+    	if (property.getVisibility() != null)
+    	    ownedAttribute.setAttribute(new Attribute("visibility", property.getVisibility().value())); 
+    	if (property.getDocumentations() != null)
+    	    for (Documentation doc : property.getDocumentations()) {
+        		addOwnedComment(ownedAttribute, property.getId(), 
+        				doc.getBody().getValue());
+    	    }
+    	
+    	Element upperValue = new Element("upperValue");
+    	ownedAttribute.addContent(upperValue);
+    	upperValue.setAttribute(new Attribute("type", "uml:LiteralUnlimitedNatural", xmiNs));
+   	    upperValue.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	upperValue.setAttribute(new Attribute("visibility", "public")); 
+    	if (property.isMany())
+    	    upperValue.setAttribute(new Attribute("value", "*")); 
+    	else
+	        upperValue.setAttribute(new Attribute("value", "1"));  
+    	
+    	Element lowerValue = new Element("lowerValue");
+    	ownedAttribute.addContent(lowerValue);
+    	lowerValue.setAttribute(new Attribute("type", "uml:LiteralInteger", xmiNs));
+    	lowerValue.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	lowerValue.setAttribute(new Attribute("visibility", "public")); 
+    	if (property.isNullable())
+    		lowerValue.setAttribute(new Attribute("value", "0")); 
+    	else
+    		lowerValue.setAttribute(new Attribute("value", "1"));  
+	
+    	if (property.getAlias() != null) {
+    		addAlias(property.getAlias(), property.getId());
+    	}
+    	
+    	if (property.getSort() != null) {
+	    	Element sequenceStereotype = new Element(SDOSort.class.getSimpleName(), plasmaNs);
+	    	this.xmi.addContent(sequenceStereotype);
+	    	sequenceStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	sequenceStereotype.setAttribute(new Attribute(SDOSort.BASE__PROPERTY, property.getId()));
+	    	sequenceStereotype.setAttribute(new Attribute(SDOSort.KEY, 
+	    			String.valueOf(property.getSort().getKey())));
+    	}
+
+    	if (property.getXmlProperty() != null) {
+	    	Element xmlPropertyStereotype = new Element(SDOXmlProperty.class.getSimpleName(), plasmaNs);
+	    	this.xmi.addContent(xmlPropertyStereotype);
+	    	xmlPropertyStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	xmlPropertyStereotype.setAttribute(new Attribute(SDOXmlProperty.BASE__PROPERTY, property.getId()));
+	    	xmlPropertyStereotype.setAttribute(new Attribute(SDOXmlProperty.NODE_TYPE, 
+	    			property.getXmlProperty().getNodeType().name().toLowerCase()));
+    	}
+    	
+    	if (property.getType() instanceof DataTypeRef) {
+        	Element type = new Element("type");
+        	ownedAttribute.addContent(type);
+        	type.setAttribute(new Attribute("type", "uml:DataType", xmiNs));
+        	//type.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+        	type.setAttribute(new Attribute("href", 
+        		"Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-" 
+        			+ ((DataTypeRef)property.getType()).getName()));        			
+
+        	if (property.getKey() != null) {
+    	    	Element keyStereotype = new Element(SDOKey.class.getSimpleName(), plasmaNs);
+    	    	this.xmi.addContent(keyStereotype);
+    	    	keyStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	    	keyStereotype.setAttribute(new Attribute(SDOKey.BASE__PROPERTY, property.getId()));
+    	    	keyStereotype.setAttribute(new Attribute(SDOKey.TYPE, // provisioning key-type is JAXB generated and upper-case
+    	    			property.getKey().getType().name().toLowerCase()));
+        	}
+        	        	
+        	if (property.getValueConstraint() != null) {
+    	    	Element valueContStereotype = new Element(SDOValueConstraint.class.getSimpleName(), plasmaNs);
+    	    	this.xmi.addContent(valueContStereotype);
+    	    	valueContStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	    	valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.BASE__PROPERTY, property.getId()));
+     	    	
+    	    	ValueConstraint vc = property.getValueConstraint();
+    	    	if (vc.getTotalDigits() != null)
+    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.TOTAL_DIGITS, 
+    	    	    		String.valueOf(vc.getTotalDigits())));
+    	    	if (vc.getFractionDigits() != null)
+    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.FRACTION_DIGITS, 
+    	    	    		String.valueOf(vc.getFractionDigits())));
+    	    	if (vc.getMaxInclusive() != null)
+    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MAX_INCLUSIVE, 
+    	    	    		String.valueOf(vc.getMaxInclusive())));
+    	    	if (vc.getMaxExclusive() != null)
+    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MAX_EXCLUSIVE, 
+    	    	    		String.valueOf(vc.getMaxExclusive())));
+    	    	if (vc.getMaxLength() != null)
+    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MAX_LENGTH, 
+    	    	    		String.valueOf(vc.getMaxLength())));
+    	    	if (vc.getMinInclusive() != null)
+    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MIN_INCLUSIVE, 
+    	    	    		String.valueOf(vc.getMinInclusive())));
+    	    	if (vc.getMinExclusive() != null)
+    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MIN_EXCLUSIVE, 
+    	    	    		String.valueOf(vc.getMinExclusive())));
+    	    	if (vc.getMinLength() != null)
+    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MIN_LENGTH, 
+    	    	    		String.valueOf(vc.getMinLength())));
+    	    	if (vc.getPattern() != null)
+    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.PATTERN, 
+    	    	    		String.valueOf(vc.getPattern())));
+        	}
+        	
+        	if (property.getUniqueConstraint() != null) {
+    	    	Element uniqueStereotype = new Element(SDOUniqueConstraint.class.getSimpleName(), plasmaNs);
+    	    	this.xmi.addContent(uniqueStereotype);
+    	    	uniqueStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.BASE__PROPERTY, property.getId()));
+    	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.GROUP, 
+    	    			property.getUniqueConstraint().getGroup()));
+        	}
+        			
+		    if (property.getEnumerationConstraint() != null) {
+    	    	Element enumConstraintStereotype = new Element(SDOEnumerationConstraint.class.getSimpleName(), plasmaNs);
+    	    	this.xmi.addContent(enumConstraintStereotype);
+    	    	enumConstraintStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	    	enumConstraintStereotype.setAttribute(new Attribute(SDOUniqueConstraint.BASE__PROPERTY, property.getId()));
+
+    	    	EnumerationConstraint constraint = property.getEnumerationConstraint();
+    	    	
+		    	
+	    		Element enumeration = this.enumElementMap.get(property.getId());
+	    		if (enumeration == null) {
+	    			enumeration = this.buildEnumeration(constraint);
+	        	    this.model.addContent(enumeration);
+	        	    this.enumElementMap.put(property.getId(), enumeration);
+	    		}
+	    		Attribute enumId = enumeration.getAttribute("id", xmiNs);
+	    		enumConstraintStereotype.setAttribute(new Attribute(SDOEnumerationConstraint.VALUE, enumId.getValue()));
+		    }
+		}
+		else {
+			
+			// set reference specific attribs
+			ClassRef targetClassRef = (ClassRef)property.getType();
+			Class targetClass = defMap.get(targetClassRef.getUri() + "#" + targetClassRef.getName());
+        	ownedAttribute.setAttribute(new Attribute("type", targetClass.getId()));         	               	
+		}
+		
+		return ownedAttribute;
+	}
+	
+	private Element buildAssociation(Property property, Property targetProperty, 
+			Element parentElem, String uuid)
+	{
+    	Element associationElem = new Element("packagedElement");
+    	parentElem.addContent(associationElem);
+    	associationElementMap.put(property.getId(), associationElem);
+    	associationElementMap.put(targetProperty.getId(), associationElem);
+    	associationElem.setAttribute(new Attribute("type", "uml:Association", xmiNs));
+    	associationElem.setAttribute(new Attribute("id", uuid, xmiNs));
+    	associationElem.setAttribute(new Attribute("visibility", "public")); 
+
+        Element leftMemberEnd = new Element("memberEnd");
+    	associationElem.addContent(leftMemberEnd);
+    	leftMemberEnd.setAttribute(new Attribute("idref", property.getId(), xmiNs));
+		
+    	Element rightMemberEnd = new Element("memberEnd");
+    	associationElem.addContent(rightMemberEnd);
+    	rightMemberEnd.setAttribute(new Attribute("idref", targetProperty.getId(), xmiNs));
+		
+    	return associationElem;
+	}
+	
+	private Element buildAssociation(Property property, Class targetClass, 
+			Element parentElem, String uuid)
+	{
+    	Element association = new Element("packagedElement");
+    	parentElem.addContent(association);
+    	association.setAttribute(new Attribute("type", "uml:Association", xmiNs));
+    	association.setAttribute(new Attribute("id", uuid, xmiNs));
+    	association.setAttribute(new Attribute("visibility", "public")); 
+
+        Element leftMemberEnd = new Element("memberEnd");
+    	association.addContent(leftMemberEnd);
+    	leftMemberEnd.setAttribute(new Attribute("idref", property.getId(), xmiNs));
+		
+		String rightPropId = UUID.randomUUID().toString();
+    	Element rightMemberEnd = new Element("memberEnd");
+    	association.addContent(rightMemberEnd);
+    	rightMemberEnd.setAttribute(new Attribute("idref", rightPropId, xmiNs));
+
+    	Element navigableOwnedEnd = new Element("navigableOwnedEnd");
+    	association.addContent(navigableOwnedEnd);
+    	navigableOwnedEnd.setAttribute(new Attribute("idref", rightPropId, xmiNs));
+
+    	Element ownedEnd = new Element("ownedEnd");
+    	association.addContent(ownedEnd);
+    	ownedEnd.setAttribute(new Attribute("type", "uml:Property", xmiNs));
+    	ownedEnd.setAttribute(new Attribute("id", rightPropId, xmiNs));
+    	ownedEnd.setAttribute(new Attribute("visibility", "private"));
+    	ownedEnd.setAttribute(new Attribute("type", targetClass.getId()));
+   	
+    	// if its external we'll need this goo
+    	/*
+    	{
+        	targetClassId = targetClassInfo.getSharedPackage().getExternalReferenceBase() + "#" + targetClassInfo.getUuid();
+        	Element type = new Element("type");
+        	ownedEnd.addContent(type);
+        	type.setAttribute(new Attribute("type", "uml:Class", xmiNs));
+        	type.setAttribute(new Attribute("href", targetClassId));        	
+    	}    	
+        */
+
+    	Element upperValue = new Element("upperValue");
+    	ownedEnd.addContent(upperValue);
+    	upperValue.setAttribute(new Attribute("type", "uml:LiteralUnlimitedNatural", xmiNs));
+    	upperValue.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	upperValue.setAttribute(new Attribute("visibility", "public"));
+    	upperValue.setAttribute(new Attribute("value", "*"));
+
+    	Element lowerValue = new Element("lowerValue");
+    	ownedEnd.addContent(lowerValue);
+    	lowerValue.setAttribute(new Attribute("type", "uml:LiteralInteger", xmiNs));
+    	lowerValue.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	lowerValue.setAttribute(new Attribute("visibility", "public"));
+    	
+    	return association;
+	}
+	
+	private Element buildEnumeration(EnumerationConstraint constraint)
+	{
+		Enumeration enm = this.enumMap.get(
+				constraint.getValue().getUri() + "#" + constraint.getValue().getName());
+		
+    	Element enumerationElem = new Element("packagedElement");
+    	enumerationElem.setAttribute(new Attribute("type", "uml:Enumeration", xmiNs));
+    	String enumId = UUID.randomUUID().toString();
+    	enumerationElem.setAttribute(new Attribute("id", enumId, xmiNs));
+    	enumerationElem.setAttribute(new Attribute("name", enm.getName()));
+    	enumerationElem.setAttribute(new Attribute("visibility", "public")); 
+
+    	if (enm.getDocumentations() != null)
+    	    for (Documentation doc : enm.getDocumentations()) {
+        		addOwnedComment(enumerationElem, enumId, 
+        				doc.getBody().getValue());
+    	    }
+
+	    for (EnumerationLiteral lit : enm.getEnumerationLiterals()) {
+        	Element literal = new Element("ownedLiteral");
+        	enumerationElem.addContent(literal);
+        	literal.setAttribute(new Attribute("type", "uml:EnumerationLiteral", xmiNs));
+        	String literalId = UUID.randomUUID().toString();
+        	literal.setAttribute(new Attribute("id", literalId, xmiNs));
+        	literal.setAttribute(new Attribute("name", lit.getValue()));
+        	literal.setAttribute(new Attribute("visibility", "public")); 
+        	if (lit.getDocumentations() != null)
+        	    for (Documentation doc : lit.getDocumentations()) {
+            		addOwnedComment(literal, literalId, 
+            				doc.getBody().getValue());
+        	    }
+
+        	if (lit.getAlias() != null && lit.getAlias().getPhysicalName() != null) {
+    	    	Element aliasStereotype = new Element(SDOAlias.class.getSimpleName(), plasmaNs);
+    	    	this.xmi.addContent(aliasStereotype);
+    	    	aliasStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+    	    	aliasStereotype.setAttribute(new Attribute(SDOAlias.BASE__NAMED_ELEMENT, literalId));
+    	    	aliasStereotype.setAttribute(new Attribute(SDOAlias.PHYSICAL_NAME, 
+    	    			lit.getAlias().getPhysicalName()));
+        	}
+        }
+		return enumerationElem;
+	    
+	}
+	
+	private void addOwnedComment(Element owner, String ownerId, String commentBody) {
+    	Element comment = new Element("ownedComment");
+    	owner.addContent(comment);
+    	comment.setAttribute(new Attribute("type", "uml:Comment", xmiNs));
+    	comment.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+
+    	Element body = new Element("body");
+    	comment.addContent(body);
+    	body.addContent(new CDATA(commentBody));
+    	
+    	Element annotatedElement = new Element("annotatedElement");
+    	comment.addContent(annotatedElement);
+    	annotatedElement.setAttribute(new Attribute("idref", ownerId, xmiNs));    				
+	}
+	
+	private Class getOppositeClass(Class def, Property propertyDef) {
+		Class targetDef = defMap.get(propertyDef.getType().getUri() 
+    			+ "#" + propertyDef.getType().getName());
+    	return targetDef;
+	}
+
+	private Property getOppositeProperty(Class def, Property propertyDef) {
+		Class targetDef = defMap.get(propertyDef.getType().getUri() 
+    			+ "#" + propertyDef.getType().getName());
+    	for (Property p : targetDef.getProperties()) {
+    		if (p.getName().equals(propertyDef.getOpposite()))
+    			return p;
+    	}
+    	return null;
+	}
+	
+}

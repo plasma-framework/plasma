@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>plasma</groupId>
+  <artifactId>plasma</artifactId>
+  <version>1.1.3</version>
+  <packaging>pom</packaging>
+  <name>Plasma</name>
+  <description></description>
+  <modules>
+      <module>plasma-common</module>
+      <module>plasma-sdo</module>
+      <module>plasma-sdo-jdbc</module>
+      <module>plasma-maven-plugin</module>
+      <module>plasma-docs</module>
+      <module>plasma-examples</module>
+  </modules>
+  <licenses>
+      <license>
+          <name>Plasma License</name>
+          <url>https://github.com/terrameta/plasma/Licensing-Information.txt</url>
+          <distribution>repo</distribution>
+      </license>
+  </licenses>
+  <scm>
+      <url>https://github.com/terrameta/plasma</url>
+      <connection></connection>
+  </scm>  
+  <developers>
+      <developer>
+          <id>scinnamond</id>
+          <name>Scott Cinnamond</name>
+          <email>scinnamond@gmail.com</email>
+      </developer>
+  </developers>
+  
+  <properties>
+          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <repositories>
+      <repository>
+          <id>lib</id>
+          <name>lib</name>
+          <releases>
+                  <enabled>true</enabled>
+                  <checksumPolicy>ignore</checksumPolicy>
+          </releases>
+          <snapshots>
+                  <enabled>false</enabled>
+          </snapshots>
+          <url>file://${project.basedir}/lib</url>
+      </repository>
+	  <repository>
+		  <id>maven2-repository.dev.java.net</id>
+		  <name>Java.net Maven 2 Repository</name>
+		  <url>http://download.java.net/maven/2</url>
+	  </repository>
+  </repositories>
+  <pluginRepositories>                                  
+		<pluginRepository>                                
+			<id>maven2-repository.dev.java.net</id>       
+			<name>Java.net Maven 2 Repository</name>      
+			<url>http://download.java.net/maven/2</url>   
+		</pluginRepository>                               
+  </pluginRepositories>                                 
+  
+  <dependencies>     
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>3.8.1</version>
+	</dependency>
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.8</version>
+	</dependency>
+	<dependency>
+		<groupId>commons-logging</groupId>
+		<artifactId>commons-logging</artifactId>
+		<version>1.1.1</version>
+	</dependency>
+  </dependencies>
+</project>

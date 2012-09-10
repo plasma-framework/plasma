@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.plasma.org/config" 
+  xmlns:cfg="http://www.plasma.org/config"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+     <xsd:complexType name="PlasmaConfiguration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+		        <xsd:sequence>
+		            <xsd:element name="SDO" type="cfg:SDO"  minOccurs="1" maxOccurs="1">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+		            <xsd:element name="Repository" type="cfg:Repository"  minOccurs="1" maxOccurs="1">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+		        </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+         
+    </xsd:complexType>
+
+    <xsd:element name="PlasmaConfiguration" type="cfg:PlasmaConfiguration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="SDO">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+		        <xsd:sequence>
+                    <xsd:element name="GlobalProvisioning" type="cfg:GlobalProvisioning"  minOccurs="1" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+		            <xsd:element name="DefaultNamespace" type="cfg:Namespace"  minOccurs="1" maxOccurs="1">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+		            <xsd:element name="Namespace" type="cfg:Namespace"  minOccurs="1" maxOccurs="unbounded">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+		            <xsd:element name="DataAccessService" type="cfg:DataAccessService"  minOccurs="1" maxOccurs="unbounded">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+		        </xsd:sequence>         
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="SDO" type="cfg:SDO">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="Namespace">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+		        <xsd:sequence>
+		            <xsd:element name="Provisioning" type="cfg:NamespaceProvisioning"  minOccurs="1" maxOccurs="1">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+                    <xsd:element name="TypeBinding" type="cfg:TypeBinding"  minOccurs="0" maxOccurs="unbounded">
+                        <xsd:annotation>                                  
+                            <xsd:documentation>The SDO Type binding customizations for this Namespace</xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+		        </xsd:sequence>         
+ 		        <xsd:attribute name="uri" type="xsd:string" use="required">
+		            <xsd:annotation>                                  
+		                <xsd:documentation>The namespace URI for generated sdo classes for this namespace</xsd:documentation>       
+		            </xsd:annotation>                                 
+		        </xsd:attribute>
+		        <xsd:attribute name="artifact" type="xsd:string" use="required">
+		            <xsd:annotation>                                  
+		                <xsd:documentation>The namespace URI for the source repository artifact for this namespace</xsd:documentation>       
+		            </xsd:annotation>                                 
+		        </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="Namespace" type="cfg:Namespace">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="GlobalProvisioning">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+                <xsd:sequence>
+                    <xsd:element name="Interface" type="cfg:InterfaceProvisioning"  minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                    <xsd:element name="Implementation" type="cfg:ImplementationProvisioning"  minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                    <xsd:element name="QueryDSL" type="cfg:QueryDSLProvisioning"  minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                </xsd:sequence>         
+                <xsd:attribute name="packageName" type="xsd:string" use="optional" >
+                    <xsd:annotation>                                  
+                        <xsd:documentation>the package name for this provisioning context</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="GlobalProvisioning" type="cfg:GlobalProvisioning">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+
+    <xsd:complexType name="InterfaceProvisioning">
+        <xsd:annotation>
+            <xsd:documentation>specific provisioning properties for interfaces under this context</xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexContent>
+            <xsd:extension base="cfg:ClassProvisioning">
+                <xsd:attribute name="constants" type="xsd:boolean" use="optional" default="true">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>whether to generate constants for logical type and propety names</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="InterfaceProvisioning" type="cfg:InterfaceProvisioning">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="ImplementationProvisioning">
+        <xsd:annotation>
+            <xsd:documentation>specific provisioning properties for implementation classes under this context</xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexContent>
+            <xsd:extension base="cfg:ClassProvisioning">
+                <xsd:attribute name="childPackageName" type="xsd:string" use="optional" default="">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The name of the sub package for implementation classes for this provisioning context</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="ImplementationProvisioning" type="cfg:ImplementationProvisioning">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="ClassProvisioning" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+                <xsd:attribute name="classNamePrefix" type="xsd:string" use="optional" default="">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The string to prepend to class names</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+                <xsd:attribute name="classNameSuffix" type="xsd:string" use="optional" default="">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The string to append class names</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="ClassProvisioning" type="cfg:ClassProvisioning">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+ 
+    <xsd:complexType name="NamespaceLink">
+        <xsd:annotation>
+            <xsd:documentation>Associates the parent element with an SDO namespace</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+                <xsd:sequence>
+                    <xsd:element name="Provisioning" type="cfg:NamespaceProvisioning"  minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                </xsd:sequence>
+	            <xsd:attribute name="uri" type="xsd:string" use="required">
+	                <xsd:annotation>                                  
+	                    <xsd:documentation>The applicable namespace URI</xsd:documentation>       
+	                </xsd:annotation>                                 
+	            </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="NamespaceLink" type="cfg:TypeBinding">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:complexType name="NamespaceProvisioning">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+                <xsd:sequence>
+                    <xsd:element name="Interface" type="cfg:InterfaceProvisioning"  minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                    <xsd:element name="Implementation" type="cfg:ImplementationProvisioning"  minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                    <xsd:element name="QueryDSL" type="cfg:QueryDSLProvisioning"  minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                </xsd:sequence>         
+		        <xsd:attribute name="packageName" type="xsd:string" use="required">
+		            <xsd:annotation>                                  
+		                <xsd:documentation>The qualified Java package for generated SDO classes for this namespace</xsd:documentation>       
+		            </xsd:annotation>                                 
+		        </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="NamespaceProvisioning" type="cfg:NamespaceProvisioning">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="QueryDSLProvisioning">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+                <xsd:sequence>
+                    <xsd:element name="Interface" type="cfg:InterfaceProvisioning"  minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                    <xsd:element name="Implementation" type="cfg:ImplementationProvisioning"  minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                </xsd:sequence>         
+                <xsd:attribute name="generate" type="xsd:boolean" use="optional" default="true">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>Whether to generate query DSL classes for the provisioning context</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+                <xsd:attribute name="packageName" type="xsd:string" use="optional">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The qualified Java package name for generated classes for the provisioning context</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="QueryDSLProvisioning" type="cfg:QueryDSLProvisioning">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="TypeBinding">
+        <xsd:annotation>
+            <xsd:documentation>Provides a name binding customization mechanism for an SDO Type</xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Binding">
+                <xsd:sequence>
+                    <xsd:element name="PropertyBinding" type="cfg:PropertyBinding"  minOccurs="0" maxOccurs="unbounded">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                </xsd:sequence>         
+                <xsd:attribute name="type" type="xsd:string" use="required">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The original name of the repository model Classifier to be customized</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="TypeBinding" type="cfg:TypeBinding">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="PropertyBinding">
+        <xsd:annotation>
+            <xsd:documentation>Provides a name binding customization mechanism for an SDO Property</xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Binding">
+                <xsd:attribute name="property" type="xsd:string" use="required">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The original name of the repository model property to be customized</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="PropertyBinding" type="cfg:PropertyBinding">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="Binding" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation>Superclass for binding customizations</xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Customization">
+                <xsd:attribute name="logicalName" type="xsd:string" use="optional">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The logical name to be used to override the logical name within a repository model element</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+                <xsd:attribute name="physicalName" type="xsd:string" use="optional">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The physical (e.g. physical data store) name to be used to override the physical name within a repository model element</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+                <xsd:attribute name="localName" type="xsd:string" use="optional">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The local (e.g. XML) name to be used to override the local name within a repository model element</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="Binding" type="cfg:Binding">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="Customization" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation>Superclass for customizations</xsd:documentation>
+        </xsd:annotation>
+    </xsd:complexType>
+    
+    <xsd:element name="Customization" type="cfg:Customization">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:complexType name="DataAccessService">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+		        
+                <xsd:sequence>
+                    <xsd:element name="DataAccessProvider" type="cfg:DataAccessProvider"  minOccurs="1" maxOccurs="unbounded">
+                        <xsd:annotation>                                  
+                            <xsd:documentation></xsd:documentation>       
+                        </xsd:annotation>                                 
+                    </xsd:element>
+                </xsd:sequence>         
+                <xsd:attribute name="dataStoreType" type="cfg:DataStoreType" use="required">
+                    <xsd:annotation>                                  
+                        <xsd:documentation></xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>       		                
+                <xsd:attribute name="checkQueryResultsSize" type="xsd:boolean" use="optional" default="true"/>
+            </xsd:extension>
+        </xsd:complexContent>
+
+    </xsd:complexType>
+
+    <xsd:element name="DataAccessService" type="cfg:DataAccessService">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element> 
+
+    <xsd:complexType name="DataAccessProvider">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+		        <xsd:sequence>
+		            <xsd:element name="SequenceConfiguration" type="cfg:SequenceConfiguration"  minOccurs="0" maxOccurs="1">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+		            <xsd:element name="Concurrency" type="cfg:Concurrency"  minOccurs="0" maxOccurs="1">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+		            <xsd:element name="NamespaceLink" type="cfg:NamespaceLink"  minOccurs="1" maxOccurs="unbounded">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+		        </xsd:sequence> 
+                <xsd:attribute name="name" type="cfg:DataAccessProviderName" use="required">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The name or category of the data access provider</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>       		                
+                <xsd:attribute name="className" type="xsd:string" use="required">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>The Java class name for the data access provider. The class must implement the PlasmaDataAccessService interface.</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>       		                
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="DataAccessProvider" type="cfg:DataAccessProvider">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="SequenceConfiguration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+                <xsd:attribute name="generatorClassName" type="xsd:string" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>The fully qualified class name for the generator class implementing the org.plasma.sdo.access.SequenceGenerator interface that generates database sequence values.</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="prefix" type="xsd:string" use="optional">
+                    <xsd:annotation>
+                        <xsd:documentation>The name prefix to use for generated (DDL) sequence names.</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>                
+                <xsd:attribute name="suffix" type="xsd:string" use="optional" default="_SEQ">
+                    <xsd:annotation>
+                        <xsd:documentation>The name suffix to use for generated (DDL) sequence names.</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>                
+                <xsd:attribute name="minValue" type="xsd:long" use="optional" default="1">
+                    <xsd:annotation>
+                        <xsd:documentation>The minimum sequence value allowed</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>                
+                <xsd:attribute name="maxValue" type="xsd:decimal" use="optional" default="999999999999999999999999999">
+                    <xsd:annotation>
+                        <xsd:documentation>The maximum sequence value allowed.</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>                
+                <xsd:attribute name="startValue" type="xsd:long" use="optional" default="1">
+                    <xsd:annotation>
+                        <xsd:documentation>The starting sequence value with which to initialize the sequence.</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>                
+                <xsd:attribute name="incrementBy" type="xsd:long" use="optional" default="1">
+                    <xsd:annotation>
+                        <xsd:documentation>The number used to increment the sequence.</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>   
+                <xsd:attribute name="cache" type="xsd:long" use="optional" default="20">
+                    <xsd:annotation>
+                        <xsd:documentation>Caches the specified number of sequence values to reduce contention and increase performance.</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>   
+                
+                             
+            </xsd:extension>
+        </xsd:complexContent>
+
+    </xsd:complexType>
+
+    <xsd:element name="SequenceConfiguration" type="cfg:SequenceConfiguration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>    
+
+    <xsd:complexType name="Concurrency">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="pessimisticLockTimeoutMillis" type="xsd:long" use="required">
+            <xsd:annotation>                                  
+                <xsd:documentation>The number of milliseconds a pessimistic lock may be held on an entity before the pessimistic lock must be refreshed to remain valid</xsd:documentation>       
+            </xsd:annotation>                                 
+        </xsd:attribute>
+    </xsd:complexType>   
+     
+    <xsd:element name="Concurrency" type="cfg:Configuration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:complexType name="Configuration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Property" type="cfg:Property"  minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>                                  
+                    <xsd:documentation></xsd:documentation>       
+                </xsd:annotation>                                 
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>   
+     
+    <xsd:element name="Configuration" type="cfg:Configuration">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+	<xsd:complexType name="Property">
+	    <xsd:annotation><xsd:documentation>defines a property element with both content and attributes</xsd:documentation></xsd:annotation>
+		<xsd:simpleContent>
+		    <xsd:extension base="xsd:string">
+		        <xsd:attribute name="name" type="xsd:string" use="required"/>
+		    </xsd:extension>			    
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+    <xsd:element name="Property" type="cfg:Property">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="Repository">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+		        <xsd:sequence>
+		            <xsd:element name="Artifact" type="cfg:Artifact"  minOccurs="1" maxOccurs="unbounded">
+		                <xsd:annotation>                                  
+		                    <xsd:documentation></xsd:documentation>       
+		                </xsd:annotation>                                 
+		            </xsd:element>
+		        </xsd:sequence>         
+            </xsd:extension>
+        </xsd:complexContent>
+
+    </xsd:complexType>
+
+    <xsd:element name="Repository" type="cfg:Repository">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="Artifact">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        
+        <xsd:complexContent>
+            <xsd:extension base="cfg:Configuration">
+		        <xsd:attribute name="name" type="xsd:string" use="required">
+		            <xsd:annotation>                                  
+		                <xsd:documentation></xsd:documentation>       
+		            </xsd:annotation>                                 
+		        </xsd:attribute>
+		        <xsd:attribute name="urn" type="xsd:string" use="required">
+		            <xsd:annotation>                                  
+		                <xsd:documentation></xsd:documentation>       
+		            </xsd:annotation>                                 
+		        </xsd:attribute>
+		        <xsd:attribute name="namespaceUri" type="xsd:string" use="required">
+		            <xsd:annotation>                                  
+		                <xsd:documentation></xsd:documentation>       
+		            </xsd:annotation>                                 
+		        </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+
+    </xsd:complexType>
+
+    <xsd:element name="Artifact" type="cfg:Artifact">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:simpleType name="DataStoreType">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="RDBMS" />
+            <xsd:enumeration value="ODBMS" />
+            <xsd:enumeration value="NOSQL" />
+            <xsd:enumeration value="OTHER" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="DataAccessProviderName">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="JDBC" />
+            <xsd:enumeration value="JDO" />
+            <xsd:enumeration value="JPA" />
+            <xsd:enumeration value="Hibernate" />
+            <xsd:enumeration value="HBASE" />
+        </xsd:restriction>
+    </xsd:simpleType>
+        
+    <xsd:simpleType name="OptimizationStrategy">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="none" />
+            <xsd:enumeration value="preserve" />
+            <xsd:enumeration value="collect" />
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="SerializationStrategy">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="java" />
+            <xsd:enumeration value="xml" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+
+    
+</xsd:schema>
