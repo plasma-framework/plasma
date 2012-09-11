@@ -5,9 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.plasma.query.QueryException;
+import org.plasma.query.model.AbstractPathElement;
 import org.plasma.query.model.AbstractProperty;
+import org.plasma.query.model.Path;
+import org.plasma.query.model.PathElement;
 import org.plasma.query.model.Property;
 import org.plasma.query.model.Where;
+import org.plasma.query.model.WildcardPathElement;
 import org.plasma.query.model.WildcardProperty;
 
 import commonj.sdo.Type;
@@ -18,18 +23,23 @@ import commonj.sdo.Type;
  */
 class CollectorSupport {
 
-	 /** 
+    private Type rootType;
+
+    /** 
      * Whether to collect only singular properties and 
      * follow paths composed of only singular properties. 
      */
     private boolean onlySingularProperties;
     
-    public CollectorSupport(boolean onlySingularProperties) {
-    	this();
+    
+    public CollectorSupport(Type rootType,
+    		boolean onlySingularProperties) {
+    	this(rootType);
     	this.onlySingularProperties = onlySingularProperties;
     }
 
-    public CollectorSupport() {
+    public CollectorSupport(Type rootType) {
+    	this.rootType = rootType;
 	}
     
 	/** 
@@ -80,6 +90,15 @@ class CollectorSupport {
         }
     }
     
+	/**
+	 * A convenience method returning an array of names for 
+	 * the given property whether a wildcard
+	 * property or not. For wildcad properties determines the type of
+	 * wildcard and returns the appropriate property set.  
+	 * @param type the type
+	 * @param abstractProperty the property
+	 * @return the property names as an array
+	 */
 	public String[] findPropertyNames(Type type, AbstractProperty abstractProperty)
     {
         String[] result = null;       
@@ -126,5 +145,85 @@ class CollectorSupport {
                 + abstractProperty.getClass().getName());
         
         return result;
+    }
+	
+    /**
+     * Recursively traverses the given path checking every
+     * path element and determines if the entire path is composed of
+     * singular properties.
+     * @param path the path
+     * @param rootType the root type
+     * @param abstractProperty
+     * @return whether the given path is composed entirely of singular \
+     * properties
+     */
+    public boolean isSingularPath(Path path, Type rootType,
+    		AbstractProperty abstractProperty) {
+    	return isSingularPath(path, rootType,
+    	    path.getPathNodes().get(0).getPathElement(), 0, abstractProperty);
+    }
+    
+    /**
+     * Recursively traverses the given path checking every
+     * path element and determines if the entire path is composed of
+     * singular properties.
+     * @param path the path
+     * @param currType the current type
+     * @param currPathElement the current path element
+     * @param curPathElementIndex the current path element index
+     * @param abstractProperty the property
+     * @return whether the given path is composed entirely of singular \
+     * properties
+     */
+    public boolean isSingularPath(Path path, Type currType, 
+            AbstractPathElement currPathElement, 
+            int curPathElementIndex, AbstractProperty abstractProperty) {
+        if (currPathElement instanceof PathElement) {
+            PathElement pathElement = (PathElement)currPathElement;
+            commonj.sdo.Property prop = currType.getProperty(pathElement.getValue());
+            
+            if (prop.getType().isDataType())
+                if (abstractProperty instanceof Property)
+                    throw new QueryException("traversal path for property '" + ((Property)abstractProperty).getName() 
+                        + "' from root '" + rootType.getName() + "' contains a non-reference property '" 
+                        + prop.getName() + "'");
+                else
+                    throw new QueryException("traversal path for wildcard property " 
+                        + "' from root '" + rootType.getName() + "' contains a non-reference property '" 
+                        + prop.getName() + "'");
+            
+            if (prop.isMany())
+            	return false; 
+
+            Type nextType = prop.getType(); // traverse
+            
+            if (path.getPathNodes().size() > curPathElementIndex + 1) { // more nodes
+                int nextPathElementIndex = curPathElementIndex + 1;
+                AbstractPathElement nextPathElement = path.getPathNodes().get(nextPathElementIndex).getPathElement();
+                if (!isSingularPath(path, nextType, nextPathElement, nextPathElementIndex, abstractProperty))
+                	return false;
+            }
+        }
+        else if (currPathElement instanceof WildcardPathElement) {
+            List<commonj.sdo.Property> properties = currType.getDeclaredProperties(); 
+            
+            for (commonj.sdo.Property prop : properties) {
+            	if (prop.getType().isDataType())
+            		continue; // 
+            	
+            	Type nextType = prop.getOpposite().getContainingType();
+                
+                if (path.getPathNodes().size() > curPathElementIndex + 1) { // more nodes
+                    int nextPathElementIndex = curPathElementIndex + 1;
+                    AbstractPathElement nextPathElement = path.getPathNodes().get(nextPathElementIndex).getPathElement();
+                    if (!isSingularPath(path, nextType, nextPathElement, nextPathElementIndex, abstractProperty))
+                    	return false;
+                }
+            }
+        }
+        else
+            throw new IllegalArgumentException("unknown path element class, "
+                + currPathElement.getClass().getName());
+        return true;
     }
 }

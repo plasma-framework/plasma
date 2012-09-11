@@ -28,22 +28,23 @@ import commonj.sdo.Type;
  * names, as well as any path-reference or key properties required
  * for graph structure, into a simple list of logical property name
  * strings mapped to the respective {@link Type} definition.  
- * @see Select 
- * @see Type
+ * @see org.plasma.query.model.Select 
+ * @see commonj.sdo.Type
  */
-public class PropertySelectionCollector extends DefaultQueryVisitor 
+public class PropertySelectionCollector 
 {
-    private Map<Type, List<String>> propertyMap;
     private Type rootType;
     private CollectorSupport collectorSupport;
     private Select select;
     // FIXME: what to do with repeated/multiple predicates
+    // 
     private Map<commonj.sdo.Property, Where> predicateMap; 
+    private Map<Type, List<String>> propertyMap;
     
     public PropertySelectionCollector(Select select, Type rootType) {
         this.rootType = rootType;
         this.select = select;
-        this.collectorSupport = new CollectorSupport();
+        this.collectorSupport = new CollectorSupport(this.rootType);
         this.predicateMap = new HashMap<commonj.sdo.Property, Where>();
     }
     
@@ -51,24 +52,13 @@ public class PropertySelectionCollector extends DefaultQueryVisitor
     		boolean onlySingularProperties) {
         this.rootType = rootType;
         this.select = select;
-        this.collectorSupport = new CollectorSupport(onlySingularProperties);
+        this.collectorSupport = new CollectorSupport(this.rootType,
+        		onlySingularProperties);
         this.predicateMap = new HashMap<commonj.sdo.Property, Where>();
     }
     
     public Map<commonj.sdo.Property, Where> getPredicateMap() {
 		return predicateMap;
-	}
-
-	/** 
-     * Whether to collect only singular properties and 
-     * follow paths composed of only singular properties. 
-     */
-    public boolean isOnlySingularProperties() {
-		return this.collectorSupport.isOnlySingularProperties();
-	}
-
-	public void setOnlySingularProperties(boolean onlySingularProperties) {
-		this.collectorSupport.setOnlySingularProperties(onlySingularProperties);
 	}
 
 	/**
@@ -81,25 +71,39 @@ public class PropertySelectionCollector extends DefaultQueryVisitor
 	public Map<Type, List<String>> getResult() {
 		
 		if (this.propertyMap == null)
-		{
-		    propertyMap = new HashMap<Type, List<String>>();
-	        QueryVisitor visitor = new DefaultQueryVisitor() {
-	            public void start(Property property)                                                                            
-	            {    
-                    collect(property);  
-                    super.start(property);                         
-	            }                                                                                                                                                                                                                                                                                                                                                               
-	            public void start(WildcardProperty wildcardProperty)                                                                            
-	            {     
-                    collect(wildcardProperty);  
-                    super.start(wildcardProperty);                         
-	            }                                                                                                                                                                                                                                                                                                                                                               
-	        };
-	        select.accept(visitor);
-		}
-		
+			collect();
         return this.propertyMap;
     }
+	
+	/** 
+     * Whether to collect only singular properties and 
+     * follow paths composed of only singular properties. 
+     */
+    public boolean isOnlySingularProperties() {
+		return this.collectorSupport.isOnlySingularProperties();
+	}
+
+	public void setOnlySingularProperties(boolean onlySingularProperties) {
+		this.collectorSupport.setOnlySingularProperties(onlySingularProperties);
+	}
+	
+	private void collect()
+	{
+	    propertyMap = new HashMap<Type, List<String>>();
+        QueryVisitor visitor = new DefaultQueryVisitor() {
+            public void start(Property property)                                                                            
+            {    
+                collect(property);  
+                super.start(property);                         
+            }                                                                                                                                                                                                                                                                                                                                                               
+            public void start(WildcardProperty wildcardProperty)                                                                            
+            {     
+                collect(wildcardProperty);  
+                super.start(wildcardProperty);                         
+            }                                                                                                                                                                                                                                                                                                                                                               
+        };
+        select.accept(visitor);
+	}	
     
     public boolean hasType(Type type) {
     	return this.propertyMap.get(type) != null;
@@ -145,71 +149,13 @@ public class PropertySelectionCollector extends DefaultQueryVisitor
                     abstractProperty, this.propertyMap);
         	}
         	else {
-        		if (isSingularPath(path, rootType, abstractProperty)) 
+        		if (this.collectorSupport.isSingularPath(path, rootType, abstractProperty)) 
                     collect(path, rootType, 
                             path.getPathNodes().get(0), 0, 
                             abstractProperty, this.propertyMap);
         	}
         }
-    }
-    
-    private boolean isSingularPath(Path path, Type rootType,
-    		AbstractProperty abstractProperty) {
-    	return isSingularPath(path, rootType,
-    	    path.getPathNodes().get(0).getPathElement(), 0, abstractProperty);
-    }
-    
-    private boolean isSingularPath(Path path, Type currType, 
-            AbstractPathElement currPathElement, 
-            int curPathElementIndex, AbstractProperty abstractProperty) {
-        if (currPathElement instanceof PathElement) {
-            PathElement pathElement = (PathElement)currPathElement;
-            commonj.sdo.Property prop = currType.getProperty(pathElement.getValue());
-            
-            if (prop.getType().isDataType())
-                if (abstractProperty instanceof Property)
-                    throw new QueryException("traversal path for property '" + ((Property)abstractProperty).getName() 
-                        + "' from root '" + rootType.getName() + "' contains a non-reference property '" 
-                        + prop.getName() + "'");
-                else
-                    throw new QueryException("traversal path for wildcard property " 
-                        + "' from root '" + rootType.getName() + "' contains a non-reference property '" 
-                        + prop.getName() + "'");
-            
-            if (prop.isMany())
-            	return false;
-
-            Type nextType = prop.getType(); // traverse
-            
-            if (path.getPathNodes().size() > curPathElementIndex + 1) { // more nodes
-                int nextPathElementIndex = curPathElementIndex + 1;
-                AbstractPathElement nextPathElement = path.getPathNodes().get(nextPathElementIndex).getPathElement();
-                if (!isSingularPath(path, nextType, nextPathElement, nextPathElementIndex, abstractProperty))
-                	return false;
-            }
-        }
-        else if (currPathElement instanceof WildcardPathElement) {
-            List<commonj.sdo.Property> properties = currType.getDeclaredProperties(); 
-            
-            for (commonj.sdo.Property prop : properties) {
-            	if (prop.getType().isDataType())
-            		continue; // 
-            	
-            	Type nextType = prop.getOpposite().getContainingType();
-                
-                if (path.getPathNodes().size() > curPathElementIndex + 1) { // more nodes
-                    int nextPathElementIndex = curPathElementIndex + 1;
-                    AbstractPathElement nextPathElement = path.getPathNodes().get(nextPathElementIndex).getPathElement();
-                    if (!isSingularPath(path, nextType, nextPathElement, nextPathElementIndex, abstractProperty))
-                    	return false;
-                }
-            }
-        }
-        else
-            throw new IllegalArgumentException("unknown path element class, "
-                + currPathElement.getClass().getName());
-        return true;
-    }
+    }    
     
     /**
      * Recursively collects properties from the given path into 

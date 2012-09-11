@@ -132,6 +132,13 @@
           <nohelp>false</nohelp>
         </configuration>
       </plugin>
+      <!-- 
+      Note: gpg plugin should be run from cygwin or unix typically
+      and note than m2e needs you to set the HOME environment
+      variable to point at your maven local repo. So while
+      running gpg plugin from eclipse gpg will read the
+      HOME variable and look for gpg config stuff there!!       
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
