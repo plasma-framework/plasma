@@ -288,7 +288,7 @@ public class Expression implements org.plasma.query.Expression {
     } 
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>equal to</b> to the given literal object. The given
      * object is assumed to be a string literal, or can be converted to a 
      * string literal.    
@@ -302,7 +302,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>equal to</b> to the given literal object. The given
      * object is assumed to be a string literal, or can be converted to a 
      * string literal.    
@@ -317,7 +317,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>equal to</b> to the given literal object. The given
      * object is assumed to be a string literal, or can be converted to a 
      * string literal.    
@@ -332,7 +332,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>equal to</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -344,7 +344,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>equal to</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -356,7 +356,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>equal to</b> to the given null-literal. 
      * @param prop the property
      * @param object the literal
@@ -368,7 +368,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>not equal to</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -380,7 +380,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>not equal to</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -392,7 +392,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>not equal to</b> to the given literal. 
      * @param prop the property
      * @param path the single-element property path
@@ -405,7 +405,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>not equal to</b> to the given literal. 
      * @param prop the property
      * @param path the multi-element property path
@@ -418,7 +418,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>not equal to</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -430,7 +430,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>not equal to</b> to the given null-literal. 
      * @param prop the property
      * @param literal the literal
@@ -442,7 +442,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greated than</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -454,7 +454,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greated than</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -466,7 +466,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greated than</b> to the given literal. 
      * @param prop the property
      * @param path the single-element property path
@@ -479,7 +479,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greated than</b> to the given literal. 
      * @param prop the property
      * @param path the multi-element property path
@@ -492,7 +492,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greater than</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -504,7 +504,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greater than or equalt to</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -516,7 +516,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greater than or equal to</b> to the given literal. 
      * @param prop the property
      * @param path the single-element property path
@@ -529,7 +529,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greater than or equal to</b> to the given literal. 
      * @param prop the property
      * @param path the multi-element property path
@@ -542,7 +542,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greater than or equal to</b> to the given literal. 
      * @param prop the property
      * @param path the single-element property path
@@ -555,7 +555,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>greater than or equal to</b> to the given literal. 
      * @param prop the property
      * @param path the single-element property path
@@ -568,7 +568,7 @@ public class Expression implements org.plasma.query.Expression {
     }  
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -580,7 +580,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -591,7 +591,7 @@ public class Expression implements org.plasma.query.Expression {
         return Expression.lt(new Property(prop), Literal.valueOf(literal));
     }
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than</b> to the given literal. 
      * @param prop the property
      * @param path the single-element property path
@@ -604,7 +604,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than</b> to the given literal. 
      * @param prop the property
      * @param path the multi-element property path
@@ -617,7 +617,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -629,7 +629,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than or equal to</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -641,7 +641,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than or equal to</b> to the given literal. 
      * @param prop the property
      * @param literal the literal
@@ -653,7 +653,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than or equal to</b> to the given literal. 
      * @param prop the property
      * @param path the single-element property path
@@ -666,7 +666,7 @@ public class Expression implements org.plasma.query.Expression {
     }
 
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than or equal to</b> to the given literal. 
      * @param prop the property
      * @param path the multi-element property path
@@ -679,7 +679,7 @@ public class Expression implements org.plasma.query.Expression {
     }
     
     /**
-     * Returns a boolean expression "triad", where
+     * Returns an expression where
      * the given property is <b>less than or equal to</b> to the given literal. 
      * @param prop the property
      * @param literal the literal

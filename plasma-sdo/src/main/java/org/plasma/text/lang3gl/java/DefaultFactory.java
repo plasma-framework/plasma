@@ -74,10 +74,12 @@ public abstract class DefaultFactory {
         case Byte:       
         case Character:  
         case Float:      
+        case Double:      
         case Int:        
         case Integer:    
-        case Long:       
         case Short:      
+        case Long:       
+        case Decimal:       
         	return "0"; 
         default:
             throw new TextException("unknown primitive type, " 

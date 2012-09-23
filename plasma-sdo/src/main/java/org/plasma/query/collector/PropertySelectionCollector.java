@@ -31,31 +31,47 @@ import commonj.sdo.Type;
  * @see org.plasma.query.model.Select 
  * @see commonj.sdo.Type
  */
-public class PropertySelectionCollector 
+public class PropertySelectionCollector extends CollectorSupport 
 {
-    private Type rootType;
-    private CollectorSupport collectorSupport;
     private Select select;
     // FIXME: what to do with repeated/multiple predicates
     // 
     private Map<commonj.sdo.Property, Where> predicateMap; 
     private Map<Type, List<String>> propertyMap;
+    private Map<Type, List<String>> singularPropertyMap;
     
     public PropertySelectionCollector(Select select, Type rootType) {
-        this.rootType = rootType;
+        super(rootType);
         this.select = select;
-        this.collectorSupport = new CollectorSupport(this.rootType);
-        this.predicateMap = new HashMap<commonj.sdo.Property, Where>();
+        collect();
     }
     
     public PropertySelectionCollector(Select select, Type rootType,
     		boolean onlySingularProperties) {
-        this.rootType = rootType;
+    	super(rootType, onlySingularProperties);
         this.select = select;
-        this.collectorSupport = new CollectorSupport(this.rootType,
-        		onlySingularProperties);
-        this.predicateMap = new HashMap<commonj.sdo.Property, Where>();
+        collect();
     }
+    
+	private void collect()
+	{
+		this.propertyMap = new HashMap<Type, List<String>>();
+		this.singularPropertyMap = new HashMap<Type, List<String>>();
+        this.predicateMap = new HashMap<commonj.sdo.Property, Where>();
+        QueryVisitor visitor = new DefaultQueryVisitor() {
+            public void start(Property property)                                                                            
+            {    
+                collect(property);  
+                super.start(property);                         
+            }                                                                                                                                                                                                                                                                                                                                                               
+            public void start(WildcardProperty wildcardProperty)                                                                            
+            {     
+                collect(wildcardProperty);  
+                super.start(wildcardProperty);                         
+            }                                                                                                                                                                                                                                                                                                                                                               
+        };
+        this.select.accept(visitor);
+	}	
     
     public Map<commonj.sdo.Property, Where> getPredicateMap() {
 		return predicateMap;
@@ -69,9 +85,6 @@ public class PropertySelectionCollector
 	 * @return the {@link Type} to logical property name map
 	 */
 	public Map<Type, List<String>> getResult() {
-		
-		if (this.propertyMap == null)
-			collect();
         return this.propertyMap;
     }
 	
@@ -80,30 +93,13 @@ public class PropertySelectionCollector
      * follow paths composed of only singular properties. 
      */
     public boolean isOnlySingularProperties() {
-		return this.collectorSupport.isOnlySingularProperties();
+		return this.isOnlySingularProperties();
 	}
 
 	public void setOnlySingularProperties(boolean onlySingularProperties) {
-		this.collectorSupport.setOnlySingularProperties(onlySingularProperties);
+		this.setOnlySingularProperties(onlySingularProperties);
 	}
 	
-	private void collect()
-	{
-	    propertyMap = new HashMap<Type, List<String>>();
-        QueryVisitor visitor = new DefaultQueryVisitor() {
-            public void start(Property property)                                                                            
-            {    
-                collect(property);  
-                super.start(property);                         
-            }                                                                                                                                                                                                                                                                                                                                                               
-            public void start(WildcardProperty wildcardProperty)                                                                            
-            {     
-                collect(wildcardProperty);  
-                super.start(wildcardProperty);                         
-            }                                                                                                                                                                                                                                                                                                                                                               
-        };
-        select.accept(visitor);
-	}	
     
     public boolean hasType(Type type) {
     	return this.propertyMap.get(type) != null;
@@ -131,7 +127,7 @@ public class PropertySelectionCollector
             throw new IllegalArgumentException("unknown property class, "
                     + abstractProperty.getClass().getName());
         if (path == null) {
-            String[] names = this.collectorSupport.findPropertyNames(rootType, abstractProperty);
+            String[] names = this.findPropertyNames(rootType, abstractProperty);
             
             List<String> list = this.propertyMap.get(this.rootType);
             if (list == null) {
@@ -143,13 +139,13 @@ public class PropertySelectionCollector
                     list.add(name);
         }
         else {
-        	if (!this.collectorSupport.isOnlySingularProperties()) {
+        	if (!this.isOnlySingularProperties()) {
                 collect(path, rootType, 
                     path.getPathNodes().get(0), 0, 
                     abstractProperty, this.propertyMap);
         	}
         	else {
-        		if (this.collectorSupport.isSingularPath(path, rootType, abstractProperty)) 
+        		if (this.isSingularPath(path, rootType, abstractProperty)) 
                     collect(path, rootType, 
                             path.getPathNodes().get(0), 0, 
                             abstractProperty, this.propertyMap);
@@ -191,23 +187,23 @@ public class PropertySelectionCollector
             if (currPathode.getWhere() != null)
             	this.predicateMap.put(prop, currPathode.getWhere());
             
-            if (prop.isMany() && this.collectorSupport.isOnlySingularProperties())
+            if (prop.isMany() && this.isOnlySingularProperties())
             	return;
 
             
             Type nextType = prop.getType(); // traverse
             
             if (path.getPathNodes().size() > curPathElementIndex + 1) { // more nodes
-            	this.collectorSupport.mapProperty(currType, prop, map);
+            	this.mapProperty(currType, prop, map);
 
                 int nextPathElementIndex = curPathElementIndex + 1;
                 PathNode nextPathNode = path.getPathNodes().get(nextPathElementIndex);
                 collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty, map);
             }
             else {
-            	this.collectorSupport.mapProperty(currType, prop, map);                              
-                String[] names = this.collectorSupport.findPropertyNames(nextType, abstractProperty);
-                this.collectorSupport.mapPropertyNames(nextType, names, map);
+            	this.mapProperty(currType, prop, map);                              
+                String[] names = this.findPropertyNames(nextType, abstractProperty);
+                this.mapPropertyNames(nextType, names, map);
             }
         }
         else if (currPathElement instanceof WildcardPathElement) {
@@ -219,22 +215,22 @@ public class PropertySelectionCollector
             for (commonj.sdo.Property prop : properties) {
             	if (prop.getType().isDataType())
             		continue;
-                if (prop.isMany() && this.collectorSupport.isOnlySingularProperties())
+                if (prop.isMany() && this.isOnlySingularProperties())
                 	return;
             	
                 Type nextType = prop.getType();
                 
                 if (path.getPathNodes().size() > curPathElementIndex + 1) {
-                	this.collectorSupport.mapProperty(currType, prop, map);
+                	this.mapProperty(currType, prop, map);
 
                     int nextPathElementIndex = curPathElementIndex + 1;
                     PathNode nextPathNode = path.getPathNodes().get(nextPathElementIndex);
                     collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty, map);
                 }
                 else {
-                	this.collectorSupport.mapProperty(currType, prop, map);
-                    String[] names = this.collectorSupport.findPropertyNames(nextType, abstractProperty);
-                    this.collectorSupport.mapPropertyNames(nextType, names, map);
+                	this.mapProperty(currType, prop, map);
+                    String[] names = this.findPropertyNames(nextType, abstractProperty);
+                    this.mapPropertyNames(nextType, names, map);
                 }
             }
         }

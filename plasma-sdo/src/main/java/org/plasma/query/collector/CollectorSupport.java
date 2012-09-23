@@ -1,7 +1,6 @@
 package org.plasma.query.collector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,25 +10,25 @@ import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.PathElement;
 import org.plasma.query.model.Property;
-import org.plasma.query.model.Where;
 import org.plasma.query.model.WildcardPathElement;
 import org.plasma.query.model.WildcardProperty;
 
 import commonj.sdo.Type;
 
 /**
- * Package level delegate for common collection
+ * Package level superclass for common collection
  * functionality.
  */
-class CollectorSupport {
+abstract class CollectorSupport {
 
-    private Type rootType;
+    protected Type rootType;
 
     /** 
-     * Whether to collect only singular properties and 
-     * follow paths composed of only singular properties. 
+     * Whether to collect only singular reference 
+     * properties and follow paths composed of only 
+     * singular properties. 
      */
-    private boolean onlySingularProperties;
+    protected boolean onlySingularProperties;
     
     
     public CollectorSupport(Type rootType,
@@ -118,7 +117,7 @@ class CollectorSupport {
                 default:
                 case ALL:
                     for (commonj.sdo.Property prop : props) {
-                        if (prop.isMany() && this.onlySingularProperties)
+                        if (prop.isMany() && !prop.getType().isDataType() && this.onlySingularProperties)
                         	continue;
                     	list.add(prop.getName());
                     }
