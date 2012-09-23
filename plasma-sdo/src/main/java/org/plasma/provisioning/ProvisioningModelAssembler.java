@@ -233,19 +233,19 @@ public class ProvisioningModelAssembler {
 			Map<Type, List<String>> queryPropertyMap)
 	{
         for (Type base : sdoType.getBaseTypes()) {
+            PlasmaType sdoBaseType = (PlasmaType)PlasmaTypeHelper.INSTANCE.getType(
+            		base.getURI(), base.getName());
         	Class existing = classMap.get(destNamespaceURI + "#" + base.getName());  
         	if (existing == null) {
                 Class baseClss = createClass(model, (PlasmaType)base);
                 classMap.put(destNamespaceURI + "#" + baseClss.getName(), baseClss);
-                PlasmaType sdoBaseType = (PlasmaType)PlasmaTypeHelper.INSTANCE.getType(
-                		base.getURI(), base.getName());
                 List<String> baseList = queryPropertyMap.get(base.getURI() + "#" + base.getName());
                 constructImplicitDatatypeProperties(query, sdoBaseType, baseClss, baseList);
                 constructImplicitReferenceProperties(query, sdoBaseType, baseClss, collector, baseList);
     		    //List<commonj.sdo.Property> baseProperties = base.getDeclaredProperties();
     		    //createFields(model, baseClss, baseProperties);
         	}
-            constructBaseTypes (query, base, collector, queryPropertyMap); // recurse
+            constructBaseTypes (query, sdoBaseType, collector, queryPropertyMap); // recurse
         }
 	}
 
