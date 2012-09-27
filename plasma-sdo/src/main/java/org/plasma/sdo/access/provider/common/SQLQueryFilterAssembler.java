@@ -43,6 +43,8 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 	public static final String ALIAS_PREFIX = "a";
 
 	protected Type stringType;
+	protected RelationalOperator contextRelationalOperator;
+	protected String contextRelationalOperatorText;
 
 	@SuppressWarnings("unused")
 	private SQLQueryFilterAssembler() {
@@ -63,33 +65,50 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 		stringType = PlasmaTypeHelper.INSTANCE.getType(uri, "String");
 	}
 
-	public void start(RelationalOperator operator) {
+	public void start(LogicalOperator operator) {
 		if (filter.length() > 0)
 			filter.append(" ");
 
 		switch (operator.getValue()) {
-		case EQUALS:
-			filter.append("=");
+		case AND:
+			filter.append("AND");
 			break;
-		case NOT_EQUALS:
-			filter.append("!=");
-			break;
-		case GREATER_THAN:
-			filter.append(">");
-			break;
-		case GREATER_THAN_EQUALS:
-			filter.append(">=");
-			break;
-		case LESS_THAN:
-			filter.append("<");
-			break;
-		case LESS_THAN_EQUALS:
-			filter.append("<=");
+		case OR:
+			filter.append("OR");
 			break;
 		default:
 			throw new DataAccessException("unknown operator '"
 					+ operator.getValue().toString() + "'");
 		}
+		super.start(operator);
+	}
+
+	public void start(RelationalOperator operator) {
+		switch (operator.getValue()) {
+		case EQUALS:
+			this.contextRelationalOperatorText = "=";
+			break;
+		case NOT_EQUALS:
+			this.contextRelationalOperatorText = "!=";
+			break;
+		case GREATER_THAN:
+			this.contextRelationalOperatorText = ">";
+			break;
+		case GREATER_THAN_EQUALS:
+			this.contextRelationalOperatorText = ">=";
+			break;
+		case LESS_THAN:
+			this.contextRelationalOperatorText = "<";
+			break;
+		case LESS_THAN_EQUALS:
+			this.contextRelationalOperatorText = "<=";
+			break;
+		default:
+			throw new DataAccessException("unknown operator '"
+					+ operator.getValue().toString() + "'");
+		}
+		this.contextRelationalOperator = operator;
+		
 		super.start(operator);
 	}
 	
@@ -111,20 +130,37 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 	public void start(Literal literal) {
 		if (filter.length() > 0)
 			filter.append(" ");
+		
+		if (filter.length() > 0)
+			filter.append(" ");
+		filter.append(this.contextRelationalOperatorText);
+		
 		String content = literal.getValue();
+		content = content.replace(WILDCARD, "%");
 		params.add(
 			DataConverter.INSTANCE.convert(
 				this.contextProperty.getType(), 
 				this.stringType,
 				content));
-		
-		super.start(literal);
+		filter.append(" ?");
 	}
 
 	public void start(NullLiteral nullLiteral) {
-
-		params.add(nullLiteral);
-		super.start(nullLiteral);
+		if (filter.length() > 0)
+			filter.append(" ");
+		if (this.contextRelationalOperator == null)
+			throw new IllegalStateException("expected context relational operator");
+		switch (this.contextRelationalOperator.getValue()) {
+		case EQUALS:
+			filter.append("IS NULL");
+			break;
+		case NOT_EQUALS:
+			filter.append("IS NOT NULL");
+			break;
+		default:
+			throw new DataAccessException("invalid operator for null literal'"
+					+ this.contextRelationalOperator.getValue().toString() + "'");
+		}
 	}
 	
 }

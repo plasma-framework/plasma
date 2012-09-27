@@ -30,6 +30,12 @@ abstract class CollectorSupport {
      */
     protected boolean onlySingularProperties;
     
+    /**
+     * Whether to collect only declared properties for
+     * a type, otherwise indicates to collect all properties
+     * for a given type and all its base types  
+     */
+    protected boolean onlyDeclaredProperties = true;
     
     public CollectorSupport(Type rootType,
     		boolean onlySingularProperties) {
@@ -57,6 +63,22 @@ abstract class CollectorSupport {
 		this.onlySingularProperties = onlySingularProperties;
 	}
 
+    /**
+     * Returns whether to collect only declared properties for
+     * a type. 
+     */
+	public boolean isOnlyDeclaredProperties() {
+		return onlyDeclaredProperties;
+	}
+
+    /**
+     * Sets whether to collect only declared properties for
+     * a type.
+     */
+	public void setOnlyDeclaredProperties(boolean onlyDeclaredProperties) {
+		this.onlyDeclaredProperties = onlyDeclaredProperties;
+	}
+
 	public void mapProperty(Type type, commonj.sdo.Property property, 
     		Map<Type, List<String>> map)
     {
@@ -79,20 +101,22 @@ abstract class CollectorSupport {
         if (list == null) {
             list = new ArrayList<String>(names.length);
             map.put(type, list);
-            for (String name : names)
+            for (String name : names) {
                 list.add(name);        
+            }
         }
         else {
             for (String name : names)
-                if (!list.contains(name))
+                if (!list.contains(name)) {
                     list.add(name); 
+                }
         }
     }
     
 	/**
 	 * A convenience method returning an array of names for 
 	 * the given property whether a wildcard
-	 * property or not. For wildcad properties determines the type of
+	 * property or not. For wildcard properties determines the type of
 	 * wildcard and returns the appropriate property set.  
 	 * @param type the type
 	 * @param abstractProperty the property
@@ -111,7 +135,11 @@ abstract class CollectorSupport {
         else if (abstractProperty instanceof WildcardProperty) {
             WildcardProperty wildcardProperty = (WildcardProperty)abstractProperty;
             List<String> list = new ArrayList<String>();
-            List<commonj.sdo.Property> props = type.getDeclaredProperties();
+            List<commonj.sdo.Property> props = null;
+            if (this.onlyDeclaredProperties)
+                props = type.getDeclaredProperties();
+            else
+            	props = type.getProperties();
             switch (wildcardProperty.getType())
             {
                 default:
@@ -204,7 +232,11 @@ abstract class CollectorSupport {
             }
         }
         else if (currPathElement instanceof WildcardPathElement) {
-            List<commonj.sdo.Property> properties = currType.getDeclaredProperties(); 
+            List<commonj.sdo.Property> properties = null;
+            if (this.onlyDeclaredProperties)
+            	properties = currType.getDeclaredProperties();
+            else
+            	properties = currType.getProperties();
             
             for (commonj.sdo.Property prop : properties) {
             	if (prop.getType().isDataType())

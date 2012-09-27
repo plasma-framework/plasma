@@ -2,18 +2,19 @@ package org.plasma.query.bind;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
+import javax.xml.transform.Source;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.BindingValidationEventHandler;
 import org.plasma.common.bind.DataBinding;
 import org.plasma.common.bind.ValidatingUnmarshaler;
-import org.plasma.query.model.ObjectFactory;
 import org.plasma.query.Query;
 import org.xml.sax.SAXException;
 
@@ -68,6 +69,14 @@ public class PlasmaQueryDataBinding implements DataBinding {
 
     public Object unmarshal(InputStream stream) throws JAXBException {
         return validatingUnmarshaler.unmarshal(stream);
+    }
+    
+    public Object unmarshal(Reader reader) throws JAXBException {
+        return validatingUnmarshaler.unmarshal(reader);
+    }
+    
+    public Object unmarshal(Source source) throws JAXBException {
+        return validatingUnmarshaler.unmarshal(source);
     }
 
     public Object validate(String xml) throws JAXBException {
