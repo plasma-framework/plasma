@@ -44,7 +44,7 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 
 	protected Type stringType;
 	protected RelationalOperator contextRelationalOperator;
-	protected String contextRelationalOperatorText;
+	protected WildcardOperator contextWildcardOperator;
 
 	@SuppressWarnings("unused")
 	private SQLQueryFilterAssembler() {
@@ -84,46 +84,14 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 	}
 
 	public void start(RelationalOperator operator) {
-		switch (operator.getValue()) {
-		case EQUALS:
-			this.contextRelationalOperatorText = "=";
-			break;
-		case NOT_EQUALS:
-			this.contextRelationalOperatorText = "!=";
-			break;
-		case GREATER_THAN:
-			this.contextRelationalOperatorText = ">";
-			break;
-		case GREATER_THAN_EQUALS:
-			this.contextRelationalOperatorText = ">=";
-			break;
-		case LESS_THAN:
-			this.contextRelationalOperatorText = "<";
-			break;
-		case LESS_THAN_EQUALS:
-			this.contextRelationalOperatorText = "<=";
-			break;
-		default:
-			throw new DataAccessException("unknown operator '"
-					+ operator.getValue().toString() + "'");
-		}
 		this.contextRelationalOperator = operator;
-		
+		this.contextWildcardOperator = null;
 		super.start(operator);
 	}
 	
 	public void start(WildcardOperator operator) {
-		if (filter.length() > 0)
-			filter.append(" ");
-
-		switch (operator.getValue()) {
-		case LIKE:
-			filter.append("LIKE");
-			break;
-		default:
-			throw new DataAccessException("unknown operator '"
-					+ operator.getValue().toString() + "'");
-		}
+		this.contextWildcardOperator = operator;
+		this.contextRelationalOperator = null;
 		super.start(operator);
 	}
 
@@ -131,12 +99,17 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 		if (filter.length() > 0)
 			filter.append(" ");
 		
-		if (filter.length() > 0)
-			filter.append(" ");
-		filter.append(this.contextRelationalOperatorText);
-		
 		String content = literal.getValue();
-		content = content.replace(WILDCARD, "%");
+		if (this.contextWildcardOperator == null) {
+			if (this.contextRelationalOperator == null)
+				throw new IllegalStateException("expected context relational operator");
+		    filter.append(toString(this.contextRelationalOperator));
+		}
+		else {
+			content = content.replace(WILDCARD, "%");
+		    filter.append(toString(contextWildcardOperator));
+		}				
+		
 		params.add(
 			DataConverter.INSTANCE.convert(
 				this.contextProperty.getType(), 
@@ -161,6 +134,47 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 			throw new DataAccessException("invalid operator for null literal'"
 					+ this.contextRelationalOperator.getValue().toString() + "'");
 		}
+	}
+	
+	private String toString(RelationalOperator operator) {
+		String result = null;
+		switch (operator.getValue()) {
+		case EQUALS:
+			result = "=";
+			break;
+		case NOT_EQUALS:
+			result = "!=";
+			break;
+		case GREATER_THAN:
+			result = ">";
+			break;
+		case GREATER_THAN_EQUALS:
+			result = ">=";
+			break;
+		case LESS_THAN:
+			result = "<";
+			break;
+		case LESS_THAN_EQUALS:
+			result = "<=";
+			break;
+		default:
+			throw new DataAccessException("unknown operator '"
+					+ operator.getValue().toString() + "'");
+		}
+        return result;
+	}
+	
+	private String toString(WildcardOperator operator) {
+		String result = null;
+		switch (operator.getValue()) {
+		case LIKE:
+			result = "LIKE";
+			break;
+		default:
+			throw new DataAccessException("unknown wildcard operator '"
+					+ operator.getValue().toString() + "'");
+		}
+		return result;
 	}
 	
 }
