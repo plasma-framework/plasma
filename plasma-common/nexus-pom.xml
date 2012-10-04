@@ -132,6 +132,54 @@
           <nohelp>false</nohelp>
         </configuration>
       </plugin>
+      <!-- 
+      Note: gpg plugin should be run from cygwin or unix typically
+      and note than m2e needs you to set the HOME environment
+      variable to point at your maven local repo. So while
+      running gpg plugin from eclipse gpg will read the
+      HOME variable and look for gpg config stuff there!!       
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--
+          Release Plugin (Update version in POM before/after release, create
+          tag, deploy) to try: mvn release:prepare -DdryRun=true && mvn
+          release:clean to perform:
+
+          mvn release:prepare release:perform
+
+          Read http://nexus.sonatype.org/oss-repository-hosting.html#3 for
+          instructions on releasing to this project's Sonatype repository
+      -->
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.0-beta-7</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+            <execution>
+                <id>attach-sources</id>
+                <goals>
+                    <goal>jar</goal>
+                </goals>
+            </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <reporting>   
@@ -143,5 +191,21 @@
       </plugin>                                                                        
     </plugins> 
   </reporting>                                                                         
-
+  <distributionManagement> 
+      <!-- My project's Sonatype repository to be used by the release plugin -->
+      <repository>
+          <id>sonatype-nexus-staging-and-release</id>
+          <name>Nexus Staging Repository</name>
+          <!--
+          giving a 400 error
+          <url>https://oss.sonatype.org/content/groups/public</url>
+          -->
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      </repository> 
+      <snapshotRepository>
+         <id>sonatype-nexus-snapshot</id>
+         <name>Nexus Snapshot Repository</name>
+         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      </snapshotRepository>
+  </distributionManagement>
 </project>
