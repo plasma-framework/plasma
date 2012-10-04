@@ -24,6 +24,7 @@
 <xsl:param name="pkg" />
 <xsl:param name="interfacepkg" />
 <xsl:param name="cfg" />
+<xsl:param name="separator" />
 
 
 <xsl:template match="xmi:XMI">
@@ -55,9 +56,9 @@
         <xsl:call-template name="getOwnedCommentBody"/>
     </xsl:variable>
     <xsl:if test="normalize-space($ownedComment) != ''">
-	    <xsl:variable name="packageDir" select="translate($packageName,'.','\')"/>                 
-	    <xsl:variable name="dir" select="concat(concat($basedir,'\'), $packageDir)"/>                         
-	    <xsl:variable name="file" select="concat(concat($dir,'\'),'package.html')"/>
+	    <xsl:variable name="packageDir" select="translate($packageName,'.',$separator)"/>                 
+	    <xsl:variable name="dir" select="concat(concat($basedir,$separator), $packageDir)"/>                         
+	    <xsl:variable name="file" select="concat(concat($dir,$separator),'package.html')"/>
 	    <redirect:write file="$file"> 
 	        <xsl:text>&#13;&lt;html&gt;</xsl:text>
 	        <xsl:text>&#13;&lt;head&gt;</xsl:text>
@@ -90,9 +91,9 @@
 	        </xsl:otherwise>
 	    </xsl:choose>	                       
     </xsl:variable>                                                  
-    <xsl:variable name="packageDir" select="translate($packageName,'.','\')"/>                 
-    <xsl:variable name="dir" select="concat(concat($basedir,'\'), $packageDir)"/>                         
-    <xsl:variable name="file" select="concat(concat($dir,'\'),concat($className, '.java'))"/>
+    <xsl:variable name="packageDir" select="translate($packageName,'.',$separator)"/>                 
+    <xsl:variable name="dir" select="concat(concat($basedir,$separator), $packageDir)"/>                         
+    <xsl:variable name="file" select="concat(concat($dir,$separator),concat($className, '.java'))"/>
 
     <redirect:write select="$file"> 
         <xsl:message terminate="no"><xsl:value-of select="$file"/></xsl:message>
@@ -182,9 +183,9 @@
 	        </xsl:otherwise>
 	    </xsl:choose>	                       
     </xsl:variable>                                                  
-    <xsl:variable name="packageDir" select="translate($packageName,'.','\')"/>                 
-    <xsl:variable name="dir" select="concat(concat($basedir,'\'), $packageDir)"/>                         
-    <xsl:variable name="file" select="concat(concat($dir,'\'),concat($className, '.java'))"/>
+    <xsl:variable name="packageDir" select="translate($packageName,'.',$separator)"/>                 
+    <xsl:variable name="dir" select="concat(concat($basedir,$separator), $packageDir)"/>                         
+    <xsl:variable name="file" select="concat(concat($dir,$separator),concat($className, '.java'))"/>
 
     <redirect:write select="$file"> 
         <xsl:message terminate="no"><xsl:value-of select="$file"/></xsl:message>

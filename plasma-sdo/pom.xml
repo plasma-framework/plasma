@@ -291,7 +291,7 @@
                           <arg value="${basedir}/dummy.out" />                                                                                                                                                                                                       
                           <arg value="${basedir}/src/main/resources/uml/Plasma_SDO_Profile.mdxml" />                                                                                                                                                                 
                           <arg value="${basedir}/src/main/resources/xsl/profile/ProfileToJavaClassMetamodel.xsl" />                                                                                                                                                  
-                          <arg value="basedir=${basedir}/target/generated-sources/java pkg=org.plasma.sdo.profile interfacepkg=org.plasma.sdo author=Plasma-Team version=${release_suffix}" />                                                                       
+                          <arg value="basedir=${basedir}/target/generated-sources/java pkg=org.plasma.sdo.profile interfacepkg=org.plasma.sdo author=Plasma-Team version=${release_suffix} separator=${file.separator}" />                                                                       
                       </java>                                                                                                                                                                                                                                        
                     </target> 
                   </configuration> 
@@ -317,7 +317,7 @@
                           <arg value="${basedir}/dummy.out" />                                                                                                                                                                                                       
                           <arg value="${basedir}/src/main/resources/uml/Plasma_SDO_Profile.mdxml" />                                                                                                                                                                 
                           <arg value="${basedir}/src/main/resources/xsl/profile/ProfileToJavaInterfaceMetamodel.xsl" />                                                                                                                                                  
-                          <arg value="basedir=${basedir}/target/generated-sources/java pkg=org.plasma.sdo implpkg=org.plasma.sdo.profile author=Plasma-Team version=${release_suffix}" />                                                                       
+                          <arg value="basedir=${basedir}/target/generated-sources/java pkg=org.plasma.sdo implpkg=org.plasma.sdo.profile author=Plasma-Team version=${release_suffix} separator=${file.separator}" />                                                                       
                       </java>                                                                                                                                                                                                                                        
                     </target>                                                
                   </configuration>                                           
