@@ -19,6 +19,7 @@ import java.util.TimeZone;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.Duration;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.ISOPeriodFormat;
@@ -223,13 +224,15 @@ public class DataConverter {
         try {
 			return method.invoke(this, targetType, value);
 		} catch (IllegalArgumentException e) {
-    		log.error(e.getMessage(), e);
+		    throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
-    		log.error(e.getMessage(), e);
+		    throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
-    		log.error(e.getMessage(), e);
+			if (e.getTargetException() instanceof InvalidDataConversionException)
+			    throw (InvalidDataConversionException)e.getTargetException();
+			else
+			    throw new RuntimeException(e.getTargetException());
 		}
-        return null;
     }
     
     public Object convert(Type targetType, Type sourceType, Object value) {
@@ -805,13 +808,33 @@ public class DataConverter {
         DataType sourceDataType = DataType.valueOf(sourceType.getName());
         switch (sourceDataType) {
         case String:
+        	if (!(value instanceof String))
+        		throw new IllegalArgumentException("expected value as class "
+        			+ String.class.getName() + ", not " 
+        			+ value.getClass().getName() + ", for datatype '"
+        			+ sourceDataType.name() + "'");
             return (String)value;
         case Decimal: 
+        	if (!(value instanceof BigDecimal))
+        		throw new IllegalArgumentException("expected value as class "
+        			+ BigDecimal.class.getName() + ", not " 
+                	+ value.getClass().getName() + ", for datatype '"
+        			+ sourceDataType.name() + "'");
             return ((BigDecimal)value).toString();
         case Bytes:  
+        	if (!(value instanceof byte[]))
+        		throw new IllegalArgumentException("expected value as class "
+        			+ byte[].class.getName() + ", not " 
+                	+ value.getClass().getName() + ", for datatype '"
+        			+ sourceDataType.name() + "'");
             // as per spec: [0-9A-F]+
             return toHexString(((byte[])value));
         case Byte:   
+        	if (!(value instanceof Byte))
+        		throw new IllegalArgumentException("expected value as class "
+        			+ Byte.class.getName() + ", not " 
+                    + value.getClass().getName() + ", for datatype '"
+        			+ sourceDataType.name() + "'");
             // as per spec: 8 bits unsigned [0-9]+
             return Integer.valueOf(((Byte)value).byteValue() & 0xFF).toString();
         case Boolean:  
@@ -823,8 +846,12 @@ public class DataConverter {
         case Long:     
         case Short:    
             return String.valueOf(value);
-        case Object:   
         case Strings:  
+        	if (!(value instanceof List))
+        		throw new IllegalArgumentException("expected value as class "
+        			+ List.class.getName() + ", not " 
+                    + value.getClass().getName() + ", for datatype '"
+        			+ sourceDataType.name() + "'");
             StringBuffer buf = new StringBuffer();
             List<String> list = (List<String>)value;
             Iterator<String> iter = list.iterator();
@@ -835,26 +862,36 @@ public class DataConverter {
             }
             return buf.toString();
         case URI:     
+        	if (!(value instanceof String))
+        		throw new IllegalArgumentException("expected value as class "
+        			+ String.class.getName() + ", not " 
+                    + value.getClass().getName() + ", for datatype '"
+        			+ sourceDataType.name() + "'");
             return (String)value;
         case Date:     
+        	if (!(value instanceof Date))
+        		throw new IllegalArgumentException("expected value as class "
+        			+ Date.class.getName() + ", not " 
+                    + value.getClass().getName() + ", for datatype '"
+        			+ sourceDataType.name() + "'");
         	return this.dateFormat.format(value);
         case DateTime: 
-        	return this.dateTimeFormat.format(value);
         case Month:    
-        	return this.monthFormat.format(value);
         case MonthDay: 
-        	return this.monthDayFormat.format(value);
         case Day:      
-        	return this.dayFormat.format(value);
         case Time:     
-        	return this.timeFormat.format(value);
         case Year:     
-        	return this.yearFormat.format(value);
         case YearMonth:
-        	return this.yearMonthFormat.format(value);
         case YearMonthDay:
-        	return this.yearMonthDayFormat.format(value);
+        	if (!(value instanceof String))
+        		throw new IllegalArgumentException("expected value as class "
+        			+ String.class.getName() + ", not " 
+                    + value.getClass().getName() + ", for datatype '"
+        			+ sourceDataType.name() + "'");
+            return (String)value; // Temporal type except Date are String in Java
         case Duration: 
+            return String.valueOf(value);
+        case Object:   
             return String.valueOf(value);
         default: 
             throw new InvalidDataConversionException(DataType.String, 
@@ -902,9 +939,9 @@ public class DataConverter {
             } catch (ParseException e) {
                 throw new PlasmaDataObjectException(e);
             }
+        case DateTime:
         case Month:    
         case MonthDay: 
-        case DateTime:
         case URI:  
             return value;
         case Day:      
@@ -994,10 +1031,28 @@ public class DataConverter {
         switch (targetDataType) {
         case Date:
             return value;
+        case DateTime:
+            return this.dateTimeFormat.format(value);
+        case Day:
+            return this.dayFormat.format(value);
+        case Month:
+            return this.monthFormat.format(value);
+        case MonthDay:
+            return this.monthDayFormat.format(value);
+        case Time:
+            return this.timeFormat.format(value);
+        case Year:
+            return this.yearFormat.format(value);
+        case YearMonth:
+            return this.yearMonthFormat.format(value);
+        case YearMonthDay:
+            return this.yearMonthDayFormat.format(value);
         case Long:
             return new Long(value.getTime());
-        case String:
-            return dateTimeFormat.format(value);
+        case String: // use format with max precision
+            return this.dateTimeFormat.format(value);
+        case Duration:    
+            return new Duration(value.getTime());
         default: 
             throw new InvalidDataConversionException(targetDataType, 
                     DataType.Date, value);

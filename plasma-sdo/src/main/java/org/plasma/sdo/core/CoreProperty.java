@@ -485,7 +485,10 @@ public class CoreProperty implements PlasmaProperty {
         case URI:       
         case Year:      
         case YearMonth: 
+        case YearMonthDay: 
         	return true;
+        case Object: 
+        	return false;
         case String:    
         case Strings: 
         	if (this.getEnumerationConstraint() != null)

@@ -2137,8 +2137,17 @@ dataObject.set(property, dataHelper.convert(property, value));
              
              Property originationTimestampProperty = ((PlasmaType)this.getType()).findProperty(ConcurrencyType.origination, 
                       	ConcurrentDataFlavor.time);
-             if (originationTimestampProperty != null)
-            	 valueObject.put(originationTimestampProperty.getName(), idMap.getSnapshotDate());
+             if (originationTimestampProperty != null) {
+             	 // Convert to date which is convert-able to
+            	 // all possible SDO 2.1 temporal data-types
+            	 Date dateSnapshot = new Date(
+             		  idMap.getSnapshotDate().getTime());
+            	 // convert date to the target type
+                 Object snapshot = DataConverter.INSTANCE.convert(
+                	  originationTimestampProperty.getType(), dateSnapshot);
+                 valueObject.put(originationTimestampProperty.getName(), 
+            	     snapshot);
+             }
              else
                  if (log.isDebugEnabled()) 
                      log.debug("could not find origination timestamp property for type, "
@@ -2177,8 +2186,16 @@ dataObject.set(property, dataHelper.convert(property, value));
                          log.debug("could not find locking user property for type, "
                              + this.getType().getURI() + "#" + this.getType().getName());  
                  Property lockingTimestampProperty = (Property)this.getType().get(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_LOCKING_TIMESTAMP);
-                 if (lockingTimestampProperty != null)
-                	 valueObject.put(lockingTimestampProperty.getName(), idMap.getSnapshotDate());
+                 if (lockingTimestampProperty != null) {
+                 	 // Convert to date which is convert-able to
+                	 // all possible SDO 2.1 temporal data-types
+                	 Date dateSnapshot = new Date(
+                 		  idMap.getSnapshotDate().getTime());
+                	 // convert date to the target type
+                     Object snapshot = DataConverter.INSTANCE.convert(
+                    		 lockingTimestampProperty.getType(), dateSnapshot);
+                	 valueObject.put(lockingTimestampProperty.getName(), snapshot);
+                 }
                  else
                      if (log.isDebugEnabled())
                          log.debug("could not find locking timestamp property for type, "

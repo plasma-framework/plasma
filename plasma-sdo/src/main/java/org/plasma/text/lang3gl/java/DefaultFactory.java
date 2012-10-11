@@ -459,6 +459,8 @@ public abstract class DefaultFactory {
 			java.lang.Class<?> typeClass = this.getTypeClass(sdoType);
 			if (typeClass.isPrimitive())
 				continue;
+			if (typeClass.isArray())
+				continue;
 			nameMap.put(typeClass.getName(), typeClass.getName());
 		}
 	}

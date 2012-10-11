@@ -1,5 +1,7 @@
 package org.plasma.text.lang3gl.java;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.Class;
@@ -7,6 +9,8 @@ import org.plasma.provisioning.ClassRef;
 import org.plasma.text.lang3gl.ClassNameResolver;
 
 public class SDOInterfaceNameResolver implements ClassNameResolver {
+    private static Log log =LogFactory.getLog(
+    		SDOInterfaceNameResolver.class); 
 
 	@Override
 	public String getName(Class clss) {		
@@ -18,6 +22,7 @@ public class SDOInterfaceNameResolver implements ClassNameResolver {
 		Namespace sdoNamespace = PlasmaConfig.getInstance().getSDONamespaceByURI(clss.getUri());
 		String packageName = sdoNamespace.getProvisioning().getPackageName();
 		String qualifiedName = packageName + "." + clss.getName(); 				
+		
 		return qualifiedName;
 	}
 
