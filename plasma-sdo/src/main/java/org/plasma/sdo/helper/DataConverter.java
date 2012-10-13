@@ -802,6 +802,17 @@ public class DataConverter {
         }
     }    
     
+    /**
+     * Converts the given value to a string.
+     * @param sourceType the property type for the given property
+     * @param value the value to convert
+     * @return the string value
+     * @throws InvalidDataConversionException if the given source 
+     * type cannot be converted to string as per the SDO 2.1 
+     * datatype conversion table.
+     * @throws IllegalArgumentException if the given value is not
+     * the expected Java type as per the SDO 2.1 specification
+     */
     @SuppressWarnings("unchecked")
     public String toString(Type sourceType, Object value)
     {    
