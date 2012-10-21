@@ -12,6 +12,7 @@ import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.ProvisioningModelAssembler;
 import org.plasma.provisioning.ProvisioningModelDataBinding;
+import org.plasma.provisioning.adapter.ModelAdapter;
 import org.plasma.text.lang3gl.DefaultLang3GLContext;
 import org.plasma.text.lang3gl.Lang3GLContext;
 import org.plasma.text.lang3gl.Lang3GLDialect;
@@ -89,6 +90,7 @@ public class SDOTool extends ProvisioningTool {
     		stream.write(xml.getBytes());
     		stream.flush();
     		stream.close();
+    		validateStagingModel(destFile);
     		log.info("wrote merged model file to: " 
     				+ destFile.getAbsoluteFile());
             break;        	
@@ -121,7 +123,9 @@ public class SDOTool extends ProvisioningTool {
         		//log.debug(xml);
         	}
         	
-            
+            // FIXME: pass this to factories
+    		ModelAdapter validator = 
+    				new ModelAdapter(modelAssembler.getModel());
             Lang3GLContext factoryContext = new DefaultLang3GLContext(modelAssembler.getModel());
             
             Lang3GLFactory factory = null;

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.provisioning.Class;
+import org.plasma.provisioning.Package;
 import org.plasma.provisioning.ClassRef;
 import org.plasma.provisioning.Enumeration;
 import org.plasma.provisioning.EnumerationRef;
@@ -52,30 +53,18 @@ public class ModelAdapter {
     }
     
     private void construct() {
-    	for (Enumeration enm : model.getEnumerations()) {
-    		String key = enm.getUri() + "#" + enm.getName();
-    		if (typeMap.get(key) != null)
-    			throw new TypeNameCollisionException(
-    				"detected multiple types named '"+enm.getName()+"' under the same URI '"
-    				+ enm.getUri() + "'");
-    		typeMap.put(key, new TypeAdapter(enm));
-    	}
+		if (log.isDebugEnabled())
+			log.debug("constructing...");
+    	for (Package pkg : model.getPackages())
+    		mapEnumerations(pkg);
     	
-    	for (Class cls : model.getClazzs()) {
-    		String key = cls.getUri() + "#" + cls.getName();
-    		if (typeMap.get(key) != null)
-    			throw new TypeNameCollisionException(
-    				"detected multiple types named '"+cls.getName()+"' under the same URI '"
-    				+ cls.getUri() + "'");
-    		
-    		TypeAdapter adapter = new TypeAdapter(cls);
-    		typeMap.put(key, adapter);
-    	}
+    	for (Package pkg : model.getPackages())
+    		mapClasses(pkg);
     	
     	for (TypeAdapter adapter : typeMap.values()) {
     		if (adapter.getType() instanceof Class) {    		
     			if (log.isDebugEnabled())
-    				log.debug("construct: " + adapter.getKey());
+    				log.debug("constructing class: " + adapter.getKey());
     		    construct(adapter, null);
     		}
     	} 
@@ -94,6 +83,36 @@ public class ModelAdapter {
     			}
     		}
     	}    	
+    }
+    
+    private void mapEnumerations(Package pkg) {
+    	for (Enumeration enm : pkg.getEnumerations()) {
+    		String key = enm.getUri() + "#" + enm.getName();
+    		if (log.isDebugEnabled())
+    			log.debug("mapping enumeration: " + key);
+    		if (typeMap.get(key) != null)
+    			throw new TypeNameCollisionException(
+    				"detected multiple types named '"+enm.getName()+"' under the same URI '"
+    				+ enm.getUri() + "'");
+    		typeMap.put(key, new TypeAdapter(enm));
+    	}
+    }   
+    
+    private void mapClasses(Package pkg) {
+		for (Class cls : pkg.getClazzs()) {
+			String key = cls.getUri() + "#" + cls.getName();
+			if (log.isDebugEnabled())
+				log.debug("mapping class: " + key);
+			if (typeMap.get(key) != null)
+				throw new TypeNameCollisionException(
+					"detected multiple types named '"+cls.getName()+"' under the same URI '"
+					+ cls.getUri() + "'");
+			
+			TypeAdapter adapter = new TypeAdapter(cls);
+			typeMap.put(key, adapter);
+			if (log.isDebugEnabled())
+				log.debug("map: " + adapter.getKey());
+		}
     }
 
     private void construct(TypeAdapter adapter, TypeAdapter source)

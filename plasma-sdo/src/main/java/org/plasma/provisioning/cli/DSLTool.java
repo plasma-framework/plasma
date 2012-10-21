@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.ProvisioningModelAssembler;
+import org.plasma.provisioning.adapter.ModelAdapter;
 import org.plasma.text.ddl.DDLModelDataBinding;
 import org.plasma.text.lang3gl.DefaultLang3GLContext;
 import org.plasma.text.lang3gl.Lang3GLContext;
@@ -85,6 +86,9 @@ public class DSLTool extends ProvisioningTool {
             log.debug("dest: " + destDir.getName());
     	    
             ProvisioningModelAssembler modelAssembler = new ProvisioningModelAssembler();
+            // FIXME: pass this to factories
+    		ModelAdapter validator = 
+    				new ModelAdapter(modelAssembler.getModel());
             
             Lang3GLContext factoryContext = new DefaultLang3GLContext(modelAssembler.getModel());
             

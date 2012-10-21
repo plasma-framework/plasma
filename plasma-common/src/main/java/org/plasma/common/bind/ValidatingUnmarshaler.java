@@ -51,10 +51,27 @@ public class ValidatingUnmarshaler extends DataBindingSupport {
             throw new IllegalArgumentException("non-null argument expected, stream");
         // this.resolver = new Resolver();
         // this.handler = new Handler();
-        this.unmarshaler = createUnmarshaler(stream, context, this.handler, this.resolver);
+        this.unmarshaler = createUnmarshaler(
+        	new InputStream[] { stream }, 
+        	context, this.handler, this.resolver);
         this.unmarshaler.setEventHandler(validationEventHandler);
     }
 
+    public ValidatingUnmarshaler(InputStream[] streams, JAXBContext context,
+            BindingValidationEventHandler validationEventHandler) throws JAXBException,
+            SAXException {
+        super(context);
+        if (streams == null)
+            throw new IllegalArgumentException("non-null argument expected, streams");
+        this.resolver = new Resolver();
+        this.handler = new Handler();
+        this.unmarshaler = createUnmarshaler(
+        	streams, 
+        	context, 
+        	this.handler, this.resolver);
+        this.unmarshaler.setEventHandler(validationEventHandler);
+    }
+    
     public ValidatingUnmarshaler(URL url, JAXBContext context, Handler handler, Resolver resolver)
             throws JAXBException, SAXException {
         super(context);
@@ -72,7 +89,9 @@ public class ValidatingUnmarshaler extends DataBindingSupport {
             throw new IllegalArgumentException("non-null argument expected, stream");
         this.resolver = resolver;
         this.handler = handler;
-        this.unmarshaler = createUnmarshaler(stream, context, this.handler, this.resolver);
+        this.unmarshaler = createUnmarshaler(
+        	new InputStream[] { stream }, 
+        	context, this.handler, this.resolver);
     }
 
     /**
@@ -116,6 +135,7 @@ public class ValidatingUnmarshaler extends DataBindingSupport {
         // u.setProperty("com.sun.xml.bind.ObjectFactory",new
         // ObjectFactoryEx());
         SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+         
         Schema schemaGrammar = schemaFactory.newSchema(url);
         u.setSchema(schemaGrammar);
 
@@ -140,25 +160,21 @@ public class ValidatingUnmarshaler extends DataBindingSupport {
      * @throws JAXBException
      * @throws SAXException
      */
-    private Unmarshaller createUnmarshaler(InputStream stream, JAXBContext context,
+    private Unmarshaller createUnmarshaler(InputStream[] streams, JAXBContext context,
             Handler handler, Resolver resolver) throws JAXBException, SAXException {
         Unmarshaller u = context.createUnmarshaller();
         SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-        Schema schemaGrammar = schemaFactory.newSchema(new StreamSource(stream));
+        StreamSource[] sources = new StreamSource[streams.length];
+        for (int i = 0; i < streams.length; i++) {
+        	sources[i] = new StreamSource(streams[i]);
+        	//FIXME: will not resolve relative URI's (included schemas) without this
+        	//sources[i].setSystemId(systemId)
+        }
+        Schema schemaGrammar = schemaFactory.newSchema(sources);
         u.setSchema(schemaGrammar);
         Validator schemaValidator = schemaGrammar.newValidator();
         schemaValidator.setResourceResolver(resolver);
         schemaValidator.setErrorHandler(handler);
-
-        return u;
-    }
-
-    private Unmarshaller createUnmarshaler(InputStream stream, JAXBContext context)
-            throws JAXBException, SAXException {
-        Unmarshaller u = context.createUnmarshaller();
-        SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-        Schema schemaGrammar = schemaFactory.newSchema(new StreamSource(stream));
-        u.setSchema(schemaGrammar);
 
         return u;
     }
