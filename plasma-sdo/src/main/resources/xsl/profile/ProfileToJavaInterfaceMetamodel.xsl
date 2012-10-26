@@ -95,7 +95,9 @@
     <xsl:variable name="file" select="concat(concat($dir,$separator),concat($className, '.java'))"/>
 
     <redirect:write select="$file"> 
+        <!--
         <xsl:message terminate="no"><xsl:value-of select="$file"/></xsl:message>
+	    -->
 	    <xsl:call-template name="emitHeader"/>  
         <xsl:text>&#13;</xsl:text>
         <xsl:text>package </xsl:text><xsl:value-of select="$packageName"/><xsl:text>;&#13;</xsl:text>
