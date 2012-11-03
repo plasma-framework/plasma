@@ -355,7 +355,7 @@ public class StreamMarshaller extends Marshaller {
 		    	+ SchemaUtil.getContainmentReferenceName(targetType));
 				
 		// add element properties
-		List<Property> list = targetType.getDeclaredProperties();
+		List<Property> list = targetType.getProperties();
     	PlasmaProperty[] properties = new PlasmaProperty[list.size()];
     	list.toArray(properties);
     	Arrays.sort(properties, this.comparator);		
