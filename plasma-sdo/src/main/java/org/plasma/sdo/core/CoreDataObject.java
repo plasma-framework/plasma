@@ -421,14 +421,22 @@ public class CoreDataObject extends CoreNode
     }
     
     /**
-     * Removes this DataObject from its container, if any. Same as
+     * Removes this DataObject from its data graph and container, if any. Same as
      * getContainer().getList(getContainmentProperty()).remove(this) or
      * getContainer().unset(getContainmentProperty()) depending on
      * getContainmentProperty().isMany() respectively.
      */
     @Override
     public void detach() {
-        // TODO Auto-generated method stub
+    	
+    	if (this.containmentProperty.isMany()) {
+    		this.getContainer().getList(this.containmentProperty).remove(this);
+    	}
+    	else {
+    		this.getContainer().unset(this.containmentProperty);
+    	}
+    	
+    	this.dataGraph = null;
     }
 
     public Object get(int propertyIndex) {
@@ -2108,19 +2116,20 @@ dataObject.set(property, dataHelper.convert(property, value));
              if (uuid != null)                                                                               
              {                                                                                               
                  Object pk = idMap.get(uuid);                                                                
-                 if (pk == null)                                                                             
-                     throw new PlasmaDataObjectException("expected PK value mapped to UUID '" + uuid + "' for entity '"   
-                         + this.getType().getName() + "'");                                                             
-                 
-                 List<Property> pkList = ((PlasmaType)this.getType()).findProperties(KeyType.primary);
-                 if (pkList == null)
-                     throw new DataAccessException("found no pri-key properties found for type '" 
-                             + this.getType().getName() + "'");
-                 if (pkList.size() > 1)
-                     throw new DataAccessException("multiple pri-key properties found for type '" 
-                             + this.getType().getName() + "' - not yet supported");
-                 Property targetPriKeyProperty = pkList.get(0);    
-                 valueObject.put(targetPriKeyProperty.getName(), pk); 
+                 if (pk != null) {                                                                            
+	                 List<Property> pkList = ((PlasmaType)this.getType()).findProperties(KeyType.primary);
+	                 if (pkList == null)
+	                     throw new DataAccessException("found no pri-key properties found for type '" 
+	                             + this.getType().getName() + "'");
+	                 if (pkList.size() > 1)
+	                     throw new DataAccessException("multiple pri-key properties found for type '" 
+	                             + this.getType().getName() + "' - not yet supported");
+	                 Property targetPriKeyProperty = pkList.get(0);    
+	                 valueObject.put(targetPriKeyProperty.getName(), pk); 
+                 }
+                 if (log.isDebugEnabled())
+                     log.debug("no PK value mapped to UUID '" + uuid + "' for entity '"   
+                         + this.getType().getName() + "' - ignoring");                                                                              
              }
              else
                  log.warn("expected UUID for inserted entity, '" + this.getType().getName() + "'");

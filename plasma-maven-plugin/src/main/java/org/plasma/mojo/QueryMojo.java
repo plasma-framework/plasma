@@ -1,17 +1,8 @@
 package org.plasma.mojo;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
-
 import org.plasma.provisioning.cli.QueryTool;
 import org.plasma.provisioning.cli.QueryToolAction;
-import commonj.sdo.DataObject;
 
 /**
  * Mojo implementation for generating SDO artifacts, such as
@@ -70,8 +61,8 @@ public class QueryMojo extends ClassRealmMojo
     {
     	super.execute();
     	
-        getLog().info( "tool: " + QueryTool.class.getName());
-        getLog().info( "classRealm: " + this.classRealm);
+        getLog().debug( "tool: " + QueryTool.class.getName());
+        getLog().debug( "classRealm: " + this.classRealm);
 
         
         try

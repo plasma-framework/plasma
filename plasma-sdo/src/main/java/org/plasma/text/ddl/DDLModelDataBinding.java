@@ -2,6 +2,7 @@ package org.plasma.text.ddl;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -37,8 +38,13 @@ public class DDLModelDataBinding implements DataBinding {
             throws JAXBException, SAXException {
     	if (validatingUnmarshaler == null) {
             log.info("loading schema chain...");
-            validatingUnmarshaler = new ValidatingUnmarshaler(
-            	RESOURCE_CLASS.getClassLoader().getResource(FILENAME_SCHEMA_CHAIN_ROOT), 
+            URL url = RESOURCE_CLASS.getResource(FILENAME_SCHEMA_CHAIN_ROOT);
+            if (url == null)
+                url = RESOURCE_CLASS.getClassLoader().getResource(FILENAME_SCHEMA_CHAIN_ROOT);
+            if (url == null)
+            	throw new IllegalArgumentException("could not find shcema root '"
+            			+ FILENAME_SCHEMA_CHAIN_ROOT + "' on the current classpath");
+            validatingUnmarshaler = new ValidatingUnmarshaler(url, 
             	JAXBContext.newInstance(FACTORIES),
                 validationEventHandler);
     	}

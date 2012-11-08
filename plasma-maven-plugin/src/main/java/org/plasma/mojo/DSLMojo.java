@@ -1,17 +1,8 @@
 package org.plasma.mojo;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
-
 import org.plasma.provisioning.cli.DSLTool;
 import org.plasma.provisioning.cli.DSLToolAction;
-import commonj.sdo.DataObject;
 
 /**
  * Mojo implementation for generating DSL artifacts, such as
@@ -35,7 +26,7 @@ public class DSLMojo extends ClassRealmMojo
     private String action;
 
     /**
-    * The target directory foer ganerated artifacts
+    * The target directory for generated artifacts
     * @parameter expression="${dsl.outputDirectory}" default-value="./"
     */
     private String outputDirectory;
@@ -52,9 +43,9 @@ public class DSLMojo extends ClassRealmMojo
     {
     	super.execute();
     	
-        getLog().info( "tool: " + DSLTool.class.getName());
-        getLog().info( "dialect: " + this.dialect);
-        getLog().info( "classRealm: " + this.classRealm);
+        getLog().debug( "tool: " + DSLTool.class.getName());
+        getLog().debug( "dialect: " + this.dialect);
+        getLog().debug( "classRealm: " + this.classRealm);
         
         try
         {        

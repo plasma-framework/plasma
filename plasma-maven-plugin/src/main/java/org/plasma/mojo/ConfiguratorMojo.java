@@ -1,12 +1,10 @@
 package org.plasma.mojo;
 
+import java.util.Properties;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-
-import java.util.Map;
-import java.util.Iterator;
-import java.util.Properties;
 
 
 /**

@@ -47,6 +47,10 @@ public class DDLTool extends ProvisioningTool {
             printUsage();
             return;
         }
+        if (!args[1].startsWith("-")) {
+            printUsage();
+            return;
+        }
         DDLToolAction command = null;
     	try {
     		command = DDLToolAction.valueOf(
@@ -68,11 +72,15 @@ public class DDLTool extends ProvisioningTool {
         case create:
         case drop:
         case truncate:
+        	//FIXME: don't assume this command maps to operation
         	DDLOperation operation = DDLOperation.valueOf(command.name());
 
         	DDLDialect dialect = null;
         	try {
-        		dialect = DDLDialect.valueOf(args[1]);
+        		String dialectArg = args[1];
+        		if (dialectArg.startsWith("-"))
+        			dialectArg = dialectArg.substring(1);
+        		dialect = DDLDialect.valueOf(dialectArg);
         	}
         	catch (IllegalArgumentException e) {
         		StringBuilder buf = new StringBuilder();
@@ -88,8 +96,7 @@ public class DDLTool extends ProvisioningTool {
         	
             File dest = new File(args[2]);
             if (!dest.getParentFile().exists())
-                throw new RuntimeException("given destination dir '"
-                        + dest.getParentFile().getName() + "' does not exist");
+            	dest.getParentFile().mkdirs();
             
         	DDLModelAssembler modelAssembler = new DDLModelAssembler();
         	DDLModelDataBinding binding = new DDLModelDataBinding(

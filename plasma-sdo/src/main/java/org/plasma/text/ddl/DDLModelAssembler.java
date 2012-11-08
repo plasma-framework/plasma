@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.modeldriven.fuml.repository.OpaqueBehavior;
 import org.plasma.config.DataAccessProviderName;
+import org.plasma.config.DataStoreType;
 import org.plasma.config.NonExistantNamespaceException;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.adapter.ModelAdapter;
@@ -44,13 +45,10 @@ public class DDLModelAssembler {
 		// load maps
     	for (Namespace namespace : namespaces) {
     		log.debug("processing namespace: " + namespace.getUri());
-			try {
-			    PlasmaConfig.getInstance().getProvisioningByNamespaceURI(DataAccessProviderName.JDO, 
-			    		namespace.getUri());
-    		}
-    		catch (NonExistantNamespaceException e) {
-        		log.debug("ignoring non "+DataAccessProviderName.JDO.name()+" namespace: " + namespace.getUri());
-    			continue; 
+    		if (!PlasmaConfig.getInstance().hasNamespace(DataStoreType.RDBMS))
+    		{
+        		log.debug("ignoring non "+DataStoreType.RDBMS.name()+" namespace: " + namespace.getUri());
+    			continue;     			
     		}
     		
         	List<Type> types = PlasmaTypeHelper.INSTANCE.getTypes(namespace.getUri());
@@ -303,7 +301,7 @@ public class DDLModelAssembler {
 			
 			// FIXME: assumes a single PK !!
 			if (!plasmaProperty.getType().isAbstract()) {
-				for (Property p : plasmaProperty.getType().getDeclaredProperties()) {
+				for (Property p : plasmaProperty.getType().getProperties()) {
 					PlasmaProperty oppositeProp = (PlasmaProperty)p;
 				    if (oppositeProp.isKey(KeyType.primary)) {
 				    	if (oppositePkProp != null)

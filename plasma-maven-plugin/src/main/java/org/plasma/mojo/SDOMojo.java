@@ -1,17 +1,8 @@
 package org.plasma.mojo;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
-
 import org.plasma.provisioning.cli.SDOTool;
 import org.plasma.provisioning.cli.SDOToolAction;
-import commonj.sdo.DataObject;
 
 /**
  * Mojo implementation for generating SDO artifacts, such as
@@ -52,9 +43,9 @@ public class SDOMojo extends ClassRealmMojo
     {
     	super.execute();
     	
-        getLog().info( "tool: " + SDOTool.class.getName());
-        getLog().info( "dialect: " + this.dialect);
-        getLog().info( "classRealm: " + this.classRealm);
+        getLog().debug( "tool: " + SDOTool.class.getName());
+        getLog().debug( "dialect: " + this.dialect);
+        getLog().debug( "classRealm: " + this.classRealm);
 
         
         try

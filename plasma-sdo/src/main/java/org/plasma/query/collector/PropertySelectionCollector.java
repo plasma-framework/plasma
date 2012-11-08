@@ -2,6 +2,7 @@ package org.plasma.query.collector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,8 @@ import org.plasma.query.model.WildcardPathElement;
 import org.plasma.query.model.WildcardProperty;
 import org.plasma.query.visitor.DefaultQueryVisitor;
 import org.plasma.query.visitor.QueryVisitor;
+import org.plasma.sdo.PlasmaProperty;
+import org.plasma.sdo.PlasmaType;
 
 import commonj.sdo.Type;
 
@@ -95,7 +98,18 @@ public class PropertySelectionCollector extends CollectorSupport
         return this.propertyMap;
     }	
     
-    public boolean hasType(Type type) {
+	/**
+	 * Returns all selected types. 
+	 * @return all selected types.
+	 */
+	public List<Type> getTypes() {
+        collect();
+        List<Type> result = new ArrayList<Type>();
+        result.addAll(this.propertyMap.keySet());
+        return result;
+    }	
+
+	public boolean hasType(Type type) {
     	return this.propertyMap.get(type) != null;
     }
     
@@ -236,5 +250,20 @@ public class PropertySelectionCollector extends CollectorSupport
             throw new IllegalArgumentException("unknown path element class, "
                 + currPathElement.getClass().getName());
     }
+    
+	public String dumpProperties() {
+        StringBuilder buf = new StringBuilder();
+		Iterator<Type> typeIter = propertyMap.keySet().iterator();
+        while (typeIter.hasNext()) {
+        	PlasmaType type = (PlasmaType)typeIter.next();
+        	buf.append("\n" + type.getURI() + "#" + type.getName());
+        	List<String> names = propertyMap.get(type);
+            for (String name : names) {
+    			PlasmaProperty prop = (PlasmaProperty)type.getProperty(name);
+            	buf.append("\n\t" + name);
+    		}        
+        }
+        return buf.toString();
+	}
     
 }

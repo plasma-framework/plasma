@@ -36,10 +36,17 @@ public class PlasmaConfig {
     private PlasmaConfiguration config;
     private Map<String, Artifact> artifactMap = new HashMap<String, Artifact>();
     private Map<String, NamespaceAdapter> sdoNamespaceMap = new HashMap<String, NamespaceAdapter>();
-    private Map<DataAccessProviderName, DataAccessProvider> dataAccessServiceConfigMap 
+    
+    /** maps provider names to provider instances */
+    private Map<DataStoreType, Map<String, NamespaceLink>> dataAccessServiceLinkMap 
+        = new HashMap<DataStoreType, Map<String, NamespaceLink>>();
+
+    /** maps provider names to provider instances */
+    private Map<DataAccessProviderName, DataAccessProvider> dataAccessProviderMap 
         = new HashMap<DataAccessProviderName, DataAccessProvider>();
 
-    private Map<DataAccessProviderName, Map<String, NamespaceProvisioning>> dataAccessServiceProvisioningMap 
+    /** maps provider names to maps of namespace URI to provisioning structures */
+    private Map<DataAccessProviderName, Map<String, NamespaceProvisioning>> dataAccessProviderProvisioningMap 
         = new HashMap<DataAccessProviderName,  Map<String, NamespaceProvisioning>>();    
         
     private PlasmaConfig()
@@ -122,17 +129,22 @@ public class PlasmaConfig {
             	
              	for (DataAccessProvider provider : daconfig.getDataAccessProviders())
              	{
-	            	dataAccessServiceConfigMap.put(provider.getName(), provider);
-	            	Map<String, NamespaceProvisioning> provMap = dataAccessServiceProvisioningMap.get(provider.getName());
+             		this.dataAccessProviderMap.put(provider.getName(), provider);
+	            	Map<String, NamespaceProvisioning> provMap = dataAccessProviderProvisioningMap.get(provider.getName());
 	            	if (provMap == null) {
 	            		provMap = new HashMap<String, NamespaceProvisioning>();
-	            		dataAccessServiceProvisioningMap.put(provider.getName(), provMap);
+	            		dataAccessProviderProvisioningMap.put(provider.getName(), provMap);
+	            	}
+	            	Map<String, NamespaceLink> linkMap = dataAccessServiceLinkMap.get(daconfig.getDataStoreType());
+	            	if (linkMap == null) {
+	            		linkMap = new HashMap<String, NamespaceLink>();
+	            		dataAccessServiceLinkMap.put(daconfig.getDataStoreType(), linkMap);
 	            	}
 	            	for (NamespaceLink namespaceLink : provider.getNamespaceLinks()) {
 	            		if (namespaceLink.getUri() == null)
 	                        throw new ConfigurationException("expected namespace URI for Data Access Service configuration '"
 	                                + provider.getName().toString() + "'");  
-	            		
+	            		linkMap.put(namespaceLink.getUri(), namespaceLink);
 	            		NamespaceAdapter adapter = sdoNamespaceMap.get(namespaceLink.getUri());
 	            		if (adapter == null)
 	                        throw new ConfigurationException("Invalid SDO Namespace - could not find SDO namespace based on namespace URI '"
@@ -308,7 +320,7 @@ public class PlasmaConfig {
     	
     	// find the supplier URI where mapped and add a mapping to the
     	// new dynamic URI
-    	for (Map<String, NamespaceProvisioning> map : dataAccessServiceProvisioningMap.values()) {
+    	for (Map<String, NamespaceProvisioning> map : dataAccessProviderProvisioningMap.values()) {
     		Iterator<String> iter = map.keySet().iterator();
     		NamespaceProvisioning provisioning = null;
     		while (iter.hasNext()) {
@@ -323,22 +335,33 @@ public class PlasmaConfig {
     	
     }
 
+    public DataAccessProvider findDataAccessProvider(DataAccessProviderName providerName) {
+    	DataAccessProvider result = this.dataAccessProviderMap.get(providerName);
+        return result;
+    }
+
     public DataAccessProvider getDataAccessProvider(DataAccessProviderName providerName) {
-    	DataAccessProvider result = this.dataAccessServiceConfigMap.get(providerName);
+    	DataAccessProvider result = this.dataAccessProviderMap.get(providerName);
         if (result != null)
             return result;
         else
-            throw new PlasmaRuntimeException("no data access provider configuration found for name'"
+            throw new PlasmaRuntimeException("no data access provider configuration found for '"
                     + providerName.value() + "'");
     }
 
     public NamespaceProvisioning getProvisioningByNamespaceURI(DataAccessProviderName providerName, String uri) {
-    	NamespaceProvisioning result = this.dataAccessServiceProvisioningMap.get(providerName).get(uri);
-    	if (result != null)
-            return result;
-        else
-            throw new NonExistantNamespaceException("no configured '"+ providerName.value() + "' provider namespace found for URI '"
+    	Map<String, NamespaceProvisioning> providerProvisionMap = this.dataAccessProviderProvisioningMap.get(providerName);
+    	if (providerProvisionMap != null) {
+    	    NamespaceProvisioning result = providerProvisionMap.get(uri);
+    	    if (result != null)
+                return result;
+    	}         
+        throw new NonExistantNamespaceException("no configured '"+ providerName.value() + "' provider namespace found for URI '"
                     + uri + "'");
+    }
+    
+    public boolean hasNamespace(DataStoreType dataStore) {
+    	return this.dataAccessServiceLinkMap.get(dataStore) != null;
     }
     
     public Repository getRepository() {

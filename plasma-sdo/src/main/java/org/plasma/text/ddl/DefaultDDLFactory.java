@@ -1,5 +1,6 @@
 package org.plasma.text.ddl;
 
+import org.plasma.config.DataAccessProvider;
 import org.plasma.config.DataAccessProviderName;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.config.SequenceConfiguration;
@@ -62,9 +63,27 @@ public abstract class DefaultDDLFactory {
 		return buf.toString();
 	}
 
+	private DataAccessProvider getProvider() {
+		DataAccessProvider provider = PlasmaConfig.getInstance().findDataAccessProvider(DataAccessProviderName.JPA);
+		if (provider == null)
+			provider = PlasmaConfig.getInstance().findDataAccessProvider(DataAccessProviderName.JDO);
+		if (provider == null)
+			provider = PlasmaConfig.getInstance().findDataAccessProvider(DataAccessProviderName.JDBC);
+	    return provider;
+	}	
+	
+	// FIXME: need to know what data store and provider we're provisioning for !!
+	private SequenceConfiguration getSequenceConfiguration() {
+		DataAccessProvider provider = getProvider();
+		if (provider != null) {
+			return provider.getSequenceConfiguration();
+		}
+		return null;
+	}
+	
 	public String createSequence(Schema schema, Table table) {
 		StringBuilder buf = new StringBuilder();
-		SequenceConfiguration config = PlasmaConfig.getInstance().getDataAccessProvider(DataAccessProviderName.JDO).getSequenceConfiguration();
+		SequenceConfiguration config = getSequenceConfiguration();
 		if (config != null) {
 		    buf.append("CREATE SEQUENCE ");
 		    if (config.getPrefix() != null && config.getPrefix().trim().length() > 0) {
@@ -91,7 +110,7 @@ public abstract class DefaultDDLFactory {
 
 	public String dropSequence(Schema schema, Table table) {
 		StringBuilder buf = new StringBuilder();
-		SequenceConfiguration config = PlasmaConfig.getInstance().getDataAccessProvider(DataAccessProviderName.JDO).getSequenceConfiguration();
+		SequenceConfiguration config = getSequenceConfiguration();
 		if (config != null) {
 			buf.append("DROP SEQUENCE ");
 		    if (config.getPrefix() != null && config.getPrefix().trim().length() > 0) {
