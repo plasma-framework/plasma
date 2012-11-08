@@ -234,9 +234,9 @@
 							<goal>xjc</goal>
 						</goals>
 				        <configuration>
-					        <schemaDirectory>${basedir}/src/main/resources/org/plasma/text</schemaDirectory>
+					        <schemaDirectory>${basedir}/src/main/resources/org/plasma/text/ddl</schemaDirectory>
 					        <schemaFiles>ddl.xsd</schemaFiles>
-					        <bindingDirectory>${basedir}/src/main/resources/org/plasma/text</bindingDirectory>
+					        <bindingDirectory>${basedir}/src/main/resources/org/plasma/text/ddl</bindingDirectory>
 					        <bindingFiles>ddl-jaxb-bindings.xml</bindingFiles>
 				            <staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-ddl</staleFile>
 				        </configuration>
