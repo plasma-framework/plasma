@@ -7,6 +7,19 @@ import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.helper.CopyHelper;
 
+/**
+ * Copy utilities class. 
+ * <p>
+ * Note that copied data objects 
+ * have the same data properties as the source but have new  
+ * (and therefore different) underlying <a target="#" href="http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html">UUID</a> 
+ * and other management properties which are not defined within the
+ * source Type. Use copied data objects to help automate and save
+ * save effort when creating <b>NEW</b> data objects. To simply link/add 
+ * and existing data object to a new data graph, first use {@link DataObject.detach()} to
+ * remove it from its graph. Than add it to a another graph.     
+ * </p>
+ */
 public class PlasmaCopyHelper implements CopyHelper {
 
     static public PlasmaCopyHelper INSTANCE = initializeInstance();
@@ -49,6 +62,17 @@ public class PlasmaCopyHelper implements CopyHelper {
      *     the copy has a new, empty ChangeSummary.
      *     Logging state is the same as the source ChangeSummary.
      * 
+	 * <p>
+	 * Note that copied data objects 
+	 * have the same data properties as the source but have new  
+	 * (and therefore different) underlying <a target="#" href="http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html">UUID</a> 
+	 * and other management properties which are not defined within the
+	 * source Type. Use copied data objects to help automate and save
+	 * save effort when creating <b>NEW</b> data objects. To simply link/add 
+	 * and existing data object to a new data graph, first use {@link DataObject.detach()} to
+	 * remove it from its graph. Than add it to a another graph.     
+	 * </p>
+	 * 
      * @param dataObject to be copied
      * @return copy of dataObject 
      */    
@@ -91,13 +115,25 @@ public class PlasmaCopyHelper implements CopyHelper {
      *     ChangeSummary refers to objects in the new DataObject tree.
      *     Logging state is the same as the source ChangeSummary.
      * 
-     * @param dataObject to be copied.
+	 * <p>
+	 * Note that copied data objects 
+	 * have the same data properties as the source but have new  
+	 * (and therefore different) underlying <a target="#" href="http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html">UUID</a> 
+	 * and other management properties which are not defined within the
+	 * source Type. Use copied data objects to help automate and save
+	 * save effort when creating <b>NEW</b> data objects. To simply link/add 
+	 * and existing data object to a new data graph, first use {@link DataObject.detach()} to
+	 * remove it from its graph. Than add it to a another graph.     
+	 * </p>
+	 *      
+	 * @param dataObject to be copied.
      * @return copy of dataObject
      * @throws IllegalArgumentException if any referenced DataObject
      *   is not part of the containment tree.
      */
     public DataObject copy(DataObject dataObject) {
-        return null;
+    	DataGraphCopyVisitor visitor = new DataGraphCopyVisitor();
+    	((PlasmaDataObject)dataObject).accept(visitor); 
+        return visitor.getResult();
     }
-
 }
