@@ -429,11 +429,19 @@ public class CoreDataObject extends CoreNode
     @Override
     public void detach() {
     	
-    	if (this.containmentProperty.isMany()) {
-    		this.getContainer().getList(this.containmentProperty).remove(this);
+    	if (this.containmentProperty != null) {
+	    	if (this.containmentProperty.isMany()) {
+	    		this.getContainer().getList(this.containmentProperty).remove(this);
+	    	}
+	    	else {
+	    		this.getContainer().unset(this.containmentProperty);
+	    	}
     	}
     	else {
-    		this.getContainer().unset(this.containmentProperty);
+    		if (!((CoreDataObject)this.getDataGraph().getRootObject()).equals(this))
+    			log.warn("detected non root data object of type "
+    		        + this.getType().getURI() + "#" + this.getType().getName()
+    		        +" with no container");
     	}
     	
     	this.dataGraph = null;
