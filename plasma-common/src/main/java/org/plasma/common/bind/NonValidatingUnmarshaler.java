@@ -24,36 +24,27 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class NonValidatingUnmarshaler extends DataBindingSupport {
 
-    private static Log log = LogFactory.getLog(NonValidatingUnmarshaler.class);
     private Unmarshaller unmarshaler;
 
     private NonValidatingUnmarshaler() {
         super(null);
     }
 
-    public NonValidatingUnmarshaler(URL url, JAXBContext context) throws JAXBException,
+    public NonValidatingUnmarshaler(JAXBContext context) throws JAXBException,
             SAXException {
         super(context);
-        if (url == null)
-            throw new IllegalArgumentException("non-null argument expected, url");
-        this.unmarshaler = createUnmarshaler(url, context);
+        this.unmarshaler = createUnmarshaler(context);
     }
 
     /**
-     * Creates an unmarshaler using the given factories and URL. Loads only the
-     * given (subclass) schema as this is the "root" schema and it should
-     * include any other schema resources it needs, and so on. Note all included
-     * schemas MUST be found at the same class level as the root schema.
-     * 
-     * @param url
-     *            the Schema URL
+     * Creates an unmarshaler using the given factories.
      * @param context
-     *            the SAXB context
+     *            the JAXB context
      * @return the unmarshaler
      * @throws JAXBException
      * @throws SAXException
      */
-    private Unmarshaller createUnmarshaler(URL url, JAXBContext context) throws JAXBException, SAXException {
+    private Unmarshaller createUnmarshaler(JAXBContext context) throws JAXBException, SAXException {
         Unmarshaller u = context.createUnmarshaller();
         // adds a custom object factory
         // u.setProperty("com.sun.xml.bind.ObjectFactory",new
