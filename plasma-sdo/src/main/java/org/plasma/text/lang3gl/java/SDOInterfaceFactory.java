@@ -73,16 +73,14 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		// the namespace URI
 		buf.append(this.indent(1));
 		buf.append("/** The SDO namespace URI associated with the SDO Type for this class */");
-		buf.append(LINE_SEP);
-		buf.append(this.indent(1));
+		buf.append(this.newline(1));
 		buf.append("public static final String NAMESPACE_URI = \"");
 		buf.append(clss.getUri());
 		buf.append("\";");
 		buf.append(LINE_SEP);
 		
 		//the entity name
-		buf.append(LINE_SEP);
-		buf.append(this.indent(1));
+		buf.append(this.newline(1));
 		buf.append("public static final String ETY_");
 		buf.append(toConstantName(clss.getName()));
 		buf.append(" \t= \"");
@@ -96,8 +94,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		    String javadoc = createStaticFieldDeclarationJavadoc(clss, field);
 		    buf.append(javadoc);
 			
-			buf.append(LINE_SEP);
-			buf.append(this.indent(1));
+			buf.append(this.newline(1));
 			buf.append("public static final String PTY_");
 			buf.append(toConstantName(field.getName()));
 			buf.append(" \t= \"");
@@ -111,8 +108,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 	private String createStaticFieldDeclarationJavadoc(Class clss, Property field)
 	{
 		StringBuilder buf = new StringBuilder();
-		buf.append(LINE_SEP);
-		buf.append(this.indent(1));
+		buf.append(this.newline(1));
 		buf.append("/**"); // begin javadoc
 		
 		// add formatted doc from UML or derived default doc
@@ -122,16 +118,14 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 				String wrappedDoc = WordWrap.wordWrap(docText, 60, Locale.ENGLISH);
 				String[] docLines = wrappedDoc.split("\n");
 				for (String line : docLines) {
-				    buf.append(LINE_SEP);	
-					buf.append(this.indent(1));
+					buf.append(this.newline(1));
 					buf.append(" * ");
 				    buf.append(line); 
 				}
 		    }
 		}
 		else {
-		    buf.append(LINE_SEP);	
-			buf.append(this.indent(1));
+			buf.append(this.newline(1));
 			buf.append(" * The logical property <b>");
 			buf.append(field.getName());
 			buf.append("</b> which is part of the SDO Type <b>");
@@ -142,27 +136,21 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		// data store mapping
 		if (clss.getAlias() != null && clss.getAlias().getPhysicalName() != null && 
 				field.getAlias() != null && field.getAlias().getPhysicalName() != null) {
-		    buf.append(LINE_SEP);	
-			buf.append(this.indent(1));
+			buf.append(this.newline(1));
 			buf.append(" *"); 
-		    buf.append(LINE_SEP);	
-			buf.append(this.indent(1));
+			buf.append(this.newline(1));
 			buf.append(" * <p></p>");
-		    buf.append(LINE_SEP);	
-			buf.append(this.indent(1));
+			buf.append(this.newline(1));
 			buf.append(" * <b>Data Store Mapping:</b>");
-		    buf.append(LINE_SEP);	
-			buf.append(this.indent(1));
+			buf.append(this.newline(1));
 			buf.append(" * Corresponds to the physical data store field <b>");
 			buf.append(clss.getAlias().getPhysicalName() + "." + field.getAlias().getPhysicalName());
 			buf.append("</b>.");
-		    buf.append(LINE_SEP);	
-			buf.append(this.indent(1));
+			buf.append(this.newline(1));
 			buf.append(" * <p></p>");		
 		}		
 		
-		buf.append(LINE_SEP);
-		buf.append(this.indent(1));
+		buf.append(this.newline(1));
 		buf.append(" */"); // end javadoc			
 		return buf.toString();
 	}
@@ -286,9 +274,18 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		buf.append(";");		
 
 		if (field.getType() instanceof ClassRef) {
-			buf.append(LINE_SEP);			    
-			createCreatorDeclaration(null, clss, field, typeClassName, buf);
-			buf.append(";");
+			Class targetClass = this.context.findClass((ClassRef)field.getType());
+			
+			if (!targetClass.isAbstract()) { 
+			    buf.append(LINE_SEP);			    
+			    createCreatorDeclaration(null, clss, field, typeClassName, buf);
+			    buf.append(";");
+			}
+			else { 
+			    buf.append(LINE_SEP);			    
+			    createCreatorByAbstractClassDeclaration(null, clss, field, typeClassName, buf);
+			    buf.append(";");
+			}
 		}
 		
 		if (!field.isMany()) {

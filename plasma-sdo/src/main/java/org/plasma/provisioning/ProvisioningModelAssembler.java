@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.config.DataAccessProviderName;
 import org.plasma.config.NonExistantNamespaceException;
 import org.plasma.config.PlasmaConfig;
+import org.plasma.query.collector.PropertySelection;
 import org.plasma.query.collector.PropertySelectionCollector;
 import org.plasma.query.Query;
 import org.plasma.sdo.DataType;
@@ -229,7 +230,7 @@ public class ProvisioningModelAssembler {
     // For every type included in the query, include all base types
     // and their properties
 	private void constructBaseTypes(Query query, Type sdoType,
-			PropertySelectionCollector collector,
+			PropertySelection collector,
 			Map<Type, List<String>> queryPropertyMap)
 	{
         for (Type base : sdoType.getBaseTypes()) {
@@ -284,7 +285,7 @@ public class ProvisioningModelAssembler {
 	}
 
 	private void constructImplicitReferenceProperties(Query query, PlasmaType sdoType, 
-			Class clss, PropertySelectionCollector collector, List<String> list)
+			Class clss, PropertySelection collector, List<String> list)
 	{
         for (commonj.sdo.Property p2 : sdoType.getDeclaredProperties()) {
         	PlasmaProperty plasmaProperty = (PlasmaProperty)p2;

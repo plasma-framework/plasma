@@ -466,7 +466,6 @@ public class CoreProperty implements PlasmaProperty {
         switch (datatype) {
         case Boolean:   
         case Byte:      
-        case Bytes:     
         case Character: 
         case DateTime:  
         case Date:      
@@ -487,6 +486,7 @@ public class CoreProperty implements PlasmaProperty {
         case YearMonth: 
         case YearMonthDay: 
         	return true;
+        case Bytes:     
         case Object: 
         	return false;
         case String:    

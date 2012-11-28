@@ -281,12 +281,14 @@ public class CoreDataObject extends CoreNode
                     + "' is not a containment property");
  
         if (!(property.getType().getName().equals(type.getName()) && 
-        		property.getType().getURI().equals(type.getURI())))
-        {
-            throw new IllegalArgumentException("the type for property '" 
+        	  property.getType().getURI().equals(type.getURI())))
+        {        	
+        	PlasmaType targetType = (PlasmaType)type;
+        	if (!targetType.isBaseType((PlasmaType)property.getType()))        	 
+                throw new IllegalArgumentException("the type for property '" 
                     + this.getType().getName() + "." + property.getName()
                     + "(" + property.getType().getURI() + "#" + property.getType().getName() + ")"
-                    + "' is not compatible wi the given type, "
+                    + "' is not compatible with (i.e. a base type of) the given type, "
                     + type.getURI() + "#" + type.getName());
         }
 
@@ -772,7 +774,6 @@ dataObject.set(property, dataHelper.convert(property, value));
             if (edgeList == null)               
                 throw new IllegalStateException("no list found for property "
                     + this.type.getURI() + "#" + this.type.getName() + "." + property.getName());
-            Property oppositeProperty = property.getOpposite();
             PlasmaNode nodeValue = (PlasmaNode)value;
             PlasmaEdge link = null;
         	CoreDataObject oppositeDataObject = null;
@@ -797,28 +798,32 @@ dataObject.set(property, dataHelper.convert(property, value));
             if (oppositeDataObject == null)
                 throw new IllegalStateException("could not find link for property "
                     + this.type.getURI() + "#" + this.type.getName() + "." + property.getName());
-            Object oppositeValue = oppositeDataObject.get(oppositeProperty);
-            if (oppositeValue != null) {
-                if (oppositeProperty.isMany()) {
-                    List<PlasmaEdge> oppositeEdgeList = (List<PlasmaEdge>)oppositeDataObject.getValue(
-                            oppositeProperty.getName());
-                    if (!oppositeEdgeList.remove(link))
-                        throw new IllegalStateException("could not remove opposite link for property "
-                            + this.type.getURI() + "#" + this.type.getName() + "." + property.getName());
-                }
-                else {
-                	oppositeDataObject.removeValue(oppositeProperty.getName());
-                }
-            }
-            else
-                throw new IllegalStateException("could not find opposite value for property "
-                        + this.type.getURI() + "#" + this.type.getName() + "." + property.getName());
             
-            // register the change on opposite
-            if (this.getDataGraph() != null && oldValue != null) {
-                PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)this.getDataGraph().getChangeSummary();
-                changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeValue);
-            }               
+            Property oppositeProperty = property.getOpposite();
+            if (oppositeProperty != null) {
+	            Object oppositeValue = oppositeDataObject.get(oppositeProperty);
+	            if (oppositeValue != null) {
+	                if (oppositeProperty.isMany()) {
+	                    List<PlasmaEdge> oppositeEdgeList = (List<PlasmaEdge>)oppositeDataObject.getValue(
+	                            oppositeProperty.getName());
+	                    if (!oppositeEdgeList.remove(link))
+	                        throw new IllegalStateException("could not remove opposite link for property "
+	                            + this.type.getURI() + "#" + this.type.getName() + "." + property.getName());
+	                }
+	                else {
+	                	oppositeDataObject.removeValue(oppositeProperty.getName());
+	                }
+	            }
+	            else
+	                throw new IllegalStateException("could not find opposite value for property "
+	                        + this.type.getURI() + "#" + this.type.getName() + "." + property.getName());
+	            
+	            // register the change on opposite
+	            if (this.getDataGraph() != null && oldValue != null) {
+	                PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)this.getDataGraph().getChangeSummary();
+	                changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeValue);
+	            } 
+            } // has opposite prop 
  
             if (!edgeList.remove(link))
                 throw new IllegalStateException("could not remove link for property "
@@ -1125,7 +1130,21 @@ dataObject.set(property, dataHelper.convert(property, value));
     @SuppressWarnings("unchecked")
 	private void unsetOpposite(CoreDataObject dataObject, Property property)
     {
-        PlasmaDataLink link = (PlasmaDataLink)dataObject.getValue(property.getName());
+    	if (!property.isMany()) {
+	        PlasmaDataLink link = (PlasmaDataLink)dataObject.getValue(property.getName());
+	        unsetLink(link, dataObject, property);
+    	}
+    	else {
+	        List<PlasmaDataLink> links = (List<PlasmaDataLink>)dataObject.getValue(property.getName());
+    		if (links != null)
+    			for (PlasmaDataLink link : links) {
+    		        unsetLink(link, dataObject, property);
+    			}
+    	}
+    }
+    
+    private void unsetLink(PlasmaDataLink link, CoreDataObject dataObject, Property property)
+    {
         PlasmaNode oppositeNode = link.getOpposite(dataObject);
         PlasmaDataObject oppositeDataObject = oppositeNode.getDataObject();
         Property oppositeProperty = property.getOpposite();
@@ -1144,10 +1163,9 @@ dataObject.set(property, dataHelper.convert(property, value));
                 if (!oppositeList.remove(link))
                     throw new IllegalStateException("could not remove opposite link for property, "
                         + dataObject.getType().getURI() + "#" + this.getType().getName() 
-                        + "." + property.getName());
-                
+                        + "." + property.getName());	                
             }   
-        }	   
+        }
     }
    
     public boolean isSet(String path) {
@@ -2584,7 +2602,7 @@ dataObject.set(property, dataHelper.convert(property, value));
     }
      
     public String toString() {
-        return this.getUUIDAsString();
+        return this.type.toString() + "/" + this.getUUIDAsString();
     }
 
     public String dump() {

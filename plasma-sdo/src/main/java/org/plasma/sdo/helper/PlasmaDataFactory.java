@@ -84,8 +84,8 @@ public class PlasmaDataFactory implements DataFactory {
         return result;
     }
 
-	@SuppressWarnings("unchecked")
-    public DataObject create(Class interfaceClass) {
+    @SuppressWarnings("rawtypes")
+	public DataObject create(Class interfaceClass) {
 		CoreDataObject result = null;
 	    Namespace sdoNamespace = PlasmaConfig.getInstance().getSDONamespaceByInterfacePackage(
 	    		interfaceClass.getPackage().getName());
@@ -121,8 +121,7 @@ public class PlasmaDataFactory implements DataFactory {
         return result;
 	}
 
-    @SuppressWarnings("unchecked")
-    private DataObject create(Class interfaceClass, Type type) {
+    private DataObject create(Class<?> interfaceClass, Type type) {
     	CoreDataObject result = null;
         Class<?>[] types = { Type.class };
         Object[] args = { type };

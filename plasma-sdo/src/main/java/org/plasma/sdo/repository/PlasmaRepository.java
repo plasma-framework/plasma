@@ -231,4 +231,9 @@ public class PlasmaRepository implements Repository {
 	public RelationCache getRelationCache() {
 		return this.relationCache;
 	}
+
+	@Override
+	public List<Classifier> getSpecializations(Classifier classifier) {
+		return delegate.getSpecializations(classifier);
+	}
 }

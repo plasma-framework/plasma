@@ -7,7 +7,6 @@ import javax.xml.namespace.QName;
 import org.plasma.sdo.profile.ConcurrencyType;
 import org.plasma.sdo.profile.ConcurrentDataFlavor;
 import org.plasma.sdo.profile.KeyType;
-import org.plasma.sdo.profile.TemporalType;
 import org.plasma.sdo.repository.Classifier;
 import org.plasma.sdo.repository.Comment;
 
@@ -127,6 +126,13 @@ public interface PlasmaType extends Type {
      */
     public byte[] getQualifiedNameBytes();
     
+    /**
+     * Returns a qualified logical-name hash code 
+     * for this type. 
+     * @return a qualified logical-name hash code 
+     * for this type. 
+     */
+    public int getQualifiedNameHashCode();
     
     /**
      * Return the namespace qualified physical name for this
@@ -227,7 +233,31 @@ public interface PlasmaType extends Type {
      */
     public Class<?> toDataTypeInstanceClass(DataType dataType);
           
+    /**
+     * Returns true if the given type is a base type for this
+     * type. 
+     * @param other the base type candidate
+     * @return true if the given type is a base type for this
+     * type. 
+     */
+    public boolean isBaseType(PlasmaType other);
     
+    /**
+     * Returns a list of types which specialize or inherit from
+     * this type. An empty list is returned if no sub types exist. 
+     * @return a list of types which specialize or inherit from
+     * this type. An empty list is returned if no sub types exist. 
+     */
+    public List<Type> getSubTypes();
+
+    /**
+     * Returns true if the given type is a specialization or 
+     * inherits from this type. 
+     * @param other the sub type candidate
+     * @return true if the given type is a specialization or 
+     * inherits from this type.
+     */
+    public boolean isSubType(PlasmaType other);
     
     /**
      * Returns true if the given type is linked or related to this type 

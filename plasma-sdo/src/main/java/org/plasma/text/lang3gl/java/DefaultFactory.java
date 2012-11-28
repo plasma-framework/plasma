@@ -286,8 +286,7 @@ public abstract class DefaultFactory {
 	
 	protected void createSingularGetterDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf) {
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(typeClassName);
 		buf.append(" get");
@@ -297,8 +296,7 @@ public abstract class DefaultFactory {
 	
 	protected void createSingularSetterDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf) {
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 	    buf.append("public void set");
 		buf.append(firstToUpperCase(field.getName()));
 		buf.append("(");
@@ -308,8 +306,7 @@ public abstract class DefaultFactory {
 
 	protected void createUnsetterDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf) {
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 		buf.append("public void unset");
 		buf.append(firstToUpperCase(field.getName()));
 		buf.append("()");
@@ -317,29 +314,38 @@ public abstract class DefaultFactory {
 	
 	protected void createIsSetDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf) {
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
-		buf.append("public void isSet");
+		buf.append(newline(1));
+		buf.append("public boolean isSet");
 		buf.append(firstToUpperCase(field.getName()));
 		buf.append("()");
 	}
 	
 	protected void createCreatorDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf) {
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(typeClassName);
 		buf.append(" create");
 		buf.append(firstToUpperCase(field.getName()));
 		buf.append("()");
 	}	
+
+	protected void createCreatorByAbstractClassDeclaration(Package pkg, Class clss, Property field, 
+			String typeClassName, StringBuilder buf) {
+		buf.append(newline(1));
+		buf.append("public ");
+		buf.append(typeClassName);
+		buf.append(" create");
+		buf.append(firstToUpperCase(field.getName()));
+		buf.append("(Class<? extends ");
+		buf.append(typeClassName);
+		buf.append("> clss)");
+	}	
 	
 	protected void createManyGetterDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf)
 	{		
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(typeClassName);
 		buf.append("[] get");
@@ -350,8 +356,7 @@ public abstract class DefaultFactory {
 	protected void createManyIndexGetterDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf)
 	{		
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(typeClassName);
 		buf.append(" get");
@@ -362,8 +367,7 @@ public abstract class DefaultFactory {
 	protected void createManyCountDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf)
 	{		
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 		buf.append("public int get");
 		buf.append(firstToUpperCase(field.getName()));
 		buf.append("Count()");
@@ -372,8 +376,7 @@ public abstract class DefaultFactory {
 	protected void createManySetterDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf)
 	{		
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 		buf.append("public void set");
 		buf.append(firstToUpperCase(field.getName()));
 		buf.append("(");
@@ -384,8 +387,7 @@ public abstract class DefaultFactory {
 	protected void createManyAdderDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf)
 	{		
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 		buf.append("public void add");
 		buf.append(firstToUpperCase(field.getName()));
 		buf.append("(");
@@ -396,8 +398,7 @@ public abstract class DefaultFactory {
 	protected void createManyRemoverDeclaration(Package pkg, Class clss, Property field, 
 			String typeClassName, StringBuilder buf)
 	{		
-		buf.append(LINE_SEP);			    
-		buf.append(indent(1));
+		buf.append(newline(1));
 		buf.append("public void remove");
 		buf.append(firstToUpperCase(field.getName()));
 		buf.append("(");

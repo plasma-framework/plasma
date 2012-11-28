@@ -60,6 +60,10 @@ public class Classifier extends Element {
     	return classifier.getGeneralization();
     }
     
+    public List<org.modeldriven.fuml.repository.Classifier> getSpecializations() {
+    	return PlasmaRepository.getInstance().getSpecializations(this.classifier);
+    }
+    
     public List<org.modeldriven.fuml.repository.Property> getDeclaredProperties() {
     	return ((Class_)this.classifier).getDeclaredProperties();
     }

@@ -12,6 +12,7 @@ import org.plasma.query.model.PathElement;
 import org.plasma.query.model.Property;
 import org.plasma.query.model.WildcardPathElement;
 import org.plasma.query.model.WildcardProperty;
+import org.plasma.sdo.PlasmaType;
 
 import commonj.sdo.Type;
 
@@ -35,7 +36,7 @@ abstract class CollectorSupport {
      * a type, otherwise indicates to collect all properties
      * for a given type and all its base types  
      */
-    protected boolean onlyDeclaredProperties = true;
+    protected boolean onlyDeclaredProperties = false;
     
     public CollectorSupport(Type rootType,
     		boolean onlySingularProperties) {
@@ -79,7 +80,7 @@ abstract class CollectorSupport {
 		this.onlyDeclaredProperties = onlyDeclaredProperties;
 	}
 
-	public void mapProperty(Type type, commonj.sdo.Property property, 
+	protected void mapProperty(Type type, commonj.sdo.Property property, 
     		Map<Type, List<String>> map)
     {
         List<String> list = map.get(type);
@@ -93,8 +94,17 @@ abstract class CollectorSupport {
                 list.add(property.getName()); 
         }
     }
+	
+	protected void mapInheritedProperty(Type type, commonj.sdo.Property property, 
+    		Map<Type, List<String>> map) {
+		mapProperty(type, property, map);
+		
+		PlasmaType plasmaType = (PlasmaType)type; 
+		for (Type subType : plasmaType.getSubTypes()) 
+			mapInheritedProperty(subType, property, map);
+	}	
     
-	public void mapPropertyNames(Type type, String[] names,
+	protected void mapPropertyNames(Type type, String[] names,
     		Map<Type, List<String>> map)
     {
         List<String> list = map.get(type);
@@ -112,6 +122,15 @@ abstract class CollectorSupport {
                 }
         }
     }
+	
+	protected void mapInheritedPropertyNames(Type type, String[] names, 
+    		Map<Type, List<String>> map) {
+		mapPropertyNames(type, names, map);
+		
+		PlasmaType plasmaType = (PlasmaType)type; 
+		for (Type subType : plasmaType.getSubTypes()) 
+			mapInheritedPropertyNames(subType, names, map);
+	}	
     
 	/**
 	 * A convenience method returning an array of names for 
@@ -122,14 +141,14 @@ abstract class CollectorSupport {
 	 * @param abstractProperty the property
 	 * @return the property names as an array
 	 */
-	public String[] findPropertyNames(Type type, AbstractProperty abstractProperty)
+	protected String[] findPropertyNames(Type type, AbstractProperty abstractProperty)
     {
         String[] result = null;       
         
         if (abstractProperty instanceof Property) {
-            result = new String[1];
             String name = ((Property)abstractProperty).getName();
             type.getProperty(name); // just validates name
+            result = new String[1];
             result[0] = name;
         }
         else if (abstractProperty instanceof WildcardProperty) {
@@ -184,7 +203,7 @@ abstract class CollectorSupport {
      * @return whether the given path is composed entirely of singular \
      * properties
      */
-    public boolean isSingularPath(Path path, Type rootType,
+	protected boolean isSingularPath(Path path, Type rootType,
     		AbstractProperty abstractProperty) {
     	return isSingularPath(path, rootType,
     	    path.getPathNodes().get(0).getPathElement(), 0, abstractProperty);
@@ -202,7 +221,7 @@ abstract class CollectorSupport {
      * @return whether the given path is composed entirely of singular \
      * properties
      */
-    public boolean isSingularPath(Path path, Type currType, 
+	protected boolean isSingularPath(Path path, Type currType, 
             AbstractPathElement currPathElement, 
             int curPathElementIndex, AbstractProperty abstractProperty) {
         if (currPathElement instanceof PathElement) {

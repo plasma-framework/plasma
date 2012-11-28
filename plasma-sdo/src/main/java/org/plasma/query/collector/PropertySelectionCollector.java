@@ -35,6 +35,7 @@ import commonj.sdo.Type;
  * @see commonj.sdo.Type
  */
 public class PropertySelectionCollector extends CollectorSupport 
+    implements PropertySelection 
 {
     private Select select;
     // FIXME: what to do with repeated/multiple predicates
@@ -42,6 +43,7 @@ public class PropertySelectionCollector extends CollectorSupport
     private Map<commonj.sdo.Property, Where> predicateMap; 
     private Map<Type, List<String>> propertyMap;
     private Map<Type, List<String>> singularPropertyMap;
+    private Map<Type, List<String>> inheritedPropertyMap;
     
     public PropertySelectionCollector(Select select, Type rootType) {
         super(rootType);
@@ -59,6 +61,7 @@ public class PropertySelectionCollector extends CollectorSupport
 		if (this.propertyMap == null) {
 			this.propertyMap = new HashMap<Type, List<String>>();
 			this.singularPropertyMap = new HashMap<Type, List<String>>();
+			this.inheritedPropertyMap = new HashMap<Type, List<String>>();
 	        this.predicateMap = new HashMap<commonj.sdo.Property, Where>();
 	        QueryVisitor visitor = new DefaultQueryVisitor() {
 	            public void start(Property property)                                                                            
@@ -76,16 +79,37 @@ public class PropertySelectionCollector extends CollectorSupport
 		}
 	}	
     
+	@Deprecated
     public Map<commonj.sdo.Property, Where> getPredicateMap() {
         collect();
 		return predicateMap;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#getPredicate(commonj.sdo.Property)
+	 */
+	@Override
+	public Where getPredicate(commonj.sdo.Property property) {
+		if (this.predicateMap != null)
+			return this.predicateMap.get(property);
+		return null;
+	}
     
+	@Deprecated
     public Map<Type, List<String>> getSingularPropertyMap() {
         collect();
-		return singularPropertyMap;
+		return this.singularPropertyMap;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#getSingularProperties(commonj.sdo.Type)
+	 */
+	@Override
+	public List<String> getSingularProperties(Type type) {
+        collect();
+        return this.singularPropertyMap.get(type);		
+	}
+	
 	/**
 	 * Return the specified property 
      * names, as well as any path-reference or key properties required
@@ -93,15 +117,34 @@ public class PropertySelectionCollector extends CollectorSupport
      * strings mapped to the respective {@link Type} definition
 	 * @return the {@link Type} to logical property name map
 	 */
+	@Deprecated
 	public Map<Type, List<String>> getResult() {
         collect();
         return this.propertyMap;
-    }	
-    
-	/**
-	 * Returns all selected types. 
-	 * @return all selected types.
+    }
+	
+	/* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#getProperties(commonj.sdo.Type)
 	 */
+	@Override
+	public List<String> getProperties(Type type) {
+        collect();
+        return propertyMap.get(type);		
+	}	
+
+	/* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#getInheritedProperties(commonj.sdo.Type)
+	 */
+	@Override
+	public List<String> getInheritedProperties(Type type) {
+        collect();
+        return inheritedPropertyMap.get(type);		
+	}	
+	
+	/* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#getTypes()
+	 */
+	@Override
 	public List<Type> getTypes() {
         collect();
         List<Type> result = new ArrayList<Type>();
@@ -109,12 +152,53 @@ public class PropertySelectionCollector extends CollectorSupport
         return result;
     }	
 
+	/* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#hasType(commonj.sdo.Type)
+	 */
+	@Override
 	public boolean hasType(Type type) {
     	return this.propertyMap.get(type) != null;
     }
-    
-    public boolean hasProperty(Type type,  commonj.sdo.Property property) {
+	
+	/* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#getInheritedTypes(commonj.sdo.Type)
+	 */
+	@Override
+	public List<Type> getInheritedTypes() {
+        collect();
+        List<Type> result = new ArrayList<Type>();
+        result.addAll(this.inheritedPropertyMap.keySet());
+        return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#hasInheritedType(commonj.sdo.Type)
+	 */
+	@Override
+	public boolean hasInheritedType(Type type) {
+    	return this.inheritedPropertyMap.get(type) != null;
+	}
+   
+    /* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#hasProperty(commonj.sdo.Type, commonj.sdo.Property)
+	 */
+    @Override
+	public boolean hasProperty(Type type,  commonj.sdo.Property property) {
     	List<String> props = this.propertyMap.get(type);
+    	if (props != null && props.size() > 0) {
+    	    for (String prop : props)	
+    	    	if (prop.equals(property.getName()))
+    	    		return true;
+    	}
+    	return false;
+    }
+    
+    /* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#hasInheritedProperty(commonj.sdo.Type, commonj.sdo.Property)
+	 */
+    @Override	
+    public boolean hasInheritedProperty(Type type, commonj.sdo.Property property) {
+    	List<String> props = this.inheritedPropertyMap.get(type);
     	if (props != null && props.size() > 0) {
     	    for (String prop : props)	
     	    	if (prop.equals(property.getName()))
@@ -136,27 +220,20 @@ public class PropertySelectionCollector extends CollectorSupport
                     + abstractProperty.getClass().getName());
         if (path == null) {
             String[] names = this.findPropertyNames(rootType, abstractProperty);
-            
-            List<String> list = this.propertyMap.get(this.rootType);
-            if (list == null) {
-                list = new ArrayList<String>(names.length);
-                this.propertyMap.put(this.rootType, list);
-            }
-            for (String name : names)
-                if (!list.contains(name))
-                    list.add(name);
+            this.mapPropertyNames(this.rootType, names, this.propertyMap);
+            this.mapInheritedPropertyNames(this.rootType, names, this.inheritedPropertyMap);
         }
         else {
         	if (!this.isOnlySingularProperties()) {
                 collect(path, rootType, 
                     path.getPathNodes().get(0), 0, 
-                    abstractProperty, this.propertyMap);
+                    abstractProperty);
         	}
         	else {
         		if (this.isSingularPath(path, rootType, abstractProperty)) 
                     collect(path, rootType, 
                             path.getPathNodes().get(0), 0, 
-                            abstractProperty, this.propertyMap);
+                            abstractProperty);
         	}
         }
     }    
@@ -174,8 +251,7 @@ public class PropertySelectionCollector extends CollectorSupport
      */
     private void collect(Path path, Type currType, 
             PathNode currPathode, 
-            int curPathElementIndex, AbstractProperty abstractProperty,
-            Map<Type, List<String>> map) {
+            int curPathElementIndex, AbstractProperty abstractProperty) {
         
     	AbstractPathElement currPathElement = currPathode.getPathElement();
         if (currPathElement instanceof PathElement) {
@@ -202,16 +278,19 @@ public class PropertySelectionCollector extends CollectorSupport
             Type nextType = prop.getType(); // traverse
             
             if (path.getPathNodes().size() > curPathElementIndex + 1) { // more nodes
-            	this.mapProperty(currType, prop, map);
+            	this.mapProperty(currType, prop, this.propertyMap);
+            	this.mapInheritedProperty(currType, prop, this.inheritedPropertyMap);
 
                 int nextPathElementIndex = curPathElementIndex + 1;
                 PathNode nextPathNode = path.getPathNodes().get(nextPathElementIndex);
-                collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty, map);
+                collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty);
             }
             else {
-            	this.mapProperty(currType, prop, map);                              
+            	this.mapProperty(currType, prop, this.propertyMap);                              
+            	this.mapInheritedProperty(currType, prop, this.inheritedPropertyMap);                              
                 String[] names = this.findPropertyNames(nextType, abstractProperty);
-                this.mapPropertyNames(nextType, names, map);
+                this.mapPropertyNames(nextType, names, this.propertyMap);
+                this.mapInheritedPropertyNames(nextType, names, this.inheritedPropertyMap);
             }
         }
         else if (currPathElement instanceof WildcardPathElement) {
@@ -233,16 +312,19 @@ public class PropertySelectionCollector extends CollectorSupport
                 Type nextType = prop.getType();
                 
                 if (path.getPathNodes().size() > curPathElementIndex + 1) {
-                	this.mapProperty(currType, prop, map);
+                	this.mapProperty(currType, prop, this.propertyMap);                              
+                	this.mapInheritedProperty(currType, prop, this.inheritedPropertyMap);                              
 
                     int nextPathElementIndex = curPathElementIndex + 1;
                     PathNode nextPathNode = path.getPathNodes().get(nextPathElementIndex);
-                    collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty, map);
+                    collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty);
                 }
                 else {
-                	this.mapProperty(currType, prop, map);
+                	this.mapProperty(currType, prop, this.propertyMap);                              
+                	this.mapInheritedProperty(currType, prop, this.inheritedPropertyMap);                              
                     String[] names = this.findPropertyNames(nextType, abstractProperty);
-                    this.mapPropertyNames(nextType, names, map);
+                	this.mapPropertyNames(currType, names, this.propertyMap);                              
+                	this.mapInheritedPropertyNames(currType, names, this.inheritedPropertyMap);                              
                 }
             }
         }
@@ -253,11 +335,11 @@ public class PropertySelectionCollector extends CollectorSupport
     
 	public String dumpProperties() {
         StringBuilder buf = new StringBuilder();
-		Iterator<Type> typeIter = propertyMap.keySet().iterator();
+		Iterator<Type> typeIter = this.propertyMap.keySet().iterator();
         while (typeIter.hasNext()) {
         	PlasmaType type = (PlasmaType)typeIter.next();
         	buf.append("\n" + type.getURI() + "#" + type.getName());
-        	List<String> names = propertyMap.get(type);
+        	List<String> names = this.propertyMap.get(type);
             for (String name : names) {
     			PlasmaProperty prop = (PlasmaProperty)type.getProperty(name);
             	buf.append("\n\t" + name);
@@ -266,4 +348,18 @@ public class PropertySelectionCollector extends CollectorSupport
         return buf.toString();
 	}
     
+	public String dumpInheritedProperties() {
+        StringBuilder buf = new StringBuilder();
+		Iterator<Type> typeIter = this.inheritedPropertyMap.keySet().iterator();
+        while (typeIter.hasNext()) {
+        	PlasmaType type = (PlasmaType)typeIter.next();
+        	buf.append("\n" + type.getURI() + "#" + type.getName());
+        	List<String> names = this.inheritedPropertyMap.get(type);
+            for (String name : names) {
+    			PlasmaProperty prop = (PlasmaProperty)type.getProperty(name);
+            	buf.append("\n\t" + name);
+    		}        
+        }
+        return buf.toString();
+	}
 }

@@ -57,19 +57,15 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	
 	protected String createConstructors(Package pkg, Enumeration enm) {
 		StringBuilder buf = new StringBuilder();
-		buf.append(LINE_SEP);        
-		buf.append(this.indent(1));
+		buf.append(this.newline(1));
 		buf.append("private ");
 		buf.append(enm.getName());
 		buf.append("(String instanceName, String description) {");
-		buf.append(LINE_SEP);        
-		buf.append(this.indent(1));
+		buf.append(this.newline(1));
 		buf.append("    this.instanceName = instanceName;");
-		buf.append(LINE_SEP);        
-		buf.append(this.indent(1));
+		buf.append(this.newline(1));
 		buf.append("    this.description = description;");
-		buf.append(LINE_SEP);        
-		buf.append(this.indent(1));
+		buf.append(this.newline(1));
 		buf.append("}");
 		buf.append(LINE_SEP);        
 		return buf.toString();

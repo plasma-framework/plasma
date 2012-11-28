@@ -50,6 +50,7 @@ public class CoreType implements PlasmaType {
     
     private static final long serialVersionUID = 1L;
     private static Log log = LogFactory.getLog(CoreType.class);
+    private static final List<Type> EMPTY_TYPE_LIST = new ArrayList<Type>();
     
     // cached names, used/valued conditionally based on binding customizations
     // FIXME: cache these as instance properties
@@ -57,9 +58,11 @@ public class CoreType implements PlasmaType {
     private String physicalName;
     private String localName;
     private QName qname;
+    private int qnameHashCode;
     
     private Classifier classifier;
     private List<Type> baseTypes;
+    private List<Type> subTypes;
     
     /** 
      * Provides fast property lookup by logical 
@@ -91,6 +94,7 @@ public class CoreType implements PlasmaType {
         
         this.name = typeName;
         this.qname = new QName(this.namespaceURI, this.name);
+        this.qnameHashCode = this.qname.hashCode();
         
         String lookupName = this.name;
         
@@ -118,6 +122,22 @@ public class CoreType implements PlasmaType {
         		(org.modeldriven.fuml.repository.Class_)classifier);
         else
         	this.classifier = new Classifier(classifier);
+    }
+    
+    public int hashCode() {
+    	return this.qnameHashCode;
+    }
+    
+    public boolean equals(Object other) {
+    	if (other != null) {
+    		CoreType otherType = (CoreType)other;
+    		return this.qnameHashCode == otherType.hashCode();
+    	}
+    	return false;	
+    }
+    
+    public String toString() {
+    	return this.qname.toString();
     }
 
     private void lazyLoadProperties() {
@@ -325,6 +345,16 @@ public class CoreType implements PlasmaType {
     }
     
     /**
+     * Returns a qualified logical-name hash code 
+     * for this type based on the 
+     * @return a qualified logical-name hash code 
+     * for this type. 
+     */
+    public int getQualifiedNameHashCode() {
+    	return this.qnameHashCode;
+    }
+    
+    /**
      * Returns the namespace qualified physical name of this Type as a byte array which may be cached
      * or lazily cached on demand, or null if no physical alias name exists. 
      * <p>
@@ -529,20 +559,22 @@ public class CoreType implements PlasmaType {
     }
 
     /**
-     * Returns the List of base Types for this Type.  The List is empty
-     * if there are no base Types.  XSD <extension>, <restriction>, and
+     * Returns the List of immediate base Types for this Type, or an
+     * empty list if there are no base Types.  
+     * XSD <extension>, <restriction>, and
      * Java extends keyword are mapped to this list.
-     * @return the List of base Types for this Type.
+     * @return the List of immediate base Types for this Type, or an
+     * empty list if there are no base Types. 
      */
-    public List<Type> getBaseTypes() {
-    	
+    public List<Type> getBaseTypes() {    	
     	if (this.baseTypes == null) {
     		this.baseTypes = new ArrayList<Type>();
+    		PlasmaTypeHelper helper = PlasmaTypeHelper.INSTANCE;
 	    	List<org.modeldriven.fuml.repository.Classifier> generalizations = this.classifier.getGeneralization();
 	    	for (org.modeldriven.fuml.repository.Classifier classifier : generalizations) {                
 	    		String namespaceURI = this.classifier.getNamespaceURI(
 	    				classifier);
-	    		Type type = PlasmaTypeHelper.INSTANCE.getType(namespaceURI, 
+	    		Type type = helper.getType(namespaceURI, 
 	    				classifier.getName());
 	    		this.baseTypes.add(type);
 	    	}
@@ -550,7 +582,70 @@ public class CoreType implements PlasmaType {
     	
         return this.baseTypes;
     }
-
+    
+    /**
+     * Returns true if the given type is part of the (base type)
+     * ancestry for this type.  
+     * @param other the base type candidate
+     * @return true if the given type is a base type for this
+     * type. 
+     */
+    public boolean isBaseType(PlasmaType other) {    	
+    	for (Type t : getBaseTypes()) {
+    		PlasmaType baseType = (PlasmaType)t;
+    		if (baseType.getQualifiedNameHashCode() == 
+    				other.getQualifiedNameHashCode()) {
+    			return true;
+    		}
+    		else if (baseType.isBaseType(other))
+    			return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * Returns a list of types which specialize or inherit from
+     * this type. An empty list is returned if no sub types exist. 
+     * @return a list of types which specialize or inherit from
+     * this type. An empty list is returned if no sub types exist. 
+     */
+    public List<Type> getSubTypes() {
+    	if (this.subTypes == null) {
+    		this.subTypes = new ArrayList<Type>();
+    		PlasmaTypeHelper helper = PlasmaTypeHelper.INSTANCE;
+	    	List<org.modeldriven.fuml.repository.Classifier> specializations = this.classifier.getSpecializations();
+	    	for (org.modeldriven.fuml.repository.Classifier classifier : specializations) {                
+	    		String namespaceURI = this.classifier.getNamespaceURI(
+	    				classifier);
+	    		Type type = helper.getType(namespaceURI, 
+	    				classifier.getName());
+	    		this.subTypes.add(type);
+	    	}
+    	}
+    	return this.subTypes;
+    }
+    
+    /**
+     * Returns true if the given type is a specialization or 
+     * inherits from this type. 
+     * @param other the sub type candidate
+     * @return true if the given type is a specialization or 
+     * inherits from this type.
+     */
+    public boolean isSubType(PlasmaType other) 
+    {
+    	for (Type t : getSubTypes()) {
+    		PlasmaType subType = (PlasmaType)t;
+    		if (subType.getQualifiedNameHashCode() == 
+    				other.getQualifiedNameHashCode()) {
+    			return true;
+    		}
+    		else if (subType.isSubType(other))
+    			return true;
+    	}
+    	return false;	
+    }
+    
     /**
      * Returns the Properties declared in this Type as opposed to
      * those declared in base Types.
