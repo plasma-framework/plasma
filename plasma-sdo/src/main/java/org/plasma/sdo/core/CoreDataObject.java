@@ -2511,11 +2511,20 @@ dataObject.set(property, dataHelper.convert(property, value));
 			CoreDataObject root, int level,
 			HashMap<CoreDataObject, HashSet<CoreDataObject>> visitedObjects, int visitedCount) {
 		
+        if (log.isDebugEnabled())
+            if (source == null)
+                log.debug(String.valueOf(level) + "node: " + target.getType().getName() + "(" + target.getUUIDAsString() + ")");
+            else
+                log.debug(String.valueOf(level) + "node: " + target.getType().getName() + "( " + target.getUUIDAsString() + ") \tSRC: " + source.getType().getName() + "." + sourceKey+ "(" + source.getUUIDAsString() + ")");
 		int currentVisitedCount = visitedCount;
 		if (source != null) {
-			// Lets make sure the parent's hashset is setup
-			if (!visitedObjects.containsKey(source))
+			// Even though we may have visited this source
+			// object before, must traverse one level past
+			// this point in order to call the 'end' method
+			// such that client can terminate, say an XML tag. 
+			if (!visitedObjects.containsKey(source)) {
 				visitedObjects.put(source, new HashSet<CoreDataObject>());
+			}			 
 
 			// Now lets see if the current child has ever been visited.
 			HashSet<CoreDataObject> visitedChildren = (HashSet<CoreDataObject>) visitedObjects
@@ -2524,14 +2533,18 @@ dataObject.set(property, dataHelper.convert(property, value));
 			if (!visitedChildren.contains(target)) {
 				visitedChildren.add(target);
 			} else {
+                if (log.isDebugEnabled())
+                    log.debug("already visited child - parent object: " 
+                            + source + " - child Object - " + target + "  - skipping duplicate accept.");
 				currentVisitedCount = currentVisitedCount + 1;
-				if (currentVisitedCount >= 100000) {
-					throw new IllegalArgumentException("data graph contains a circularity: "
+				if (currentVisitedCount >= 1000) {
+					throw new IllegalStateException("data graph contains a circularity: "
 							+ source.getType().getName() 
 	                        + "("+((PlasmaNode)source).getUUIDAsString()+ ")."
 	                        + sourceKey + "->"
 	                        + target.getType().getName() + "("+((PlasmaNode)target).getUUIDAsString()+")");
 				}
+                return;
 			}
 		}
 
@@ -2555,13 +2568,17 @@ dataObject.set(property, dataHelper.convert(property, value));
 		for (Property property : properties) {
 			if (property.getType().isDataType())
 				continue; // not a reference property
+            if (log.isDebugEnabled())
+                log.debug("property: " + property.getName()); 
 
 			if (!property.isMany()) {
 				PlasmaEdge edge = (PlasmaEdge) target.getValue(property.getName());
 				if (edge != null && edge.canTraverse(target)) {
 					PlasmaNode node = edge.getRight();
-					CoreDataObject child = (CoreDataObject)node.getDataObject();
+					CoreDataObject child = (CoreDataObject)node.getDataObject();					 
 					if (!child.equals(root)) {
+                        if (log.isDebugEnabled())
+                            log.debug("accept: " + property.getName());
 						child.accept(visitor, child, target,
 							property.getName(), root, level + 1, 
 							visitedObjects, currentVisitedCount);
@@ -2580,6 +2597,8 @@ dataObject.set(property, dataHelper.convert(property, value));
 							PlasmaNode node = edge.getRight();
 							CoreDataObject child = (CoreDataObject)node.getDataObject();
 							if (!child.equals(root)) {
+		                        if (log.isDebugEnabled())
+		                            log.debug("accept: " + property.getName());
 								child.accept(visitor, child, target, property
 										.getName(), root, 
 										level + 1, visitedObjects,
@@ -2590,7 +2609,6 @@ dataObject.set(property, dataHelper.convert(property, value));
 				}
 			}
 		}
-
 		visitor.end(target, source, sourceKey, level);
 	}
      

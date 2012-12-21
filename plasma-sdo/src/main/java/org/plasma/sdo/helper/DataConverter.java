@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -803,7 +804,8 @@ public class DataConverter {
     }    
     
     /**
-     * Converts the given value to a string.
+     * Converts the given value to a string. Uses java.util.Arrays
+     * formatting for 'many' properties. 
      * @param sourceType the property type for the given property
      * @param value the value to convert
      * @return the string value
@@ -819,45 +821,94 @@ public class DataConverter {
         DataType sourceDataType = DataType.valueOf(sourceType.getName());
         switch (sourceDataType) {
         case String:
-        	if (!(value instanceof String))
-        		throw new IllegalArgumentException("expected value as class "
-        			+ String.class.getName() + ", not " 
-        			+ value.getClass().getName() + ", for datatype '"
-        			+ sourceDataType.name() + "'");
-            return (String)value;
+        	if (value instanceof String) {
+                return (String)value;
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<?> list = (List<?>)value;        			
+        			for (Object listValue : (List<?>)value) 
+        				if (!(listValue instanceof String))
+        					throwExpectedInstance(sourceDataType, String.class, listValue.getClass());
+        			return Arrays.toString(list.toArray());
+        		}
+        		else {
+					throwExpectedInstance(sourceDataType, String.class, value.getClass());
+        		}
+        	}
         case Decimal: 
-        	if (!(value instanceof BigDecimal))
-        		throw new IllegalArgumentException("expected value as class "
-        			+ BigDecimal.class.getName() + ", not " 
-                	+ value.getClass().getName() + ", for datatype '"
-        			+ sourceDataType.name() + "'");
-            return ((BigDecimal)value).toString();
+        	if (value instanceof BigDecimal) {
+                return ((BigDecimal)value).toString();
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<?> list = (List<?>)value;        			
+        			for (Object listValue : (List<?>)value) 
+        				if (!(listValue instanceof BigDecimal))
+        					throwExpectedInstance(sourceDataType, BigDecimal.class, listValue.getClass());
+        			return Arrays.toString(list.toArray());
+        		}
+        		else {
+					throwExpectedInstance(sourceDataType, BigDecimal.class, value.getClass());
+        		}
+        	}
         case Bytes:  
-        	if (!(value instanceof byte[]))
-        		throw new IllegalArgumentException("expected value as class "
-        			+ byte[].class.getName() + ", not " 
-                	+ value.getClass().getName() + ", for datatype '"
-        			+ sourceDataType.name() + "'");
-            // as per spec: [0-9A-F]+
-            return toHexString(((byte[])value));
+        	if (value instanceof byte[]) {
+                return toHexString(((byte[])value)); // as per spec: [0-9A-F]+
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<String> result = new ArrayList<String>();
+        			List<?> list = (List<?>)value;        			
+        			for (Object listValue : list) {
+        				if (!(listValue instanceof byte[]))
+        					throwExpectedInstance(sourceDataType, byte[].class, listValue.getClass());
+        				result.add(toHexString((byte[])listValue));
+        			}       			
+        			return Arrays.toString(result.toArray());
+        		}
+        		else {
+					throwExpectedInstance(sourceDataType, byte[].class, value.getClass());
+        		}
+        	}
         case Byte:   
-        	if (!(value instanceof Byte))
-        		throw new IllegalArgumentException("expected value as class "
-        			+ Byte.class.getName() + ", not " 
-                    + value.getClass().getName() + ", for datatype '"
-        			+ sourceDataType.name() + "'");
-            // as per spec: 8 bits unsigned [0-9]+
-            return Integer.valueOf(((Byte)value).byteValue() & 0xFF).toString();
+        	if (value instanceof Byte) {
+        		// as per spec: 8 bits unsigned [0-9]+
+                return Integer.valueOf(((Byte)value).byteValue() & 0xFF).toString();
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<String> result = new ArrayList<String>();
+        			List<?> list = (List<?>)value;        			
+        			for (Object listValue : list) {
+        				if (!(listValue instanceof Byte))
+        					throwExpectedInstance(sourceDataType, Byte.class, listValue.getClass());
+        				result.add(Integer.valueOf(((Byte)listValue).byteValue() & 0xFF).toString());
+        			}       			
+        			return Arrays.toString(result.toArray());
+        		}
+        		else {
+					throwExpectedInstance(sourceDataType, Byte.class, value.getClass());
+        		}
+        	}   	
         case Boolean:  
+        	return toString(sourceDataType, Boolean.class, value);
         case Character:
+        	return toString(sourceDataType, Character.class, value);
         case Double:   
+        	return toString(sourceDataType, Double.class, value);
         case Float:    
+        	return toString(sourceDataType, Float.class, value);
         case Int:      
+        	return toString(sourceDataType, Integer.class, value);
         case Integer:  
-        case Long:     
-        case Short:    
-            return String.valueOf(value);
+        	return toString(sourceDataType, BigInteger.class, value);
+        case Long:  
+        	return toString(sourceDataType, Long.class, value);
+        case Short:   
+        	return toString(sourceDataType, Short.class, value);
         case Strings:  
+        	// FIXME: add many condition
         	if (!(value instanceof List))
         		throw new IllegalArgumentException("expected value as class "
         			+ List.class.getName() + ", not " 
@@ -873,6 +924,7 @@ public class DataConverter {
             }
             return buf.toString();
         case URI:     
+        	// FIXME: add many condition
         	if (!(value instanceof String))
         		throw new IllegalArgumentException("expected value as class "
         			+ String.class.getName() + ", not " 
@@ -880,6 +932,7 @@ public class DataConverter {
         			+ sourceDataType.name() + "'");
             return (String)value;
         case Date:     
+        	// FIXME: add many condition
         	if (!(value instanceof Date))
         		throw new IllegalArgumentException("expected value as class "
         			+ Date.class.getName() + ", not " 
@@ -894,6 +947,7 @@ public class DataConverter {
         case Year:     
         case YearMonth:
         case YearMonthDay:
+        	// FIXME: add many condition
         	if (!(value instanceof String))
         		throw new IllegalArgumentException("expected value as class "
         			+ String.class.getName() + ", not " 
@@ -901,52 +955,231 @@ public class DataConverter {
         			+ sourceDataType.name() + "'");
             return (String)value; // Temporal type except Date are String in Java
         case Duration: 
+        	// FIXME: add many condition
             return String.valueOf(value);
         case Object:   
+        	// FIXME: add many condition
             return String.valueOf(value);
         default: 
             throw new InvalidDataConversionException(DataType.String, 
                     sourceDataType, value);
         }
     }
+    
+    private String toString(DataType sourceDataType, Class<?> typeClass, Object value) {
+    	
+    	String result = null;
+    	if (typeClass.isAssignableFrom(value.getClass())) {
+    		result = String.valueOf(value);
+    	}
+    	else {
+    		if (value instanceof List) {
+    			List<?> list = (List<?>)value;        			
+    			for (Object listValue : (List<?>)value) 
+    				if (!(typeClass.isAssignableFrom(listValue.getClass())))
+    					throwExpectedInstance(sourceDataType, typeClass, listValue.getClass());        			
+    			result = Arrays.toString(list.toArray());
+    		}
+    		else {
+				throwExpectedInstance(sourceDataType, typeClass, value.getClass());
+    		}
+    	}  
+    	return result;
+    }
+    
+    private void throwExpectedInstance(DataType dataType, 
+    		Class expectedClass, Class foundClass) {
+	    throw new IllegalArgumentException("expected value or list of class "
+			    + expectedClass.getName() + ", not " 
+			    + foundClass.getName() + ", for datatype '"
+			    + dataType.name() + "'");    	
+    }
 
+    /**
+     * Converts the given string value to an object appropriate
+     * for the target type. If java.util.Arrays formatting
+     * is detected for the given string, the formatting is
+     * from removed and the arrays converted into a list
+     * of elements appropriate for the target type.
+     * @param targetType the target data type
+     * @param value the value
+     * @return the converted value
+     */
     public Object fromString(Type targetType, String value)
     {    
         DataType targetDataType = DataType.valueOf(targetType.getName());
         switch (targetDataType) {
         case String:
-            return value;
+        	if (!value.startsWith("[")) { 
+                return value;
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<String> list = new ArrayList<String>();            	
+            	for (String arrayValue : strings)
+            		list.add(arrayValue);
+            	return list;
+        	}
         case Decimal: 
-            return new BigDecimal(value);
+        	if (!value.startsWith("[")) { 
+                return new BigDecimal(value);
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<BigDecimal> list = new ArrayList<BigDecimal>();            	
+            	for (String arrayValue : strings)
+            		list.add(new BigDecimal(arrayValue));
+            	return list;
+        	}
         case Bytes:
-            return value.getBytes();
+        	if (!value.startsWith("[")) { 
+                return value.getBytes(); // FIXME: charset?
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<byte[]> list = new ArrayList<byte[]>();            	
+            	for (String arrayValue : strings)
+            		list.add(value.getBytes()); // FIXME: charset?
+            	return list;
+        	}
         case Byte:   
-            return new Byte(value.getBytes()[0]); // TODO: truncation warning?
+        	if (!value.startsWith("[")) { 
+        		byte[] byteArray = value.getBytes(); // FIXME: charset?
+                return new Byte(byteArray[0]); //TODO: truncation warning?
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<Byte> list = new ArrayList<Byte>();            	
+            	byte[] byteArray = null;
+            	for (String arrayValue : strings) {
+            		byteArray = arrayValue.getBytes();
+            		list.add( new Byte(byteArray[0]));
+            	}
+            	return list;
+        	}
         case Boolean:  
-            return Boolean.valueOf(value);
+        	if (!value.startsWith("[")) { 
+                return Boolean.valueOf(value);
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<Boolean> list = new ArrayList<Boolean>();            	
+            	for (String arrayValue : strings)
+            		list.add(Boolean.valueOf(arrayValue));
+            	return list;
+        	}
         case Character:
-            return Character.valueOf(value.charAt(0)); // TODO: truncation warning?
+        	if (!value.startsWith("[")) { 
+                return Character.valueOf(value.charAt(0)); // TODO: truncation warning?
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<Character> list = new ArrayList<Character>();            	
+            	for (String arrayValue : strings)
+            		list.add(Character.valueOf(arrayValue.charAt(0)));
+            	return list;
+        	}
         case Double:  
-            return Double.valueOf(value);
+        	if (!value.startsWith("[")) { 
+                return Double.valueOf(value);
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<Double> list = new ArrayList<Double>();            	
+            	for (String arrayValue : strings)
+            		list.add(Double.valueOf(arrayValue));
+            	return list;
+        	}
         case Float:    
-            return Float.valueOf(value);
+        	if (!value.startsWith("[")) { 
+                return Float.valueOf(value);
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<Float> list = new ArrayList<Float>();            	
+            	for (String arrayValue : strings)
+            		list.add(Float.valueOf(arrayValue));
+            	return list;
+        	}
         case Int:      
-            return Integer.valueOf(value);
+        	if (!value.startsWith("[")) { 
+                return Integer.valueOf(value);
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<Integer> list = new ArrayList<Integer>();            	
+            	for (String arrayValue : strings)
+            		list.add(Integer.valueOf(arrayValue));
+            	return list;
+        	}
         case Integer:  
-            return new BigInteger(value);
+        	if (!value.startsWith("[")) { 
+                return new BigInteger(value);
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<BigInteger> list = new ArrayList<BigInteger>();            	
+            	for (String arrayValue : strings)
+            		list.add(new BigInteger(arrayValue));
+            	return list;
+        	}
         case Long:     
-            return Long.valueOf(value);
+        	if (!value.startsWith("[")) { 
+                return Long.valueOf(value);
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<Long> list = new ArrayList<Long>();            	
+            	for (String arrayValue : strings)
+            		list.add(Long.valueOf(arrayValue));
+            	return list;
+        	}
         case Short:    
-            return Short.valueOf(value);
+        	if (!value.startsWith("[")) { 
+                return Short.valueOf(value);
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<Short> list = new ArrayList<Short>();            	
+            	for (String arrayValue : strings)
+            		list.add(Short.valueOf(arrayValue));
+            	return list;
+        	}
         case Strings:  
-            String[] values = value.split("\\s");
-            List<String> list = new ArrayList<String>(values.length);
-            for (int i = 0; i < values.length; i++)
-                list.add(values[i]); // what no Java 5 sugar for this ??
-            return list;
+        	if (!value.startsWith("[")) { 
+                String[] values = value.split("\\s");
+                List<String> list = new ArrayList<String>(values.length);
+                for (int i = 0; i < values.length; i++)
+                    list.add(values[i]); 
+                return list;
+        	}
+        	else {
+        		// don't replace whitespace internal to individual 'strings' value
+        		String tempValue = value.replaceAll("[\\[\\]]", "");
+        		tempValue.trim(); // just trim Arrays formatting
+        		String[] strings = tempValue.split(",");
+            	List<List<String>> list = new ArrayList<List<String>>();            	
+            	for (String arrayValue : strings) {
+                    String[] values = arrayValue.split("\\s");
+                    List<String> subList = new ArrayList<String>(values.length);
+                    for (int i = 0; i < values.length; i++)
+                    	subList.add(values[i]); 
+                    list.add(subList);
+            	}
+            	return list;
+        	}
         case Date:                 
             try {
-                return dateFormat.parse(value);
+	        	if (!value.startsWith("[")) { 
+	                return dateFormat.parse(value);
+	        	}
+	        	else {
+	        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+	            	List<Date> list = new ArrayList<Date>();            	
+	            	for (String arrayValue : strings)
+	            		list.add(dateFormat.parse(arrayValue));
+	            	return list;
+	        	}
             } catch (ParseException e) {
                 throw new PlasmaDataObjectException(e);
             }
@@ -954,14 +1187,23 @@ public class DataConverter {
         case Month:    
         case MonthDay: 
         case URI:  
-            return value;
         case Day:      
         case Duration: 
         case Time:     
         case Year:     
         case YearMonth:
         case YearMonthDay:
-            return value; // TODO: See lexical string representation for XML Schema
+        	// TODO: See lexical XML Schema string representation for these types
+        	if (!value.startsWith("[")) { 
+                return value;
+        	}
+        	else {
+        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+            	List<String> list = new ArrayList<String>();            	
+            	for (String arrayValue : strings)
+            		list.add(arrayValue);
+            	return list;
+        	}
         default: 
             throw new InvalidDataConversionException(targetDataType, 
                     DataType.String, value);

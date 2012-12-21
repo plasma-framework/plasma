@@ -903,8 +903,12 @@ public class CoreType implements PlasmaType {
 	
 		
     /**
-     * Returns the Java class that this type represents.
-     * @return the Java class.
+     * Returns the Java class that this type represents or the generic
+     * data object implementation class if no provisioned implementation
+     * class is found. 
+     * @return the Java class that this type represents or the generic
+     * data object implementation class if no provisioned implementation
+     * class is found. 
      */
     public Class<?> getInstanceClass() {
         if (!isDataType()) {
@@ -916,8 +920,7 @@ public class CoreType implements PlasmaType {
 	                Class<?> interfaceImplClass = Class.forName(qualifiedName);
 	                return interfaceImplClass;
 	            } catch (ClassNotFoundException e) {
-	            	throw new IllegalArgumentException("no interface class found for qualified name '"
-	                        + qualifiedName + "'");
+	            	return CoreDataObject.class;
 	            }
             }
             else

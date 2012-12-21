@@ -268,13 +268,13 @@ public class PropertySelectionCollector extends CollectorSupport
                         + "' from root '" + rootType.getName() + "' contains a non-reference property '" 
                         + prop.getName() + "'");
             
+
             if (currPathode.getWhere() != null)
             	this.predicateMap.put(prop, currPathode.getWhere());
             
             if (prop.isMany() && this.isOnlySingularProperties())
             	return;
 
-            
             Type nextType = prop.getType(); // traverse
             
             if (path.getPathNodes().size() > curPathElementIndex + 1) { // more nodes
@@ -323,8 +323,8 @@ public class PropertySelectionCollector extends CollectorSupport
                 	this.mapProperty(currType, prop, this.propertyMap);                              
                 	this.mapInheritedProperty(currType, prop, this.inheritedPropertyMap);                              
                     String[] names = this.findPropertyNames(nextType, abstractProperty);
-                	this.mapPropertyNames(currType, names, this.propertyMap);                              
-                	this.mapInheritedPropertyNames(currType, names, this.inheritedPropertyMap);                              
+                	this.mapPropertyNames(nextType, names, this.propertyMap);                              
+                	this.mapInheritedPropertyNames(nextType, names, this.inheritedPropertyMap);                              
                 }
             }
         }
@@ -341,7 +341,6 @@ public class PropertySelectionCollector extends CollectorSupport
         	buf.append("\n" + type.getURI() + "#" + type.getName());
         	List<String> names = this.propertyMap.get(type);
             for (String name : names) {
-    			PlasmaProperty prop = (PlasmaProperty)type.getProperty(name);
             	buf.append("\n\t" + name);
     		}        
         }
@@ -356,7 +355,6 @@ public class PropertySelectionCollector extends CollectorSupport
         	buf.append("\n" + type.getURI() + "#" + type.getName());
         	List<String> names = this.inheritedPropertyMap.get(type);
             for (String name : names) {
-    			PlasmaProperty prop = (PlasmaProperty)type.getProperty(name);
             	buf.append("\n\t" + name);
     		}        
         }

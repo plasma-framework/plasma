@@ -61,11 +61,9 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 		return buf.toString();
 	}
 
-
-
-	
 	protected String getImplementationClassName(Class clss) {
-		String name = PlasmaConfig.getInstance().getSDOImplementationClassName(clss.getUri(), clss.getName());
+		SDOClassNameResolver resolver = new SDOClassNameResolver();
+		String name = resolver.getName(clss);
 		return name;
 	}	
 

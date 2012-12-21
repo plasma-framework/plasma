@@ -8,7 +8,7 @@ import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
 import org.plasma.text.lang3gl.ClassNameResolver;
 
-public class JDOInterfaceNameResolver implements ClassNameResolver {
+public class JDOInterfaceNameResolver extends DefaultNameResolver implements ClassNameResolver {
 
 	public JDOInterfaceNameResolver() {}
 	
@@ -22,7 +22,8 @@ public class JDOInterfaceNameResolver implements ClassNameResolver {
 		NamespaceProvisioning provisioning = PlasmaConfig.getInstance().getProvisioningByNamespaceURI(
 				DataAccessProviderName.JDO, clss.getUri());
 		String packageName = provisioning.getPackageName();
-		String qualifiedName = packageName + "." + clss.getName(); 				
+		String name = this.replaceReservedCharacters(clss.getName());
+		String qualifiedName = packageName + "." + name; 				
 		return qualifiedName;
 	}
 
@@ -31,7 +32,8 @@ public class JDOInterfaceNameResolver implements ClassNameResolver {
 		NamespaceProvisioning provisioning = PlasmaConfig.getInstance().getProvisioningByNamespaceURI(
 				DataAccessProviderName.JDO, clssRef.getUri());
 		String packageName = provisioning.getPackageName();
-		String qualifiedName = packageName + "." + clssRef.getName(); 				
+		String name = this.replaceReservedCharacters(clssRef.getName());
+		String qualifiedName = packageName + "." + name; 				
 		return qualifiedName;
 	}
 

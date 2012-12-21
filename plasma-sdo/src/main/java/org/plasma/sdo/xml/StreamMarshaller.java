@@ -5,7 +5,10 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javanet.staxutils.IndentingXMLStreamWriter;
 
@@ -200,6 +203,7 @@ public class StreamMarshaller extends Marshaller {
 	class EventVisitor implements PlasmaDataGraphEventVisitor {
 		
 		private XMLStreamWriter writer;
+		private HashSet<PlasmaDataObject> nonContainmentObjects = new HashSet<PlasmaDataObject>();
 		
 		public EventVisitor(XMLStreamWriter writer) {
 			this.writer = writer;
@@ -210,13 +214,15 @@ public class StreamMarshaller extends Marshaller {
 				PlasmaType sourceType = null;
 		        PlasmaProperty sourceProperty = null;
 		        if (source != null) {
-		        	sourceType = (PlasmaType)PlasmaTypeHelper.INSTANCE.getType(
-		        		document.getRootElementURI(), source.getType().getName());
+		        	if (this.nonContainmentObjects.contains(source)) {
+		        		this.nonContainmentObjects.add(target); // so gets checked as source at next level, removed on end event
+		            	return; // no content needed for non containment obj
+		        	}
+		        	sourceType = (PlasmaType)source.getType();
 		        	sourceProperty = (PlasmaProperty)sourceType.getProperty(sourcePropertyName);
 		        }
 		        
-		        PlasmaType targetType = (PlasmaType)PlasmaTypeHelper.INSTANCE.getType(
-		        		document.getRootElementURI(), target.getType().getName()); 
+		        PlasmaType targetType = (PlasmaType)target.getType(); 
 		        
 		        if (log.isDebugEnabled())
 		            if (source == null)
@@ -250,6 +256,10 @@ public class StreamMarshaller extends Marshaller {
 			        	    sourceProperty, targetType, sourceType, level);	
 	        	}
 	        	else {
+	        		// source node does not contain the target, yet the
+	        		// target may contain other nodes which we will subsequently
+	        		// get, Therefore check for source as non-containment obj above
+	        		this.nonContainmentObjects.add(target);
 	        		writeNonContainmentReferenceContent(this.writer, target, source, 
 			        	    sourceProperty, targetType, sourceType, level);
 	        	}
@@ -261,8 +271,14 @@ public class StreamMarshaller extends Marshaller {
 			}
 		}
 		
-		public void end(PlasmaDataObject targetObject, PlasmaDataObject sourceObject, String sourcePropertyName, int level){
+		public void end(PlasmaDataObject target, PlasmaDataObject source, String sourcePropertyName, int level){
 			try {
+		        if (source != null) {
+		        	if (this.nonContainmentObjects.contains(source)) {
+		        		this.nonContainmentObjects.remove(target); // 
+		            	return; // no content needed for non containment obj
+		        	}
+		        }
 				this.writer.writeEndElement();
 			} catch (XMLStreamException e) {
 				throw new MarshallerRuntimeException(e);
@@ -283,34 +299,6 @@ public class StreamMarshaller extends Marshaller {
 
 	    writer.writeAttribute(SchemaUtil.getSerializationAttributeName(), 
 	    		((PlasmaDataObject)dataObject).getUUIDAsString());
-	    /*
-	    int externKeyCount = 0;
-		for (Property property : targetType.getProperties()) {
-			PlasmaProperty prop = (PlasmaProperty)property;
-			if (!prop.getType().isDataType() || !prop.isKey(KeyType.external) || !prop.isXMLAttribute()) {
-			    continue; // not an external key attribute
-			}
-			Object value = dataObject.get(prop);
-			if (value == null)
-				continue;
-		    writer.writeAttribute(helper.getLocalName(prop),
-		    		fromObject(prop.getType(), value));
-		    externKeyCount++;
-		}
-		for (Property property : targetType.getProperties()) {
-			PlasmaProperty prop = (PlasmaProperty)property;
-			if (!prop.getType().isDataType() || !prop.isKey(KeyType.external) || prop.isXMLAttribute()) {
-			    continue; // not an external key element
-			}
-			Object value = dataObject.get(prop);
-			if (value == null)
-				continue;
-        	writer.writeStartElement(helper.getLocalName(prop));
-        	writer.writeCharacters(this.fromObject(prop.getType(), value));
-        	writer.writeEndElement();
-        	externKeyCount++;
-		}
-		*/
 	}
 
 	private void writeContent(XMLStreamWriter writer, DataObject dataObject, DataObject source, 
@@ -348,6 +336,9 @@ public class StreamMarshaller extends Marshaller {
 		}
 		
 		// create XSI type on demand for containment refs
+		// FIXME: SDO namespaces are necessary in some cases
+		// to determine exact XSI type to unmarshal. Can't determine
+		// this from the property type on unmarshalling. 
 		if (externKeyCount > 0)
 	        writer.writeAttribute("xsi", 
 	    	    XMLConstants.XMLSCHEMA_INSTANCE_NAMESPACE_URI, "type", 

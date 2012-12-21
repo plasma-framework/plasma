@@ -26,14 +26,15 @@ public class DSLClassFactory extends SDODefaultFactory
     implements ClassFactory {
 
 	protected SDOInterfaceNameResolver sdoInterfaceResolver = new SDOInterfaceNameResolver();
-
+    protected DSLClassNameResolver dslClassNameResolver = new DSLClassNameResolver();
+	
 	public DSLClassFactory(Lang3GLContext context) {
 		super(context);
 	}
 	
 	public String createFileName(Class clss) {
 		StringBuilder buf = new StringBuilder();
-		String name = PlasmaConfig.getInstance().getQueryDSLImplementationClassName(clss.getUri(), clss.getName());
+		String name = this.dslClassNameResolver.getName(clss);
 		buf.append(name);
 		buf.append(".java");		
 		return buf.toString();
@@ -57,7 +58,8 @@ public class DSLClassFactory extends SDODefaultFactory
 		// if impl class is in different package, need import
 		if (!packageName.equals(interfacePackageName)) {
 			buf.append(LINE_SEP);
-			String qualifiedName = interfacePackageName + "." + clss.getName(); 
+			String qualifiedName = interfacePackageName + "." 
+			    + sdoInterfaceResolver.getName(clss); 
 			buf.append(this.createImportDeclaration(pkg, clss, qualifiedName));
 		}
 		
@@ -332,8 +334,8 @@ public class DSLClassFactory extends SDODefaultFactory
 		return buf.toString();
 	}
 
-	protected String getImplementationClassName(Class clss) {
-		String name = PlasmaConfig.getInstance().getQueryDSLImplementationClassName(clss.getUri(), clss.getName());
+	protected String getImplementationClassName(Class clss) {		
+		String name = this.dslClassNameResolver.getName(clss);
 		return name;
 	}
 	

@@ -6,7 +6,8 @@ import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
 import org.plasma.text.lang3gl.ClassNameResolver;
 
-public class DSLClassNameResolver implements ClassNameResolver {
+public class DSLClassNameResolver  extends DefaultNameResolver
+    implements ClassNameResolver {
 
 	@Override
 	public String getQualifiedName(Class clss) {		
@@ -25,6 +26,7 @@ public class DSLClassNameResolver implements ClassNameResolver {
 		if (subpackage != null && subpackage.trim().length() > 0)
 			packageName = packageName + "." + subpackage;
 		String className = PlasmaConfig.getInstance().getQueryDSLImplementationClassName(uri, name);
+		className = this.replaceReservedCharacters(className);
 		String qualifiedName = packageName + "." + className; 				
 		return qualifiedName;
 	}
@@ -32,6 +34,7 @@ public class DSLClassNameResolver implements ClassNameResolver {
 	@Override
 	public String getName(Class clss) {
 		String className = PlasmaConfig.getInstance().getQueryDSLImplementationClassName(clss.getUri(), clss.getName());
+		className = this.replaceReservedCharacters(className);
 		return className;
 	}
 

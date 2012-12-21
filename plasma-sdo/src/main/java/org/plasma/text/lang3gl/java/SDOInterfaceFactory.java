@@ -328,8 +328,9 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 	}
 	
 	public String createFileName(Class clss) {
-		StringBuilder buf = new StringBuilder();
-		buf.append(clss.getName());
+		SDOInterfaceNameResolver interfaceResolver = new SDOInterfaceNameResolver();
+		StringBuilder buf = new StringBuilder();		
+		buf.append(interfaceResolver.getName(clss));
 		buf.append(".java");		
 		return buf.toString();
 	}

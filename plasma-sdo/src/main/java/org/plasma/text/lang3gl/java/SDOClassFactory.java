@@ -30,13 +30,18 @@ import commonj.sdo.Type;
 public class SDOClassFactory extends SDODefaultFactory 
     implements ClassFactory {
 
+	private ClassNameResolver interfaceResolver = new SDOInterfaceNameResolver();
+	private ClassNameResolver classResolver = new SDOClassNameResolver();
+
+	
 	public SDOClassFactory(Lang3GLContext context) {
 		super(context);
 	}
 	
 	public String createFileName(Class clss) {
 		StringBuilder buf = new StringBuilder();
-		String name = PlasmaConfig.getInstance().getSDOImplementationClassName(clss.getUri(), clss.getName());
+		SDOClassNameResolver resolver = new SDOClassNameResolver();
+		String name = resolver.getName(clss);
 		buf.append(name);
 		buf.append(".java");		
 		return buf.toString();
@@ -59,7 +64,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		
 		// if impl class is in different package, need import
 		if (!packageName.equals(interfacePackageName)) {
-			String qualifiedName = interfacePackageName + "." + clss.getName(); 
+			String qualifiedName = interfacePackageName + "." + resolver.getName(clss); 
 			importMap.put(qualifiedName, qualifiedName);
 		}
 		buf.append(this.createImportDeclarations(importMap));
@@ -219,7 +224,7 @@ public class SDOClassFactory extends SDODefaultFactory
 				buf.append(objectPrimitiveClass.getSimpleName());
 				buf.append(")");
 				buf.append("super.get(");
-				buf.append(clss.getName());
+				buf.append(this.interfaceResolver.getName(clss));
 				buf.append(".PTY_");
 				buf.append(toConstantName(field.getName()));
 				buf.append(");");			
@@ -239,7 +244,7 @@ public class SDOClassFactory extends SDODefaultFactory
 				buf.append(typeClassName);
 				buf.append(")");
 				buf.append("super.get(");
-				buf.append(clss.getName());
+				buf.append(this.interfaceResolver.getName(clss));
 				buf.append(".PTY_");
 				buf.append(toConstantName(field.getName()));
 				buf.append(");");			
@@ -249,7 +254,7 @@ public class SDOClassFactory extends SDODefaultFactory
 			buf.append(typeClassName);
 			buf.append(")");
 			buf.append("super.get(");
-			buf.append(clss.getName());
+			buf.append(this.interfaceResolver.getName(clss));
 			buf.append(".PTY_");
 			buf.append(toConstantName(field.getName()));
 			buf.append(");");		
@@ -270,7 +275,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append(this.beginBody());
 		buf.append(newline(2));
 	    buf.append("super.set(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(", value);");				
@@ -289,7 +294,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append(this.beginBody());
 		buf.append(newline(2));
         buf.append("super.unset(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(");");				
@@ -308,7 +313,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append(this.beginBody());
 		buf.append(newline(2));
         buf.append("return super.isSet(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(");");				
@@ -329,7 +334,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("return (");
 		buf.append(typeClassName);
         buf.append(")super.createDataObject(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(");");				
@@ -387,7 +392,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName);
 		buf.append(">)super.get(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(");");	
@@ -442,7 +447,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName);
 		buf.append(">)super.get(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(");");	
@@ -488,7 +493,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName);
 		buf.append(">)super.get(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(");");	
@@ -533,30 +538,30 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName);
 		buf.append(">)super.get(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(");");	
 		
 		buf.append(newline(2));
-		buf.append("if (list != null) {");
+		buf.append("if (value != null || value.length == 0) {");
 		
 		buf.append(newline(3));
+		buf.append("if (list == null)");
+		buf.append(newline(4));
+		buf.append("list = new ArrayList<");
 		buf.append(typeClassName);
-		buf.append("[] array = new ");
-		buf.append(typeClassName);
-		buf.append("[list.size()];");
-		buf.append(" //Clear/replace existing list as per SDO 2.1 spec - See DataObject.set(Property property, Object value)");
-		
+		buf.append(">();");
+				
 		buf.append(newline(3));
-		buf.append("for (int i = 0; i < array.length; i++)");
+		buf.append("for (int i = 0; i < value.length; i++)");
 		
 		buf.append(newline(4));
-		buf.append("list.add(array[i]);");
+		buf.append("list.add(value[i]);");
 
 		buf.append(newline(3));
 		buf.append("super.set(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(", list);");
@@ -568,7 +573,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("else");
 
 		buf.append(newline(3));
-		buf.append("throw new IllegalArgumentException(\"expected non-null argument 'array' - use unset");
+		buf.append("throw new IllegalArgumentException(\"expected non-null and non-zero length array argument 'value' - use unset");
 		buf.append(firstToUpperCase(field.getName()));
 		buf.append("() method to remove this property\");");
 		
@@ -596,7 +601,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName);
 		buf.append(">)super.get(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(");");	
@@ -616,7 +621,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("// NOTE: SDO 2.1 spec specifies replacing the whole list on a multi-valued 'set' operation");
 		buf.append(newline(2));
 		buf.append("super.setList(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(", list);");
@@ -645,7 +650,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName);
 		buf.append(">)super.get(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(");");	
@@ -660,7 +665,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("// NOTE: SDO 2.1 spec specifies replacing the whole list on a multi-valued 'set' operation");
 		buf.append(newline(2));
 		buf.append("super.setList(");
-		buf.append(clss.getName());
+		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
 		buf.append(toConstantName(field.getName()));
 		buf.append(", list);");

@@ -69,18 +69,17 @@ public class RelationCache {
             log.debug("comparing "+ targetType.getName() 
                     + "/" + sourceType.getName());
                 
-        for (org.modeldriven.fuml.repository.Property targetProperty : targetType.getDeclaredProperties()) {
+        for (org.modeldriven.fuml.repository.Property targetProperty : targetType.getAllProperties()) {
             
             if (targetProperty.getType().isDataType()) 
                 continue; // not a reference              
             
             if (targetProperty.isSingular()) {
             	
-            	// our metadata is not a directed graph so we 
+            	// Our metadata is not a directed graph so we 
             	// can't bypass traversals based on directionality, so
-            	// detect a loop based on an inordinate number of visits
-            	// then determine an error for this particular relation type
-            	// TODO: alternately just only visit a particular link
+            	// detect a loop based on source and target properties
+            	// And only visit a particular link
             	// ever once.
             	if (traversalSourceProperty != null) {
 	            	String linkKey = createHashKey(targetProperty, traversalSourceProperty);
@@ -88,9 +87,10 @@ public class RelationCache {
 	            	if ((count = visited.get(linkKey)) == null)
 	            		visited.put(linkKey, Integer.valueOf(1));
 	            	else {	
+	            		
 	                	org.modeldriven.fuml.repository.Property opposite = targetProperty.getOpposite();
-	                	if (opposite.isSingular()) {
-	            		    throw new IllegalCircularReferenceException("singular property "
+	                	if (opposite != null && opposite.isSingular()) {
+	            		    log.warn("singular property "
 	                				+ targetType.getName() + "."
 	                        		+ (targetProperty.getName() == null ? targetProperty.getXmiId() : targetProperty.getName())
 	                        		+ " has opposite " 
@@ -98,22 +98,16 @@ public class RelationCache {
 	                        		+ (opposite.getName() == null ? opposite.getXmiId() : opposite.getName())
 	                        		+ " which is also singular");
 	                	}
-	            		else {
-	            			if (count.intValue() > 500) {
-		            		    throw new IllegalCircularReferenceException("singular property "
-		                				+ targetType.getName() + "."
-		                        		+ (targetProperty.getName() == null ? targetProperty.getXmiId() : targetProperty.getName())
-		                        		+ " has one or more singular property associations");
-	            			}
-	                	    count = Integer.valueOf(count.intValue() + 1);
-	                	    visited.put(linkKey, count);
-	                	}
+
+	                	return false;
 	            	}
             	}
             	
                 if (log.isDebugEnabled())
                     log.debug("processing "+ targetType.getName() + "."
                     		+ targetProperty.getName());
+                
+                // if we've arrived at the target via singular relations
             	if (targetProperty.getType().getXmiId().equals(sourceType.getId())) {
 	                if (targetType.getId().equals(sourceType.getId())) {
 	                    log.warn("potential circular reference: " + targetType.getNamespaceURI() + "#"+ targetType.getName()

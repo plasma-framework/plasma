@@ -79,7 +79,7 @@
         <xsd:complexContent>
             <xsd:extension base="cfg:Configuration">
 		        <xsd:sequence>
-		            <xsd:element name="Provisioning" type="cfg:NamespaceProvisioning"  minOccurs="1" maxOccurs="1">
+		            <xsd:element name="Provisioning" type="cfg:NamespaceProvisioning"  minOccurs="0" maxOccurs="1">
 		                <xsd:annotation>                                  
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 
