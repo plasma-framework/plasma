@@ -15,14 +15,20 @@ import javax.xml.bind.JAXBException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.common.xslt.XSLTUtils;
+import org.plasma.config.Artifact;
+import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.Model;
 import org.plasma.provisioning.ProvisioningModelDataBinding;
 import org.plasma.provisioning.adapter.ModelAdapter;
 import org.xml.sax.SAXException;
 
 public abstract class ProvisioningTool {
+    private static Log log =LogFactory.getLog(
+    		ProvisioningTool.class); 
 
     protected static File createStagingModel(File source, File classesDir) 
         throws IOException, TransformerConfigurationException, TransformerException, JAXBException, SAXException 
@@ -88,6 +94,33 @@ public abstract class ProvisioningTool {
         OutputStream javaXslOutputStream = new FileOutputStream(javaXslUrlFile);
         writeContent(javaXslStream, javaXslOutputStream);
         return javaXslUrlFile;
+    }
+    
+    protected static boolean regenerate(long lastExecution)
+    {
+    	boolean fileStale = false;
+        for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifacts()) {
+            URL url = PlasmaConfig.class.getResource(artifact.getUrn());
+            if (url == null)
+            	url = PlasmaConfig.class.getClassLoader().getResource(artifact.getUrn());            
+            log.debug("checking modified state of repository artifact '"
+            		+ url.getFile() + "' against time: " 
+            		+ String.valueOf(lastExecution));
+            File urlFile = new File(url.getFile());
+            if (urlFile.exists()) {
+            	if (urlFile.lastModified() > lastExecution) {
+            		fileStale = true;
+                    log.debug("detected stale repository artifact '"
+                    		+ url.getFile() + "' against time: " 
+                    		+ String.valueOf(lastExecution));
+            		break;
+            	}
+            }
+        }           
+        if (!fileStale)
+        	return false;
+        else
+            return true;
     }
     
     protected static void writeContent(InputStream is, OutputStream os) throws IOException {

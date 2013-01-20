@@ -126,7 +126,7 @@ public class JDOClassFactory extends JDODefaultFactory
 		
 		StringBuilder buf = new StringBuilder();
 		
-		String typeClassName = getTypeClassName(clss, field);
+		TypeClassInfo typeClassName = getTypeClassName(field.getType());
 		
 		if (!field.isMany()) {
 			buf.append(LINE_SEP);			    
@@ -152,14 +152,14 @@ public class JDOClassFactory extends JDODefaultFactory
 	}	
 	
 	private void createSingularGetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		
 		createSingularGetterDeclaration(pkg, clss, field, typeClassName, buf);
 		createSingularGetterBody(pkg, clss, field, typeClassName, buf);
 	}
 
 	private void createSingularGetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {	
+			TypeClassInfo typeClassName, StringBuilder buf) {	
 		buf.append(this.beginBody());
 		buf.append(LINE_SEP);			    
 		buf.append(indent(2));
@@ -172,13 +172,13 @@ public class JDOClassFactory extends JDODefaultFactory
 	}
 	
 	private void createSingularSetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		createSingularSetterDeclaration(pkg, clss, field, typeClassName, buf);
 		createSingularSetterBody(pkg, clss, field, typeClassName, buf);
 	}
 
 	private void createSingularSetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(this.beginBody());
 		buf.append(LINE_SEP);			    
 		buf.append(indent(2));
@@ -191,14 +191,14 @@ public class JDOClassFactory extends JDODefaultFactory
 	}	
 	
 	private void createManyGetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{	
 		createManyGetterDeclaration(pkg, clss, field, typeClassName, buf);
 		createManyGetterBody(pkg, clss, field, typeClassName, buf);
 	}
 	
 	private void createManyGetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 			
@@ -206,9 +206,9 @@ public class JDOClassFactory extends JDODefaultFactory
 		
 		buf.append(LINE_SEP);			    
 		buf.append(indent(2));
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append("[] array = new ");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append("[this.");
 		buf.append(fieldName);
 		buf.append(".size()];");
@@ -229,14 +229,14 @@ public class JDOClassFactory extends JDODefaultFactory
 	}
 
 	private void createManyIndexGetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{	
 		createManyIndexGetterDeclaration(pkg, clss, field, typeClassName, buf);
 		createManyIndexGetterBody(pkg, clss, field, typeClassName, buf);
 	}
 	
 	private void createManyIndexGetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 
@@ -254,14 +254,14 @@ public class JDOClassFactory extends JDODefaultFactory
 	}
 
 	private void createManyCount(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{	
 		createManyCountDeclaration(pkg, clss, field, typeClassName, buf);
 		createManyCountBody(pkg, clss, field, typeClassName, buf);
 	}
 	
 	private void createManyCountBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 		
@@ -279,14 +279,14 @@ public class JDOClassFactory extends JDODefaultFactory
 	}
 	
 	private void createManySetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		createManySetterDeclaration(pkg, clss, field, typeClassName, buf);
 		createManySetterBody(pkg, clss, field, typeClassName, buf);
 	}
 	
 	private void createManySetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 
@@ -318,14 +318,14 @@ public class JDOClassFactory extends JDODefaultFactory
 	}
 	
 	private void createManyAdder(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		createManyAdderDeclaration(pkg, clss, field, typeClassName, buf);
 		createManyAdderBody(pkg, clss, field, typeClassName, buf);
 	}
 	
 	private void createManyAdderBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 		
@@ -343,14 +343,14 @@ public class JDOClassFactory extends JDODefaultFactory
 	}
 
 	private void createManyRemover(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		createManyRemoverDeclaration(pkg, clss, field, typeClassName, buf);
 		createManyRemoverBody(pkg, clss, field, typeClassName, buf);
 	}
 	
 	private void createManyRemoverBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 		
@@ -402,47 +402,29 @@ public class JDOClassFactory extends JDODefaultFactory
 		
 		return buf.toString();
 	}
-
-	private String getTypeClassName(Class clss, Property field)
-	{
-		String typeClassName = null;
-		if (field.getType() instanceof ClassRef) {
-			ClassRef clssRef = (ClassRef)field.getType();
-			Class refClss = this.getContext().findClass(clssRef);
-			//if (!refClss.isAbstract()) {
-				typeClassName = this.getTypeClassName(clssRef);
-			//}
-			//else { 
-			//	typeClassName = this.getTypeClassName(clss);
-			//}
-		}
-		else 
-		    typeClassName = this.getTypeClassName(field.getType());
-		return typeClassName;		
-	}
 	
 	protected String createPrivateFieldDeclaration(Class clss, Property field) {
 		StringBuilder buf = new StringBuilder();
 		
-		String typeClassName = getTypeClassName(clss, field);
+		TypeClassInfo typeClassName = getTypeClassName(field.getType());
 		
 		String fieldName = (buildPrivateFieldName(clss, field));
 		buf.append(LINE_SEP);
 		buf.append(indent(1));
 		buf.append("private ");
 		if (!field.isMany()) {
-			buf.append(typeClassName);
+			buf.append(typeClassName.getSimpleName());
 			buf.append(" ");
 			buf.append(fieldName);
 			buf.append(";");
 		}
 		else {
 			buf.append("List<");
-			buf.append(typeClassName);
+			buf.append(typeClassName.getCollectionSimpleName());
 			buf.append("> ");
 			buf.append(fieldName);
 			buf.append(" = new ArrayList<");
-			buf.append(typeClassName);
+			buf.append(typeClassName.getCollectionSimpleName());
 			buf.append(">();");
 		}
 		

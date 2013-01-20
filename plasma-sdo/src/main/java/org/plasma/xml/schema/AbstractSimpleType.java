@@ -16,6 +16,10 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.namespace.QName;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -46,6 +50,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public abstract class AbstractSimpleType
     extends Annotated
 {
+	private static Log log = LogFactory.getLog(
+			AbstractSimpleType.class); 
 
     protected Union union;
     protected org.plasma.xml.schema.List list;
@@ -182,5 +188,100 @@ public abstract class AbstractSimpleType
     public void setName(String value) {
         this.name = value;
     }
+    
+    /**
+     * Encapsulates the (breadth-first) 
+     * traversal logic for XSD SimpleType hierarchies
+     * across restrictions, lists, unions and other elements,
+     * creating "visit" events ala. the Visitor pattern for the
+     * given visitor. 
+     * @see org.plasma.xml.schema.Restriction
+     * @see org.plasma.xml.schema.List
+     * @see org.plasma.xml.schema.Union
+     */
+    public void accept(SimpleTypeVisitor visitor) {
+    	this.accept(this, null, visitor, 0);
+    }
+    
+    /**
+     * Encapsulates the (breadth-first) 
+     * traversal logic for XSD SimpleType hierarchies
+     * across restrictions, lists, unions and other elements,
+     * creating "visit" events ala. the Visitor pattern for the
+     * given visitor. 
+     * @see org.plasma.xml.schema.Restriction
+     * @see org.plasma.xml.schema.List
+     * @see org.plasma.xml.schema.Union
+     */
+    private void accept(AbstractSimpleType target, AbstractSimpleType source,     		 
+    		SimpleTypeVisitor visitor, int level) {
 
+    	// depth-first visit event
+    	visitor.visit(target, source, level);
+    	
+    	if (target.getRestriction() != null) {
+    		Restriction restriction = target.getRestriction();
+        	QName typeName = restriction.getBase();
+    		if (typeName != null) {
+    			if (typeName.getNamespaceURI() != null) {
+	    			if (typeName.getNamespaceURI().equals(visitor.getTargetNamespace())) {
+		    	        SimpleType baseType = visitor.getTopLevelSimpleType(typeName);
+		    	        accept(baseType, target, visitor, level++);
+	    			}
+	    			else if (typeName.getNamespaceURI().equals(SchemaConstants.XMLSCHEMA_NAMESPACE_URI)) {
+	    				// leaf
+	    			}
+	    			else 
+	        			log.warn("could not process namespace URI found for base type, "
+	        					+ typeName.toString());
+    			}
+    			else
+        			log.warn("could not process (no namespace) base type, "
+        					+ typeName.toString());
+    		}
+    		else {
+    			LocalSimpleType localSimpleType = restriction.getSimpleType();
+    			if (localSimpleType != null) {
+    				accept(localSimpleType, target, visitor, level++);
+    			}
+    			else
+    			    log.warn("no base type or local type found on restriction for type, "
+    					+ target.getName());
+    		}
+    	}
+    	else if (target.getList() != null) {
+    		org.plasma.xml.schema.List typeList = target.getList();
+    		if (typeList.getSimpleType() != null)
+    			log.warn("ignoring local simple type child for simple type, "
+    				+ target.getName());
+    		QName typeName = typeList.getItemType();
+    		if (typeName != null&& typeName.getNamespaceURI() != null ) {
+    			if (typeName.getNamespaceURI().equals(visitor.getTargetNamespace())) {
+	    	        SimpleType baseType = visitor.getTopLevelSimpleType(typeName);
+		        	accept(baseType, target, visitor, level++);
+    			}
+    			else if (typeName.getNamespaceURI().equals(SchemaConstants.XMLSCHEMA_NAMESPACE_URI)) {
+    				// leaf
+    			}
+    			else 
+        			log.warn("could not process namespace URI found for type, "
+        					+ typeName.toString());
+    		}
+    		else
+    			log.warn("no namespace URI found for type, "
+    					+ typeName.toString());
+    	}
+    	else if (target.getUnion() != null) {
+    		Union union = target.getUnion();
+    		for (QName member : union.getMemberTypes()) {
+	    	    SimpleType baseType = visitor.getTopLevelSimpleType(member);
+	        	accept(baseType, target, visitor, level++);
+    		}
+    		
+    		// process leaf local simple types
+			for (LocalSimpleType localBaseType : union.getSimpleTypes()) {
+	        	accept(localBaseType, target, visitor, level++);
+			}					        			
+    	}
+    }
 }

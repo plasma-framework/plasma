@@ -203,20 +203,28 @@ public abstract class DefaultFactory {
 		return "}";
 	}
 	
-	protected String getTypeClassName(TypeRef type)
+	protected TypeClassInfo getTypeClassName(TypeRef type)
     {
-		String typeClassName = null;
+		TypeClassInfo result = null;
 		if (type instanceof DataTypeRef) {
-			DataType sdoType = DataType.valueOf(((DataTypeRef)type).getName());
-			java.lang.Class<?> typeClass = this.getTypeClass(sdoType);
-			typeClassName = typeClass.getSimpleName();
+			DataTypeRef dataTypeRef = (DataTypeRef)type;
+			DataType sdoType = DataType.valueOf(dataTypeRef.getName());
+			
+			java.lang.Class<?> primitiveTypeClass = getTypeClass(sdoType, true);
+			java.lang.Class<?> wrapperTypeClass = getTypeClass(sdoType, false);
+			
+            result = new TypeClassInfo(dataTypeRef, sdoType,
+			    primitiveTypeClass, wrapperTypeClass, 
+			    this.context.usePrimitives());
 		}
 		else if (type instanceof ClassRef) {
-			typeClassName = ((ClassRef)type).getName();
+			result = new TypeClassInfo((ClassRef)type, 
+				this.context.usePrimitives());
 		}
-    	return typeClassName;
+    	return result;
     }	
 	
+	@Deprecated
 	protected String getTypeClassName(Class clss)
     {
     	return clss.getName();
@@ -228,6 +236,20 @@ public abstract class DefaultFactory {
 		}
 			
 		return name;
+    }
+	
+	protected String toEnumLiteralName(String name) {
+		name = toConstantName(name);		
+    	StringBuilder buf = new StringBuilder();
+    	char[] array = name.toCharArray();
+        for (int i = 0; i < array.length; i++) {
+        	if (i == 0) {
+        		if (Character.isDigit(array[i]))
+    	            buf.append("_");
+        	}
+        	buf.append(array[i]);        
+        }
+        return buf.toString();
     }
 	
 	protected String toConstantName(String name) {
@@ -247,6 +269,10 @@ public abstract class DefaultFactory {
         }
         return buf.toString();
     }
+	
+	protected String toMethodFieldName(String name) {
+		return firstToUpperCase(name);
+	}
 	
 	protected String indent(int num) {
     	StringBuilder buf = new StringBuilder();
@@ -285,124 +311,124 @@ public abstract class DefaultFactory {
 	}
 	
 	protected void createSingularGetterDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(newline(1));
 		buf.append("public ");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append(" get");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("()");
 	}
 	
 	protected void createSingularSetterDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(newline(1));
 	    buf.append("public void set");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append(" value)");
 	}
 
 	protected void createUnsetterDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(newline(1));
 		buf.append("public void unset");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("()");
 	}	
 	
 	protected void createIsSetDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(newline(1));
 		buf.append("public boolean isSet");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("()");
 	}
 	
 	protected void createCreatorDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(newline(1));
 		buf.append("public ");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append(" create");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("()");
 	}	
 
 	protected void createCreatorByAbstractClassDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(newline(1));
 		buf.append("public ");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append(" create");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(Class<? extends ");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append("> clss)");
 	}	
 	
 	protected void createManyGetterDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(newline(1));
 		buf.append("public ");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append("[] get");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("()");
 	}	
 
 	protected void createManyIndexGetterDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(newline(1));
 		buf.append("public ");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append(" get");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(int idx)");
 	}	
 
 	protected void createManyCountDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(newline(1));
 		buf.append("public int get");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("Count()");
 	}	
 	
 	protected void createManySetterDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(newline(1));
 		buf.append("public void set");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append("[] value)");
 	}
 	
 	protected void createManyAdderDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(newline(1));
 		buf.append("public void add");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append(" value)");
 	}
 	
 	protected void createManyRemoverDeclaration(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(newline(1));
 		buf.append("public void remove");
-		buf.append(firstToUpperCase(field.getName()));
+		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append(" value)");
 	}
 

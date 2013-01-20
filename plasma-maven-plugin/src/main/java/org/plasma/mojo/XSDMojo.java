@@ -1,58 +1,59 @@
 package org.plasma.mojo;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.plasma.provisioning.cli.QueryTool;
-import org.plasma.provisioning.cli.QueryToolAction;
+import org.plasma.provisioning.cli.XSDTool;
+import org.plasma.provisioning.cli.XSDToolAction;
 
 /**
- * Mojo implementation for generating SDO artifacts, such as
- * source code, which sets up the mojo envoronment and then calls
- * the Plasma Query command-line (CLI) tool, passing it mojo args. 
+ * Mojo implementation for generating SDO model artifacts from
+ * XML Schema, such as UML/XMI. 
+ * Sets up the mojo envoronment and then calls
+ * the Plasma XSD command-line (CLI) tool, passing it mojo args. 
  * 
  * @author Scott Cinnamond
  * @since 1.1.3
  * 
- * @goal query
+ * @goal xsd
  * @phase generate-sources
  * 
- * @see org.plasma.provisioning.cli.QueryTool
+ * @see org.plasma.provisioning.cli.XSDTool
  */
-public class QueryMojo extends ClassRealmMojo
+public class XSDMojo extends ClassRealmMojo
 {    
     /**
     * The tool action to be performed
-    * @parameter expression="${query.action}" default-value="compile"
+    * @parameter expression="${xsd.action}" default-value="convert"
     */
     private String action;
 
     /**
-    * The query XML source file name
-    * @parameter expression="${query.sourceFile}"
+    * The XML Schema source file name
+    * @parameter expression="${xsd.sourceFile}"
     */
     private String sourceFile;
     
     /**
     * The destination or target file name
-    * @parameter expression="${query.destFile}"
+    * @parameter expression="${xsd.destFile}"
     */
     private String destFile;
 
     /**
     * The destination or target file type
-    * @parameter expression="${query.destFileType}"
+    * @parameter expression="${xsd.destFileType}"
     * @see org.plasma.provisioning.cli.ProvisioningTarget
     */
     private String destFileType;
     
     /**
     * The destination or target namespage URI
-    * @parameter expression="${query.destNamespaceURI}" 
+    * @parameter expression="${xsd.destNamespaceURI}" 
     */
     private String destNamespaceURI;
 
     /**
     * The destination or target namespage prefix
-    * @parameter expression="${query.destNamespacePrefix}" default-value="tns"
+    * @parameter expression="${xsd.destNamespacePrefix}" default-value="tns"
     */
     private String destNamespacePrefix;
     
@@ -61,13 +62,13 @@ public class QueryMojo extends ClassRealmMojo
     {
     	super.execute();
     	
-        getLog().debug( "tool: " + QueryTool.class.getName());
+        getLog().debug( "tool: " + XSDTool.class.getName());
         getLog().debug( "classRealm: " + this.classRealm);
 
         
         try
         {        
-        	QueryToolAction toolAction = getToolAction(this.action);
+        	XSDToolAction toolAction = getToolAction(this.action);
         	
             String[] args = {
                 	"-"+toolAction.name(), 
@@ -78,8 +79,8 @@ public class QueryMojo extends ClassRealmMojo
                 	this.destNamespacePrefix
                 };
         	
-            getLog().info( "executing tool: "  + QueryTool.class.getName());
-            QueryTool.main(args);
+            getLog().info( "executing tool: "  + XSDTool.class.getName());
+            XSDTool.main(args);
         }
         catch (IllegalArgumentException e) {
             throw new MojoExecutionException(e.getMessage(), e);
@@ -90,18 +91,18 @@ public class QueryMojo extends ClassRealmMojo
         }        
     }
     
-    private QueryToolAction getToolAction(String action)
+    private XSDToolAction getToolAction(String action)
     {
-    	QueryToolAction command = null;
+    	XSDToolAction command = null;
     	try {
-    		command = QueryToolAction.valueOf(action);
+    		command = XSDToolAction.valueOf(action);
     	}
     	catch (IllegalArgumentException e) {
     		StringBuilder buf = new StringBuilder();
-    		for (int i = 0; i < QueryToolAction.values().length; i++) {
+    		for (int i = 0; i < XSDToolAction.values().length; i++) {
     			if (i > 0)
     				buf.append(", ");
-    			buf.append(QueryToolAction.values()[i].name());
+    			buf.append(XSDToolAction.values()[i].name());
     		}
     			
     		throw new IllegalArgumentException("'" + action + "' - expected one of ["

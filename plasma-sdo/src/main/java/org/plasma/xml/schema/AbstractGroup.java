@@ -111,6 +111,10 @@ public abstract class AbstractGroup
         return this.elementsAndGroupsAndAlls;
     }
 
+    public boolean hasMinOccurs() {
+    	return minOccurs != null;
+    }
+
     /**
      * Gets the value of the minOccurs property.
      * 
@@ -137,6 +141,10 @@ public abstract class AbstractGroup
      */
     public void setMinOccurs(BigInteger value) {
         this.minOccurs = value;
+    }
+
+    public boolean hasMaxOccurs() {
+    	return maxOccurs != null;
     }
 
     /**

@@ -11,9 +11,9 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.config.DataAccessProviderName;
 import org.plasma.config.NonExistantNamespaceException;
 import org.plasma.config.PlasmaConfig;
+import org.plasma.query.Query;
 import org.plasma.query.collector.PropertySelection;
 import org.plasma.query.collector.PropertySelectionCollector;
-import org.plasma.query.Query;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
@@ -482,15 +482,15 @@ public class ProvisioningModelAssembler {
 			if (sdoValConst.getFractionDigits() != null)
 			    valueConstraint.setFractionDigits(sdoValConst.getFractionDigits());
 			if (sdoValConst.getMaxExclusive() != null)
-			    valueConstraint.setMaxExclusive(sdoValConst.getMaxExclusive());
+			    valueConstraint.setMaxExclusive(Float.valueOf(sdoValConst.getMaxExclusive()));
 			if (sdoValConst.getMaxInclusive() != null)
-			    valueConstraint.setMaxInclusive(sdoValConst.getMaxInclusive());
+			    valueConstraint.setMaxInclusive(Float.valueOf(sdoValConst.getMaxInclusive()));
 			if (sdoValConst.getMaxLength() != null)
 			    valueConstraint.setMaxLength(sdoValConst.getMaxLength());
 			if (sdoValConst.getMinExclusive() != null)
-			    valueConstraint.setMinExclusive(sdoValConst.getMinExclusive());
+			    valueConstraint.setMinExclusive(Float.valueOf(sdoValConst.getMinExclusive()));
 			if (sdoValConst.getMinInclusive() != null)
-			    valueConstraint.setMinInclusive(sdoValConst.getMinInclusive());
+			    valueConstraint.setMinInclusive(Float.valueOf(sdoValConst.getMinInclusive()));
 			if (sdoValConst.getMinLength() != null)
 			    valueConstraint.setMinLength(sdoValConst.getMinLength());
 			if (sdoValConst.getPattern() != null)

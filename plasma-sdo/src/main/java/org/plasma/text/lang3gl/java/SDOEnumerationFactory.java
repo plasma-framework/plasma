@@ -228,7 +228,7 @@ public class SDOEnumerationFactory extends SDODefaultFactory
     			buf.append(",");    					
 			buf.append(LINE_SEP);
 			buf.append(this.indent(1));
-			buf.append(toConstantName(literal.getName()));
+			buf.append(toEnumLiteralName(literal.getName()));
 			if (literal.getAlias() != null && 
 				literal.getAlias().getPhysicalName() != null && 
 				literal.getAlias().getPhysicalName().length() > 0) {
@@ -254,8 +254,6 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	}
 	
 	private String replaceQuot(String s) {
-		//CharSequence.;
-		
 	   return s.replaceAll("\"", "\\\\\""); 	
 	}
 

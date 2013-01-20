@@ -71,7 +71,7 @@ public abstract class ClassRealmMojo extends AbstractMojo
             } catch (MalformedURLException e) {
                 throw new MojoExecutionException(e.getMessage() + e);
             }
-            getLog().info("adding URL:" + url.toString());
+            getLog().debug("adding URL:" + url.toString());
             getClassRealm().addURL(url);
         }
         
@@ -79,7 +79,7 @@ public abstract class ClassRealmMojo extends AbstractMojo
         while (names.hasMoreElements()) {
         	String name = (String)names.nextElement();
         	String value = this.systemProperties.getProperty(name); 
-          	getLog().info( "system prop: " + name + ":" + value);
+          	getLog().debug( "system prop: " + name + ":" + value);
         	System.setProperty(name, value);
         }         
     }

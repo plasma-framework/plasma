@@ -1,5 +1,8 @@
 package org.plasma.mojo;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.DDLTool;
 import org.plasma.provisioning.cli.DDLToolAction;
@@ -58,16 +61,18 @@ public class DDLMojo extends ClassRealmMojo
         {        
         	DDLToolAction toolAction = getToolAction(this.action);
         	DDLDialect toolDialect = getToolDialect(this.dialect);
-        	
+
+        	        	
             String[] args = {
                 	"-"+toolAction.name(), 
                 	"-"+toolDialect.name(), 
-                	this.outputDirectory + "/" + outputFile	
+                	this.outputDirectory + "/" + outputFile
                 };
         	
             getLog().info( "executing tool: "  + DDLTool.class.getName());
             
             DDLTool.main(args);
+
         }
         catch (IllegalArgumentException e) {
             throw new MojoExecutionException(e.getMessage(), e);

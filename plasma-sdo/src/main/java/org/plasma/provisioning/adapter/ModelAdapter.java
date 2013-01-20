@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.plasma.provisioning.Alias;
 import org.plasma.provisioning.Class;
 import org.plasma.provisioning.Package;
 import org.plasma.provisioning.ClassRef;
@@ -126,15 +127,28 @@ public class ModelAdapter {
 	    			+ "must be unique");
 		    adapter.putDeclaredProperty(prop.getName(), prop);
 		    adapter.putProperty(prop.getName(), prop); // note: all property collection not declared only
-		    if (prop.getAlias() != null && prop.getAlias().getPhysicalName() != null && prop.getAlias().getPhysicalName().trim().length() > 0) {
-			    String alias = prop.getAlias().getPhysicalName().trim();
-		    	if (adapter.getAliasedProperty(alias) != null)
-			    	throw new PropertyNameCollisionException(
-		    			"detected multiple properties with the same physical name '"
-			    		+ alias + "' defined for class '"
-		    			+ adapter.getKey() + "' the set of physical names for a class "
-		    			+ "must be unique");
-			    adapter.putAliasedProperty(alias, prop);
+		    if (prop.getAlias() != null) {
+		    	Alias alias = prop.getAlias();
+			    if (alias.getPhysicalName() != null && alias.getPhysicalName().trim().length() > 0) {
+				    String physicalName = alias.getPhysicalName().trim();
+			    	if (adapter.getAliasedProperty(physicalName) != null)
+				    	throw new PropertyNameCollisionException(
+			    			"detected multiple properties with the same physical name '"
+				    		+ alias + "' defined for class '"
+			    			+ adapter.getKey() + "' the set of physical names for a class "
+			    			+ "must be unique");
+				    adapter.putAliasedProperty(physicalName, prop);
+			    }
+			    if (alias.getLocalName() != null && alias.getLocalName().trim().length() > 0) {
+				    String localName = prop.getAlias().getLocalName().trim();
+			    	if (adapter.getAliasedProperty(localName) != null)
+				    	throw new PropertyNameCollisionException(
+			    			"detected multiple properties with the same local name '"
+				    		+ alias + "' defined for class '"
+			    			+ adapter.getKey() + "' the set of local names for a class "
+			    			+ "must be unique");
+				    adapter.putAliasedProperty(localName, prop);
+			    }
 		    }
 		}
     }

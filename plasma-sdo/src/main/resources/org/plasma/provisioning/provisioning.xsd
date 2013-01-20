@@ -368,25 +368,25 @@
             <xs:documentation />
         </xs:annotation>
 
-        <xs:attribute use="optional" type="xs:int" name="minInclusive">
+        <xs:attribute use="optional" type="xs:float" name="minInclusive">
             <xs:annotation>
                 <xs:documentation>Property value must be a number whose value must be higher or equal to the specificed minimum</xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute use="optional" type="xs:int" name="maxInclusive">
+        <xs:attribute use="optional" type="xs:float" name="maxInclusive">
             <xs:annotation>
                 <xs:documentation>Property value must be a number whose value must be lower or equal to the specified maximum</xs:documentation>
             </xs:annotation>
         </xs:attribute>
         
-        <xs:attribute use="optional" type="xs:int" name="minExclusive">
+        <xs:attribute use="optional" type="xs:float" name="minExclusive">
             <xs:annotation>
                 <xs:documentation>Specifies the lower bounds for numeric values (the value must be greater than this value)</xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute use="optional" type="xs:int" name="maxExclusive">
+        <xs:attribute use="optional" type="xs:float" name="maxExclusive">
             <xs:annotation>
                 <xs:documentation>Specifies the upper bounds for numeric values (the value must be less than this value)</xs:documentation>
             </xs:annotation>

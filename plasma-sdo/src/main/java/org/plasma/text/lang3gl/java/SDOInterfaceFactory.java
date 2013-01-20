@@ -263,7 +263,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 
 	protected String createMethodDeclarations(Class clss, Property field) {
 		StringBuilder buf = new StringBuilder();
-		String typeClassName = this.getTypeClassName(field.getType());
+		TypeClassInfo typeClassName = this.getTypeClassName(field.getType());
 
 		buf.append(LINE_SEP);			    
 		createIsSetDeclaration(null, clss, field, typeClassName, buf);

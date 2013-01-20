@@ -3,12 +3,16 @@ package org.plasma.provisioning.cli;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
+import org.plasma.config.Artifact;
+import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.ProvisioningModelAssembler;
 import org.plasma.provisioning.ProvisioningModelDataBinding;
@@ -96,7 +100,6 @@ public class SDOTool extends ProvisioningTool {
             break;        	
         case create:
         	Lang3GLOperation operation = Lang3GLOperation.valueOf(command.name());
-
         	
             File destDir = new File(args[2]);
             if (!destDir.exists()) {
@@ -107,7 +110,22 @@ public class SDOTool extends ProvisioningTool {
                             + destDir.getName() + "' could not be created");                	
             }
             log.debug("dest: " + destDir.getName());
+            
+        	long lastExecution = 0L;
+            if (args.length >= 4) {
+            	try {
+            		lastExecution = Long.valueOf(args[3]).longValue();
+            	}
+            	catch (NumberFormatException e) {
+            		throw new IllegalArgumentException(getUsage());                	
+            	}
+            }
     	    
+            if (!regenerate(lastExecution)) {
+                log.info("skipping SDO creation - no stale artifacts detected");	
+                return;
+            }            	
+            
             modelAssembler = new ProvisioningModelAssembler();
             binding = new ProvisioningModelDataBinding(
         			new DefaultValidationEventHandler());
@@ -164,8 +182,9 @@ public class SDOTool extends ProvisioningTool {
        
     }
     
+    
     private static String getUsage() {
-    	return "usage: [command, dialect, dest-dir]";
+    	return "usage: -command dialect dest-dir [last-execution-time]";
     }
     
     private static void printUsage() {

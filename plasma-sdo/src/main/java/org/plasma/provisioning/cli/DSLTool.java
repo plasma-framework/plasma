@@ -84,7 +84,22 @@ public class DSLTool extends ProvisioningTool {
                             + destDir.getName() + "' could not be created");                	
             }
             log.debug("dest: " + destDir.getName());
+
+        	long lastExecution = 0L;
+            if (args.length >= 4) {
+            	try {
+            		lastExecution = Long.valueOf(args[3]).longValue();
+            	}
+            	catch (NumberFormatException e) {
+            		throw new IllegalArgumentException(getUsage());                	
+            	}
+            }
     	    
+            if (!regenerate(lastExecution)) {
+                log.info("skipping DSL creation - no stale artifacts detected");	
+                return;
+            }            	
+            
             ProvisioningModelAssembler modelAssembler = new ProvisioningModelAssembler();
             // FIXME: pass this to factories
     		ModelAdapter validator = 
@@ -120,7 +135,11 @@ public class DSLTool extends ProvisioningTool {
        
     }
     
+    private static String getUsage() {
+        return "usage: command dialect dest-dir [last-execution-time]";
+    }
+    
     private static void printUsage() {
-        log.info("usage: [command, dialect, dest-dir]");
+        log.info(getUsage());
     }
 }

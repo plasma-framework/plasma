@@ -153,7 +153,7 @@ public class SDOClassFactory extends SDODefaultFactory
 	protected String createOperations(Package pkg, Class clss, Property field) {
 		
 		StringBuilder buf = new StringBuilder();
-		String typeClassName = getTypeClassName(field.getType());
+		TypeClassInfo typeClassName = getTypeClassName(field.getType());
 		
 		buf.append(LINE_SEP);			    
 		createIsSet(pkg, clss, field, typeClassName, buf);			
@@ -199,14 +199,14 @@ public class SDOClassFactory extends SDODefaultFactory
 	}	
 	
 	private void createSingularGetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		
 		createSingularGetterDeclaration(pkg, clss, field, typeClassName, buf);
 		createSingularGetterBody(pkg, clss, field, typeClassName, buf);
 	}
 
 	private void createSingularGetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {	
+			TypeClassInfo typeClassName, StringBuilder buf) {	
 		
 		buf.append(this.beginBody());
 		buf.append(LINE_SEP);			    
@@ -241,7 +241,7 @@ public class SDOClassFactory extends SDODefaultFactory
 			}
 			else { // just cast it and return
 				buf.append("return (");
-				buf.append(typeClassName);
+				buf.append(typeClassName.getSimpleName());
 				buf.append(")");
 				buf.append("super.get(");
 				buf.append(this.interfaceResolver.getName(clss));
@@ -251,7 +251,7 @@ public class SDOClassFactory extends SDODefaultFactory
 			}
 		} else {
 			buf.append("return (");
-			buf.append(typeClassName);
+			buf.append(typeClassName.getSimpleName());
 			buf.append(")");
 			buf.append("super.get(");
 			buf.append(this.interfaceResolver.getName(clss));
@@ -265,13 +265,13 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createSingularSetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		createSingularSetterDeclaration(pkg, clss, field, typeClassName, buf);
 		createSingularSetterBody(pkg, clss, field, typeClassName, buf);
 	}
 
 	private void createSingularSetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(this.beginBody());
 		buf.append(newline(2));
 	    buf.append("super.set(");
@@ -284,13 +284,13 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createUnsetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		createUnsetterDeclaration(pkg, clss, field, typeClassName, buf);
 		createUnsetterBody(pkg, clss, field, typeClassName, buf);
 	}	
 
 	private void createUnsetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(this.beginBody());
 		buf.append(newline(2));
         buf.append("super.unset(");
@@ -303,13 +303,13 @@ public class SDOClassFactory extends SDODefaultFactory
 	}	
 	
 	private void createIsSet(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		createIsSetDeclaration(pkg, clss, field, typeClassName, buf);
 		createIsSetBody(pkg, clss, field, typeClassName, buf);
 	}
 	
 	private void createIsSetBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(this.beginBody());
 		buf.append(newline(2));
         buf.append("return super.isSet(");
@@ -322,17 +322,17 @@ public class SDOClassFactory extends SDODefaultFactory
 	}	
 
 	private void createCreator(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		createCreatorDeclaration(pkg, clss, field, typeClassName, buf);
 		createCreatorBody(pkg, clss, field, typeClassName, buf);
 	}	
 
 	private void createCreatorBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(this.beginBody());
 		buf.append(newline(2));
 		buf.append("return (");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
         buf.append(")super.createDataObject(");
 		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
@@ -343,13 +343,13 @@ public class SDOClassFactory extends SDODefaultFactory
 	}	
 
 	private void createCreatorByAbstractClass(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 		createCreatorByAbstractClassDeclaration(pkg, clss, field, typeClassName, buf);
 		createCreatorByAbstractClassBody(pkg, clss, field, typeClassName, buf);
 	}	
 
 	private void createCreatorByAbstractClassBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf) {
+			TypeClassInfo typeClassName, StringBuilder buf) {
 
 		buf.append(this.beginBody());
 		
@@ -361,7 +361,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		
 		buf.append(newline(2));
 		buf.append("return (");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
         buf.append(")super.createDataObject(this.getType().getProperty(");
 		buf.append(clss.getName());
 		buf.append(".PTY_");
@@ -373,7 +373,7 @@ public class SDOClassFactory extends SDODefaultFactory
 	}	
 	
 	private void createManyGetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{	
 		buf.append(newline(1));
 		buf.append("@SuppressWarnings(\"unchecked\")"); // for cast from DataObject[] to specific array
@@ -382,15 +382,15 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createManyGetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 		
 		buf.append(newline(2));
 		buf.append("List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append("> list = (List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
 		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
@@ -401,13 +401,15 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("if (list != null) {");
 		
 		buf.append(newline(3));
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append("[] array = new ");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append("[list.size()];");
 		
 		buf.append(newline(3));
-		buf.append("list.toArray(array);");
+		buf.append("for (int i = 0; i < list.size(); i++)");
+		buf.append(newline(4));
+		buf.append("array[i] = list.get(i);");
 
 		buf.append(newline(3));
 		buf.append("return array;");
@@ -420,7 +422,7 @@ public class SDOClassFactory extends SDODefaultFactory
 
 		buf.append(newline(3));
 		buf.append("return new ");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append("[0];");
 
 		buf.append(newline(1));
@@ -428,7 +430,7 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 
 	private void createManyIndexGetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{	
 		buf.append(newline(1));
 		buf.append("@SuppressWarnings(\"unchecked\")"); // for cast from DataObject[] to specific array
@@ -437,15 +439,15 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createManyIndexGetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 		
 		buf.append(newline(2));
 		buf.append("List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append("> list = (List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
 		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
@@ -457,7 +459,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		
 		buf.append(newline(3));
 		buf.append("return (");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getSimpleName());
 		buf.append(")list.get(idx);");
 
 		buf.append(newline(2));
@@ -467,14 +469,14 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("else");
 
 		buf.append(newline(3));
-		buf.append("return null;");
+		buf.append("throw new ArrayIndexOutOfBoundsException(idx);");
 
 		buf.append(newline(1));
 		buf.append(this.endBody());
 	}
 
 	private void createManyCount(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{	
 		buf.append(newline(1));
 		buf.append("@SuppressWarnings(\"unchecked\")"); // for cast from DataObject[] to specific array
@@ -483,15 +485,15 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createManyCountBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 		
 		buf.append(newline(2));
 		buf.append("List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append("> list = (List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
 		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
@@ -518,7 +520,7 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createManySetter(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(LINE_SEP);
 		buf.append(indent(1));
@@ -528,15 +530,15 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createManySetterBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 		
 		buf.append(newline(2));
 		buf.append("List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append("> list = (List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
 		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
@@ -550,7 +552,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("if (list == null)");
 		buf.append(newline(4));
 		buf.append("list = new ArrayList<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">();");
 				
 		buf.append(newline(3));
@@ -582,7 +584,7 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createManyAdder(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(newline(1));
 		buf.append("@SuppressWarnings(\"unchecked\")"); // for cast from DataObject[] to specific array
@@ -591,15 +593,15 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createManyAdderBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 		
 		buf.append(newline(2));
 		buf.append("List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append("> list = (List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
 		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");
@@ -611,7 +613,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		
 		buf.append(newline(3));
 		buf.append("list = new ArrayList<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">();");
 		
 		buf.append(newline(4));
@@ -631,7 +633,7 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 
 	private void createManyRemover(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(newline(1));
 		buf.append("@SuppressWarnings(\"unchecked\")"); // for cast from DataObject[] to specific array
@@ -640,15 +642,15 @@ public class SDOClassFactory extends SDODefaultFactory
 	}
 	
 	private void createManyRemoverBody(Package pkg, Class clss, Property field, 
-			String typeClassName, StringBuilder buf)
+			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
 		buf.append(this.beginBody());
 		
 		buf.append(newline(2));
 		buf.append("List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append("> list = (List<");
-		buf.append(typeClassName);
+		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
 		buf.append(this.interfaceResolver.getName(clss));
 		buf.append(".PTY_");

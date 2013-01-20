@@ -282,6 +282,16 @@ public class PlasmaConfig {
             throw new PlasmaRuntimeException("no configured SDO namespace found for URI '"
                     + uri + "'");
     }
+    
+    public void remapTypeBinding(String uri, TypeBinding typeBinding) {
+        NamespaceAdapter namespaceAdapter = sdoNamespaceMap.get(uri);
+        if (namespaceAdapter != null) {
+        	namespaceAdapter.remapTypeBinding(typeBinding);
+        }
+        else
+            throw new PlasmaRuntimeException("no configured SDO namespace found for URI '"
+                    + uri + "'");
+    }
 
     public PropertyBinding findPropertyBinding(String uri, String typeName, String propertyName) {
         NamespaceAdapter namespaceAdapter = sdoNamespaceMap.get(uri);

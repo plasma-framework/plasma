@@ -1,0 +1,117 @@
+package org.plasma.provisioning.xsd;
+
+import java.util.UUID;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.xerces.dom.ElementNSImpl;
+import org.plasma.provisioning.Alias;
+import org.plasma.provisioning.Documentation;
+import org.plasma.provisioning.DocumentationType;
+import org.plasma.provisioning.Enumeration;
+import org.plasma.provisioning.EnumerationLiteral;
+import org.plasma.xml.schema.AbstractSimpleType;
+import org.plasma.xml.schema.Restriction;
+import org.plasma.xml.schema.SimpleType;
+
+public class EnumerationAssembler extends AbstractAssembler {
+	
+	private static Log log = LogFactory.getLog(
+			   EnumerationAssembler.class); 
+	
+	
+	public EnumerationAssembler(String destNamespaceURI,
+			String destNamespacePrefix) {
+		super(destNamespaceURI, destNamespacePrefix);
+	}
+
+	public Enumeration buildEnumeration(AbstractSimpleType simpleType, AbstractSimpleType source) {
+		String name = simpleType.getName();
+		if (name == null)
+			name = source.getName();
+		return buildEnumeration(simpleType, name);
+	}	
+	
+	public Enumeration buildEnumeration(SimpleType simpleType) {
+		return buildEnumeration(simpleType, simpleType.getName());
+	}
+	
+	public Enumeration buildEnumeration(AbstractSimpleType simpleType, String name) {
+    	Enumeration enm = new Enumeration();
+    	enm.setId(UUID.randomUUID().toString());
+    	Alias alias = new Alias();
+    	enm.setAlias(alias);
+    	alias.setLocalName(name);
+    	String logicalName = this.formatLocalClassName(name);
+    	enm.setName(logicalName);
+    	enm.setUri(this.destNamespaceURI);
+    	    	
+        Documentation documentation = createDocumentation(
+        		DocumentationType.DEFINITION,
+        		getDocumentationContent(simpleType));
+		enm.getDocumentations().add(documentation);
+    	
+    	Restriction restriction = simpleType.getRestriction();
+    	if (restriction.getMinExclusivesAndMinInclusivesAndMaxExclusives().size() == 0)
+			throw new IllegalStateException("expected collection values");
+    	for (Object obj : restriction.getMinExclusivesAndMinInclusivesAndMaxExclusives()) {
+    		if (obj instanceof org.plasma.xml.schema.Enumeration) {
+    			org.plasma.xml.schema.Enumeration schemaEnum = (org.plasma.xml.schema.Enumeration)obj;
+    			EnumerationLiteral literal = new EnumerationLiteral();
+    			enm.getEnumerationLiterals().add(literal);
+    			literal.setName(schemaEnum.getValue());
+        		literal.setId(UUID.randomUUID().toString());
+                alias = new Alias();
+                literal.setAlias(alias);       
+                alias.setPhysicalName(schemaEnum.getValue()); 
+                
+                String value = findAppInfoValue(schemaEnum);
+                if (value == null)
+                	value = schemaEnum.getValue();
+                literal.setValue(value);
+                
+                buildEnumerationLiteralDocumentation(schemaEnum, literal);
+    		}
+        	else
+        		log.warn("unexpected Restriction child class, " 
+        			+ obj.getClass().getName());
+    	}
+    	return enm;
+    }
+
+	public void buildEnumerationLiteralDocumentation(org.plasma.xml.schema.Enumeration schemaEnum, EnumerationLiteral literal)
+    {
+		if (schemaEnum.getAnnotation() != null)
+	    for (Object o2 : schemaEnum.getAnnotation().getAppinfosAndDocumentations()) {
+	    	if (o2 instanceof org.plasma.xml.schema.Documentation) {
+	    		org.plasma.xml.schema.Documentation doc = (org.plasma.xml.schema.Documentation)o2;
+	    		if (doc.getContent() != null && doc.getContent().size() > 0) {
+		    		for (Object content : doc.getContent()) {
+		    			if (content instanceof String) {
+		    				Documentation documentation = createDocumentation(
+		            		DocumentationType.DEFINITION,
+		            		(String)content);
+    		    	        literal.getDocumentations().add(documentation);
+		    			}
+					    else if (content instanceof ElementNSImpl) {
+						    ElementNSImpl nsElem = (ElementNSImpl) content;
+		    				Documentation documentation = createDocumentation(
+				            		DocumentationType.DEFINITION,
+				            		serializeElement(nsElem));
+		    		    	        literal.getDocumentations().add(documentation);
+					    } 
+		    			else {
+		    				Documentation documentation = createDocumentation(
+		            		DocumentationType.DEFINITION,
+		            		content.toString());
+    		    	        literal.getDocumentations().add(documentation);
+		    			}
+		    		}
+	    		}
+	    	}
+        	else
+        		log.warn("unexpected Enumeration child class, " 
+        			+ o2.getClass().getName());
+	    }    	
+    }
+}

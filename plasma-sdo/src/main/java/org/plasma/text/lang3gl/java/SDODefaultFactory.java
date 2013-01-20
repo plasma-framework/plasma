@@ -1,5 +1,6 @@
 package org.plasma.text.lang3gl.java;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -16,8 +17,18 @@ import org.plasma.text.lang3gl.ClassNameResolver;
 
 public abstract class SDODefaultFactory extends DefaultFactory {
 	
+	protected static String[] SDO_RESERVED_NAMES = {
+		"type",
+		"dataobject",
+		"list"
+	};
+	
+	private Map<String, String> reservedMap =  new HashMap<String, String>();
+	
 	public SDODefaultFactory(Lang3GLContext context) {
 		super(context);
+		for (String name : SDO_RESERVED_NAMES)
+			this.reservedMap.put(name, name);
 	}
 
 	protected String createPackageDeclaration(Package pkg) {
@@ -67,4 +78,10 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 		return name;
 	}	
 
+	protected String toMethodFieldName(String name) {
+		String result = firstToUpperCase(name);
+		if (this.reservedMap.get(name.toLowerCase()) != null)
+			result += "_";
+		return result;
+	}
 }

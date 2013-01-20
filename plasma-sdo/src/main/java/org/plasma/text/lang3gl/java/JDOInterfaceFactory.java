@@ -263,7 +263,7 @@ public class JDOInterfaceFactory extends JDODefaultFactory
 
 	protected String createMethodDeclarations(Class clss, Property field) {
 		StringBuilder buf = new StringBuilder();
-		String typeClassName = this.getTypeClassName(field.getType());
+		TypeClassInfo typeClassName = this.getTypeClassName(field.getType());
 		
 		if (!field.isMany()) {
 			buf.append(LINE_SEP);			    

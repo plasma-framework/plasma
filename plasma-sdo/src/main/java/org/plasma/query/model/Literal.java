@@ -1,6 +1,7 @@
 package org.plasma.query.model;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -44,12 +45,22 @@ public class Literal {
         setValue(DataConverter.INSTANCE.getDateTimeFormat().format(content));
     } 
     
+    public Literal(Short content) {
+        this();
+        setValue(String.valueOf(content));
+    } 
+    
     public Literal(Integer content) {
         this();
         setValue(String.valueOf(content));
     } 
     
     public Literal(Long content) {
+        this();
+        setValue(String.valueOf(content));
+    }
+    
+    public Literal(BigInteger content) {
         this();
         setValue(String.valueOf(content));
     } 
@@ -78,10 +89,14 @@ public class Literal {
     	    return new Literal((String)content);
     	else if (content instanceof Date)
     	    return new Literal((Date)content);
+    	else if (content instanceof Short)
+    	    return new Literal((Short)content);
     	else if (content instanceof Integer)
     	    return new Literal((Integer)content);
     	else if (content instanceof Long)
     	    return new Literal((Long)content);
+    	else if (content instanceof BigInteger)
+    	    return new Literal((BigInteger)content);
     	else if (content instanceof Float)
     	    return new Literal((Float)content);
     	else if (content instanceof Double)
@@ -93,7 +108,6 @@ public class Literal {
     	else
     		throw new QueryException("unsupported " + content.getClass().getName());
     }
-
     
     /**
      * Gets the value of the value property.

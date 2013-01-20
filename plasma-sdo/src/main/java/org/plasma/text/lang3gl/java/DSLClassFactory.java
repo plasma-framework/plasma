@@ -182,8 +182,6 @@ public class DSLClassFactory extends SDODefaultFactory
 	protected String createOperations(Package pkg, Class clss, Property field) {
 		
 		StringBuilder buf = new StringBuilder();
-		String typeClassName = getTypeClassName(field.getType());		
-		
 		if (field.getType() instanceof ClassRef) {
 			buf.append(createReferencePropertyOperation(pkg, clss, field));
 			buf.append(newline(1));

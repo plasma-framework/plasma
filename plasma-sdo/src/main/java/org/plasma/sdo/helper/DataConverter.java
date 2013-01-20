@@ -21,13 +21,9 @@ import java.util.TimeZone;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.Duration;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
-import org.plasma.config.PlasmaConfig;
 import org.plasma.sdo.DataType;
-import org.plasma.sdo.PlasmaDataObjectConstants;
 import org.plasma.sdo.PlasmaDataObjectException;
 
 import commonj.sdo.Type;

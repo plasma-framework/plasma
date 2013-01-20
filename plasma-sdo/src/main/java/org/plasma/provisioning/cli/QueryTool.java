@@ -95,13 +95,13 @@ public class QueryTool extends ProvisioningTool {
         if (destFileType == null || destFileType.trim().length() == 0)
             throw new IllegalArgumentException("expected argument, destFileType"); 
         
-        QueryToolTargetType targetType = null;
+        ProvisioningTarget targetType = null;
         try {
-            targetType = QueryToolTargetType.valueOf(destFileType);
+            targetType = ProvisioningTarget.valueOf(destFileType);
         }
         catch (IllegalArgumentException e) {
         	List<String> displayValues = new ArrayList<String>();
-        	for (QueryToolTargetType v : QueryToolTargetType.values())
+        	for (ProvisioningTarget v : ProvisioningTarget.values())
         		displayValues.add(v.name());
             throw new IllegalArgumentException("unknown target type '"
                     + destFileType + "' - expected one of "

@@ -429,6 +429,10 @@ public abstract class AbstractElement
         this.form = value;
     }
 
+    public boolean hasMinOccurs() {
+    	return minOccurs != null;
+    }
+ 
     /**
      * Gets the value of the minOccurs property.
      * 
@@ -471,6 +475,10 @@ public abstract class AbstractElement
         } else {
             return maxOccurs;
         }
+    }
+    
+    public boolean hasMaxOccurs() {
+    	return maxOccurs != null;
     }
 
     /**

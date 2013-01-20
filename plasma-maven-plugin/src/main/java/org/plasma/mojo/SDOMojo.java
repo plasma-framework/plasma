@@ -1,5 +1,8 @@
 package org.plasma.mojo;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.SDOTool;
 import org.plasma.provisioning.cli.SDOToolAction;
@@ -46,18 +49,51 @@ public class SDOMojo extends ClassRealmMojo
         getLog().debug( "tool: " + SDOTool.class.getName());
         getLog().debug( "dialect: " + this.dialect);
         getLog().debug( "classRealm: " + this.classRealm);
-
         
         try
         {        
         	SDOToolAction toolAction = getToolAction(this.action);
+
+        	long lastExecution = 0L;
+        	File mojoDir = new File(MojoConstants.MOJO_DIR);
+            if (mojoDir.exists()) {
+                File mojoFile = new File(mojoDir, 
+                		this.getClass().getSimpleName()
+                		+ "_" + MojoConstants.MOJO_STALE_FLAG);
+                if (mojoFile.exists())
+                	lastExecution = mojoFile.lastModified();
+            }
         	
             String[] args = {
-                	"-"+toolAction.name(), this.dialect, this.outputDirectory	
-                };
-        	
-            getLog().info( "executing tool: "  + SDOTool.class.getName());
+                	"-"+toolAction.name(), 
+                	this.dialect, 
+                	this.outputDirectory,
+                	String.valueOf(lastExecution)
+                };        	
+            getLog().info("executing tool: "  + SDOTool.class.getName());
             SDOTool.main(args);
+            
+            mojoDir.mkdirs();
+            if (mojoDir.exists()) {
+                File mojoFile = new File(mojoDir, 
+                		this.getClass().getSimpleName()
+                		+ "_" + MojoConstants.MOJO_STALE_FLAG);
+            	if (mojoFile.exists())
+            		mojoFile.delete();
+            	FileOutputStream out = null;
+            	try {
+            	    out = new FileOutputStream(mojoFile);
+            	    out.write(this.getClass().getSimpleName().getBytes());
+            	    out.flush();
+            	}
+            	finally {
+            		if (out != null)
+            		    out.close();
+            	}
+            }
+            else
+                getLog().warn("mojo: "  + this.getClass().getName() 
+                		+ " - could not create dir, " + MojoConstants.MOJO_DIR);
         }
         catch (IllegalArgumentException e) {
             throw new MojoExecutionException(e.getMessage(), e);

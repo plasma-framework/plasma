@@ -30,6 +30,7 @@ import org.plasma.provisioning.Documentation;
 import org.plasma.provisioning.Enumeration;
 import org.plasma.provisioning.EnumerationConstraint;
 import org.plasma.provisioning.EnumerationLiteral;
+import org.plasma.provisioning.EnumerationRef;
 import org.plasma.provisioning.Model;
 import org.plasma.provisioning.Package;
 import org.plasma.provisioning.Property;
@@ -72,6 +73,7 @@ public class UMLModelAssembler {
 	@SuppressWarnings("unused")
 	private UMLModelAssembler() {}
 	
+	@Deprecated
     public UMLModelAssembler(Query query, String destNamespaceURI,
     		String destNamespacePrefix) {
 		super();
@@ -85,6 +87,7 @@ public class UMLModelAssembler {
 				this.destNamespaceURI, this.destNamespacePrefix);
 	}
     
+	@Deprecated
     public UMLModelAssembler(Schema schema, String destNamespaceURI,
     		String destNamespacePrefix) {
 		super();
@@ -570,13 +573,14 @@ public class UMLModelAssembler {
     	    	enumConstraintStereotype.setAttribute(new Attribute(SDOUniqueConstraint.BASE__PROPERTY, property.getId()));
 
     	    	EnumerationConstraint constraint = property.getEnumerationConstraint();
-    	    	
+    	    	EnumerationRef enumRef = constraint.getValue();
+    	    	String enumRefId = enumRef.getUri() + "#" + enumRef.getName();
 		    	
-	    		Element enumeration = this.enumElementMap.get(property.getId());
+	    		Element enumeration = this.enumElementMap.get(enumRefId);
 	    		if (enumeration == null) {
 	    			enumeration = this.buildEnumeration(constraint);
 	        	    this.model.addContent(enumeration);
-	        	    this.enumElementMap.put(property.getId(), enumeration);
+	        	    this.enumElementMap.put(enumRefId, enumeration);
 	    		}
 	    		Attribute enumId = enumeration.getAttribute("id", xmiNs);
 	    		enumConstraintStereotype.setAttribute(new Attribute(SDOEnumerationConstraint.VALUE, enumId.getValue()));

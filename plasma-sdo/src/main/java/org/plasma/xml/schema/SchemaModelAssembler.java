@@ -850,6 +850,14 @@ public class SchemaModelAssembler {
         return new JAXBElement<Facet>(qname, Facet.class, null, facet);       	        	
     }
     
+    private JAXBElement<Facet> createNumberFacet(String name, String value)
+    {
+    	NumFacet facet = new NumFacet();
+    	facet.setValue(String.valueOf(value));
+        QName qname = new QName(SchemaConstants.XMLSCHEMA_NAMESPACE_URI, name);
+        return new JAXBElement<Facet>(qname, Facet.class, null, facet);       	        	
+    }
+    
     private Restriction buildStringEnumerationRestriction(PlasmaProperty property)
     {
         Restriction restriction = new Restriction();

@@ -103,6 +103,8 @@ public class CoreType implements PlasmaType {
         	if (binding.getLogicalName() != null && binding.getLogicalName().trim().length() > 0) {
         	    this.name = binding.getLogicalName().trim();
         	    lookupName = binding.getType();
+        	    // so we can find this by its new logical name
+        	    PlasmaConfig.getInstance().remapTypeBinding(uri, binding);
         	}
         	if (binding.getPhysicalName() != null && binding.getPhysicalName().trim().length() > 0)
         	    this.physicalName = binding.getPhysicalName().trim();
@@ -214,10 +216,17 @@ public class CoreType implements PlasmaType {
             		this);
             
             this.declaredPropertiesMap.put(property.getName(), property);
-            for (String alias : property.getAliasNames())
+        	PlasmaProperty existing = null;
+            for (String alias : property.getAliasNames()) {
+            	if ((existing = this.declaredPropertiesMap.get(alias)) != null)
+            		if (!existing.getName().equals(property.getName()))
+            		    throw new IllegalStateException("found existing property, "
+            	 			+ existing.getContainingType().getName() + "." + existing.getName()
+            	 	        + ", already mapped to alias '" + alias + "' while loading property "
+            			    + this.classifier.getName() + "." + property.getName()); 
             	this.declaredPropertiesMap.put(alias, property);
-            this.declaredPropertiesList.add(property);
-            
+            }
+            this.declaredPropertiesList.add(property);            
             
             // Cache operational (meta) properties/tags/facets as instance properties on Type for quick access
             if (property.isKey(KeyType.primary))
