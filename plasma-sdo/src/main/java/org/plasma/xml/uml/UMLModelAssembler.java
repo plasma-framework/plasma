@@ -340,6 +340,8 @@ public class UMLModelAssembler {
     	modelElem.setAttribute(new Attribute("name", packageNames[0]));
     	modelElem.setAttribute(new Attribute("visibility", "public"));
     	elementMap.put(model.getId(), modelElem);
+    	// FIXME: duplicating model level docs at package
+    	// descendant level
     	if (model.getDocumentations() != null)
     	    for (Documentation doc : model.getDocumentations()) {
         		addOwnedComment(modelElem, model.getId(), 
@@ -375,6 +377,13 @@ public class UMLModelAssembler {
 	        	pkgStereotypeElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
 	        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.BASE__PACKAGE, id));
 	        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.URI, this.destNamespaceURI));               	
+	        	// FIXME: no packages or package-level docs in provisioning model
+	        	// use model-level docs here
+	        	if (model.getDocumentations() != null)
+	        	    for (Documentation doc : model.getDocumentations()) {
+	            		addOwnedComment(pkgElem, id, 
+	            				doc.getBody().getValue());
+		        	}
         	}
         	
         	rootPackageElem = pkgElem;

@@ -368,49 +368,49 @@
             <xs:documentation />
         </xs:annotation>
 
-        <xs:attribute use="optional" type="xs:float" name="minInclusive">
+        <xs:attribute use="optional" type="xs:string" name="minInclusive">
             <xs:annotation>
                 <xs:documentation>Property value must be a number whose value must be higher or equal to the specificed minimum</xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute use="optional" type="xs:float" name="maxInclusive">
+        <xs:attribute use="optional" type="xs:string" name="maxInclusive">
             <xs:annotation>
                 <xs:documentation>Property value must be a number whose value must be lower or equal to the specified maximum</xs:documentation>
             </xs:annotation>
         </xs:attribute>
         
-        <xs:attribute use="optional" type="xs:float" name="minExclusive">
+        <xs:attribute use="optional" type="xs:string" name="minExclusive">
             <xs:annotation>
                 <xs:documentation>Specifies the lower bounds for numeric values (the value must be greater than this value)</xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute use="optional" type="xs:float" name="maxExclusive">
+        <xs:attribute use="optional" type="xs:string" name="maxExclusive">
             <xs:annotation>
                 <xs:documentation>Specifies the upper bounds for numeric values (the value must be less than this value)</xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute use="optional" type="xs:int" name="minLength">
+        <xs:attribute use="optional" type="xs:string" name="minLength">
             <xs:annotation>
                 <xs:documentation>Property value must be above or equal to the specified minimum boundary</xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute use="optional" type="xs:int" name="maxLength">
+        <xs:attribute use="optional" type="xs:string" name="maxLength">
             <xs:annotation>
                 <xs:documentation>Property value must be below or equal to the specified maximum boundary</xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute use="optional" type="xs:int" name="totalDigits">
+        <xs:attribute use="optional" type="xs:string" name="totalDigits">
             <xs:annotation>
                 <xs:documentation>The total number of digits for the Property value must be below or equal to the specified total</xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute use="optional" type="xs:int" name="fractionDigits">
+        <xs:attribute use="optional" type="xs:string" name="fractionDigits">
             <xs:annotation>
                 <xs:documentation>The number of fraction digits for the Property value must be below or equal to the specified total</xs:documentation>
             </xs:annotation>

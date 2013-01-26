@@ -267,7 +267,7 @@ public interface PlasmaProperty extends Property {
 	 * @return the maximum length or -1 if no
 	 * maximum length is defined
 	 */
-	public int getMaxLength();
+	public long getMaxLength();
 	
    
     /**

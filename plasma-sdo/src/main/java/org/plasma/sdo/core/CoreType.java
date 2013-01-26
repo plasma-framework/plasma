@@ -221,9 +221,9 @@ public class CoreType implements PlasmaType {
             	if ((existing = this.declaredPropertiesMap.get(alias)) != null)
             		if (!existing.getName().equals(property.getName()))
             		    throw new IllegalStateException("found existing property, "
-            	 			+ existing.getContainingType().getName() + "." + existing.getName()
+            	 			+ existing.getContainingType().toString() + "." + existing.getName()
             	 	        + ", already mapped to alias '" + alias + "' while loading property "
-            			    + this.classifier.getName() + "." + property.getName()); 
+            			    + this.toString() + "." + property.getName()); 
             	this.declaredPropertiesMap.put(alias, property);
             }
             this.declaredPropertiesList.add(property);            

@@ -2,8 +2,11 @@ package org.plasma.provisioning.xsd;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -22,13 +25,17 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.xerces.dom.ElementNSImpl;
 import org.plasma.provisioning.Body;
 import org.plasma.provisioning.Class;
+import org.plasma.provisioning.ClassRef;
 import org.plasma.provisioning.Documentation;
 import org.plasma.provisioning.DocumentationType;
+import org.plasma.provisioning.Enumeration;
+import org.plasma.provisioning.EnumerationLiteral;
 import org.plasma.provisioning.NameUtils;
 import org.plasma.provisioning.Property;
 import org.plasma.sdo.DataType;
 import org.plasma.xml.schema.AbstractSimpleType;
 import org.plasma.xml.schema.Annotated;
+import org.plasma.xml.schema.Annotation;
 import org.plasma.xml.schema.Appinfo;
 import org.plasma.xml.schema.AttributeGroup;
 import org.plasma.xml.schema.ComplexType;
@@ -49,6 +56,7 @@ public class ConverterSupport {
     protected Map<String, Class> classQualifiedNameMap = new HashMap<String, Class>();
     protected Map<String, Class> classLocalNameMap = new HashMap<String, Class>();
     protected Map<Class, Map<String, Property>> classPropertyMap = new HashMap<Class, Map<String, Property>>();
+    protected Map<Class, HashSet<Class>> subclassMap = new HashMap<Class, HashSet<Class>>();
     protected Schema schema;
     /** maps top-level complex type names to complex type structures */
     protected Map<String, ComplexType> complexTypeMap = new HashMap<String, ComplexType>();
@@ -91,6 +99,10 @@ public class ConverterSupport {
 
 	public Map<Class, Map<String, Property>> getClassPropertyMap() {
 		return classPropertyMap;
+	}
+
+	public Map<Class, HashSet<Class>> getSubclassMap() {
+		return subclassMap;
 	}
 
 	public Schema getSchema() {
@@ -137,25 +149,107 @@ public class ConverterSupport {
     public String buildLogicalPropertyName(Class clss, String name)
     {
     	String logicalName = name;
-        Map<String, Property> existingProps = this.classPropertyMap.get(clss);
-        if (existingProps != null) {
-	        Property existing = existingProps.get(logicalName);
-	        if (existing != null) {
-	        	int count = 1;
-	        	while (existing != null) {
-	            	logicalName += String.valueOf(count);
-	        	    log.warn("detected name colision for property '"
-		        		    + clss.getName() + "." + existing.getName() 
-		        		    + "' - using synthetic name '"
-		        		    + logicalName + "'");
-	            	count++;
-	            	existing = existingProps.get(logicalName);
-	        	}
-	        } 
+        Map<String, Property> existingProps = this.getAllExistingProps(clss);
+        Property existing = existingProps.get(logicalName);
+        if (existing != null) {
+        	int count = 1;
+        	while (existing != null) {
+        		int underscore = logicalName.lastIndexOf("_");
+        		if (underscore > 0) {
+        			logicalName = logicalName.substring(0, underscore);
+        		}
+        		logicalName = logicalName + "_" + String.valueOf(count);
+        	    log.warn("detected name colision for property '"
+	        		    + clss.getName() + "." + existing.getName() 
+	        		    + "' - using synthetic name '"
+	        		    + logicalName + "'");
+            	count++;
+            	existing = existingProps.get(logicalName);
+        	}
         }
         return logicalName;    	
     }
     
+    private Map<String, Property> getAllExistingProps(Class clss) {
+        Map<String, Property> result = new HashMap<String, Property>();
+        collect(clss, result);
+        return result;
+    }
+    
+    private void collect(Class clss, Map<String, Property> properties) {
+    	Map<String, Property> baseResult = this.classPropertyMap.get(clss);
+    	if (baseResult != null)
+    	    properties.putAll(baseResult);
+        for (ClassRef ref : clss.getSuperClasses()) {
+        	Class base = this.classQualifiedNameMap.get(
+        			ref.getUri() + "#" + ref.getName());
+        	collect(base, properties);
+        }
+    }
+    
+    public List<Class> getRootClasses() {
+    	List<Class> result = new ArrayList<Class>();
+	    for (Class clss : this.classQualifiedNameMap.values()) {
+	    	if (clss.getSuperClasses() == null || clss.getSuperClasses().size() == 0)
+	    		result.add(clss);
+	    }
+	    return result;
+    }
+    
+    public void accept(Class root, ClassVisitor visitor) {
+    	traverse(root, null, visitor);
+    }
+ 
+    private void traverse(Class target, Class source, ClassVisitor visitor) {
+    	visitor.visit(target, source);
+    	HashSet<Class> subclasses = this.subclassMap.get(target);
+    	if (subclasses != null) {
+	    	Iterator<Class> iter = subclasses.iterator();
+	    	while (iter.hasNext()) {
+	    		traverse(iter.next(), target, visitor);
+	        }
+    	}
+    }
+    
+    public void collectSubclasses() {
+        for (Class clss : this.getClassQualifiedNameMap().values())
+        {
+            for (ClassRef ref : clss.getSuperClasses()) {
+            	Class base = this.getClassQualifiedNameMap().get(
+            			ref.getUri() + "#" + ref.getName());
+            	HashSet<Class> subclasses = this.subclassMap.get(base);
+            	if (subclasses == null) {
+            		subclasses = new HashSet<Class>();
+            		this.subclassMap.put(base, subclasses);
+            	}
+            	subclasses.add(clss);
+            }
+        }
+    }
+    
+    public String buildLogicalEnumerationLiteralName(Enumeration enm, String name,
+    		Map<String, EnumerationLiteral> literalMap)
+    {
+    	String logicalName = name;
+    	EnumerationLiteral existing = literalMap.get(logicalName);
+	        if (existing != null) {
+	        	int count = 1;
+	        	while (existing != null) {
+	        		int underscore = logicalName.lastIndexOf("_");
+	        		if (underscore > 0) {
+	        			logicalName = logicalName.substring(0, underscore);
+	        		}
+	        		logicalName = logicalName + "_" + String.valueOf(count);
+	        	    log.warn("detected name colision for literal '"
+		        		    + enm.getName() + "." + existing.getName() 
+		        		    + "' - using synthetic name '"
+		        		    + logicalName + "'");
+	            	count++;
+	            	existing = literalMap.get(logicalName);
+	        	}
+        }
+        return logicalName;    	
+    }
     
     public boolean isEnumeration(AbstractSimpleType simpleType) {
     	Restriction restriction = simpleType.getRestriction();
@@ -216,29 +310,44 @@ public class ConverterSupport {
 		return null;
 	}
 
+    public String getDocumentationContent(Annotation annotation) {
+		StringBuilder buf = new StringBuilder();
+		for (Object annotationObj : annotation.getAppinfosAndDocumentations()) {
+			buf.append(getContent(annotationObj));
+		}
+		return buf.toString();
+	}    
+    
     public String getDocumentationContent(Annotated annotated) {
 		StringBuilder buf = new StringBuilder();
-		if (annotated != null && annotated.getAnnotation() != null)
+		if (annotated != null && annotated.getAnnotation() != null) {
 			for (Object annotationObj : annotated.getAnnotation()
 					.getAppinfosAndDocumentations()) {
-				if (annotationObj instanceof org.plasma.xml.schema.Documentation) {
-					org.plasma.xml.schema.Documentation doc = (org.plasma.xml.schema.Documentation) annotationObj;
-					for (Object content : doc.getContent())
-						if (content instanceof String) {
-							buf.append(content);
-						} else if (content instanceof ElementNSImpl) {
-							ElementNSImpl nsElem = (ElementNSImpl) content;
-							buf.append(serializeElement(nsElem));
-						} else
-							throw new IllegalStateException(
-									"unexpected content class, "
-											+ annotationObj.getClass()
-													.getName());
-				} else if (annotationObj instanceof Appinfo) {
-					log.warn("ignoring app-info: "
-							+ String.valueOf(annotationObj));
-				}
+				buf.append(getContent(annotationObj));
 			}
+        }
+		return buf.toString();
+	}    
+    
+    private String getContent(Object annotationObj) {
+		StringBuilder buf = new StringBuilder();
+		if (annotationObj instanceof org.plasma.xml.schema.Documentation) {
+			org.plasma.xml.schema.Documentation doc = (org.plasma.xml.schema.Documentation) annotationObj;
+			for (Object content : doc.getContent())
+				if (content instanceof String) {
+					buf.append(content);
+				} else if (content instanceof ElementNSImpl) {
+					ElementNSImpl nsElem = (ElementNSImpl) content;
+					buf.append(serializeElement(nsElem));
+				} else
+					throw new IllegalStateException(
+							"unexpected content class, "
+									+ annotationObj.getClass()
+											.getName());
+		} else if (annotationObj instanceof Appinfo) {
+			log.warn("ignoring app-info: "
+					+ String.valueOf(annotationObj));
+		}
 		return buf.toString();
 	}
 	

@@ -28,14 +28,18 @@ public abstract class AbstractAssembler {
 			AbstractAssembler.class); 
     protected String destNamespaceURI;
     protected String destNamespacePrefix;
+    protected ConverterSupport support;
 
     @SuppressWarnings("unused")
 	private AbstractAssembler() {}
     
-    public AbstractAssembler(String destNamespaceURI, String destNamespacePrefix) {
+    public AbstractAssembler(String destNamespaceURI, 
+    		String destNamespacePrefix, 
+    		ConverterSupport converterSupport) {
 		super();
 		this.destNamespaceURI = destNamespaceURI;
 		this.destNamespacePrefix = destNamespacePrefix;
+		this.support = converterSupport;
 	}
 
 	protected Documentation createDocumentation(DocumentationType type, 
@@ -50,12 +54,16 @@ public abstract class AbstractAssembler {
     }
     
     protected String formatLocalClassName(String localName) {
+    	if (localName == null || localName.trim().length() == 0)
+    		throw new IllegalArgumentException("expected localName argument");
     	String result = localName;
     	result = NameUtils.firstToUpperCase(result);
     	return result;
     }
 
     protected String formatLocalPropertyName(String localName) {
+    	if (localName == null || localName.trim().length() == 0)
+    		throw new IllegalArgumentException("expected localName argument");
     	String result = localName;
     	result = NameUtils.firstToLowerCase(result);
     	return result;

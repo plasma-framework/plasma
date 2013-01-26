@@ -1,5 +1,7 @@
 package org.plasma.provisioning.xsd;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.logging.Log;
@@ -20,9 +22,10 @@ public class EnumerationAssembler extends AbstractAssembler {
 			   EnumerationAssembler.class); 
 	
 	
-	public EnumerationAssembler(String destNamespaceURI,
+	public EnumerationAssembler(ConverterSupport converterSupport, 
+			String destNamespaceURI,
 			String destNamespacePrefix) {
-		super(destNamespaceURI, destNamespacePrefix);
+		super(destNamespaceURI, destNamespacePrefix, converterSupport);
 	}
 
 	public Enumeration buildEnumeration(AbstractSimpleType simpleType, AbstractSimpleType source) {
@@ -50,24 +53,30 @@ public class EnumerationAssembler extends AbstractAssembler {
         		DocumentationType.DEFINITION,
         		getDocumentationContent(simpleType));
 		enm.getDocumentations().add(documentation);
-    	
+    	Map<String, EnumerationLiteral> literalMap = new HashMap<String, EnumerationLiteral>();
+		
     	Restriction restriction = simpleType.getRestriction();
     	if (restriction.getMinExclusivesAndMinInclusivesAndMaxExclusives().size() == 0)
 			throw new IllegalStateException("expected collection values");
     	for (Object obj : restriction.getMinExclusivesAndMinInclusivesAndMaxExclusives()) {
     		if (obj instanceof org.plasma.xml.schema.Enumeration) {
     			org.plasma.xml.schema.Enumeration schemaEnum = (org.plasma.xml.schema.Enumeration)obj;
+    			
     			EnumerationLiteral literal = new EnumerationLiteral();
     			enm.getEnumerationLiterals().add(literal);
-    			literal.setName(schemaEnum.getValue());
+    			String literalName = schemaEnum.getValue();
+    			literalName = support.buildLogicalEnumerationLiteralName(enm, literalName, literalMap);
+    			literalMap.put(literalName, literal);    			
+    			literal.setName(literalName);
         		literal.setId(UUID.randomUUID().toString());
                 alias = new Alias();
                 literal.setAlias(alias);       
-                alias.setPhysicalName(schemaEnum.getValue()); 
+                alias.setPhysicalName(literalName); 
+                
                 
                 String value = findAppInfoValue(schemaEnum);
                 if (value == null)
-                	value = schemaEnum.getValue();
+                	value = literalName;
                 literal.setValue(value);
                 
                 buildEnumerationLiteralDocumentation(schemaEnum, literal);

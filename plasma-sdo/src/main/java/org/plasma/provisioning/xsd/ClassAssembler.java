@@ -12,6 +12,7 @@ import org.plasma.provisioning.ClassRef;
 import org.plasma.provisioning.Documentation;
 import org.plasma.provisioning.DocumentationType;
 import org.plasma.provisioning.NameUtils;
+import org.plasma.xml.schema.ComplexRestrictionType;
 import org.plasma.xml.schema.ComplexType;
 import org.plasma.xml.schema.Element;
 import org.plasma.xml.schema.ExtensionType;
@@ -22,9 +23,10 @@ public class ClassAssembler extends AbstractAssembler {
 			ClassAssembler.class); 
 	
 	
-	public ClassAssembler(String destNamespaceURI,
+	public ClassAssembler(ConverterSupport converterSupport,
+			String destNamespaceURI,
 			String destNamespacePrefix) {
-		super(destNamespaceURI, destNamespacePrefix);
+		super(destNamespaceURI, destNamespacePrefix, converterSupport);
 	}
 
 	public Class buildClass(ComplexType complexType)
@@ -49,16 +51,30 @@ public class ClassAssembler extends AbstractAssembler {
 		clss.getDocumentations().add(documentation);
 		
 		if (complexType.getComplexContent() != null) { // has a base type
-			ExtensionType baseType = complexType.getComplexContent().getExtension(); 
-			QName base = baseType.getBase();
-    	    if (!base.getLocalPart().equals(SchemaUtil.getSerializationBaseTypeName()))
-    	    {	
-				ClassRef baseRef = new ClassRef();
-				String formattedClassName = formatLocalClassName(base.getLocalPart());
-				baseRef.setName(formattedClassName);
-				baseRef.setUri(this.destNamespaceURI);
-				clss.getSuperClasses().add(baseRef);
-    	    }
+			ExtensionType extension = complexType.getComplexContent().getExtension(); 
+			if (extension != null) {
+				QName base = extension.getBase();
+	    	    if (base != null && !base.getLocalPart().equals(SchemaUtil.getSerializationBaseTypeName()))
+	    	    {	
+					ClassRef baseRef = new ClassRef();
+					String formattedClassName = formatLocalClassName(base.getLocalPart());
+					baseRef.setName(formattedClassName);
+					baseRef.setUri(this.destNamespaceURI);
+					clss.getSuperClasses().add(baseRef);
+	    	    }
+			}
+			ComplexRestrictionType restriction = complexType.getComplexContent().getRestriction(); 
+			if (restriction != null) {
+				QName base = restriction.getBase();
+	    	    if (base != null && !base.getLocalPart().equals(SchemaUtil.getSerializationBaseTypeName()))
+	    	    {	
+					ClassRef baseRef = new ClassRef();
+					String formattedClassName = formatLocalClassName(base.getLocalPart());
+					baseRef.setName(formattedClassName);
+					baseRef.setUri(this.destNamespaceURI);
+					clss.getSuperClasses().add(baseRef);
+	    	    }
+			}
 		}
     	
     	return clss;

@@ -1,5 +1,6 @@
 package org.plasma.text.lang3gl.java;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -26,11 +27,41 @@ public abstract class DefaultFactory {
 	protected Lang3GLContext context;
 	protected static final String LINE_SEP = System.getProperty("line.separator");
 	protected static final String FILE_SEP = System.getProperty("file.separator");
+	private Map<Character, String> reservedJavaCharToLiteralMap =  new HashMap<Character, String>();
+	
+	@SuppressWarnings("unused")
+	private DefaultFactory() {}
 	
 	public DefaultFactory(Lang3GLContext context) {
 		this.context = context;
+		this.reservedJavaCharToLiteralMap.put(
+				Character.valueOf('+'),  
+				"_plus_");
+		this.reservedJavaCharToLiteralMap.put(
+				Character.valueOf('-'),  
+				"_minus_");
+		this.reservedJavaCharToLiteralMap.put(
+				Character.valueOf('/'),  
+				"_div_");
+		this.reservedJavaCharToLiteralMap.put(
+				Character.valueOf('*'),  
+				"_mult_");
+		this.reservedJavaCharToLiteralMap.put(
+				Character.valueOf('%'),  
+				"_mod_");
+		this.reservedJavaCharToLiteralMap.put(
+				Character.valueOf('('),  
+				"_rp_");
+		this.reservedJavaCharToLiteralMap.put(
+				Character.valueOf(')'),  
+				"_lp_");
+		this.reservedJavaCharToLiteralMap.put(
+				Character.valueOf('('),  
+				"_rb_");
+		this.reservedJavaCharToLiteralMap.put(
+				Character.valueOf(')'),  
+				"_lb_");
 	}
-
 	
 	public Lang3GLContext getContext() {
 		return this.context;
@@ -247,7 +278,7 @@ public abstract class DefaultFactory {
         		if (Character.isDigit(array[i]))
     	            buf.append("_");
         	}
-        	buf.append(array[i]);        
+        	buf.append(array[i]);
         }
         return buf.toString();
     }
@@ -257,9 +288,16 @@ public abstract class DefaultFactory {
     	StringBuilder buf = new StringBuilder();
     	char[] array = name.toCharArray();
         for (int i = 0; i < array.length; i++) {
+    		String lit = reservedJavaCharToLiteralMap.get(Character.valueOf(array[i]));
+    		if (lit != null) {
+    			buf.append(lit.toUpperCase());
+    			continue;
+    		}
         	if (i > 0) {
-        	   if (Character.isLetter(array[i]) && Character.isUpperCase(array[i]))
-        		   buf.append("_");
+        	   if (Character.isLetter(array[i]) && Character.isUpperCase(array[i])) {
+        		   if (!Character.isUpperCase(array[i-1]))
+        		       buf.append("_");
+        	   }
         	}
         	if (Character.isLetterOrDigit(array[i])) {
         	    buf.append(Character.toUpperCase(array[i]));        		

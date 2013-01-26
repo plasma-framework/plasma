@@ -20,15 +20,17 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 	protected static String[] SDO_RESERVED_NAMES = {
 		"type",
 		"dataobject",
+		"sequence",
 		"list"
 	};
 	
-	private Map<String, String> reservedMap =  new HashMap<String, String>();
+	private Map<String, String> reservedGetterNameMap =  new HashMap<String, String>();
 	
 	public SDODefaultFactory(Lang3GLContext context) {
 		super(context);
 		for (String name : SDO_RESERVED_NAMES)
-			this.reservedMap.put(name, name);
+			this.reservedGetterNameMap.put(name, name);
+		
 	}
 
 	protected String createPackageDeclaration(Package pkg) {
@@ -80,7 +82,7 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 
 	protected String toMethodFieldName(String name) {
 		String result = firstToUpperCase(name);
-		if (this.reservedMap.get(name.toLowerCase()) != null)
+		if (this.reservedGetterNameMap.get(name.toLowerCase()) != null)
 			result += "_";
 		return result;
 	}

@@ -144,7 +144,7 @@ public class CoreProperty implements PlasmaProperty {
 
         if (this.property.isDataType()) {
         
-        	Integer max = this.property.getMaxLength();
+        	Long max = this.property.getMaxLength();
         	if (max != null)
                 instanceProperties.put(INSTANCE_PROPERTY_INT_MAXLENGTH, max);
                     
@@ -443,11 +443,11 @@ public class CoreProperty implements PlasmaProperty {
 	 * @return the maximum length or -1 if no
 	 * maximum length is defined
 	 */
-	public int getMaxLength() {
-		Integer maxlen = (Integer)this.get(
+	public long getMaxLength() {
+		Long maxlen = (Long)this.get(
 				CoreProperty.INSTANCE_PROPERTY_INT_MAXLENGTH);
 		if (maxlen != null)
-		    return maxlen.intValue();
+		    return maxlen.longValue();
 		else
 			return -1;
 	}

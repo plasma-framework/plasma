@@ -318,9 +318,11 @@ public class JDOModelAssembler {
     		column.setName(pdef.getAlias().getPhysicalName());
     		column.setDefaultValue("BOGUS_DEFAULT_VALUE");
     		if (pdef.getValueConstraint() != null && 
-    			pdef.getValueConstraint().getMaxLength() != null && 
-    			pdef.getValueConstraint().getMaxLength() > 4000)
-    			column.setJdbcType("clob");
+    			pdef.getValueConstraint().getMaxLength() != null) {
+    			Long maxLength = Long.valueOf(pdef.getValueConstraint().getMaxLength());
+    			if (maxLength.longValue() > 4000)
+    			    column.setJdbcType("clob");
+    		}
     		field.getColumns().add(column);
 		}
     	

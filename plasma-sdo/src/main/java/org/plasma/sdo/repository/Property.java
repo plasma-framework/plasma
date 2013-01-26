@@ -240,7 +240,7 @@ public class Property extends Element {
         return false;
     }    
 
-    public Integer getMaxLength() 
+    public Long getMaxLength() 
     {
         if (!property.isDataType())
             throw new IllegalArgumentException("property " 
@@ -251,7 +251,8 @@ public class Property extends Element {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOValueConstraint) {
                 	SDOValueConstraint sdoValueConstraintStereotype = (SDOValueConstraint)stereotype.getDelegate();
-                    return sdoValueConstraintStereotype.getMaxLength();
+                    if (sdoValueConstraintStereotype.getMaxLength() != null)
+                	    return Long.valueOf(sdoValueConstraintStereotype.getMaxLength());
                 }
         }
         else

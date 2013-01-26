@@ -17,9 +17,10 @@ public class ConstraintAssembler extends AbstractAssembler {
 	private static Log log = LogFactory.getLog(
 			   ConstraintAssembler.class); 
 		
-	public ConstraintAssembler(String destNamespaceURI,
+	public ConstraintAssembler(ConverterSupport converterSupport,
+			String destNamespaceURI,
 			String destNamespacePrefix) {
-		super(destNamespaceURI, destNamespacePrefix);
+		super(destNamespaceURI, destNamespacePrefix, converterSupport);
 	}
 
 	public EnumerationConstraint buildEnumerationConstraint(AbstractSimpleType simpleType, AbstractSimpleType source)
@@ -53,35 +54,35 @@ public class ConstraintAssembler extends AbstractAssembler {
     			JAXBElement<Facet> facet = (JAXBElement<Facet>)obj;
     			if (facet.getName().getLocalPart().equals("maxInclusive")) {
     				Facet numFacet = (Facet)facet.getValue();
-    				constraint.setMaxInclusive(Float.valueOf(numFacet.getValue()));
+    				constraint.setMaxInclusive(numFacet.getValue());
     			}
     			else if (facet.getName().getLocalPart().equals("minInclusive")) {
     				Facet numFacet = (Facet)facet.getValue();
-    				constraint.setMinInclusive(Float.valueOf(numFacet.getValue()));
+    				constraint.setMinInclusive(numFacet.getValue());
     			}
     			else if (facet.getName().getLocalPart().equals("minExclusive")) {
     				Facet numFacet = (Facet)facet.getValue();
-    				constraint.setMinExclusive(Float.valueOf(numFacet.getValue()));
+    				constraint.setMinExclusive(numFacet.getValue());
     			}
     			else if (facet.getName().getLocalPart().equals("maxExclusive")) {
     				Facet numFacet = (Facet)facet.getValue();
-    				constraint.setMaxExclusive(Float.valueOf(numFacet.getValue()));
+    				constraint.setMaxExclusive(numFacet.getValue());
     			}
     			else if (facet.getName().getLocalPart().equals("totalDigits")) {
     				Facet numFacet = (Facet)facet.getValue();
-    				constraint.setTotalDigits(Integer.valueOf(numFacet.getValue()));
+    				constraint.setTotalDigits(numFacet.getValue());
     			}
     			else if (facet.getName().getLocalPart().equals("fractionDigits")) {
     				Facet numFacet = (Facet)facet.getValue();
-    				constraint.setFractionDigits(Integer.valueOf(numFacet.getValue()));
+    				constraint.setFractionDigits(numFacet.getValue());
     			}
     			else if (facet.getName().getLocalPart().equals("maxLength")) {
     				Facet numFacet = (Facet)facet.getValue();
-    				constraint.setMaxLength(Integer.valueOf(numFacet.getValue()));
+    				constraint.setMaxLength(numFacet.getValue());
     			}
     			else if (facet.getName().getLocalPart().equals("minLength")) {
     				Facet numFacet = (Facet)facet.getValue();
-    				constraint.setMinLength(Integer.valueOf(numFacet.getValue()));
+    				constraint.setMinLength(numFacet.getValue());
     			}
     		}
     		else if (obj instanceof Pattern) {

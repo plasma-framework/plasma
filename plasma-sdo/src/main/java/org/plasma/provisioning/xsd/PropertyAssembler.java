@@ -24,8 +24,10 @@ import org.plasma.provisioning.XmlNodeType;
 import org.plasma.provisioning.XmlProperty;
 import org.plasma.sdo.DataType;
 import org.plasma.xml.schema.AbstractComplexType;
+import org.plasma.xml.schema.AbstractSimpleType;
 import org.plasma.xml.schema.Attribute;
 import org.plasma.xml.schema.ExplicitGroup;
+import org.plasma.xml.schema.LocalComplexType;
 import org.plasma.xml.schema.LocalElement;
 import org.plasma.xml.schema.LocalSimpleType;
 import org.plasma.xml.schema.Restriction;
@@ -37,16 +39,15 @@ public class PropertyAssembler extends AbstractAssembler {
 	private static Log log = LogFactory.getLog(
 			PropertyAssembler.class); 
 	
-	private ConverterSupport support;
 	private QName appNamespaceQName;
 	
 	public PropertyAssembler(ConverterSupport converterSupport,
 	    QName appNamespaceQName) {
 		
 		super(converterSupport.getDestNamespaceURI(),
-				converterSupport.getDestNamespacePrefix());
+			   converterSupport.getDestNamespacePrefix(),
+				converterSupport);
 		this.appNamespaceQName = appNamespaceQName;
-		this.support = converterSupport;
 	}	
 
 	/**
@@ -78,13 +79,6 @@ public class PropertyAssembler extends AbstractAssembler {
 
         property.setVisibility(VisibilityType.PUBLIC); 
         
-        if ("ReactantList".equalsIgnoreCase(clss.getName()) && (
-        		"reactant".equalsIgnoreCase(element.getName()) ||
-        		"reactant".equalsIgnoreCase(element.getRef().getLocalPart()))) {
-        	int foo = 0;
-        	foo++;
-        }
-        
         // set up multiplicity
         String maxOccurs = "1"; // the default
         if (element.hasMaxOccurs()) {
@@ -114,9 +108,9 @@ public class PropertyAssembler extends AbstractAssembler {
     	    property.setNullable(false);
         
 		Alias alias = new Alias();
-        property.setAlias(alias);               
+        property.setAlias(alias);  
         
-    	
+    	// check for complex type or element ref
         QName refQName = element.getRef();
         if (refQName != null) { // reference prop
             Class targetDef = this.support.getClassLocalNameMap().get(refQName.getLocalPart());
@@ -126,65 +120,100 @@ public class PropertyAssembler extends AbstractAssembler {
                 targetClassRef.setUri(targetDef.getUri());
                 property.setType(targetClassRef);                
 	            property.setContainment(true);  
-	            String logicalName = this.formatLocalPropertyName(targetDef.getName());
-	            boolean logicalNameConflict = this.support.logicalNameConflict(clss, logicalName);
-	            logicalName = this.support.buildLogicalPropertyName(clss, logicalName);
-	            property.setName(logicalName); 
-	            String physicalNameAlias = NameUtils.toAbbreviatedName(logicalName);
-	            alias.setPhysicalName(physicalNameAlias);
-	            // else there likely will be a local-name conflict
-	            // as well. 
-	            if (!logicalNameConflict)
-	                alias.setLocalName(refQName.getLocalPart()); // because XML schema "projection" names could differ
-	            else
-	            	alias.setLocalName(logicalName);
+                setupNames(clss, property, alias, 
+                		targetDef.getName(), refQName.getLocalPart());
             }
             else {
             	throw new IllegalStateException("could not find target class from, "
             			+ refQName);
             }
         } 
-        else { // no ref
+        else { // no ref, check type
             QName typeQName = element.getType();
-            // if a reference to another entity
-            if (typeQName.getPrefix() == null || (appNamespaceQName != null && typeQName.getPrefix().equals(this.appNamespaceQName.getPrefix()))) {
-
-                Class targetDef = this.support.getClassLocalNameMap().get(typeQName.getLocalPart());
-                if (targetDef != null) {
-                    ClassRef targetClassRef = new ClassRef();
-                    targetClassRef.setName(targetDef.getName());
-                    targetClassRef.setUri(targetDef.getUri());
-                    property.setType(targetClassRef);                
-    	            property.setContainment(true);  
-    	            alias.setLocalName(typeQName.getLocalPart()); // because XML schema "projection" names could differ
-    	            String logicalName = this.formatLocalPropertyName(targetDef.getName());
-    	            logicalName = this.support.buildLogicalPropertyName(clss, logicalName);
-    	            property.setName(logicalName); 
-    	            String physicalNameAlias = NameUtils.toAbbreviatedName(logicalName);
-    	            alias.setPhysicalName(physicalNameAlias);
-                }
-                else {
-                	throw new IllegalStateException("could not find target class from, "
-                			+ typeQName);
-                }
-            }
-            else { // datatype        	.               
-            	String xsdTypeName = typeQName.getLocalPart();
-            	XSDBuiltInType xsdType = XSDBuiltInType.valueOf("xsd_" + xsdTypeName);
-                DataType sdoType = this.support.mapType(xsdType);
-            	DataTypeRef dataTypeRef = new DataTypeRef();
-                dataTypeRef.setName(sdoType.name());
-                dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
-                property.setType(dataTypeRef);        	
-
-                if (element.getName() == null)
-                	throw new IllegalStateException("expected name for element");
-                alias.setLocalName(element.getName()); // because XML schema "projection" names could differ
-	            String logicalName = this.formatLocalPropertyName(element.getName());
-	            logicalName = this.support.buildLogicalPropertyName(clss, logicalName);
-                property.setName(logicalName); 
-                String physicalNameAlias = NameUtils.toAbbreviatedName(logicalName);
-                alias.setPhysicalName(physicalNameAlias);
+            if (typeQName != null) {
+	            // if a reference to another "local" entity
+	            //TODO: what if elementFormDefault is not qualified?
+	            if (typeQName.getNamespaceURI() != null && !typeQName.getNamespaceURI().equals(SchemaConstants.XMLSCHEMA_NAMESPACE_URI)) {
+	
+	                Class targetDef = this.support.getClassLocalNameMap().get(typeQName.getLocalPart());
+	                if (targetDef != null) {
+	                    ClassRef targetClassRef = new ClassRef();
+	                    targetClassRef.setName(targetDef.getName());
+	                    targetClassRef.setUri(targetDef.getUri());
+	                    property.setType(targetClassRef);                
+	    	            property.setContainment(true); 
+	    	            if (element.getName() != null)
+	    	                setupNames(clss, property, alias, 
+	    	                	element.getName(), element.getName());
+	    	            else
+    	                    setupNames(clss, property, alias, 
+    	                	    targetDef.getName(), typeQName.getLocalPart());
+	                }
+	                else {
+	                	SimpleType simpleType = this.support.getSimpleTypeMap().get(typeQName.getLocalPart());
+	                	if (simpleType != null) {
+	    	                if (element.getName() == null)
+	    	                	throw new IllegalStateException("expected name for element");
+	    	                setupNames(clss, property, alias, element.getName(), element.getName());
+	                    	ConstraintAssembler constraintAssembler = new ConstraintAssembler(
+	                    			this.support,
+	                    			this.destNamespaceURI, this.destNamespacePrefix);
+	        	        	collect(clss, property,  simpleType,constraintAssembler);
+	                	}
+	                	else
+	                	   throw new IllegalStateException("could not find target class or simple type from, "
+	                			+ typeQName);
+	                }
+	            }
+	            else { // XSD datatype        	.               
+	            	String xsdTypeName = typeQName.getLocalPart();
+	            	XSDBuiltInType xsdType = XSDBuiltInType.valueOf("xsd_" + xsdTypeName);
+	                DataType sdoType = this.support.mapType(xsdType);;
+	            	DataTypeRef dataTypeRef = new DataTypeRef();
+	                dataTypeRef.setName(sdoType.name());
+	                dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+	                property.setType(dataTypeRef);        	
+	
+	                if (element.getName() == null)
+	                	throw new IllegalStateException("expected name for element");
+	                setupNames(clss, property, alias, 
+	                		element.getName(), element.getName());
+	            }
+            } 
+            else {
+            	LocalSimpleType simpleType = element.getSimpleType();
+            	if (simpleType != null) {
+	                if (element.getName() == null)
+	                	throw new IllegalStateException("expected name for element");
+	                setupNames(clss, property, alias, element.getName(), element.getName());
+                	ConstraintAssembler constraintAssembler = new ConstraintAssembler(
+                			this.support,
+                			this.destNamespaceURI, this.destNamespacePrefix);
+    	        	collect(clss, property, simpleType, constraintAssembler);
+            	}
+            	else {
+            		LocalComplexType localComplexType = element.getComplexType();
+            		if (localComplexType != null) {
+    	                if (element.getName() == null || element.getName().trim().length() == 0)
+    	                	throw new IllegalStateException("expected name for element while processing class, " 
+        		                + clss.getName());
+            			log.warn("ignoring local complex type for element, "
+            				+ element.getName() + ", - using string datatype");
+    	            	XSDBuiltInType xsdType = XSDBuiltInType.xsd_string;
+    	                DataType sdoType = this.support.mapType(xsdType);;
+    	            	DataTypeRef dataTypeRef = new DataTypeRef();
+    	                dataTypeRef.setName(sdoType.name());
+    	                dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+    	                property.setType(dataTypeRef);        	
+    	                setupNames(clss, property, alias, 
+    	                		element.getName(), element.getName());
+            		}
+                	else
+                    	throw new IllegalStateException("expected 'ref' or 'type' attributes or local-simple-type or "
+                    			+ "local-complex-type for element, "
+                    			+ element.getName());
+            	}
+            		
             }
         }
             
@@ -200,8 +229,7 @@ public class PropertyAssembler extends AbstractAssembler {
         
     	return property;
     }
- 
-    
+	
     /**
      * Creates non-reference property definitions. 
      * @param clss the owner class
@@ -211,23 +239,16 @@ public class PropertyAssembler extends AbstractAssembler {
      */
 	public Property buildDatatypeProperty(Class clss, AbstractComplexType complexType, Attribute attribute)
     {
+        if (attribute.getName() == null || attribute.getName().trim().length() == 0)
+        	throw new IllegalStateException("expected name for attribute while processing class, " 
+        		+ clss.getName());
     	Property property = new Property();
         property.setId(UUID.randomUUID().toString());
         // set property names and aliases
         Alias alias = new Alias();
         property.setAlias(alias);       
-        String logicalName = this.formatLocalPropertyName(attribute.getName());
-        boolean logicalNameConflict = this.support.logicalNameConflict(clss, logicalName);
-        logicalName = this.support.buildLogicalPropertyName(clss, logicalName);
-        property.setName(logicalName); 
-        String physicalNameAlias = NameUtils.toAbbreviatedName(logicalName);
-        alias.setPhysicalName(physicalNameAlias);
-        // else there likely will be a local-name conflict
-        // as well. 
-        if (!logicalNameConflict)
-            alias.setLocalName(attribute.getName()); // because XML schema "projection" names could differ
-        else
-        	alias.setLocalName(logicalName);
+        setupNames(clss, property, alias, 
+        		attribute.getName(), attribute.getName());
         XmlProperty xmlProp = new XmlProperty();
 		xmlProp.setNodeType(XmlNodeType.ATTRIBUTE);
 		property.setXmlProperty(xmlProp);
@@ -254,6 +275,7 @@ public class PropertyAssembler extends AbstractAssembler {
     	    	
     	// if local restriction will not have a simple type
     	ConstraintAssembler constraintAssembler = new ConstraintAssembler(
+    			this.support,
     			this.destNamespaceURI, this.destNamespacePrefix);
     	if (typeQName == null) {
         	LocalSimpleType lst = attribute.getSimpleType();
@@ -264,40 +286,7 @@ public class PropertyAssembler extends AbstractAssembler {
     	else {  
         	if (typeQName.getNamespaceURI() != null && typeQName.getNamespaceURI().equals(this.support.getSchema().getTargetNamespace())) {
 	        	SimpleType simpleType = this.support.getSimpleTypeMap().get(typeQName.getLocalPart());
-	        	ConstraintCollector constraintCollector = 
-	        		new ConstraintCollector(this.support.getSchema(),
-	        				this.support.getSimpleTypeMap(), constraintAssembler);
-	        	simpleType.accept(constraintCollector);
-	        	if (constraintCollector.getEnumerationConstraints().size() > 0) {
-	        		if (constraintCollector.getEnumerationConstraints().size() == 1)
-	        			property.setEnumerationConstraint(constraintCollector.getEnumerationConstraints().get(0));
-	        		else
-	        			log.warn("collected more than one enumeration constraint for "
-	        				+ clss.getName() + "." + property.getName() + " - ignoring");
-	        	}
-	        	if (constraintCollector.getValueConstraints().size() > 0) {
-	        		if (constraintCollector.getValueConstraints().size() == 1)
-	        			property.setValueConstraint(constraintCollector.getValueConstraints().get(0));
-	        		else
-	        			log.warn("collected more than one value constraint for "
-	        				+ clss.getName() + "." + property.getName() + " - ignoring");
-	        	}
-	        	DatatypeCollector datatypeCollector = new DatatypeCollector(this.support.getSchema(),
-	        			this.support.getSimpleTypeMap());
-	        	simpleType.accept(datatypeCollector);
-	        	if (datatypeCollector.isListType())
-	        		property.setMany(true);
-	        	if (datatypeCollector.getResult().size() > 0) {
-	        		if (datatypeCollector.getResult().size() == 1)
-	        			buildDataTypeReference(property, 
-	        				datatypeCollector.getResult().get(0));
-	        		else	
-	        			log.warn("collected more than one XSD datatype for "
-		        				+ clss.getName() + "." + property.getName() + " - ignoring");
-	        	}
-	        	else
-        			log.warn("collected no XSD datatypes for "
-	        				+ clss.getName() + "." + property.getName() + " - using default xsd:string");
+	        	collect(clss, property,  simpleType,constraintAssembler);
         	}
 			else if (typeQName.getNamespaceURI().equals(SchemaConstants.XMLSCHEMA_NAMESPACE_URI)) {
 				buildDataTypeReference(property, typeQName);
@@ -317,6 +306,7 @@ public class PropertyAssembler extends AbstractAssembler {
     	
     	return property;
     }
+	
  
 	public Property buildElementContentDatatypeProperty(Class clss,
     		QName xsdTypeNameQName)
@@ -325,17 +315,9 @@ public class PropertyAssembler extends AbstractAssembler {
         property.setId(UUID.randomUUID().toString());
         // set property names and aliases
         Alias alias = new Alias();
-        property.setAlias(alias);       
-        String logicalName = this.formatLocalPropertyName("value");
-        boolean logicalNameConflict = this.support.logicalNameConflict(clss, logicalName);
-        logicalName = this.support.buildLogicalPropertyName(clss, logicalName);
-        property.setName(logicalName); 
-        String physicalNameAlias = NameUtils.toAbbreviatedName(logicalName);
-        alias.setPhysicalName(physicalNameAlias);
-        if (!logicalNameConflict)
-            alias.setLocalName("value"); 
-        else
-            alias.setLocalName(logicalName); 
+        property.setAlias(alias);   
+        setupNames(clss, property, alias, 
+        	"value", "value");
         
         //TODO: how to annotate such that serialization can know
         // this property is an element text value
@@ -368,6 +350,9 @@ public class PropertyAssembler extends AbstractAssembler {
     {
     	Property targetProperty = new Property();
         targetProperty.setId(UUID.randomUUID().toString());
+        if (sourceProperty.getOpposite() == null || sourceProperty.getOpposite().trim().length() == 0)
+        	throw new IllegalStateException("expected opposite name for property, " 
+                + clss.getName() + "." + sourceProperty.getName());
         targetProperty.setName(sourceProperty.getOpposite()); // actual SDO type name stored as sdox name        
         Documentation documentation = createDocumentation(
         	DocumentationType.DEFINITION,
@@ -421,4 +406,65 @@ public class PropertyAssembler extends AbstractAssembler {
         dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
         property.setType(dataTypeRef);        	
     }
+	
+	private void collect(Class clss, Property property, 
+			AbstractSimpleType simpleType, ConstraintAssembler constraintAssembler) 
+	{
+    	ConstraintCollector constraintCollector = 
+    		new ConstraintCollector(this.support.getSchema(),
+    				this.support.getSimpleTypeMap(), constraintAssembler);
+    	simpleType.accept(constraintCollector);
+    	if (constraintCollector.getEnumerationConstraints().size() > 0) {
+    		if (constraintCollector.getEnumerationConstraints().size() == 1)
+    			property.setEnumerationConstraint(constraintCollector.getEnumerationConstraints().get(0));
+    		else
+    			log.warn("collected more than one enumeration constraint for "
+    				+ clss.getName() + "." + property.getName() + " - ignoring");
+    	}
+    	if (constraintCollector.getValueConstraints().size() > 0) {
+    		if (constraintCollector.getValueConstraints().size() == 1)
+    			property.setValueConstraint(constraintCollector.getValueConstraints().get(0));
+    		else
+    			log.warn("collected more than one value constraint for "
+    				+ clss.getName() + "." + property.getName() + " - ignoring");
+    	}
+    	DatatypeCollector datatypeCollector = new DatatypeCollector(this.support.getSchema(),
+    			this.support.getSimpleTypeMap());
+    	simpleType.accept(datatypeCollector);
+    	if (datatypeCollector.isListType())
+    		property.setMany(true);
+    	if (datatypeCollector.getResult().size() > 0) {
+			QName first = datatypeCollector.getResult().get(0);
+    		if (datatypeCollector.getResult().size() > 1) {
+    			for (QName name : datatypeCollector.getResult())
+    				if (!name.getLocalPart().equals(first.getLocalPart())) {
+	    			    log.warn("detected hetergeneous XSD datatype '"+name.getLocalPart()+"' for "
+		        				+ clss.getName() + "." + property.getName() + " - using first type '"
+		        				+ first.getLocalPart() + "'");
+    				}
+    		}
+    		buildDataTypeReference(property, first);
+    	}
+    	else
+			log.warn("collected no XSD datatypes for "
+    				+ clss.getName() + "." + property.getName() + " - using default xsd:string");		
+	}
+	
+	private void setupNames(Class clss, Property property, Alias alias, 
+			String candidateNameLogicalName, 
+			String localName) {
+        String logicalName = this.formatLocalPropertyName(candidateNameLogicalName);
+        boolean logicalNameConflict = this.support.logicalNameConflict(clss, logicalName);
+        logicalName = this.support.buildLogicalPropertyName(clss, logicalName);
+        property.setName(logicalName); 
+        String physicalNameAlias = NameUtils.toAbbreviatedName(logicalName);
+        alias.setPhysicalName(physicalNameAlias);
+        // else there likely will be a local-name conflict
+        // as well. 
+        if (!logicalNameConflict)
+            alias.setLocalName(localName); // because XML schema "projection" names could differ
+        else
+        	alias.setLocalName(logicalName);		
+	} 
+    
 }

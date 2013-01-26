@@ -482,15 +482,15 @@ public class ProvisioningModelAssembler {
 			if (sdoValConst.getFractionDigits() != null)
 			    valueConstraint.setFractionDigits(sdoValConst.getFractionDigits());
 			if (sdoValConst.getMaxExclusive() != null)
-			    valueConstraint.setMaxExclusive(Float.valueOf(sdoValConst.getMaxExclusive()));
+			    valueConstraint.setMaxExclusive(sdoValConst.getMaxExclusive());
 			if (sdoValConst.getMaxInclusive() != null)
-			    valueConstraint.setMaxInclusive(Float.valueOf(sdoValConst.getMaxInclusive()));
+			    valueConstraint.setMaxInclusive(sdoValConst.getMaxInclusive());
 			if (sdoValConst.getMaxLength() != null)
 			    valueConstraint.setMaxLength(sdoValConst.getMaxLength());
 			if (sdoValConst.getMinExclusive() != null)
-			    valueConstraint.setMinExclusive(Float.valueOf(sdoValConst.getMinExclusive()));
+			    valueConstraint.setMinExclusive(sdoValConst.getMinExclusive());
 			if (sdoValConst.getMinInclusive() != null)
-			    valueConstraint.setMinInclusive(Float.valueOf(sdoValConst.getMinInclusive()));
+			    valueConstraint.setMinInclusive(sdoValConst.getMinInclusive());
 			if (sdoValConst.getMinLength() != null)
 			    valueConstraint.setMinLength(sdoValConst.getMinLength());
 			if (sdoValConst.getPattern() != null)

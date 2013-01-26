@@ -1,6 +1,7 @@
 package org.plasma.provisioning.xsd;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,20 +14,26 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
 import org.plasma.provisioning.DataTypeRef;
+import org.plasma.provisioning.Documentation;
+import org.plasma.provisioning.DocumentationType;
 import org.plasma.provisioning.Enumeration;
 import org.plasma.provisioning.Model;
 import org.plasma.provisioning.Property;
 import org.plasma.provisioning.SchemaConverter;
 import org.plasma.xml.schema.AbstractComplexType;
 import org.plasma.xml.schema.Annotated;
+import org.plasma.xml.schema.Annotation;
 import org.plasma.xml.schema.Any;
 import org.plasma.xml.schema.Attribute;
 import org.plasma.xml.schema.AttributeGroup;
 import org.plasma.xml.schema.AttributeGroupRef;
+import org.plasma.xml.schema.ComplexRestrictionType;
 import org.plasma.xml.schema.ComplexType;
 import org.plasma.xml.schema.Element;
 import org.plasma.xml.schema.ExplicitGroup;
+import org.plasma.xml.schema.ExtensionType;
 import org.plasma.xml.schema.LocalElement;
+import org.plasma.xml.schema.OpenAttrs;
 import org.plasma.xml.schema.Schema;
 import org.plasma.xml.schema.SchemaConstants;
 import org.plasma.xml.schema.SchemaUtil;
@@ -58,7 +65,8 @@ public class XSDSchemaConverter
         		this.support.getSchema()); 
     	this.propertyAssembler = new PropertyAssembler(
     			this.support, this.appNamespaceQName);    	
-    	this.classAssembler = new ClassAssembler(this.destNamespaceURI,
+    	this.classAssembler = new ClassAssembler(this.support,
+    			this.destNamespaceURI,
         		this.destNamespacePrefix);
 	}
 	
@@ -70,6 +78,16 @@ public class XSDSchemaConverter
         model.setId(UUID.randomUUID().toString());
         model.setUri(this.support.getDestNamespaceURI());
         
+        for (OpenAttrs attrs : this.support.getSchema().getIncludesAndImportsAndRedefines()) {
+        	if (attrs instanceof Annotation) {
+        		String doc = this.support.getDocumentationContent((Annotation)attrs);
+        		if (doc != null && doc.length() > 0) {
+        			Documentation documentation = this.support.createDocumentation(
+        	            	DocumentationType.DEFINITION, doc);
+        			model.getDocumentations().add(documentation);
+        		}
+        	}
+        }
         
         // map top-level objects (process attributes/properties on another pass)
         for (Annotated annotated : this.support.getSchema().getSimpleTypesAndComplexTypesAndGroups()) {
@@ -105,6 +123,7 @@ public class XSDSchemaConverter
         // collect local enumerations from type hierarchies
         // starting with each top-level simple type
         EnumerationAssembler enumerationAssembler = new EnumerationAssembler(
+        		this.support,
         		this.destNamespaceURI, this.destNamespacePrefix);
         for (Annotated annotated : this.support.getSchema().getSimpleTypesAndComplexTypesAndGroups()) {
         	if (annotated instanceof SimpleType) {
@@ -119,6 +138,7 @@ public class XSDSchemaConverter
         }
         
         // create classes
+        // FIXME: can we not have top level elements as well as classes?
         if (this.support.getElementMap().size() > 0) {
         	for (Element element : this.support.getElementMap().values()) {
         		ComplexType complexType = this.support.getComplexTypeMap().get(element.getName());
@@ -126,13 +146,17 @@ public class XSDSchemaConverter
             	    Class cls = classAssembler.buildClass(complexType);
             	    model.getClazzs().add(cls);
             	    this.support.getClassQualifiedNameMap().put(destNamespaceURI + "#" + cls.getName(), cls);        	
-            	    this.support.getClassLocalNameMap().put(cls.getAlias().getLocalName(), cls);        	
+            	    this.support.getClassLocalNameMap().put(cls.getAlias().getLocalName(), cls); 
+            	    if (log.isDebugEnabled())
+            	    	log.debug("created class, " + cls.getName());
         		}
         		else {
             	    Class cls = classAssembler.buildClass(element);
             	    model.getClazzs().add(cls);
             	    this.support.getClassQualifiedNameMap().put(destNamespaceURI + "#" + cls.getName(), cls);        	
             	    this.support.getClassLocalNameMap().put(cls.getAlias().getLocalName(), cls);        	
+            	    if (log.isDebugEnabled())
+            	    	log.debug("created class, " + cls.getName());
         		}
         	}
         }
@@ -142,30 +166,48 @@ public class XSDSchemaConverter
         	    model.getClazzs().add(cls);
         	    this.support.getClassQualifiedNameMap().put(destNamespaceURI + "#" + cls.getName(), cls);        	
         	    this.support.getClassLocalNameMap().put(cls.getAlias().getLocalName(), cls);        	
+        	    if (log.isDebugEnabled())
+        	    	log.debug("created class, " + cls.getName());
         	}        	
         }
         
-        // build both data and reference properties
-        for (Class cls : this.support.getClassQualifiedNameMap().values())
-        {
-        	String localName = cls.getAlias().getLocalName();
-        	if (localName == null || localName.trim().length() == 0)
-        		throw new IllegalStateException("expected local name apias for class, " 
-        				+ cls.getName());
-        	ComplexType complexType = this.support.getComplexTypeMap().get(localName);
-        	if (complexType != null) {
-        		buildProperties(cls, complexType);
-        	}
-        	else {
-        		Element element = this.support.getElementMap().get(localName);
-        		if (element != null) 
-            		buildProperties(cls, element);
-        		else
-        			throw new IllegalStateException("expected top level conplex type or element for local name, "
-        					+ localName);
-        	}
-        }
+        // build a map of classes to their subclasses
+        // so we can process properties while doing a breadth-first
+        // traversal across the class lattice
+        this.support.collectSubclasses();
         
+        // create properties in class lattice order
+        // starting w/each root
+        ClassVisitor visitor = new ClassVisitor() {
+			public void visit(Class target, Class source) {
+	    	    if (log.isDebugEnabled())
+	    	    	log.debug("creating properties for class, " + target.getName());
+	        	String localName = target.getAlias().getLocalName();
+	        	if (localName == null || localName.trim().length() == 0)
+	        		throw new IllegalStateException("expected local name apias for class, " 
+	        				+ target.getName());
+	        	ComplexType complexType = support.getComplexTypeMap().get(localName);
+	        	if (complexType != null) {
+	        		buildProperties(target, complexType);
+	        	}
+	        	else {
+	        		Element element = support.getElementMap().get(localName);
+	        		if (element != null) 
+	            		buildProperties(target, element);
+	        		else
+	        			throw new IllegalStateException("expected top level conplex type or element for local name, "
+	        					+ localName);
+	        	}
+			}        	
+        };
+        
+        // traverse each root and any subclass hierarchy
+        for (Class root : this.support.getRootClasses()) {
+    	    if (log.isDebugEnabled())
+    	    	log.debug("traversing 'root' class, " + root.getName());
+        	this.support.accept(root, visitor);
+        }
+
         // add derived target properties
         for (Class cls : this.support.getClassQualifiedNameMap().values())
         {
@@ -205,6 +247,41 @@ public class XSDSchemaConverter
 
         return model;
     }  
+    
+    private boolean hasBase(ComplexType complexType) {
+    	if (complexType.getComplexContent() != null) {
+			ExtensionType extension = complexType.getComplexContent().getExtension(); 
+			if (extension != null) {
+				QName base = extension.getBase();
+	    	    if (base != null && !base.getLocalPart().equals(SchemaUtil.getSerializationBaseTypeName()))
+	    	       return true;	
+			}
+			ComplexRestrictionType restriction = complexType.getComplexContent().getRestriction(); 
+			if (restriction != null) {
+				QName base = restriction.getBase();
+	    	    if (base != null && !base.getLocalPart().equals(SchemaUtil.getSerializationBaseTypeName()))
+	    	    	return true;		
+			}
+    	}
+		return false;
+    }
+    
+    private boolean hasBase(Element element) {
+		if (element.getComplexType() != null && element.getComplexType().getComplexContent() != null) { // has a base type
+			ExtensionType baseType = element.getComplexType().getComplexContent().getExtension(); 
+			if (baseType != null) {
+			    QName base = baseType.getBase();
+    	        if (!base.getLocalPart().equals(SchemaUtil.getSerializationBaseTypeName()))
+    	    	    return true;
+			}
+		}     	
+		else if (element.getSubstitutionGroup() != null) {
+			QName base = element.getSubstitutionGroup();
+    	    if (!base.getLocalPart().equals(SchemaUtil.getSerializationBaseTypeName()))
+	    	    return true;
+		}
+    	return false;
+    }
     
     private void buildProperties(Class cls, Element element) {
     	if (element.getComplexType() != null) {
@@ -251,9 +328,13 @@ public class XSDSchemaConverter
     			}
     		}
         }
-    	else {
-    		annotatedList = complexType.getComplexContent().getExtension().getAttributesAndAttributeGroups();
-    	}
+    	else { //complexType.getComplexContent() != null
+    		if (complexType.getComplexContent().getExtension() != null)
+    		    annotatedList = complexType.getComplexContent().getExtension().getAttributesAndAttributeGroups();
+    		else if (complexType.getComplexContent().getRestriction() != null)
+    		    annotatedList = complexType.getComplexContent().getRestriction().getAttributesAndAttributeGroups();
+    	}    	
+    	
     	if (annotatedList != null)
     	    buildProperties(cls, complexType, annotatedList);
     	        
@@ -263,20 +344,28 @@ public class XSDSchemaConverter
     	if (complexType.getComplexContent() == null) { // no base type
     		sequence = complexType.getSequence();
     	}
-    	else {
-    		sequence = complexType.getComplexContent().getExtension().getSequence();
+    	else { // complexType.getComplexContent() != null
+    		if (complexType.getComplexContent().getExtension() != null)
+    		    sequence = complexType.getComplexContent().getExtension().getSequence();
+    		else if (complexType.getComplexContent().getRestriction() != null)
+    			sequence = complexType.getComplexContent().getRestriction().getSequence();
     	} 
     	if (sequence != null)
-    	    buildProperties(cls, complexType, sequence);   	   
+    	    buildProperties(cls, complexType, sequence); 
+    	
+    	
 
-        // get sequences and build properties
+        // get choice and build properties
         // from elements
     	ExplicitGroup choice = null;
     	if (complexType.getComplexContent() == null) { // no base type
     		choice = complexType.getChoice();
     	}
-    	else {
-    		choice = complexType.getComplexContent().getExtension().getChoice();
+    	else { // complexType.getComplexContent() != null
+    		if (complexType.getComplexContent().getExtension() != null)
+    		    choice = complexType.getComplexContent().getExtension().getChoice();
+    		else if (complexType.getComplexContent().getRestriction() != null)
+    			choice = complexType.getComplexContent().getRestriction().getChoice();
     	}   
     	if (choice != null)
     	    buildProperties(cls, complexType, choice);  
@@ -317,6 +406,31 @@ public class XSDSchemaConverter
         	        	        	this.support.getClassPropertyMap().put(cls, classProps);
         	        	        }
         	    	        	classProps.put(property.getName(), property);
+        	        		}
+        	        		else if (element2.getValue() instanceof ExplicitGroup) {
+        	        			ExplicitGroup grandChildGroup = (ExplicitGroup)element2.getValue();
+        	        	        for (int k = 0; k < grandChildGroup.getElementsAndGroupsAndAlls().size(); k++) {
+        	        	        	Object obj3 = grandChildGroup.getElementsAndGroupsAndAlls().get(k);
+        	        	        	if (obj3 instanceof JAXBElement) {
+        	        	        		JAXBElement element3 = (JAXBElement)obj3;
+        	        	        		if (element3.getValue() instanceof LocalElement) {
+        	        	        		    LocalElement localElement = (LocalElement)element3.getValue();
+        	        	        		    Property property = this.propertyAssembler.buildProperty(cls, complexType, 
+        	        	        		    		childGroup, grandChildGroup, localElement, k);
+        	        	        		    cls.getProperties().add(property);
+        	        	        	        Map<String, Property> classProps = this.support.getClassPropertyMap().get(cls);
+        	        	        	        if (classProps == null) {
+        	        	        	        	classProps = new HashMap<String, Property>();
+        	        	        	        	this.support.getClassPropertyMap().put(cls, classProps);
+        	        	        	        }
+        	        	    	        	classProps.put(property.getName(), property);
+        	        	        		}
+        	        	        		else
+        	                         	    log.warn("unexpected sequence/choice great-grandchild JAXBElement value class, " 
+        	                              			+ element3.getValue().getClass().getName());
+        	        	        	} // 
+        	        	        } // for
+        	    		
         	        		}
             	        	else
                          	    log.warn("unexpected sequence/choice grandchild JAXBElement value class, " 

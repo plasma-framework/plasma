@@ -58,9 +58,12 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
     	String destNamespaceURI,
     	String destNamespacePrefix) {
 		super(schema, destNamespaceURI, destNamespacePrefix);
-		enumerationAssembler = new EnumerationAssembler (destNamespaceURI,
+		enumerationAssembler = new EnumerationAssembler(
+				this,
+				destNamespaceURI,
 				destNamespacePrefix);
-		constraintAssembler = new ConstraintAssembler (destNamespaceURI,
+		constraintAssembler = new ConstraintAssembler(this, 
+				destNamespaceURI,
 				destNamespacePrefix);
 	}
     	
