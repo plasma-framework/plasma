@@ -1,19 +1,25 @@
 package org.plasma.text.lang3gl.java;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.plasma.common.WordWrap;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
 import org.plasma.provisioning.DataTypeRef;
+import org.plasma.provisioning.Documentation;
+import org.plasma.provisioning.EnumerationConstraint;
 import org.plasma.provisioning.Package;
 import org.plasma.provisioning.Property;
 import org.plasma.provisioning.PropertyNameCollisionException;
 import org.plasma.provisioning.TypeRef;
+import org.plasma.provisioning.ValueConstraint;
 import org.plasma.provisioning.adapter.FieldAdapter;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.helper.DataConverter;
@@ -350,6 +356,30 @@ public abstract class DefaultFactory {
 	
 	protected void createSingularGetterDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf) {
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Returns the value of the <b>");
+		buf.append(field.getName());
+		buf.append("</b> property.");	
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+			buf.append(newline(1));	
+			buf.append(" * <p></p>");
+			buf.append(newline(1));	
+			buf.append(" * <b>Property Definition: </b>");
+			buf.append(definition);
+	    }	    
+
+		buf.append(newline(1));	
+		buf.append(" * @return the value of the <b>");
+		buf.append(field.getName());
+		buf.append("</b> property.");	
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+		
 		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(typeClassName.getSimpleName());
@@ -360,6 +390,98 @@ public abstract class DefaultFactory {
 	
 	protected void createSingularSetterDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf) {
+		
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Sets the value of the <b>");
+		buf.append(field.getName());
+		buf.append("</b> property to the given value.");	
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+			buf.append(newline(1));	
+			buf.append(" * <p></p>");
+			buf.append(newline(1));	
+			buf.append(" * <b>Property Definition: </b>");
+			buf.append(definition);
+	    }	
+	    
+	    if (field.getValueConstraint() != null || field.getEnumerationConstraint() != null) {	    	
+			if (field.getValueConstraint() != null) {
+		    	buf.append(newline(1));	
+				buf.append(" * <p></p>");
+				buf.append(newline(1));	
+				buf.append(" * <b>Value Constraints: </b>");
+				buf.append("<pre>");	
+				ValueConstraint vc = field.getValueConstraint();
+				if (vc.getMinLength() != null) {
+					buf.append(newline(1));	
+					buf.append(" *     minLength: ");	
+					buf.append(vc.getMinLength());						
+				}
+				if (vc.getMaxLength() != null) {
+					buf.append(newline(1));	
+					buf.append(" *     maxLength: ");	
+					buf.append(vc.getMaxLength());						
+				}
+				if (vc.getMinInclusive() != null) {
+					buf.append(newline(1));	
+					buf.append(" *     minInclusive: ");	
+					buf.append(vc.getMinInclusive());						
+				}
+				if (vc.getMaxInclusive() != null) {
+					buf.append(newline(1));	
+					buf.append(" *     maxInclusive: ");	
+					buf.append(vc.getMaxInclusive());						
+				}
+				if (vc.getMinExclusive() != null) {
+					buf.append(newline(1));	
+					buf.append(" *     minExclusive: ");	
+					buf.append(vc.getMinExclusive());						
+				}
+				if (vc.getMaxExclusive() != null) {
+					buf.append(newline(1));	
+					buf.append(" *     maxExclusive: ");	
+					buf.append(vc.getMaxExclusive());						
+				}
+				if (vc.getFractionDigits() != null) {
+					buf.append(newline(1));	
+					buf.append(" *     fractionDigits: ");	
+					buf.append(vc.getFractionDigits());						
+				}
+				if (vc.getTotalDigits() != null) {
+					buf.append(newline(1));	
+					buf.append(" *     totalDigits: ");	
+					buf.append(vc.getTotalDigits());						
+				}
+				if (vc.getPattern() != null) {
+					buf.append(newline(1));	
+					buf.append(" *     pattern: ");	
+					buf.append(vc.getPattern());						
+				}
+				buf.append("</pre>");	
+			}
+			else if (field.getEnumerationConstraint() != null) {
+		    	buf.append(newline(1));	
+				buf.append(" * <p></p>");
+				buf.append(newline(1));	
+				buf.append(" * <b>Enumeration Constraints: </b>");
+				buf.append("<pre>");	
+				EnumerationConstraint ec = field.getEnumerationConstraint();
+				buf.append(newline(1));	
+				buf.append(" *     <b>name:</b> ");	
+				buf.append(ec.getValue().getName());						
+				buf.append(newline(1));	
+				buf.append(" *     <b>URI:</b>");	
+				buf.append(ec.getValue().getUri());						
+				buf.append("</pre>");	
+			}
+	    }
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+		
 		buf.append(newline(1));
 	    buf.append("public void set");
 		buf.append(toMethodFieldName(field.getName()));
@@ -370,14 +492,98 @@ public abstract class DefaultFactory {
 
 	protected void createUnsetterDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf) {
+
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Unsets the <b>");
+		buf.append(field.getName());
+		buf.append("</b> property, ");
+		if (field.isMany()) {
+			buf.append("clearing the underlying collection. ");
+		}
+		else {
+			buf.append("the value");
+			buf.append(newline(1));	
+			buf.append(" * of the property of the object being set to the property's");
+			buf.append(newline(1));	
+			buf.append(" * default value. ");
+		}
+		buf.append("The property will no longer be");
+		buf.append(newline(1));	
+		buf.append(" * considered set.");		
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+	    	addPropertyModelDocLinks(clss, field, 
+	    		typeClassName, buf);
+	    }
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+		
 		buf.append(newline(1));
 		buf.append("public void unset");
 		buf.append(toMethodFieldName(field.getName()));
 		buf.append("()");
 	}	
 	
+	private void addPropertyModelDocLinks(Class clss, Property field, 
+			TypeClassInfo typeClassName, StringBuilder buf)
+	{
+		buf.append(newline(1));	
+		buf.append(" * <p></p>");
+		buf.append(newline(1));	
+		buf.append(" * <b>Property Definition: </b>");
+		buf.append(newline(1));	
+		buf.append(" * See {@link #get");
+		buf.append(toMethodFieldName(field.getName()));
+		buf.append("() get");
+		buf.append(toMethodFieldName(field.getName()));
+		buf.append("} or {@link #set");
+		buf.append(toMethodFieldName(field.getName()));
+		if (!field.isMany()) {
+		    buf.append("(");
+		    buf.append(typeClassName.getSimpleName());
+		    buf.append(" value) ");
+		}
+		else {
+			buf.append("(");
+			buf.append(typeClassName.getSimpleName());
+			buf.append("[] value) ");
+		}
+		buf.append("set");
+		buf.append(toMethodFieldName(field.getName()));
+		buf.append("(...)} for a definition of property <b>");
+		buf.append(field.getName());
+		buf.append("</b>");		
+	}
+	
 	protected void createIsSetDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf) {
+		
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Returns true if the <b>");
+		buf.append(field.getName());
+		buf.append("</b> property is set.");	
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+	    	addPropertyModelDocLinks(clss, field, 
+		    		typeClassName, buf);
+	    }
+	    
+	    // return
+	    buf.append(newline(1));	
+		buf.append(" * @return true if the <b>");
+		buf.append(field.getName());
+		buf.append("</b> property is set.");	
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+		
 		buf.append(newline(1));
 		buf.append("public boolean isSet");
 		buf.append(toMethodFieldName(field.getName()));
@@ -386,6 +592,35 @@ public abstract class DefaultFactory {
 	
 	protected void createCreatorDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf) {
+
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Creates and returns a new instance of Type {@link ");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("} automatically establishing a containment relationship ");
+		buf.append("through the object's reference property, <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+		
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+	    	addPropertyModelDocLinks(clss, field, 
+		    		typeClassName, buf);
+	    }
+	    
+	    // return
+	    buf.append(newline(1));	
+		buf.append(" * @return a new instance of Type {@link ");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("} automatically establishing a containment relationship ");
+		buf.append("through the object's reference property <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");		
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+
 		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(typeClassName.getSimpleName());
@@ -396,6 +631,36 @@ public abstract class DefaultFactory {
 
 	protected void createCreatorByAbstractClassDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf) {
+
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Creates and returns a new instance of the given subclass Type for abstract base Type {@link ");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("} automatically establishing a containment relationship ");
+		buf.append("through the object's reference property, <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+		
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+	    	addPropertyModelDocLinks(clss, field, 
+		    		typeClassName, buf);
+	    }
+	    
+	    //params
+		buf.append(newline(1));	
+		buf.append(" * @param clss the subclass Type");	
+
+	    //return
+		buf.append(newline(1));	
+		buf.append(" * Returns a new instance of the given subclass Type for abstract base Type {@link ");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("}.");	
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+		
 		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(typeClassName.getSimpleName());
@@ -409,6 +674,35 @@ public abstract class DefaultFactory {
 	protected void createManyGetterDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Returns an array of <b>");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("</b> set for the object's multi-valued property <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+			buf.append(newline(1));	
+			buf.append(" * <p></p>");
+			buf.append(newline(1));	
+			buf.append(" * <b>Property Definition: </b>");
+			buf.append(definition);
+	    }
+
+	    // return 
+		buf.append(newline(1));	
+		buf.append(" * @return an array of <b>");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("</b> set for the object's multi-valued property <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+		
 		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(typeClassName.getSimpleName());
@@ -420,6 +714,36 @@ public abstract class DefaultFactory {
 	protected void createManyIndexGetterDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Returns the <b>");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("</b> set for the object's multi-valued property <b>");
+		buf.append(field.getName());
+		buf.append("</b> based on the given index.");	
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+	    	addPropertyModelDocLinks(clss, field, 
+		    		typeClassName, buf);
+	    }
+
+	    // params
+		buf.append(newline(1));	
+		buf.append(" * @param idx the index");
+		
+		// return 
+		buf.append(newline(1));	
+		buf.append(" * @return the <b>");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("</b> set for the object's multi-valued property <b>");
+		buf.append(field.getName());
+		buf.append("</b> based on the given index.");	
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+
 		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(typeClassName.getSimpleName());
@@ -431,6 +755,28 @@ public abstract class DefaultFactory {
 	protected void createManyCountDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Returns a count for multi-valued property <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+	    	addPropertyModelDocLinks(clss, field, 
+		    		typeClassName, buf);
+	    }
+
+	    // return 
+		buf.append(newline(1));	
+		buf.append(" * @return a count for multi-valued property <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+		
 		buf.append(newline(1));
 		buf.append("public int get");
 		buf.append(toMethodFieldName(field.getName()));
@@ -440,6 +786,31 @@ public abstract class DefaultFactory {
 	protected void createManySetterDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Sets the given array of Type <b>");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("</b> for the object's multi-valued property <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+			buf.append(newline(1));	
+			buf.append(" * <p></p>");
+			buf.append(newline(1));	
+			buf.append(" * <b>Property Definition: </b>");
+			buf.append(definition);
+	    }
+
+	    // params
+		buf.append(newline(1));	
+		buf.append(" * @param value the array value");
+			    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+
 		buf.append(newline(1));
 		buf.append("public void set");
 		buf.append(toMethodFieldName(field.getName()));
@@ -447,10 +818,32 @@ public abstract class DefaultFactory {
 		buf.append(typeClassName.getSimpleName());
 		buf.append("[] value)");
 	}
-	
+	 
 	protected void createManyAdderDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Adds the given value of Type <b>");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("</b> for the object's multi-valued property <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+	    	addPropertyModelDocLinks(clss, field, 
+		    		typeClassName, buf);
+	    }
+
+	    // params
+		buf.append(newline(1));	
+		buf.append(" * @param value the value to add");
+			    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+
 		buf.append(newline(1));
 		buf.append("public void add");
 		buf.append(toMethodFieldName(field.getName()));
@@ -462,6 +855,28 @@ public abstract class DefaultFactory {
 	protected void createManyRemoverDeclaration(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf)
 	{		
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Removes the given value of Type <b>");
+		buf.append(typeClassName.getSimpleName());
+		buf.append("</b> for the object's multi-valued property <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+	    if (definition != null && definition.length() > 0) {
+	    	addPropertyModelDocLinks(clss, field, 
+		    		typeClassName, buf);
+	    }
+
+	    // params
+		buf.append(newline(1));	
+		buf.append(" * @param value the value to remove");
+			    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+
 		buf.append(newline(1));
 		buf.append("public void remove");
 		buf.append(toMethodFieldName(field.getName()));
@@ -658,5 +1073,25 @@ public abstract class DefaultFactory {
 		}
 		
 		return buf.toString();
+	}
+	
+	protected String getWrappedDocmentations(List<Documentation> docs, int indent) {
+		// add formatted doc from UML or derived default doc
+		StringBuilder docsBuf = new StringBuilder();
+		if (docs != null) {
+			for (Documentation doc : docs) {
+				String docText = doc.getBody().getValue().trim();
+				if (docText.length() == 0)
+					continue;
+				String wrappedDoc = WordWrap.wordWrap(docText, 60, Locale.ENGLISH);
+				String[] docLines = wrappedDoc.split("\n");
+				for (String line : docLines) {
+					docsBuf.append(newline(indent));	
+					docsBuf.append(" * ");
+					docsBuf.append(line); 
+				}
+		    }
+		}
+		return docsBuf.toString();
 	}
 }

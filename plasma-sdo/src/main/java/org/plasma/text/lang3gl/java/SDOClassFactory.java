@@ -30,10 +30,6 @@ import commonj.sdo.Type;
 public class SDOClassFactory extends SDODefaultFactory 
     implements ClassFactory {
 
-	private ClassNameResolver interfaceResolver = new SDOInterfaceNameResolver();
-	private ClassNameResolver classResolver = new SDOClassNameResolver();
-
-	
 	public SDOClassFactory(Lang3GLContext context) {
 		super(context);
 	}
@@ -101,6 +97,96 @@ public class SDOClassFactory extends SDODefaultFactory
 		return buf.toString();
 	}
 	
+	protected String createTypeDeclaration(Package pkg, Class clss) {
+		StringBuilder buf = new StringBuilder();
+
+		buf.append(createTypeDeclarationJavadoc(pkg, clss));		
+
+		buf.append(newline(0));	
+		buf.append("public class ");
+		buf.append(getImplementationClassName(clss));
+		buf.append(" extends ");
+		buf.append(CoreDataObject.class.getSimpleName());
+		buf.append(" implements Serializable, ");
+		buf.append(this.interfaceResolver.getName(clss));		
+		
+		return buf.toString();
+	}
+	
+	private String createTypeDeclarationJavadoc(Package pkg, Class clss) {
+		StringBuilder buf = new StringBuilder();
+		
+		buf.append("/**"); // begin javadoc
+		
+		// add formatted doc from UML if exists		
+		// always put model definition first so it appears
+		// on package summary line for class
+		String docs = getWrappedDocmentations(clss.getDocumentations(), 0);
+		if (docs.trim().length() > 0) {
+		    buf.append(docs);
+		    
+		    // if we have model docs, set up the next section w/a "header"
+		    buf.append(newline(0));	
+			buf.append(" * <p></p>");
+		}
+		
+	    buf.append(newline(0));	
+		buf.append(" * Generated implementation class representing the domain model entity <b>");
+		buf.append(clss.getName());
+		buf.append("</b>."); 
+		
+		// data store mapping
+		if (clss.getAlias() != null && clss.getAlias().getPhysicalName() != null) {
+		    buf.append(newline(0));	
+			buf.append(" *"); 
+		    buf.append(newline(0));	
+			buf.append(" * <p></p>");
+		    buf.append(newline(0));	
+			buf.append(" * <b>Data Store Mapping:</b>");
+		    buf.append(newline(0));	
+			buf.append(" * Corresponds to the physical data store entity <b>");
+			buf.append(clss.getAlias().getPhysicalName());
+			buf.append("</b>.");
+		    buf.append(newline(0));	
+			buf.append(" * <p></p>");		
+		    buf.append(newline(0));	
+			buf.append(" *"); 
+		}		
+
+	    buf.append(newline(0));	
+		buf.append(" */"); // end javadoc
+		
+		return buf.toString();
+	}
+	
+	protected String createStaticFieldDeclarations(Class clss) {
+		StringBuilder buf = new StringBuilder();
+		
+		buf.append(this.getContext().getIndentationToken());
+		buf.append("private static final long serialVersionUID = 1L;");
+	    
+		// FIXME: a config option for what to log??
+		//@SuppressWarnings("unused")
+		//buf.append(LINE_SEP);			    
+		//buf.append(this.getContext().getIndentationToken());
+		//buf.append("private static Log log = LogFactory.getFactory().getInstance(");
+		//buf.append(getImplementationClassName(clss));
+		//buf.append(".class);");
+	    
+		buf.append(newline(1));
+		buf.append("/** The SDO namespace URI associated with the SDO Type for this class */");
+		buf.append(newline(1));
+		buf.append("public static final String NAMESPACE_URI = \"");
+		buf.append(clss.getUri());
+		buf.append("\";");
+
+		return buf.toString();
+	}	
+	
+
+	protected String createPrivateFieldDeclaration(Class clss, Property field) {
+		return ""; // no fixed fields, methods delegate to SDO DataObject impl class structures for data accces
+	}
 	
 	protected String createConstructors(Package pkg, Class clss) {
 		StringBuilder buf = new StringBuilder();
@@ -192,11 +278,11 @@ public class SDOClassFactory extends SDODefaultFactory
 			createManyAdder(pkg, clss, field, typeClassName, buf);
 			buf.append(LINE_SEP);			    
 			createManyRemover(pkg, clss, field, typeClassName, buf);
-		}
-		
+		}		
 
 	    return buf.toString();
 	}	
+	
 	
 	private void createSingularGetter(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf) {
@@ -224,9 +310,7 @@ public class SDOClassFactory extends SDODefaultFactory
 				buf.append(objectPrimitiveClass.getSimpleName());
 				buf.append(")");
 				buf.append("super.get(");
-				buf.append(this.interfaceResolver.getName(clss));
-				buf.append(".PTY_");
-				buf.append(toConstantName(field.getName()));
+			    buf.append(toQualifiedPropertyNameReference(clss, field));
 				buf.append(");");			
 				buf.append(newline(2));		
 				buf.append("if (result != null)");
@@ -244,9 +328,7 @@ public class SDOClassFactory extends SDODefaultFactory
 				buf.append(typeClassName.getSimpleName());
 				buf.append(")");
 				buf.append("super.get(");
-				buf.append(this.interfaceResolver.getName(clss));
-				buf.append(".PTY_");
-				buf.append(toConstantName(field.getName()));
+			    buf.append(toQualifiedPropertyNameReference(clss, field));
 				buf.append(");");			
 			}
 		} else {
@@ -254,9 +336,7 @@ public class SDOClassFactory extends SDODefaultFactory
 			buf.append(typeClassName.getSimpleName());
 			buf.append(")");
 			buf.append("super.get(");
-			buf.append(this.interfaceResolver.getName(clss));
-			buf.append(".PTY_");
-			buf.append(toConstantName(field.getName()));
+		    buf.append(toQualifiedPropertyNameReference(clss, field));
 			buf.append(");");		
 		}
 				
@@ -269,15 +349,13 @@ public class SDOClassFactory extends SDODefaultFactory
 		createSingularSetterDeclaration(pkg, clss, field, typeClassName, buf);
 		createSingularSetterBody(pkg, clss, field, typeClassName, buf);
 	}
-
+	
 	private void createSingularSetterBody(Package pkg, Class clss, Property field, 
 			TypeClassInfo typeClassName, StringBuilder buf) {
 		buf.append(this.beginBody());
 		buf.append(newline(2));
 	    buf.append("super.set(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(", value);");				
 		buf.append(newline(1));
 		buf.append(this.endBody());		
@@ -294,9 +372,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append(this.beginBody());
 		buf.append(newline(2));
         buf.append("super.unset(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");");				
 		buf.append(newline(1));
 		buf.append(this.endBody());		
@@ -313,9 +389,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append(this.beginBody());
 		buf.append(newline(2));
         buf.append("return super.isSet(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");");				
 		buf.append(newline(1));
 		buf.append(this.endBody());		
@@ -334,9 +408,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("return (");
 		buf.append(typeClassName.getSimpleName());
         buf.append(")super.createDataObject(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");");				
 		buf.append(newline(1));
 		buf.append(this.endBody());		
@@ -363,9 +435,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("return (");
 		buf.append(typeClassName.getSimpleName());
         buf.append(")super.createDataObject(this.getType().getProperty(");
-		buf.append(clss.getName());
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append("), classType);");				
 		
 		buf.append(newline(1));
@@ -392,9 +462,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");");	
 		
 		buf.append(newline(2));
@@ -449,9 +517,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");");	
 		
 		buf.append(newline(2));
@@ -495,9 +561,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");");	
 		
 		buf.append(newline(2));
@@ -540,13 +604,11 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");");	
 		
 		buf.append(newline(2));
-		buf.append("if (value != null || value.length == 0) {");
+		buf.append("if (value != null && value.length > 0) {");
 		
 		buf.append(newline(3));
 		buf.append("if (list == null)");
@@ -563,9 +625,7 @@ public class SDOClassFactory extends SDODefaultFactory
 
 		buf.append(newline(3));
 		buf.append("super.set(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(", list);");
 		
 		buf.append(newline(2));
@@ -603,9 +663,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");");	
 		
 		buf.append(newline(2));
@@ -623,9 +681,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("// NOTE: SDO 2.1 spec specifies replacing the whole list on a multi-valued 'set' operation");
 		buf.append(newline(2));
 		buf.append("super.setList(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(", list);");
 		
 		buf.append(newline(1));
@@ -652,9 +708,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("> list = (List<");
 		buf.append(typeClassName.getCollectionSimpleName());
 		buf.append(">)super.get(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");");	
 		
 		buf.append(newline(2));
@@ -667,9 +721,7 @@ public class SDOClassFactory extends SDODefaultFactory
 		buf.append("// NOTE: SDO 2.1 spec specifies replacing the whole list on a multi-valued 'set' operation");
 		buf.append(newline(2));
 		buf.append("super.setList(");
-		buf.append(this.interfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(", list);");
 		
 		buf.append(newline(1));
@@ -706,58 +758,9 @@ public class SDOClassFactory extends SDODefaultFactory
 		return buf.toString();
 	}
 
-	protected String createStaticFieldDeclarations(Class clss) {
-		StringBuilder buf = new StringBuilder();
-		
-		buf.append(this.getContext().getIndentationToken());
-		buf.append("private static final long serialVersionUID = 1L;");
-	    
-		// FIXME: a config option for what to log??
-		//@SuppressWarnings("unused")
-		//buf.append(LINE_SEP);			    
-		//buf.append(this.getContext().getIndentationToken());
-		//buf.append("private static Log log = LogFactory.getFactory().getInstance(");
-		//buf.append(getImplementationClassName(clss));
-		//buf.append(".class);");
-	    
-		buf.append(LINE_SEP);
-		buf.append(this.getContext().getIndentationToken());
-		buf.append("/** The SDO namespace URI associated with the SDO Type for this class */");
-		buf.append(LINE_SEP);
-		buf.append(this.getContext().getIndentationToken());
-		buf.append("public static final String NAMESPACE_URI = \"");
-		buf.append(clss.getUri());
-		buf.append("\";");
-
-		return buf.toString();
-	}	
-	
-	protected String createTypeDeclaration(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
-
-		SDOInterfaceNameResolver interfaceResolver = new SDOInterfaceNameResolver();
-		buf.append("public class ");
-		buf.append(getImplementationClassName(clss));
-		buf.append(" extends ");
-		buf.append(CoreDataObject.class.getSimpleName());
-		buf.append(" implements Serializable, ");
-		buf.append(interfaceResolver.getName(clss));		
-		
-		return buf.toString();
-	}
-
-	protected String createPrivateFieldDeclaration(Class clss, Property field) {
-		return ""; // no fixed fields, methods delegate to SDO DataObject impl class structures for data accces
-	}
 
 	protected String createThirdPartyImportDeclarations(Package pkg, Class clss) {
 		StringBuilder buf = new StringBuilder();
-		//buf.append(LINE_SEP);
-		//buf.append(this.createImportDeclaration(pkg, clss, LogFactory.class.getName()));
-		//buf.append(LINE_SEP);
-		//buf.append(this.createImportDeclaration(pkg, clss, Log.class.getName()));
-		//buf.append(LINE_SEP);
-		//buf.append(this.createImportDeclaration(pkg, clss, commonj.sdo.Type.class.getName()));
 		buf.append(LINE_SEP);
 		buf.append(this.createImportDeclaration(pkg, clss, Serializable.class.getName()));
 		buf.append(LINE_SEP);

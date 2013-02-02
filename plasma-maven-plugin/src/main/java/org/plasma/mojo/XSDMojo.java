@@ -1,5 +1,9 @@
 package org.plasma.mojo;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.XSDTool;
 import org.plasma.provisioning.cli.XSDToolAction;
@@ -7,7 +11,7 @@ import org.plasma.provisioning.cli.XSDToolAction;
 /**
  * Mojo implementation for generating SDO model artifacts from
  * XML Schema, such as UML/XMI. 
- * Sets up the mojo envoronment and then calls
+ * Sets up the mojo environment and then calls
  * the Plasma XSD command-line (CLI) tool, passing it mojo args. 
  * 
  * @author Scott Cinnamond
@@ -69,6 +73,19 @@ public class XSDMojo extends ClassRealmMojo
         try
         {        
         	XSDToolAction toolAction = getToolAction(this.action);
+
+        	long lastExecution = 0L;
+        	File mojoDir = new File(MojoConstants.MOJO_DIR);
+            if (mojoDir.exists()) {
+                File mojoFile = new File(mojoDir, 
+                		this.getClass().getSimpleName()
+                		+ "_" + MojoConstants.MOJO_STALE_FLAG);
+                if (mojoFile.exists()) {
+                	lastExecution = mojoFile.lastModified();
+                	getLog().info("last successful execution: "
+                		+ String.valueOf(new Date(lastExecution)));
+                }
+            }
         	
             String[] args = {
                 	"-"+toolAction.name(), 
@@ -76,11 +93,35 @@ public class XSDMojo extends ClassRealmMojo
                 	this.destFile,
                 	this.destFileType,
                 	this.destNamespaceURI,
-                	this.destNamespacePrefix
+                	this.destNamespacePrefix,
+                	String.valueOf(lastExecution)
                 };
         	
             getLog().info( "executing tool: "  + XSDTool.class.getName());
             XSDTool.main(args);
+
+            mojoDir.mkdirs();
+            if (mojoDir.exists()) {
+                File mojoFile = new File(mojoDir, 
+                		this.getClass().getSimpleName()
+                		+ "_" + MojoConstants.MOJO_STALE_FLAG);
+            	if (mojoFile.exists())
+            		mojoFile.delete();
+            	FileOutputStream out = null;
+            	try {
+            	    out = new FileOutputStream(mojoFile);
+            	    out.write(this.getClass().getSimpleName().getBytes());
+            	    out.flush();
+            	}
+            	finally {
+            		if (out != null)
+            		    out.close();
+            	}
+            }
+            else
+                getLog().warn("mojo: "  + this.getClass().getName() 
+                		+ " - could not create dir, " + MojoConstants.MOJO_DIR);
+        
         }
         catch (IllegalArgumentException e) {
             throw new MojoExecutionException(e.getMessage(), e);

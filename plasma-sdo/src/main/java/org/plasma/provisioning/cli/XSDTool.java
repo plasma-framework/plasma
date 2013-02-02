@@ -40,7 +40,7 @@ public class XSDTool extends ProvisioningTool {
         throws TransformerConfigurationException, 
         IOException, TransformerException, ClassNotFoundException {
         
-        if (args.length != 6) {
+        if (args.length < 6) {
             printUsage();
             return;
         }
@@ -100,9 +100,23 @@ public class XSDTool extends ProvisioningTool {
         String destNamespacePrefix = args[5];
         if (destNamespacePrefix == null || destNamespacePrefix.trim().length() == 0)
         	destNamespacePrefix = "tns";            
-                        
+
+    	long lastExecution = 0L;
+        if (args.length >= 7) {
+        	try {
+        		lastExecution = Long.valueOf(args[6]).longValue();
+        	}
+        	catch (NumberFormatException e) {
+        		throw new IllegalArgumentException(getUsage());                	
+        	}
+        }
+        
         switch (command) {
         case convert:
+            if (sourceFile.lastModified() < lastExecution) {
+                log.info("skipping conversion - no stale source XSD detected");	
+                return;
+            }            	
             switch (targetType) {
             case xmi:
 	        	log.info("compiling Schema into UML/XMI model");
@@ -226,8 +240,12 @@ public class XSDTool extends ProvisioningTool {
             throw new PlasmaRuntimeException(e);
         }                     	
     }
+    
+    private static String getUsage() {
+    	return "usage: -action sourceFile destFile destFileType destNamespaceURI destNamespacePrefix  [last-execution-time]";
+    }
      
     private static void printUsage() {
-        log.info("usage: -action sourceFile destFile destFileType destNamespaceURI destNamespacePrefix");
+        log.info(getUsage());
     }
 }

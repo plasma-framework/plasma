@@ -148,7 +148,6 @@
         </xsd:annotation>
     </xsd:element>
 
-
     <xsd:complexType name="InterfaceProvisioning">
         <xsd:annotation>
             <xsd:documentation>specific provisioning properties for interfaces under this context</xsd:documentation>
@@ -156,9 +155,9 @@
 
         <xsd:complexContent>
             <xsd:extension base="cfg:ClassProvisioning">
-                <xsd:attribute name="constants" type="xsd:boolean" use="optional" default="true">
+                <xsd:attribute name="propertyNameStyle" type="cfg:PropertyNameStyle" use="optional" default="enums">
                     <xsd:annotation>                                  
-                        <xsd:documentation>whether to generate constants for logical type and propety names</xsd:documentation>       
+                        <xsd:documentation>Specifies how logical property names are generated and referenced within SDO interfaes and implementation classes.</xsd:documentation>       
                     </xsd:annotation>                                 
                 </xsd:attribute>
             </xsd:extension>
@@ -709,6 +708,29 @@
         </xsd:restriction>
     </xsd:simpleType>
 
+    <xsd:simpleType name="PropertyNameStyle">
+        <xsd:annotation>
+            <xsd:documentation>Specifies how logical property names are generated and referenced within SDO interfaes and implementation classes.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="constants">
+                <xsd:annotation>
+                    <xsd:documentation>use static string constants</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="enums">
+                <xsd:annotation>
+                    <xsd:documentation>use inner-class enumnerations </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="none">
+                <xsd:annotation>
+                    <xsd:documentation>use the actual quoted property name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
 
     
 </xsd:schema>

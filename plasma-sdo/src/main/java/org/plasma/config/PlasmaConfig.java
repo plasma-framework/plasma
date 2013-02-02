@@ -1,5 +1,6 @@
 package org.plasma.config;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -32,7 +33,8 @@ public class PlasmaConfig {
     private static PlasmaConfig instance = null;
     
     private static final String defaultConfigFileName = "plasma-config.xml";  
-    
+    private String configFileName;
+    private long configFileLastModifiedDate = System.currentTimeMillis();
     private PlasmaConfiguration config;
     private Map<String, Artifact> artifactMap = new HashMap<String, Artifact>();
     private Map<String, NamespaceAdapter> sdoNamespaceMap = new HashMap<String, NamespaceAdapter>();
@@ -54,16 +56,16 @@ public class PlasmaConfig {
         log.debug("initializing...");
         try {
             
-            String fileName = EnvProperties.instance().getProperty(
+            this.configFileName = EnvProperties.instance().getProperty(
                     EnvConstants.PROPERTY_NAME_ENV_CONFIG);
             
-            if (fileName == null)
-                fileName = defaultConfigFileName;
+            if (this.configFileName == null)
+            	this.configFileName = defaultConfigFileName;
             
             PlasmaConfigDataBinding configBinding = new PlasmaConfigDataBinding(
 	        		new PlasmaConfigValidationEventHandler());
 	        
-            config = unmarshalConfig(fileName, configBinding);
+            config = unmarshalConfig(this.configFileName, configBinding);
             
             
             for (Artifact artifact : config.getRepository().getArtifacts()) {
@@ -179,7 +181,15 @@ public class PlasmaConfig {
         }
     }
     
-    private NamespaceProvisioning createDefaultProvisioning(String uri) {
+    public String getConfigFileName() {
+		return configFileName;
+	}
+
+	public long getConfigFileLastModifiedDate() {
+		return configFileLastModifiedDate;
+	}
+
+	private NamespaceProvisioning createDefaultProvisioning(String uri) {
     	NamespaceProvisioning provisioning = new NamespaceProvisioning();
     	String[] tokens = ConfigUtils.toPackageTokens(uri);
     	StringBuilder buf = new StringBuilder();
@@ -205,6 +215,17 @@ public class PlasmaConfig {
 	                    + "' on the current classpath");        
 	        
             PlasmaConfiguration result = (PlasmaConfiguration)binding.validate(stream);
+
+            URL url = PlasmaConfig.class.getResource(configFileName);
+            if (url == null)
+            	url = PlasmaConfig.class.getClassLoader().getResource(configFileName);
+            if (url != null) {
+                File urlFile = new File(url.getFile());
+                if (urlFile.exists()) 
+                	this.configFileLastModifiedDate = urlFile.lastModified();
+            }
+            
+            
             return result;
     	}
         catch (UnmarshalException e) {

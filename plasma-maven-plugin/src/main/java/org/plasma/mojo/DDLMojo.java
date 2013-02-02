@@ -10,7 +10,7 @@ import org.plasma.text.ddl.DDLDialect;
 
 /**
  * Mojo implementation for generating DDL artifacts, such as
- * relational database schemas, which sets up the mojo envoronment and then calls
+ * relational database schemas, which sets up the mojo environment and then calls
  * the Plasma DDL command-line (CLI) tool, passing it mojo args. 
  * 
  * @author Scott Cinnamond

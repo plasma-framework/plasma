@@ -55,6 +55,60 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 		return buf.toString();
 	}
 	
+	protected String createTypeDeclaration(Package pkg, Enumeration enumeration) {
+		StringBuilder buf = new StringBuilder();
+		
+		String javadocs = createTypeDeclarationJavadoc(pkg, enumeration);
+	    buf.append(javadocs);	
+		
+	    buf.append(newline(0));	
+		buf.append("public enum ");
+		buf.append(enumeration.getName());
+		buf.append(" implements ");
+		buf.append(PlasmaEnum.class.getSimpleName());
+		return buf.toString();
+	}
+
+	private String createTypeDeclarationJavadoc(Package pkg, Enumeration enm) {
+		StringBuilder buf = new StringBuilder();
+		
+		buf.append("/**"); // begin javadoc
+		
+		// add formatted doc from UML if exists		
+		// always put model definition first so it appears
+		// on package summary line for class
+		String docs = getWrappedDocmentations(enm.getDocumentations(), 0);
+		if (docs.trim().length() > 0) {
+		    buf.append(docs);	
+		    // if we have model docs, set up the next section w/a "header"
+		    buf.append(newline(0));	
+			buf.append(" * <p></p>");
+		}
+		
+	    buf.append(newline(0));	
+		buf.append(" * This generated <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaEnum.html\">Enumeration</a> represents the domain model enumeration <b>");
+		buf.append(enm.getName());
+		buf.append("</b> which is part of namespace <b>");
+		buf.append(enm.getUri());
+		buf.append("</b> as defined within the <a href=\"http://docs.plasma-sdo.org/api/org/plasma/config/package-summary.html\">Configuration</a>.");
+		buf.append(newline(0));	
+		buf.append(" * <p></p>");	
+		buf.append(" * Generated <a href=\"http://plasma-sdo.org\">SDO</a> enumerations embody not only logical-name literals ");
+		buf.append(newline(0));	
+		buf.append(" * but also physical or instance names, which are often shorter (possibly abbreviated) ");
+		buf.append(newline(0));	
+		buf.append(" * and applicable as a data-store space-saving device. ");
+		buf.append(newline(0));	
+		buf.append(" * Application programs should typically use the physical or instance name ");
+		buf.append(newline(0));	
+		buf.append(" * for an enumeration literal when setting a data object property which is <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/EnumerationConstraint.html\">constrained</a> by an enumeration.");
+
+	    buf.append(newline(0));	
+		buf.append(" */"); // end javadoc
+		
+		return buf.toString();
+	}	
+	
 	protected String createConstructors(Package pkg, Enumeration enm) {
 		StringBuilder buf = new StringBuilder();
 		buf.append(this.newline(1));
@@ -226,8 +280,9 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 			EnumerationLiteral literal = enumeration.getEnumerationLiterals().get(i);
 			if (i > 0)
     			buf.append(",");    					
-			buf.append(LINE_SEP);
-			buf.append(this.indent(1));
+			buf.append(newline(1));
+			buf.append(createEnumerationLiteralDeclarationJavadoc(enumeration, literal));
+			buf.append(newline(1));
 			buf.append(toEnumLiteralName(literal.getName()));
 			if (literal.getAlias() != null && 
 				literal.getAlias().getPhysicalName() != null && 
@@ -253,17 +308,35 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 		return buf.toString();
 	}
 	
+	private String createEnumerationLiteralDeclarationJavadoc(Enumeration enumeration, EnumerationLiteral literal)
+	{
+		StringBuilder buf = new StringBuilder();
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		
+		// add formatted doc from UML if exists		
+		// always put model definition first so it appears
+		// on package summary line for class
+		String docs = getWrappedDocmentations(literal.getDocumentations(), 1);
+		if (docs.trim().length() > 0) {
+		    buf.append(docs);	
+		    buf.append(newline(1));	
+			buf.append(" * <p></p>");
+		}
+		
+        buf.append(newline(1));	
+		buf.append(" * Holds the logical and physical names for literal <b>");
+		buf.append(literal.getName());
+		buf.append("</b>."); 					
+		
+		buf.append(this.newline(1));
+		buf.append(" */"); // end javadoc			
+		return buf.toString();
+	}	
+	
+	
 	private String replaceQuot(String s) {
 	   return s.replaceAll("\"", "\\\\\""); 	
-	}
-
-	protected String createTypeDeclaration(Package pkg, Enumeration enumeration) {
-		StringBuilder buf = new StringBuilder();
-		buf.append("public enum ");
-		buf.append(enumeration.getName());
-		buf.append(" implements ");
-		buf.append(PlasmaEnum.class.getSimpleName());
-		return buf.toString();
 	}
 
 	protected String createPrivateFieldDeclarations(Enumeration enm) {

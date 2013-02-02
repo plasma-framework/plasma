@@ -6,7 +6,7 @@ import org.plasma.provisioning.cli.QueryToolAction;
 
 /**
  * Mojo implementation for generating SDO artifacts, such as
- * source code, which sets up the mojo envoronment and then calls
+ * source code, which sets up the mojo environment and then calls
  * the Plasma Query command-line (CLI) tool, passing it mojo args. 
  * 
  * @author Scott Cinnamond

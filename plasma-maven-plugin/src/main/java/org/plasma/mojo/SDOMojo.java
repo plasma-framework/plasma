@@ -2,6 +2,7 @@ package org.plasma.mojo;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Date;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.SDOTool;
@@ -9,7 +10,7 @@ import org.plasma.provisioning.cli.SDOToolAction;
 
 /**
  * Mojo implementation for generating SDO artifacts, such as
- * source code, which sets up the mojo envoronment and then calls
+ * source code, which sets up the mojo environment and then calls
  * the Plasma SDO command-line (CLI) tool, passing it mojo args. 
  * 
  * @author Scott Cinnamond
@@ -29,7 +30,7 @@ public class SDOMojo extends ClassRealmMojo
     private String action;
 
     /**
-    * The target directory foer generated artifacts
+    * The target directory for generated artifacts
     * @parameter expression="${sdo.outputDirectory}" default-value="./"
     */
     private String outputDirectory;
@@ -39,8 +40,6 @@ public class SDOMojo extends ClassRealmMojo
     * @parameter expression="${sdo.dialect}" default-value="java"
     */
     private String dialect;
-        
-    
     
     public void execute() throws MojoExecutionException
     {
@@ -60,8 +59,11 @@ public class SDOMojo extends ClassRealmMojo
                 File mojoFile = new File(mojoDir, 
                 		this.getClass().getSimpleName()
                 		+ "_" + MojoConstants.MOJO_STALE_FLAG);
-                if (mojoFile.exists())
+                if (mojoFile.exists()) {
                 	lastExecution = mojoFile.lastModified();
+                	getLog().info("last successful execution: "
+                		+ String.valueOf(new Date(lastExecution)));
+                }
             }
         	
             String[] args = {

@@ -1,28 +1,28 @@
 package org.plasma.text.lang3gl.java;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.plasma.common.WordWrap;
+import org.plasma.config.InterfaceProvisioning;
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
+import org.plasma.config.PropertyNameStyle;
 import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
-import org.plasma.provisioning.Documentation;
 import org.plasma.provisioning.Package;
 import org.plasma.provisioning.Property;
 import org.plasma.sdo.PlasmaDataObject;
+import org.plasma.text.lang3gl.ClassNameResolver;
 import org.plasma.text.lang3gl.InterfaceFactory;
 import org.plasma.text.lang3gl.Lang3GLContext;
-import org.plasma.text.lang3gl.ClassNameResolver;
 
 
 public class SDOInterfaceFactory extends SDODefaultFactory 
     implements InterfaceFactory {
 
+	
 	public SDOInterfaceFactory(Lang3GLContext context) {
-		super(context);
+		super(context);		
 	}
 		
 	public String createContent(Package pkg, Class clss) {
@@ -66,95 +66,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		//}
 		return buf.toString();
 	}
-	
-	protected String createStaticFieldDeclarations(Class clss) {
-		StringBuilder buf = new StringBuilder();
-		
-		// the namespace URI
-		buf.append(this.indent(1));
-		buf.append("/** The SDO namespace URI associated with the SDO Type for this class */");
-		buf.append(this.newline(1));
-		buf.append("public static final String NAMESPACE_URI = \"");
-		buf.append(clss.getUri());
-		buf.append("\";");
-		buf.append(LINE_SEP);
-		
-		//the entity name
-		buf.append(this.newline(1));
-		buf.append("public static final String ETY_");
-		buf.append(toConstantName(clss.getName()));
-		buf.append(" \t= \"");
-		buf.append(clss.getName());
-		buf.append("\";");
 
-		// the fields
-		for (Property field : clss.getProperties()) {
-		    buf.append(LINE_SEP);	
-			
-		    String javadoc = createStaticFieldDeclarationJavadoc(clss, field);
-		    buf.append(javadoc);
-			
-			buf.append(this.newline(1));
-			buf.append("public static final String PTY_");
-			buf.append(toConstantName(field.getName()));
-			buf.append(" \t= \"");
-			buf.append(field.getName());
-			buf.append("\";");
-		}
-
-		return buf.toString();
-	}
-
-	private String createStaticFieldDeclarationJavadoc(Class clss, Property field)
-	{
-		StringBuilder buf = new StringBuilder();
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		
-		// add formatted doc from UML or derived default doc
-		if (field.getDocumentations() != null) {
-			for (Documentation doc : field.getDocumentations()) {
-				String docText = doc.getBody().getValue().trim();
-				String wrappedDoc = WordWrap.wordWrap(docText, 60, Locale.ENGLISH);
-				String[] docLines = wrappedDoc.split("\n");
-				for (String line : docLines) {
-					buf.append(this.newline(1));
-					buf.append(" * ");
-				    buf.append(line); 
-				}
-		    }
-		}
-		else {
-			buf.append(this.newline(1));
-			buf.append(" * The logical property <b>");
-			buf.append(field.getName());
-			buf.append("</b> which is part of the SDO Type <b>");
-			buf.append(clss.getUri() + "#" + clss.getName());
-			buf.append("</b>."); 			
-		}
-		
-		// data store mapping
-		if (clss.getAlias() != null && clss.getAlias().getPhysicalName() != null && 
-				field.getAlias() != null && field.getAlias().getPhysicalName() != null) {
-			buf.append(this.newline(1));
-			buf.append(" *"); 
-			buf.append(this.newline(1));
-			buf.append(" * <p></p>");
-			buf.append(this.newline(1));
-			buf.append(" * <b>Data Store Mapping:</b>");
-			buf.append(this.newline(1));
-			buf.append(" * Corresponds to the physical data store field <b>");
-			buf.append(clss.getAlias().getPhysicalName() + "." + field.getAlias().getPhysicalName());
-			buf.append("</b>.");
-			buf.append(this.newline(1));
-			buf.append(" * <p></p>");		
-		}		
-		
-		buf.append(this.newline(1));
-		buf.append(" */"); // end javadoc			
-		return buf.toString();
-	}
-	
 	protected String createTypeDeclaration(Package pkg, Class clss) {
 		StringBuilder buf = new StringBuilder();
 		
@@ -182,54 +94,52 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		
 			
 		return buf.toString();
-	}
-	
+	}	
 	
 	private String createTypeDeclarationJavadoc(Package pkg, Class clss) {
 		StringBuilder buf = new StringBuilder();
 		
 		buf.append("/**"); // begin javadoc
 		
-		// add formatted doc from UML or derived default doc
-		if (clss.getDocumentations() != null) {
-			for (Documentation doc : clss.getDocumentations()) {
-				String docText = doc.getBody().getValue().trim();
-				String wrappedDoc = WordWrap.wordWrap(docText, 60, Locale.ENGLISH);
-				String[] docLines = wrappedDoc.split("\n");
-				for (String line : docLines) {
-				    buf.append(LINE_SEP);	
-					buf.append(" * ");
-				    buf.append(line); 
-				}
-		    }
+		// add formatted doc from UML if exists		
+		// always put model definition first so it appears
+		// on package summary line for class
+		String docs = getWrappedDocmentations(clss.getDocumentations(), 0);
+		if (docs.trim().length() > 0) {
+		    buf.append(docs);
+		    
+		    // if we have model docs, set up the next section w/a "header"
+		    buf.append(newline(0));	
+			buf.append(" * <p></p>");
 		}
-		else {
-		    buf.append(LINE_SEP);	
-			buf.append(" * An SDO interface representing <b>");
-			buf.append(clss.getName());
-			buf.append("</b> which is part of the SDO namespace <b>");
-			buf.append(clss.getUri());
-			buf.append("</b>."); 			
-		}
+		
+	    buf.append(newline(0));	
+		buf.append(" * Generated interface representing the domain model entity <b>");
+		buf.append(clss.getName());
+		buf.append("</b>. This <a href=\"http://plasma-sdo.org\">SDO</a> interface directly reflects the");
+		buf.append(newline(0));	
+		buf.append(" * class (single or multiple) inheritance lattice of the source domain model(s) ");		
+		buf.append(" and is part of namespace <b>");
+		buf.append(clss.getUri());
+		buf.append("</b> defined within the <a href=\"http://docs.plasma-sdo.org/api/org/plasma/config/package-summary.html\">Configuration</a>.");
 		
 		// data store mapping
 		if (clss.getAlias() != null && clss.getAlias().getPhysicalName() != null) {
-		    buf.append(LINE_SEP);	
+		    buf.append(newline(0));	
 			buf.append(" *"); 
-		    buf.append(LINE_SEP);	
+		    buf.append(newline(0));	
 			buf.append(" * <p></p>");
-		    buf.append(LINE_SEP);	
+		    buf.append(newline(0));	
 			buf.append(" * <b>Data Store Mapping:</b>");
-		    buf.append(LINE_SEP);	
+		    buf.append(newline(0));	
 			buf.append(" * Corresponds to the physical data store entity <b>");
 			buf.append(clss.getAlias().getPhysicalName());
 			buf.append("</b>.");
-		    buf.append(LINE_SEP);	
+		    buf.append(newline(0));	
 			buf.append(" * <p></p>");		
-		    buf.append(LINE_SEP);	
+		    buf.append(newline(0));	
 			buf.append(" *"); 
-		}
-		
+		}		
 
 		// add @see items for referenced classes
 		Map<String, Class> classMap = new TreeMap<String, Class>();
@@ -242,20 +152,133 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 			Namespace sdoNamespace = PlasmaConfig.getInstance().getSDONamespaceByURI(refClass.getUri());
 			String packageName = sdoNamespace.getProvisioning().getPackageName();
 			String packageQualifiedName = packageName + "." + refClass.getName(); 	
-		    buf.append(LINE_SEP);	
+		    buf.append(newline(0));	
 			buf.append(" * @see ");
 			buf.append(packageQualifiedName);
 			buf.append(" ");
 			buf.append(refClass.getName());			
-		}
+		}		
 		
-		
-	    buf.append(LINE_SEP);	
+	    buf.append(newline(0));	
 		buf.append(" */"); // end javadoc
 		
 		return buf.toString();
+	}	
+	
+	protected String createStaticFieldDeclarations(Class clss) {
+		StringBuilder buf = new StringBuilder();
+		
+		// the namespace URI
+		buf.append(this.indent(1));
+		buf.append("/** The <a href=\"http://plasma-sdo.org\">SDO</a> namespace URI associated with the <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a> for this class. */");
+		buf.append(this.newline(1));
+		buf.append("public static final String NAMESPACE_URI = \"");
+		buf.append(clss.getUri());
+		buf.append("\";");
+		buf.append(LINE_SEP);
+		
+		//the entity name
+		buf.append(this.newline(1));
+		buf.append("/** The entity or <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a> logical name associated with this class. */");
+		buf.append(this.newline(1));
+		buf.append("public static final String TYPE_NAME_");
+		buf.append(toConstantName(clss.getName()));
+		buf.append(" = \"");
+		buf.append(clss.getName());
+		buf.append("\";");
+
+		buf.append(this.newline(1));
+
+		switch (this.interfaceProvisioning.getPropertyNameStyle()) {
+		case ENUMS:
+			// the static enums
+			buf.append(this.newline(1));
+			buf.append("/** The declared logical property names for this <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a>. */");
+			buf.append(this.newline(1));
+			buf.append("public static enum PROPERTY {");
+			int enumCount = 0;
+			for (Property field : clss.getProperties()) {
+				if (enumCount > 0)
+					buf.append(",");
+				buf.append(this.newline(2));	
+			    String javadoc = createStaticFieldDeclarationJavadoc(clss, field, 2);
+			    buf.append(javadoc);				
+				buf.append(this.newline(2));
+				buf.append(field.getName());
+				enumCount++;
+			}
+			buf.append(this.newline(1));
+			buf.append("}");
+			break;
+		case CONSTANTS:
+			// static constants
+			buf.append(this.newline(1));
+			for (Property field : clss.getProperties()) {
+				buf.append(this.newline(1));	
+				
+			    String javadoc = createStaticFieldDeclarationJavadoc(clss, field, 1);
+			    buf.append(javadoc);
+				
+				buf.append(this.newline(1));
+				buf.append("public static final String ");
+				buf.append(toConstantName(field.getName()));
+				buf.append(" = \"");
+				buf.append(field.getName());
+				buf.append("\";");
+			}
+			buf.append(this.newline(1));
+			break;
+			default:	
+		}
+
+		return buf.toString();
 	}
 
+	private String createStaticFieldDeclarationJavadoc(Class clss, Property field, int indent)
+	{
+		StringBuilder buf = new StringBuilder();
+		buf.append(this.newline(indent));
+		buf.append("/**"); // begin javadoc
+		
+		// add formatted doc from UML if exists		
+		// always put model definition first so it appears
+		// on package summary line for class
+		String docs = getWrappedDocmentations(field.getDocumentations(), indent);
+		if (docs.trim().length() > 0) {
+		    buf.append(docs);	
+		    buf.append(newline(indent));	
+			buf.append(" * <p></p>");
+	        buf.append(newline(indent));	
+			buf.append(" *");
+		}
+		
+        buf.append(newline(indent));	
+		buf.append(" * Represents the logical <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaProperty.html\">Property</a> <b>");
+		buf.append(field.getName());
+		buf.append("</b> which is part of the <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a> <b>");
+		buf.append(clss.getName());
+		buf.append("</b>."); 			
+		
+		// data store mapping
+		if (clss.getAlias() != null && clss.getAlias().getPhysicalName() != null && 
+				field.getAlias() != null && field.getAlias().getPhysicalName() != null) {
+			buf.append(this.newline(indent));
+			buf.append(" *"); 
+			buf.append(this.newline(indent));
+			buf.append(" * <p></p>");
+			buf.append(this.newline(indent));
+			buf.append(" * <b>Data Store Mapping:</b>");
+			buf.append(this.newline(indent));
+			buf.append(" * Corresponds to the physical data store element <b>");
+			buf.append(clss.getAlias().getPhysicalName() + "." + field.getAlias().getPhysicalName());
+			buf.append("</b>.");
+		}		
+		
+		buf.append(this.newline(indent));
+		buf.append(" */"); // end javadoc			
+		return buf.toString();
+	}	
+	
 	protected String createMethodDeclarations(Class clss) {
 		// TODO Auto-generated method stub
 		return "";

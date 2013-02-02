@@ -98,29 +98,39 @@ public abstract class ProvisioningTool {
     
     protected static boolean regenerate(long lastExecution)
     {
-    	boolean fileStale = false;
-        for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifacts()) {
-            URL url = PlasmaConfig.class.getResource(artifact.getUrn());
-            if (url == null)
-            	url = PlasmaConfig.class.getClassLoader().getResource(artifact.getUrn());            
-            log.debug("checking modified state of repository artifact '"
-            		+ url.getFile() + "' against time: " 
+    	boolean stale = false;
+    	
+    	//check config file
+    	if (PlasmaConfig.getInstance().getConfigFileLastModifiedDate() > lastExecution) {
+    		stale = true;
+    		log.debug("detected stale configuration file '"
+            		+ PlasmaConfig.getInstance().getConfigFileName() + "' against time: " 
             		+ String.valueOf(lastExecution));
-            File urlFile = new File(url.getFile());
-            if (urlFile.exists()) {
-            	if (urlFile.lastModified() > lastExecution) {
-            		fileStale = true;
-                    log.debug("detected stale repository artifact '"
-                    		+ url.getFile() + "' against time: " 
-                    		+ String.valueOf(lastExecution));
-            		break;
-            	}
-            }
-        }           
-        if (!fileStale)
-        	return false;
-        else
-            return true;
+    	}
+    	
+    	if (!stale) {
+	    	// check repo artifacts
+	        for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifacts()) {
+	            URL url = PlasmaConfig.class.getResource(artifact.getUrn());
+	            if (url == null)
+	            	url = PlasmaConfig.class.getClassLoader().getResource(artifact.getUrn());            
+	            log.debug("checking modified state of repository artifact '"
+	            		+ url.getFile() + "' against time: " 
+	            		+ String.valueOf(lastExecution));
+	            File urlFile = new File(url.getFile());
+	            if (urlFile.exists()) {
+	            	if (urlFile.lastModified() > lastExecution) {
+	            		stale = true;
+	                    log.debug("detected stale repository artifact '"
+	                    		+ url.getFile() + "' against time: " 
+	                    		+ String.valueOf(lastExecution));
+	            		break;
+	            	}
+	            }
+	        }
+    	}
+        
+    	return stale;
     }
     
     protected static void writeContent(InputStream is, OutputStream os) throws IOException {

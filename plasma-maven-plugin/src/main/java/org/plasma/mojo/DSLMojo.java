@@ -9,7 +9,7 @@ import org.plasma.provisioning.cli.DSLToolAction;
 
 /**
  * Mojo implementation for generating DSL artifacts, such as
- * source code, which sets up the mojo envoronment and then calls
+ * source code, which sets up the mojo environment and then calls
  * the Plasma DSL command-line (CLI) tool, passing it mojo args. 
  * 
  * @author Scott Cinnamond

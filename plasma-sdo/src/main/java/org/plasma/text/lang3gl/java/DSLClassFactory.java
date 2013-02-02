@@ -70,7 +70,6 @@ public class DSLClassFactory extends SDODefaultFactory
 		buf.append(this.beginBody());
 		
 		buf.append(LINE_SEP);
-		buf.append(this.createStaticOperations(pkg, clss));
 
 		for (Property field : clss.getProperties()) {
 			buf.append(this.createPrivateFieldDeclaration(clss, field));
@@ -78,6 +77,8 @@ public class DSLClassFactory extends SDODefaultFactory
 				
 		buf.append(LINE_SEP);
 		buf.append(this.createConstructors(pkg, clss));    			
+		buf.append(LINE_SEP);
+		buf.append(this.createStaticOperations(pkg, clss));
 
 		Map<String, FieldAdapter> fields = new TreeMap<String, FieldAdapter>();
 		collectProvisioningFields(pkg, clss, pkg, clss, fields);
@@ -95,8 +96,72 @@ public class DSLClassFactory extends SDODefaultFactory
 		return buf.toString();
 	}	
 	
+	protected String createPackageDeclaration(Package pkg) {
+		StringBuilder buf = new StringBuilder();
+		buf.append("package " + createPackageName(pkg));
+		buf.append(";");
+		return buf.toString();
+	}
+
+	protected String createTypeDeclaration(Package pkg, Class clss) {
+		StringBuilder buf = new StringBuilder();
+		buf.append(createTypeDeclarationJavadoc(pkg, clss));
+	    buf.append(newline(0));	
+		buf.append("public class ");
+		buf.append(getImplementationClassName(clss));
+		buf.append(" extends ");
+		buf.append(DomainRoot.class.getSimpleName());
+		
+		return buf.toString();
+	}
+
+	private String createTypeDeclarationJavadoc(Package pkg, Class clss) {
+		StringBuilder buf = new StringBuilder();
+		
+		buf.append("/**"); // begin javadoc
+		
+		// add formatted doc from UML if exists		
+		// always put model definition first so it appears
+		// on package summary line for class
+		String docs = getWrappedDocmentations(clss.getDocumentations(), 0);
+		if (docs.trim().length() > 0) {
+		    buf.append(docs);
+		    
+		    // if we have model docs, set up the next section
+		    buf.append(newline(0));	
+			buf.append(" * <p></p>");
+		}
+		
+	    buf.append(newline(0));	
+		buf.append(" * Generated Domain Specific Language (DSL) implementation class representing the domain model entity <b>");
+		buf.append(clss.getName());
+		buf.append("</b>."); 
+		
+		// data store mapping
+		if (clss.getAlias() != null && clss.getAlias().getPhysicalName() != null) {
+		    buf.append(newline(0));	
+			buf.append(" *"); 
+		    buf.append(newline(0));	
+			buf.append(" * <p></p>");
+		    buf.append(newline(0));	
+			buf.append(" * <b>Data Store Mapping:</b>");
+		    buf.append(newline(0));	
+			buf.append(" * Corresponds to the physical data store entity <b>");
+			buf.append(clss.getAlias().getPhysicalName());
+			buf.append("</b>.");
+		    buf.append(newline(0));	
+			buf.append(" *"); 
+		}		
+
+	    buf.append(newline(0));	
+		buf.append(" */"); // end javadoc
+		
+		return buf.toString();
+	}	
+	
 	protected String createConstructors(Package pkg, Class clss) {
 		StringBuilder buf = new StringBuilder();
+
 		buf.append(newline(1));
 		buf.append("private ");
 		buf.append(getImplementationClassName(clss));
@@ -111,6 +176,26 @@ public class DSLClassFactory extends SDODefaultFactory
 		buf.append("}");
 		
 		buf.append(newline(1));
+
+		buf.append(newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Constructor which instantiates a domain query path node. A path may");
+		buf.append(newline(1));	
+		buf.append(" * span multiple namespaces and therefore Java inplementation packages");
+		buf.append(newline(1));	
+		buf.append(" * based on the <a href=\"http://docs.plasma-sdo.org/api/org/plasma/config/PlasmaConfiguration.html\">Condiguration</a>.");
+		buf.append(newline(1));	
+		buf.append(" * Note: while this constructor is public, it is not for application use!");
+	    
+	    // params
+	    buf.append(newline(1));	
+		buf.append(" * @param source the source path node");
+	    buf.append(newline(1));	
+		buf.append(" * @param sourceProperty the source property logical name");
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
 		
 		buf.append(newline(1));
 		buf.append("public ");
@@ -128,6 +213,28 @@ public class DSLClassFactory extends SDODefaultFactory
 
 		buf.append(newline(1));
 
+		buf.append(newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Constructor which instantiates a domain query path node. A path may");
+		buf.append(newline(1));	
+		buf.append(" * span multiple namespaces and therefore Java inplementation packages");
+		buf.append(newline(1));	
+		buf.append(" * based on the <a href=\"http://docs.plasma-sdo.org/api/org/plasma/config/PlasmaConfiguration.html\">Condiguration</a>.");
+		buf.append(newline(1));	
+		buf.append(" * Note: while this constructor is public, it is not for application use!");
+	    
+	    // params
+	    buf.append(newline(1));	
+		buf.append(" * @param source the source path node");
+	    buf.append(newline(1));	
+		buf.append(" * @param sourceProperty the source property logical name");
+	    buf.append(newline(1));	
+		buf.append(" * @param expr the path predicate expression");
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+		
 		buf.append(newline(1));
 		buf.append("public ");
 		buf.append(getImplementationClassName(clss));
@@ -149,7 +256,24 @@ public class DSLClassFactory extends SDODefaultFactory
 	
 	protected String createStaticOperations(Package pkg, Class clss) {
 		StringBuilder buf = new StringBuilder();
-				
+
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Returns a new DSL query for <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a> ");
+		buf.append("<b>");	
+		buf.append(clss.getName());
+		buf.append("</b> which can be used either as a query root or");	
+	    buf.append(newline(1));	
+		buf.append(" * as the start (entry point) for a new path predicate expression.");	
+	    
+	    // return
+	    buf.append(newline(1));	
+		buf.append(" * @return a new DSL query");
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+		
 		buf.append(newline(1));
 		buf.append("public static "); 
 		buf.append(getImplementationClassName(clss));
@@ -184,8 +308,10 @@ public class DSLClassFactory extends SDODefaultFactory
 		StringBuilder buf = new StringBuilder();
 		if (field.getType() instanceof ClassRef) {
 			buf.append(createReferencePropertyOperation(pkg, clss, field));
-			buf.append(newline(1));
-			buf.append(createReferencePropertyPredicateOperation(pkg, clss, field));
+			if (field.isMany()) {
+			    buf.append(newline(1));
+			    buf.append(createReferencePropertyPredicateOperation(pkg, clss, field));
+			}
 		}
 		else {
 			buf.append(createDataPropertyOperation(pkg, clss, field));
@@ -198,6 +324,22 @@ public class DSLClassFactory extends SDODefaultFactory
 	protected String createDataPropertyOperation(Package pkg, Class clss, Property field) {
 		StringBuilder buf = new StringBuilder();
 		
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Returns a DSL data element for property, <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+	    // return
+	    buf.append(newline(1));	
+		buf.append(" * @return a DSL data element for property, <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+
 		buf.append(newline(1));
 		buf.append("public "); 
 		buf.append(DataProperty.class.getSimpleName());
@@ -208,9 +350,7 @@ public class DSLClassFactory extends SDODefaultFactory
 		buf.append("return new ");
 		buf.append(DataNode.class.getSimpleName());
 		buf.append("(this, ");
-		buf.append(sdoInterfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");"); 
 		buf.append(newline(1));
 		buf.append("}");
@@ -223,6 +363,22 @@ public class DSLClassFactory extends SDODefaultFactory
 		
         Class otherClass = this.context.findClass((ClassRef)field.getType());
 
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Returns a DSL query element for reference property, <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+	    // return
+	    buf.append(newline(1));	
+		buf.append(" * @return a DSL query element for reference property, <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc
+        
         buf.append(newline(1));
 		buf.append("public "); 		
 		buf.append(getImplementationClassName(otherClass));
@@ -233,9 +389,7 @@ public class DSLClassFactory extends SDODefaultFactory
 		buf.append("return new ");
 		buf.append(getImplementationClassName(otherClass));
 		buf.append("(this, ");
-		buf.append(sdoInterfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(");"); 
 		buf.append(newline(1));
 		buf.append("}");
@@ -248,6 +402,30 @@ public class DSLClassFactory extends SDODefaultFactory
 		
         Class otherClass = this.context.findClass((ClassRef)field.getType());
 
+		buf.append(this.newline(1));
+		buf.append("/**"); // begin javadoc
+		buf.append(newline(1));	
+		buf.append(" * Returns a DSL query element for reference property, <b>");
+		buf.append(field.getName());
+		buf.append("</b>, while adding the given path predicate expression. ");	
+		buf.append(newline(1));	
+		buf.append(" * Path predicate expressions are used to restrict");	
+		buf.append(newline(1));	
+		buf.append(" * the query results for a collection property within a <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaDataGraph.html\">DataGraph</a>.");	
+	    
+	    // params
+	    buf.append(newline(1));	
+		buf.append(" * @param expr the path predicate expression");
+		
+	    // return
+	    buf.append(newline(1));	
+		buf.append(" * @return a DSL query element for reference property, <b>");
+		buf.append(field.getName());
+		buf.append("</b>.");	
+	    
+	    buf.append(newline(1));	
+		buf.append(" */"); // end javadoc        
+        
         buf.append(newline(1));
 		buf.append("public "); 		
 		buf.append(getImplementationClassName(otherClass));
@@ -260,9 +438,7 @@ public class DSLClassFactory extends SDODefaultFactory
 		buf.append("return new ");
 		buf.append(getImplementationClassName(otherClass));
 		buf.append("(this, ");
-		buf.append(sdoInterfaceResolver.getName(clss));
-		buf.append(".PTY_");
-		buf.append(toConstantName(field.getName()));
+	    buf.append(toQualifiedPropertyNameReference(clss, field));
 		buf.append(", expr);");
 		buf.append(newline(1));
 		buf.append("}");
@@ -293,23 +469,7 @@ public class DSLClassFactory extends SDODefaultFactory
 		return buf.toString();
 	}
 		
-	protected String createPackageDeclaration(Package pkg) {
-		StringBuilder buf = new StringBuilder();
-		buf.append("package " + createPackageName(pkg));
-		buf.append(";");
-		return buf.toString();
-	}
-
-	protected String createTypeDeclaration(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
-		buf.append("public class ");
-		buf.append(getImplementationClassName(clss));
-		buf.append(" extends ");
-		buf.append(DomainRoot.class.getSimpleName());
-		
-		return buf.toString();
-	}
-
+	
 	protected String createPrivateFieldDeclaration(Class clss, Property field) {
 		return ""; // no fixed fields, methods delegate to SDO DataObject impl class structures for data accces
 	}

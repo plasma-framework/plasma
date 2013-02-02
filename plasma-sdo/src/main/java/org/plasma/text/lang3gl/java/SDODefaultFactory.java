@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.plasma.config.InterfaceProvisioning;
 import org.plasma.config.PlasmaConfig;
+import org.plasma.config.PropertyNameStyle;
 import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
 import org.plasma.provisioning.DataTypeRef;
@@ -25,12 +27,20 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 	};
 	
 	private Map<String, String> reservedGetterNameMap =  new HashMap<String, String>();
+	protected InterfaceProvisioning interfaceProvisioning;
+	protected ClassNameResolver interfaceResolver = new SDOInterfaceNameResolver();
+	protected ClassNameResolver classResolver = new SDOClassNameResolver();
 	
 	public SDODefaultFactory(Lang3GLContext context) {
 		super(context);
 		for (String name : SDO_RESERVED_NAMES)
 			this.reservedGetterNameMap.put(name, name);
 		
+		this.interfaceProvisioning = PlasmaConfig.getInstance().getSDO().getGlobalProvisioning().getInterface();
+		if (interfaceProvisioning == null) {
+			interfaceProvisioning = new InterfaceProvisioning();
+			interfaceProvisioning.setPropertyNameStyle(PropertyNameStyle.ENUMS);
+		}
 	}
 
 	protected String createPackageDeclaration(Package pkg) {
@@ -55,6 +65,30 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 		String packageDir = packageName.replace(".", "/");
 		StringBuilder buf = new StringBuilder();
 		buf.append(packageDir);
+		return buf.toString();
+	}
+	
+	protected String toQualifiedPropertyNameReference(Class clss, Property field) {
+		StringBuilder buf = new StringBuilder();
+		switch (this.interfaceProvisioning.getPropertyNameStyle()) {
+		case ENUMS:
+			buf.append(this.interfaceResolver.getName(clss));
+			buf.append(".PROPERTY.");
+			buf.append(field.getName());
+			buf.append(".name()");
+			break;
+		case CONSTANTS:
+			buf.append(this.interfaceResolver.getName(clss));
+			buf.append(".");
+			buf.append(toConstantName(field.getName()));
+			break;
+		case NONE:
+		default:	
+			buf.append("\"");
+			buf.append(field.getName());
+			buf.append("\"");
+			break;
+		}
 		return buf.toString();
 	}
 		
