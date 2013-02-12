@@ -13,8 +13,10 @@
       <module>plasma-sdo</module>
       <module>plasma-sdo-jdbc</module>
       <module>plasma-maven-plugin</module>
+      <!--  
       <module>plasma-docs</module>
       <module>plasma-examples</module>
+      -->
   </modules>
   <licenses>
       <license>
