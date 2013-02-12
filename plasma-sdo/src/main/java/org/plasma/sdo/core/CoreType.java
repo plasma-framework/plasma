@@ -119,6 +119,7 @@ public class CoreType implements PlasmaType {
             + "#" + lookupName;
         
         org.modeldriven.fuml.repository.Classifier classifier = PlasmaRepository.getInstance().getClassifier(artifactQualifiedName);
+        
         if (org.modeldriven.fuml.repository.Class_.class.isAssignableFrom(classifier.getClass()))        	
             this.classifier = new Class_(
         		(org.modeldriven.fuml.repository.Class_)classifier);

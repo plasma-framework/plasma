@@ -6,5 +6,5 @@ package org.plasma.query;
  * @see DataProperty
  * @see PathProperty
  */
-public interface Select {
+public interface Select extends Clause {
 }

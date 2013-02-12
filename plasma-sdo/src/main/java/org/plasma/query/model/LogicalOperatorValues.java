@@ -35,7 +35,9 @@ public enum LogicalOperatorValues {
     @XmlEnumValue("and")
     AND("and"),
     @XmlEnumValue("or")
-    OR("or");
+    OR("or"),
+    @XmlEnumValue("not")
+    NOT("or");
     private final String value;
 
     LogicalOperatorValues(String v) {

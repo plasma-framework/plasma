@@ -234,13 +234,15 @@ public class Expression implements org.plasma.query.Expression {
 
     public Expression(Property prop, Literal min, Literal max) {
         this();
-        this.getTerms().add(new Term(prop));
-        this.getTerms().add(new Term(new RelationalOperator(RelationalOperatorValues.GREATER_THAN_EQUALS)));
-        this.getTerms().add(new Term(min));
+        Expression left = new Expression(prop, 
+        		new RelationalOperator(RelationalOperatorValues.GREATER_THAN_EQUALS),
+        		min);      
+        Expression right = new Expression(prop, 
+        		new RelationalOperator(RelationalOperatorValues.LESS_THAN_EQUALS),
+        		max);
+        this.getTerms().add(new Term(left));
         this.getTerms().add(new Term(new LogicalOperator(LogicalOperatorValues.AND)));
-        this.getTerms().add(new Term(prop));
-        this.getTerms().add(new Term(new RelationalOperator(RelationalOperatorValues.LESS_THAN_EQUALS)));
-        this.getTerms().add(new Term(max));
+        this.getTerms().add(new Term(right));
     } 
     
     public Expression(Property prop, RelationalOperator oper, NullLiteral lit) {

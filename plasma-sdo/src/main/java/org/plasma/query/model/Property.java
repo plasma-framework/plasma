@@ -26,7 +26,7 @@ public class Property
     @XmlElement(name = "As", namespace = "")
     protected Projection as;
     @XmlAttribute(required = true)
-    protected String name;
+    protected String name;    
     @XmlAttribute
     protected Boolean values;
     @XmlAttribute
@@ -36,6 +36,23 @@ public class Property
     @XmlAttribute
     protected FunctionValues function;
 
+    /** 
+     * Stores the physical name associated with this 
+     * property. Can be used by service providers
+     * for query post processing. This field is not
+     * processed during XML or other serialization
+     * operations.  
+     */
+    protected transient String physicalName;
+    /** 
+     * Stores the physical name bytes associated with this 
+     * property. Can be used by service providers
+     * for query post processing. This field is not
+     * processed during XML or other serialization
+     * operations.  
+     */
+    protected transient byte[] physicalNameBytes;
+    
       //----------------/
      //- Constructors -/
     //----------------/
@@ -275,23 +292,30 @@ public class Property
         this.as = value;
     }
 
-    /* (non-Javadoc)
-	 * @see org.plasma.query.model.Property2#getName()
-	 */
     public String getName() {
         return name;
     }
 
-    /* (non-Javadoc)
-	 * @see org.plasma.query.model.Property2#setName(java.lang.String)
-	 */
     public void setName(String value) {
         this.name = value;
     }
 
-    /* (non-Javadoc)
-	 * @see org.plasma.query.model.Property2#isValues()
-	 */
+    public String getPhysicalName() {
+        return physicalName;
+    }
+
+    public void setPhysicalName(String value) {
+        this.physicalName = value;
+    }
+    
+    public byte[] getPhysicalNameBytes() {
+        return physicalNameBytes;
+    }
+
+    public void setPhysicalNameBytes(byte[] value) {
+        this.physicalNameBytes = value;
+    }
+
     public boolean isValues() {
         if (values == null) {
             return false;

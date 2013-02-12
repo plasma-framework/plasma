@@ -12,9 +12,27 @@ import javax.xml.bind.annotation.XmlType;
 public class PathElement
     extends AbstractPathElement
 {
-
     @XmlAttribute
     protected Integer index;
+
+    /** 
+     * Stores the physical name associated with this 
+     * property. Can be used by service providers
+     * for query post processing. This field is not
+     * processed during XML or other serialization
+     * operations.  
+     */
+    protected transient String physicalName;
+    /** 
+     * Stores the physical name bytes associated with this 
+     * property. Can be used by service providers
+     * for query post processing. This field is not
+     * processed during XML or other serialization
+     * operations.  
+     */
+    protected transient byte[] physicalNameBytes;
+    
+    
     public PathElement() {
     } 
 
@@ -44,5 +62,21 @@ public class PathElement
      */
     public void setIndex(Integer value) {
         this.index = value;
+    }
+    
+    public String getPhysicalName() {
+        return physicalName;
+    }
+
+    public void setPhysicalName(String value) {
+        this.physicalName = value;
+    }
+    
+    public byte[] getPhysicalNameBytes() {
+        return physicalNameBytes;
+    }
+
+    public void setPhysicalNameBytes(byte[] value) {
+        this.physicalNameBytes = value;
     }
 }

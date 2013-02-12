@@ -4,7 +4,7 @@ package org.plasma.query;
 /**
  * A base expression  
  */
-public interface Expression {
+public interface Expression extends Term {
 	
 	/**
 	 * Concatenates the given expression onto this expression using

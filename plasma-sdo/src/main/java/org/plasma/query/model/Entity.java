@@ -39,6 +39,22 @@ public class Entity {
     protected String name;
     @XmlAttribute
     protected String namespaceURI;
+    /** 
+     * Stores the physical name associated with this 
+     * property. Can be used by service providers
+     * for query post processing. This field is not
+     * processed during XML or other serialization
+     * operations.  
+     */
+    protected transient String physicalName;
+    /** 
+     * Stores the physical name bytes associated with this 
+     * property. Can be used by service providers
+     * for query post processing. This field is not
+     * processed during XML or other serialization
+     * operations.  
+     */
+    protected transient byte[] physicalNameBytes;
 
     public Entity() {
         super();
@@ -83,6 +99,22 @@ public class Entity {
      */
     public String getNamespaceURI() {
         return namespaceURI;
+    }
+    
+    public String getPhysicalName() {
+        return physicalName;
+    }
+
+    public void setPhysicalName(String value) {
+        this.physicalName = value;
+    }
+    
+    public byte[] getPhysicalNameBytes() {
+        return physicalNameBytes;
+    }
+
+    public void setPhysicalNameBytes(byte[] value) {
+        this.physicalNameBytes = value;
     }
 
     /**

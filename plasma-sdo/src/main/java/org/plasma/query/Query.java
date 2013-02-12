@@ -20,7 +20,7 @@ package org.plasma.query;
  * The object model can also be serialized as XML for wire 
  * transport, persistence, flat file or other usage.
  */
-public interface Query {
+public interface Query extends Term {
 	
 
 	/**

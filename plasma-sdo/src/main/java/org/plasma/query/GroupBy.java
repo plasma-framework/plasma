@@ -5,5 +5,5 @@ package org.plasma.query;
  * grouping statement and is used in conjunction with 
  * aggregate functions.
  */
-public interface GroupBy {
+public interface GroupBy extends Clause {
 }

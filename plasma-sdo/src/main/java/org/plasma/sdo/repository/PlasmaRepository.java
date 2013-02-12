@@ -139,7 +139,11 @@ public class PlasmaRepository implements Repository {
 	}
 
 	public Classifier getClassifier(String name) {
-		return delegate.getClassifier(name);
+		Classifier result = delegate.getClassifier(name);
+		if (result == null)
+			throw new RepositoryException("no classifier defined for qualified name, "
+				+ name);
+		return result;
 	}
 	
     public List<Stereotype> getStereotypes(Element element) {

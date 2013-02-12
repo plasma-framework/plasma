@@ -28,7 +28,7 @@ import org.plasma.query.visitor.Traversal;
     "query"
 })
 @XmlRootElement(name = "Term")
-public class Term {
+public class Term implements org.plasma.query.Term {
 
     @XmlElement(name = "WildcardProperty")
     protected WildcardProperty wildcardProperty;

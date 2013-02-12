@@ -19,7 +19,7 @@ import org.plasma.sdo.helper.DataConverter;
     "value"
 })
 @XmlRootElement(name = "Literal")
-public class Literal {
+public class Literal implements org.plasma.query.Term {
 
     @XmlValue
     protected String value;

@@ -536,6 +536,7 @@
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="and"/>
 			<xsd:enumeration value="or"/>
+            <xsd:enumeration value="not"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="ArithmeticOperatorValues">
