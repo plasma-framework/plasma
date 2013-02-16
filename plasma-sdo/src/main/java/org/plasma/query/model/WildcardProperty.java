@@ -13,7 +13,7 @@ import org.plasma.query.visitor.QueryVisitor;
 @XmlType(name = "WildcardProperty")
 @XmlRootElement(name = "WildcardProperty")
 public class WildcardProperty
-    extends AbstractProperty
+    extends AbstractProperty implements org.plasma.query.Term
 {
     @XmlAttribute(required = true)
     protected WildcardPropertyTypeValues type;

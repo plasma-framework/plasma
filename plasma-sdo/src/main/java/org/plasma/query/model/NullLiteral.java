@@ -17,7 +17,7 @@ import org.plasma.query.visitor.QueryVisitor;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NullLiteral")
 @XmlRootElement(name = "NullLiteral")
-public class NullLiteral {
+public class NullLiteral implements org.plasma.query.Term {
 
     public NullLiteral() {
         super();

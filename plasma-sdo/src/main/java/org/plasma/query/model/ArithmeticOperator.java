@@ -30,7 +30,7 @@ import org.plasma.query.visitor.QueryVisitor;
     "value"
 })
 @XmlRootElement(name = "ArithmeticOperator")
-public class ArithmeticOperator {
+public class ArithmeticOperator implements org.plasma.query.Operator {
 
     @XmlValue
     protected ArithmeticOperatorValues value;

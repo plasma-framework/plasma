@@ -21,7 +21,7 @@ import org.plasma.query.visitor.QueryVisitor;
     "value"
 })
 @XmlRootElement(name = "LogicalOperator")
-public class LogicalOperator {
+public class LogicalOperator implements org.plasma.query.Operator {
 
     @XmlValue
     protected LogicalOperatorValues value;

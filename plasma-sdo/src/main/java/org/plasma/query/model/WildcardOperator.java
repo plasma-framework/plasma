@@ -20,7 +20,7 @@ import org.plasma.query.visitor.QueryVisitor;
     "value"
 })
 @XmlRootElement(name = "WildcardOperator")
-public class WildcardOperator {
+public class WildcardOperator implements org.plasma.query.Operator {
 
     @XmlValue
     protected WildcardOperatorValues value;

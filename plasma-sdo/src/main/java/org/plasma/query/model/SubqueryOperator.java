@@ -24,7 +24,7 @@ import org.plasma.query.visitor.QueryVisitor;
     "value"
 })
 @XmlRootElement(name = "SubqueryOperator")
-public class SubqueryOperator {
+public class SubqueryOperator implements org.plasma.query.Operator {
 
     public SubqueryOperator() {}
     

@@ -20,7 +20,7 @@ import org.plasma.query.visitor.QueryVisitor;
     "value"
 })
 @XmlRootElement(name = "GroupOperator")
-public class GroupOperator {
+public class GroupOperator implements org.plasma.query.Operator {
 
     @XmlValue
     protected GroupOperatorValues value;
