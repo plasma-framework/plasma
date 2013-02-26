@@ -2,26 +2,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>plasma</groupId>
+  <groupId>org.terrameta</groupId>
   <artifactId>plasma</artifactId>
   <version>1.1.3</version>
   <packaging>pom</packaging>
   <name>Plasma</name>
-  <description></description>
-  <modules>
-      <module>plasma-common</module>
-      <module>plasma-sdo</module>
-      <module>plasma-sdo-jdbc</module>
-      <module>plasma-maven-plugin</module>
-      <!--  
-      <module>plasma-docs</module>
-      <module>plasma-examples</module>
-      -->
-  </modules>
+  <description>The Plasma project is an SDO 2.1 implementation with associated provisioning and other tools. In its initial releases, the PlasmaSDO™ implementation seeks to address the need for automation and code generation under SDO for standard enterprise Java web applications while focusing on critical operational considerations these applications face, such as optimistic and pessimistic concurrency control. The PlasmaSDO™ implementation is not bound to any integrated development environment (IDE) and provides support for standard Java™ based build tools. Note: Such operational considerations such as optimistic and pessimistic concurrency control are seen as a feature gap within various commercial and open-source SDO offerings, and are facilitated in PlasmaSDO™ by a custom UML profile and various associated SDO API extensions.</description>  
   <licenses>
       <license>
           <name>Plasma License</name>
-          <url>https://github.com/terrameta/plasma/Licensing-Information.txt</url>
+          <url>https://github.com/terrameta/plasma/LICENSE</url>
           <distribution>repo</distribution>
       </license>
   </licenses>
@@ -35,7 +25,17 @@
           <name>Scott Cinnamond</name>
           <email>scinnamond@gmail.com</email>
       </developer>
-  </developers>
+  </developers>  
+  <modules>
+      <module>plasma-common</module>
+      <module>plasma-sdo</module>
+      <module>plasma-sdo-jdbc</module>
+      <module>plasma-maven-plugin</module>
+      <!--  
+      <module>plasma-docs</module>
+      <module>plasma-examples</module>
+      -->
+  </modules>
   
   <properties>
           <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -85,4 +85,126 @@
 		<version>1.1.1</version>
 	</dependency>
   </dependencies>
+    <build>
+        <finalName>cloudgraph</finalName>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.8.1</version>
+            <configuration>
+              <author>true</author>
+              <show>public</show>
+              <nohelp>false</nohelp>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+    
+          <!-- Produce ZIP with dependencies and samples. -->
+          <!--
+          <plugin>
+              <artifactId>maven-assembly-plugin</artifactId>
+              <version>2.2-beta-2</version>
+              <executions>
+                  <execution>
+                      <id>assemble-zip</id>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>single</goal>
+                      </goals>
+                  </execution>
+              </executions>
+              <configuration>
+                  <descriptors>
+                      <descriptor>maven-assembly-dist.xml</descriptor>
+                  </descriptors>
+              </configuration>
+          </plugin>
+          -->
+    
+          <!--
+              Release Plugin (Update version in POM before/after release, create
+              tag, deploy) to try: mvn release:prepare -DdryRun=true && mvn
+              release:clean to perform:
+    
+              mvn release:prepare release:perform
+    
+              Read http://nexus.sonatype.org/oss-repository-hosting.html#3 for
+              instructions on releasing to this project's Sonatype repository
+          -->
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-release-plugin</artifactId>
+              <version>2.0-beta-7</version>
+          </plugin>    
+        </plugins>
+    </build>
+    <reporting>   
+        <plugins>                                                                          
+          <plugin>                                                                         
+            <groupId>org.apache.maven.plugins</groupId>                                    
+            <artifactId>maven-javadoc-plugin</artifactId>                                  
+            <version>2.8.1</version>                                                       
+          </plugin>                                                                        
+      </plugins> 
+    </reporting>                                                                         
+    <distributionManagement> 
+          <!-- My project's Sonatype repository to be used by the release plugin -->
+          <repository>
+              <id>sonatype-nexus-staging-and-release</id>
+              <name>Nexus Staging Repository</name>
+              <!--
+              giving a 400 error
+              <url>https://oss.sonatype.org/content/groups/public</url>
+              -->
+              <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+          </repository> 
+          <snapshotRepository>
+             <id>sonatype-nexus-snapshot</id>
+             <name>Nexus Snapshot Repository</name>
+             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          </snapshotRepository>
+    </distributionManagement>
+    <!--repositories>
+          <repository>
+              <id>ibiblio.org</id>
+              <name>ibiblio Mirror of http://repo1.maven.org/maven2/</name>
+              <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+          </repository>
+    </repositories-->
+    <profiles>
+        <profile>
+          <id>release</id>
+          <build>
+            <plugins>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                  <execution>
+                    <id>attach-javadocs</id>
+                    <goals>
+                      <goal>jar</goal>
+                    </goals>
+                  </execution>
+                </executions>
+              </plugin>
+            </plugins>
+          </build>
+        </profile>
+    </profiles>
 </project>

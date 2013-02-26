@@ -1,3 +1,24 @@
+/**
+ *         PlasmaSDO™ License
+ * 
+ * This is a community release of PlasmaSDO™, a dual-license 
+ * Service Data Object (SDO) 2.1 implementation. 
+ * This particular copy of the software is released under the 
+ * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
+ * TerraMeta Software, Inc.
+ * 
+ * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ * 
+ * General License information can be found below.
+ * 
+ * This distribution may include materials developed by third
+ * parties. For license and attribution notices for these
+ * materials, please refer to the documentation that accompanies
+ * this distribution (see the "Licenses for Third-Party Components"
+ * appendix) or view the online documentation at 
+ * <http://plasma-sdo.org/licenses/>.
+ *  
+ */
 package org.plasma.sdo.xml;
 
 import java.io.IOException;
@@ -179,7 +200,7 @@ public class StreamMarshaller extends Marshaller {
 	    //     "xml-stylesheet href='catalog.xsl' type='text/xsl'");	
 		
 		if (this.document.getRootElementName() != null) {
-			writer.writeDefaultNamespace(this.document.getRootElementURI());		    			
+			//writer.writeDefaultNamespace(this.document.getRootElementURI());		    			
 			writer.writeStartElement(namespacePrefix, 
 				this.document.getRootElementName(), 
 				this.document.getRootElementURI());
@@ -306,21 +327,29 @@ public class StreamMarshaller extends Marshaller {
 			PlasmaType targetType, PlasmaType sourceType,
 			int level) throws IOException, XMLStreamException {
 		
-		// create XSI type for all containment refs
-	    writer.writeAttribute("xsi", 
-	    	XMLConstants.XMLSCHEMA_INSTANCE_NAMESPACE_URI, "type", 
-	    	namespacePrefix + ":" 
-	    	+ SchemaUtil.getContainmentReferenceName(targetType));
-	    
-	    writer.writeAttribute(SchemaUtil.getSerializationAttributeName(), 
-	    		((PlasmaDataObject)dataObject).getUUIDAsString());
-
 	    int externKeyCount = 0;
 		for (Property property : targetType.getProperties()) {
 			PlasmaProperty prop = (PlasmaProperty)property;
 			if (prop.isKey(KeyType.external)) {
 				externKeyCount++;
 			}
+		}
+		
+		// create XSI type on demand for containment refs
+		// FIXME: SDO namespaces are necessary in some cases
+		// to determine exact XSI type to unmarshal. Can't determine
+		// this from the property type on unmarshalling. 
+		if (externKeyCount > 0)
+	        writer.writeAttribute("xsi", 
+	    	    XMLConstants.XMLSCHEMA_INSTANCE_NAMESPACE_URI, "type", 
+	    	    namespacePrefix + ":" 
+		    	+ SchemaUtil.getContainmentReferenceName(targetType));
+	    
+	    writer.writeAttribute(SchemaUtil.getSerializationAttributeName(), 
+	    		((PlasmaDataObject)dataObject).getUUIDAsString());
+
+		for (Property property : targetType.getProperties()) {
+			PlasmaProperty prop = (PlasmaProperty)property;
 			if (!prop.getType().isDataType() || !prop.isXMLAttribute()) {
 			    continue;
 			}
@@ -335,15 +364,6 @@ public class StreamMarshaller extends Marshaller {
 		    		fromObject(prop.getType(), value));
 		}
 		
-		// create XSI type on demand for containment refs
-		// FIXME: SDO namespaces are necessary in some cases
-		// to determine exact XSI type to unmarshal. Can't determine
-		// this from the property type on unmarshalling. 
-		if (externKeyCount > 0)
-	        writer.writeAttribute("xsi", 
-	    	    XMLConstants.XMLSCHEMA_INSTANCE_NAMESPACE_URI, "type", 
-	    	    namespacePrefix + ":" 
-		    	+ SchemaUtil.getContainmentReferenceName(targetType));
 				
 		// add element properties
 		List<Property> list = targetType.getProperties();

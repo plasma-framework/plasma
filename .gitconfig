@@ -1,3 +1,5 @@
 [user]
 	name = terrameta
 	email = scinnamond@gmail.com
+[pack]
+	windowMemory = 256m

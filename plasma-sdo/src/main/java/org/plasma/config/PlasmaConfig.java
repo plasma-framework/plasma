@@ -1,3 +1,24 @@
+/**
+ *         PlasmaSDO™ License
+ * 
+ * This is a community release of PlasmaSDO™, a dual-license 
+ * Service Data Object (SDO) 2.1 implementation. 
+ * This particular copy of the software is released under the 
+ * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
+ * TerraMeta Software, Inc.
+ * 
+ * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ * 
+ * General License information can be found below.
+ * 
+ * This distribution may include materials developed by third
+ * parties. For license and attribution notices for these
+ * materials, please refer to the documentation that accompanies
+ * this distribution (see the "Licenses for Third-Party Components"
+ * appendix) or view the online documentation at 
+ * <http://plasma-sdo.org/licenses/>.
+ *  
+ */
 package org.plasma.config;
 
 import java.io.File;
@@ -38,9 +59,10 @@ public class PlasmaConfig {
     private PlasmaConfiguration config;
     private Map<String, Artifact> artifactMap = new HashMap<String, Artifact>();
     private Map<String, NamespaceAdapter> sdoNamespaceMap = new HashMap<String, NamespaceAdapter>();
+    private DataAccessProviderName defaultProviderName;
     
-    /** maps provider names to provider instances */
-    private Map<DataStoreType, Map<String, NamespaceLink>> dataAccessServiceLinkMap 
+    /** maps data store types to maps of namespace links */
+    private Map<DataStoreType, Map<String, NamespaceLink>> dataStoreNamespaceLinkMap 
         = new HashMap<DataStoreType, Map<String, NamespaceLink>>();
 
     /** maps provider names to provider instances */
@@ -131,16 +153,19 @@ public class PlasmaConfig {
             	
              	for (DataAccessProvider provider : daconfig.getDataAccessProviders())
              	{
+             		if (defaultProviderName == null)
+             			defaultProviderName = provider.name;
+             		
              		this.dataAccessProviderMap.put(provider.getName(), provider);
 	            	Map<String, NamespaceProvisioning> provMap = dataAccessProviderProvisioningMap.get(provider.getName());
 	            	if (provMap == null) {
 	            		provMap = new HashMap<String, NamespaceProvisioning>();
 	            		dataAccessProviderProvisioningMap.put(provider.getName(), provMap);
 	            	}
-	            	Map<String, NamespaceLink> linkMap = dataAccessServiceLinkMap.get(daconfig.getDataStoreType());
+	            	Map<String, NamespaceLink> linkMap = dataStoreNamespaceLinkMap.get(daconfig.getDataStoreType());
 	            	if (linkMap == null) {
 	            		linkMap = new HashMap<String, NamespaceLink>();
-	            		dataAccessServiceLinkMap.put(daconfig.getDataStoreType(), linkMap);
+	            		dataStoreNamespaceLinkMap.put(daconfig.getDataStoreType(), linkMap);
 	            	}
 	            	for (NamespaceLink namespaceLink : provider.getNamespaceLinks()) {
 	            		if (namespaceLink.getUri() == null)
@@ -187,6 +212,10 @@ public class PlasmaConfig {
 
 	public long getConfigFileLastModifiedDate() {
 		return configFileLastModifiedDate;
+	}
+
+	public DataAccessProviderName getDefaultProviderName() {
+		return defaultProviderName;
 	}
 
 	private NamespaceProvisioning createDefaultProvisioning(String uri) {
@@ -392,7 +421,7 @@ public class PlasmaConfig {
     }
     
     public boolean hasNamespace(DataStoreType dataStore) {
-    	return this.dataAccessServiceLinkMap.get(dataStore) != null;
+    	return this.dataStoreNamespaceLinkMap.get(dataStore) != null;
     }
     
     public Repository getRepository() {
