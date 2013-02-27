@@ -13,24 +13,6 @@
 
   <name>Plasma SDO</name>
   <description>In its initial releases, the PlasmaSDO™ implementation seeks to address the need for automation and code generation under SDO for standard enterprise Java web applications while focusing on critical operational considerations these applications face, such as optimistic and pessimistic concurrency control. The PlasmaSDO™ implementation is not bound to any integrated development environment (IDE) and provides support for standard Java™ based build tools. Note: Such operational considerations such as optimistic and pessimistic concurrency control are seen as a feature gap within various commercial and open-source SDO offerings, and are facilitated in PlasmaSDO™ by a custom UML profile and various associated SDO API extensions.</description>  
-  <licenses>
-      <license>
-          <name>Plasma License</name>
-          <url>https://github.com/terrameta/plasma/LICENSE</url>
-          <distribution>repo</distribution>
-      </license>
-  </licenses>
-  <scm>
-      <url>https://github.com/terrameta/plasma</url>
-      <connection></connection>
-  </scm>  
-  <developers>
-      <developer>
-          <id>scinnamond</id>
-          <name>Scott Cinnamond</name>
-          <email>scinnamond@gmail.com</email>
-      </developer>
-  </developers>
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -104,11 +86,6 @@
 		<version>1.2.8</version>
 	</dependency>
 	<dependency>
-		<groupId>stax-utils</groupId>
-		<artifactId>stax-utils</artifactId>
-		<version>snapshot-20040917</version>
-	</dependency>
-	<dependency>
 		<groupId>com.sun.xml.stream</groupId>
 		<artifactId>sjsxp</artifactId>
 		<version>1.0.1</version>
@@ -153,11 +130,6 @@
 		<artifactId>javaee</artifactId>
 		<version>1.4</version>
 	</dependency>
-    <dependency>
-      <groupId>plasma</groupId>
-      <artifactId>ydoc</artifactId>
-      <version>1.0</version>
-    </dependency>
     <dependency>
       <groupId>plasma</groupId>
       <artifactId>plasma-common</artifactId>
@@ -388,18 +360,18 @@
 						-Dplasma.configuration=plasma-config.xml</argLine>
 				</configuration>
 			</plugin>
-	        <plugin>
-	          <groupId>org.apache.maven.plugins</groupId>
-	          <artifactId>maven-source-plugin</artifactId>
-	          <executions>
-	              <execution>
-	                  <id>attach-sources</id>
-	                  <goals>
-	                      <goal>jar</goal>
-	                  </goals>
-	              </execution>
-	          </executions>
-	        </plugin>
+		    <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-source-plugin</artifactId>
+		        <executions>
+		            <execution>
+		                <id>attach-sources</id>
+		                <goals>
+		                    <goal>jar</goal>
+		                </goals>
+		            </execution>
+		        </executions>
+		    </plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
