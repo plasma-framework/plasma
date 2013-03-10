@@ -152,7 +152,22 @@ public class MySQLFactory extends DefaultDDLFactory
 				+ table.getName() + "." + column.getName());
 	}	
 	
-	private boolean isSequence(Table table, Column column) {
+	/**
+	 * Presume its a sequence if a PK and an integral type.
+	 * @param table the table
+	 * @param column the column
+	 * @return true if a PK and an integral type. 
+	 */
+	private boolean isSequence(Table table, Column column) {		
+		if (isPk(table, column)) {
+			DataType sdoType = DataType.valueOf(column.getType());
+			switch (sdoType) {
+			case Int:        
+			case Integer:    
+			case Long:  
+				return true;
+			}
+		}
 		return false;
 	}	
 	
@@ -196,6 +211,18 @@ public class MySQLFactory extends DefaultDDLFactory
 		buf.append(fk.getName());
 		buf.append(";\n");
 		return buf.toString();
+	}
+	
+	public String enableForeignKeyConstraint(Schema schema, Table table,
+			Fk fk, Table toTable, boolean enable) {
+		if (enable) {
+			return createForeignKeyConstraint(schema, table,
+			    fk, toTable);
+		}
+		else {
+			return dropForeignKeyConstraint(schema, table,
+				    fk, toTable);
+		}
 	}
 	
 	@Override
@@ -262,4 +289,21 @@ public class MySQLFactory extends DefaultDDLFactory
 	public String dropCheckConstraint(Schema schema, Table table, Check check) {
 		return ""; // implemented with MySql enum
 	}
+	
+	public String enableUniqueConstraint(Schema schema, Table table,
+			Unique unique, boolean enable) {
+		StringBuilder buf = new StringBuilder();
+		buf.append("ALTER TABLE ");
+		buf.append(schema.getName());
+		buf.append(".");
+		buf.append(table.getName());
+		if (enable)
+			buf.append(" ADD CONSTRAINT ");
+		else
+			buf.append(" DROP CONSTRAINT ");
+		buf.append(unique.getName());
+		buf.append(";\n");
+		return buf.toString();
+	}
+	
 }

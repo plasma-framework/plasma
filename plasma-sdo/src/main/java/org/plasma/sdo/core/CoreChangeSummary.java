@@ -23,9 +23,13 @@ package org.plasma.sdo.core;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,7 +56,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
     private static Log log = LogFactory.getFactory().getInstance(CoreChangeSummary.class);
 
     
-    private Map<String, Change> changedDataObjects;
+    private Map<String, CoreChange> changedDataObjects;
     
     private PlasmaDataGraph dataGraph;
     
@@ -65,18 +69,18 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
     public CoreChangeSummary(PlasmaDataGraph dataGraph) {
         this.dataGraph = dataGraph;
     }
- 
+    
     public void created(DataObject dataObject) {
         if (!isLogging())
             return;
 
         if (changedDataObjects == null) {
-            changedDataObjects = new HashMap<String, Change>();
+            changedDataObjects = new HashMap<String, CoreChange>();
         }    
         
         PlasmaNode dataNode = (PlasmaNode)dataObject;
     	String hashKey = dataNode.getUUIDAsString();
-        Change dataObjectSettings = changedDataObjects.get(hashKey);
+    	CoreChange dataObjectSettings = changedDataObjects.get(hashKey);
         if (dataObjectSettings == null)
         {
         	if (log.isDebugEnabled())
@@ -95,12 +99,12 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             return;
 
         if (changedDataObjects == null) {
-            changedDataObjects = new HashMap<String, Change>();
+            changedDataObjects = new HashMap<String, CoreChange>();
         }    
         
         PlasmaNode dataNode = (PlasmaNode)dataObject;
     	String hashKey = dataNode.getUUIDAsString();
-        Change dataObjectSettings = changedDataObjects.get(dataNode.getUUIDAsString());
+    	CoreChange dataObjectSettings = changedDataObjects.get(dataNode.getUUIDAsString());
         if (dataObjectSettings == null)
         {
         	if (log.isDebugEnabled())
@@ -147,7 +151,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             return;
 
         if (changedDataObjects == null) {
-            changedDataObjects = new HashMap<String, Change>();
+            changedDataObjects = new HashMap<String, CoreChange>();
         }    
         
         PlasmaNode dataNode = (PlasmaNode)dataObject;
@@ -160,7 +164,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             return;
         }            
         
-        Change dataObjectSettings = changedDataObjects.get(hashKey);
+        CoreChange dataObjectSettings = changedDataObjects.get(hashKey);
         if (dataObjectSettings == null) {
             dataObjectSettings = new CoreChange(dataObject, ChangeType.MODIFIED);
             changedDataObjects.put(hashKey, dataObjectSettings);
@@ -237,12 +241,16 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
     public List<DataObject> getChangedDataObjects() {
         
         List<DataObject> result = new ArrayList<DataObject>();
-        if (changedDataObjects != null)
-            for (String key : changedDataObjects.keySet()) {
-                Change info = changedDataObjects.get(key);
-                result.add(info.getDataObject());
-            }    
+        if (changedDataObjects != null) {
+        	Collection<CoreChange> coll = changedDataObjects.values();
+        	CoreChange[] changes = new CoreChange[coll.size()];
+        	coll.toArray(changes);        	
+        	Arrays.sort(changes, new CoreChangeComparator());
         
+            for (Change change : changes) {
+                result.add(change.getDataObject());
+            }    
+        }
         return result;
     }
 
@@ -454,8 +462,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
      * @see #isLogging
      */
     public void undoChanges() {
-        // TODO Auto-generated method stub
-        
+    	//FIXME: 
     }
     
     public String toString() {

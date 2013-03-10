@@ -44,12 +44,12 @@ public class RelationCache {
 			String key = createHashKey(target, source);
 			RelationPathResult result = this.map.get(key);
 			if (result == null) {
-		        if (log.isDebugEnabled())
-		            log.debug("cacheing lateral-singular relation: "+ target.getName() 
-		                    + "/" + source.getName());
 			    boolean isRelated = isLateralSingularRelation(target, source, null,
 			    		new HashMap<String, Integer>());
 			    result = new RelationPathResult(AssociationPath.singular, isRelated);
+		        if (log.isDebugEnabled())
+		            log.debug("cacheing ("+isRelated+") lateral-singular relation: "+ target.getName() 
+		                    + "/" + source.getName());
 			    synchronized (map) {
 			    	this.map.put(key, result);
 			    }
@@ -91,9 +91,8 @@ public class RelationCache {
                     + "/" + sourceType.getName());
                 
         for (org.modeldriven.fuml.repository.Property targetProperty : targetType.getAllProperties()) {
-            
             if (targetProperty.getType().isDataType()) 
-                continue; // not a reference              
+                continue; // not a reference       
             
             if (targetProperty.isSingular()) {
             	
@@ -119,6 +118,9 @@ public class RelationCache {
 	                        		+ (opposite.getName() == null ? opposite.getXmiId() : opposite.getName())
 	                        		+ " which is also singular");
 	                	}
+	                    if (log.isDebugEnabled())
+	                        log.debug("exiting - visited "+ targetType.getName() + "."
+	                        		+ targetProperty.getName());
 
 	                	return false;
 	            	}
@@ -148,7 +150,11 @@ public class RelationCache {
                         if (log.isDebugEnabled())
                             log.debug("traversing "+ targetType.getName() + "."
                             		+ targetProperty.getName());
-            		    if (isLateralSingularRelation(new Classifier(targetProperty.getType()), sourceType, targetProperty, 
+                        org.modeldriven.fuml.repository.Classifier targetClassifier = (org.modeldriven.fuml.repository.Classifier)Repository.INSTANCE.getElementById(
+                        		targetProperty.getType().getXmiId());
+            		    if (isLateralSingularRelation(new Classifier(targetClassifier), 
+            		    		sourceType, // Note: stays constant across traversals 
+            		    		targetProperty, 
             		    		visited))
             		    	return true;
                     }

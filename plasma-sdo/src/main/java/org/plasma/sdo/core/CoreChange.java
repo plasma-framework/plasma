@@ -48,7 +48,7 @@ public class CoreChange implements Change {
     
     private DataObject dataObject;
     private ChangeType changeType; 
-    private Map<String, List<PlasmaSetting>> propetyMap;
+    private Map<String, List<PlasmaSetting>> settings;
     private String pathFromRoot;
     private int pathDepthFromRoot;
     
@@ -65,7 +65,16 @@ public class CoreChange implements Change {
         if (log.isDebugEnabled())
             log.debug("selected min path: " + this.pathFromRoot);
         pathDepthFromRoot = visitor.getMinimumPathDepth();
-    }   
+    } 
+    
+    public boolean equals(Object obj) {
+    	CoreChange other = (CoreChange)obj;
+        return this.dataObject.equals(other.dataObject);    	
+    }
+    
+    public int hashCode() {
+    	return this.dataObject.hashCode();
+    }
     
     public DataObject getDataObject() {
         return dataObject;
@@ -76,18 +85,18 @@ public class CoreChange implements Change {
     }  
      
     public List<PlasmaSetting> getSettings(String propertyName) {
-        return propetyMap.get(propertyName);
+        return settings.get(propertyName);
     }
     
     public void add(Property property, Object value) {
-        if (propetyMap == null) {
-            propetyMap = new HashMap<String, List<PlasmaSetting>>();
+        if (settings == null) {
+            settings = new HashMap<String, List<PlasmaSetting>>();
         }
         
-        List<PlasmaSetting> dataObjectPropertySettings = propetyMap.get(property.getName());
+        List<PlasmaSetting> dataObjectPropertySettings = settings.get(property.getName());
         if (dataObjectPropertySettings == null) {
             dataObjectPropertySettings = new ArrayList<PlasmaSetting>();
-            propetyMap.put(property.getName(), dataObjectPropertySettings);
+            settings.put(property.getName(), dataObjectPropertySettings);
         }           
         
         dataObjectPropertySettings.add(new CoreSetting(dataObject,
@@ -96,14 +105,14 @@ public class CoreChange implements Change {
     
     public List<ChangeSummary.Setting> getAllSettings() {
         
-        if (propetyMap == null || propetyMap.size() == 0)
+        if (settings == null || settings.size() == 0)
             return emptySettingList;
         
         List<ChangeSummary.Setting> result = new ArrayList<ChangeSummary.Setting>();
         
-        Iterator<String> iter = propetyMap.keySet().iterator();
+        Iterator<String> iter = settings.keySet().iterator();
         while (iter.hasNext()) {
-            List<PlasmaSetting> propertySettings = propetyMap.get(iter.next()); 
+            List<PlasmaSetting> propertySettings = settings.get(iter.next()); 
             for (PlasmaSetting setting : propertySettings)
                 result.add(setting);
         }

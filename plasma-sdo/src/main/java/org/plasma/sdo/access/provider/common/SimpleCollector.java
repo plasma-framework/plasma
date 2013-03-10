@@ -56,48 +56,40 @@ public abstract class SimpleCollector {
     
     protected boolean isRelation(DataObject target, DataObject source, AssociationPath relationPath) {
     	return (((PlasmaType)target.getType()).isRelation((PlasmaType)source.getType(), 
-    			AssociationPath.singular));
+    			relationPath));
     }
     
     protected boolean hasChildLink(DataObject target, DataObject source) {
         
         if (log.isDebugEnabled())
-            log.debug("comparing "+ target.getType().getName() 
-                    + "/" + source.getType().getName());
+            log.debug("comparing "+ target.toString() 
+                    + "/" + source.toString());
         
-        // look at properties in target, check if linked to source
-        List<ChangeSummary.Setting> settings = 
-            target.getDataGraph().getChangeSummary().getOldValues(target);
-        
-        for (ChangeSummary.Setting setting : settings) {
-            Property property = setting.getProperty();
+        for (Property property : target.getType().getProperties()) {
             if (property.getType().isDataType()) 
                 continue;               
-            
-            // FIXME - equality method for Type ??
-            if (!property.getType().getName().equals(source.getType().getName()))
-                continue;
-                                   
+            if (property.isMany()) 
+                continue;               
+                        
+            Object value = target.get(property);
+            if (value == null)
+            	continue;
+
             if (log.isDebugEnabled())
                 log.debug("checking property " + target.getType().getName()
                         + "." + property.getName());
-            if (isLinked(source, setting.getValue()))
+            
+            if (isLinked(source, value))
             {
-                // singular property linked to source
-                if (!property.isMany()) {
-                    if (log.isDebugEnabled())
-                        log.debug("found child data link " + target.getType().getName()
-                                + "." + property.getName()
-                                + "->" + source.getType().getName());
-                    if (target.getType().getName().equals(source.getType().getName()))
-                        throw new IllegalStateException("potential circular reference");
-                    return true; 
-                }    
+                if (log.isDebugEnabled())
+                    log.debug("found child data link " + target.getType().getName()
+                            + "." + property.getName()
+                            + "->" + source.getType().getName());
+                return true; 
             }           
         } 
         return false;
-    }
- 
+    } 
        
     protected boolean isLinked(DataObject other, Object value) {
         if (value instanceof List) {

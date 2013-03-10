@@ -21,7 +21,6 @@
  */
 package org.plasma.sdo.access.provider.common;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -29,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.sdo.AssociationPath;
 import org.plasma.sdo.PlasmaChangeSummary;
 import org.plasma.sdo.PlasmaDataObject;
+import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.DataAccessException;
 
 import commonj.sdo.DataGraph;
@@ -53,40 +53,64 @@ public class CreatedObjectCollector extends SimpleCollector
         for (DataObject changed : list) {
             if (!changeSummary.isCreated(changed))
                 continue;
-            
-            log.debug("processing changed object: "
-                    + changed.getType().getName() + "(" 
-                    + ((PlasmaDataObject)changed).getUUIDAsString() + ")");
+            if (log.isDebugEnabled())
+                log.debug("processing changed object: "
+                    + changed.toString());
+            PlasmaType changedType = (PlasmaType)changed.getType();
+            int changedDepth = changeSummary.getPathDepth(changed);
             // convert to array to avoid concurrent mods of collection
             DataObject[] resultArray = new DataObject[result.size()];
             result.toArray(resultArray);
             
-            boolean found = false;
+            boolean childFound = false;
             for (int i = 0; i < resultArray.length; i++) {
-                // if existing result object is a child of the changed/created 
-            	// object, add the changed object ahead of the 
-            	// existing, so will be created first
-            	if (isRelation(resultArray[i], changed, 
-            			AssociationPath.singular)) {            		
-                    if (result.contains(changed)) {
-                        throw new DataAccessException("unexpected changed object: "
-                            + changed.getType().getURI() + "#"+ changed.getType().getName() + "(" 
-                            + ((PlasmaDataObject)changed).getUUIDAsString() + ")");
-                    }
-                    found = true;
-                    if (log.isDebugEnabled())
-                        log.debug("adding changed object: "
-                            + changed.getType().getURI() + "#"+ changed.getType().getName() + "(" 
-                            + ((PlasmaDataObject)changed).getUUIDAsString() + ") at position " + i);
-                    result.add(i, (PlasmaDataObject)changed);
-                    break;
+            	PlasmaType resultType = (PlasmaType)resultArray[i].getType();
+            	// If existing result object is a "child" of the changed/created 
+            	// object, prepend the changed object ahead of the 
+            	// existing, so will be created first.
+            	// This determination is made by checking either metadata
+                // for the 2 data objects, or their reference values (instance data).
+            	// If the source and target types are different, compare their metadata
+            	// otherwise we are forced to compare their actual reference
+            	// values to determine ordering
+            	boolean prepend = false;		
+            	if (resultType.getQualifiedName() != changedType.getQualifiedName()) {
+            		if (isRelation(resultArray[i], changed, AssociationPath.singular))
+            			prepend = true;
+            	}
+            	else {
+            		// give precedence to reference links, then to
+            		// graph path depth
+            		if (hasChildLink(resultArray[i], changed)) {
+            			prepend = true;
+            		}
+            		else {
+            			int resultDepth = changeSummary.getPathDepth(resultArray[i]);
+            			if (changedDepth < resultDepth)
+            				prepend = true;
+            		}
+            	}
+            	
+                if (result.contains(changed)) {
+                    throw new DataAccessException("unexpected changed object: "
+                        + changed.toString());
                 }
-            }
-            if (!found) {
+        	
+            	if (prepend) {
+                    if (log.isDebugEnabled())
+                        log.debug("prepending changed object: "
+                            + changed.toString()+ " at position " + i);
+                    result.add(i, (PlasmaDataObject)changed);
+                    childFound = true;
+                    break;
+            	}
+            	
+            } // for 
+            
+            if (!childFound) {
                 if (log.isDebugEnabled())
                     log.debug("appending changed object: "
-                        + changed.getType().getURI() + "#" + changed.getType().getName() + "(" 
-                        + ((PlasmaDataObject)changed).getUUIDAsString() + ")");
+                        + changed.toString());
                 result.add((PlasmaDataObject)changed); // append it 
             }
         }

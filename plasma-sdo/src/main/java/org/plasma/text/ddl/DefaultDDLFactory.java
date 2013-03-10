@@ -63,6 +63,16 @@ public abstract class DefaultDDLFactory {
 		buf.append(" );\n");
 		return buf.toString();
 	}
+	
+	protected boolean isPk(Table table, Column column) {
+		if (table.getPk() != null) {
+			for (On on : table.getPk().getOns()) {
+				if (on.getColumn().equals(column.getName()))
+					return true;
+			}
+		}
+		return false;
+	}
 
 	public String dropTable(Schema schema, Table table) {
 		StringBuilder buf = new StringBuilder();
@@ -93,7 +103,6 @@ public abstract class DefaultDDLFactory {
 	    return provider;
 	}	
 	
-	// FIXME: need to know what data store and provider we're provisioning for !!
 	private SequenceConfiguration getSequenceConfiguration() {
 		DataAccessProvider provider = getProvider();
 		if (provider != null) {
