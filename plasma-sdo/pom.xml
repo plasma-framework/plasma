@@ -294,8 +294,10 @@
                   <goals>                                                    
                     <goal>run</goal>                                         
                   </goals>                                                   
-                </execution>  
-                                                                  
+                </execution> 
+                <!-- Generated SDO classes used by RDB service checked in as
+                    would cause circular depency - uncomment to re-generate --> 
+                <!--                                                   
                 <execution>    
                   <id>gen_rdb_sdo</id>                                              
                   <phase>process-classes</phase>                
@@ -339,7 +341,7 @@
                     <goal>run</goal>                                         
                   </goals>                                                   
                 </execution> 
-                                                                 
+                -->                                                 
               </executions>                                                  
             </plugin>	
             <plugin>
