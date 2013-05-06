@@ -292,7 +292,8 @@ public class DynamicSDOModelTest extends DASClientTestCase {
 					continue;
 				}
 				if (property.getValueConstraint() != null && property.getValueConstraint().getMaxLength() != null) {
-					int max = property.getValueConstraint().getMaxLength();
+					String maxStr = property.getValueConstraint().getMaxLength();
+					int max = Integer.valueOf(maxStr);
 					target.setString(property, truncate(value, max));
 				}
 			}

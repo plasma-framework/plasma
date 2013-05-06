@@ -19,7 +19,7 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo.access.provider.jdbc;
+package org.plasma.sdo.jdbc.filter;
 
 // java imports
 import java.util.List;
@@ -46,15 +46,15 @@ import org.plasma.sdo.access.provider.common.SQLQueryFilterAssembler;
 
 import commonj.sdo.Type;
 
-public class JDBCSubqueryFilterAssembler extends SQLQueryFilterAssembler
+public class SubqueryFilterAssembler extends SQLQueryFilterAssembler
 {
-    private static Log log = LogFactory.getLog(JDBCSubqueryFilterAssembler.class);
+    private static Log log = LogFactory.getLog(SubqueryFilterAssembler.class);
     
     private String alias;
     private Object[] filterParams;
     private int variableCount = 0;
 
-    public JDBCSubqueryFilterAssembler(String alias, Query query, List params, Type contextType)
+    public SubqueryFilterAssembler(String alias, Query query, List params, Type contextType)
     {
         super(contextType, params);
         this.alias = alias;

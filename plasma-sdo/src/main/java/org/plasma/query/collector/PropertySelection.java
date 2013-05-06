@@ -34,6 +34,13 @@ import commonj.sdo.Type;
 public interface PropertySelection {
 
 	/**
+	 * Traverses the given predicate adding its properties
+	 * and property paths to the selection.
+	 * @param predicate the predicate
+	 */
+	public void collect(Where predicate);
+	
+	/**
 	 * Returns the predicate for the given property or null
 	 * if the given property is not mapped. 
 	 * @param property the property
@@ -129,4 +136,17 @@ public interface PropertySelection {
 	 * given type. 
 	 */
 	public boolean hasInheritedProperty(Type type, commonj.sdo.Property property);
+
+	/**
+	 * Adds the given given property to the 
+	 * selection for the given graph root type and
+	 * returns any types collected during traversal
+	 * of the property path. 
+	 * @param rootType the graph root type
+	 * @param path the SDO XPath specifying a path from the given root type
+	 * to a target or endpoint property 
+	 * @return any types collected during traversal
+	 * of the property path.
+	 */
+	public List<Type> addProperty(Type rootType, String path);
 }

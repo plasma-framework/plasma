@@ -21,6 +21,7 @@
  */
 package org.plasma.provisioning.cli;
 
+@Deprecated
 public enum DDLToolAction {
     create,  
     drop,  

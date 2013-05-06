@@ -391,8 +391,20 @@ public class PlasmaConfig {
     		}
     		if (provisioning != null)
     			map.put(uri, provisioning);
-    	}
-    	
+    	}    	
+    }
+    
+    public void addDynamicSDONamespace(String uri, String artifact,
+    		NamespaceProvisioning provisioning) {
+    	Namespace namespace = new Namespace();
+    	namespace.setArtifact(artifact); 
+    	namespace.setUri(uri);
+    	namespace.setProvisioning(provisioning);
+        if (this.sdoNamespaceMap.get(namespace.getUri()) != null)
+			throw new ConfigurationException("duplicate SDO namespace configuration - "
+					+ "a namespace with URI '" + namespace.getUri() + "' already exists "
+					+ "within the configucation");
+    	this.sdoNamespaceMap.put(uri, new NamespaceAdapter(namespace));
     }
 
     public DataAccessProvider findDataAccessProvider(DataAccessProviderName providerName) {

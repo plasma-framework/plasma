@@ -73,10 +73,10 @@ public class TaxonomyQuery {
 
         Select select = new Select(paths);
         Where where = new Where();
-        where.addExpression(Property.forName(Category.PTY_NAME,
-                new Path(Taxonomy.PTY_CATEGORY)).eq(
+        where.addExpression(Property.forName(Category.PROPERTY.name.name(),
+                new Path(Taxonomy.PROPERTY.category.name())).eq(
                         name));
-        From from = new From(Taxonomy.ETY_TAXONOMY,
+        From from = new From(Taxonomy.TYPE_NAME_TAXONOMY,
         		Taxonomy.NAMESPACE_URI);        
         
         Query query = new Query(select, from, where);

@@ -19,12 +19,12 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo.access.provider.jdbc;
+package org.plasma.sdo.jdbc.filter;
 
 // java imports
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.query.model.GroupBy;
+import org.plasma.query.model.OrderBy;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.Property;
 import org.plasma.query.model.QueryConstants;
@@ -33,41 +33,42 @@ import org.plasma.query.visitor.Traversal;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.model.EntityConstants;
+import org.plasma.sdo.access.provider.jdbc.AliasMap;
 
-public class JDBCGroupingDeclarationAssembler extends DefaultQueryVisitor
+public class OrderingDeclarationAssembler extends DefaultQueryVisitor
     implements QueryConstants, EntityConstants
 {
-    private static Log log = LogFactory.getLog(JDBCGroupingDeclarationAssembler.class);
+    private static Log log = LogFactory.getLog(OrderingDeclarationAssembler.class);
 
     private PlasmaType contextType;
     private commonj.sdo.Property contextProp;
-    private StringBuilder groupingDeclaration = new StringBuilder();
+    private StringBuilder orderingDeclaration = new StringBuilder();
     private AliasMap aliasMap;
 
     @SuppressWarnings("unused")
-	private JDBCGroupingDeclarationAssembler() {}
+	private OrderingDeclarationAssembler() {}
 
-    public JDBCGroupingDeclarationAssembler(GroupBy groupby,
+    public OrderingDeclarationAssembler(OrderBy orderby,
     		PlasmaType contextType, AliasMap aliasMap)
     {
         this.contextType = contextType;
         this.aliasMap = aliasMap;
         
-        if (groupby.getTextContent() == null)
-        	groupby.accept(this); // traverse
+        if (orderby.getTextContent() == null)
+            orderby.accept(this); // traverse
         else
-            groupingDeclaration.append(groupby.getTextContent().getValue());            
+            orderingDeclaration.append(orderby.getTextContent().getValue());            
     }
-
-    public String getGroupingDeclaration() { return groupingDeclaration.toString(); }
+    
+	public String getOrderingDeclaration() { return orderingDeclaration.toString(); }
 
     public void start(Property property)                  
     {                
-        if (groupingDeclaration.length() == 0)
-        	groupingDeclaration.append("GROUP BY ");
+        if (orderingDeclaration.length() == 0)
+        	orderingDeclaration.append("ORDER BY ");
         	
-    	if (groupingDeclaration.length() > "GROUP BY ".length())
-            groupingDeclaration.append(", ");
+    	if (orderingDeclaration.length() > "ORDER BY ".length())
+            orderingDeclaration.append(", ");
     	PlasmaType targetType = contextType;
         if (property.getPath() != null)
         {
@@ -81,11 +82,18 @@ public class JDBCGroupingDeclarationAssembler extends DefaultQueryVisitor
         }
         PlasmaProperty endpoint = (PlasmaProperty)targetType.getProperty(property.getName());        
         contextProp = endpoint;
+        String targetAlias = this.aliasMap.getAlias(targetType);
+        if (targetAlias == null)
+        	targetAlias = this.aliasMap.addAlias(targetType);
         
         String alias = this.aliasMap.getAlias(targetType);
-        groupingDeclaration.append(alias);
-        groupingDeclaration.append(".");
-        groupingDeclaration.append(endpoint.getPhysicalName());
+        orderingDeclaration.append(alias);
+        orderingDeclaration.append(".");
+        orderingDeclaration.append(endpoint.getPhysicalName());
+        if (property.getDirection() == null || property.getDirection().ordinal() == org.plasma.query.model.SortDirectionValues.ASC.ordinal())
+            orderingDeclaration.append(" ASC");
+        else  
+            orderingDeclaration.append(" DESC");
         this.getContext().setTraversal(Traversal.ABORT);
     } 
 }

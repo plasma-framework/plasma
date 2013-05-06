@@ -76,6 +76,23 @@ public class PropertySelectionCollector extends CollectorSupport
     	super(rootType, onlySingularProperties);
         this.select = select;
     }
+    
+	@Override
+	public void collect(Where predicate) {
+        QueryVisitor visitor = new DefaultQueryVisitor() {
+            public void start(Property property)                                                                            
+            {    
+                collect(property);  
+                super.start(property);                         
+            }                                                                                                                                                                                                                                                                                                                                                               
+            public void start(WildcardProperty wildcardProperty)                                                                            
+            {     
+                collect(wildcardProperty);  
+                super.start(wildcardProperty);                         
+            }                                                                                                                                                                                                                                                                                                                                                               
+        };
+        predicate.accept(visitor);
+	}
         
 	private void collect()
 	{
@@ -214,6 +231,37 @@ public class PropertySelectionCollector extends CollectorSupport
     	return false;
     }
     
+    /* (non-Javadoc)
+	 * @see org.plasma.query.collector.PropertySelection#addProperty(commonj.sdo.Type, commonj.sdo.Property)
+	 */
+    @Override
+	public List<Type> addProperty(Type rootType, String path) {
+    	List<Type> result = new ArrayList<Type>();
+    	Type contextType = rootType;
+		StringBuilder buf = new StringBuilder();
+		String[] tokens = path.split("/");
+		for (int i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				buf.append("/");
+			String token = tokens[i];
+			int right = token.indexOf("[");
+			if (right >= 0) // remove predicate - were just after the path 
+				token = token.substring(0, right);	
+			int attr = token.indexOf("@");
+			if (attr == 0)
+				token = token.substring(1);
+			commonj.sdo.Property prop = contextType.getProperty(token);
+        	this.mapProperty(contextType, prop, this.propertyMap);
+        	this.mapInheritedProperty(contextType, prop, this.inheritedPropertyMap);
+			if (!prop.getType().isDataType())  {				
+				contextType = prop.getType(); // traverse
+				result.add(contextType);
+			}
+			buf.append(prop.getName());
+		}
+		return result;
+	}
+   
     /* (non-Javadoc)
 	 * @see org.plasma.query.collector.PropertySelection#hasInheritedProperty(commonj.sdo.Type, commonj.sdo.Property)
 	 */
@@ -381,4 +429,5 @@ public class PropertySelectionCollector extends CollectorSupport
         }
         return buf.toString();
 	}
+
 }

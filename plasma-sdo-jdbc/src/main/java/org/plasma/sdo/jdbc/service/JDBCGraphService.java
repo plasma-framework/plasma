@@ -19,7 +19,7 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo.access.provider.jdbc;
+package org.plasma.sdo.jdbc.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -42,16 +42,17 @@ import org.plasma.sdo.access.DataGraphDispatcher;
 import org.plasma.sdo.access.PlasmaDataAccessService;
 import org.plasma.sdo.core.SnapshotMap;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
+import org.plasma.sdo.jdbc.connect.RDBConnectionManager;
 import org.xml.sax.SAXException;
 
 import commonj.sdo.DataGraph;
 import commonj.sdo.Type;
 
-public class JDBCDataAccessProvider implements PlasmaDataAccessService {
+public class JDBCGraphService implements PlasmaDataAccessService {
     
-    private static Log log = LogFactory.getLog(JDBCDataAccessProvider.class);
+    private static Log log = LogFactory.getLog(JDBCGraphService.class);
 
-    public JDBCDataAccessProvider() {
+    public JDBCGraphService() {
     }
  
     public void initialize() {}
@@ -64,7 +65,7 @@ public class JDBCDataAccessProvider implements PlasmaDataAccessService {
         if (log.isDebugEnabled()) {
             log(query);
         }
-        JDBCQueryDispatcher dispatcher = new JDBCQueryDispatcher();
+        GraphQuery dispatcher = new GraphQuery();
         return dispatcher.count(query);
     }
     
@@ -84,7 +85,7 @@ public class JDBCDataAccessProvider implements PlasmaDataAccessService {
         if (log.isDebugEnabled()) {
             log(query);
         }
-        JDBCQueryDispatcher dispatcher = new JDBCQueryDispatcher();
+        GraphQuery dispatcher = new GraphQuery();
         Timestamp snapshotDate = new Timestamp((new Date()).getTime());
         return dispatcher.find(query, snapshotDate);
     }
@@ -96,7 +97,7 @@ public class JDBCDataAccessProvider implements PlasmaDataAccessService {
         if (log.isDebugEnabled()) {
             log(query);
         }
-        JDBCQueryDispatcher dispatcher = new JDBCQueryDispatcher();
+        GraphQuery dispatcher = new GraphQuery();
         DataGraph[] results = dispatcher.find(query, -1, new Timestamp((new Date()).getTime()));
         return results;
     }
@@ -104,7 +105,7 @@ public class JDBCDataAccessProvider implements PlasmaDataAccessService {
     public List<DataGraph[]> find(Query[] queries) {
         if (queries == null)
             throw new IllegalArgumentException("expected non-null 'queries' argument");
-        JDBCQueryDispatcher dispatcher = new JDBCQueryDispatcher();
+        GraphQuery dispatcher = new GraphQuery();
         List<DataGraph[]> list = new ArrayList<DataGraph[]>();
         Timestamp snapshotDate = new Timestamp((new Date()).getTime());
         for (int i = 0; i < queries.length; i++)
@@ -129,12 +130,13 @@ public class JDBCDataAccessProvider implements PlasmaDataAccessService {
         SnapshotMap snapshotMap = new SnapshotMap(new Timestamp((new Date()).getTime()));
         Connection con = null;
 		try {
-			con = JDBCConnectionManager.instance().getConnection();
+			con = RDBConnectionManager.instance().getConnection();
 	        con.setAutoCommit(false);
 		} catch (SQLException e2) {
             throw new DataAccessException(e2);
 		}
-        DataGraphDispatcher dispatcher = new JDBCDataGraphDispatcher(snapshotMap, 
+		DataGraphDispatcher dispatcher = 
+        	new GraphDispatcher(snapshotMap, 
                 username, con);
         try {
             dispatcher.commit(dataGraph);
@@ -162,6 +164,12 @@ public class JDBCDataAccessProvider implements PlasmaDataAccessService {
             throw new DataAccessException(t);
         }
         finally {
+        	 
+        	try {
+				con.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
             dispatcher.close();
         }
     }
@@ -176,15 +184,15 @@ public class JDBCDataAccessProvider implements PlasmaDataAccessService {
         SnapshotMap snapshotMap = new SnapshotMap(new Timestamp((new Date()).getTime()));
         Connection con = null;
 		try {
-			con = JDBCConnectionManager.instance().getConnection();
+			con = RDBConnectionManager.instance().getConnection();
 	        con.setAutoCommit(false);
 		} catch (SQLException e2) {
             throw new DataAccessException(e2);
 		}
-        
-        DataGraphDispatcher dispatcher = new JDBCDataGraphDispatcher(snapshotMap,
+		DataGraphDispatcher dispatcher = 
+        	new GraphDispatcher(snapshotMap, 
                 username, con);
-        
+       
         try {
             for (int i = 0; i < dataGraphs.length; i++) { 
                 if (log.isDebugEnabled())
@@ -211,6 +219,11 @@ public class JDBCDataAccessProvider implements PlasmaDataAccessService {
             throw new DataAccessException(t);
         }
         finally {
+        	try {
+				con.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
             dispatcher.close();
         }
     }

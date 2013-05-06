@@ -64,6 +64,73 @@ public class NameUtils {
 	 * @param name the name
 	 * @return the result name
 	 */
+	public static String toCamelCase(String name) {
+    	StringBuilder buf = new StringBuilder();
+    	if (name.indexOf("_") >= 0) {
+    		char[] array = name.toLowerCase().toCharArray();
+            for (int i = 0; i < array.length; i++) {
+            	if (i > 0) {
+            	    if (array[i] == '_') {
+            	    	int next = i+1;
+            	    	if (next < array.length)
+            	    	    array[next] = Character.toUpperCase(array[next]);
+            		    continue;
+            	    }
+            	    else
+            	    	buf.append(array[i]);	
+            	}
+            	else {
+            		buf.append(Character.toUpperCase(array[i]));
+            	}
+            }
+    	}
+    	else {
+        	char[] array = name.toCharArray();
+    		if (hasUpper(array)) {
+    			if (hasLower(array)) {
+    				buf.append(name);
+    			}
+    			else
+        			buf.append(name.toLowerCase());
+    		}
+    		else {
+    			buf.append(name);
+    		}
+    	}
+    	
+        return buf.toString();
+    }
+	
+	private static boolean hasDelimiter(char[] array, char c)
+	{
+        for (int i = 0; i < array.length; i++)
+        	if (array[i] == c)
+        		return true;
+ 		return false;
+	}
+
+	private static boolean hasLower(char[] array)
+	{
+        for (int i = 0; i < array.length; i++)
+        	if (Character.isLowerCase(array[i]))
+        		return true;
+ 		return false;
+	}
+
+	private static boolean hasUpper(char[] array)
+	{
+        for (int i = 0; i < array.length; i++)
+        	if (Character.isUpperCase(array[i]))
+        		return true;
+ 		return false;
+	}
+	
+	/**
+	 * Creates a capitalized, underscore delimited name
+	 * from the given camel case name. 
+	 * @param name the name
+	 * @return the result name
+	 */
 	public static String toConstantName(String name) {
     	StringBuilder buf = new StringBuilder();
     	char[] array = name.toCharArray();

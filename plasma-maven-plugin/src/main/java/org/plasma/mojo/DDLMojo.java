@@ -25,9 +25,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.plasma.provisioning.cli.RDBDialect;
 import org.plasma.provisioning.cli.DDLTool;
 import org.plasma.provisioning.cli.DDLToolAction;
-import org.plasma.text.ddl.DDLDialect;
 
 /**
  * Mojo implementation for generating DDL artifacts, such as
@@ -42,6 +42,7 @@ import org.plasma.text.ddl.DDLDialect;
  * 
  * @see org.plasma.provisioning.cli.DDLTool
  */
+@Deprecated
 public class DDLMojo extends ClassRealmMojo
 {    
     /**
@@ -81,7 +82,7 @@ public class DDLMojo extends ClassRealmMojo
         try
         {        
         	DDLToolAction toolAction = getToolAction(this.action);
-        	DDLDialect toolDialect = getToolDialect(this.dialect);
+        	RDBDialect toolDialect = getToolDialect(this.dialect);
 
         	        	
             String[] args = {
@@ -124,18 +125,18 @@ public class DDLMojo extends ClassRealmMojo
     	return command;
     }
     
-    private DDLDialect getToolDialect(String dialectValue)
+    private RDBDialect getToolDialect(String dialectValue)
     {
-    	DDLDialect dialect = null;
+    	RDBDialect dialect = null;
     	try {
-    		dialect = DDLDialect.valueOf(dialectValue);
+    		dialect = RDBDialect.valueOf(dialectValue);
     	}
     	catch (IllegalArgumentException e) {
     		StringBuilder buf = new StringBuilder();
-    		for (int i = 0; i < DDLDialect.values().length; i++) {
+    		for (int i = 0; i < RDBDialect.values().length; i++) {
     			if (i > 0)
     				buf.append(", ");
-    			buf.append(DDLDialect.values()[i].name());
+    			buf.append(RDBDialect.values()[i].name());
     		}
     			
     		throw new IllegalArgumentException("'" + dialectValue + "' - expected one of ["

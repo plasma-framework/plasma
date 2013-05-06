@@ -235,7 +235,7 @@ public class ProfileTest extends DASClientTestCase {
     protected int getPersonCount() {
         Query query = new org.plasma.query.model.Query(
         	new Select("*"), 
-        	new From(Person.ETY_PERSON,
+        	new From(Person.TYPE_NAME_PERSON,
         			 Person.NAMESPACE_URI));
         return service.count(query);
     }
@@ -243,7 +243,7 @@ public class ProfileTest extends DASClientTestCase {
     protected int getUserCount() {
         Query query = new org.plasma.query.model.Query(
         	new Select("*"), 
-        	new From(User.ETY_USER,
+        	new From(User.TYPE_NAME_USER,
         			User.NAMESPACE_URI));
         return service.count(query);
     }
@@ -251,7 +251,7 @@ public class ProfileTest extends DASClientTestCase {
     protected int getProfileCount() {
         Query query = new org.plasma.query.model.Query(
         	new Select("*"), 
-        	new From(Profile.ETY_PROFILE,
+        	new From(Profile.TYPE_NAME_PROFILE,
         			Profile.NAMESPACE_URI));
         return service.count(query);
     }
@@ -259,7 +259,7 @@ public class ProfileTest extends DASClientTestCase {
     protected int getElementCount() {
         Query query = new org.plasma.query.model.Query(
         	new Select("*"), 
-        	new From(Element.ETY_ELEMENT,
+        	new From(Element.TYPE_NAME_ELEMENT,
         			Element.NAMESPACE_URI));
         return service.count(query);
     }

@@ -160,7 +160,7 @@ public class ProfileTestCase extends PlasmaTest {
         //        applicationClassifier != null);
 
         // find by namespace qualified name
-        String id = OptimisticConcurrent.NAMESPACE_URI + "#" + OptimisticConcurrent.ETY_OPTIMISTIC_CONCURRENT;
+        String id = OptimisticConcurrent.NAMESPACE_URI + "#" + OptimisticConcurrent.TYPE_NAME_OPTIMISTIC_CONCURRENT;
         Classifier appClassifier = PlasmaRepository.getInstance().findClassifier(id);
         assertTrue("could not find "+id+" classifier by artifact namespace qualified name", 
         		appClassifier != null);

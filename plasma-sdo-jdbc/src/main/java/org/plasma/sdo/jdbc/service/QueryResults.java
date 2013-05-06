@@ -19,8 +19,7 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-
-package org.plasma.sdo.access.provider.jdbc;
+package org.plasma.sdo.jdbc.service;
 
 import java.util.Collection;
 
@@ -35,13 +34,13 @@ import java.util.Collection;
  * execution.  
  *
  */
-public class JDBCQueryResults 
+public class QueryResults 
 {
     private Collection collection;
     
-    private JDBCQueryResults () {}   
+    private QueryResults () {}   
         
-    public JDBCQueryResults(Collection collection) {
+    public QueryResults(Collection collection) {
         this.collection = collection;
     }    
     

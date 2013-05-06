@@ -7,8 +7,8 @@
         <GlobalProvisioning 
             packageName="org.plasma.platform.sdo">
             
-           <Interface classNamePrefix="I" constants="true"/>          
-           <Implementation classNameSuffix="SDO"
+           <Interface />          
+           <Implementation classNameSuffix="Impl"
                childPackageName="impl"/>  
            <QueryDSL>
                <Implementation classNamePrefix="Q"
@@ -66,19 +66,18 @@
         </Namespace>
         -->
         
+        <DataAccessService dataStoreType="RDBMS">   
   		
-  	    <DataAccessService dataStoreType="RDBMS"> 	
-
             <DataAccessProvider name="JDBC"                
-                className="org.plasma.sdo.access.provider.jdbc.JDBCDataAccessProvider">
+                className="org.plasma.sdo.jdbc.service.JDBCGraphService">
 
-                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionURL">jdbc:oracle:thin:@localhost:1521:XE</Property>    
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionURL">jdbc:oracle:thin:@162.79.16.102:1521:DEVDB</Property>    
                 
-                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionPassword">PLASMA</Property>    
-                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionUserName">plasma</Property>    
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionPassword">fs_nice#1</Property>    
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionUserName">fs_nice</Property>    
                 <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionDriverName">oracle.jdbc.driver.OracleDriver</Property>    
                 <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionPoolMinSize">1</Property>    
-                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionPoolMaxSize">80</Property>    
+                <Property name="org.plasma.sdo.access.provider.jdbc.ConnectionPoolMaxSize">20</Property>  
 
                 <SequenceConfiguration suffix="_SEQ"
                     generatorClassName="org.plasma.sdo.StoredProcSequenceGenerator"/>         

@@ -19,9 +19,9 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.text.ddl;
+package org.plasma.provisioning.cli;
 
-public enum DDLDialect {
+public enum RDBDialect {
     oracle,
     mysql
 }

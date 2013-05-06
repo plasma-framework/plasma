@@ -55,7 +55,7 @@
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 
 		            </xsd:element>
-		            <xsd:element name="DataAccessService" type="cfg:DataAccessService"  minOccurs="1" maxOccurs="unbounded">
+		            <xsd:element name="DataAccessService" type="cfg:DataAccessService"  minOccurs="0" maxOccurs="unbounded">
 		                <xsd:annotation>                                  
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 

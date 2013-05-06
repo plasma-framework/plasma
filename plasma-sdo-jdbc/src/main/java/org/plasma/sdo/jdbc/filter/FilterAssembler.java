@@ -19,21 +19,22 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo.access.provider.jdbc;
+package org.plasma.sdo.jdbc.filter;
 
 // java imports
 import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.query.QueryException;
+import org.plasma.query.bind.PlasmaQueryDataBinding;
 import org.plasma.query.model.AbstractPathElement;
 import org.plasma.query.model.Expression;
 import org.plasma.query.model.From;
-import org.plasma.query.model.GroupOperator;
 import org.plasma.query.model.Literal;
-import org.plasma.query.model.LogicalOperator;
-import org.plasma.query.model.NullLiteral;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.PathElement;
 import org.plasma.query.model.Property;
@@ -49,16 +50,17 @@ import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.DataAccessException;
 import org.plasma.sdo.access.model.EntityConstants;
 import org.plasma.sdo.access.provider.common.SQLQueryFilterAssembler;
-import org.plasma.sdo.helper.DataConverter;
+import org.plasma.sdo.access.provider.jdbc.AliasMap;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
 import org.plasma.sdo.profile.KeyType;
+import org.xml.sax.SAXException;
 
 import commonj.sdo.Type;
 
-public class JDBCFilterAssembler extends SQLQueryFilterAssembler
+public class FilterAssembler extends SQLQueryFilterAssembler
     implements QueryConstants, EntityConstants
 {
-    private static Log log = LogFactory.getLog(JDBCFilterAssembler.class);
+    private static Log log = LogFactory.getLog(FilterAssembler.class);
 
     private Map variableMap;
     private StringBuffer variableDecls;
@@ -69,7 +71,7 @@ public class JDBCFilterAssembler extends SQLQueryFilterAssembler
     
     private AliasMap aliasMap;
 
-    public JDBCFilterAssembler(Class candidate, Where where,
+    public FilterAssembler(Where where,
         Type contextType, AliasMap aliasMap)
     {
         super(contextType);
@@ -85,7 +87,9 @@ public class JDBCFilterAssembler extends SQLQueryFilterAssembler
         		throw new DataAccessException("parameter declarations allowed only for 'free-text' Where clause");
         	if (where.getVariableDeclaration() != null)
         		throw new DataAccessException("import declarations allowed only for 'free-text' Where clause");
-                    	
+                 
+        	if (log.isDebugEnabled())
+        		log(where);
         	this.filter.append(" WHERE ");
         	where.accept(this); // traverse        	
         }
@@ -152,7 +156,7 @@ public class JDBCFilterAssembler extends SQLQueryFilterAssembler
         Type type = PlasmaTypeHelper.INSTANCE.getType(from.getEntity().getNamespaceURI(), 
         		from.getEntity().getName());
         String alias = ALIAS_PREFIX + String.valueOf(subqueryCount);
-        JDBCSubqueryFilterAssembler assembler = new JDBCSubqueryFilterAssembler(alias, 
+        SubqueryFilterAssembler assembler = new SubqueryFilterAssembler(alias, 
             query, params, type);
                 
         if (property.getPath() != null)
@@ -275,81 +279,20 @@ public class JDBCFilterAssembler extends SQLQueryFilterAssembler
         filter.append(targetAlias + "." + endpointProp.getPhysicalName());
         super.start(property);
     }
-    
-	public void start(WildcardOperator operator) {
-		if (filter.length() > 0)
-			filter.append(" ");
-
-		switch (operator.getValue()) {
-		case LIKE:
-			filter.append("LIKE");
-			break;
-		default:
-			throw new DataAccessException("unknown operator '"
-					+ operator.getValue().toString() + "'");
-		}
-	}
-
-	public void start(LogicalOperator operator) {
-		if (filter.length() > 0)
-			filter.append(" ");
-
-		switch (operator.getValue()) {
-		case AND:
-			filter.append("AND");
-			break;
-		case OR:
-			filter.append("OR");
-			break;
-		default:
-			throw new DataAccessException("unknown operator '"
-					+ operator.getValue().toString() + "'");
-		}
-		super.start(operator);
-	}
-
-  /*
-    * Resets variable hash map on every term grouping so as
-    * not to preserve variables across groups. 
-    * @param oper the group operator
-    */
-    public void start(GroupOperator oper)
+    	
+    protected void log(Where root)
     {
-		switch (oper.getValue()) {
-		case LP_1: filter.append(")"); break;			
-		case LP_2: filter.append("))"); break;			
-		case LP_3: filter.append(")))"); break;			
-		case RP_1: filter.append("("); 			
-            if (variableMap != null)
-                variableMap.clear();
-            break;
-		case RP_2: filter.append("(("); break;			
-		case RP_3: filter.append("((("); break;			
-		default:
-			throw new QueryException("unknown group operator, "
-						+ oper.getValue().name());
+    	String xml = "";
+        PlasmaQueryDataBinding binding;
+		try {
+			binding = new PlasmaQueryDataBinding(
+			        new DefaultValidationEventHandler());
+	        xml = binding.marshal(root);
+		} catch (JAXBException e) {
+			log.debug(e);
+		} catch (SAXException e) {
+			log.debug(e);
 		}
-
-        super.start(oper);
+        log.debug("where: " + xml);
     }
-
-	public void start(Literal literal) {
-		if (filter.length() > 0)
-			filter.append(" ");
-		String content = literal.getValue().trim();
-		content = content.replace(WILDCARD, "%");
-		params.add(
-			DataConverter.INSTANCE.convert(
-				this.contextProperty.getType(), 
-				this.stringType,
-				content));
-		filter.append("?");
-	}
-
-	public void start(NullLiteral nullLiteral) {
-		if (filter.length() > 0)
-			filter.append(" ");
-		params.add(nullLiteral);
-		filter.append("?");
-	}
 }

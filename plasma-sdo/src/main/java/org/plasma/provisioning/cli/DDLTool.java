@@ -22,20 +22,14 @@
 package org.plasma.provisioning.cli;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
-import org.plasma.text.ddl.DDLDialect;
 import org.plasma.text.ddl.DDLException;
 import org.plasma.text.ddl.DDLFactory;
 import org.plasma.text.ddl.DDLModelAssembler;
@@ -46,18 +40,12 @@ import org.plasma.text.ddl.MySQLFactory;
 import org.plasma.text.ddl.OracleFactory;
 import org.xml.sax.SAXException;
 
+@Deprecated
 public class DDLTool extends ProvisioningTool {
     
     private static Log log =LogFactory.getLog(
             DDLTool.class); 
 
-    /*
-    public static void provision(File src, File dest, 
-            URL styleSheet, Properties params) 
-        throws TransformerConfigurationException, 
-            IOException, TransformerException {       
-    }
-    */
         
     public static void main(String[] args) throws JAXBException, SAXException, IOException {
         if (args.length != 3) {
@@ -96,19 +84,19 @@ public class DDLTool extends ProvisioningTool {
         	//FIXME: don't assume this command maps to operation
         	DDLOperation operation = DDLOperation.valueOf(command.name());
 
-        	DDLDialect dialect = null;
+        	RDBDialect dialect = null;
         	try {
         		String dialectArg = args[1];
         		if (dialectArg.startsWith("-"))
         			dialectArg = dialectArg.substring(1);
-        		dialect = DDLDialect.valueOf(dialectArg);
+        		dialect = RDBDialect.valueOf(dialectArg);
         	}
         	catch (IllegalArgumentException e) {
         		StringBuilder buf = new StringBuilder();
-        		for (int i = 0; i < DDLDialect.values().length; i++) {
+        		for (int i = 0; i < RDBDialect.values().length; i++) {
         			if (i > 0)
         				buf.append(", ");
-        			buf.append(DDLDialect.values()[i].name());
+        			buf.append(RDBDialect.values()[i].name());
         		}
         			
         		throw new IllegalArgumentException("'" + args[1] + "' - expected one of ["

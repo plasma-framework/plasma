@@ -53,10 +53,20 @@ public class DataConverter {
     
     private static Log log = LogFactory.getFactory().getInstance(DataConverter.class);
     static public DataConverter INSTANCE = initializeInstance();
+    public static final String FORMAT_PATTERN_TIME 		= "HH:mm:ss'.'SSS'Z'";
+    public static final String FORMAT_PATTERN_DATE 		= "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String FORMAT_PATTERN_DATETIME 	= "yyyy-MM-dd'T'HH:mm:ss'.'SSS'Z'";
+    public static final String FORMAT_PATTERN_DAY 		= "dd"; 
+    public static final String FORMAT_PATTERN_MONTH 		= "MM";
+    public static final String FORMAT_PATTERN_MONTHDAY 	= "MM-dd";
+    public static final String FORMAT_PATTERN_YEAR 		= "yyyy";
+    public static final String FORMAT_PATTERN_YEARMONTH 	= "yyyy-MM";
+    public static final String FORMAT_PATTERN_YEARMONTHDAY = "yyyy-MM-dd";
 
     private static Map<Class<?>, Map<String,DataType>> javaClassToAllowableTypesMap;
     
     private static Map<Class<?>, Method> javaClassToConverterFromMethodMap;
+
     
     private DateFormat timeFormat;
     private DateFormat dateFormat;
@@ -70,10 +80,10 @@ public class DataConverter {
     private DateFormat yearMonthDayFormat;
     
     private DataConverter() {
-    	timeFormat = new SimpleDateFormat("HH:mm:ss'.'SSS'Z'");
+    	timeFormat = new SimpleDateFormat(FORMAT_PATTERN_TIME);
     	timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     	
-    	dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    	dateFormat = new SimpleDateFormat(FORMAT_PATTERN_DATE);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
     	// Note: the Java class for SDO dataTime datatype is String. This seems unfortunate
@@ -84,27 +94,27 @@ public class DataConverter {
         // but can compensate for this by allowing more precision
         // in the SDO date datatype. See above data format which allows
         // seconds precision.
-        dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS'Z'");
+        dateTimeFormat = new SimpleDateFormat(FORMAT_PATTERN_DATETIME);
         dateTimeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
  
     	durationFormat = ISOPeriodFormat.standard();
     	
-    	dayFormat = new SimpleDateFormat("dd");
+    	dayFormat = new SimpleDateFormat(FORMAT_PATTERN_DAY);
     	dayFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-    	monthFormat = new SimpleDateFormat("MM");
+    	monthFormat = new SimpleDateFormat(FORMAT_PATTERN_MONTH);
     	monthFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     	
-    	monthDayFormat = new SimpleDateFormat("MM-dd");
+    	monthDayFormat = new SimpleDateFormat(FORMAT_PATTERN_MONTHDAY);
     	monthDayFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-    	yearFormat = new SimpleDateFormat("yyyy");
+    	yearFormat = new SimpleDateFormat(FORMAT_PATTERN_YEAR);
     	yearFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-    	yearMonthFormat = new SimpleDateFormat("yyyy-MM");
+    	yearMonthFormat = new SimpleDateFormat(FORMAT_PATTERN_YEARMONTH);
     	yearMonthFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-    	yearMonthDayFormat = new SimpleDateFormat("yyyy-MM-dd");
+    	yearMonthDayFormat = new SimpleDateFormat(FORMAT_PATTERN_YEARMONTHDAY);
     	yearMonthDayFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     	
         if (javaClassToAllowableTypesMap == null) {

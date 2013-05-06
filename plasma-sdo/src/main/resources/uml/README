@@ -1,0 +1,3 @@
+The PlasmaSDO profile in this resource subdir is one version ahead
+of the one in the src/main/resources directory. Use the previous version
+in the src/main/resources directory to distribute.  

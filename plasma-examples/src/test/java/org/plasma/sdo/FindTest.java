@@ -79,9 +79,9 @@ public class FindTest extends DASClientTestCase {
   
     protected Query createShallowQuery() {
         Select select = new Select(new AbstractProperty[] { 
-            Property.forName(Category.PTY_NAME),
+            Property.forName(Category.PROPERTY.name.name()),
         });
-        From from = new From(Category.ETY_CATEGORY,
+        From from = new From(Category.TYPE_NAME_CATEGORY,
         		Category.NAMESPACE_URI);
         Where where = new Where();
         Query query = new Query(select, from, where);

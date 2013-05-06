@@ -228,7 +228,17 @@
 			</plugin>
             <plugin>                                                         
               <artifactId>maven-antrun-plugin</artifactId>                   
-              <version>1.7</version>                                         
+              <version>1.7</version>  
+              <dependencies>
+                <dependency>
+                  <groupId>com.sun</groupId>
+                  <artifactId>tools</artifactId>
+                  <version>1.5.0</version>
+                  <scope>system</scope>
+                  <systemPath>${java.home}/../lib/tools.jar</systemPath>
+                </dependency>
+              </dependencies>              
+                                                     
               <executions>                                                   
                 <execution>    
                   <id>gen_profile_classes</id>                                              
@@ -284,7 +294,52 @@
                   <goals>                                                    
                     <goal>run</goal>                                         
                   </goals>                                                   
-                </execution>                                                 
+                </execution>  
+                                                                  
+                <execution>    
+                  <id>gen_rdb_sdo</id>                                              
+                  <phase>process-classes</phase>                
+                  <configuration>                                            
+                     <systemProperties>
+                                <property><name>log4j.configuration</name><value>log4j.properties</value></property>
+                                <property><name>fuml.configuration</name><value>fuml-config.xml</value></property> 
+                                <property><name>plasma.configuration</name><value>plasma-config.xml</value></property>
+                     </systemProperties>
+                    <target>                                                 
+                      <echo message="####Generate RDB SDO####"/>                                              
+                      <property name="compile_classpath" refid="maven.compile.classpath"/>
+                      <path id="cp">                                                                                                                                                                                                                             
+                         <pathelement path="${compile_classpath}"/>                                                                                                                                                                                                  
+                      </path>                                                                                                                                                                                                                                          
+                      <java failonerror="yes" fork="yes"                                                                                                                                                                                                                                 
+                          classname="org.plasma.provisioning.cli.SDOTool">                                                                                                                                                                                              
+                          <classpath refid="cp"/> 
+                          <jvmarg value="-Dfuml.configuration=fuml-config.xml" />                                                                                                                                                                                                               
+                          <arg value="-create" />                                                                                                                                                                 
+                          <arg value="java" />                                                                                                                                                                 
+                          <arg value="${basedir}/target/generated-sources/java" />                                                                                                                                                                 
+                      </java>                                                                                                                                                                                                                                        
+                      <java failonerror="yes" fork="yes"                                                                                                                                                                                                                                 
+                          classname="org.plasma.provisioning.cli.DSLTool">                                                                                                                                                                                              
+                          <classpath refid="cp"/> 
+                          <jvmarg value="-Dfuml.configuration=fuml-config.xml" />                                                                                                                                                                                                               
+                          <arg value="-create" />                                                                                                                                                                 
+                          <arg value="java" />                                                                                                                                                                 
+                          <arg value="${basedir}/target/generated-sources/java" />                                                                                                                                                                 
+                      </java>                                                                                                                                                                                                                                        
+			          <javac destdir="${basedir}/target/classes" 
+			              debug="on"> 
+			              <classpath refid="cp" /> 
+			              <src path="${basedir}/src/main/java"/>
+			              <src path="${basedir}/target/generated-sources/java"/>
+			          </javac>                          
+                    </target>                                                
+                  </configuration>                                           
+                  <goals>                                                    
+                    <goal>run</goal>                                         
+                  </goals>                                                   
+                </execution> 
+                                                                 
               </executions>                                                  
             </plugin>	
             <plugin>
@@ -314,7 +369,10 @@
 				<configuration>
 					<excludes>
 						<exclude>**/*.xml</exclude>
+                        <exclude>**/Plasma_SDO_Profile*.mdxml</exclude>
+						<!-- 
 						<exclude>**/*.mdxml</exclude>
+						-->
 						<exclude>**/*.properties</exclude>
 						<exclude>com/*</exclude>
 						<exclude>**/test/*</exclude>

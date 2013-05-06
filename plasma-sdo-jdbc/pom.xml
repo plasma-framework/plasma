@@ -94,6 +94,16 @@
 		<artifactId>commons-dbcp</artifactId>
 		<version>1.4</version>
 	</dependency>
+    <dependency>                                 
+        <groupId>com.oracle</groupId>          
+        <artifactId>ojdbc14</artifactId>    
+        <version>10.2.0.3.0</version>                   
+    </dependency>                                
+    <!--
+    Note: for Oracle JDBC driver use: 
+    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 \
+ -Dversion=10.2.0.3.0 -Dpackaging=jar -Dfile=ojdbc.jar -DgeneratePom=true 
+    -->
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>
@@ -106,6 +116,7 @@
     </dependency>	
   </dependencies>
   <build>
+    <finalName>plasma-sdo-jdbc</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

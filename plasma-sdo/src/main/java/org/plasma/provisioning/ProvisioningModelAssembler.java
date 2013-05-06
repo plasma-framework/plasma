@@ -45,6 +45,12 @@ import org.plasma.sdo.repository.PlasmaRepository;
 
 import commonj.sdo.Type;
 
+/**
+ * Assembles a provisioning model based on the configured SDO 
+ * environment iterating through the configured SDO name-spaces
+ * or taking a specific name-space list or various of the
+ * constructor arguments. 
+ */
 public class ProvisioningModelAssembler {
 	private static Log log = LogFactory.getLog(ProvisioningModelAssembler.class);
 	private Model model;
@@ -55,19 +61,40 @@ public class ProvisioningModelAssembler {
 	private String destNamespaceURI;
 	private DataAccessProviderName serviceName;
 	
+	/**
+	 * Constructs a provisioning model based
+	 * on all configured SDO namespaces.
+	 */
 	public ProvisioningModelAssembler() {
 		this(PlasmaRepository.getInstance().getAllNamespaces());
 	}
 	
+	/**
+	 * Constructs a provisioning model based
+	 * on the given provider. 
+	 * @param serviceName the service provider
+	 */
 	public ProvisioningModelAssembler(DataAccessProviderName serviceName) {
 		this.serviceName = serviceName;
 		construct(PlasmaRepository.getInstance().getAllNamespaces());
 	}
 	
+	/**
+	 * Constructs a provisioning model based
+	 * on the given list of SDO name spaces. 
+	 * @param namespaces the SDO name spaces
+	 */
 	public ProvisioningModelAssembler(List<Namespace> namespaces) {
 		construct(PlasmaRepository.getInstance().getAllNamespaces());
 	}
 	
+	/**
+	 * Constructs a provisioning model based
+	 * on the given query.
+	 * @param query the query
+	 * @param destNamespaceURI the destination namespace URI
+	 * @param destNamespacePrefix the destination namespace prefix
+	 */
     public ProvisioningModelAssembler(Query query, String destNamespaceURI,
     		String destNamespacePrefix) {
 		super();

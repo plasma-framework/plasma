@@ -19,7 +19,7 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo.access.provider.jdbc;
+package org.plasma.sdo.jdbc.service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,29 +28,33 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.DataAccessException;
 import org.plasma.sdo.access.provider.common.PropertyPair;
+import org.plasma.sdo.access.provider.jdbc.AliasMap;
 import org.plasma.sdo.core.CoreDataObject;
+import org.plasma.sdo.jdbc.filter.FilterAssembler;
 import org.plasma.sdo.profile.ConcurrencyType;
 import org.plasma.sdo.profile.ConcurrentDataFlavor;
 import org.plasma.sdo.profile.KeyType;
 
 import commonj.sdo.Property;
 
-public abstract class JDBCDispatcher {
+public abstract class JDBCSupport {
 	
-    private static Log log = LogFactory.getFactory().getInstance(JDBCDispatcher.class);
-	protected JDBCDataConverter converter = JDBCDataConverter.INSTANCE;
+    private static Log log = LogFactory.getFactory().getInstance(JDBCSupport.class);
+	protected RDBDataConverter converter = RDBDataConverter.INSTANCE;
 	
-	protected JDBCDispatcher() {
+	protected JDBCSupport() {
 		
 	}	
 
@@ -123,44 +127,158 @@ public abstract class JDBCDispatcher {
         	// FIXME: escape , etc...
         	sql.append(propValue.getValue()); // FIXME; use converter
         }
-        sql.append(" FOR UPDATE WAIT ");
-        sql.append(String.valueOf(waitSeconds));
-        //sql.append(";");
+        // FIXME: vendor specific checks
+        // if Oracle
+        //sql.append(" FOR UPDATE WAIT ");
+        //sql.append(String.valueOf(waitSeconds));
+        // if MySql
+        sql.append(" FOR UPDATE");
+
 		return sql;
 	}
 	
 	protected StringBuilder createSelect(PlasmaType type, List<String> names, 
-			List<PropertyPair> keyValues) {
+			List<PropertyPair> keyValues) throws SQLException {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT ");		
-		int i = 0;
+		
+		int count = 0;
+		// always select pk props where not found in given list
+		List<Property> pkProps = type.findProperties(KeyType.primary);
+		for (Property pkProp : pkProps) {
+			if (names.contains(pkProp.getName()))
+				continue;
+			if (count > 0)
+				sql.append(", ");
+			sql.append("t0.");
+			sql.append(((PlasmaProperty)pkProp).getPhysicalName());			
+			count++;
+		}
+		
 		for (String name : names) {
 			PlasmaProperty prop = (PlasmaProperty)type.getProperty(name);
 			if (prop.isMany() && !prop.getType().isDataType())
 				continue;
-			if (i > 0)
+			if (count > 0)
 				sql.append(", ");
 			sql.append("t0.");
 			sql.append(prop.getPhysicalName());
-			i++;
-		}
+			count++;
+		}		
+		
 		sql.append(" FROM ");
 		sql.append(type.getPhysicalName());
 		sql.append(" t0 ");
 		sql.append(" WHERE ");
-        for (int k = 0; k < keyValues.size(); k++) {
-        	if (k > 0)
-        		sql.append(", ");
-        	PropertyPair propValue = keyValues.get(k);
+        for (count = 0; count < keyValues.size(); count++) {
+        	if (count > 0)
+        		sql.append(" AND ");
+        	PropertyPair propValue = keyValues.get(count);
         	sql.append("t0.");  
         	sql.append(propValue.getProp().getPhysicalName());
         	sql.append(" = "); 
-        	// FIXME: escape , etc...
-        	sql.append(propValue.getValue()); // FIXME; use converter
+        	appendValue(propValue, sql);
         }
 		
 		return sql;
 	}
+
+	protected StringBuilder createSelect(PlasmaType type, List<String> names, 
+			List<PropertyPair> keyValues,
+			FilterAssembler filterAssembler,
+			AliasMap aliasMap) throws SQLException {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT ");		
+		int count = 0;
+		// always select pk props where not found in given list
+		List<Property> pkProps = type.findProperties(KeyType.primary);
+		for (Property pkProp : pkProps) {
+			if (names.contains(pkProp.getName()))
+				continue;
+			if (count > 0)
+				sql.append(", ");
+			sql.append("t0.");
+			sql.append(((PlasmaProperty)pkProp).getPhysicalName());			
+			count++;
+		}
+		for (String name : names) {
+			PlasmaProperty prop = (PlasmaProperty)type.getProperty(name);
+			if (prop.isMany() && !prop.getType().isDataType())
+				continue;
+			if (count > 0)
+				sql.append(", ");
+			sql.append("t0.");
+			sql.append(prop.getPhysicalName());
+			count++;
+		}
+		sql.append(" FROM ");
+    	Iterator<PlasmaType> it = aliasMap.getTypes();
+    	count = 0;
+    	while (it.hasNext()) {
+    		PlasmaType aliasType = it.next();
+    		String alias = aliasMap.getAlias(aliasType); 
+    		if (count > 0)
+    			sql.append(", ");
+    		sql.append(aliasType.getPhysicalName());
+    		sql.append(" ");
+    		sql.append(alias);
+    		count++;
+    	}
+    	sql.append(" ");
+    	sql.append(filterAssembler.getFilter());
+        for (count = 0; count < keyValues.size(); count++) {
+            sql.append(" AND ");
+        	PropertyPair propValue = keyValues.get(count);
+        	sql.append("t0.");  
+        	sql.append(propValue.getProp().getPhysicalName());
+        	sql.append(" = "); 
+        	appendValue(propValue, sql);
+        }
+        
+        // add default ordering by given keys
+    	sql.append(" ORDER BY ");
+        for (count = 0; count < keyValues.size(); count++) {
+        	if (count > 0)        		
+                sql.append(", ");
+        	PropertyPair propValue = keyValues.get(count);
+        	sql.append("t0.");  
+        	sql.append(propValue.getProp().getPhysicalName());
+        }
+		
+		return sql;
+	}
+
+	private void appendValue(PropertyPair propValue, StringBuilder sql) throws SQLException
+	{
+    	PlasmaProperty dataProperty = propValue.getProp();
+    	if (!propValue.getProp().getType().isDataType()) {        		
+    		PlasmaType oppositeType = (PlasmaType)propValue.getProp().getType();
+        	List<Property> pkPropList = oppositeType.findProperties(KeyType.primary);
+            if (pkPropList == null || pkPropList.size() == 0)
+                throw new DataAccessException("no pri-key properties found for type '" 
+                        + oppositeType.getName() + "'");
+            if (pkPropList.size() > 1)
+                throw new DataAccessException("multiple pri-key properties found for type '" 
+                        + oppositeType.getName() + "' - cannot map to generated keys");
+            dataProperty = (PlasmaProperty)pkPropList.get(0);
+     	}        	
+    	
+    	Object jdbcValue = RDBDataConverter.INSTANCE.toJDBCDataValue(dataProperty, 
+    			propValue.getValue());
+    	DataFlavor dataFlavor = dataProperty.getDataFlavor();
+    	switch (dataFlavor) {
+    	case string:
+    	case temporal:
+    	case other:
+    	    sql.append("'");
+    	    sql.append(jdbcValue);
+    	    sql.append("'");
+    	    break;
+    	default:
+    	    sql.append(jdbcValue);
+     	   break;
+    	}		
+	}	
 	
 	protected StringBuilder createInsert(PlasmaType type, 
 			Map<String, PropertyPair> values) {
@@ -193,6 +311,19 @@ public abstract class JDBCDispatcher {
 		}
 		sql.append(")");
 		return sql;
+	}
+	
+	protected boolean hasUpdatableProperties(Map<String, PropertyPair> values) {
+		
+		for (PropertyPair pair : values.values()) {
+			PlasmaProperty prop = pair.getProp();
+			if (prop.isMany() && !prop.getType().isDataType())
+				continue;
+			if (prop.isKey(KeyType.primary))
+				continue; // ignore keys here
+			return true;
+		}
+		return false;
 	}
 
 	protected StringBuilder createUpdate(PlasmaType type,  
@@ -243,7 +374,6 @@ public abstract class JDBCDispatcher {
 		StringBuilder sql = new StringBuilder();
 		sql.append("DELETE FROM ");		
 		sql.append(type.getPhysicalName());
-		sql.append(" t0 ");
 		sql.append(" WHERE ");
 		int i = 0;
 		for (PropertyPair pair : values.values()) {
@@ -252,7 +382,6 @@ public abstract class JDBCDispatcher {
 				continue;
 			if (!prop.isKey(KeyType.primary))
 				continue;
-        	sql.append("t0.");  
         	sql.append(pair.getProp().getPhysicalName());
         	sql.append(" = ?"); 
         	pair.setColumn(i+1);
@@ -264,6 +393,11 @@ public abstract class JDBCDispatcher {
 	
 	protected List<List<PropertyPair>> fetch(PlasmaType type, StringBuilder sql, Connection con)
 	{
+		return fetch(type, sql, new Object[0], con);
+	}
+	
+	protected List<List<PropertyPair>> fetch(PlasmaType type, StringBuilder sql, Object[] params, Connection con)
+	{
 		List<List<PropertyPair>> result = new ArrayList<List<PropertyPair>>();
         PreparedStatement statement = null;
         ResultSet rs = null; 
@@ -272,10 +406,29 @@ public abstract class JDBCDispatcher {
                		ResultSet.TYPE_FORWARD_ONLY,/*ResultSet.TYPE_SCROLL_INSENSITIVE,*/
                     ResultSet.CONCUR_READ_ONLY);
 		
-            if (log.isDebugEnabled() ){
-                log.debug("fetch: " + sql.toString());
-            } 
+            for (int i = 0; i < params.length; i++)
+            	statement.setString(i+1, 
+            			String.valueOf(params[i]));
             
+            if (log.isDebugEnabled() ){
+                if (params == null || params.length == 0) {
+                    log.debug("fetch: "+ sql.toString());                	
+                }
+                else
+                {
+                    StringBuilder paramBuf = new StringBuilder();
+                	paramBuf.append(" [");
+                    for (int p = 0; p < params.length; p++)
+                    {
+                        if (p > 0)
+                        	paramBuf.append(", ");
+                        paramBuf.append(String.valueOf(params[p]));
+                    }
+                    paramBuf.append("]");
+                    log.debug("fetch: "+ sql.toString() 
+                    		+ " " + paramBuf.toString());
+                }
+            } 
             statement.execute();
             rs = statement.getResultSet();
             ResultSetMetaData rsMeta = rs.getMetaData();
@@ -518,5 +671,100 @@ public abstract class JDBCDispatcher {
         }
  	}
 	
+	protected List<PropertyPair> executeInsert(PlasmaType type, StringBuilder sql, 
+			Map<String, PropertyPair> values,
+			Connection con)
+	{
+		List<PropertyPair> resultKeys = new ArrayList<PropertyPair>();
+        PreparedStatement statement = null;
+        ResultSet generatedKeys = null;
+        try {
+            statement = con.prepareStatement(sql.toString(), 
+            		PreparedStatement.RETURN_GENERATED_KEYS);
+		
+            StringBuilder paramBuf = null;
+            if (log.isDebugEnabled() ){
+                log.debug("execute: " + sql.toString());
+                paramBuf = new StringBuilder();
+                paramBuf.append("[");
+            } 
+            
+    		int i = 1;
+    		for (PropertyPair pair : values.values()) {
+    			int jdbcType = converter.toJDBCDataType(pair.getProp(), pair.getValue());
+    			Object jdbcValue = converter.toJDBCDataValue(pair.getProp(), pair.getValue());
+    			statement.setObject(pair.getColumn(), 
+    					jdbcValue, jdbcType);
+                if (log.isDebugEnabled() ) {
+                	if (i > 1) {
+                		paramBuf.append(", ");
+                	}
+                	paramBuf.append("(");
+                	paramBuf.append(jdbcValue.getClass().getSimpleName());
+                	paramBuf.append("/");
+                	paramBuf.append(converter.getJdbcTypeName(jdbcType));
+                	paramBuf.append(")");
+                	paramBuf.append(String.valueOf(jdbcValue));
+                }                	
+    			i++;		
+    		}
+            if (log.isDebugEnabled() ){
+            	paramBuf.append("]");
+                log.debug("params: " + paramBuf.toString());
+            } 
+            statement.execute();
+            generatedKeys = statement.getGeneratedKeys();
+            //if (generatedKeys.next()) {
+            //	resultKeys.add(generatedKeys.getObject(1));
+            //}
+            ResultSetMetaData rsMeta = generatedKeys.getMetaData();
+            int numcols = rsMeta.getColumnCount();
+            if (log.isDebugEnabled())
+            	log.debug("returned " + numcols + " keys");
+            
+            if (generatedKeys.next()) {
+                // FIXME; without metadata describing which properties
+            	// are actually a sequence, there us guess work
+            	// involved in matching the values returned
+            	// automatically from PreparedStatment as they
+            	// are anonymous in terms of the column names
+            	// making it impossible to match them to a metadata
+            	// property. 
+            	List<Property> pkPropList = type.findProperties(KeyType.primary);
+                if (pkPropList == null || pkPropList.size() == 0)
+                    throw new DataAccessException("no pri-key properties found for type '" 
+                            + type.getName() + "'");
+                if (pkPropList.size() > 1)
+                    throw new DataAccessException("multiple pri-key properties found for type '" 
+                            + type.getName() + "' - cannot map to generated keys");
+                PlasmaProperty prop = (PlasmaProperty)pkPropList.get(0);
+
+            	for(i=1;i<=numcols;i++) {
+            		String columnName = rsMeta.getColumnName(i);
+                    if (log.isDebugEnabled())
+                    	log.debug("returned key column '" + columnName + "'");
+            		int columnType = rsMeta.getColumnType(i);
+              		Object value = converter.fromJDBCDataType(generatedKeys, 
+            				i, columnType, prop);
+        		    PropertyPair pair = new PropertyPair(
+            			    (PlasmaProperty)prop, value);
+            		resultKeys.add(pair);
+                }
+            }
+        }
+        catch (Throwable t) {
+            throw new DataAccessException(t);
+        }
+        finally {
+			try {
+	        	if (statement != null)
+				    statement.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage(), e);
+			}
+        }
+        
+        return resultKeys;
+ 	}
 
 }

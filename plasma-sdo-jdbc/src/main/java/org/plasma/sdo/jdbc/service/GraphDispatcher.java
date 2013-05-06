@@ -19,13 +19,16 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo.access.provider.jdbc;
+package org.plasma.sdo.jdbc.service;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,12 +36,13 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.plasma.common.sort.InsertionSort;
 import org.plasma.config.DataAccessProvider;
 import org.plasma.config.DataAccessProviderName;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.sdo.DataFlavor;
-import org.plasma.sdo.DataType;
 import org.plasma.sdo.PlasmaChangeSummary;
+import org.plasma.sdo.PlasmaDataGraph;
 import org.plasma.sdo.PlasmaDataGraphVisitor;
 import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.sdo.PlasmaNode;
@@ -51,9 +55,11 @@ import org.plasma.sdo.access.LockedEntityException;
 import org.plasma.sdo.access.RequiredPropertyException;
 import org.plasma.sdo.access.SequenceGenerator;
 import org.plasma.sdo.access.provider.common.CreatedObjectCollector;
+import org.plasma.sdo.access.provider.common.DataObjectCommitComparator;
 import org.plasma.sdo.access.provider.common.DeletedObjectCollector;
 import org.plasma.sdo.access.provider.common.ModifiedObjectCollector;
 import org.plasma.sdo.access.provider.common.PropertyPair;
+import org.plasma.sdo.access.provider.jdbc.JDBCDataConverter;
 import org.plasma.sdo.core.CoreConstants;
 import org.plasma.sdo.core.CoreDataObject;
 import org.plasma.sdo.core.CoreHelper;
@@ -63,14 +69,15 @@ import org.plasma.sdo.profile.ConcurrencyType;
 import org.plasma.sdo.profile.ConcurrentDataFlavor;
 import org.plasma.sdo.profile.KeyType;
 
+
 import commonj.sdo.DataGraph;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
 
-public class JDBCDataGraphDispatcher extends JDBCDispatcher
+public class GraphDispatcher extends JDBCSupport
     implements DataGraphDispatcher {
-    private static Log log = LogFactory.getLog(JDBCDataGraphDispatcher.class);
+    private static Log log = LogFactory.getLog(GraphDispatcher.class);
     private Connection con;
     private SnapshotMap snapshotMap;
     private SequenceGenerator sequenceGenerator;
@@ -78,15 +85,13 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
     private JDBCDataConverter converter = JDBCDataConverter.INSTANCE;
     
     @SuppressWarnings("unused")
-    private JDBCDataGraphDispatcher() {}
+    private GraphDispatcher() {}
     
-    public JDBCDataGraphDispatcher(SnapshotMap snapshotMap, 
+    public GraphDispatcher(SnapshotMap snapshotMap, 
             String username, Connection con) {
         this.snapshotMap = snapshotMap;
         this.username = username;
-        this.con = con;
-        
-        this.sequenceGenerator = this.newSequenceGenerator();
+        this.con = con;        
     }
     
     public void close()
@@ -104,16 +109,17 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
                 log.debug("current user is '" + username + "'");
             }
         
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug(dataGraph.getChangeSummary().toString());
+            log.debug(((PlasmaDataGraph)dataGraph).dump());
+        }
         
         PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)dataGraph.getChangeSummary();
         
         List<DataObject> list = changeSummary.getChangedDataObjects();
         DataObject[] changed = new DataObject[list.size()];
         list.toArray(changed);
-        //Comparator comparator = new DataObjectCommitComparator();
-        //Arrays.sort(changed, comparator);
+        
         
         if (log.isDebugEnabled()) {
             StringBuffer buf = new StringBuffer();
@@ -134,21 +140,46 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
             log.debug("commit list: " + buf.toString());
         }
         
-        CreatedObjectCollector created = new CreatedObjectCollector(dataGraph);
+        List<CoreDataObject> createdList = new ArrayList<CoreDataObject>();
+        for (int i = 0; i < changed.length; i++) {
+            DataObject dataObject = changed[i];
+            if (changeSummary.isCreated(dataObject))
+            	createdList.add((CoreDataObject)dataObject);
+        }
+        CoreDataObject[] createdArray = new CoreDataObject[createdList.size()];
+        createdList.toArray(createdArray);
+
+    	if (log.isDebugEnabled()) {
+    		int createdIndex = 0; 
+            //for (DataObject dataObject : created.getResult()) {
+            for (DataObject dataObject : createdArray) {
+            	log.debug("created before sort " + createdIndex + ": " + dataObject.toString());
+            	createdIndex++;
+            }
+    	}        
+        Comparator<CoreDataObject> comparator = new CreatedCommitComparator();
+        //Arrays.sort(createdArray, comparator);
+        Collections.sort(createdList, comparator);
+        InsertionSort sort = new InsertionSort();
+        sort.sort(createdArray, comparator);
+    	
+        if (log.isDebugEnabled()) {
+    		int createdIndex = 0; 
+            //for (DataObject dataObject : created.getResult()) {
+            for (DataObject dataObject : createdArray) {
+            	log.debug("created after sort " + createdIndex + ": " + dataObject.toString());
+            	createdIndex++;
+            }
+    	}
+        
+        //CreatedObjectCollector created = new CreatedObjectCollector(dataGraph);
         ModifiedObjectCollector modified = new ModifiedObjectCollector(dataGraph);
         DeletedObjectCollector deleted = new DeletedObjectCollector(dataGraph);
         try {
             
-        	if (log.isDebugEnabled()) {
-        		int createdIndex = 0; 
-                for (DataObject dataObject : created.getResult()) {
-                	log.debug("created result " + createdIndex + ": " + dataObject.getType().getName() + "(" 
-                        + ((PlasmaDataObject)dataObject).getUUIDAsString() + ")");
-                	createdIndex++;
-                }
-        	}
         		
-            for (PlasmaDataObject dataObject : created.getResult())
+            //for (PlasmaDataObject dataObject : created.getResult())
+            for (PlasmaDataObject dataObject : createdArray)
                 create(dataGraph, dataObject);
             
             for (PlasmaDataObject dataObject : modified.getResult())
@@ -199,27 +230,29 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
             Object pk = dataObject.get(targetPriKeyProperty);
             if (pk == null)
             {
-            	DataFlavor dataFlavor = targetPriKeyProperty.getDataFlavor();
-            	switch (dataFlavor) {
-            	case integral:
-                    if (sequenceGenerator == null)
-                    {
-                        sequenceGenerator = this.newSequenceGenerator();
-                        sequenceGenerator.initialize();
-                    }  
-                    if (log.isDebugEnabled()) {
-                        log.debug("getting seq-num for " + type.getName());
-                    }
-                    pk = sequenceGenerator.get(dataObject); 
-                    entity.put(targetPriKeyProperty.getName(), 
-                    		new PropertyPair(targetPriKeyProperty, pk));
-                    //entity.set(targetPriKeyProperty.getName(), pk);                 
-                    ((CoreDataObject)dataObject).setValue(targetPriKeyProperty.getName(), pk); // FIXME: bypassing modification detection on pri-key
-            		break;
-            	default:
-                    throw new DataAccessException("found null primary key property '"
-                    		+ targetPriKeyProperty.getName() + "' for type, "
-                            + type.getURI() + "#" + type.getName());  
+            	if (this.hasSequenceGenerator()) {
+	            	DataFlavor dataFlavor = targetPriKeyProperty.getDataFlavor();
+	            	switch (dataFlavor) {
+	            	case integral:
+	                    if (sequenceGenerator == null)
+	                    {
+	                        sequenceGenerator = this.newSequenceGenerator();
+	                        sequenceGenerator.initialize();
+	                    }  
+	                    if (log.isDebugEnabled()) {
+	                        log.debug("getting seq-num for " + type.getName());
+	                    }
+	                    pk = sequenceGenerator.get(dataObject); 
+	                    entity.put(targetPriKeyProperty.getName(), 
+	                    		new PropertyPair(targetPriKeyProperty, pk));
+	                    //entity.set(targetPriKeyProperty.getName(), pk);                 
+	                    ((CoreDataObject)dataObject).setValue(targetPriKeyProperty.getName(), pk); // FIXME: bypassing modification detection on pri-key
+	            		break;
+	            	default:
+	                    throw new DataAccessException("found null primary key property '"
+	                    		+ targetPriKeyProperty.getName() + "' for type, "
+	                            + type.getURI() + "#" + type.getName());  
+	            	}
             	}
             }
             else
@@ -227,14 +260,16 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
             	entity.put(targetPriKeyProperty.getName(),
             			new PropertyPair(targetPriKeyProperty, pk));
                 //entity.set(targetPriKeyProperty.getName(), pk); 
-            }   
-            if (log.isDebugEnabled()) {
-                log.debug("mapping UUID '" + uuid + "' to pk (" + String.valueOf(pk) + ")");
+            } 
+            
+            if (pk != null) {
+	            if (log.isDebugEnabled()) {
+	                log.debug("mapping UUID '" + uuid + "' to pk (" + String.valueOf(pk) + ")");
+	            }
+	            // FIXME: multiple PK's not supported
+	            snapshotMap.put(uuid, pk); // map new PK back to UUID
             }
-            // FIXME: multiple PK's not supported
-            snapshotMap.put(uuid, pk); // map new PK back to UUID
         }
-        
         
         // FIXME - could be a reference to a user
         Property originationUserProperty = type.findProperty(ConcurrencyType.origination, 
@@ -311,7 +346,20 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
         if (log.isDebugEnabled()) {
             log.debug("inserting " + dataObject.getType().getName()); 
         }
-        execute(type, insert, entity, con);
+        List<PropertyPair> keys = executeInsert(type, insert, entity, con);
+        
+        for (Property pkp : pkList) {
+            PlasmaProperty targetPriKeyProperty = (PlasmaProperty)pkp;
+            for (PropertyPair key : keys) {
+                if (targetPriKeyProperty.getName().equals(key.getProp().getName())) { 
+    	            if (log.isDebugEnabled()) {
+    	                log.debug("mapping UUID '" + uuid + "' to pk (" + String.valueOf(key.getValue()) + ")");
+    	            }
+                    // FIXME: multiple PK's not supported
+                    snapshotMap.put(uuid, key.getValue()); // map new PK back to UUID\
+                }
+            }
+        }
 
     }
     
@@ -418,11 +466,14 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
             			+ type.getURI() + "#" + type.getName() + "." + property.getName());
             }
         }    
-        StringBuilder update = createUpdate(type, entity);
-        if (log.isDebugEnabled()) {
-            log.debug("updating " + dataObject.getType().getName()); 
+        
+        if (hasUpdatableProperties(entity)) {
+	        StringBuilder update = createUpdate(type, entity);
+	        if (log.isDebugEnabled()) {
+	            log.debug("updating " + dataObject.getType().getName()); 
+	        }
+	        execute(type, update, entity, con);
         }
-        execute(type, update, entity, con);
     }
  
     private void delete(DataGraph dataGraph, DataObject dataObject)
@@ -722,6 +773,9 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
             InvocationTargetException
     {
     	Object resultValue = value;
+        if (log.isDebugEnabled()) {
+            log.debug("setting " + dataObject.toString() + "." + property.getName());
+        }
 
         // pull pk from value object target and use to find existing entity 
         if (!property.getType().isDataType() && !(resultValue instanceof NullValue))
@@ -732,6 +786,7 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
                     + resultValue.getClass().getName());
                         
             DataObject resultDataObject = (DataObject)resultValue;
+            CoreDataObject resultCoreObject = (CoreDataObject)resultValue;
             PlasmaType resultType = (PlasmaType)resultDataObject.getType();
 
             List<Property> pkList = resultType.findProperties(KeyType.primary);
@@ -744,29 +799,30 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
             
             Property targetPriKeyProperty = pkList.get(0);    
             
-            Object pk = ((CoreDataObject)resultValue).get(targetPriKeyProperty.getName());   
+            Object pk = resultDataObject.get(targetPriKeyProperty.getName());   
             if (pk == null)
             {
-                String uuid = (String)((CoreDataObject)resultValue).getUUIDAsString();
+                String uuid = (String)resultCoreObject.getUUIDAsString();
                 if (uuid == null)
-                    throw new DataAccessException("found no pri-key propery or UUID value for entity '" 
-                            + property.getType().getName() + "'");
+                    throw new DataAccessException("found no UUID value for entity '" 
+                            + property.getType().getName() + "' when setting property "
+                            + dataObject.getType().toString() + "." + property.getName());
                 pk = this.snapshotMap.get(uuid);
                 if (pk == null)
                     throw new DataAccessException("found no pri-key value for UUID '" + uuid 
                             + "' in id-map for entity '" 
-                            + property.getType().getName() + "'");
+                            + property.getType().getName() + "' when setting property "
+                            + dataObject.getType().toString() + "." + property.getName());
             }
             resultValue = pk;  
             if (log.isDebugEnabled()) {
-                log.debug("setting " + dataObject.getUUIDAsString() + "." + property.getName() 
+                log.debug("set " + dataObject.toString() + "." + property.getName() 
                         + " (" + String.valueOf(resultValue) + ")");
             }
         }
         else {
-            DataType sourceDataType = DataType.valueOf(property.getType().getName());
             if (log.isDebugEnabled()) {
-                log.debug("setting " + dataObject.getUUIDAsString() + "." + property.getName() 
+                log.debug("set " + dataObject.toString() + "." + property.getName() 
                         + " (" + String.valueOf(resultValue) + ")");
             }
         } 
@@ -774,11 +830,9 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
      	PropertyPair result = null;
         if (!(value instanceof NullValue)) {  
         	result = new PropertyPair((PlasmaProperty)property, resultValue);
-            //entity.set(property.getName(), resultValue); 
         }
         else  {
         	result = new PropertyPair((PlasmaProperty)property, null);
-            //entity.set(property.getName(), null); 
         }
         
         return result;
@@ -805,9 +859,16 @@ public class JDBCDataGraphDispatcher extends JDBCDispatcher
         return null;
     }
     
+    private boolean hasSequenceGenerator() {
+   	     DataAccessProvider provider = PlasmaConfig.getInstance().getDataAccessProvider(DataAccessProviderName.JDBC);
+   	     return provider.getSequenceConfiguration() != null && 
+   	    		 provider.getSequenceConfiguration().getGeneratorClassName() != null;
+    }
+    
     private SequenceGenerator newSequenceGenerator() {
          try {
-             String qualifiedName = PlasmaConfig.getInstance().getDataAccessProvider(DataAccessProviderName.JDO).getSequenceConfiguration().getGeneratorClassName();
+        	 DataAccessProvider provider = PlasmaConfig.getInstance().getDataAccessProvider(DataAccessProviderName.JDBC);
+             String qualifiedName = provider.getSequenceConfiguration().getGeneratorClassName();
 
              Class<?> entityClass = Class.forName(qualifiedName); 
              Class<?>[] argClasses = {};

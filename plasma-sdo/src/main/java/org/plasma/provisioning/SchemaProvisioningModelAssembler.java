@@ -34,6 +34,10 @@ import org.plasma.xml.schema.Schema;
 import org.plasma.xml.sdox.SDOXConstants;
 
 
+/**
+ * Constructs a provisioning model
+ * based on the a given XML Schema
+ */
 public class SchemaProvisioningModelAssembler {
 	   private static Log log = LogFactory.getLog(
 			   SchemaProvisioningModelAssembler.class); 
