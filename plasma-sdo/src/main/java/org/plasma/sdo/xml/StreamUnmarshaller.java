@@ -96,6 +96,7 @@ public class StreamUnmarshaller extends Unmarshaller {
     private XMLOptions options;
     private String locationURI;
     private Timestamp snapshotDate = new Timestamp((new Date()).getTime());
+    private StringBuilder charbuf = new StringBuilder();
     
 	public StreamUnmarshaller(XMLOptions options, String locationURI) {
 		super(UnmarshallerFlavor.STAX);
@@ -362,6 +363,12 @@ public class StreamUnmarshaller extends Unmarshaller {
         		// link stream objects creating an initial graph
             	StreamObject other = (StreamObject)stack.peek(); 
         		if (node instanceof StreamProperty) {
+ 		    		StreamProperty streamProp = (StreamProperty)node;
+ 		    		if (this.charbuf.length() > 0) {
+ 		    		    readCharacters(streamProp, 
+ 		    				this.charbuf.toString(), event);
+ 	    	    	    this.charbuf.setLength(0); 
+ 		    		}
         			link((StreamProperty)node, other);
         		}
         		else {
@@ -369,11 +376,14 @@ public class StreamUnmarshaller extends Unmarshaller {
         		}
        	        break;
             case XMLEvent.CHARACTERS:  
+            	if (stack.size() == 0)
+            		break;
  		    	String data = event.asCharacters().getData();
- 		    	if (data == null || data.trim().length() == 0) {
- 		    		break; // ignore newlines and such
+        	    if (log.isDebugEnabled())
+        	    	log.debug("unmarshaling characters: " + String.valueOf(data));
+ 		    	if (data == null) {
+ 		    		break; // ignore null
  		    	}
- 		    	data = data.trim();
  		    	if (data.contains(">")) {
  		            Location loc = event.getLocation();               
  		            String msg = "line:col[" + loc.getLineNumber() + ":" + loc.getColumnNumber() + "]";
@@ -382,19 +392,19 @@ public class StreamUnmarshaller extends Unmarshaller {
  		    	}
  		    	StreamNode streamNode = stack.peek();
  		    	if (streamNode instanceof StreamProperty) {
- 		    		readCharacters((StreamProperty)streamNode, 
- 		    				data, event);
+                    this.charbuf.append(data);
  		    	}
  		    	else {
- 		    		StreamObject streamObj = (StreamObject)streamNode;
- 		            Location loc = event.getLocation();               
- 		            String msg = "line:col[" + loc.getLineNumber() + ":" + loc.getColumnNumber() + "]";
- 		    		msg += " - cannot character(s) data for complex type "
- 		    			+ streamObj.getType().getURI() + "#" 
- 		    			+ streamObj.getType().getName(); 
- 		    		throw new UnmarshallerException(msg);
- 		    		//readCharacters((StreamObject)streamNode, 
- 		    		//	data, event);
+ 		    		if (log.isDebugEnabled()) {
+	 		    		StreamObject streamObj = (StreamObject)streamNode;
+	 		            Location loc = event.getLocation();               
+	 		            String msg = "line:col[" + loc.getLineNumber() + ":" + loc.getColumnNumber() + "]";
+	 		    		msg += " - ignoring character(s) data '" + data 
+	 		    			+ "' for complex type "
+	 		    			+ streamObj.getType().getURI() + "#" 
+	 		    			+ streamObj.getType().getName(); 
+	 		    		log.debug(msg);
+ 		    		}
  		    	}
         	    break;
             default:
@@ -409,14 +419,14 @@ public class StreamUnmarshaller extends Unmarshaller {
 	{
     	PlasmaType type = streamProperty.getType();
 	    PlasmaProperty property = streamProperty.getProperty();
-    	if (!property.getType().isDataType()) {    		    		
-            Location loc = event.getLocation();               
-            String msg = "line:col[" + loc.getLineNumber() + ":" + loc.getColumnNumber() + "]";
-    		msg += " - cannot set reference propery ("
-    			+ type.getURI() + "#" + type.getName() + "." + property.getName() 
-    			+ ") - from character data"; 
-    		throw new UnmarshallerException(msg);
-    	}     		    	
+ 	    if (!property.getType().isDataType()) {    		    		
+             Location loc = event.getLocation();               
+             String msg = "line:col[" + loc.getLineNumber() + ":" + loc.getColumnNumber() + "]";
+ 		    msg += " - cannot set reference propery ("
+ 			    + type.getURI() + "#" + type.getName() + "." + property.getName() 
+ 			    + ") - from character data"; 
+ 		    throw new UnmarshallerException(msg);
+ 	    }     		    	
     	if (!property.isReadOnly()) {
             Object value = PlasmaDataHelper.INSTANCE.convert(property, data);
     		if (!property.isMany()) {
