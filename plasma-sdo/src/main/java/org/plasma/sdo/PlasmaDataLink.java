@@ -43,9 +43,9 @@ public class PlasmaDataLink extends CoreEdge
     }
     
     public PlasmaNode getOpposite(PlasmaNode fromNode) {
-        if (this.left.getUUIDAsString().equals(fromNode.getUUIDAsString()))
+        if (this.left.equals(fromNode))
             return right;
-        else if (this.right.getUUIDAsString().equals(fromNode.getUUIDAsString()))
+        else if (this.right.equals(fromNode))
             return left;
         else
             throw new IllegalArgumentException("given node '" 

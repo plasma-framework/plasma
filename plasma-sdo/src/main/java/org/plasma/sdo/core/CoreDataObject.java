@@ -25,6 +25,7 @@ package org.plasma.sdo.core;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -34,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jaxen.JaxenException;
@@ -104,8 +106,19 @@ public class CoreDataObject extends CoreNode
 
     private static Log log = LogFactory.getFactory().getInstance(CoreDataObject.class);
 
+    /** 
+     * The cached UUID value. Caching UUID has bacome important
+     * as continually pulling the UUID out of the underlying
+     * value map/hash has a performance impact as UUID is
+     * used in every equals comparison etc..
+     */
+    private UUID uuid; 
+    /** The cached integral hash code value */
+    private int hashCode;
+    
     private DataGraph dataGraph; // TODO - consider hashing these
     private Type type;
+    
     /**
      * The current container for this DataObject
      */
@@ -127,26 +140,22 @@ public class CoreDataObject extends CoreNode
     protected CoreDataObject(Type type, CoreObject values) {
         super(values);        
         this.type = type;
-        UUID uuid = UUID.randomUUID();
-        this.setValue(CoreConstants.PROPERTY_NAME_UUID, uuid);
+        this.uuid = UUID.randomUUID();
+        this.hashCode = uuid.hashCode();
     }
 
     public CoreDataObject(Type type) {
         super(new CoreObject(type.getName()));       
         this.type = type;
-        UUID uuid = UUID.randomUUID();
-        this.setValue(CoreConstants.PROPERTY_NAME_UUID, uuid);
+        this.uuid = UUID.randomUUID();
     }   
 
     public int hashCode() {
-    	UUID uuid = (UUID)this.getValue(CoreConstants.PROPERTY_NAME_UUID);
-    	return uuid.hashCode();
+    	return this.hashCode;
     }
     
     public boolean equals(Object obj) {
-    	UUID uuid = (UUID)this.getValue(CoreConstants.PROPERTY_NAME_UUID);
-    	UUID other = (UUID)((CoreDataObject)obj).getValue(CoreConstants.PROPERTY_NAME_UUID);
-    	return uuid.equals(other);
+    	return this.uuid.equals(((CoreDataObject)obj).uuid);
     }
     
     /**
@@ -169,6 +178,46 @@ public class CoreDataObject extends CoreNode
     public DataObject getRootObject() {
         return this.dataGraph.getRootObject();
     }
+    
+    public UUID getUUID() {
+   	    return this.uuid;
+    }
+    
+    /**
+     * Resets the UUID after creation for cases where the UUID
+     * is stored externally and services creating data objects
+     * need to preserve the stored UUIDs across service calls.
+     * Refreshes the integral hash and other elements dependent
+     * on the cached UUID. 
+     * @param uuid the UUID
+     */
+    public void resetUUID(UUID uuid) {
+   	    this.uuid = uuid;
+        this.hashCode = uuid.hashCode();
+    }
+    
+    @Deprecated
+    public String getUUIDAsString() {   
+   	    return this.uuid.toString();
+    }
+    
+    public String uuidToBase64(String str) {
+        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+        bb.putLong(this.uuid.getMostSignificantBits());
+        bb.putLong(this.uuid.getLeastSignificantBits());
+        return Base64.encodeBase64URLSafeString(bb.array());
+    }
+    
+    public String uuidFromBase64(String str) {
+        byte[] bytes = Base64.decodeBase64(str);
+        ByteBuffer bb = ByteBuffer.wrap(bytes);
+        UUID uuid = new UUID(bb.getLong(), bb.getLong());
+        return uuid.toString();
+    }    
+    
+    public PlasmaDataObject getDataObject() {
+        return this;
+    }    
 
     /**
      * Returns a new {@link DataObject data object} contained by this object
@@ -424,12 +473,13 @@ public class CoreDataObject extends CoreNode
      * given data object
      */
     public boolean contains(DataObject dataObject) {
-    	if (dataObject.getContainer() == null)
+    	CoreDataObject container = (CoreDataObject)dataObject.getContainer();
+    	if (container == null)
             throw new IllegalArgumentException("the given data-object (" 
-                    + ((PlasmaNode)this).getUUIDAsString() + ") of type "
-                    + this.getType().getURI() + "#" 
-                    + this.getType().getName() + " has no container");            
-        return (((PlasmaNode)dataObject.getContainer()).getUUIDAsString().equals(this.getUUIDAsString()));
+                    + ((CoreDataObject)dataObject).getUUIDAsString() + ") of type "
+                    + dataObject.getType().getURI() + "#" 
+                    + dataObject.getType().getName() + " has no container");            
+        return container.equals(this);
     }
     
     /**
@@ -622,7 +672,7 @@ dataObject.set(property, dataHelper.convert(property, value));
                 PlasmaDataLink existingLink = (PlasmaDataLink)super.getValue(property.getName());
                 if (existingLink != null) {                   
                     PlasmaNode existingOpposite = existingLink.getOpposite(this);
-                    if (existingOpposite.getUUIDAsString().equals(targetNode.getUUIDAsString()))
+                    if (existingOpposite.equals(targetNode))
                     {
                         log.warn("detected 'set' operation with identical " 
                             + targetNode.getClass().getSimpleName() 
@@ -2339,24 +2389,6 @@ dataObject.set(property, dataHelper.convert(property, value));
          }
      }
      
-     public UUID getUUID() {
-       	 UUID result = (UUID)this.getValue(CoreConstants.PROPERTY_NAME_UUID);
-    	 if (result == null)
-    		 throw new IllegalStateException("data object has no UUID");
-    	 return result;
-     }
-     
-     public String getUUIDAsString() {   
-    	 UUID result = (UUID)this.getValue(CoreConstants.PROPERTY_NAME_UUID);
-    	 if (result == null)
-    		 throw new IllegalStateException("data object has no UUID");
-    	 return result.toString();
-     }
-     
-     public PlasmaDataObject getDataObject() {
-         return this;
-     }
-     
      /**
       * Begin breadth-first traversal of a DataGraph with this DataObject as the graph root, the given
       * visitor receiving "visit" events for each graph node traversed.  
@@ -2650,7 +2682,6 @@ dataObject.set(property, dataHelper.convert(property, value));
                     buf.append("  ");
                 if (sourceKey != null)
                 {
-                    Property sourceProperty = source.getType().getProperty(sourceKey);
                     buf.append("(" + String.valueOf(level) + ")" + sourceKey + ":" + target.getType().getURI() + "#" + target.getType().getName() + "[");
                 }
                 else
@@ -2658,7 +2689,7 @@ dataObject.set(property, dataHelper.convert(property, value));
                                 
                 String uuid = (String)((CoreDataObject)target).getUUIDAsString();
                 if (uuid != null)
-                    buf.append("<" + CoreConstants.PROPERTY_NAME_UUID
+                    buf.append("<" + "__UUID__"
                             + ":" + uuid + ">");
                 
                 List<Property> properties = target.getType().getProperties();

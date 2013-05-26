@@ -50,7 +50,7 @@
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 
 		            </xsd:element>
-		            <xsd:element name="Namespace" type="cfg:Namespace"  minOccurs="1" maxOccurs="unbounded">
+		            <xsd:element name="Namespace" type="cfg:Namespace"  minOccurs="0" maxOccurs="unbounded">
 		                <xsd:annotation>                                  
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 

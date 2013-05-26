@@ -37,7 +37,6 @@ import org.plasma.query.model.WildcardOperator;
 import org.plasma.query.visitor.DefaultQueryVisitor;
 import org.plasma.query.visitor.Traversal;
 import org.plasma.sdo.access.model.EntityConstants;
-import org.plasma.sdo.helper.DataConverter;
 
 import commonj.sdo.Type;
 

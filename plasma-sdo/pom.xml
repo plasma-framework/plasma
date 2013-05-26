@@ -53,6 +53,11 @@
 		<artifactId>commons-logging</artifactId>
 		<version>1.1.1</version>
 	</dependency>
+    <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.7</version>
+    </dependency>
 	<dependency>
 		<groupId>joda-time</groupId>
 		<artifactId>joda-time</artifactId>
@@ -297,7 +302,7 @@
                 </execution> 
                 <!-- Generated SDO classes used by RDB service checked in as
                     would cause circular depency - uncomment to re-generate --> 
-                <!--                                                   
+                    <!--                                                              
                 <execution>    
                   <id>gen_rdb_sdo</id>                                              
                   <phase>process-classes</phase>                
@@ -341,7 +346,7 @@
                     <goal>run</goal>                                         
                   </goals>                                                   
                 </execution> 
-                -->                                                 
+                      -->                                                
               </executions>                                                  
             </plugin>	
             <plugin>

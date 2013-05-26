@@ -50,7 +50,8 @@ public interface CoreConstants
     public static final String PROPERTY_NAME_ENTITY_LOCKED      = "entityLocked";
     public static final String PROPERTY_NAME_ENTITY_UNLOCKED      = "entityUnlocked";
     
-    public static final String PROPERTY_NAME_UUID               = "__UUID__";
+    //@Deprecated
+    //public static final String PROPERTY_NAME_UUID               = "__UUID__";
     public static final String PROPERTY_NAME_UUID_BYTES         = "__UUID_BYTES__";
     public static final String PROPERTY_NAME_UUID_STRING        = "__UUID_STR__";
 

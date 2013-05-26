@@ -76,8 +76,7 @@ public class CorePathAssembler implements PathAssembler {
         }
         else { // the root
             DataObject root = this.pathTarget.getDataObject().getDataGraph().getRootObject();
-        	if (!((PlasmaNode)target).getUUIDAsString().equals(
-        			((PlasmaNode)root).getUUIDAsString())) {  
+        	if (!target.equals(root)) {  
         		throw new IllegalArgumentException("expected data graph root as "
         				+ "traversal root");
         	}
@@ -92,14 +91,9 @@ public class CorePathAssembler implements PathAssembler {
                         + sourceProperty.getName() + "->"
                         + target.getType().getName() + "("+((PlasmaNode)target).getUUIDAsString()+")");
         
-        if ("Dependancy".equals(target.getType().getName())) {
-        	int foo = 0;
-        	foo++;
-        }
-        
         if (level == currentPath.size()) {
             currentPath.push(new PathNode(target, 0, source, sourceProperty));
-            if (((PlasmaNode)target).getUUIDAsString().equals(pathTarget.getUUIDAsString())) {
+            if (target.equals(pathTarget)) {
                 
                 Stack<PathNode> path = new Stack<PathNode>();
                 path.addAll(currentPath); // copy current state
@@ -117,8 +111,7 @@ public class CorePathAssembler implements PathAssembler {
             int siblingIndex = 0;
             // If current node is a sibling (e.g. same parent and same source property), assume
             // it's index is the previous path-node index +1
-            if (((PlasmaNode)pathNode.getSource()).getUUIDAsString().equals(
-                    ((PlasmaNode)source).getUUIDAsString())) {
+            if (pathNode.getSource().equals(source)) {
                 if (pathNode.getSourceProperty().getName().equals(
                         sourceProperty.getName())) 
                     siblingIndex = pathNode.getIndex()+1;
@@ -127,7 +120,7 @@ public class CorePathAssembler implements PathAssembler {
             currentPath.push(new PathNode(target, siblingIndex, 
                     source, sourceProperty));
             
-            if (((PlasmaNode)target).getUUIDAsString().equals(pathTarget.getUUIDAsString())) 
+            if (target.equals(pathTarget)) 
             {    
                 Stack<PathNode> path = new Stack<PathNode>();
                 path.addAll(currentPath); // copy current state

@@ -89,7 +89,7 @@
     <build>
         <finalName>plasma</finalName>
         <plugins>
-          <!--  
+	      <!--
 	      <plugin>
 	          <groupId>org.apache.maven.plugins</groupId>
 	          <artifactId>maven-javadoc-plugin</artifactId>
@@ -118,7 +118,7 @@
           </plugin>
           -->
           <!-- Produce ZIP with dependencies and samples. -->
-          <!--
+          <!-- 
           <plugin>
               <artifactId>maven-assembly-plugin</artifactId>
               <version>2.2-beta-2</version>

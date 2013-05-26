@@ -21,9 +21,7 @@
  */
 package org.plasma.sdo.access.provider.common;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;

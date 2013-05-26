@@ -98,8 +98,6 @@ public class PlasmaDataFactory implements DataFactory {
                 log.debug("no interface class found for qualified name '"
                     + qualifiedName + "' - using generic DataObject");
         	CoreDataObject dataObject = new CoreDataObject(type);
-            dataObject.setValue(CoreConstants.PROPERTY_NAME_UUID, 
-            		java.util.UUID.randomUUID());
             result = dataObject;
         }
         return result;
@@ -122,8 +120,6 @@ public class PlasmaDataFactory implements DataFactory {
 	        Class<?> interfaceImplClass = Class.forName(qualifiedName);
             Constructor<?> constructor = interfaceImplClass.getConstructor(types);
             result = (CoreDataObject)constructor.newInstance(args); 
-            result.setValue(CoreConstants.PROPERTY_NAME_UUID, 
-            		java.util.UUID.randomUUID());
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -149,8 +145,6 @@ public class PlasmaDataFactory implements DataFactory {
         try {
             Constructor<?> constructor = interfaceClass.getConstructor(types);
             result = (CoreDataObject)constructor.newInstance(args); 
-            result.setValue(CoreConstants.PROPERTY_NAME_UUID, 
-            		java.util.UUID.randomUUID());
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {

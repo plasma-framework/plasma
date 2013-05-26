@@ -59,8 +59,7 @@ public class CreatedObjectCollector extends SimpleCollector
             PlasmaType changedType = (PlasmaType)changed.getType();
             int changedDepth = changeSummary.getPathDepth(changed);
             // convert to array to avoid concurrent mods of collection
-            DataObject[] resultArray = new DataObject[result.size()];
-            result.toArray(resultArray);
+            DataObject[] resultArray = super.toArray();
             
             boolean childFound = false;
             for (int i = 0; i < resultArray.length; i++) {
@@ -91,7 +90,7 @@ public class CreatedObjectCollector extends SimpleCollector
             		}
             	}
             	
-                if (result.contains(changed)) {
+                if (super.contains(changed)) {
                     throw new DataAccessException("unexpected changed object: "
                         + changed.toString());
                 }
@@ -100,7 +99,7 @@ public class CreatedObjectCollector extends SimpleCollector
                     if (log.isDebugEnabled())
                         log.debug("prepending changed object: "
                             + changed.toString()+ " at position " + i);
-                    result.add(i, (PlasmaDataObject)changed);
+                    super.add(i, (PlasmaDataObject)changed);
                     childFound = true;
                     break;
             	}
@@ -111,7 +110,7 @@ public class CreatedObjectCollector extends SimpleCollector
                 if (log.isDebugEnabled())
                     log.debug("appending changed object: "
                         + changed.toString());
-                result.add((PlasmaDataObject)changed); // append it 
+                super.add((PlasmaDataObject)changed); // append it 
             }
         }
     }

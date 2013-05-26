@@ -56,15 +56,56 @@ public class CoreChange implements Change {
         this.dataObject = dataObject;
         this.changeType = changeType;
 
-        if (log.isDebugEnabled())
-            log.debug("calculating min path for graph: "
-                    + ((PlasmaDataObject)dataObject.getDataGraph().getRootObject()).dump());
-        PathAssembler visitor = new CorePathAssembler(dataObject);
-        ((PlasmaNode)dataObject.getDataGraph().getRootObject()).accept(visitor);
-        pathFromRoot = visitor.getMinimumPathString();
-        if (log.isDebugEnabled())
-            log.debug("selected min path: " + this.pathFromRoot);
-        pathDepthFromRoot = visitor.getMinimumPathDepth();
+        PlasmaDataObject root = (PlasmaDataObject)dataObject.getDataGraph().getRootObject();
+        if (root.equals(dataObject)) {
+       		this.pathFromRoot = CorePathAssembler.PATH_PREFIX;
+    		this.pathDepthFromRoot = 0;        	
+        }
+        // create a simple path from root to the target
+        // no need to traverse the graph, they are connected
+        else if (root.contains(dataObject)) {
+        	StringBuilder buf = new StringBuilder();
+    		buf.append(CorePathAssembler.PATH_PREFIX);
+        	if (!dataObject.getContainmentProperty().isMany()) {
+        		buf.append(dataObject.getContainmentProperty().getName());
+        	}
+        	else {
+        		@SuppressWarnings("unchecked")
+				List<DataObject> list = root.getList(dataObject.getContainmentProperty());
+        		int index = -1;
+        		for (int i = 0; i < list.size(); i++) {
+        			if (list.get(i).equals(dataObject)) {
+        				index = i;
+        				break;
+        			}
+        		}
+        		if (index == -1)
+        	         throw new IllegalStateException("expected data-object, " 
+	            		+ dataObject.getType().toString() 
+	            		+ " (" + ((PlasmaNode)dataObject).getUUIDAsString() + ") "
+	            		+ "as contained by root, "
+	            		+ root.getType().toString() 
+	            		+ " (" + ((PlasmaNode)root).getUUIDAsString() + ") through containment property, "
+	            		+ dataObject.getContainmentProperty().getName());
+        		buf.append(dataObject.getContainmentProperty().getName()); 
+        		buf.append(CorePathAssembler.PATH_INDEX_RIGHT);
+        		buf.append(String.valueOf(index));
+        		buf.append(CorePathAssembler.PATH_INDEX_LEFT);
+            }
+    		this.pathFromRoot = buf.toString();
+    		this.pathDepthFromRoot = 1;
+        }
+        else {
+            if (log.isDebugEnabled())
+                log.debug("calculating min path for graph: "
+                        + ((PlasmaDataObject)dataObject.getDataGraph().getRootObject()).dump());            
+	        PathAssembler visitor = new CorePathAssembler(dataObject);
+	        root.accept(visitor);
+	        pathFromRoot = visitor.getMinimumPathString();
+	        if (log.isDebugEnabled())
+	            log.debug("selected min path: " + this.pathFromRoot);
+	        pathDepthFromRoot = visitor.getMinimumPathDepth();
+        }
     } 
     
     public boolean equals(Object obj) {

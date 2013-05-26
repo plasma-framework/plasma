@@ -23,9 +23,15 @@
             <Provisioning packageName="org.plasma.platform.sdo"/>
   		</DefaultNamespace>
   		 
-        <Namespace uri="http://org.plasma/sdo/oracle/sys"
+        <Namespace uri="http://org.plasma/sdo/oracle/any/sys"
             artifact="http://Plasma_RDB.mdxml">
-            <Provisioning packageName="org.plasma.provisioning.rdb.oracle.sys">
+            <Provisioning packageName="org.plasma.provisioning.rdb.oracle.any.sys">
+                <QueryDSL generate="true"/>
+            </Provisioning>
+        </Namespace>
+        <Namespace uri="http://org.plasma/sdo/oracle/11g/sys"
+            artifact="http://Plasma_RDB.mdxml">
+            <Provisioning packageName="org.plasma.provisioning.rdb.oracle.g11.sys">
                 <QueryDSL generate="true"/>
             </Provisioning>
         </Namespace>

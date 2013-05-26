@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,25 +33,43 @@ import org.plasma.sdo.AssociationPath;
 import org.plasma.sdo.PlasmaChangeSummary;
 import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.sdo.PlasmaNode;
-import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 
-import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
-import commonj.sdo.Type;
 
 public abstract class SimpleCollector {
 
     private static Log log = LogFactory.getFactory().getInstance(
     		SimpleCollector.class);
-    protected List<PlasmaDataObject> result = new ArrayList<PlasmaDataObject>();
+    private List<PlasmaDataObject> result = new ArrayList<PlasmaDataObject>();
+    private HashSet<PlasmaDataObject> resultMap = new HashSet<PlasmaDataObject>();
     protected PlasmaChangeSummary changeSummary;
     protected Map<String, Boolean> isDescendantResultsMap = new HashMap<String, Boolean>();
    
     public List<PlasmaDataObject> getResult() {
-        return result;
+        return this.result;
     } 
+    
+    protected DataObject[] toArray() {
+    	DataObject[] resultArray = new DataObject[result.size()];
+        result.toArray(resultArray);
+        return resultArray;
+    }
+    
+    protected boolean contains(DataObject dataObject) {
+    	return this.resultMap.contains(dataObject);
+    }
+    
+    protected void add(PlasmaDataObject dataObject) {
+    	result.add(dataObject);
+    	resultMap.add(dataObject);
+    }
+
+    protected void add(int index, PlasmaDataObject dataObject) {
+    	result.add(index, dataObject);
+    	resultMap.add(dataObject);
+    }
     
     protected boolean isRelation(DataObject target, DataObject source, AssociationPath relationPath) {
     	return (((PlasmaType)target.getType()).isRelation((PlasmaType)source.getType(), 

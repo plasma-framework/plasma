@@ -21,25 +21,17 @@
  */
 package org.plasma.sdo.access.provider.common;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.sdo.AssociationPath;
 import org.plasma.sdo.PlasmaChangeSummary;
-import org.plasma.sdo.PlasmaDataGraphVisitor;
 import org.plasma.sdo.PlasmaDataObject;
-import org.plasma.sdo.PlasmaNode;
-import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.DataAccessException;
 
-import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataGraph;
 import commonj.sdo.DataObject;
-import commonj.sdo.Property;
 
 public class DeletedObjectCollector extends SimpleCollector {
     private static Log log = LogFactory.getFactory().getInstance(
@@ -61,8 +53,7 @@ public class DeletedObjectCollector extends SimpleCollector {
                 continue;
             
             // convert to array to avoid concurrent mods of collection
-            DataObject[] resultArray = new DataObject[result.size()];
-            result.toArray(resultArray);
+            DataObject[] resultArray =super.toArray();
             
             boolean found = false;
             for (int i = 0; i < resultArray.length; i++) {
@@ -71,7 +62,7 @@ public class DeletedObjectCollector extends SimpleCollector {
             	if (isRelation(changed, resultArray[i], 
             			AssociationPath.singular)) {            		
                 //if (isDescendant(changed, resultArray[i])) {
-                    if (result.contains(changed)) {
+                    if (super.contains(changed)) {
                         throw new DataAccessException("unexpected changed object: "
                             + changed.getType().getURI() + "#"+ changed.getType().getName() + "(" 
                             + ((PlasmaDataObject)changed).getUUIDAsString() + ")");
@@ -81,7 +72,7 @@ public class DeletedObjectCollector extends SimpleCollector {
                         log.debug("adding changed object: "
                             + changed.getType().getName() + "(" 
                             + ((PlasmaDataObject)changed).getUUIDAsString() + ") at position " + i);
-                    result.add(i, (PlasmaDataObject)changed);
+                    super.add(i, (PlasmaDataObject)changed);
                     break;
                 }
             }
@@ -90,15 +81,10 @@ public class DeletedObjectCollector extends SimpleCollector {
                     log.debug("appending changed object: "
                         + changed.getType().getURI() + "#" + changed.getType().getName() + "(" 
                         + ((PlasmaDataObject)changed).getUUIDAsString() + ")");
-                result.add((PlasmaDataObject)changed); // append it 
+                super.add((PlasmaDataObject)changed); // append it 
             }
         }
     }
-    
-    
-    public List<PlasmaDataObject> getResult() {
-        return result;
-    } 
-
+        
 }
 

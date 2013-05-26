@@ -141,6 +141,7 @@
                     <xs:element ref="prov:Documentation" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="prov:Property" maxOccurs="unbounded"/>
                     <xs:element name="SuperClass" type="prov:ClassRef" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element ref="prov:Behavior" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
                 <xs:attribute name="uri" type="xs:string" use="required"/>
                 <xs:attribute name="abstract" type="xs:boolean" use="optional" default="false"/>
@@ -148,6 +149,24 @@
         </xs:complexContent>
     </xs:complexType>   
     <xs:element name="Class" type="prov:Class"/>
+    
+    <xs:complexType name="Behavior">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="language" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="prov:BehaviorType" use="required"/>
+            </xs:extension>                
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:element name="Behavior" type="prov:Behavior"/>
+
+    <xs:simpleType name="BehaviorType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="create"/>        
+            <xs:enumeration value="drop"/>       
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="ClassAppInfo">
         <xs:annotation><xs:documentation>Application specific provisioning information for a class element</xs:documentation></xs:annotation>

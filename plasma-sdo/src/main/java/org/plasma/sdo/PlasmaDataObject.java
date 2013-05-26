@@ -121,6 +121,16 @@ public interface PlasmaDataObject extends DataObject
      public UUID getUUID();
      
      /**
+      * Resets the UUID after creation for cases where the UUID
+      * is stored externally and services creating data objects
+      * need to preserve the stored UUIDs across service calls.
+      * Refreshes the integral hash and other elements dependent
+      * on the cached UUID. 
+      * @param uuid the UUID
+      */
+     public void resetUUID(UUID uuid);
+     
+     /**
       * Returns the UUID for this data object as a 
       * character string.
       * @return the UUID for this data object as a 

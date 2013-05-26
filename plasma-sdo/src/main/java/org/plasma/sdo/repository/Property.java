@@ -46,7 +46,12 @@ import fUML.Syntax.Classes.Kernel.VisibilityKind;
 public class Property extends Element {
 
 	private org.modeldriven.fuml.repository.Property property;
-
+    /** Cached locally as the call into FUML RI property is
+     * goes into upperValue etc... and is showing up in
+     * CPU profiling output. 
+     */
+	private Boolean isMany;
+	
 	@SuppressWarnings("unused")
 	private Property() {}
 	
@@ -63,9 +68,11 @@ public class Property extends Element {
 		return this.property.findPropertyDefault();
 	}
 	
-    public boolean isMany() {
-    	
-        return !this.property.isSingular();
+    public boolean isMany() {    	
+    	if (this.isMany == null) {
+    		this.isMany = !this.property.isSingular();
+    	}
+    	return this.isMany.booleanValue();
     }
     
     public boolean isNullable() {

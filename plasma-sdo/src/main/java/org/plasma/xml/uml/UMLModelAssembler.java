@@ -76,17 +76,24 @@ public class UMLModelAssembler {
     private static Log log = LogFactory.getLog(
     		UMLModelAssembler.class); 
 	
+    private Model provisioningModel;
 	private String destNamespaceURI;
 	private String destNamespacePrefix;
+	private boolean derivePackageNamesFromURIs = true;
     private Document document;
-    private Map<String, Class> defMap = new HashMap<String, Class>();
+    private Map<String, Package> packageMap = new HashMap<String, Package>();
+    private Map<String, Class> classMap = new HashMap<String, Class>();
+    private Map<Class, Package> classPackageMap = new HashMap<Class, Package>();
     private Map<String, Enumeration> enumMap = new HashMap<String, Enumeration>();
+    private Map<Enumeration, Package> enumPackageMap = new HashMap<Enumeration, Package>();
+    
     // FIXME: hard baked namespaces w/versions
     private Namespace umlNs = Namespace.getNamespace("uml", "http://schema.omg.org/spec/UML/2.1.2"); 
     private Namespace xmiNs = Namespace.getNamespace("xmi", "http://schema.omg.org/spec/XMI/2.1"); 
     private Namespace plasmaNs = Namespace.getNamespace("Plasma_SDO_Profile", "http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"); 
-	private Element xmi;
-	private Element model;
+	
+    private Element xmiElem;
+	private Element modelElem;
 	private Map<String, Element> elementMap = new HashMap<String, Element>();
 	private Map<String, Element> associationElementMap = new HashMap<String, Element>();
 	private Map<String, Element> enumElementMap = new HashMap<String, Element>();
@@ -131,11 +138,37 @@ public class UMLModelAssembler {
 			throw new IllegalArgumentException("expected 'destNamespaceURI' argument");
 		if (destNamespacePrefix == null || destNamespacePrefix.trim().length() == 0)
 			throw new IllegalArgumentException("expected 'destNamespacePrefix' argument");
-		this.document = buildDocumentModel(model, 
-				this.destNamespaceURI, this.destNamespacePrefix);
+		this.provisioningModel = model;
 	}
     
+	public String getDestNamespaceURI() {
+		return destNamespaceURI;
+	}
+
+	public void setDestNamespaceURI(String destNamespaceURI) {
+		this.destNamespaceURI = destNamespaceURI;
+	}
+
+	public String getDestNamespacePrefix() {
+		return destNamespacePrefix;
+	}
+
+	public void setDestNamespacePrefix(String destNamespacePrefix) {
+		this.destNamespacePrefix = destNamespacePrefix;
+	}
+
+	public boolean isDerivePackageNamesFromURIs() {
+		return derivePackageNamesFromURIs;
+	}
+
+	public void setDerivePackageNamesFromURIs(boolean derivePackageNamesFromURIs) {
+		this.derivePackageNamesFromURIs = derivePackageNamesFromURIs;
+	}
+
 	public Document getDocument() {
+		if (this.document == null)
+		    this.document = buildDocumentModel(this.provisioningModel, 
+				this.destNamespaceURI, this.destNamespacePrefix);
 		return this.document;
 	}
 		
@@ -277,38 +310,36 @@ public class UMLModelAssembler {
 	private Document buildDocumentModel(Model model, 
         		String destNamespaceURI, String destNamespacePrefix) 
     {
-    	this.xmi = new Element("XMI");
-    	this.xmi.setNamespace(xmiNs);
-    	Document document = new Document(this.xmi);
-    	this.xmi.setAttribute(new Attribute("version", "2.1", xmiNs)); // FIXME - use FUML config for this, i.e which version?
-    	this.xmi.addNamespaceDeclaration(umlNs);
-    	this.xmi.addNamespaceDeclaration(xmiNs);
-    	this.xmi.addNamespaceDeclaration(plasmaNs);    	
-    	this.model = buildModel(model);
+    	this.xmiElem = new Element("XMI");
+    	this.xmiElem.setNamespace(xmiNs);
+    	Document document = new Document(this.xmiElem);
+    	this.xmiElem.setAttribute(new Attribute("version", "2.1", xmiNs)); // FIXME - use FUML config for this, i.e which version?
+    	this.xmiElem.addNamespaceDeclaration(umlNs);
+    	this.xmiElem.addNamespaceDeclaration(xmiNs);
+    	this.xmiElem.addNamespaceDeclaration(plasmaNs);   
+    	if (this.derivePackageNamesFromURIs)
+    	    this.modelElem = this.buildModelFromURITokens(model);
+    	else
+	        this.modelElem = this.buildModelFromPackageNames(model);
     	
-    	// map class defs
-	    for (Class clss : model.getClazzs()) {
-	        defMap.put(clss.getUri() + "#" + clss.getName(), clss);    	
-	    } 
-
-    	// map enum defs
-	    for (Enumeration enm : model.getEnumerations()) {
-	        enumMap.put(enm.getUri() + "#" + enm.getName(), enm);    	
-	    } 
+    	collectPackages(model);
+    	collectClasses(model);
+    	collectEnumerations(model);
     	
-	    for (Class clss : model.getClazzs()) {
-        	Element clssElem = buildClass(clss, this.model);        	
+	    for (Class clss : this.classMap.values()) {
+	    	Package pkg = this.classPackageMap.get(clss);
+        	Element clssElem = buildClass(clss);        	
         	elementMap.put(clss.getId(), clssElem);
-        	
+        	// build properties w/o any associations
         	for (Property property : clss.getProperties()) {
         		
-        		Element ownedAttribute = buildProperty(clss, property, clssElem);
+        		Element ownedAttribute = buildProperty(pkg, clss, property, clssElem);
             	elementMap.put(property.getId(), ownedAttribute);        		
          	}
     	}
     	
     	// create associations
-	    for (Class clss : model.getClazzs()) {
+	    for (Class clss : this.classMap.values()) {
         	for (Property prop : clss.getProperties()) {
         		
         		if (prop.getType() instanceof DataTypeRef) 
@@ -328,7 +359,7 @@ public class UMLModelAssembler {
 	    			Element rightOwnedAttribute = elementMap.get(targetProp.getId());
 	    			rightOwnedAttribute.setAttribute(new Attribute("association", associationUUID));
 	
-	    			Element association = buildAssociation(prop, targetProp, this.model, associationUUID);
+	    			Element association = buildAssociation(prop, targetProp, this.modelElem, associationUUID);
 	    			
 	    			// map it to both props so we can know not to create it again
 	            	associationElementMap.put(prop.getId(), association);
@@ -336,7 +367,7 @@ public class UMLModelAssembler {
     			}
     			else {
     				Class targetClass = getOppositeClass(clss, prop);
-	    			Element association = buildAssociation(prop, targetClass, this.model, associationUUID);
+	    			Element association = buildAssociation(prop, targetClass, this.modelElem, associationUUID);
 	    			
 	    			// map it to both props so we can know not to create it again
 	            	associationElementMap.put(prop.getId(), association);
@@ -347,16 +378,110 @@ public class UMLModelAssembler {
     	
 		return document;
     }
+	
+	private void collectPackages(Model model) {
+        if (model.getUri() != null) {
+    	    packageMap.put(model.getUri() + "#" + model.getName(), model);    	
+        }
+        for (Package pkg : model.getPackages())	{
+	        if (pkg.getUri() != null) {
+        	    packageMap.put(pkg.getUri() + "#" + pkg.getName(), pkg);    	
+	        }
+        }
+	}
+
+	//FIXME: only a model can have packages? A package cannot?
+	private void collectClasses(Model model) {
+		collectClasses((Package)model);
+        for (Package pkg : model.getPackages())	
+        	collectClasses(pkg);
+	}
+	
+	private void collectClasses(Package pkg) {
+	    for (Class clss : pkg.getClazzs()) {
+	        classMap.put(clss.getUri() + "#" + clss.getName(), clss); 
+	        classPackageMap.put(clss, pkg);
+	    } 
+	}
+	
+	private void collectEnumerations(Model model) {
+		collectEnumerations((Package)model);
+        for (Package pkg : model.getPackages())	
+        	collectEnumerations(pkg);
+	}
+	
+	private void collectEnumerations(Package pkg) {
+	    for (Enumeration enm : pkg.getEnumerations()) {
+	        enumMap.put(enm.getUri() + "#" + enm.getName(), enm);    	
+	        enumPackageMap.put(enm, pkg);
+	    } 
+	}
+	
+	private Element buildModelFromPackageNames(Model model)
+	{
+    	Element modelElem = new Element("Model");
+    	modelElem.setNamespace(umlNs);
+    	this.xmiElem.addContent(modelElem);
+    	modelElem.setAttribute(new Attribute("id", model.getId(), xmiNs));
+    	modelElem.setAttribute(new Attribute("name", model.getName()));
+    	modelElem.setAttribute(new Attribute("visibility", "public"));
+    	elementMap.put(model.getId(), modelElem);
+    	if (model.getDocumentations() != null)
+    	    for (Documentation doc : model.getDocumentations()) {
+        		addOwnedComment(modelElem, model.getId(), 
+        				doc.getBody().getValue());
+    	    }
+     	
+    	// Only a root (model) package
+    	// tag the model w/a SDO namespace streotype, else tag the 
+    	// last package descendant below
+    	if (model.getPackages().size() == 0) {
+	    	Element modelStereotype = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
+	    	this.xmiElem.addContent(modelStereotype);
+	    	modelStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	modelStereotype.setAttribute(new Attribute(SDONamespace.BASE__PACKAGE, model.getId()));
+	    	modelStereotype.setAttribute(new Attribute(SDONamespace.URI, model.getUri())); 
+	    	if (model.getAlias() != null)
+	    	    addAlias(model.getAlias(), model.getId());
+    	}
+    	
+    	for (Package pkg : model.getPackages()) {
+
+        	Element pkgElem = new Element("packagedElement");
+        	modelElem.addContent(pkgElem); // add package child
+        	pkgElem.setAttribute(new Attribute("type", "uml:Package", xmiNs));
+        	pkgElem.setAttribute(new Attribute("id", pkg.getId(), xmiNs));
+        	pkgElem.setAttribute(new Attribute("name", pkg.getName()));
+        	pkgElem.setAttribute(new Attribute("visibility", "public"));
+        	elementMap.put(pkg.getId(), pkgElem);
+	    	if (pkg.getAlias() != null)
+	    	    addAlias(pkg.getAlias(), pkg.getId());
+        	
+        	Element pkgStereotypeElem = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
+        	this.xmiElem.addContent(pkgStereotypeElem);
+        	pkgStereotypeElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.BASE__PACKAGE, pkg.getId()));
+        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.URI, pkg.getUri()));               	
+        	if (pkg.getDocumentations() != null)
+        	    for (Documentation doc : model.getDocumentations()) {
+            		addOwnedComment(pkgElem, pkg.getId(), 
+            				doc.getBody().getValue());
+	        	}
+        }    	
+    	
+    	return modelElem;
+	}
 		
-	private Element buildModel(Model model)
+	private Element buildModelFromURITokens(Model model)
 	{
 		Element rootPackageElem = null;
 
+		
 		String[] packageNames = ConfigUtils.toPackageTokens(model.getUri());
 
     	Element modelElem = new Element("Model");
     	modelElem.setNamespace(umlNs);
-    	this.xmi.addContent(modelElem);
+    	this.xmiElem.addContent(modelElem);
     	modelElem.setAttribute(new Attribute("id", model.getId(), xmiNs));
     	modelElem.setAttribute(new Attribute("name", packageNames[0]));
     	modelElem.setAttribute(new Attribute("visibility", "public"));
@@ -373,7 +498,7 @@ public class UMLModelAssembler {
     	// last package descendant below
     	if (packageNames.length == 1) {
 	    	Element modelStereotype = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
-	    	this.xmi.addContent(modelStereotype);
+	    	this.xmiElem.addContent(modelStereotype);
 	    	modelStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
 	    	modelStereotype.setAttribute(new Attribute(SDONamespace.BASE__PACKAGE, model.getId()));
 	    	modelStereotype.setAttribute(new Attribute(SDONamespace.URI, this.destNamespaceURI));               	
@@ -394,7 +519,7 @@ public class UMLModelAssembler {
         	
         	if (i == packageNames.length-1) {
 	        	Element pkgStereotypeElem = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
-	        	this.xmi.addContent(pkgStereotypeElem);
+	        	this.xmiElem.addContent(pkgStereotypeElem);
 	        	pkgStereotypeElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
 	        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.BASE__PACKAGE, id));
 	        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.URI, this.destNamespaceURI));               	
@@ -407,16 +532,18 @@ public class UMLModelAssembler {
 		        	}
         	}
         	
-        	rootPackageElem = pkgElem;
-        	
+        	rootPackageElem = pkgElem;        	
         }
-    	
     	
     	return rootPackageElem;
 	}
 	
-	private Element buildClass(Class clss, Element parent)
+	private Element buildClass(Class clss)
 	{
+		// find parent element
+		Package pkgParent = this.classPackageMap.get(clss);
+		Element parent = this.elementMap.get(pkgParent.getId());
+		
     	Element clssElem = new Element("packagedElement");
     	parent.addContent(clssElem);
     	elementMap.put(clss.getId(), clssElem);
@@ -439,7 +566,7 @@ public class UMLModelAssembler {
         	generalizationElem.setAttribute(new Attribute("type", "uml:Generalization", xmiNs));
         	generalizationElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
         	clssElem.addContent(generalizationElem);
-        	Class baseClass = defMap.get(baseRef.getUri() + "#" + baseRef.getName());
+        	Class baseClass = classMap.get(baseRef.getUri() + "#" + baseRef.getName());
         	generalizationElem.setAttribute(new Attribute("general", baseClass.getId()));
         	
         	/* --for an external reference
@@ -463,7 +590,7 @@ public class UMLModelAssembler {
 	
 	private void addAlias(Alias alias, String namedElementId) {
     	Element aliasStereotype = new Element(SDOAlias.class.getSimpleName(), plasmaNs);
-    	this.xmi.addContent(aliasStereotype);
+    	this.xmiElem.addContent(aliasStereotype);
     	aliasStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	aliasStereotype.setAttribute(new Attribute(SDOAlias.BASE__NAMED_ELEMENT, namedElementId));
     	if (alias.getPhysicalName() != null)
@@ -477,7 +604,7 @@ public class UMLModelAssembler {
     	    		alias.getBusinessName().trim()));		
 	}
 
-	private Element buildProperty(Class clss, Property property, Element parentElem) {
+	private Element buildProperty(Package pkg, Class clss, Property property, Element parentElem) {
     	Element ownedAttribute = new Element("ownedAttribute");
     	parentElem.addContent(ownedAttribute);
     	ownedAttribute.setAttribute(new Attribute("type", "uml:Property", xmiNs));
@@ -487,7 +614,8 @@ public class UMLModelAssembler {
     	    ownedAttribute.setAttribute(new Attribute("visibility", property.getVisibility().value())); 
     	if (property.getDocumentations() != null)
     	    for (Documentation doc : property.getDocumentations()) {
-        		addOwnedComment(ownedAttribute, property.getId(), 
+    	    	if (doc.getBody() != null)
+        		    addOwnedComment(ownedAttribute, property.getId(), 
         				doc.getBody().getValue());
     	    }
     	
@@ -515,9 +643,25 @@ public class UMLModelAssembler {
     		addAlias(property.getAlias(), property.getId());
     	}
     	
+    	if (property.getType() instanceof DataTypeRef) {
+        	Element type = new Element("type");
+        	ownedAttribute.addContent(type);
+        	type.setAttribute(new Attribute("type", "uml:DataType", xmiNs));
+        	//type.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+        	type.setAttribute(new Attribute("href", 
+        		"Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-" 
+        			+ ((DataTypeRef)property.getType()).getName()));        			        	        	
+		}
+		else {			
+			// set reference specific attribs
+			ClassRef targetClassRef = (ClassRef)property.getType();
+			Class targetClass = classMap.get(targetClassRef.getUri() + "#" + targetClassRef.getName());
+        	ownedAttribute.setAttribute(new Attribute("type", targetClass.getId()));         	               	
+		}
+    	
     	if (property.getSort() != null) {
 	    	Element sequenceStereotype = new Element(SDOSort.class.getSimpleName(), plasmaNs);
-	    	this.xmi.addContent(sequenceStereotype);
+	    	this.xmiElem.addContent(sequenceStereotype);
 	    	sequenceStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
 	    	sequenceStereotype.setAttribute(new Attribute(SDOSort.BASE__PROPERTY, property.getId()));
 	    	sequenceStereotype.setAttribute(new Attribute(SDOSort.KEY, 
@@ -526,103 +670,88 @@ public class UMLModelAssembler {
 
     	if (property.getXmlProperty() != null) {
 	    	Element xmlPropertyStereotype = new Element(SDOXmlProperty.class.getSimpleName(), plasmaNs);
-	    	this.xmi.addContent(xmlPropertyStereotype);
+	    	this.xmiElem.addContent(xmlPropertyStereotype);
 	    	xmlPropertyStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
 	    	xmlPropertyStereotype.setAttribute(new Attribute(SDOXmlProperty.BASE__PROPERTY, property.getId()));
 	    	xmlPropertyStereotype.setAttribute(new Attribute(SDOXmlProperty.NODE_TYPE, 
 	    			property.getXmlProperty().getNodeType().name().toLowerCase()));
     	}
     	
-    	if (property.getType() instanceof DataTypeRef) {
-        	Element type = new Element("type");
-        	ownedAttribute.addContent(type);
-        	type.setAttribute(new Attribute("type", "uml:DataType", xmiNs));
-        	//type.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
-        	type.setAttribute(new Attribute("href", 
-        		"Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-" 
-        			+ ((DataTypeRef)property.getType()).getName()));        			
+    	if (property.getKey() != null) {
+	    	Element keyStereotype = new Element(SDOKey.class.getSimpleName(), plasmaNs);
+	    	this.xmiElem.addContent(keyStereotype);
+	    	keyStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	keyStereotype.setAttribute(new Attribute(SDOKey.BASE__PROPERTY, property.getId()));
+	    	keyStereotype.setAttribute(new Attribute(SDOKey.TYPE, // provisioning key-type is JAXB generated and upper-case
+	    			property.getKey().getType().name().toLowerCase()));
+    	}
+    	
+    	if (property.getValueConstraint() != null) {
+	    	Element valueContStereotype = new Element(SDOValueConstraint.class.getSimpleName(), plasmaNs);
+	    	this.xmiElem.addContent(valueContStereotype);
+	    	valueContStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.BASE__PROPERTY, property.getId()));
+ 	    	
+	    	ValueConstraint vc = property.getValueConstraint();
+	    	if (vc.getTotalDigits() != null)
+	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.TOTAL_DIGITS, 
+	    	    		String.valueOf(vc.getTotalDigits())));
+	    	if (vc.getFractionDigits() != null)
+	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.FRACTION_DIGITS, 
+	    	    		String.valueOf(vc.getFractionDigits())));
+	    	if (vc.getMaxInclusive() != null)
+	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MAX_INCLUSIVE, 
+	    	    		String.valueOf(vc.getMaxInclusive())));
+	    	if (vc.getMaxExclusive() != null)
+	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MAX_EXCLUSIVE, 
+	    	    		String.valueOf(vc.getMaxExclusive())));
+	    	if (vc.getMaxLength() != null)
+	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MAX_LENGTH, 
+	    	    		String.valueOf(vc.getMaxLength())));
+	    	if (vc.getMinInclusive() != null)
+	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MIN_INCLUSIVE, 
+	    	    		String.valueOf(vc.getMinInclusive())));
+	    	if (vc.getMinExclusive() != null)
+	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MIN_EXCLUSIVE, 
+	    	    		String.valueOf(vc.getMinExclusive())));
+	    	if (vc.getMinLength() != null)
+	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MIN_LENGTH, 
+	    	    		String.valueOf(vc.getMinLength())));
+	    	if (vc.getPattern() != null)
+	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.PATTERN, 
+	    	    		String.valueOf(vc.getPattern())));
+    	}
+    	
+    	if (property.getUniqueConstraint() != null) {
+	    	Element uniqueStereotype = new Element(SDOUniqueConstraint.class.getSimpleName(), plasmaNs);
+	    	this.xmiElem.addContent(uniqueStereotype);
+	    	uniqueStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.BASE__PROPERTY, property.getId()));
+	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.GROUP, 
+	    			property.getUniqueConstraint().getGroup()));
+    	}
+    			
+	    if (property.getEnumerationConstraint() != null) {
+	    	Element enumConstraintStereotype = new Element(SDOEnumerationConstraint.class.getSimpleName(), plasmaNs);
+	    	this.xmiElem.addContent(enumConstraintStereotype);
+	    	enumConstraintStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	enumConstraintStereotype.setAttribute(new Attribute(SDOUniqueConstraint.BASE__PROPERTY, property.getId()));
 
-        	if (property.getKey() != null) {
-    	    	Element keyStereotype = new Element(SDOKey.class.getSimpleName(), plasmaNs);
-    	    	this.xmi.addContent(keyStereotype);
-    	    	keyStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
-    	    	keyStereotype.setAttribute(new Attribute(SDOKey.BASE__PROPERTY, property.getId()));
-    	    	keyStereotype.setAttribute(new Attribute(SDOKey.TYPE, // provisioning key-type is JAXB generated and upper-case
-    	    			property.getKey().getType().name().toLowerCase()));
-        	}
-        	        	
-        	if (property.getValueConstraint() != null) {
-    	    	Element valueContStereotype = new Element(SDOValueConstraint.class.getSimpleName(), plasmaNs);
-    	    	this.xmi.addContent(valueContStereotype);
-    	    	valueContStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
-    	    	valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.BASE__PROPERTY, property.getId()));
-     	    	
-    	    	ValueConstraint vc = property.getValueConstraint();
-    	    	if (vc.getTotalDigits() != null)
-    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.TOTAL_DIGITS, 
-    	    	    		String.valueOf(vc.getTotalDigits())));
-    	    	if (vc.getFractionDigits() != null)
-    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.FRACTION_DIGITS, 
-    	    	    		String.valueOf(vc.getFractionDigits())));
-    	    	if (vc.getMaxInclusive() != null)
-    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MAX_INCLUSIVE, 
-    	    	    		String.valueOf(vc.getMaxInclusive())));
-    	    	if (vc.getMaxExclusive() != null)
-    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MAX_EXCLUSIVE, 
-    	    	    		String.valueOf(vc.getMaxExclusive())));
-    	    	if (vc.getMaxLength() != null)
-    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MAX_LENGTH, 
-    	    	    		String.valueOf(vc.getMaxLength())));
-    	    	if (vc.getMinInclusive() != null)
-    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MIN_INCLUSIVE, 
-    	    	    		String.valueOf(vc.getMinInclusive())));
-    	    	if (vc.getMinExclusive() != null)
-    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MIN_EXCLUSIVE, 
-    	    	    		String.valueOf(vc.getMinExclusive())));
-    	    	if (vc.getMinLength() != null)
-    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.MIN_LENGTH, 
-    	    	    		String.valueOf(vc.getMinLength())));
-    	    	if (vc.getPattern() != null)
-    	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.PATTERN, 
-    	    	    		String.valueOf(vc.getPattern())));
-        	}
-        	
-        	if (property.getUniqueConstraint() != null) {
-    	    	Element uniqueStereotype = new Element(SDOUniqueConstraint.class.getSimpleName(), plasmaNs);
-    	    	this.xmi.addContent(uniqueStereotype);
-    	    	uniqueStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
-    	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.BASE__PROPERTY, property.getId()));
-    	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.GROUP, 
-    	    			property.getUniqueConstraint().getGroup()));
-        	}
-        			
-		    if (property.getEnumerationConstraint() != null) {
-    	    	Element enumConstraintStereotype = new Element(SDOEnumerationConstraint.class.getSimpleName(), plasmaNs);
-    	    	this.xmi.addContent(enumConstraintStereotype);
-    	    	enumConstraintStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
-    	    	enumConstraintStereotype.setAttribute(new Attribute(SDOUniqueConstraint.BASE__PROPERTY, property.getId()));
-
-    	    	EnumerationConstraint constraint = property.getEnumerationConstraint();
-    	    	EnumerationRef enumRef = constraint.getValue();
-    	    	String enumRefId = enumRef.getUri() + "#" + enumRef.getName();
-		    	
-	    		Element enumeration = this.enumElementMap.get(enumRefId);
-	    		if (enumeration == null) {
-	    			enumeration = this.buildEnumeration(constraint);
-	        	    this.model.addContent(enumeration);
-	        	    this.enumElementMap.put(enumRefId, enumeration);
-	    		}
-	    		Attribute enumId = enumeration.getAttribute("id", xmiNs);
-	    		enumConstraintStereotype.setAttribute(new Attribute(SDOEnumerationConstraint.VALUE, enumId.getValue()));
-		    }
-		}
-		else {
-			
-			// set reference specific attribs
-			ClassRef targetClassRef = (ClassRef)property.getType();
-			Class targetClass = defMap.get(targetClassRef.getUri() + "#" + targetClassRef.getName());
-        	ownedAttribute.setAttribute(new Attribute("type", targetClass.getId()));         	               	
-		}
+	    	EnumerationConstraint constraint = property.getEnumerationConstraint();
+	    	EnumerationRef enumRef = constraint.getValue();
+	    	String enumRefId = enumRef.getUri() + "#" + enumRef.getName();
+	    	
+    		Element enumeration = this.enumElementMap.get(enumRefId);
+    		if (enumeration == null) {
+    			enumeration = this.buildEnumeration(constraint);
+    			Element pkgElement = this.elementMap.get(pkg.getId());
+    			pkgElement.addContent(enumeration);
+        	    this.enumElementMap.put(enumRefId, enumeration);
+    		}
+    		Attribute enumId = enumeration.getAttribute("id", xmiNs);
+    		enumConstraintStereotype.setAttribute(new Attribute(SDOEnumerationConstraint.VALUE, enumId.getValue()));
+	    }
+    	
 		
 		return ownedAttribute;
 	}
@@ -739,7 +868,7 @@ public class UMLModelAssembler {
 
         	if (lit.getAlias() != null && lit.getAlias().getPhysicalName() != null) {
     	    	Element aliasStereotype = new Element(SDOAlias.class.getSimpleName(), plasmaNs);
-    	    	this.xmi.addContent(aliasStereotype);
+    	    	this.xmiElem.addContent(aliasStereotype);
     	    	aliasStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	    	aliasStereotype.setAttribute(new Attribute(SDOAlias.BASE__NAMED_ELEMENT, literalId));
     	    	aliasStereotype.setAttribute(new Attribute(SDOAlias.PHYSICAL_NAME, 
@@ -766,13 +895,13 @@ public class UMLModelAssembler {
 	}
 	
 	private Class getOppositeClass(Class def, Property propertyDef) {
-		Class targetDef = defMap.get(propertyDef.getType().getUri() 
+		Class targetDef = classMap.get(propertyDef.getType().getUri() 
     			+ "#" + propertyDef.getType().getName());
     	return targetDef;
 	}
 
 	private Property getOppositeProperty(Class def, Property propertyDef) {
-		Class targetDef = defMap.get(propertyDef.getType().getUri() 
+		Class targetDef = classMap.get(propertyDef.getType().getUri() 
     			+ "#" + propertyDef.getType().getName());
     	for (Property p : targetDef.getProperties()) {
     		if (p.getName().equals(propertyDef.getOpposite()))

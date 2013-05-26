@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,7 +57,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
     private static Log log = LogFactory.getFactory().getInstance(CoreChangeSummary.class);
 
     
-    private Map<String, CoreChange> changedDataObjects;
+    private Map<UUID, CoreChange> changedDataObjects;
     
     private PlasmaDataGraph dataGraph;
     
@@ -75,11 +76,11 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             return;
 
         if (changedDataObjects == null) {
-            changedDataObjects = new HashMap<String, CoreChange>();
+            changedDataObjects = new HashMap<UUID, CoreChange>();
         }    
         
         PlasmaNode dataNode = (PlasmaNode)dataObject;
-    	String hashKey = dataNode.getUUIDAsString();
+        UUID hashKey = dataNode.getUUID();
     	CoreChange dataObjectSettings = changedDataObjects.get(hashKey);
         if (dataObjectSettings == null)
         {
@@ -99,12 +100,12 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             return;
 
         if (changedDataObjects == null) {
-            changedDataObjects = new HashMap<String, CoreChange>();
+            changedDataObjects = new HashMap<UUID, CoreChange>();
         }    
         
         PlasmaNode dataNode = (PlasmaNode)dataObject;
-    	String hashKey = dataNode.getUUIDAsString();
-    	CoreChange dataObjectSettings = changedDataObjects.get(dataNode.getUUIDAsString());
+        UUID hashKey = dataNode.getUUID();
+    	CoreChange dataObjectSettings = changedDataObjects.get(dataNode.getUUID());
         if (dataObjectSettings == null)
         {
         	if (log.isDebugEnabled())
@@ -151,11 +152,11 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             return;
 
         if (changedDataObjects == null) {
-            changedDataObjects = new HashMap<String, CoreChange>();
+            changedDataObjects = new HashMap<UUID, CoreChange>();
         }    
         
         PlasmaNode dataNode = (PlasmaNode)dataObject;
-    	String hashKey = dataNode.getUUIDAsString();
+        UUID hashKey = dataNode.getUUID();
         if (isCreated(dataObject)) {
             Change dataObjectSettings = changedDataObjects.get(hashKey);
             if (dataObjectSettings == null)
@@ -317,7 +318,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
         PlasmaNode dataNode = (PlasmaNode)dataObject;
         if (changedDataObjects == null)
             return null;
-        Change dataObjectSettings = changedDataObjects.get(dataNode.getUUIDAsString());
+        Change dataObjectSettings = changedDataObjects.get(dataNode.getUUID());
         if (dataObjectSettings == null)
             return null;
         
@@ -350,7 +351,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
     public List<ChangeSummary.Setting> getOldValues(DataObject dataObject) {
         List<ChangeSummary.Setting> result = new ArrayList<ChangeSummary.Setting>();
         PlasmaNode dataNode = (PlasmaNode)dataObject;
-        Change dataObjectSettings = changedDataObjects.get(dataNode.getUUIDAsString());
+        Change dataObjectSettings = changedDataObjects.get(dataNode.getUUID());
         if (dataObjectSettings == null)
             return result;
         
@@ -381,7 +382,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             throw new IllegalArgumentException("expected non-null data-object argument");
         PlasmaNode dataNode = (PlasmaNode)dataObject;
         if (changedDataObjects != null) {
-            Change info = changedDataObjects.get(dataNode.getUUIDAsString());
+            Change info = changedDataObjects.get(dataNode.getUUID());
             return info != null && info.getChangeType() == ChangeType.CREATED;
         }
         else
@@ -402,7 +403,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             throw new IllegalArgumentException("expected non-null data-object argument");
         PlasmaNode dataNode = (PlasmaNode)dataObject;
         if (changedDataObjects != null) {
-            Change info = changedDataObjects.get(dataNode.getUUIDAsString());
+            Change info = changedDataObjects.get(dataNode.getUUID());
             return info != null && info.getChangeType() == ChangeType.MODIFIED;
         }
         else
@@ -422,7 +423,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             throw new IllegalArgumentException("expected non-null data-object argument");
         PlasmaNode dataNode = (PlasmaNode)dataObject;
         if (changedDataObjects != null) {
-            Change info = changedDataObjects.get(dataNode.getUUIDAsString());
+            Change info = changedDataObjects.get(dataNode.getUUID());
             return info != null && info.getChangeType() == ChangeType.DELETED;
         }
         else
@@ -433,7 +434,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
         if (dataObject == null)
             throw new IllegalArgumentException("expected non-null data-object argument");
         PlasmaNode dataNode = (PlasmaNode)dataObject;
-        Change info = changedDataObjects.get(dataNode.getUUIDAsString());
+        Change info = changedDataObjects.get(dataNode.getUUID());
         if (info == null)
             throw new IllegalArgumentException("given data-object (" +
                     dataNode.getUUIDAsString() + ") not registed in change summary");
@@ -473,7 +474,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
         List<DataObject> changedObjects = this.getChangedDataObjects();
         for (DataObject dataObject : changedObjects) {
             PlasmaNode dataNode = (PlasmaNode)dataObject;
-            Change info = changedDataObjects.get(dataNode.getUUIDAsString());
+            Change info = changedDataObjects.get(dataNode.getUUID());
             List<Setting> settings = info.getAllSettings();
 
             result.append("\n\t<" + info.getChangeType().toString().toLowerCase() 

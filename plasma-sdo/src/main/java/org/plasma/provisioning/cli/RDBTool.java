@@ -22,6 +22,7 @@
 package org.plasma.provisioning.cli;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,9 +44,10 @@ import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.ProvisioningModelDataBinding;
 import org.plasma.provisioning.SchemaConverter;
 import org.plasma.provisioning.adapter.ModelAdapter;
-import org.plasma.provisioning.rdb.OracleConverter;
+import org.plasma.provisioning.rdb.Oracle11GConverter;
+import org.plasma.provisioning.rdb.OracleVersion;
+import org.plasma.provisioning.rdb.OracleVersionFinder;
 import org.plasma.provisioning.rdb.RDBConstants;
-import org.plasma.provisioning.rdb.oracle.sys.Version;
 import org.plasma.sdo.repository.PlasmaRepository;
 import org.plasma.text.ddl.DDLFactory;
 import org.plasma.text.ddl.DDLModelAssembler;
@@ -92,7 +94,7 @@ import org.xml.sax.SAXException;
  * associations are expected to be
  * part of the configured PlasmaSDO UML Profile annotated UML model artifact(s).</li> 
  */
-public class RDBTool extends ProvisioningTool {
+public class RDBTool extends ProvisioningTool implements RDBConstants {
     
     private static Log log =LogFactory.getLog(
             RDBTool.class); 
@@ -248,32 +250,38 @@ public class RDBTool extends ProvisioningTool {
         	
         	PlasmaRepository.getInstance(); // just force an init
         	
-        	//FIXME: determine the vendor and version
-        	
-        	NamespaceProvisioning provisioning = new NamespaceProvisioning();
-        	provisioning.setPackageName(Version.class.getPackage().getName());
-        	
-            PlasmaConfig.getInstance().addDynamicSDONamespace(
-            		RDBConstants.ARTIFACT_NAMESPACE_ORACLE_SYS, 
-            		RDBConstants.ARTIFACT_RESOURCE,
-            		provisioning);
-
-        	InputStream stream2 = RDBTool.class.getClassLoader().getResourceAsStream(
-        			RDBConstants.ARTIFACT_RESOURCE);
-        	
-    	    if (log.isDebugEnabled())
-    	    	log.info("loading UML/XMI model");
-            Fuml.load(new ResourceArtifact(
-            	RDBConstants.ARTIFACT_RESOURCE, 
-            	RDBConstants.ARTIFACT_RESOURCE, 
-                stream2));              	
-        	
+           	
+            // convert the schemas
             Model model = null;
         	switch (dialect) {
         	case oracle: 
-        		SchemaConverter converter = 
-        		    new OracleConverter(schemaNames, destNamespaceURI);
-        		model = converter.buildModel();            	
+        		loadDynamicArtifact();
+        		loadDynamicNamespace(ARTIFACT_NAMESPACE_ORACLE_ANY_SYS,
+        			org.plasma.provisioning.rdb.oracle.any.sys.Version.class.getPackage());
+        		OracleVersionFinder versionFinder = new OracleVersionFinder();
+        		OracleVersion version = versionFinder.findVersion();
+        		log.info("detected version '" + version + "'");
+        		SchemaConverter converter = null;
+        		switch (version) {
+        		case _9i:
+        		case _10g:
+        		case _11g:
+            		loadDynamicNamespace(ARTIFACT_NAMESPACE_ORACLE_11G_SYS,
+            			org.plasma.provisioning.rdb.oracle.g11.sys.Version.class.getPackage());
+            		converter = new Oracle11GConverter(
+            			schemaNames, destNamespaceURI);
+            		break;
+        		case _unknown:
+        		default:
+        			log.warn("unknown Oracle version - using 11g metamodel");
+            		loadDynamicNamespace(ARTIFACT_NAMESPACE_ORACLE_11G_SYS,
+            			org.plasma.provisioning.rdb.oracle.g11.sys.Version.class.getPackage());
+            		converter = new Oracle11GConverter(
+                			schemaNames, destNamespaceURI);
+            		break;
+        		}
+        		
+        		model = converter.buildModel(); 
         	    break;
         	case mysql:  
         	default:
@@ -291,12 +299,17 @@ public class RDBTool extends ProvisioningTool {
         		stream.close();
         		log.debug("wrote merged model file to: " 
         				+ outFile.getAbsoluteFile());
+        		log.debug("reading merged model file: " 
+        				+ outFile.getAbsoluteFile());
+        		model = (Model)provBinding.unmarshal(
+        			new FileInputStream(outFile));
         	}
     	    ModelAdapter helper = 
     				   new ModelAdapter(model);
     			   
     		UMLModelAssembler umlAssembler = new UMLModelAssembler(model, 
     				destNamespaceURI, "tns");
+    		umlAssembler.setDerivePackageNamesFromURIs(false);
     	    Document document = umlAssembler.getDocument();
     	        
 	    	log.info("marshaling XMI model to file, '"
@@ -317,6 +330,37 @@ public class RDBTool extends ProvisioningTool {
                     + command.toString() + "'");
         } 
        
+    }
+    
+    /**
+     * Dynamically loads the vendor metamodel for the given
+     * namespace and provisioning package adding
+     * a dynamic SDO namespace.
+     * @param namespace the SDO namespace URI
+     * @param pkg the provisioning package
+     */
+    private static void loadDynamicNamespace(String namespace, 
+    		java.lang.Package pkg) {
+    		
+    	NamespaceProvisioning provisioning = new NamespaceProvisioning();
+    	provisioning.setPackageName(pkg.getName());
+    	
+        PlasmaConfig.getInstance().addDynamicSDONamespace(
+        		namespace, 
+        		RDBConstants.ARTIFACT_RESOURCE,
+        		provisioning);
+    }
+    
+    private static void loadDynamicArtifact() {
+    	InputStream stream = RDBTool.class.getClassLoader().getResourceAsStream(
+    			RDBConstants.ARTIFACT_RESOURCE);
+    	
+	    if (log.isDebugEnabled())
+	    	log.info("loading UML/XMI model");
+        Fuml.load(new ResourceArtifact(
+        	RDBConstants.ARTIFACT_RESOURCE, 
+        	RDBConstants.ARTIFACT_RESOURCE, 
+        	stream));              	        		    	
     }
     
     private static void printUsage() {

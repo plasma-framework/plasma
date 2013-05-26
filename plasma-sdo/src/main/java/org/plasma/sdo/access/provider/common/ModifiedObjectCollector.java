@@ -21,7 +21,8 @@
  */
 package org.plasma.sdo.access.provider.common;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -32,12 +33,11 @@ import org.plasma.sdo.PlasmaDataObject;
 
 import commonj.sdo.DataGraph;
 import commonj.sdo.DataObject;
-import commonj.sdo.Property;
 
 public class ModifiedObjectCollector implements PlasmaDataGraphVisitor {
     private static Log log = LogFactory.getFactory().getInstance(
             ModifiedObjectCollector.class);
-    private List<PlasmaDataObject> result = new ArrayList<PlasmaDataObject>();
+    private HashSet<PlasmaDataObject> result = new HashSet<PlasmaDataObject>();
     private PlasmaChangeSummary changeSummary;
     @SuppressWarnings("unused")
     private ModifiedObjectCollector() {}
@@ -52,12 +52,14 @@ public class ModifiedObjectCollector implements PlasmaDataGraphVisitor {
         
         if (changeSummary.isModified(target)) {
             if (!result.contains(target))
-                result.add((PlasmaDataObject)target);
+                this.result.add((PlasmaDataObject)target);
         }
     }
     
     public List<PlasmaDataObject> getResult() {
-        return result;
+    	PlasmaDataObject[] array = new PlasmaDataObject[this.result.size()];
+    	this.result.toArray();
+        return Arrays.asList(array);
     } 
 }
 
