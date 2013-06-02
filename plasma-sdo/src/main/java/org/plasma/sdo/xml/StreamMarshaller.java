@@ -128,8 +128,12 @@ public class StreamMarshaller extends Marshaller {
     }
 
 	public void marshal(OutputStream stream) throws XMLStreamException, MarshallerException {
-		XMLStreamWriter writer =
-			factory.createXMLStreamWriter(stream);
+		String encoding = findEncoding();
+		XMLStreamWriter writer = null;
+		if (encoding != null)
+			writer = factory.createXMLStreamWriter(stream, encoding);
+		else
+			writer = factory.createXMLStreamWriter(stream);
 		
 		writer = new IndentingXMLStreamWriter(writer);
 		try {
@@ -141,8 +145,7 @@ public class StreamMarshaller extends Marshaller {
 	}
 	
 	public void marshal(Writer outputWriter) throws XMLStreamException, MarshallerException {
-		XMLStreamWriter writer =
-			factory.createXMLStreamWriter(outputWriter);
+		XMLStreamWriter writer = factory.createXMLStreamWriter(outputWriter);
 		
 		writer = new IndentingXMLStreamWriter(writer);
 		try {
@@ -184,16 +187,27 @@ public class StreamMarshaller extends Marshaller {
 			    this.document.getSchemaLocation());	
 	}
 	
+	private String findEncoding() {
+		if (this.document.getEncoding() != null)
+			return this.document.getEncoding();
+		else if (this.getOptions() != null && this.getOptions().getEncoding() != null)
+			return this.getOptions().getEncoding();
+		else
+			return null;
+	}
+	
 	private void write(XMLStreamWriter writer) throws XMLStreamException {
     	setup();
 
-    	if (this.document.isXMLDeclaration())
-    		if (this.document.getEncoding() != null)
-    	        writer.writeStartDocument(this.document.getEncoding(), 
+    	if (this.document.isXMLDeclaration()) {
+    		String encoding = findEncoding();
+    		if (encoding != null)
+    	        writer.writeStartDocument(encoding, 
     	    		this.document.getXMLVersion());
     		else
     			writer.writeStartDocument( 
         	    		this.document.getXMLVersion());
+    	}
     	
 	    // Write a processing instruction
 		//writer.writeProcessingInstruction(

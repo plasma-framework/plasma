@@ -25,8 +25,6 @@ package org.plasma.sdo.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.plasma.sdo.PlasmaEdge;
 import org.plasma.sdo.PlasmaNode;
 import org.plasma.sdo.PlasmaProperty;
@@ -35,7 +33,7 @@ import org.plasma.sdo.PlasmaProperty;
 public abstract class CoreNode 
     implements PlasmaNode, CoreObjectHolder, NamedEntity 
 {
-    private static Log log = LogFactory.getFactory().getInstance(CoreNode.class); 
+	private static final long serialVersionUID = 1L;
 
     protected CoreObject valueObject;
     protected static final List <PlasmaEdge> EMPTY_EDGE_LIST = new ArrayList<PlasmaEdge>(); 

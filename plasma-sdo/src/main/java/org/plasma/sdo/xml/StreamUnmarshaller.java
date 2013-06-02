@@ -246,10 +246,13 @@ public class StreamUnmarshaller extends Unmarshaller {
 	        		if (property.getType().isDataType()) {
 		        		Object value = target.get(property);
 		    	    	if (!property.isReadOnly()) {
-		        			dataObject.set(property, value);
+		    	    		if (!property.isMany())
+		        			    dataObject.set(property, value);
+		    	    		else
+		    	    			dataObject.setList(property, (List)value);
 		    	    	}
 		    	    	else {
-		                    CoreHelper.set(dataObject, property.getName(), value);
+		      	    		CoreHelper.set(dataObject, property.getName(), value);
 		    	    	}
 	        		}
 	        	}
@@ -385,10 +388,12 @@ public class StreamUnmarshaller extends Unmarshaller {
  		    		break; // ignore null
  		    	}
  		    	if (data.contains(">")) {
+ 		    		//Note: we even get escaped '>' char here so 
+ 		    		// can't accurately determine well-formedness 
  		            Location loc = event.getLocation();               
  		            String msg = "line:col[" + loc.getLineNumber() + ":" + loc.getColumnNumber() + "]";
- 		            msg += " - document is not well-formed";
- 		    		throw new XMLStreamException(msg);
+ 		            msg += " - document may not be well-formed";
+ 		    		log.warn(msg);
  		    	}
  		    	StreamNode streamNode = stack.peek();
  		    	if (streamNode instanceof StreamProperty) {
@@ -428,17 +433,13 @@ public class StreamUnmarshaller extends Unmarshaller {
  		    throw new UnmarshallerException(msg);
  	    }     		    	
     	if (!property.isReadOnly()) {
-            Object value = PlasmaDataHelper.INSTANCE.convert(property, data);
     		if (!property.isMany()) {
+                Object value = PlasmaDataHelper.INSTANCE.convert(property, data);
     			streamProperty.set(value);
     		}
     		else {
-	            Location loc = event.getLocation();               
-	            String msg = "line:col[" + loc.getLineNumber() + ":" + loc.getColumnNumber() + "]";
-	    		msg += " - cannot set many propery ("
-	    			+ type.getURI() + "#" + type.getName() + "." + property.getName() 
-	    			+ ") - from character data"; 
-    			throw new UnmarshallerException(msg);
+    			Object value = PlasmaDataHelper.INSTANCE.convert(property, data);
+    			streamProperty.set(value);
     		}
     	}
     	else {
@@ -456,17 +457,7 @@ public class StreamUnmarshaller extends Unmarshaller {
 	{
 		Object value = propertyNode.get();
 		if (value != null) { // maybe no characters data
-			if (!propertyNode.getProperty().isMany()) {
-				parent.set(propertyNode.getProperty(), value);
-			}
-			else {
-    			List<Object> list = (List<Object>)parent.get(propertyNode.getProperty());
-    			if (list == null) {
-    				list = new ArrayList<Object>();
-    				parent.set(propertyNode.getProperty(), list);
-    			}
-    			list.add(value);
-			}            		
+			parent.set(propertyNode.getProperty(), value);
 		}		
 	}
 	

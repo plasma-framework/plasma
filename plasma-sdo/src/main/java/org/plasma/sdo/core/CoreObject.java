@@ -27,27 +27,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Class used to describe a value object model of arbitrary
  * complexity. Can accommodate strict hierarchical structures
  * as well as object networks and graphs.
  */
-@SuppressWarnings("serial")
 public final class CoreObject
-    implements Serializable, Cloneable
-{
-    private static Log log = LogFactory.getFactory().getInstance(CoreObject.class);
-
-        
-    /** 
+    implements Cloneable, Serializable
+{        
+	private static final long serialVersionUID = 1L;
+	/** 
      * let's NOT serialize the collection structure for 
      * efficiency, only it's contents. 
      */
@@ -207,7 +200,7 @@ public final class CoreObject
         
         // default constructors not called during deserialization, must
         // re-create transient Map data member
-        values = new Hashtable(size);
+        values = new HashMap<String, Object>(size);
         
         for (int i = 0; i < size; i++) 
         {

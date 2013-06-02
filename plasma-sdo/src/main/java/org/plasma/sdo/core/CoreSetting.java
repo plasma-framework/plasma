@@ -21,23 +21,30 @@
  */
 package org.plasma.sdo.core;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.sdo.PlasmaNode;
 import org.plasma.sdo.PlasmaSetting;
-import org.plasma.sdo.core.NullValue;
+import org.plasma.sdo.helper.PlasmaTypeHelper;
 
-import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
+import commonj.sdo.Type;
 
 public class CoreSetting implements PlasmaSetting {
 
     private static Log log = LogFactory.getLog(CoreSetting.class);
     private DataObject source;
-    private Property property;
+    private transient Property property;
+    /** used for serialization only */
+    private String propertyName;
+    /** used for serialization only */
+    private String propertyTypeName;
+    /** used for serialization only */
+    private String propertyTypeUri;
     private Object value;
     private String valuePath; // need to capture before it changes
     private boolean isSet;
@@ -78,6 +85,40 @@ public class CoreSetting implements PlasmaSetting {
                         log.error("expected instance of PlasmaNode or NullValue");                    
             }
         }
+    }
+    
+    /**
+     * Writes out metadata logical names as string
+     * for serialization.
+     * @param out the stream
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) 
+    		throws IOException {
+	    this.propertyName = this.property.getName();
+	    this.propertyTypeName = this.property.getContainingType().getName();
+	    this.propertyTypeUri = this.property.getContainingType().getURI();
+	    this.property = null;
+    	out.defaultWriteObject();
+    }
+    
+    /**
+     * Reads in metadata logical names as string
+     * during de-serialization looks up and
+     * restores references.
+     * @param in
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in)
+    	     throws IOException, ClassNotFoundException {
+    	in.defaultReadObject();
+		Type propertyType = PlasmaTypeHelper.INSTANCE.getType(
+				this.propertyTypeUri, this.propertyTypeName);
+		this.property = propertyType.getProperty(this.propertyName);
+	    this.propertyName = null;
+	    this.propertyTypeName = null;
+	    this.propertyTypeUri = null;
     }
     
     /**

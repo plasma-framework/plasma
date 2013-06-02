@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.modeldriven.fuml.repository.Class_;
 import org.modeldriven.fuml.repository.Stereotype;
+import org.modeldriven.fuml.repository.Package;
 import org.plasma.common.exception.PlasmaRuntimeException;
 import org.plasma.sdo.Alias;
 import org.plasma.sdo.AssociationPath;
@@ -56,6 +57,36 @@ public class Classifier extends Element {
 	public String getId() {
 		return this.classifier.getDelegate().getXmiId();
 	}	
+	
+	public String getPackageName()
+	{
+    	if (classifier.getPackage() != null) 
+		    return this.classifier.getPackage().getName();
+		else
+			return null;
+	}
+	
+	public String getPackagePhysicalName()
+	{
+    	SDOAlias alias = findPackageAlias();
+    	if (alias != null)
+    		return alias.getPhysicalName();
+        return null;
+	}
+	
+    public SDOAlias findPackageAlias() 
+    {
+    	if (classifier.getPackage() != null) {
+	        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier.getPackage());
+	        if (stereotypes != null) {
+	            for (Stereotype stereotype : stereotypes)
+	                if (stereotype.getDelegate() instanceof SDOAlias) {
+	                	return (SDOAlias)stereotype.getDelegate();
+	                }
+	        }
+    	}
+        return null;
+    }        
 	
 	public List<Comment> getComments() {
 		List<Comment> result = new ArrayList<Comment>();
@@ -105,43 +136,25 @@ public class Classifier extends Element {
      
     public String getPhysicalName() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier);
-        if (stereotypes != null) {
-            for (Stereotype stereotype : stereotypes)
-                if (stereotype.getDelegate() instanceof SDOAlias) {
-                	SDOAlias sdoAliasStereotype = (SDOAlias)stereotype.getDelegate();
-                    if (sdoAliasStereotype.getPhysicalName() != null)
-                        return sdoAliasStereotype.getPhysicalName();
-                }
-        }
+    	SDOAlias alias = findAlias();
+    	if (alias != null)
+    		return alias.getPhysicalName();
         return null;
     }    
 
     public String getLocalName() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier);
-        if (stereotypes != null) {
-            for (Stereotype stereotype : stereotypes)
-                if (stereotype.getDelegate() instanceof SDOAlias) {
-                	SDOAlias sdoAliasStereotype = (SDOAlias)stereotype.getDelegate();
-                    if (sdoAliasStereotype.getLocalName() != null)
-                        return sdoAliasStereotype.getLocalName();
-                }
-        }
+    	SDOAlias alias = findAlias();
+    	if (alias != null)
+    		return alias.getLocalName();
         return null;
     }    
 
     public String getBusinessName() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier);
-        if (stereotypes != null) {
-            for (Stereotype stereotype : stereotypes)
-                if (stereotype.getDelegate() instanceof SDOAlias) {
-                	SDOAlias sdoAliasStereotype = (SDOAlias)stereotype.getDelegate();
-                    if (sdoAliasStereotype.getBusinessName() != null)
-                        return sdoAliasStereotype.getBusinessName();
-                }
-        }
+    	SDOAlias alias = findAlias();
+    	if (alias != null)
+    		return alias.getBusinessName();
         return null;
     }    
 

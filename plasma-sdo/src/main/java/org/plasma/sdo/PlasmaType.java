@@ -189,6 +189,31 @@ public interface PlasmaType extends Type {
     public Alias getAlias();
     
     /**
+     * Returns the logical name of the 
+     * model package (if any) associated with this Type 
+     * as a string, or null if no package exists.
+     * @return the logical name of the 
+     * model package (if any) associated with this Type 
+     * as a string, or null if no package exists.
+     */    
+    public String getPackageName();   
+
+    /**
+     * Returns the physical name alias of the 
+     * model package (if any) associated with this Type 
+     * as a string, or null if no physical 
+     * name alias exists. The package physical name alias is
+     * useful for various services, such as those
+     * providing access to relational data stores. 
+     * @return the physical name alias of the 
+     * model package (if any) associated with this Type 
+     * as a string, or null if no physical 
+     * name alias exists.
+     */    
+    public String getPackagePhysicalName();   
+
+    
+    /**
      * Returns an alphabetically sorted list of the Properties declared 
      * in this Type as opposed to
      * those declared in base Types. Properties are alphabetically sorted by name. 

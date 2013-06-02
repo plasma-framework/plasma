@@ -23,7 +23,8 @@ package org.plasma.sdo.core;
 
 public class CoreEdge implements Edge {
     
-    protected TraversalDirection direction = TraversalDirection.RIGHT;
+	private static final long serialVersionUID = 1L;
+	protected TraversalDirection direction = TraversalDirection.RIGHT;
     protected double weight;
 
     public TraversalDirection getDirection() {

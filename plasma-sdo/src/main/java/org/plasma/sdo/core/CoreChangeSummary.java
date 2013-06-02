@@ -22,14 +22,13 @@
 package org.plasma.sdo.core;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
 
 import org.apache.commons.logging.Log;
@@ -52,9 +51,12 @@ import commonj.sdo.Sequence;
  * allowing applications to efficiently and incrementally update back-end 
  * storage when required.
  */
-public class CoreChangeSummary implements PlasmaChangeSummary {
+public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
 
-    private static Log log = LogFactory.getFactory().getInstance(CoreChangeSummary.class);
+	private static final long serialVersionUID = 1L;
+
+
+	private static Log log = LogFactory.getFactory().getInstance(CoreChangeSummary.class);
 
     
     private Map<UUID, CoreChange> changedDataObjects;
@@ -87,7 +89,8 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
         	if (log.isDebugEnabled())
         		log.debug("created: " + dataObject.getType().getURI() + "#" 
         				+ dataObject.getType().getName() + "(" + hashKey + ")");
-            dataObjectSettings = new CoreChange(dataObject, ChangeType.CREATED);
+            dataObjectSettings = new CoreChange(dataObject, 
+            		ChangeType.CREATED, changedDataObjects);
             changedDataObjects.put(hashKey, dataObjectSettings);
         }
         else
@@ -111,11 +114,11 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
         	if (log.isDebugEnabled())
         		log.debug("deleted: " + dataObject.getType().getURI() + "#" 
         				+ dataObject.getType().getName() + "(" + hashKey + ")");
-            dataObjectSettings = new CoreChange(dataObject, ChangeType.DELETED);
+            dataObjectSettings = new CoreChange(dataObject, 
+            	ChangeType.DELETED, changedDataObjects);
             changedDataObjects.put(hashKey, dataObjectSettings);
         }
-        else {
-            
+        else {            
             // could have been modified as a result of deleting
             // a linked object. Just ensure only reference properties
             // were changed
@@ -134,7 +137,8 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
             	if (log.isDebugEnabled())
             		log.debug("deleted: " + dataObject.getType().getURI() + "#" 
             				+ dataObject.getType().getName() + "(" + hashKey + ")");
-                dataObjectSettings = new CoreChange(dataObject, ChangeType.DELETED);
+                dataObjectSettings = new CoreChange(dataObject, 
+                	ChangeType.DELETED, changedDataObjects);
                 changedDataObjects.put(hashKey, dataObjectSettings);
             }  
             else 
@@ -167,7 +171,8 @@ public class CoreChangeSummary implements PlasmaChangeSummary {
         
         CoreChange dataObjectSettings = changedDataObjects.get(hashKey);
         if (dataObjectSettings == null) {
-            dataObjectSettings = new CoreChange(dataObject, ChangeType.MODIFIED);
+            dataObjectSettings = new CoreChange(dataObject, 
+            	ChangeType.MODIFIED, changedDataObjects);
             changedDataObjects.put(hashKey, dataObjectSettings);
         }
     	if (log.isDebugEnabled())

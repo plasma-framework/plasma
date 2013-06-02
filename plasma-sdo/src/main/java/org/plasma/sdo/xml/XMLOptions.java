@@ -127,6 +127,17 @@ public interface XMLOptions {
      */
     public void setErrorHandler(ErrorHandler handler);
 
+    /**
+     * Returns the character encoding
+     * @return the character encoding
+     */
+	public String getEncoding();
 
+	/**
+	 * Sets the character encoding. E.g. ISO-8859-1
+	 * @param encoding the character encoding
+	 */
+	public void setEncoding(String encoding);
+    
 
 }

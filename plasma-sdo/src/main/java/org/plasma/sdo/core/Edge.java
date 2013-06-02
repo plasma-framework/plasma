@@ -21,9 +21,11 @@
  */
 package org.plasma.sdo.core;
 
+import java.io.Serializable;
+
 /**
  * A directed graph edge.
  */
-public interface Edge {
+public interface Edge extends Serializable {
     public TraversalDirection getDirection();
 }

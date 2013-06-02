@@ -58,7 +58,7 @@ public class ModifiedObjectCollector implements PlasmaDataGraphVisitor {
     
     public List<PlasmaDataObject> getResult() {
     	PlasmaDataObject[] array = new PlasmaDataObject[this.result.size()];
-    	this.result.toArray();
+    	this.result.toArray(array);
         return Arrays.asList(array);
     } 
 }

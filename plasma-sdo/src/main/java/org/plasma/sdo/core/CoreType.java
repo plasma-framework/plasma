@@ -21,7 +21,6 @@
  */
 package org.plasma.sdo.core;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +29,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.xml.namespace.QName;
@@ -41,17 +39,15 @@ import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.config.TypeBinding;
 import org.plasma.sdo.Alias;
+import org.plasma.sdo.AssociationPath;
 import org.plasma.sdo.DataType;
-import org.plasma.sdo.PlasmaDataObjectException;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
-import org.plasma.sdo.AssociationPath;
 import org.plasma.sdo.helper.DataConverter;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
 import org.plasma.sdo.profile.ConcurrencyType;
 import org.plasma.sdo.profile.ConcurrentDataFlavor;
 import org.plasma.sdo.profile.KeyType;
-import org.plasma.sdo.profile.TemporalType;
 import org.plasma.sdo.repository.Class_;
 import org.plasma.sdo.repository.Classifier;
 import org.plasma.sdo.repository.Comment;
@@ -521,6 +517,34 @@ public class CoreType implements PlasmaType {
 				PlasmaProperty.INSTANCE_PROPERTY_BYTES_LOCAL_NAME_BYTES, result);
         }
         return result;
+    }
+    
+    /**
+     * Returns the logical name of the 
+     * model package (if any) associated with this Type 
+     * as a string, or null if no package exists.
+     * @return the logical name of the 
+     * model package (if any) associated with this Type 
+     * as a string, or null if no package exists.
+     */    
+    public String getPackageName() {
+    	return this.classifier.getPackageName();
+    }
+
+    /**
+     * Returns the physical name alias of the 
+     * model package (if any) associated with this Type 
+     * as a string, or null if no physical 
+     * name alias exists. The package physical name alias is
+     * useful for various services, such as those
+     * providing access to relational data stores. 
+     * @return the physical name alias of the 
+     * model package (if any) associated with this Type 
+     * as a string, or null if no physical 
+     * name alias exists.
+     */    
+    public String getPackagePhysicalName() {
+    	return this.classifier.getPackagePhysicalName();    	
     }
     
 	@SuppressWarnings("unchecked")

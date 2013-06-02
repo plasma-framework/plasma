@@ -22,12 +22,9 @@
 package org.plasma.sdo.core;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import org.plasma.sdo.PlasmaDataObject;
-import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaSequence;
 import org.plasma.sdo.PlasmaSetting;
 

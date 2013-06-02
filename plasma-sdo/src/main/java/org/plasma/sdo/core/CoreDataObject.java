@@ -23,6 +23,7 @@ package org.plasma.sdo.core;
 
 // java imports
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -117,7 +118,12 @@ public class CoreDataObject extends CoreNode
     private int hashCode;
     
     private DataGraph dataGraph; // TODO - consider hashing these
-    private Type type;
+    private transient Type type;
+    /** used for serialization only */
+    private String typeName;
+    /** used for serialization only */
+    private String typeUri;
+    
     
     /**
      * The current container for this DataObject
@@ -127,7 +133,13 @@ public class CoreDataObject extends CoreNode
      * The declared reference Property within the Type for the 
      * container which is our current containment reference property 
      */
-    private Property containmentProperty;
+    private transient Property containmentProperty;
+    /** used for serialization only */
+    private String containmentPropertyName;
+    /** used for serialization only */
+    private String containmentPropertyTypeName;
+    /** used for serialization only */
+    private String containmentPropertyTypeUri;
 
     /**
      * Default No-arg constructor required for serialization operations. This method 
@@ -156,6 +168,51 @@ public class CoreDataObject extends CoreNode
     
     public boolean equals(Object obj) {
     	return this.uuid.equals(((CoreDataObject)obj).uuid);
+    }
+    
+    /**
+     * Writes out metadata logical names as string
+     * for serialization.
+     * @param out the stream
+     * @throws IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream out) 
+    		throws IOException {
+    	this.typeName = this.type.getName();
+    	this.typeUri = this.type.getURI();
+    	this.type = null;
+    	if (this.containmentProperty != null) {
+    	    this.containmentPropertyName = this.containmentProperty.getName();
+    	    this.containmentPropertyTypeName = this.containmentProperty.getContainingType().getName();
+    	    this.containmentPropertyTypeUri = this.containmentProperty.getContainingType().getURI();
+    	    this.containmentProperty = null;
+    	}
+    	out.defaultWriteObject();
+    }
+    
+    /**
+     * Reads in metadata logical names as string
+     * during de-serialization looks up and
+     * restores references.
+     * @param in
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream in)
+    	     throws IOException, ClassNotFoundException {
+    	in.defaultReadObject();
+    	this.type = PlasmaTypeHelper.INSTANCE.getType(
+    			this.typeUri, this.typeName);
+    	this.typeName = null;
+    	this.typeUri = null;
+    	if (this.containmentPropertyName != null) {
+    		Type propertyType = PlasmaTypeHelper.INSTANCE.getType(
+    				this.containmentPropertyTypeUri, this.containmentPropertyTypeName);
+    		this.containmentProperty = propertyType.getProperty(this.containmentPropertyName);
+    	    this.containmentPropertyName = null;
+    	    this.containmentPropertyTypeName = null;
+    	    this.containmentPropertyTypeUri = null;
+    	}
     }
     
     /**
@@ -492,12 +549,13 @@ public class CoreDataObject extends CoreNode
     public void detach() {
     	
     	if (this.containmentProperty != null) {
-	    	if (this.containmentProperty.isMany()) {
-	    		this.getContainer().getList(this.containmentProperty).remove(this);
-	    	}
-	    	else {
-	    		this.getContainer().unset(this.containmentProperty);
-	    	}
+    		if (this.getContainer() != null) // could be detached already
+		    	if (this.containmentProperty.isMany()) {
+		    		this.getContainer().getList(this.containmentProperty).remove(this);
+		    	}
+		    	else {
+		    		this.getContainer().unset(this.containmentProperty);
+		    	}
     	}
     	else {
     		if (!((CoreDataObject)this.getDataGraph().getRootObject()).equals(this))

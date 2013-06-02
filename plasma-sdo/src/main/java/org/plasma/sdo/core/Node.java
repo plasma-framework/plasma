@@ -21,8 +21,10 @@
  */
 package org.plasma.sdo.core;
 
+import java.io.Serializable;
+
 /**
  * A graph node.
  */
-public interface Node {
+public interface Node extends Serializable {
 }

@@ -32,6 +32,7 @@ public class DefaultOptions implements XMLOptions {
 	private Log validationLog;
 	private boolean validate = true;
 	private ErrorHandler errorHandler;
+	private String encoding;
 	
 	public DefaultOptions(String rootElementNamespaceURI) {
 		super();
@@ -100,6 +101,14 @@ public class DefaultOptions implements XMLOptions {
 
 	public void setErrorHandler(ErrorHandler handler) {
 		this.errorHandler = handler;		
+	}
+
+	public String getEncoding() {
+		return encoding;
+	}
+
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
 	}
 
 }
