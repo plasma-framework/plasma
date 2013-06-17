@@ -24,24 +24,22 @@ package org.plasma.sdo.access.provider.common;
 // java imports
 import java.util.Comparator;
 
-import org.plasma.query.model.OrderBy;
-import org.plasma.sdo.PlasmaDataObject;
+import org.plasma.sdo.PlasmaDataGraph;
+import org.plasma.sdo.core.CoreDataObject;
 
-import commonj.sdo.Type;
 
-public class DataObjectComparatorAssembler extends DataComparatorAssembler
+public class DataGraphComparator extends DataComparator
+    implements Comparator<PlasmaDataGraph>
 {
-    private DataObjectComparator comparator;  
-
-
-    public DataObjectComparatorAssembler(OrderBy orderby, Type rootType)
+	protected DataGraphComparator()
     {
-    	super(orderby, rootType, new DataObjectComparator());
     }
-    
-    public Comparator<PlasmaDataObject> getComparator()
+
+    public int compare(PlasmaDataGraph o1, PlasmaDataGraph o2)
     {
-        return comparator;
-    }
+    	CoreDataObject vo1 = (CoreDataObject)o1.getRootObject();
+    	CoreDataObject vo2 = (CoreDataObject)o2.getRootObject();
+        return super.compare(vo1, vo2);
+    } 
 
 }
