@@ -52,7 +52,8 @@ public class PojoDataAccessClient extends ClientSupport
     public PojoDataAccessClient()
     {
     	PlasmaConfig config = PlasmaConfig.getInstance();
-    	this.service = createProvider(
+    	if (config.getDefaultProviderName() != null)
+    	    this.service = createProvider(
     			config.getDataAccessProvider(
     					config.getDefaultProviderName()).getClassName());
     }

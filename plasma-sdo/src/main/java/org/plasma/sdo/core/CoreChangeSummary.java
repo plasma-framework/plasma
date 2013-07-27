@@ -192,7 +192,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
         }    
         
         PlasmaNode dataNode = (PlasmaNode)dataObject;
-    	String hashKey = dataNode.getUUIDAsString();
+        UUID hashKey = dataNode.getUUID();
         changedDataObjects.remove(hashKey);
     	if (log.isDebugEnabled())
     		log.debug("clear: " + dataObject.getType().getURI() + "#" 

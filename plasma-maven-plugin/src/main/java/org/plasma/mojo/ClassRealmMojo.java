@@ -77,10 +77,17 @@ public abstract class ClassRealmMojo extends AbstractMojo
     public Properties getSystemProperties() {
     	return this.systemProperties;
     }
-    
-    public ClassRealm getClassRealm() {
-    	return (ClassRealm)this.classRealm;
-    }    
+        
+    protected void addURL(URL url) {
+    	if (this.classRealm instanceof  org.codehaus.plexus.classworlds.realm.ClassRealm) {
+    		 org.codehaus.plexus.classworlds.realm.ClassRealm realm = ( org.codehaus.plexus.classworlds.realm.ClassRealm)this.classRealm;
+    		 realm.addURL(url);
+    	}
+    	else if (this.classRealm instanceof org.codehaus.classworlds.ClassRealm) {
+    		 org.codehaus.classworlds.ClassRealm realm = ( org.codehaus.classworlds.ClassRealm)this.classRealm;
+   		     realm.addConstituent(url);
+   	    }
+    }
     
     public void execute() throws MojoExecutionException
     {
@@ -93,15 +100,17 @@ public abstract class ClassRealmMojo extends AbstractMojo
                 throw new MojoExecutionException(e.getMessage() + e);
             }
             getLog().debug("adding URL:" + url.toString());
-            getClassRealm().addURL(url);
+            this.addURL(url);
         }
         
-        Enumeration names	= this.systemProperties.propertyNames(); 
-        while (names.hasMoreElements()) {
-        	String name = (String)names.nextElement();
-        	String value = this.systemProperties.getProperty(name); 
-          	getLog().debug( "system prop: " + name + ":" + value);
-        	System.setProperty(name, value);
-        }         
+        if (this.systemProperties != null) {
+	        Enumeration names	= this.systemProperties.propertyNames(); 
+	        while (names.hasMoreElements()) {
+	        	String name = (String)names.nextElement();
+	        	String value = this.systemProperties.getProperty(name); 
+	          	getLog().debug( "system prop: " + name + ":" + value);
+	        	System.setProperty(name, value);
+	        }  
+        }
     }
 }
