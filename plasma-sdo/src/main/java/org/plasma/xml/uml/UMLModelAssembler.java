@@ -212,7 +212,8 @@ public class UMLModelAssembler {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {
 			if (this.document == null)
-				throw new IllegalStateException("no content yet assembled");
+			    this.document = buildDocumentModel(this.provisioningModel, 
+						this.destNamespaceURI, this.destNamespacePrefix);
 		    outputter.output(this.document, os);
 			os.flush();
 			result = new String(os.toByteArray());
@@ -231,7 +232,8 @@ public class UMLModelAssembler {
 		String result = null;
 		try {
 			if (this.document == null)
-				throw new IllegalStateException("no content yet assembled");
+			    this.document = buildDocumentModel(this.provisioningModel, 
+						this.destNamespaceURI, this.destNamespacePrefix);
 		    outputter.output(this.document, stream);
 		    stream.flush();
 		} catch (java.io.IOException e) {
