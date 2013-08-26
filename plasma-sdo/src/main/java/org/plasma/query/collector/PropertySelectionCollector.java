@@ -187,6 +187,7 @@ public class PropertySelectionCollector extends CollectorSupport
         collect();
         List<Type> result = new ArrayList<Type>();
         result.addAll(this.propertyMap.keySet());
+        result.addAll(this.inheritedPropertyMap.keySet());
         return result;
     }	
 

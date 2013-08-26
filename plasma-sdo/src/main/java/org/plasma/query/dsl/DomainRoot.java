@@ -143,13 +143,16 @@ public class DomainRoot extends PathNode
 		}
 		DataNode domainProperty = (DataNode)property;
 		String[] path = domainProperty.getPath();
-		org.plasma.query.model.Property prop = null;
-		if (path != null && path.length > 0)
-			prop = org.plasma.query.model.Property.forName(domainProperty.getName(), 
-					new Path(path));
-		else 
-			prop = org.plasma.query.model.Property.forName(domainProperty.getName());
-		orderBy.addProperty(prop);
+		AbstractProperty prop = domainProperty.getModel();
+		//org.plasma.query.model.Property prop = null;
+		//if (path != null && path.length > 0)
+		//	prop = org.plasma.query.model.Property.forName(domainProperty.getName(), 
+		//			new Path(path));
+		//else 
+		//	prop = org.plasma.query.model.Property.forName(domainProperty.getName());
+		//FIXME; why are we copying data here, just use the delegate
+		//prop.setDirection(((org.plasma.query.model.Property)domainProperty.getModel()).getDirection());
+		orderBy.addProperty((org.plasma.query.model.Property)prop);
 		return this;
 	}
 	

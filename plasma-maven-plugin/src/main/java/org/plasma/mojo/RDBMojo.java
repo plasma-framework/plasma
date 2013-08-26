@@ -33,7 +33,7 @@ import org.plasma.provisioning.cli.RDBToolAction;
 
 /**
  * Mojo implementation for generating RDB related artifacts, such as
- * relational database schemas, which sets up the mojo environment and then calls
+ * relational database schemas and UML models, which sets up the mojo environment and then calls
  * the Plasma RDB command-line (CLI) tool, passing it mojo args. 
  * 
  * @author Scott Cinnamond
@@ -71,14 +71,16 @@ public class RDBMojo extends ClassRealmMojo
     private String dialect;
         
     /**
-    * The destination or target namespage URI
-    * @parameter expression="${rdb.destNamespaceURI}" 
+    * The destination or target namespace URIs. These are
+    * separated by commas and mapped (in order) to schema
+    * names in the resulting document.
+    * @parameter expression="${rdb.namespaces}" 
     */
-    private String destNamespaceURI;
+    private String namespaces;
 
     /**
     * The names for RDB schema(s) to process, separated
-    * by commas.  
+    * by commas.   
     * @parameter expression="${rdb.schemaNames}"
     */
     private String schemaNames;
@@ -107,7 +109,7 @@ public class RDBMojo extends ClassRealmMojo
                     	"-"+toolAction.name(), 
                     	toolDialect.name(), 
                     	this.outputDirectory + "/" + outputFile,
-                    	this.destNamespaceURI != null ? this.destNamespaceURI : "http://" + outputFile, 
+                    	this.namespaces != null ? this.namespaces : "http://" + outputFile, 
                     	this.schemaNames
                     };
                 RDBTool.main(args);

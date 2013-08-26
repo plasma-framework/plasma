@@ -726,5 +726,12 @@ public class CoreProperty implements PlasmaProperty {
         
         return this.property.getIsReadonly() || this.isKey(KeyType.primary);
     }
+    
+    public String toString() {
+    	if (this.containingType != null)
+    	    return this.containingType.toString() + "." + this.getName();
+    	else
+    		return this.getName();    		
+    }
 
 }

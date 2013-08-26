@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -36,14 +37,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdom2.Attribute;
 import org.jdom2.CDATA;
+import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
+import org.jdom2.Text;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.plasma.common.bind.BindingValidationEventHandler;
 import org.plasma.config.ConfigUtils;
 import org.plasma.provisioning.Alias;
+import org.plasma.provisioning.Behavior;
 import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
 import org.plasma.provisioning.DataTypeRef;
@@ -587,7 +591,48 @@ public class UMLModelAssembler {
 		</generalization>
 		
  */
+    	if (clss.getBehaviors().size() > 0)
+    		addBehaviors(clss, clssElem, clss.getBehaviors());
+    		
+    	
     	return clssElem;
+	}
+
+	/**
+	 * Adds a UML owned opaque behavior ala. below for each provisioning
+	 * behavior.
+	 * 
+	 * <ownedBehavior xmi:type='uml:OpaqueBehavior' xmi:id='_17_0_6_1707042b_1376433440849_3356_7405' name='create' visibility='public'>
+	 *   <body>FOO BAR;</body>
+	 *	 <language>SQL</language>
+	 * </ownedBehavior>
+	 * 
+	 * @param clss the 
+	 * @param clssElem the element
+	 * @param behaviors the bahaviors
+	 */
+	private void addBehaviors(Class clss, Element clssElem, 
+			List<Behavior> behaviors) {
+		
+		for (Behavior behavior : behaviors) {
+	    	Element ownedBehavior = new Element("ownedBehavior");
+	    	clssElem.addContent(ownedBehavior);
+	    	ownedBehavior.setAttribute(new Attribute("type", "uml:OpaqueBehavior", xmiNs));
+	    	ownedBehavior.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	ownedBehavior.setAttribute(new Attribute("visibility", "public")); 
+	    	ownedBehavior.setAttribute(new Attribute("name", behavior.getType().name())); 
+	    	
+	    	Element language = new Element("language");
+	    	language.setText(behavior.getLanguage());
+	    	ownedBehavior.addContent(language);
+	    	
+	    	Element body = new Element("body");
+	    	Text text = new Text(behavior.getValue());	    	 
+	    	body.addContent(text);
+	    	ownedBehavior.addContent(body);
+	    	
+		}
+
 	}
 	
 	private void addAlias(Alias alias, String namedElementId) {
@@ -641,9 +686,6 @@ public class UMLModelAssembler {
     	else
     		lowerValue.setAttribute(new Attribute("value", "1"));  
 	
-    	if (property.getAlias() != null) {
-    		addAlias(property.getAlias(), property.getId());
-    	}
     	
     	if (property.getType() instanceof DataTypeRef) {
         	Element type = new Element("type");
@@ -661,6 +703,30 @@ public class UMLModelAssembler {
         	ownedAttribute.setAttribute(new Attribute("type", targetClass.getId()));         	               	
 		}
     	
+    	// add stereotypes in order of "priority" in terms of how we
+    	// would like them to appear in UML tools
+    	if (property.getKey() != null) {
+	    	Element keyStereotype = new Element(SDOKey.class.getSimpleName(), plasmaNs);
+	    	this.xmiElem.addContent(keyStereotype);
+	    	keyStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	keyStereotype.setAttribute(new Attribute(SDOKey.BASE__PROPERTY, property.getId()));
+	    	keyStereotype.setAttribute(new Attribute(SDOKey.TYPE, // provisioning key-type is JAXB generated and upper-case
+	    			property.getKey().getType().name().toLowerCase()));
+    	}
+    	
+    	if (property.getUniqueConstraint() != null) {
+	    	Element uniqueStereotype = new Element(SDOUniqueConstraint.class.getSimpleName(), plasmaNs);
+	    	this.xmiElem.addContent(uniqueStereotype);
+	    	uniqueStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.BASE__PROPERTY, property.getId()));
+	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.GROUP, 
+	    			property.getUniqueConstraint().getGroup()));
+    	}
+
+    	if (property.getAlias() != null) {
+    		addAlias(property.getAlias(), property.getId());
+    	}
+
     	if (property.getSort() != null) {
 	    	Element sequenceStereotype = new Element(SDOSort.class.getSimpleName(), plasmaNs);
 	    	this.xmiElem.addContent(sequenceStereotype);
@@ -678,16 +744,7 @@ public class UMLModelAssembler {
 	    	xmlPropertyStereotype.setAttribute(new Attribute(SDOXmlProperty.NODE_TYPE, 
 	    			property.getXmlProperty().getNodeType().name().toLowerCase()));
     	}
-    	
-    	if (property.getKey() != null) {
-	    	Element keyStereotype = new Element(SDOKey.class.getSimpleName(), plasmaNs);
-	    	this.xmiElem.addContent(keyStereotype);
-	    	keyStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
-	    	keyStereotype.setAttribute(new Attribute(SDOKey.BASE__PROPERTY, property.getId()));
-	    	keyStereotype.setAttribute(new Attribute(SDOKey.TYPE, // provisioning key-type is JAXB generated and upper-case
-	    			property.getKey().getType().name().toLowerCase()));
-    	}
-    	
+    	    	
     	if (property.getValueConstraint() != null) {
 	    	Element valueContStereotype = new Element(SDOValueConstraint.class.getSimpleName(), plasmaNs);
 	    	this.xmiElem.addContent(valueContStereotype);
@@ -723,16 +780,7 @@ public class UMLModelAssembler {
 	    	    valueContStereotype.setAttribute(new Attribute(SDOValueConstraint.PATTERN, 
 	    	    		String.valueOf(vc.getPattern())));
     	}
-    	
-    	if (property.getUniqueConstraint() != null) {
-	    	Element uniqueStereotype = new Element(SDOUniqueConstraint.class.getSimpleName(), plasmaNs);
-	    	this.xmiElem.addContent(uniqueStereotype);
-	    	uniqueStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
-	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.BASE__PROPERTY, property.getId()));
-	    	uniqueStereotype.setAttribute(new Attribute(SDOUniqueConstraint.GROUP, 
-	    			property.getUniqueConstraint().getGroup()));
-    	}
-    			
+    	    			
 	    if (property.getEnumerationConstraint() != null) {
 	    	Element enumConstraintStereotype = new Element(SDOEnumerationConstraint.class.getSimpleName(), plasmaNs);
 	    	this.xmiElem.addContent(enumConstraintStereotype);

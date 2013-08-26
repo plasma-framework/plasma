@@ -302,10 +302,15 @@
                 </execution> 
                 <!-- Generated SDO classes used by RDB service checked in as
                     would cause circular depency - uncomment to re-generate --> 
-                    <!--                                                              
+                <!--          
+                          <jvmarg value="-Xdebug" /> 
+                          <jvmarg value="-Xnoagent" /> 
+                          <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8002,server=y,suspend=y" />  
+                -->   
+                  <!--                                                                  
                 <execution>    
                   <id>gen_rdb_sdo</id>                                              
-                  <phase>process-classes</phase>                
+                  <phase>generate-sources</phase>                
                   <configuration>                                            
                      <systemProperties>
                                 <property><name>log4j.configuration</name><value>log4j.properties</value></property>
@@ -321,7 +326,9 @@
                       <java failonerror="yes" fork="yes"                                                                                                                                                                                                                                 
                           classname="org.plasma.provisioning.cli.SDOTool">                                                                                                                                                                                              
                           <classpath refid="cp"/> 
-                          <jvmarg value="-Dfuml.configuration=fuml-config.xml" />                                                                                                                                                                                                               
+                          <jvmarg value="-Dfuml.configuration=fuml-config.xml" /> 
+                             
+                                                                                                                                                                                                                                      
                           <arg value="-create" />                                                                                                                                                                 
                           <arg value="java" />                                                                                                                                                                 
                           <arg value="${basedir}/target/generated-sources/java" />                                                                                                                                                                 
@@ -346,7 +353,7 @@
                     <goal>run</goal>                                         
                   </goals>                                                   
                 </execution> 
-                      -->                                                
+                    -->                                                        
               </executions>                                                  
             </plugin>	
             <plugin>

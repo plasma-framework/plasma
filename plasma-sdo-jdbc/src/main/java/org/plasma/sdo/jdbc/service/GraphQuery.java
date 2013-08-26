@@ -301,7 +301,7 @@ public class GraphQuery extends JDBCSupport
             }
             else {
           	    sqlQuery.append(" FROM ");
-          	    sqlQuery.append(type.getPhysicalName());  
+          	    sqlQuery.append(getQualifiedPhysicalName(type));  
           	    sqlQuery.append(" ");
           	    sqlQuery.append(aliasMap.getAlias(type));    
             }
@@ -403,7 +403,7 @@ public class GraphQuery extends JDBCSupport
     		String alias = aliasMap.getAlias(aliasType); 
     		if (count > 0)
     			sqlQuery.append(", ");
-    		sqlQuery.append(aliasType.getPhysicalName());
+    		sqlQuery.append(getQualifiedPhysicalName(aliasType));
     		sqlQuery.append(" ");
     		sqlQuery.append(alias);
     		count++;

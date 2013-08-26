@@ -12,8 +12,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.Alias;
-import org.plasma.provisioning.Behavior;
-import org.plasma.provisioning.BehaviorType;
 import org.plasma.provisioning.Body;
 import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
@@ -36,51 +34,37 @@ import org.plasma.provisioning.TypeRef;
 import org.plasma.provisioning.UniqueConstraint;
 import org.plasma.provisioning.ValueConstraint;
 import org.plasma.provisioning.VisibilityType;
-import org.plasma.provisioning.rdb.oracle.g11.sys.Constraint;
-import org.plasma.provisioning.rdb.oracle.g11.sys.ConstraintType;
-import org.plasma.provisioning.rdb.oracle.g11.sys.SysDataType;
-import org.plasma.provisioning.rdb.oracle.g11.sys.Table;
-import org.plasma.provisioning.rdb.oracle.g11.sys.TableColumn;
-import org.plasma.provisioning.rdb.oracle.g11.sys.TableColumnComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.TableColumnConstraint;
-import org.plasma.provisioning.rdb.oracle.g11.sys.TableComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.View;
-import org.plasma.provisioning.rdb.oracle.g11.sys.ViewColumn;
-import org.plasma.provisioning.rdb.oracle.g11.sys.ViewColumnComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.ViewComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QTable;
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QView;
+import org.plasma.provisioning.rdb.mysql.v5_5.ColumnKeyType;
+//import org.plasma.provisioning.rdb.mysql.v5_5.Constraint;
+import org.plasma.provisioning.rdb.mysql.v5_5.ConstraintType;
+import org.plasma.provisioning.rdb.mysql.v5_5.SysDataType;
+import org.plasma.provisioning.rdb.mysql.v5_5.Table;
+import org.plasma.provisioning.rdb.mysql.v5_5.TableColumn;
+import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnConstraint;
+import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnKeyUsage;
+import org.plasma.provisioning.rdb.mysql.v5_5.TableConstraint;
+import org.plasma.provisioning.rdb.mysql.v5_5.query.QTable;
+import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumn;
+import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumnConstraint;
+import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumnKeyUsage;
+import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableConstraint;
 import org.plasma.sdo.DataType;
-import org.plasma.sdo.access.client.JDBCPojoDataAccessClient;
 import org.plasma.sdo.helper.PlasmaXMLHelper;
 import org.plasma.sdo.xml.DefaultOptions;
 
 import commonj.sdo.DataGraph;
 import commonj.sdo.helper.XMLDocument;
 
-public class Oracle11GConverter extends ConverterSupport implements SchemaConverter {
+public class MySql55Converter extends ConverterSupport implements SchemaConverter {
 	private static Log log = LogFactory.getLog(
-			Oracle11GConverter.class); 
-    
-    /** 
-     * Maps physical schema 
-     * qualified primary key constraint names to
-     * classes.
-     */
-    protected Map<String, Class> classQualifiedPriKeyConstrainatNameMap = new HashMap<String, Class>();
-    /** 
-     * Maps physical schema 
-     * qualified primary key constraint names to
-     * properties.
-     */
-    protected Map<String, Property> propertyQualifiedPriKeyConstrainatNameMap = new HashMap<String, Property>();
-    /** maps classes to properties */
-    protected Map<Class, Map<String, Property>> classPropertyMap = new HashMap<Class, Map<String, Property>>();
+			MySql55Converter.class); 
+    /** Maps physical name qualified property names to classes */
+    protected Map<String, Class> classQualifiedPropertyPhysicalNameMap = new HashMap<String, Class>();
     /** maps properties to physical constraints */
-    protected JDBCPojoDataAccessClient client = new JDBCPojoDataAccessClient();
     protected Map<Property, ConstraintInfo[]> constraintMap = new HashMap<Property, ConstraintInfo[]>();
+    
 
-	public Oracle11GConverter(String[] schemaNames, 
+	public MySql55Converter(String[] schemaNames, 
 			String[] namespaces) {
 		this.schemaNames = schemaNames;
 		this.namespaces = namespaces;
@@ -110,7 +94,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 			log.info("loading schema '" + this.schemaNames[i] + "'");
     		Package pkg = findPackage(this.schemaNames[i], this.namespaces[i]);
     		loadTables(pkg, this.schemaNames[i]);
-    		loadViews(pkg, this.schemaNames[i]);
+    		//loadViews(pkg, schema);
 		} // schema
     	
     	// process referential constraints
@@ -122,12 +106,13 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     			if (infos == null)
     				continue;
 				for (ConstraintInfo info : infos) {
-					ConstraintType consType = ConstraintType.valueOf(info.getConstraint().getConstraintType());
+					String constraintType = info.getConstraint().getConstraintType().replace(' ', '_');
+					ConstraintType consType = ConstraintType.valueOf(constraintType);
 					switch (consType) {
-					case R:
-						String qualifiedName = info.getConstraint().getRefOwner()
-						    + "." + info.getConstraint().getRefConstraintName();
-						Class targetClass = this.classQualifiedPriKeyConstrainatNameMap.get(qualifiedName);
+					case FOREIGN_KEY:
+						String qualifiedName = info.getTableColumnConstraint().getReferencedTableName()
+						    + "." + info.getTableColumnConstraint().getReferencedColumnName();
+						Class targetClass = this.classQualifiedPropertyPhysicalNameMap.get(qualifiedName);
 						if (targetClass == null)
 							throw new ProvisioningException("no target class found for, "
 									+ qualifiedName);
@@ -228,49 +213,17 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 			for (TableColumn column : table.getTableColumn()) {
 				log.debug("\tloading column '" + column.getColumnName() + "'");
 				ConstraintInfo[] constraints = findConstraints(column, table);
-				TableColumnComment[] comments = findComments(column, table);
 				Property prop = buildProperty(pkg, clss, column, 
-					constraints, comments);
-				clss.getProperties().add(prop);					
+					constraints);
+				clss.getProperties().add(prop);	
+				if ( prop.getAlias() != null && prop.getAlias().getPhysicalName() != null)
+				    this.classQualifiedPropertyPhysicalNameMap.put(
+					    clss.getAlias().getPhysicalName() + "." + prop.getAlias().getPhysicalName(), 
+					    clss);
 				this.constraintMap.put(prop, constraints);
 			}
 		}		
-	}
-	
-	private void loadViews(Package pkg, String schema)
-	{
-		for (String viewName : getViewNames(schema)) {
-			log.info("loading view '" + viewName + "'");
-			View view = getViewGraph(schema, viewName);
-			if (log.isDebugEnabled())
-				try {
-				    log.debug(serializeGraph(view.getDataGraph()));
-				}
-			    catch (IOException e) {
-			    	log.error(e.getMessage());
-			    }
-			
-			Class clss = buildClass(pkg, view);
-			pkg.getClazzs().add(clss);
-			String key = pkg.getUri() + "#" + clss.getName();
-			this.classQualifiedNameMap.put(key, clss);
-			
-			Behavior behavior = new Behavior();
-			behavior.setName(view.getViewName() + "_create");
-			behavior.setLanguage("SQL");
-			behavior.setType(BehaviorType.CREATE);
-			behavior.setValue(view.getText());
-			clss.getBehaviors().add(behavior);
-			
-			for (ViewColumn column : view.getViewColumn()) {
-				log.debug("\tloading column '" + column.getColumnName() + "'");
-				ViewColumnComment[] comments = findComments(column, view);
-				Property prop = buildProperty(pkg, clss, column, comments);
-				clss.getProperties().add(prop);					
-			}
-		}		
-	}
-	
+	}	
 	
 	private Package findPackage(String schema, String namespace) {
 		Package pkg = null;;
@@ -289,101 +242,83 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
         return pkg;
 	}
 	
-	private TableColumnComment[] findComments(TableColumn column, 
-			Table table) {
-		TableColumnComment[] result = new TableColumnComment[0];
-		if (table.getTableColumnComment() != null) {
-			List<TableColumnComment> list = new ArrayList<TableColumnComment>();
-			for (TableColumnComment comment : table.getTableColumnComment()) {
-				if (comment.getColumnName().equalsIgnoreCase(column.getColumnName())) {
-					list.add(comment);
-				}
-			}
-			if (list.size() > 0) {
-			    result = new TableColumnComment[list.size()];
-			    list.toArray(result);
-			}
-		}
-		return result;
-    }
-	
-	private ViewColumnComment[] findComments(ViewColumn column, 
-			View view) {
-		ViewColumnComment[] result = new ViewColumnComment[0];
-		if (view.getViewColumnComment() != null) {
-			List<ViewColumnComment> list = new ArrayList<ViewColumnComment>();
-			for (ViewColumnComment comment : view.getViewColumnComment()) {
-				if (comment.getColumnName().equalsIgnoreCase(column.getColumnName())) {
-					list.add(comment);
-				}
-			}
-			if (list.size() > 0) {
-			    result = new ViewColumnComment[list.size()];
-			    list.toArray(result);
-			}
-		}
-		return result;
-    }
-
-	private ConstraintInfo[] findConstraints(TableColumn column, 
-			Table table) {
-		return findConstraints(column, table.getConstraint(),
-				table.getTableColumnConstraint());
-	}
-	
 	class ConstraintInfo {
-		private Constraint constraint;
-		private TableColumnConstraint columnConstraint;
-		public ConstraintInfo(Constraint constraint,
-				TableColumnConstraint columnConstraint) {
+		private TableConstraint constraint;
+		private TableColumnKeyUsage columnConstraint;
+		public ConstraintInfo(TableConstraint constraint,
+				TableColumnKeyUsage columnConstraint) {
 			super();
 			this.constraint = constraint;
 			this.columnConstraint = columnConstraint;
 		}
-		public Constraint getConstraint() {
+		public TableConstraint getConstraint() {
 			return constraint;
 		}
-		public TableColumnConstraint getTableColumnConstraint() {
+		public TableColumnKeyUsage getTableColumnConstraint() {
 			return columnConstraint;
 		}		
 	}
 	
 	private ConstraintInfo[] findConstraints(TableColumn column, 
-			Constraint[] constraints, TableColumnConstraint[] columnConstraints) {		
+			Table table) {
+		return findConstraints(column, table.getTableConstraint(),
+				table.getTableColumnConstraint(),
+				table.getTableColumnKeyUsage());
+	}
+	
+	
+	private ConstraintInfo[] findConstraints(TableColumn column, 
+			TableConstraint[] constraints, TableColumnConstraint[] columnConstraints,
+			TableColumnKeyUsage[] columnKeyUsages) {		
 		List<ConstraintInfo> list = new ArrayList<ConstraintInfo>();
 		if (columnConstraints != null && constraints != null)
-		for (TableColumnConstraint colConst : columnConstraints) {
+		for (TableColumnKeyUsage colConst : columnKeyUsages) {
 			if (!colConst.getColumnName().equals(column.getColumnName()))
 				continue;
 			list.add(new ConstraintInfo(
-					getConstraint(colConst, constraints),
-					colConst));
+					getTableConstraint(colConst, constraints),
+					getColumnConstraint(colConst, columnKeyUsages) 
+					));
 		}
 		ConstraintInfo[] result = new ConstraintInfo[list.size()];
 		list.toArray(result);
 		return result;
 	}
 	
-	private Constraint getConstraint(TableColumnConstraint constraint,
-			Constraint[] constraints)
+	private TableConstraint getTableConstraint(TableColumnKeyUsage constraint,
+			TableConstraint[] constraints)
 	{
 		if (constraints != null)
-		for (Constraint c : constraints)
-			if (c.getConstraintName().equals(constraint.getConstraintName())) 
+		for (TableConstraint c : constraints)
+			if (c.getName().equals(constraint.getName())) 
 			    return c;
 		throw new IllegalArgumentException("no constraint found for given constraint name '"
-				+ constraint.getConstraintName() + "'");
+				+ constraint.getName() + "'");
+	}
+	
+	private TableColumnKeyUsage getColumnConstraint(TableColumnKeyUsage constraint,
+			TableColumnKeyUsage[] constraints)
+	{
+		if (constraints != null)
+		for (TableColumnKeyUsage c : constraints)
+			if (c.getName().equals(constraint.getName())) 
+			    return c;
+		throw new IllegalArgumentException("no constraint found for given constraint name '"
+				+ constraint.getName() + "'");
 	}
 			
 	private Table getTableGraph(String schema, String tableName)
 	{
-		QTable table = QTable.newQuery();		
+		QTable table = QTable.newQuery();	
+		QTableColumn tableColumn = QTableColumn.newQuery();
+		QTableConstraint tableConstraint = QTableConstraint.newQuery();
+		QTableColumnKeyUsage columnKeyUsage = QTableColumnKeyUsage.newQuery();
+		QTableColumnConstraint tableColumnConstraint = QTableColumnConstraint.newQuery();
 		table.select(table.wildcard());
-		table.select(table.tableColumn().wildcard());
-		table.select(table.tableComment().wildcard());
-		table.select(table.tableColumnComment().wildcard());
-		table.select(table.constraint().wildcard());
-		table.select(table.tableColumnConstraint().wildcard());
+		table.select(table.tableColumn(tableColumn.owner().eq(schema)).wildcard());
+		table.select(table.tableConstraint(tableConstraint.owner().eq(schema)).wildcard());
+		table.select(table.tableColumnKeyUsage(columnKeyUsage.owner().eq(schema)).wildcard());
+		table.select(table.tableColumnConstraint(tableColumnConstraint.owner().eq(schema)).wildcard());
 		table.where(table.owner().eq(schema)
 			 .and(table.tableName().eq(tableName)));
         DataGraph[] results = this.client.find(table);
@@ -404,31 +339,6 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 		return result;
 	}
 
-	private View getViewGraph(String schema, String viewName)
-	{
-		QView view = QView.newQuery();		
-		view.select(view.wildcard())
-		    .select(view.viewColumn().wildcard()) 
-		    .select(view.viewComment().wildcard()) 
-		    .select(view.viewColumnComment().wildcard());
-		view.where(view.owner().eq(schema)
-			 .and(view.viewName().eq(viewName)));
-        DataGraph[] results = this.client.find(view);
-		return (View)results[0].getRootObject();
-	}
- 
-	private List<String> getViewNames(String schema)
-	{
-		List<String> result = new ArrayList<String>();
-		QView query = QView.newQuery();		
-		query.select(query.viewName());
-		query.where(query.owner().eq(schema));		
-		for (DataGraph graph : client.find(query)) {
-			View view = (View)graph.getRootObject();
-			result.add(view.getViewName());
-		}		
-		return result;
-	}	
 	
     public Class buildClass(Package pkg, Table table) {
     	Class clss = new Class();
@@ -440,67 +350,21 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     	alias.setPhysicalName(table.getTableName());
     	clss.setAlias(alias);
     	
-    	if (table.getTableComment() != null)
-    		for (TableComment comment : table.getTableComment()) {
-    			if (comment.getComments() == null || comment.getComments().trim().length() == 0)
-    			    continue;
-    	        Documentation documentation = new Documentation();
-    			documentation.setType(DocumentationType.DEFINITION);
-    			Body body = new Body();
-    			body.setValue(filter(comment.getComments()));
-    			documentation.setBody(body);
-    			clss.getDocumentations().add(documentation);
-    		}
+    	if (table.getTableComment() != null) {
+	        Documentation documentation = new Documentation();
+			documentation.setType(DocumentationType.DEFINITION);
+			Body body = new Body();
+			body.setValue(filter(table.getTableComment()));
+			documentation.setBody(body);
+			clss.getDocumentations().add(documentation);
+		}
     	
     	return clss;
     }	
     
-    public Class buildClass(Package pkg, View view) {
-    	Class clss = new Class();
-    	clss.setId(UUID.randomUUID().toString());
-    	clss.setName(NameUtils.firstToUpperCase(
-    		NameUtils.toCamelCase(view.getViewName())));
-    	clss.setUri(pkg.getUri());
-    	Alias alias = new Alias();
-    	alias.setPhysicalName(view.getViewName());
-    	clss.setAlias(alias);
-    	    	
-    	if (view.getViewComment() != null)
-    		for (ViewComment comment : view.getViewComment()) {
-    			if (comment.getComments() == null || comment.getComments().trim().length() == 0)
-    			    continue;
-    	        Documentation documentation = new Documentation();
-    			documentation.setType(DocumentationType.DEFINITION);
-    			Body body = new Body();
-    			body.setValue(filter(comment.getComments()));
-    			documentation.setBody(body);
-    			clss.getDocumentations().add(documentation);
-    		}
-    	
-    	// add the view creation content
-    	if (view.getText() != null && view.getText().length() > 0) {
-    		Behavior create = new Behavior();
-    		create.setLanguage("SQL");
-    		create.setType(BehaviorType.CREATE);
-    		create.setName(BehaviorType.CREATE.name());
-   		    create.setValue(filter(view.getText()));
-    		clss.getBehaviors().add(create);
-    	}
-    	
-		Behavior drop = new Behavior();
-		drop.setLanguage("SQL");
-		drop.setType(BehaviorType.DROP);
-		drop.setName(BehaviorType.DROP.name());
-		drop.setValue("DROP VIEW " + pkg.getAlias().getPhysicalName() 
-				+ "." + clss.getAlias().getPhysicalName() + ";");
-		clss.getBehaviors().add(drop);
-    	
-    	
-    	return clss;
-    }	
     
     public Property buildProperty(Package pkg, Class clss, TableColumn column,
-    		ConstraintInfo[] constraints, TableColumnComment[] comments) {
+    		ConstraintInfo[] constraints) {
         Property property = new Property();
         property.setId(UUID.randomUUID().toString());
         property.setVisibility(VisibilityType.PUBLIC); 
@@ -512,79 +376,97 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     	property.setAlias(alias);
     	
         // nullable
-    	if ("Y".equalsIgnoreCase(column.getNullable()))
+    	if ("YES".equalsIgnoreCase(column.getNullable()))
     		property.setNullable(true);
     	else
     		property.setNullable(false);
     	
-    	SysDataType oracleType = SysDataType.valueOf(column.getDataType());
-    	DataType sdoType = mapType(oracleType, column.getDataLength(),
+    	SysDataType oracleType = SysDataType.valueOf(column.getDataType().toUpperCase());
+    	DataType sdoType = mapType(oracleType, column.getCharMaxLength(),
     			column.getDataPrecision(), column.getDataScale());
     	DataTypeRef dataTypeRef = new DataTypeRef();
         dataTypeRef.setName(sdoType.name());
         dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
         property.setType(dataTypeRef);  
         
-        ValueConstraint valueConstraint = buildValueConstraint(oracleType, column.getDataLength(),
+        ValueConstraint valueConstraint = buildValueConstraint(oracleType, column.getCharMaxLength(),
     		column.getDataPrecision(), column.getDataScale());
         if (valueConstraint != null) 
         	property.setValueConstraint(valueConstraint);
-
-        for (ConstraintInfo info : constraints) {
-			ConstraintType consType = ConstraintType.valueOf(info.getConstraint().getConstraintType());
-			switch (consType) {
-			case P: // pk
+        
+        if (oracleType.ordinal() == SysDataType.ENUM.ordinal()) {
+			String condition = column.getColumnType();
+			if (condition != null) {
+				String[] literals = parseLiterals(column, condition);
+				if (literals != null) {
+					Enumeration enm = buildEnumeration(pkg, clss, property,
+				    	literals);
+					pkg.getEnumerations().add(enm);
+					this.enumQualifiedNameMap.put(enm.getUri() + "#" + enm.getName(), enm);
+					EnumerationRef enumRef = new EnumerationRef();
+					enumRef.setName(enm.getName());
+					enumRef.setUri(enm.getUri());	
+					EnumerationConstraint enumConst = new EnumerationConstraint();
+					enumConst.setValue(enumRef);
+					property.setEnumerationConstraint(enumConst);
+				}
+			}
+        }
+        
+        // MySql metemodel defines PK constraints in 2 ways..possible
+        // for backwards compatibility
+        if (column.getColumnKey() != null && column.getColumnKey().trim().length() > 0) {
+        	ColumnKeyType keyType = ColumnKeyType.valueOf(column.getColumnKey().trim());
+        	switch (keyType) {
+        	case PRI:
 				Key prikey = new Key();
 				prikey.setType(KeyType.PRIMARY);
 				property.setKey(prikey);
-				String qualifiedName = pkg.getAlias().getPhysicalName()
-						+ "." + info.getConstraint().getConstraintName();
-				this.classQualifiedPriKeyConstrainatNameMap.put(
-					qualifiedName, clss);
+				String constraintName = getSyntheticPriKeyConstraintName(pkg, clss, property);
+				String qualifiedName = clss.getAlias().getPhysicalName()
+						+ "." + constraintName;
+				this.propertyQualifiedPriKeyConstrainatNameMap.put(
+					qualifiedName, property);				
+        		break;
+        	default:
+        		break;
+        	}
+        }        
+
+        for (ConstraintInfo info : constraints) {
+        	String constraintType = info.getConstraint().getConstraintType().replace(' ', '_'); // as will be used in an enum
+			ConstraintType consType = ConstraintType.valueOf(constraintType);
+			switch (consType) {
+			case PRIMARY_KEY: // pk
+				Key prikey = new Key();
+				prikey.setType(KeyType.PRIMARY);
+				property.setKey(prikey);
+				String qualifiedName = clss.getAlias().getPhysicalName()
+						+ "." + info.getConstraint().getName();
 				this.propertyQualifiedPriKeyConstrainatNameMap.put(
 					qualifiedName, property);				
 				UniqueConstraint uniqueConstraint = new UniqueConstraint();
-				uniqueConstraint.setGroup(info.getConstraint().getConstraintName());
+				uniqueConstraint.setGroup(info.getConstraint().getName());
 				property.setUniqueConstraint(uniqueConstraint);
 				break; 
-			case R: // referential
+			case FOREIGN_KEY: // referential
 				// deal with on second pass after all tables processed 
 				break; 
-			case U: // unique
+			case UNIQUE: // unique
 				uniqueConstraint = new UniqueConstraint();
-				uniqueConstraint.setGroup(info.getConstraint().getConstraintName());
+				uniqueConstraint.setGroup(info.getConstraint().getName());
 				property.setUniqueConstraint(uniqueConstraint);
-				break; 
-			case C: // check
-				String condition = info.getConstraint().getSearchCondition();
-				if (condition != null) {
-					String[] literals = parseLiterals(column, condition);
-					if (literals != null) {
-						Enumeration enm = buildEnumeration(pkg, clss, property,
-					    	literals);
-						pkg.getEnumerations().add(enm);
-						this.enumQualifiedNameMap.put(enm.getUri() + "#" + enm.getName(), enm);
-						EnumerationRef enumRef = new EnumerationRef();
-						enumRef.setName(enm.getName());
-						enumRef.setUri(enm.getUri());	
-						EnumerationConstraint enumConst = new EnumerationConstraint();
-						enumConst.setValue(enumRef);
-						property.setEnumerationConstraint(enumConst);
-					}
-				}
 				break; 
 			default:
 				break;
 			}
         }
         
-		for (TableColumnComment comment : comments) {
-			if (comment.getComments() == null || comment.getComments().trim().length() == 0)
-		        continue;
+		if (column.getColumnComment() != null) {
 	        Documentation documentation = new Documentation();
 			documentation.setType(DocumentationType.DEFINITION);
 			Body body = new Body();
-			body.setValue(filter(comment.getComments()));
+			body.setValue(filter(column.getColumnComment()));
 			documentation.setBody(body);
 			property.getDocumentations().add(documentation);
 		}
@@ -592,50 +474,9 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
         return property;
     }
     
-    public Property buildProperty(Package pkg, Class clss, 
-    		ViewColumn column, ViewColumnComment[] comments) {
-        Property property = new Property();
-        property.setId(UUID.randomUUID().toString());
-        property.setVisibility(VisibilityType.PUBLIC); 
-        property.setName(NameUtils.firstToLowerCase(
-        		NameUtils.toCamelCase(column.getColumnName())));
-
-    	Alias alias = new Alias();
-    	alias.setPhysicalName(column.getColumnName());
-    	property.setAlias(alias);
-    	
-        // nullable
-    	if ("Y".equalsIgnoreCase(column.getNullable()))
-    		property.setNullable(true);
-    	else
-    		property.setNullable(false);
-    	
-    	SysDataType oracleType = SysDataType.valueOf(column.getDataType());
-    	DataType sdoType = mapType(oracleType, column.getDataLength(),
-    			column.getDataPrecision(), column.getDataScale());
-    	DataTypeRef dataTypeRef = new DataTypeRef();
-        dataTypeRef.setName(sdoType.name());
-        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
-        property.setType(dataTypeRef);  
-        
-        ValueConstraint valueConstraint = buildValueConstraint(oracleType, column.getDataLength(),
-    		column.getDataPrecision(), column.getDataScale());
-        if (valueConstraint != null) 
-        	property.setValueConstraint(valueConstraint);
-
-		for (ViewColumnComment comment : comments) {
-			if (comment.getComments() == null || comment.getComments().trim().length() == 0)
-		        continue;
-	        Documentation documentation = new Documentation();
-			documentation.setType(DocumentationType.DEFINITION);
-			Body body = new Body();
-			body.setValue(filter(comment.getComments()));
-			documentation.setBody(body);
-			property.getDocumentations().add(documentation);
-		}
-
-		return property;
-    }        
+    private String getSyntheticPriKeyConstraintName(Package pkg, Class clss, Property property) {
+    	return "pk_" + property.getAlias().getPhysicalName().toLowerCase();
+    }
     
     private Enumeration buildEnumeration(Package pkg, Class clss, Property property,
     		String[] literals) {
@@ -657,8 +498,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
         Documentation documentation = new Documentation();
 		documentation.setType(DocumentationType.DEFINITION);
 		Body body = new Body();
-		body.setValue("This enumeration was derived from a check " 
-		    + "constraint on column "
+		body.setValue("This enumeration was derived from enum column " 
 			+ clss.getAlias().getPhysicalName() + "." 
 			+ property.getAlias().getPhysicalName() 
 			+ " and linked as an SDO enumeration constraint to logical"
@@ -719,23 +559,16 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     	int rightIndex = condition.indexOf("(");
 		int leftIndex = condition.indexOf(")");
 		if (rightIndex >= 0 && leftIndex > 0 && leftIndex > rightIndex) {
-			String[] conditionTokens = condition.split(" "); 
-			if (findTokenIgnoreCase(column.getColumnName(), conditionTokens) &&
-				findTokenIgnoreCase("IN", conditionTokens)) {
-				String literalSubstr = condition.substring(rightIndex, leftIndex);
-				literals = literalSubstr.split(",");
-				for (int i = 0; i < literals.length; i++) {
-					int rightAposIndex = literals[i].indexOf("'");
-					int leftAposIndex = literals[i].lastIndexOf("'");
-					if (rightAposIndex >= 0 && leftAposIndex > 0) {
-					    literals[i] = literals[i].substring(rightAposIndex+1, leftAposIndex);
-					}
-					literals[i] = literals[i].trim();
+			String rawTokens = condition.substring(rightIndex, leftIndex);
+			literals = rawTokens.split(","); 
+			for (int i = 0; i < literals.length; i++) {
+				int rightAposIndex = literals[i].indexOf("'");
+				int leftAposIndex = literals[i].lastIndexOf("'");
+				if (rightAposIndex >= 0 && leftAposIndex > 0) {
+				    literals[i] = literals[i].substring(rightAposIndex+1, leftAposIndex);
 				}
+				literals[i] = literals[i].trim();
 			}
-			else
-				log.warn("expected constraint search condition on column, "
-					+ column.getColumnName());
 		}
     	return literals;
     }
@@ -748,23 +581,41 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     	return false;
     }
     
-    private ValueConstraint buildValueConstraint(SysDataType oracleType, int dataLength,
+    private ValueConstraint buildValueConstraint(SysDataType rdbType, int dataLength,
     		int dataPrecision, int dataScale) {
         ValueConstraint constraint = null;
-    	switch (oracleType) {
+    	switch (rdbType) {
     	case CHAR:	
-    	case VARCHAR2:		
-    	case VARCHAR:			
-    	case NCHAR:			
-    	case NVARCHAR2:		
-    	case CLOB:			
-    	case NCLOB:	
+    	case VARCHAR:	
+    	case ENUM:	
+    	case SET:
+    	case TEXT:
+    	case TINYTEXT:
+    	case MEDIUMTEXT:
+    	case LONGTEXT:	
     		if (dataLength > 0) {
     			constraint = new ValueConstraint();
     			constraint.setMaxLength(String.valueOf(dataLength));
     		}
     		break;
-    	case NUMBER:
+    	case BINARY:
+    	case VARBINARY:
+    	case TINYBLOB:
+    	case BLOB:
+    	case MEDIUMBLOB:
+    	case LONGBLOB:
+    		if (dataLength > 0) {
+    			constraint = new ValueConstraint();
+    			constraint.setMaxLength(String.valueOf(dataLength));
+    		}
+    		break;    		
+    	case DECIMAL:
+    	case DEC:
+    	case NUMERIC:
+    	case FIXED:
+    	case FLOAT:
+    	case DOUBLE:
+    	case DOUBLE__PRECISION:
     		if (dataPrecision > 0) {
     			constraint = new ValueConstraint();
     			constraint.setTotalDigits(String.valueOf(dataPrecision));
@@ -772,69 +623,80 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     				constraint.setFractionDigits(String.valueOf(dataScale));
     		} 
     		break;
-    	case LONG:			
-    	case BINARY__FLOAT:	
-    	case BINARY__DOUBLE:	
-    	case BLOB:			
-    	case BFILE:			
-    	case RAW:				
-    	case DATE:			
-    	case TIMESTAMP:	
-    	case ROWID:				
-    	case UROWID:
-    		if (dataPrecision > 0)
-    			log.warn("ignoring precision for datatype '" 
-    		        + oracleType + "' when creating valud constraints");
-    		if (dataScale > 0)
-    			log.warn("ignoring scale for datatype '" 
-    		        + oracleType + "' when creating valud constraints");
-    		break;
     	default:
-    		throw new ProvisioningException("unknown datatype, "
-    				+ oracleType.name());
+    		// just don't build one
     	}
     	return constraint;
     }    
     
-    private DataType mapType(SysDataType oracleType, int dataLength,
+    private DataType mapType(SysDataType rdbType, int dataLength,
     		int dataPrecision, int dataScale) {
-    	switch (oracleType) {
+    	switch (rdbType) {
     	case CHAR:	
-    		return DataType.Character;
-    	case VARCHAR2:		
-    	case VARCHAR:			
-    	case NCHAR:			
-    	case NVARCHAR2:		
-    	case CLOB:			
-    	case NCLOB:			
-    	case LONG:	// Note: LONG is an Oracle data type for storing character data of variable length up to 2 Gigabytes in length		
+    	case VARCHAR:	
+    	case ENUM:	
+    	case SET:
+    	case TEXT:
+    	case TINYTEXT:
+    	case MEDIUMTEXT:
+    	case LONGTEXT:	
     		return DataType.String;
-    	case NUMBER:
-    		if (dataPrecision > 0) {
-    			if (dataScale == 0) { // Oracle does not give us a scale, must assume
-    				return mapIntegralType(dataPrecision);
-    	    	}
-    			else {
-    				return mapFloatingPointType(dataPrecision, dataScale);
-    			}
+    	case BIT:	
+    		if (dataLength == 1) {
+        		return DataType.Boolean;
     		} 
-    		else // precision not specified, can't determine floating point type by magic
-    		    return DataType.Long;    		
-    	case BINARY__FLOAT:	
-    	case BINARY__DOUBLE:	
-    	case BLOB:			
-    	case BFILE:			
-    	case RAW:				
-    	case ROWID:				
-    	case UROWID:
-    		return DataType.Bytes;
+    		else  
+    		    return DataType.Bytes;    		
+    	case TINYINT:
+    		if (dataLength == 1) {
+        		return DataType.Boolean;
+    		} 
+    		else  
+    		    return DataType.Short;    		
+    	case BOOL:	
+    		return DataType.Boolean;
+    	case BOOLEAN:	
+    		return DataType.Boolean;
+    	case SMALLINT:
+    		return DataType.Short;  
+    	case MEDIUMINT:
+    		return DataType.Int;  
+    	case INT:
+    		return DataType.Int;  
+    	case INTEGER:
+    		return DataType.Int;  
+    	case BIGINT:
+    		return DataType.Integer;  
+    	case DECIMAL:
+    	case DEC:
+    	case NUMERIC:
+    	case FIXED:
+    		return DataType.Decimal;
+    	case FLOAT:
+    		return DataType.Float;
+    	case DOUBLE:
+    	case DOUBLE__PRECISION:
+    		return DataType.Double;
     	case DATE:			
     		return DataType.Date;
+    	case DATETIME:			
+    		return DataType.DateTime;
     	case TIMESTAMP:		
     		return DataType.DateTime;
+    	case TIME:		
+    		return DataType.Time;
+    	case YEAR:		
+    		return DataType.Year;
+    	case BINARY:
+    	case VARBINARY:
+    	case TINYBLOB:
+    	case BLOB:
+    	case MEDIUMBLOB:
+    	case LONGBLOB:
+    		return DataType.Bytes;
     	default:
     		log.warn("unknown datatype '"
-    				+ oracleType.name() + "' - using String");
+    				+ rdbType.name() + "' - using String");
     		return DataType.String;
     	}
     }
@@ -876,7 +738,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 		else
 			return DataType.Decimal; // SDO type maps to Java BigDEcimal
     }
-    
+           
     private String serializeGraph(DataGraph graph) throws IOException
     {
         DefaultOptions options = new DefaultOptions(

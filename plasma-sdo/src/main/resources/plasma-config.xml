@@ -24,14 +24,26 @@
   		</DefaultNamespace>
   		 
         <Namespace uri="http://org.plasma/sdo/oracle/any/sys"
-            artifact="http://Plasma_RDB.mdxml">
+            artifact="http://Plasma_RDB_Oracle.mdxml">
             <Provisioning packageName="org.plasma.provisioning.rdb.oracle.any.sys">
                 <QueryDSL generate="true"/>
             </Provisioning>
         </Namespace>
         <Namespace uri="http://org.plasma/sdo/oracle/11g/sys"
-            artifact="http://Plasma_RDB.mdxml">
+            artifact="http://Plasma_RDB_Oracle.mdxml">
             <Provisioning packageName="org.plasma.provisioning.rdb.oracle.g11.sys">
+                <QueryDSL generate="true"/>
+            </Provisioning>
+        </Namespace>
+        <Namespace uri="http://org.plasma/sdo/mysql/any"
+            artifact="http://Plasma_RDB_MySql.mdxml">
+            <Provisioning packageName="org.plasma.provisioning.rdb.mysql.any">
+                <QueryDSL generate="true"/>
+            </Provisioning>
+        </Namespace>
+        <Namespace uri="http://org.plasma/sdo/mysql/5_5"
+            artifact="http://Plasma_RDB_MySql.mdxml">
+            <Provisioning packageName="org.plasma.provisioning.rdb.mysql.v5_5">
                 <QueryDSL generate="true"/>
             </Provisioning>
         </Namespace>
@@ -50,10 +62,13 @@
             urn="Plasma_SDO_Profile.mdxml" 
             namespaceUri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"/>
   
-        <Artifact name="Plasma_RDB.mdxml"
-            urn="Plasma_RDB.mdxml" 
-            namespaceUri="http://Plasma_RDB.mdxml"/>  
+        <Artifact name="Plasma_RDB_Oracle.mdxml"
+            urn="Plasma_RDB_Oracle.mdxml" 
+            namespaceUri="http://Plasma_RDB_Oracle.mdxml"/>  
         
+        <Artifact name="Plasma_RDB_MySql.mdxml"
+            urn="Plasma_RDB_MySql.mdxml" 
+            namespaceUri="http://Plasma_RDB_MySql.mdxml"/>  
     </Repository>
     
   

@@ -44,6 +44,9 @@ import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.ProvisioningModelDataBinding;
 import org.plasma.provisioning.SchemaConverter;
 import org.plasma.provisioning.adapter.ModelAdapter;
+import org.plasma.provisioning.rdb.MySql55Converter;
+import org.plasma.provisioning.rdb.MySqlVersion;
+import org.plasma.provisioning.rdb.MySqlVersionFinder;
 import org.plasma.provisioning.rdb.Oracle11GConverter;
 import org.plasma.provisioning.rdb.OracleVersion;
 import org.plasma.provisioning.rdb.OracleVersionFinder;
@@ -86,9 +89,7 @@ import org.xml.sax.SAXException;
  * database vendor</li>
  * <li><b>dialect</b> is one of [oracle | mysql, ...] and the specific database product version is determined at runtime</li>
  * <li><b>dest-file</b> is the file name for the target artifact</li> 
- * <li><b>dest-namespace-URI</b> is the namespace URI used to annotate the UML package(s). If more than one 
- * schema is used, each schema name is used as a suffix. If no dest-namespace-URI is present
- * a nemsapace URI based on the destination file name is constructed.</li> 
+ * <li><b>namespaces</b> the destination or target namespace URIs. These are separated by commas and mapped (in order) to schema names in the resulting document</li> 
  * <li><b>schema1, schema2, ...</b> is a set of source RDB schemas separated by commas. This argument
  * <i>reverse</i> command as the physical schema names and namespace URI
  * associations are expected to be
@@ -239,14 +240,21 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
             
             break;
         case reverse:
-        	String destNamespaceURI = "http://" + dest.getName();
         	String[] schemaNames = null;
+        	String[] namespaces = null;
         	if (args.length == 5) {
-        		destNamespaceURI = args[3];
+        		namespaces = args[3].split(",");
         	    schemaNames = args[4].split(",");
+        	    if (namespaces.length != schemaNames.length)
+            		throw new RDBException("expected 'schemaNames' and 'namespaces' arguments with equal number of comma seperated  values");
+
         	}
-        	else
+        	else {
         		schemaNames = args[3].split(",");
+        		namespaces = new String[schemaNames.length];
+        		for (int i = 0; i < schemaNames.length; i++)
+        			namespaces[i] = "http://" + schemaNames[i];
+        	}
         	
         	PlasmaRepository.getInstance(); // just force an init
         	
@@ -255,9 +263,10 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
             Model model = null;
         	switch (dialect) {
         	case oracle: 
-        		loadDynamicArtifact();
+        		loadDynamicArtifact(RDBConstants.ARTIFACT_RESOURCE_ORACLE);
         		loadDynamicNamespace(ARTIFACT_NAMESPACE_ORACLE_ANY_SYS,
-        			org.plasma.provisioning.rdb.oracle.any.sys.Version.class.getPackage());
+        			org.plasma.provisioning.rdb.oracle.any.sys.Version.class.getPackage(),
+        			RDBConstants.ARTIFACT_RESOURCE_ORACLE);
         		OracleVersionFinder versionFinder = new OracleVersionFinder();
         		OracleVersion version = versionFinder.findVersion();
         		log.info("detected version '" + version + "'");
@@ -267,23 +276,54 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
         		case _10g:
         		case _11g:
             		loadDynamicNamespace(ARTIFACT_NAMESPACE_ORACLE_11G_SYS,
-            			org.plasma.provisioning.rdb.oracle.g11.sys.Version.class.getPackage());
+            			org.plasma.provisioning.rdb.oracle.g11.sys.Version.class.getPackage(),
+            			RDBConstants.ARTIFACT_RESOURCE_ORACLE);
             		converter = new Oracle11GConverter(
-            			schemaNames, destNamespaceURI);
+            			schemaNames, namespaces);
             		break;
         		case _unknown:
         		default:
         			log.warn("unknown Oracle version - using 11g metamodel");
             		loadDynamicNamespace(ARTIFACT_NAMESPACE_ORACLE_11G_SYS,
-            			org.plasma.provisioning.rdb.oracle.g11.sys.Version.class.getPackage());
+            			org.plasma.provisioning.rdb.oracle.g11.sys.Version.class.getPackage(),
+            			RDBConstants.ARTIFACT_RESOURCE_ORACLE);
             		converter = new Oracle11GConverter(
-                			schemaNames, destNamespaceURI);
+                			schemaNames, namespaces);
             		break;
         		}
         		
         		model = converter.buildModel(); 
         	    break;
         	case mysql:  
+        		loadDynamicArtifact(RDBConstants.ARTIFACT_RESOURCE_MYSQL);
+        		loadDynamicNamespace(ARTIFACT_NAMESPACE_MYSQL_ANY,
+        			org.plasma.provisioning.rdb.mysql.any.GlobalVariable.class.getPackage(),
+        			RDBConstants.ARTIFACT_RESOURCE_MYSQL);
+        		MySqlVersionFinder mysqlVersionFinder = new MySqlVersionFinder();
+        		MySqlVersion mysqlVersion = mysqlVersionFinder.findVersion();
+        		log.info("detected version '" + mysqlVersion + "'");
+        		converter = null;
+        		switch (mysqlVersion) {
+        		case _5_5:
+            		loadDynamicNamespace(ARTIFACT_NAMESPACE_MYSQL_5_5,
+            			org.plasma.provisioning.rdb.mysql.v5_5.GlobalVariable.class.getPackage(),
+            			RDBConstants.ARTIFACT_RESOURCE_MYSQL);
+            		converter = new MySql55Converter(
+            	 	    schemaNames, namespaces);
+            		break;
+        		case _unknown:
+        		default:
+        			log.warn("unknown MySql version - using 5.5 metamodel");
+            		loadDynamicNamespace(ARTIFACT_NAMESPACE_MYSQL_5_5,
+            			org.plasma.provisioning.rdb.mysql.v5_5.GlobalVariable.class.getPackage(),
+            			RDBConstants.ARTIFACT_RESOURCE_MYSQL);
+            		converter = new MySql55Converter(
+                			schemaNames, namespaces);
+            		break;
+        		}
+        		
+        		model = converter.buildModel(); 
+        	    break;
         	default:
         		throw new RDBException("unknown dialect, '"
         				+ dialect.name() + "'");
@@ -308,7 +348,7 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
     				   new ModelAdapter(model);
     			   
     		UMLModelAssembler umlAssembler = new UMLModelAssembler(model, 
-    				destNamespaceURI, "tns");
+    				namespaces[0], "tns");
     		umlAssembler.setDerivePackageNamesFromURIs(false);
     	    Document document = umlAssembler.getDocument();
     	        
@@ -340,26 +380,26 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
      * @param pkg the provisioning package
      */
     private static void loadDynamicNamespace(String namespace, 
-    		java.lang.Package pkg) {
+    		java.lang.Package pkg, String artifactResourceName) {
     		
     	NamespaceProvisioning provisioning = new NamespaceProvisioning();
     	provisioning.setPackageName(pkg.getName());
     	
         PlasmaConfig.getInstance().addDynamicSDONamespace(
         		namespace, 
-        		RDBConstants.ARTIFACT_RESOURCE,
+        		artifactResourceName,
         		provisioning);
     }
     
-    private static void loadDynamicArtifact() {
+    private static void loadDynamicArtifact(String artifactResourceName) {
     	InputStream stream = RDBTool.class.getClassLoader().getResourceAsStream(
-    			RDBConstants.ARTIFACT_RESOURCE);
+    			artifactResourceName);
     	
 	    if (log.isDebugEnabled())
 	    	log.info("loading UML/XMI model");
         Fuml.load(new ResourceArtifact(
-        	RDBConstants.ARTIFACT_RESOURCE, 
-        	RDBConstants.ARTIFACT_RESOURCE, 
+        	artifactResourceName, 
+        	artifactResourceName, 
         	stream));              	        		    	
     }
     

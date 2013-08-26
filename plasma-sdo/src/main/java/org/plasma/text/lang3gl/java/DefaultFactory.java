@@ -1101,6 +1101,8 @@ public abstract class DefaultFactory {
 		StringBuilder docsBuf = new StringBuilder();
 		if (docs != null) {
 			for (Documentation doc : docs) {
+				if (doc.getBody() == null || doc.getBody().getValue() == null)
+					continue;
 				String docText = doc.getBody().getValue().trim();
 				if (docText.length() == 0)
 					continue;
@@ -1111,7 +1113,7 @@ public abstract class DefaultFactory {
 					docsBuf.append(" * ");
 					docsBuf.append(line); 
 				}
-		    }
+	        }
 		}
 		return docsBuf.toString();
 	}

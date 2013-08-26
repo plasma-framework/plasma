@@ -114,7 +114,7 @@ public abstract class JDBCSupport {
 			i++;
 		}
 		sql.append(" FROM ");
-		sql.append(type.getPhysicalName());
+		sql.append(getQualifiedPhysicalName(type));
 		sql.append(" t0 ");
 		sql.append(" WHERE ");
         for (int k = 0; k < keyValues.size(); k++) {
@@ -124,8 +124,11 @@ public abstract class JDBCSupport {
         	sql.append("t0.");  
         	sql.append(propValue.getProp().getPhysicalName());
         	sql.append(" = "); 
-        	// FIXME: escape , etc...
-        	sql.append(propValue.getValue()); // FIXME; use converter
+        	try {
+				appendValue(propValue, sql);
+			} catch (SQLException e) {
+				throw new JDBCServiceException(e);
+			}
         }
         // FIXME: vendor specific checks
         // if Oracle
@@ -137,6 +140,13 @@ public abstract class JDBCSupport {
 		return sql;
 	}
 	
+	protected String getQualifiedPhysicalName(PlasmaType type) {
+		String packageName = type.getPackagePhysicalName();
+		if (packageName != null) 
+			return packageName + "." + type.getPhysicalName();
+		else
+			return type.getPhysicalName();
+	}
 	protected StringBuilder createSelect(PlasmaType type, List<String> names, 
 			List<PropertyPair> keyValues) throws SQLException {
 		StringBuilder sql = new StringBuilder();
@@ -167,7 +177,7 @@ public abstract class JDBCSupport {
 		}		
 		
 		sql.append(" FROM ");
-		sql.append(type.getPhysicalName());
+		sql.append(getQualifiedPhysicalName(type));
 		sql.append(" t0 ");
 		sql.append(" WHERE ");
         for (count = 0; count < keyValues.size(); count++) {
@@ -219,7 +229,7 @@ public abstract class JDBCSupport {
     		String alias = aliasMap.getAlias(aliasType); 
     		if (count > 0)
     			sql.append(", ");
-    		sql.append(aliasType.getPhysicalName());
+    		sql.append(getQualifiedPhysicalName(aliasType));
     		sql.append(" ");
     		sql.append(alias);
     		count++;
@@ -284,7 +294,7 @@ public abstract class JDBCSupport {
 			Map<String, PropertyPair> values) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO ");
-		sql.append(type.getPhysicalName());
+		sql.append(getQualifiedPhysicalName(type));
 		sql.append("(");
 		int i = 0;
 		for (PropertyPair pair : values.values()) {
@@ -333,7 +343,7 @@ public abstract class JDBCSupport {
 		// construct an 'update' for all non pri-keys and
 		// excluding many reference properties
 		sql.append("UPDATE ");		
-		sql.append(type.getPhysicalName());
+		sql.append(getQualifiedPhysicalName(type));
 		sql.append(" t0 SET ");
 		int i = 0;
 		for (PropertyPair pair : values.values()) {
@@ -373,7 +383,7 @@ public abstract class JDBCSupport {
 			Map<String, PropertyPair> values) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("DELETE FROM ");		
-		sql.append(type.getPhysicalName());
+		sql.append(getQualifiedPhysicalName(type));
 		sql.append(" WHERE ");
 		int i = 0;
 		for (PropertyPair pair : values.values()) {
@@ -402,14 +412,6 @@ public abstract class JDBCSupport {
         PreparedStatement statement = null;
         ResultSet rs = null; 
         try {
-            statement = con.prepareStatement(sql.toString(),
-               		ResultSet.TYPE_FORWARD_ONLY,/*ResultSet.TYPE_SCROLL_INSENSITIVE,*/
-                    ResultSet.CONCUR_READ_ONLY);
-		
-            for (int i = 0; i < params.length; i++)
-            	statement.setString(i+1, 
-            			String.valueOf(params[i]));
-            
             if (log.isDebugEnabled() ){
                 if (params == null || params.length == 0) {
                     log.debug("fetch: "+ sql.toString());                	
@@ -429,6 +431,13 @@ public abstract class JDBCSupport {
                     		+ " " + paramBuf.toString());
                 }
             } 
+            statement = con.prepareStatement(sql.toString(),
+               		ResultSet.TYPE_FORWARD_ONLY,/*ResultSet.TYPE_SCROLL_INSENSITIVE,*/
+                    ResultSet.CONCUR_READ_ONLY);
+		
+            for (int i = 0; i < params.length; i++)
+            	statement.setString(i+1, 
+            			String.valueOf(params[i]));
             statement.execute();
             rs = statement.getResultSet();
             ResultSetMetaData rsMeta = rs.getMetaData();
@@ -474,13 +483,12 @@ public abstract class JDBCSupport {
         PreparedStatement statement = null;
         ResultSet rs = null; 
         try {
-            statement = con.prepareStatement(sqlQuery.toString(),
-               		ResultSet.TYPE_FORWARD_ONLY,/*ResultSet.TYPE_SCROLL_INSENSITIVE,*/
-                    ResultSet.CONCUR_READ_ONLY);
-		
             if (log.isDebugEnabled() ){
                 log.debug("fetch: " + sqlQuery.toString());
             } 
+            statement = con.prepareStatement(sqlQuery.toString(),
+               		ResultSet.TYPE_FORWARD_ONLY,/*ResultSet.TYPE_SCROLL_INSENSITIVE,*/
+                    ResultSet.CONCUR_READ_ONLY);
             
             statement.execute();
             rs = statement.getResultSet();
