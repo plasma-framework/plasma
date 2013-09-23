@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
+import javax.xml.bind.annotation.XmlEnumValue;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -419,6 +420,47 @@ public class PlasmaConfig {
         else
             throw new PlasmaRuntimeException("no data access provider configuration found for '"
                     + providerName.value() + "'");
+    }
+    
+    public RDBMSVendorName getRDBMSProviderVendor(DataAccessProviderName providerName) {
+    	DataAccessProvider provider = this.dataAccessProviderMap.get(providerName);
+        if (provider == null) 
+            throw new PlasmaRuntimeException("no data access provider configuration found for '"
+                    + providerName.value() + "'");
+        RDBMSVendorName vendor = null;
+        switch (providerName) {
+    	case JDBC:
+    	case JDO:
+    	case JPA:
+    	case HIBERNATE:
+    		Property driver = findDriverProperty(provider);
+    		vendor = findVendor(driver);
+    		if (vendor == null)
+                throw new PlasmaRuntimeException("could not determine RDBMS vendor from provider configuration '"
+                        + providerName.value() + "'");
+    		break;
+    	default:	
+            throw new PlasmaRuntimeException("could not determine RDBMS vendor from non-RDBMS provider configuration '"
+                    + providerName.value() + "'");
+    	}
+    	return vendor;
+    }
+        
+    private RDBMSVendorName findVendor(Property prop)    
+    {
+    	for (RDBMSVendorName vendor : RDBMSVendorName.values()) {
+    		if (prop.getValue().toLowerCase().contains(vendor.name().toLowerCase()))
+    			return vendor;
+    	}
+    	return null;
+    }    
+    
+    private Property findDriverProperty(DataAccessProvider provider) {
+    	for (Property prop : provider.getProperties()) {
+    		if (prop.getValue() != null && prop.getValue().toLowerCase().contains("driver"))
+    			return prop;
+    	}
+    	return null;
     }
 
     public NamespaceProvisioning getProvisioningByNamespaceURI(DataAccessProviderName providerName, String uri) {

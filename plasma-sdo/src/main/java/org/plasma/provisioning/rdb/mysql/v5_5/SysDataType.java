@@ -244,7 +244,7 @@ public enum SysDataType implements PlasmaEnum
 	 * UTC). A TIMESTAMP cannot represent the value '1970-01-01 
 	 * 00:00:00' because that is equivalent to 0 seconds from 
 	 * the epoch and the value 0 is reserved for representing 
-	 * '0000-00-00 00:00:00', the “zero” TIMESTAMP value.
+	 * '0000-00-00 00:00:00', the zero TIMESTAMP value.
 	 * 
 	 * Unless specified otherwise, the first TIMESTAMP column in a 
 	 * table is defined to be automatically set to the date and 
@@ -257,7 +257,7 @@ public enum SysDataType implements PlasmaEnum
 	 * <p></p>
 	 * Holds the logical and physical names for literal <b>TIMESTAMP</b>.
 	 */
-	TIMESTAMP("TIMESTAMP","A timestamp. The range is '1970-01-01 00:00:01' UTC to '2038-01-19 03:14:07' UTC. TIMESTAMP values are stored as the number of seconds since the epoch ('1970-01-01 00:00:00' UTC). A TIMESTAMP cannot represent the value '1970-01-01 00:00:00' because that is equivalent to 0 seconds from the epoch and the value 0 is reserved for representing '0000-00-00 00:00:00', the “zero” TIMESTAMP value.  Unless specified otherwise, the first TIMESTAMP column in a table is defined to be automatically set to the date and time of the most recent modification if not explicitly assigned a value. This makes TIMESTAMP useful for recording the timestamp of an INSERT or UPDATE operation. You can also set any TIMESTAMP column to the current date and time by assigning it a NULL value, unless it has been defined with the NULL attribute to permit NULL values. "),
+	TIMESTAMP("TIMESTAMP","A timestamp. The range is '1970-01-01 00:00:01' UTC to '2038-01-19 03:14:07' UTC. TIMESTAMP values are stored as the number of seconds since the epoch ('1970-01-01 00:00:00' UTC). A TIMESTAMP cannot represent the value '1970-01-01 00:00:00' because that is equivalent to 0 seconds from the epoch and the value 0 is reserved for representing '0000-00-00 00:00:00', the zero TIMESTAMP value.  Unless specified otherwise, the first TIMESTAMP column in a table is defined to be automatically set to the date and time of the most recent modification if not explicitly assigned a value. This makes TIMESTAMP useful for recording the timestamp of an INSERT or UPDATE operation. You can also set any TIMESTAMP column to the current date and time by assigning it a NULL value, unless it has been defined with the NULL attribute to permit NULL values. "),
 	
 	/**
 	 * A time. The range is '-838:59:59' to '838:59:59'. MySQL 
@@ -298,17 +298,17 @@ public enum SysDataType implements PlasmaEnum
 	VARBINARY("VARBINARY",""),
 	
 	/**
-	 * A BLOB column with a maximum length of 255 (28 – 1) 
+	 * A BLOB column with a maximum length of 255 (28 ï¿½ 1) 
 	 * bytes. Each TINYBLOB value is stored using a 1-byte 
 	 * length prefix that indicates the number of bytes in the 
 	 * value.
 	 * <p></p>
 	 * Holds the logical and physical names for literal <b>TINYBLOB</b>.
 	 */
-	TINYBLOB("TINYBLOB","A BLOB column with a maximum length of 255 (28 – 1) bytes. Each TINYBLOB value is stored using a 1-byte length prefix that indicates the number of bytes in the value."),
+	TINYBLOB("TINYBLOB","A BLOB column with a maximum length of 255 (28 ï¿½ 1) bytes. Each TINYBLOB value is stored using a 1-byte length prefix that indicates the number of bytes in the value."),
 	
 	/**
-	 * A TEXT column with a maximum length of 255 (28 – 1) 
+	 * A TEXT column with a maximum length of 255 (28 ï¿½ 1) 
 	 * characters. The effective maximum length is less if the 
 	 * value contains multi-byte characters. Each TINYTEXT value is
 	 * stored using a 1-byte length prefix that indicates the 
@@ -316,10 +316,10 @@ public enum SysDataType implements PlasmaEnum
 	 * <p></p>
 	 * Holds the logical and physical names for literal <b>TINYTEXT</b>.
 	 */
-	TINYTEXT("TINYTEXT","A TEXT column with a maximum length of 255 (28 – 1) characters. The effective maximum length is less if the value contains multi-byte characters. Each TINYTEXT value is stored using a 1-byte length prefix that indicates the number of bytes in the value."),
+	TINYTEXT("TINYTEXT","A TEXT column with a maximum length of 255 (28 ï¿½ 1) characters. The effective maximum length is less if the value contains multi-byte characters. Each TINYTEXT value is stored using a 1-byte length prefix that indicates the number of bytes in the value."),
 	
 	/**
-	 * A BLOB column with a maximum length of 65,535 (216 – 1) 
+	 * A BLOB column with a maximum length of 65,535 (216 ï¿½ 1) 
 	 * bytes. Each BLOB value is stored using a 2-byte length 
 	 * prefix that indicates the number of bytes in the value.
 	 * 
@@ -329,10 +329,10 @@ public enum SysDataType implements PlasmaEnum
 	 * <p></p>
 	 * Holds the logical and physical names for literal <b>BLOB</b>.
 	 */
-	BLOB("BLOB","A BLOB column with a maximum length of 65,535 (216 – 1) bytes. Each BLOB value is stored using a 2-byte length prefix that indicates the number of bytes in the value.  An optional length M can be given for this type. If this is done, MySQL creates the column as the smallest BLOB type large enough to hold values M bytes long."),
+	BLOB("BLOB","A BLOB column with a maximum length of 65,535 (216 ï¿½ 1) bytes. Each BLOB value is stored using a 2-byte length prefix that indicates the number of bytes in the value.  An optional length M can be given for this type. If this is done, MySQL creates the column as the smallest BLOB type large enough to hold values M bytes long."),
 	
 	/**
-	 * A TEXT column with a maximum length of 65,535 (216 – 1) 
+	 * A TEXT column with a maximum length of 65,535 (216 ï¿½ 1) 
 	 * characters. The effective maximum length is less if the 
 	 * value contains multi-byte characters. Each TEXT value is 
 	 * stored using a 2-byte length prefix that indicates the 
@@ -344,20 +344,20 @@ public enum SysDataType implements PlasmaEnum
 	 * <p></p>
 	 * Holds the logical and physical names for literal <b>TEXT</b>.
 	 */
-	TEXT("TEXT","A TEXT column with a maximum length of 65,535 (216 – 1) characters. The effective maximum length is less if the value contains multi-byte characters. Each TEXT value is stored using a 2-byte length prefix that indicates the number of bytes in the value.  An optional length M can be given for this type. If this is done, MySQL creates the column as the smallest TEXT type large enough to hold values M characters long."),
+	TEXT("TEXT","A TEXT column with a maximum length of 65,535 (216 ï¿½ 1) characters. The effective maximum length is less if the value contains multi-byte characters. Each TEXT value is stored using a 2-byte length prefix that indicates the number of bytes in the value.  An optional length M can be given for this type. If this is done, MySQL creates the column as the smallest TEXT type large enough to hold values M characters long."),
 	
 	/**
-	 * A BLOB column with a maximum length of 16,777,215 (224 – 
+	 * A BLOB column with a maximum length of 16,777,215 (224 ï¿½ 
 	 * 1) bytes. Each MEDIUMBLOB value is stored using a 3-byte 
 	 * length prefix that indicates the number of bytes in the 
 	 * value.
 	 * <p></p>
 	 * Holds the logical and physical names for literal <b>MEDIUMBLOB</b>.
 	 */
-	MEDIUMBLOB("MEDIUMBLOB","A BLOB column with a maximum length of 16,777,215 (224 – 1) bytes. Each MEDIUMBLOB value is stored using a 3-byte length prefix that indicates the number of bytes in the value."),
+	MEDIUMBLOB("MEDIUMBLOB","A BLOB column with a maximum length of 16,777,215 (224 ï¿½ 1) bytes. Each MEDIUMBLOB value is stored using a 3-byte length prefix that indicates the number of bytes in the value."),
 	
 	/**
-	 * A TEXT column with a maximum length of 16,777,215 (224 – 
+	 * A TEXT column with a maximum length of 16,777,215 (224 ï¿½ 
 	 * 1) characters. The effective maximum length is less if 
 	 * the value contains multi-byte characters. Each MEDIUMTEXT 
 	 * value is stored using a 3-byte length prefix that 
@@ -365,11 +365,11 @@ public enum SysDataType implements PlasmaEnum
 	 * <p></p>
 	 * Holds the logical and physical names for literal <b>MEDIUMTEXT</b>.
 	 */
-	MEDIUMTEXT("MEDIUMTEXT","A TEXT column with a maximum length of 16,777,215 (224 – 1) characters. The effective maximum length is less if the value contains multi-byte characters. Each MEDIUMTEXT value is stored using a 3-byte length prefix that indicates the number of bytes in the value."),
+	MEDIUMTEXT("MEDIUMTEXT","A TEXT column with a maximum length of 16,777,215 (224 ï¿½ 1) characters. The effective maximum length is less if the value contains multi-byte characters. Each MEDIUMTEXT value is stored using a 3-byte length prefix that indicates the number of bytes in the value."),
 	
 	/**
 	 * A BLOB column with a maximum length of 4,294,967,295 or 
-	 * 4GB (232 – 1) bytes. The effective maximum length of 
+	 * 4GB (232 ï¿½ 1) bytes. The effective maximum length of 
 	 * LONGBLOB columns depends on the configured maximum packet 
 	 * size in the client/server protocol and available memory. 
 	 * Each LONGBLOB value is stored using a 4-byte length 
@@ -377,11 +377,11 @@ public enum SysDataType implements PlasmaEnum
 	 * <p></p>
 	 * Holds the logical and physical names for literal <b>LONGBLOB</b>.
 	 */
-	LONGBLOB("LONGBLOB","A BLOB column with a maximum length of 4,294,967,295 or 4GB (232 – 1) bytes. The effective maximum length of LONGBLOB columns depends on the configured maximum packet size in the client/server protocol and available memory. Each LONGBLOB value is stored using a 4-byte length prefix that indicates the number of bytes in the value."),
+	LONGBLOB("LONGBLOB","A BLOB column with a maximum length of 4,294,967,295 or 4GB (232 ï¿½ 1) bytes. The effective maximum length of LONGBLOB columns depends on the configured maximum packet size in the client/server protocol and available memory. Each LONGBLOB value is stored using a 4-byte length prefix that indicates the number of bytes in the value."),
 	
 	/**
 	 * A TEXT column with a maximum length of 4,294,967,295 or 
-	 * 4GB (232 – 1) characters. The effective maximum length is 
+	 * 4GB (232 ï¿½ 1) characters. The effective maximum length is 
 	 * less if the value contains multi-byte characters. The 
 	 * effective maximum length of LONGTEXT columns also depends on
 	 * the configured maximum packet size in the client/server 
@@ -391,7 +391,7 @@ public enum SysDataType implements PlasmaEnum
 	 * <p></p>
 	 * Holds the logical and physical names for literal <b>LONGTEXT</b>.
 	 */
-	LONGTEXT("LONGTEXT","A TEXT column with a maximum length of 4,294,967,295 or 4GB (232 – 1) characters. The effective maximum length is less if the value contains multi-byte characters. The effective maximum length of LONGTEXT columns also depends on the configured maximum packet size in the client/server protocol and available memory. Each LONGTEXT value is stored using a 4-byte length prefix that indicates the number of bytes in the value."),
+	LONGTEXT("LONGTEXT","A TEXT column with a maximum length of 4,294,967,295 or 4GB (232 ï¿½ 1) characters. The effective maximum length is less if the value contains multi-byte characters. The effective maximum length of LONGTEXT columns also depends on the configured maximum packet size in the client/server protocol and available memory. Each LONGTEXT value is stored using a 4-byte length prefix that indicates the number of bytes in the value."),
 	
 	/**
 	 * An enumeration. A string object that can have only one 

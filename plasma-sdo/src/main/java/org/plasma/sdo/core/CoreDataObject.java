@@ -51,6 +51,7 @@ import org.plasma.sdo.PlasmaNode;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.DataAccessException;
+import org.plasma.sdo.access.provider.common.PropertyPair;
 import org.plasma.sdo.helper.DataConverter;
 import org.plasma.sdo.helper.PlasmaDataFactory;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
@@ -460,13 +461,14 @@ public class CoreDataObject extends CoreNode
     @SuppressWarnings("unchecked")
 	public void delete() {
     	
+    	// collect the containment graph in a flat list
     	ContainmentGraphCollector collector = 
     		new ContainmentGraphCollector();
     	this.accept(collector);
     	List<ContainmentNode> nodes = collector.getResult();
 
-    	// update change summary
-        // capture delete before removing properties, as the current state
+    	// For each node, update the change summary.
+        // Capture delete before removing properties, as the current state
         // is required in the change-summary
         for (ContainmentNode node : nodes) {
         	
@@ -489,15 +491,22 @@ public class CoreDataObject extends CoreNode
         for (ContainmentNode node : nodes) {
         	PlasmaDataObject toDelete = node.getDataObject();
             for (Property property : toDelete.getType().getDeclaredProperties()) {
-                if (property.getType().isDataType()) {
-                    if (toDelete.isSet(property) && !property.isReadOnly())
-                    	toDelete.unset(property);   	
+                if (property.getType().isDataType() && !property.isReadOnly()) {
+                	PlasmaProperty prop = (PlasmaProperty)property;
+                	// services need PK's to be left set such that they can construct 
+                	// queries to find entities to delete
+                	if (!prop.isKey(KeyType.primary)) {
+                        if (toDelete.isSet(property))
+                    	    toDelete.unset(property);  
+                	}
                 }
             }
         }  
         
         // process linked objects
         for (ContainmentNode node : nodes) {
+        	// FIXME: detect readonly containment property
+        	// and abort removal. 
         	PlasmaDataObject toDelete = node.getDataObject();
             for (Property property : toDelete.getType().getDeclaredProperties()) {
                 if (property.getType().isDataType()) 
@@ -506,8 +515,11 @@ public class CoreDataObject extends CoreNode
                     DataObject dataObject = toDelete.getDataObject(property);
                     if (dataObject == null)
                         continue; 
-                    //FIXME: currently unset() is not removing opposites. See comments in unset()
-                    toDelete.unset(property);         	              	                        
+                	PlasmaProperty prop = (PlasmaProperty)property;
+                	if (!prop.isKey(KeyType.primary)) {
+                        //FIXME: currently unset() is not removing opposites. See comments in unset()
+                        toDelete.unset(property);   
+                	}
                 }
                 else {
                     List<DataObject> dataObjectList = toDelete.getList(property);
@@ -2256,27 +2268,21 @@ dataObject.set(property, dataHelper.convert(property, value));
      {
          if (this.getDataGraph().getChangeSummary().isCreated(this))
          {
-             String uuid = this.getUUIDAsString();                           
-             if (uuid != null)                                                                               
-             {                                                                                               
-                 Object pk = idMap.get(uuid);                                                                
-                 if (pk != null) {                                                                            
-	                 List<Property> pkList = ((PlasmaType)this.getType()).findProperties(KeyType.primary);
-	                 if (pkList == null)
-	                     throw new DataAccessException("found no pri-key properties found for type '" 
-	                             + this.getType().getName() + "'");
-	                 if (pkList.size() > 1)
-	                     throw new DataAccessException("multiple pri-key properties found for type '" 
-	                             + this.getType().getName() + "' - not yet supported");
-	                 Property targetPriKeyProperty = pkList.get(0);    
-	                 valueObject.put(targetPriKeyProperty.getName(), pk); 
+        	 List<PropertyPair> props = idMap.get(this.getUUID()); 
+        	 if (props != null) {
+            	 for (PropertyPair pair : props) { 
+            		 if (!pair.getProp().isReadOnly()) {
+            			 this.set(pair.getProp(), pair.getValue());
+            		 }
+            		 else {
+            		     valueObject.put(pair.getProp().getName(), pair.getValue());
+            		 }
                  }
+        	 }
+        	 else 
                  if (log.isDebugEnabled())
                      log.debug("no PK value mapped to UUID '" + uuid + "' for entity '"   
                          + this.getType().getName() + "' - ignoring");                                                                              
-             }
-             else
-                 log.warn("expected UUID for inserted entity, '" + this.getType().getName() + "'");
              
              // FIXME - could be a reference to a user
              Property originationUserProperty = ((PlasmaType)this.getType()).findProperty(ConcurrencyType.origination, 

@@ -31,6 +31,7 @@ import commonj.sdo.Type;
  * Provides access to various property mapping data collected
  * from a selection graph. 
  */
+@Deprecated
 public interface PropertySelection {
 
 	/**

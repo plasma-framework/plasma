@@ -126,7 +126,10 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 					+ targetResult.getType().getURI() + "#" + targetResult.getType().getName()
 					+ " (" + targetResult.getUUIDAsString() + ")");
 		    if (!isReferenceType(sourceResult.getType())) {
-			    sourceResult.set(sourceProperty, targetResult);
+		    	if (sourceProperty.isMany())
+			        sourceResult.add(sourceProperty, targetResult);
+		    	else
+			        sourceResult.set(sourceProperty, targetResult);
 		    }
 		    else {
 		    	// noop

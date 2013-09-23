@@ -205,6 +205,10 @@ public class TableColumnImpl extends CoreDataObject implements Serializable, Tab
 	 * <p></p>
 	 * <b>Property Definition: </b>
 	 * Default value for the column
+	 * <p></p>
+	 * <b>Enumeration Constraints: </b><pre>
+	 *     <b>name:</b> ColumnKeyType
+	 *     <b>URI:</b>http://org.plasma/sdo/mysql/5_5</pre>
 	 */
 	public void setColumnKey(String value){
 		super.set(TableColumn.PROPERTY.columnKey.name(), value);

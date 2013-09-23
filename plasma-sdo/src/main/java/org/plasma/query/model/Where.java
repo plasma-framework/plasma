@@ -95,13 +95,17 @@ public class Where implements org.plasma.query.Where {
     	}
     	
     	public void start(Property property) {
-    		if (this.path != null)
+    		if (this.path != null) {
     			property.setPath(this.path);
+    		}
+    		    
     		super.start(property);    		
     	}
     	public void start(WildcardProperty property) {
-    		if (this.path != null)
+    		if (this.path != null) {
     			property.setPath(this.path);
+    		}
+    		
     		super.start(property);    		
     	}
     }

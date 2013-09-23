@@ -66,9 +66,15 @@ public interface PlasmaDataObject extends DataObject
     public void setDataGraph(DataGraph dataGraph);
     
 
-    // FIXME use instance properties
+    /**
+     * Sets the current container for this DataObject
+     */
     public void setContainer(DataObject container);
 
+    /** 
+     * Sets the declared reference Property within the Type for the 
+     * container which is our current containment reference property 
+     */
     public void setContainmentProperty(Property containmentProperty);
 
     

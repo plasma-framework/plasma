@@ -327,7 +327,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
         if (dataObjectSettings == null)
             return null;
         
-        List<PlasmaSetting> propertySettings = dataObjectSettings.getSettings(property.getName());
+        List<ChangeSummary.Setting> propertySettings = dataObjectSettings.getSettings(property.getName());
         if (propertySettings == null)
             return null;
         

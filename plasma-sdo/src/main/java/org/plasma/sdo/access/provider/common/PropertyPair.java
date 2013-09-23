@@ -32,6 +32,8 @@ public class PropertyPair {
 	private Object value;
 	private int column;
 	private String propertyPath;
+    /** whether the property was explicitly named in the originating query */	
+	private boolean queryProperty = true; 
 	
 	@SuppressWarnings("unused")
 	private PropertyPair() {}
@@ -61,5 +63,12 @@ public class PropertyPair {
 	public String toString() {
 		return this.prop.getName() + "/" + String.valueOf(this.value);
 	}
+	public boolean isQueryProperty() {
+		return queryProperty;
+	}
+	public void setQueryProperty(boolean queryProperty) {
+		this.queryProperty = queryProperty;
+	}
+	
 }
 

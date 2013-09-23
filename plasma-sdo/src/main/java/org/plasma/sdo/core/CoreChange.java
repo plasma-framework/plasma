@@ -50,7 +50,7 @@ public class CoreChange implements Change, Serializable {
     
     private DataObject dataObject;
     private ChangeType changeType; 
-    private Map<String, List<PlasmaSetting>> settings;
+    private Map<String, List<ChangeSummary.Setting>> settings;
     private String pathFromRoot;
     private int pathDepthFromRoot;
     
@@ -150,18 +150,21 @@ public class CoreChange implements Change, Serializable {
         return changeType;
     }  
      
-    public List<PlasmaSetting> getSettings(String propertyName) {
-        return settings.get(propertyName);
+    public List<ChangeSummary.Setting> getSettings(String propertyName) {
+        if (settings == null || settings.size() == 0)
+            return emptySettingList;
+        
+       return settings.get(propertyName); 
     }
     
     public void add(Property property, Object value) {
         if (settings == null) {
-            settings = new HashMap<String, List<PlasmaSetting>>();
+            settings = new HashMap<String, List<ChangeSummary.Setting>>();
         }
         
-        List<PlasmaSetting> dataObjectPropertySettings = settings.get(property.getName());
+        List<ChangeSummary.Setting> dataObjectPropertySettings = settings.get(property.getName());
         if (dataObjectPropertySettings == null) {
-            dataObjectPropertySettings = new ArrayList<PlasmaSetting>();
+            dataObjectPropertySettings = new ArrayList<ChangeSummary.Setting>();
             settings.put(property.getName(), dataObjectPropertySettings);
         }           
         
@@ -178,8 +181,8 @@ public class CoreChange implements Change, Serializable {
         
         Iterator<String> iter = settings.keySet().iterator();
         while (iter.hasNext()) {
-            List<PlasmaSetting> propertySettings = settings.get(iter.next()); 
-            for (PlasmaSetting setting : propertySettings)
+            List<ChangeSummary.Setting> propertySettings = settings.get(iter.next()); 
+            for (ChangeSummary.Setting setting : propertySettings)
                 result.add(setting);
         }
         

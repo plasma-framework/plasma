@@ -24,9 +24,16 @@ package org.plasma.sdo.core;
 // java imports
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+
+import org.plasma.sdo.access.provider.common.PropertyPair;
+
+import commonj.sdo.Property;
 
 
 /**
@@ -41,7 +48,7 @@ public class SnapshotMap
     implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private Map<String, Object> values = new HashMap<String, Object>();
+	private Map<UUID, List<PropertyPair>> values = new HashMap<UUID, List<PropertyPair>>();
     private Timestamp snapshotDate;
 
     @SuppressWarnings("unused")
@@ -54,26 +61,45 @@ public class SnapshotMap
     
     public Timestamp getSnapshotDate() { return snapshotDate; }
 
-    public String[] getKeys() 
+    public UUID[] getKeys() 
     {
-        Set<String> keys = values.keySet();
-        String[] result = new String[keys.size()];
+        Set<UUID> keys = values.keySet();
+        UUID[] result = new UUID[keys.size()];
         keys.toArray(result); 
         return result; 
     }
 
-    public void put(String key, Object value)
+    public void put(UUID key, PropertyPair value)
     {
-        values.put(key, value);
+    	List<PropertyPair> list = values.get(key);
+    	if (list == null) {
+    		list = new ArrayList<PropertyPair>();
+    		values.put(key, list);
+    	}
+    	list.add(value);
     }
 
-    public Object get(String key)
+    public List<PropertyPair> get(UUID key)
     {
         return values.get(key);
+    } 
+    
+    public PropertyPair get(UUID key, Property prop)
+    {
+    	List<PropertyPair> list = values.get(key);
+    	if (list != null) {
+    		for (PropertyPair pair : list) {
+    			if (pair.getProp().getName().equals(prop.getName()))
+    				return pair;
+    		}
+    	}
+        return null;
     }  
 
-    public Object remove(String key)
+    public List<PropertyPair> remove(UUID key)
     {
         return values.remove(key);
-    }  
+    } 
+    
+     
 }

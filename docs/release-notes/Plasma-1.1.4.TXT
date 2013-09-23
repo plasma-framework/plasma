@@ -1,0 +1,33 @@
+Release Notes
+
+Plasma 1.1.4 Release Notes
+
+Plasma 1.1.4 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+See https://github.com/terrameta/plasma/issues. 
+
+Major Changes
+
+
+Bugs
+
+[Issue #7] - Relax Read-Only for Reference Properties Annotated as Key
+[Issue #8] - Deep Copy Error
+[Issue #2] - Default Empty Arrays per Type in SDO Generated Code
+
+Improvements
+
+[Issue #9] - Result Snapshot Support for Any Properties
+[Issue #6] - Add Inherited Types to Selection Collector
+[Issue #1] - Generate JavaDocs for DSL and SDO
+[Issue #2] - Default Empty Arrays per Type in SDO Generated Code
+
+New Features
+
+[Issue #10] - MySQL Support for RDB Reverse Engineering
+
+Tasks
+
+Wish
+

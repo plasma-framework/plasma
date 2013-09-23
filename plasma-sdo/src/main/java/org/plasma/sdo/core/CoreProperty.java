@@ -28,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import org.modeldriven.fuml.repository.Class_;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.config.PropertyBinding;
@@ -58,7 +60,6 @@ import org.plasma.sdo.repository.Enumeration;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
-
 import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 /**
@@ -71,6 +72,8 @@ public class CoreProperty implements PlasmaProperty {
     private org.plasma.sdo.repository.Property property;
     /** name attribute to support instance properties w/no repository element */
     private String name;
+    private QName qname;
+    private int qnameHashCode;
     // cached names, used/valued conditionally based on binding customizations
     // FIXME: cache these as instance properties
     private String physicalName;
@@ -108,6 +111,12 @@ public class CoreProperty implements PlasmaProperty {
 	        	    this.localName = binding.getLocalName().trim();
 	        }
 	        this.containingType = containingType;
+	        this.qname = new QName(this.containingType.getName(), this.name);
+	        this.qnameHashCode = this.qname.hashCode();
+        }
+        else {
+	        this.qname = new QName(this.name);        	
+	        this.qnameHashCode = this.qname.hashCode();
         }
     }
 
@@ -136,7 +145,9 @@ public class CoreProperty implements PlasmaProperty {
         	    this.localName = binding.getLocalName().trim();
         }
         this.containingType = containingType;
-        
+        this.qname = new QName(this.containingType.getName(), this.name);
+        this.qnameHashCode = this.qname.hashCode();
+       
         // add instance properties
         instanceProperties = new HashMap<Property, Object>();
         
@@ -170,6 +181,18 @@ public class CoreProperty implements PlasmaProperty {
                 instanceProperties.put(INSTANCE_PROPERTY_INT_MAXLENGTH, max);
                     
         }
+    }
+    
+    public int hashCode() {
+    	return this.qnameHashCode;
+    }
+    
+    public boolean equals(Object other) {
+    	if (other != null) {
+    		CoreType otherType = (CoreType)other;
+    		return this.qnameHashCode == otherType.hashCode();
+    	}
+    	return false;	
     }
     
     private String getDerivedName(PlasmaType type) {
@@ -716,15 +739,26 @@ public class CoreProperty implements PlasmaProperty {
      */
     public boolean isReadOnly() {
         
-        // For a delete() operation on data-object, it wants to unset all non-readonly
-        // properties, but we need pri-keys and references to determine what
-        // to delete !! This implies that pri-keys MUST always be read-only.
+        // For a delete() operation on data-object, the spec demands we unset all non-readonly
+        // properties, but services need pri-keys and references to determine what
+        // to delete in an underlying data store!! This implies that pri-key data properties MUST 
+    	// always be read-only. Unfortunately many data models are quite liberal
+    	// with setting many columns as pri-key(s), so assuming all these are
+    	// read only is a bad assumption. 
         
         // In general for persistence capable objects, we don't want users to modify pri-key
         // properties, but whether these are truly read only "should" be defined
         // in the model itself, but users will omit this for sure.    
+    	
+    	// Service implementors assembling a graph as a result of a query need to set read-only
+    	// data as well as reference properties. For data properties there is an easy bypass
+    	// mechanism, but for reference properties, it is critical that implentors use the
+    	// SDO APIs to link data objects as much is accomplished under the covers in terms of
+    	// graph edges and the like. Is there an extension API targeted for service implemetors
+    	// that does not check read-only on a set operation (??)
+        //return this.property.getIsReadonly() || (this.property.isDataType() && this.isKey(KeyType.primary));
         
-        return this.property.getIsReadonly() || this.isKey(KeyType.primary);
+        return this.property.getIsReadonly();
     }
     
     public String toString() {

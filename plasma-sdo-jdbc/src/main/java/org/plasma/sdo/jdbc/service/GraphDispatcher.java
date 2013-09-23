@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,6 +69,7 @@ import org.plasma.sdo.core.SnapshotMap;
 import org.plasma.sdo.profile.ConcurrencyType;
 import org.plasma.sdo.profile.ConcurrentDataFlavor;
 import org.plasma.sdo.profile.KeyType;
+
 
 
 import commonj.sdo.DataGraph;
@@ -210,7 +212,7 @@ public class GraphDispatcher extends JDBCSupport
     
     private void create(DataGraph dataGraph, PlasmaDataObject dataObject) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         PlasmaType type = (PlasmaType)dataObject.getType();
-        String uuid = (String)((CoreDataObject)dataObject).getUUIDAsString();
+        UUID uuid = ((CoreDataObject)dataObject).getUUID();
         if (uuid == null)
             throw new DataAccessException("expected UUID for inserted entity '" + type.getName() + "'");
         if (log.isDebugEnabled())
@@ -266,8 +268,7 @@ public class GraphDispatcher extends JDBCSupport
 	            if (log.isDebugEnabled()) {
 	                log.debug("mapping UUID '" + uuid + "' to pk (" + String.valueOf(pk) + ")");
 	            }
-	            // FIXME: multiple PK's not supported
-	            snapshotMap.put(uuid, pk); // map new PK back to UUID
+	            snapshotMap.put(uuid, new PropertyPair(targetPriKeyProperty, pk)); // map new PK back to UUID
             }
         }
         
@@ -355,8 +356,7 @@ public class GraphDispatcher extends JDBCSupport
     	            if (log.isDebugEnabled()) {
     	                log.debug("mapping UUID '" + uuid + "' to pk (" + String.valueOf(key.getValue()) + ")");
     	            }
-                    // FIXME: multiple PK's not supported
-                    snapshotMap.put(uuid, key.getValue()); // map new PK back to UUID\
+    	            snapshotMap.put(uuid, key);
                 }
             }
         }
@@ -802,17 +802,23 @@ public class GraphDispatcher extends JDBCSupport
             Object pk = resultDataObject.get(targetPriKeyProperty.getName());   
             if (pk == null)
             {
-                String uuid = (String)resultCoreObject.getUUIDAsString();
+                UUID uuid = resultCoreObject.getUUID();
                 if (uuid == null)
                     throw new DataAccessException("found no UUID value for entity '" 
                             + property.getType().getName() + "' when setting property "
                             + dataObject.getType().toString() + "." + property.getName());
-                pk = this.snapshotMap.get(uuid);
-                if (pk == null)
+                List<PropertyPair> pkPairs = this.snapshotMap.get(uuid);
+                if (pkPairs == null)
                     throw new DataAccessException("found no pri-key value for UUID '" + uuid 
                             + "' in id-map for entity '" 
                             + property.getType().getName() + "' when setting property "
                             + dataObject.getType().toString() + "." + property.getName());
+                if (pkPairs.size() != 1)
+                    throw new DataAccessException("found multiple pri-key value for UUID '" + uuid 
+                            + "' in id-map for entity '" 
+                            + property.getType().getName() + "' when setting property "
+                            + dataObject.getType().toString() + "." + property.getName());
+                pk = pkPairs.get(0).getValue();
             }
             resultValue = pk;  
             if (log.isDebugEnabled()) {

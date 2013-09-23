@@ -686,6 +686,18 @@
             <xsd:enumeration value="HBASE" />
         </xsd:restriction>
     </xsd:simpleType>
+ 
+     <xsd:simpleType name="RDBMSVendorName">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="oracle" />
+            <xsd:enumeration value="mysql" />
+            <xsd:enumeration value="db2" />
+            <xsd:enumeration value="mssql" />
+        </xsd:restriction>
+    </xsd:simpleType>
         
     <xsd:simpleType name="OptimizationStrategy">
         <xsd:annotation>

@@ -5,6 +5,7 @@ import org.plasma.provisioning.rdb.mysql.v5_5.TableColumn;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnConstraint;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnKeyUsage;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableConstraint;
+import org.plasma.provisioning.rdb.mysql.v5_5.View;
 import org.plasma.sdo.PlasmaDataObject;
 
 /**
@@ -20,6 +21,7 @@ import org.plasma.sdo.PlasmaDataObject;
  * @see org.plasma.provisioning.rdb.mysql.v5_5.TableColumnConstraint TableColumnConstraint
  * @see org.plasma.provisioning.rdb.mysql.v5_5.TableColumnKeyUsage TableColumnKeyUsage
  * @see org.plasma.provisioning.rdb.mysql.v5_5.TableConstraint TableConstraint
+ * @see org.plasma.provisioning.rdb.mysql.v5_5.View View
  */
 public interface Table extends PlasmaDataObject
 {
@@ -86,7 +88,21 @@ public interface Table extends PlasmaDataObject
 		 * <b>Data Store Mapping:</b>
 		 * Corresponds to the physical data store element <b>TABLES.TABLE_COMMENT</b>.
 		 */
-		tableComment
+		tableComment,
+		
+		/**
+		 * Represents the logical <a href="http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaProperty.html">Property</a> <b>tableType</b> which is part of the <a href="http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html">Type</a> <b>Table</b>.
+		 *
+		 * <p></p>
+		 * <b>Data Store Mapping:</b>
+		 * Corresponds to the physical data store element <b>TABLES.TABLE_TYPE</b>.
+		 */
+		tableType,
+		
+		/**
+		 * Represents the logical <a href="http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaProperty.html">Property</a> <b>view</b> which is part of the <a href="http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html">Type</a> <b>Table</b>.
+		 */
+		view
 	}
 
 
@@ -417,4 +433,90 @@ public interface Table extends PlasmaDataObject
 	 * Sets the value of the <b>tableComment</b> property to the given value.
 	 */
 	public void setTableComment(String value);
+
+
+	/**
+	 * Returns true if the <b>tableType</b> property is set.
+	 * @return true if the <b>tableType</b> property is set.
+	 */
+	public boolean isSetTableType();
+
+	/**
+	 * Unsets the <b>tableType</b> property, the value
+	 * of the property of the object being set to the property's
+	 * default value. The property will no longer be
+	 * considered set.
+	 */
+	public void unsetTableType();
+
+	/**
+	 * Returns the value of the <b>tableType</b> property.
+	 * @return the value of the <b>tableType</b> property.
+	 */
+	public String getTableType();
+
+	/**
+	 * Sets the value of the <b>tableType</b> property to the given value.
+	 * <p></p>
+	 * <b>Enumeration Constraints: </b><pre>
+	 *     <b>name:</b> TableType
+	 *     <b>URI:</b>http://org.plasma/sdo/mysql/5_5</pre>
+	 */
+	public void setTableType(String value);
+
+
+	/**
+	 * Returns true if the <b>view</b> property is set.
+	 * @return true if the <b>view</b> property is set.
+	 */
+	public boolean isSetView();
+
+	/**
+	 * Unsets the <b>view</b> property, clearing the underlying collection. The property will no longer be
+	 * considered set.
+	 */
+	public void unsetView();
+
+	/**
+	 * Creates and returns a new instance of Type {@link View} automatically establishing a containment relationship through the object's reference property, <b>view</b>.
+	 * @return a new instance of Type {@link View} automatically establishing a containment relationship through the object's reference property <b>view</b>.
+	 */
+	public View createView();
+
+	/**
+	 * Returns an array of <b>View</b> set for the object's multi-valued property <b>view</b>.
+	 * @return an array of <b>View</b> set for the object's multi-valued property <b>view</b>.
+	 */
+	public View[] getView();
+
+	/**
+	 * Returns the <b>View</b> set for the object's multi-valued property <b>view</b> based on the given index.
+	 * @param idx the index
+	 * @return the <b>View</b> set for the object's multi-valued property <b>view</b> based on the given index.
+	 */
+	public View getView(int idx);
+
+	/**
+	 * Returns a count for multi-valued property <b>view</b>.
+	 * @return a count for multi-valued property <b>view</b>.
+	 */
+	public int getViewCount();
+
+	/**
+	 * Sets the given array of Type <b>View</b> for the object's multi-valued property <b>view</b>.
+	 * @param value the array value
+	 */
+	public void setView(View[] value);
+
+	/**
+	 * Adds the given value of Type <b>View</b> for the object's multi-valued property <b>view</b>.
+	 * @param value the value to add
+	 */
+	public void addView(View value);
+
+	/**
+	 * Removes the given value of Type <b>View</b> for the object's multi-valued property <b>view</b>.
+	 * @param value the value to remove
+	 */
+	public void removeView(View value);
 }

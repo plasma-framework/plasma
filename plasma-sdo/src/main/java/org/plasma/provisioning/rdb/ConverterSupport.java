@@ -49,7 +49,7 @@ public class ConverterSupport {
     	 
     	//Pattern INVALID_XML_CHARS = Pattern.compile("[^\\u0009\\u000A\\u000D\\u0020-\\uD7FF\\uE000-\\uFFFD\uD800\uDC00-\uDBFF\uDFFF]");
     	//String preCleaned = INVALID_XML_CHARS.matcher(src).replaceAll("");
-    	Pattern INVALID_XML_CHARS = Pattern.compile("[^\\u0]");
+    	Pattern INVALID_XML_CHARS = Pattern.compile("[\\\\u0]");
     	String preCleaned = INVALID_XML_CHARS.matcher(src).replaceAll("");
     	
     	char[] chars = preCleaned.toCharArray();

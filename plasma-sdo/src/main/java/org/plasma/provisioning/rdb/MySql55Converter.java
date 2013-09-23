@@ -12,6 +12,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.Alias;
+import org.plasma.provisioning.Behavior;
+import org.plasma.provisioning.BehaviorType;
 import org.plasma.provisioning.Body;
 import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
@@ -43,11 +45,15 @@ import org.plasma.provisioning.rdb.mysql.v5_5.TableColumn;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnConstraint;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnKeyUsage;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableConstraint;
+import org.plasma.provisioning.rdb.mysql.v5_5.TableType;
+import org.plasma.provisioning.rdb.mysql.v5_5.View;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTable;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumn;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumnConstraint;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumnKeyUsage;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableConstraint;
+import org.plasma.provisioning.rdb.mysql.v5_5.query.QView;
+import org.plasma.provisioning.rdb.oracle.g11.sys.ViewComment;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.helper.PlasmaXMLHelper;
 import org.plasma.sdo.xml.DefaultOptions;
@@ -314,11 +320,13 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 		QTableConstraint tableConstraint = QTableConstraint.newQuery();
 		QTableColumnKeyUsage columnKeyUsage = QTableColumnKeyUsage.newQuery();
 		QTableColumnConstraint tableColumnConstraint = QTableColumnConstraint.newQuery();
-		table.select(table.wildcard());
-		table.select(table.tableColumn(tableColumn.owner().eq(schema)).wildcard());
-		table.select(table.tableConstraint(tableConstraint.owner().eq(schema)).wildcard());
-		table.select(table.tableColumnKeyUsage(columnKeyUsage.owner().eq(schema)).wildcard());
-		table.select(table.tableColumnConstraint(tableColumnConstraint.owner().eq(schema)).wildcard());
+		QView view = QView.newQuery();
+		table.select(table.wildcard()) 
+		     .select(table.tableColumn(tableColumn.owner().eq(schema)).wildcard()) 
+		     .select(table.tableConstraint(tableConstraint.owner().eq(schema)).wildcard()) 
+		     .select(table.tableColumnKeyUsage(columnKeyUsage.owner().eq(schema)).wildcard()) 
+		     .select(table.tableColumnConstraint(tableColumnConstraint.owner().eq(schema)).wildcard())
+		     .select(table.view(view.owner().eq(schema)).wildcard());
 		table.where(table.owner().eq(schema)
 			 .and(table.tableName().eq(tableName)));
         DataGraph[] results = this.client.find(table);
@@ -358,6 +366,34 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 			documentation.setBody(body);
 			clss.getDocumentations().add(documentation);
 		}
+    	
+		String tableTypeStr = table.getTableType().replace(' ', '_');
+    	TableType tableType = TableType.valueOf(tableTypeStr);
+    	if (tableType.ordinal() == TableType.VIEW.ordinal()) {
+    		if (table.getViewCount() == 1) {
+	    		View view = table.getView(0);
+	        	// add the view creation content
+	        	if (view.getViewDefinition() != null && view.getViewDefinition().length() > 0) {
+	        		Behavior create = new Behavior();
+	        		create.setLanguage("SQL");
+	        		create.setType(BehaviorType.CREATE);
+	        		create.setName(BehaviorType.CREATE.name().toLowerCase());
+	       		    create.setValue(filter(view.getViewDefinition()));
+	        		clss.getBehaviors().add(create);
+	        	}
+	        	
+	    		Behavior drop = new Behavior();
+	    		drop.setLanguage("SQL");
+	    		drop.setType(BehaviorType.DROP);
+	    		drop.setName(BehaviorType.DROP.name().toLowerCase());
+	    		drop.setValue("DROP VIEW " + pkg.getAlias().getPhysicalName() 
+	    				+ "." + clss.getAlias().getPhysicalName() + ";");
+	    		clss.getBehaviors().add(drop);   
+    		}
+    		else
+    			log.warn("no view definition found for '" + table.getTableName() + "'");
+    	}
+    	
     	
     	return clss;
     }	

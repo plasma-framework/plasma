@@ -425,7 +425,7 @@ public class Property
     public void accept(QueryVisitor visitor)
     {
         visitor.start(this);
-    	visitor.end(this);
+	    visitor.end(this);
     }
 
 }

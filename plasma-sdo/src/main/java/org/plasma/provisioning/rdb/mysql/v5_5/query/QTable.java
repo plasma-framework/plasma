@@ -12,6 +12,7 @@ import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumn;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumnConstraint;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumnKeyUsage;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableConstraint;
+import org.plasma.provisioning.rdb.mysql.v5_5.query.QView;
 import org.plasma.provisioning.rdb.mysql.v5_5.Table;
 
 /**
@@ -170,5 +171,32 @@ public class QTable extends DomainRoot
 	 */
 	public DataProperty tableName() {
 		return new DataNode(this, Table.PROPERTY.tableName.name());
+	}
+
+	/**
+	 * Returns a DSL data element for property, <b>tableType</b>.
+	 * @return a DSL data element for property, <b>tableType</b>.
+	 */
+	public DataProperty tableType() {
+		return new DataNode(this, Table.PROPERTY.tableType.name());
+	}
+
+	/**
+	 * Returns a DSL query element for reference property, <b>view</b>.
+	 * @return a DSL query element for reference property, <b>view</b>.
+	 */
+	public QView view() {
+		return new QView(this, Table.PROPERTY.view.name());
+	}
+	
+	/**
+	 * Returns a DSL query element for reference property, <b>view</b>, while adding the given path predicate expression. 
+	 * Path predicate expressions are used to restrict
+	 * the query results for a collection property within a <a href="http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaDataGraph.html">DataGraph</a>.
+	 * @param expr the path predicate expression
+	 * @return a DSL query element for reference property, <b>view</b>.
+	 */
+	public QView view(Expression expr) {
+		return new QView(this, Table.PROPERTY.view.name(), expr);
 	}
 }

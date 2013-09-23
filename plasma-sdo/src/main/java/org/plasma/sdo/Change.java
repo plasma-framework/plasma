@@ -33,7 +33,7 @@ public interface Change {
 
     public ChangeType getChangeType();
      
-    public List<PlasmaSetting> getSettings(String propertyName);
+    public List<ChangeSummary.Setting> getSettings(String propertyName);
     
     public void add(Property property, Object value);
     

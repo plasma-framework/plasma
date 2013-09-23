@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.plasma.query.InvalidPathPredicateException;
 import org.plasma.query.QueryException;
@@ -55,12 +56,12 @@ import commonj.sdo.Type;
  * @see org.plasma.query.model.Select 
  * @see commonj.sdo.Type
  */
+@Deprecated
 public class PropertySelectionCollector extends CollectorSupport 
     implements PropertySelection 
 {
     private Select select;
     // FIXME: what to do with repeated/multiple predicates
-    // 
     private Map<commonj.sdo.Property, Where> predicateMap; 
     private Map<Type, List<String>> propertyMap;
     private Map<Type, List<String>> singularPropertyMap;
@@ -80,11 +81,13 @@ public class PropertySelectionCollector extends CollectorSupport
 	@Override
 	public void collect(Where predicate) {
         QueryVisitor visitor = new DefaultQueryVisitor() {
+        	@Override
             public void start(Property property)                                                                            
             {    
                 collect(property);  
                 super.start(property);                         
-            }                                                                                                                                                                                                                                                                                                                                                               
+            }   
+        	@Override
             public void start(WildcardProperty wildcardProperty)                                                                            
             {     
                 collect(wildcardProperty);  
@@ -102,11 +105,13 @@ public class PropertySelectionCollector extends CollectorSupport
 			this.inheritedPropertyMap = new HashMap<Type, List<String>>();
 	        this.predicateMap = new HashMap<commonj.sdo.Property, Where>();
 	        QueryVisitor visitor = new DefaultQueryVisitor() {
+	        	@Override
 	            public void start(Property property)                                                                            
 	            {    
 	                collect(property);  
 	                super.start(property);                         
-	            }                                                                                                                                                                                                                                                                                                                                                               
+	            }   
+	        	@Override
 	            public void start(WildcardProperty wildcardProperty)                                                                            
 	            {     
 	                collect(wildcardProperty);  

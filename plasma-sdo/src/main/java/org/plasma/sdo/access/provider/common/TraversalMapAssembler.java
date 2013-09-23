@@ -61,11 +61,13 @@ public class TraversalMapAssembler
         if (select.getProperties().size() == 0)
         	throw new DataAccessException("Select clause has no properties");
         QueryVisitor visitor = new DefaultQueryVisitor() {
+        	@Override
             public void start(Property property)                                                                            
             {     
             	assembleProperty(property);                                                                                                          
                 super.start(property);                                                                  
-            }                                                                                                                                                                                                                                                                                                                                                               
+            } 
+        	@Override
             public void start(WildcardProperty wildcardProperty)                                                                            
             {     
             	assembleProperty(wildcardProperty);                                                                                                          

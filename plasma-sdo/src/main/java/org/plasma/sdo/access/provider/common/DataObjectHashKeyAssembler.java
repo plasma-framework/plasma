@@ -60,6 +60,7 @@ public class DataObjectHashKeyAssembler extends DefaultQueryVisitor
         hashKey = new StringBuffer("24");
     }
 
+    @Override
     public void start(Property property)                                                                            
     {                   
         //if (!property.getDistinct())

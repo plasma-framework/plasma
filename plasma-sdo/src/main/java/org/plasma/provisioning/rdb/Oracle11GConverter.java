@@ -482,7 +482,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     		Behavior create = new Behavior();
     		create.setLanguage("SQL");
     		create.setType(BehaviorType.CREATE);
-    		create.setName(BehaviorType.CREATE.name());
+    		create.setName(BehaviorType.CREATE.name().toLowerCase());
    		    create.setValue(filter(view.getText()));
     		clss.getBehaviors().add(create);
     	}
@@ -490,7 +490,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 		Behavior drop = new Behavior();
 		drop.setLanguage("SQL");
 		drop.setType(BehaviorType.DROP);
-		drop.setName(BehaviorType.DROP.name());
+		drop.setName(BehaviorType.DROP.name().toLowerCase());
 		drop.setValue("DROP VIEW " + pkg.getAlias().getPhysicalName() 
 				+ "." + clss.getAlias().getPhysicalName() + ";");
 		clss.getBehaviors().add(drop);

@@ -10,6 +10,7 @@ import org.plasma.provisioning.rdb.mysql.v5_5.TableColumn;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnConstraint;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnKeyUsage;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableConstraint;
+import org.plasma.provisioning.rdb.mysql.v5_5.View;
 
 /**
  * Generated implementation class representing the domain model entity <b>Table</b>.
@@ -638,5 +639,159 @@ public class TableImpl extends CoreDataObject implements Serializable, Table
 	 */
 	public void setTableName(String value){
 		super.set(Table.PROPERTY.tableName.name(), value);
+	}
+
+
+	/**
+	 * Returns true if the <b>tableType</b> property is set.
+	 * @return true if the <b>tableType</b> property is set.
+	 */
+	public boolean isSetTableType(){
+		return super.isSet(Table.PROPERTY.tableType.name());
+	}
+
+	/**
+	 * Unsets the <b>tableType</b> property, the value
+	 * of the property of the object being set to the property's
+	 * default value. The property will no longer be
+	 * considered set.
+	 */
+	public void unsetTableType(){
+		super.unset(Table.PROPERTY.tableType.name());
+	}
+
+	/**
+	 * Returns the value of the <b>tableType</b> property.
+	 * @return the value of the <b>tableType</b> property.
+	 */
+	public String getTableType(){
+		return (String)super.get(Table.PROPERTY.tableType.name());
+	}
+
+	/**
+	 * Sets the value of the <b>tableType</b> property to the given value.
+	 * <p></p>
+	 * <b>Enumeration Constraints: </b><pre>
+	 *     <b>name:</b> TableType
+	 *     <b>URI:</b>http://org.plasma/sdo/mysql/5_5</pre>
+	 */
+	public void setTableType(String value){
+		super.set(Table.PROPERTY.tableType.name(), value);
+	}
+
+
+	/**
+	 * Returns true if the <b>view</b> property is set.
+	 * @return true if the <b>view</b> property is set.
+	 */
+	public boolean isSetView(){
+		return super.isSet(Table.PROPERTY.view.name());
+	}
+
+	/**
+	 * Unsets the <b>view</b> property, clearing the underlying collection. The property will no longer be
+	 * considered set.
+	 */
+	public void unsetView(){
+		super.unset(Table.PROPERTY.view.name());
+	}
+
+	/**
+	 * Creates and returns a new instance of Type {@link View} automatically establishing a containment relationship through the object's reference property, <b>view</b>.
+	 * @return a new instance of Type {@link View} automatically establishing a containment relationship through the object's reference property <b>view</b>.
+	 */
+	public View createView(){
+		return (View)super.createDataObject(Table.PROPERTY.view.name());
+	}
+
+	@SuppressWarnings("unchecked")
+	/**
+	 * Returns an array of <b>View</b> set for the object's multi-valued property <b>view</b>.
+	 * @return an array of <b>View</b> set for the object's multi-valued property <b>view</b>.
+	 */
+	public View[] getView(){
+		List<View> list = (List<View>)super.get(Table.PROPERTY.view.name());
+		if (list != null) {
+			View[] array = new View[list.size()];
+			for (int i = 0; i < list.size(); i++)
+				array[i] = list.get(i);
+			return array;
+		}
+		else
+			return new View[0];
+	}
+
+	@SuppressWarnings("unchecked")
+	/**
+	 * Returns the <b>View</b> set for the object's multi-valued property <b>view</b> based on the given index.
+	 * @param idx the index
+	 * @return the <b>View</b> set for the object's multi-valued property <b>view</b> based on the given index.
+	 */
+	public View getView(int idx){
+		List<View> list = (List<View>)super.get(Table.PROPERTY.view.name());
+		if (list != null) {
+			return (View)list.get(idx);
+		}
+		else
+			throw new ArrayIndexOutOfBoundsException(idx);
+	}
+
+	@SuppressWarnings("unchecked")
+	/**
+	 * Returns a count for multi-valued property <b>view</b>.
+	 * @return a count for multi-valued property <b>view</b>.
+	 */
+	public int getViewCount(){
+		List<View> list = (List<View>)super.get(Table.PROPERTY.view.name());
+		if (list != null) {
+			return list.size();
+		}
+		else
+			return 0;
+	}
+
+	@SuppressWarnings("unchecked")
+	/**
+	 * Sets the given array of Type <b>View</b> for the object's multi-valued property <b>view</b>.
+	 * @param value the array value
+	 */
+	public void setView(View[] value){
+		List<View> list = (List<View>)super.get(Table.PROPERTY.view.name());
+		if (value != null && value.length > 0) {
+			if (list == null)
+				list = new ArrayList<View>();
+			for (int i = 0; i < value.length; i++)
+				list.add(value[i]);
+			super.set(Table.PROPERTY.view.name(), list);
+		}
+		else
+			throw new IllegalArgumentException("expected non-null and non-zero length array argument 'value' - use unsetView() method to remove this property");
+	}
+
+	@SuppressWarnings("unchecked")
+	/**
+	 * Adds the given value of Type <b>View</b> for the object's multi-valued property <b>view</b>.
+	 * @param value the value to add
+	 */
+	public void addView(View value){
+		List<View> list = (List<View>)super.get(Table.PROPERTY.view.name());
+		if (list == null)
+			list = new ArrayList<View>();
+				list.add(value);
+		// NOTE: SDO 2.1 spec specifies replacing the whole list on a multi-valued 'set' operation
+		super.setList(Table.PROPERTY.view.name(), list);
+	}
+
+	@SuppressWarnings("unchecked")
+	/**
+	 * Removes the given value of Type <b>View</b> for the object's multi-valued property <b>view</b>.
+	 * @param value the value to remove
+	 */
+	public void removeView(View value){
+		List<View> list = (List<View>)super.get(Table.PROPERTY.view.name());
+		if (list != null)
+				list.remove(value);
+		// NOTE: SDO 2.1 spec specifies replacing the whole list on a multi-valued 'set' operation
+		super.setList(Table.PROPERTY.view.name(), list);
 	}
 }
