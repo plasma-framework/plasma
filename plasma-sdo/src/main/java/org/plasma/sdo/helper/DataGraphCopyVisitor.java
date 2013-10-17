@@ -23,6 +23,7 @@ package org.plasma.sdo.helper;
 
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -30,6 +31,11 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.sdo.PlasmaDataGraph;
 import org.plasma.sdo.PlasmaDataGraphVisitor;
 import org.plasma.sdo.PlasmaDataObject;
+import org.plasma.sdo.core.CoreChangeSummary;
+import org.plasma.sdo.core.CoreConstants;
+import org.plasma.sdo.core.CoreDataObject;
+import org.plasma.sdo.core.CoreNode;
+import org.plasma.sdo.core.CoreObject;
 import org.plasma.sdo.helper.PlasmaDataFactory;
 
 import commonj.sdo.DataGraph;
@@ -38,26 +44,24 @@ import commonj.sdo.Property;
 import commonj.sdo.Type;
 
 /**
- * Creates a copy of any arbitrary DataGraph while exempting all
+ * Creates a copy of any arbitrary DataGraph. For all
  * DataObject nodes with a SDO type found in the given referenceTypes
- * array. For all "reference" types found in the source graph, these are
- * "re-parented" to the target graph. Rather than removing, reference nodes
- * from the source graph, it is required that the source graph be 
- * discarded. 
+ * array clears these from the change summary.
  */
 public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
     private static Log log = LogFactory.getLog(DataGraphCopyVisitor.class);
 	
 	private PlasmaDataObject result;
-	private Type[] referenceTypes;
 	private Map<String, PlasmaDataObject> resultMap = new HashMap<String, PlasmaDataObject>();
+	private HashSet<Type> referenceTypes;
 	
 	public DataGraphCopyVisitor() {
-		this.referenceTypes = new Type[0];
 	}
 	
 	public DataGraphCopyVisitor(Type[] referenceTypes) {
-		this.referenceTypes = referenceTypes;
+		this.referenceTypes = new HashSet<Type>(); 
+		for (Type t : referenceTypes)
+		   this.referenceTypes.add(t);
 	}
 	
 	public void visit(DataObject target, DataObject source,
@@ -68,13 +72,10 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 		// process the root and exit
 		if (source == null) {
 			DataGraph dataGraph = PlasmaDataFactory.INSTANCE.createDataGraph();
-			dataGraph.getChangeSummary().beginLogging(); // log changes from this point
-	            	
+			dataGraph.getChangeSummary().beginLogging(); // log changes from this point	            	
 			if (log.isDebugEnabled())
 				log.debug("copying root object "
-					+ targetObject.getType().getURI() + "#" + targetObject.getType().getName()
-					+ " (" + targetObject.getUUIDAsString() + ")");
-			
+					+ targetObject.getUUIDAsString());
 	    	Type rootType = target.getType();
 	    	result = (PlasmaDataObject)dataGraph.createRootObject(rootType);
 	    	copyDataProperties(targetObject, result);
@@ -91,61 +92,54 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 					+ " (" + sourceObject.getUUIDAsString() + ")");
 		
 		PlasmaDataObject targetResult = resultMap.get(targetObject.getUUIDAsString());
-		if (targetResult == null) {
-			// copy if not a reference type in this context
-			if (!isReferenceType(target.getType())) {
+		if (target.getContainer().equals(source)) {
+			if (targetResult == null) {
 				if (log.isDebugEnabled())
-					log.debug("copying/linking non-reference object "
-						+ targetObject.getType().getURI() + "#" + targetObject.getType().getName()
-						+ " (" + targetObject.getUUIDAsString() + ")");
-	    	    targetResult = (PlasmaDataObject)sourceResult.createDataObject(sourceProperty);
-	    	    copyDataProperties(targetObject, targetResult);
-	    	    resultMap.put(targetObject.getUUIDAsString(), targetResult);
+					log.debug("creating contained object "
+						+ targetObject.toString());
+    	        targetResult = (PlasmaDataObject)sourceResult.createDataObject(sourceProperty);
+    	        copyDataProperties(targetObject, targetResult);
+    	        resultMap.put(targetObject.getUUIDAsString(), targetResult);
 			}
-			else { // target is a reference obj
-				targetObject.setDataGraph(null); // set up to re-parent it
-				targetResult = targetObject;
-				
-				if (log.isDebugEnabled())
-					log.debug("linking reference object "
-						+ targetResult.getType().getURI() + "#" + targetResult.getType().getName()
-						+ " (" + targetResult.getUUIDAsString() + ")");
-			    if (!isReferenceType(sourceResult.getType())) {
-				    sourceResult.set(sourceProperty, targetResult);
-			    }
-			    else {	
-			    	targetResult.setDataGraph(sourceResult.getDataGraph());
-			    	// ignore since we should have re-parented it when it was a target
-			    }	
-			    resultMap.put(targetResult.getUUIDAsString(), targetResult);
-			}			
-		}
+			else {
+				// reparent
+			     if (log.isDebugEnabled())
+						log.debug("reparenting contained object "
+							+ targetObject.toString());
+				targetResult.setContainer(sourceResult);
+				targetResult.setContainmentProperty(sourceProperty);
+			}
+		}	
 		else {
-			if (log.isDebugEnabled())
-				log.debug("linking existing non-reference copy "
-					+ targetResult.getType().getURI() + "#" + targetResult.getType().getName()
-					+ " (" + targetResult.getUUIDAsString() + ")");
-		    if (!isReferenceType(sourceResult.getType())) {
-		    	if (sourceProperty.isMany())
-			        sourceResult.add(sourceProperty, targetResult);
-		    	else
-			        sourceResult.set(sourceProperty, targetResult);
-		    }
-		    else {
-		    	// noop
-		    }	
-		}		
+			 if (targetResult != null) {				 
+			     if (log.isDebugEnabled())
+						log.debug("linking existing object "
+							+ targetObject.toString());
+			     sourceResult.set(sourceProperty, targetResult);
+			 }
+			 else {
+				 // leave it orphaned till we get an event where source is the container
+			     if (log.isDebugEnabled())
+						log.debug("copying/linking orphaned object "
+							+ targetObject.toString());
+				 targetResult = (PlasmaDataObject)PlasmaDataFactory.INSTANCE.create(targetObject.getType());
+	    	     copyDataProperties(targetObject, targetResult);
+			     sourceResult.set(sourceProperty, targetResult);
+			     resultMap.put(targetObject.getUUIDAsString(), targetResult);
+			 }
+		}
+		
+		if (isReferenceType(targetResult.getType())) {
+			CoreChangeSummary changeSummary = (CoreChangeSummary)targetResult.getChangeSummary();
+			changeSummary.clear(targetResult);
+		    if (log.isDebugEnabled())
+				log.debug("clearing change summary for reference object "
+						+ targetObject.toString());
+		}
 	}
 	
-	private boolean isReferenceType(Type type) {
-		boolean found = false;
-		for (Type t : referenceTypes)
-            if (t.getName().equals(type.getName()) && 
-            	t.getURI().equals(type.getURI())) {	
-            	found = true;
-            	break;
-            }	
-		return found;
+	private boolean isReferenceType(Type type) {	
+		return referenceTypes != null && referenceTypes.contains(type);
 	}
 	
 	/**
@@ -164,9 +158,14 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
                 continue;
             if (property.getType().isDataType()) {
                 if (!property.isReadOnly())
-                	copy.set(property, value);
+                	copy.set(property, value); 
+                else
+                	((CoreNode)copy).getValueObject().put(property.getName(), value); // FIXME: what about change summary
             }
-        }		
+        }
+        Object timestamp = ((CoreDataObject)source).getValueObject().get(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP);
+        if (timestamp != null)
+            ((CoreDataObject)copy).getValueObject().put(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, timestamp);
 	}
 	
 	public DataObject getResult() {

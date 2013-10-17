@@ -28,5 +28,6 @@ import commonj.sdo.DataGraph;
 public interface DataGraphDispatcher {
 
     public SnapshotMap commit(DataGraph dataGraph);
+    public SnapshotMap commit(DataGraph[] dataGraphs);
     public void close();
 }

@@ -409,7 +409,7 @@ public class CoreDataObject extends CoreNode
                     + type.getURI() + "#" + type.getName());
         }
 
-        DataObject dataObject = PlasmaDataFactory.INSTANCE.create(
+        PlasmaDataObject dataObject = (PlasmaDataObject)PlasmaDataFactory.INSTANCE.create(
                 type);
 
         if (property.isMany())
@@ -418,19 +418,18 @@ public class CoreDataObject extends CoreNode
             this.set(property, dataObject);
         
         // make this the new object's container
-        PlasmaDataObject plasmaDataObject = ((PlasmaNode)dataObject).getDataObject();
-        plasmaDataObject.setContainer(this);
-        plasmaDataObject.setContainmentProperty(property);
+        dataObject.setContainer(this);
+        dataObject.setContainmentProperty(property);
         
  
         if (this.getDataGraph() != null) {
                         
-            plasmaDataObject.setDataGraph(this.getDataGraph());           
+        	dataObject.setDataGraph(this.getDataGraph());           
             
             PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)this.getDataGraph().getChangeSummary();
              
-            changeSummary.created(plasmaDataObject);
-            changeSummary.modified(this, property, plasmaDataObject);
+            changeSummary.created(dataObject);
+            changeSummary.modified(this, property, dataObject);
         }   
         else
             throw new IllegalStateException("source data-object has no data-graph");
@@ -752,7 +751,6 @@ dataObject.set(property, dataHelper.convert(property, value));
                         return;
                     }
                 }
-                
                 PlasmaDataLink link = createLink(property, targetNode);
                 propertyValue = link; // set the link into this node below
             }
@@ -789,7 +787,7 @@ dataObject.set(property, dataHelper.convert(property, value));
                                 + this.type.getURI() + "#" + this.type.getName() + "." + property.getName()
                                 + " - not class, " + listValue.getClass().getName());  
                     if (edgeList != null) {
-                        PlasmaDataLink link = createLink(property, (PlasmaNode)listValue);
+                    	PlasmaDataLink link = createLink(property, (PlasmaNode)listValue);
                         edgeList.add(link); 
                     }
                 }                                    
@@ -809,6 +807,19 @@ dataObject.set(property, dataHelper.convert(property, value));
         }        
         
         super.setValue(property.getName(), propertyValue);
+        
+        // register an opposite change after the link between objects is created
+        // as change summary creates a path between them
+        /*
+        if (!property.getType().isDataType()) {
+            if (!property.isMany()) {
+        	    this.oppositeModified(this, property, (PlasmaDataLink)propertyValue);        	
+            }
+            else {
+        	    this.oppositeModified(this, property, (List<PlasmaEdge>)propertyValue);        	
+            }
+        }
+        */
     }   
     
 
@@ -1196,35 +1207,10 @@ dataObject.set(property, dataHelper.convert(property, value));
 	    
 	    if (!property.isMany()) {
 	        PlasmaDataLink link = (PlasmaDataLink)dataObject.getValue(property.getName());
-	        PlasmaNode oppositeNode = link.getOpposite(dataObject);
-	        PlasmaDataObject oppositeDataObject = oppositeNode.getDataObject();
-	        
-            if (!oppositeProperty.isMany()) { // one-to-one
-                PlasmaDataLink oppositeLink = (PlasmaDataLink)((CoreDataObject)oppositeDataObject).getValue(oppositeProperty.getName());
-                if (oppositeLink == null || !oppositeLink.equals(link))
-                    throw new IllegalStateException("expected equivalent link for property, "
-                        + this.getType().getURI() + "#" + this.getType().getName() 
-                        + "." + property.getName());
-                // register change on opposite
-                if (oppositeDataObject.getDataGraph() != null) {
-                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
-                    changeSummary.modified(oppositeDataObject, oppositeProperty, this);
-                }               
-            }
-            else {
-                // register change on opposite
-                List<DataObject> oppositeDataObjectList = oppositeDataObject.getList(oppositeProperty);
-                if (oppositeDataObject.getDataGraph() != null) {
-                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
-                    changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeDataObjectList);
-                }               
-            }   
-		}
-		else { // is Many
-	        List<PlasmaDataLink> links = (List<PlasmaDataLink>)dataObject.getValue(property.getName());
-	        for (PlasmaDataLink link : links) {
-	            PlasmaNode oppositeNode = link.getOpposite(dataObject);
-	            PlasmaDataObject oppositeDataObject = oppositeNode.getDataObject();
+	        if (link != null) {
+		        PlasmaNode oppositeNode = link.getOpposite(dataObject);
+		        PlasmaDataObject oppositeDataObject = oppositeNode.getDataObject();
+		        
 	            if (!oppositeProperty.isMany()) { // one-to-one
 	                PlasmaDataLink oppositeLink = (PlasmaDataLink)((CoreDataObject)oppositeDataObject).getValue(oppositeProperty.getName());
 	                if (oppositeLink == null || !oppositeLink.equals(link))
@@ -1234,7 +1220,8 @@ dataObject.set(property, dataHelper.convert(property, value));
 	                // register change on opposite
 	                if (oppositeDataObject.getDataGraph() != null) {
 	                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
-	                    changeSummary.modified(oppositeDataObject, oppositeProperty, this);
+	                    if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
+	                        changeSummary.modified(oppositeDataObject, oppositeProperty, this);
 	                }               
 	            }
 	            else {
@@ -1242,13 +1229,120 @@ dataObject.set(property, dataHelper.convert(property, value));
 	                List<DataObject> oppositeDataObjectList = oppositeDataObject.getList(oppositeProperty);
 	                if (oppositeDataObject.getDataGraph() != null) {
 	                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
-	                    changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeDataObjectList);
+	                    if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
+	                        changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeDataObjectList);
 	                }               
-	            }   
+	            } 
+	        }
+		}
+		else { // is Many
+	        List<PlasmaDataLink> links = (List<PlasmaDataLink>)dataObject.getValue(property.getName());
+	        if (links != null) {
+		        for (PlasmaDataLink link : links) {
+		            PlasmaNode oppositeNode = link.getOpposite(dataObject);
+		            PlasmaDataObject oppositeDataObject = oppositeNode.getDataObject();
+		            if (!oppositeProperty.isMany()) { // one-to-one
+		                PlasmaDataLink oppositeLink = (PlasmaDataLink)((CoreDataObject)oppositeDataObject).getValue(oppositeProperty.getName());
+		                if (oppositeLink == null || !oppositeLink.equals(link))
+		                    throw new IllegalStateException("expected equivalent link for property, "
+		                        + this.getType().getURI() + "#" + this.getType().getName() 
+		                        + "." + property.getName());
+		                // register change on opposite
+		                if (oppositeDataObject.getDataGraph() != null) {
+		                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
+		                    if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
+		                        changeSummary.modified(oppositeDataObject, oppositeProperty, this);
+		                }               
+		            }
+		            else {
+		                // register change on opposite
+		                List<DataObject> oppositeDataObjectList = oppositeDataObject.getList(oppositeProperty);
+		                if (oppositeDataObject.getDataGraph() != null) {
+		                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
+		                    if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
+		                        changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeDataObjectList);
+		                }               
+		            }   
+		        }
 	        }
 		}
     }
-   
+
+	private void oppositeModified(CoreDataObject dataObject, Property property, PlasmaDataLink link)
+    {
+	    Property oppositeProperty = property.getOpposite();
+	    if (oppositeProperty == null)
+	    	return;
+	    
+	    if (property.isMany()) {
+	    	log.warn("expected singular property not multi-property, " + property.toString());
+	    	return;
+	    }
+        PlasmaNode oppositeNode = link.getOpposite(dataObject);
+        PlasmaDataObject oppositeDataObject = oppositeNode.getDataObject();
+        
+        if (!oppositeProperty.isMany()) { // one-to-one
+            PlasmaDataLink oppositeLink = (PlasmaDataLink)((CoreDataObject)oppositeDataObject).getValue(oppositeProperty.getName());
+            if (oppositeLink == null || !oppositeLink.equals(link))
+                throw new IllegalStateException("expected equivalent link for property, "
+                    + this.getType().getURI() + "#" + this.getType().getName() 
+                    + "." + property.getName());
+            // register change on opposite
+            if (oppositeDataObject.getDataGraph() != null) {
+                PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
+                if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
+                    changeSummary.modified(oppositeDataObject, oppositeProperty, this);
+            }               
+        }
+        else {
+            // register change on opposite
+            List<DataObject> oppositeDataObjectList = oppositeDataObject.getList(oppositeProperty);
+            if (oppositeDataObject.getDataGraph() != null) {
+                PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
+                if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
+                    changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeDataObjectList);
+            }               
+        } 
+	}
+	    	    
+	private void oppositeModified(CoreDataObject dataObject, Property property, List<PlasmaEdge> links)
+    {
+	    Property oppositeProperty = property.getOpposite();
+	    if (oppositeProperty == null)
+	    	return;
+	    if (!property.isMany()) {
+	    	log.warn("expected multi property not sungular property, " + property.toString());
+	    	return;
+	    }
+	    
+        for (PlasmaEdge link : links) {
+            PlasmaNode oppositeNode = link.getOpposite(dataObject);
+            PlasmaDataObject oppositeDataObject = oppositeNode.getDataObject();
+            if (!oppositeProperty.isMany()) { // one-to-one
+                PlasmaDataLink oppositeLink = (PlasmaDataLink)((CoreDataObject)oppositeDataObject).getValue(oppositeProperty.getName());
+                if (oppositeLink == null || !oppositeLink.equals(link))
+                    throw new IllegalStateException("expected equivalent link for property, "
+                        + this.getType().getURI() + "#" + this.getType().getName() 
+                        + "." + property.getName());
+                // register change on opposite
+                if (oppositeDataObject.getDataGraph() != null) {
+                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
+                    if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
+                        changeSummary.modified(oppositeDataObject, oppositeProperty, this);
+                }               
+            }
+            else {
+                // register change on opposite
+                List<DataObject> oppositeDataObjectList = oppositeDataObject.getList(oppositeProperty);
+                if (oppositeDataObject.getDataGraph() != null) {
+                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
+                    if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
+                        changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeDataObjectList);
+                }               
+            }   
+        }
+    }
+	
     /**
      * Looks at the opposite property, if exists, for the given data object
      * and reference property, makes the structural the change appropriate

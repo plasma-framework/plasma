@@ -103,7 +103,11 @@ public class CoreChange implements Change, Serializable {
     		buf.append(CorePathAssembler.PATH_DELIM);
     		this.pathDepthFromRoot = sourceChange.getPathDepthFromRoot() + 1;
     	}
-		
+		if (target.getContainmentProperty() == null)
+	         throw new IllegalStateException("data-object, " 
+       		     + target.toString() 
+       		     + " has no containment property");			
+    	
     	if (!target.getContainmentProperty().isMany()) {
     		buf.append(target.getContainmentProperty().getName());
     	}

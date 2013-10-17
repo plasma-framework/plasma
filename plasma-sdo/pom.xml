@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.1.4</version>
+      <version>1.1.5</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-sdo</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
   <packaging>jar</packaging>
 
   <name>Plasma SDO</name>
@@ -64,11 +64,6 @@
 		<version>1.6.2</version>
 	</dependency>
 	<dependency>
-		<groupId>xerces</groupId>
-		<artifactId>xerces</artifactId>
-		<version>1.4.4</version>
-	</dependency>
-	<dependency>
 		<groupId>xalan</groupId>
 		<artifactId>xalan</artifactId>
 		<version>2.6.0</version>
@@ -83,6 +78,7 @@
 		<artifactId>sjsxp</artifactId>
 		<version>1.0.1</version>
 	</dependency>
+	<!-- Removed Xerces 1.1.4 as 2.6.2 included with Jaxen -->
 	<dependency>
 		<groupId>jaxen</groupId>
 		<artifactId>jaxen</artifactId>
@@ -126,7 +122,7 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>
-      <version>1.1.4</version>
+      <version>1.1.5</version>
     </dependency>
   </dependencies>
 	<build>
@@ -252,7 +248,7 @@
                     <target>   
                       <echo message="####Generate profile classes####"/>                                              
                       <property name="compile_classpath" refid="maven.compile.classpath"/>
-                      <property name="release_suffix" value="1.1.4"/>
+                      <property name="release_suffix" value="1.1.5"/>
                                                                                                                                                                                                   
                       <!--                                                                                                                                                                                                                                           
                       <echo message="compile classpath: ${compile_classpath}"/>                                                                                                                                                                                      
@@ -282,7 +278,7 @@
                     <target>                                                 
                       <echo message="####Generate profile interfaces####"/>                                              
                       <property name="compile_classpath" refid="maven.compile.classpath"/>
-                      <property name="release_suffix" value="1.1.4"/>
+                      <property name="release_suffix" value="1.1.5"/>
                       <path id="cp">                                                                                                                                                                                                                             
                          <pathelement path="${compile_classpath}"/>                                                                                                                                                                                                  
                       </path>	                                                                                                                                                                                                                                       

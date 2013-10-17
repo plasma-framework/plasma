@@ -306,6 +306,8 @@ public class CoreType implements PlasmaType {
      * @return the name of this Type as a byte array
      */
     public byte[] getNameBytes() {
+    	if (this.instancePropertiesMap == null)
+    		this.lazyLoadProperties();
     	byte[] result = (byte[])this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_BYTES_NAME_BYTES);
         if (result == null) {
         	result = this.getName().getBytes(
@@ -344,6 +346,8 @@ public class CoreType implements PlasmaType {
      * @return the namespace qualified logical name of this Type as a byte array
      */
     public byte[] getQualifiedNameBytes() {
+    	if (this.instancePropertiesMap == null)
+    		this.lazyLoadProperties();
     	byte[] result = (byte[])this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_BYTES_QUALIFIED_NAME_BYTES);
         if (result == null) {
         	result = this.getQualifiedName().toString().getBytes(
@@ -395,6 +399,8 @@ public class CoreType implements PlasmaType {
      * @return the namespace qualified physical name of this Type as a byte array, or null if no physical alias name exists.
      */
     public byte[] getQualifiedPhysicalNameBytes() {
+    	if (this.instancePropertiesMap == null)
+    		this.lazyLoadProperties();
     	byte[] result = (byte[])this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_BYTES_QUALIFIED_PHYSICAL_NAME_BYTES);
         if (result == null) {
         	QName qname = getQualifiedPhysicalName(); 
@@ -431,6 +437,8 @@ public class CoreType implements PlasmaType {
      * @return the URI of this Type as a byte array
      */    
     public byte[] getURIBytes() {
+    	if (this.instancePropertiesMap == null)
+    		this.lazyLoadProperties();
     	byte[] result = (byte[])this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_BYTES_URI_BYTES);
         if (result == null) {
         	result = this.getURI().getBytes(
@@ -469,6 +477,8 @@ public class CoreType implements PlasmaType {
      * @return the physical name alias of this Type as a byte array, or null if no physical alias name exists.
      */
     public byte[] getPhysicalNameBytes() {
+    	if (this.instancePropertiesMap == null)
+    		this.lazyLoadProperties();
     	byte[] result = (byte[])this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_BYTES_PHYSICAL_NAME_BYTES);
         if (result == null) {
         	String name = this.getPhysicalName();
@@ -509,6 +519,8 @@ public class CoreType implements PlasmaType {
      * @return the local name of this Type as a byte array
      */
     public byte[] getLocalNameBytes() {
+    	if (this.instancePropertiesMap == null)
+    		this.lazyLoadProperties();
     	byte[] result = (byte[])this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_BYTES_LOCAL_NAME_BYTES);
         if (result == null) {
         	result = this.getLocalName().getBytes(

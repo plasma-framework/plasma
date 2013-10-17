@@ -130,6 +130,48 @@ public interface Selection {
 	public Set<commonj.sdo.Property> getInheritedProperties(Type type);
 
 	/**
+	 * Returns the unique set of inherited data and reference 
+	 * properties collected for the given type, and any base types
+	 * of the given type, for the given
+	 * (query) graph level.
+	 * @param type the type
+	 * @param level the specific graph level where the properties were specified in the selection
+	 * @return the unique set of inherited data and reference 
+	 * properties collected for the given type, and any base types
+	 * of the given type, irrespective
+	 * of the (query) graph level
+	 */
+	public Set<commonj.sdo.Property> getInheritedProperties(Type type, int level);
+
+	/**
+	 * Returns the unique set of inherited data and reference 
+	 * properties collected for the given Type for the given
+	 * (query) graph edge source property.
+	 * @param type the type (query) graph edge source property
+	 * @param sourceProperty the 
+	 * @param level the specific graph level where the properties were specified in the selection
+	 * @return the unique set of inherited data and reference 
+	 * properties collected for the given Type for the given
+	 * (query) graph edge source property.
+	 */
+	public Set<commonj.sdo.Property> getInheritedProperties(Type type, commonj.sdo.Property sourceProperty);
+
+	/**
+	 * Returns the unique set of inherited data and reference 
+	 * properties collected for the given Type for the given
+	 * (query) graph edge source property at the given traversal 
+	 * level or graph depth.
+	 * @param type the type (query) graph edge source property
+	 * @param sourceProperty the 
+	 * @param level the traversal level or graph depth
+	 * @return the unique set of inherited data and reference 
+	 * properties collected for the given Type for the given
+	 * (query) graph edge source property.
+	 */
+	public Set<commonj.sdo.Property> getInheritedProperties(Type type, commonj.sdo.Property sourceProperty, int level);
+	
+
+	/**
 	 * Returns the unique set of data and reference 
 	 * properties collected for the given Type for the given
 	 * (query) graph level.
@@ -144,36 +186,35 @@ public interface Selection {
 	/**
 	 * Returns the unique set of data and reference 
 	 * properties collected for the given Type for the given
-	 * (query) graph edge source property, and for the given
-	 * (query) graph level.
+	 * (query) graph edge source property.
 	 * @param type the type (query) graph edge source property
 	 * @param sourceProperty the 
 	 * @param level the specific graph level where the properties were specified in the selection
 	 * @return the unique set of data and reference 
 	 * properties collected for the given Type for the given
-	 * (query) graph edge source property, and for the given
-	 * (query) graph level.
+	 * (query) graph edge source property.
 	 */
 	public Set<commonj.sdo.Property> getProperties(Type type, commonj.sdo.Property sourceProperty);
 	
 	/**
 	 * Returns the unique set of data and reference 
 	 * properties collected for the given Type for the given
-	 * (query) graph edge source property.
+	 * (query) graph edge source property at the given traversal 
+	 * level or graph depth.
 	 * @param type the type (query) graph edge source property
 	 * @param sourceProperty the 
+	 * @param level the traversal level or graph depth
 	 * @return the unique set of data and reference 
 	 * properties collected for the given Type for the given
 	 * (query) graph edge source property.
 	 */
 	public Set<commonj.sdo.Property> getProperties(Type type, commonj.sdo.Property sourceProperty, int level);
-	
+		
 	/**
-	 * Traverses the given predicate adding its properties
-	 * and property paths to the selection.
-	 * @param predicate the predicate
+	 * Returns true if the selection has path predicates. 
+	 * @return true if the selection has path predicates.
 	 */
-	public void collect(Where predicate);
+	public boolean hasPredicates();
 	
 	/**
 	 * Returns the predicate for the given property or null

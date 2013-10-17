@@ -101,7 +101,15 @@ public class GraphDispatcher extends JDBCSupport
         if (sequenceGenerator != null)
             sequenceGenerator.close();
     }
+    
+	@Override
+	public SnapshotMap commit(DataGraph[] dataGraphs) {
+		for (DataGraph dataGraph : dataGraphs)
+			commit(dataGraph);
+		return this.snapshotMap;
+	}
      
+	@Override
     public SnapshotMap commit(DataGraph dataGraph) {
         
         if (username == null || username.length() == 0)
@@ -927,5 +935,7 @@ public class GraphDispatcher extends JDBCSupport
         }                
     
     }
+
+
      
 }
