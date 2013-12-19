@@ -29,6 +29,8 @@ import org.plasma.sdo.PlasmaProperty;
  */
 public class PropertyPair {
 	private PlasmaProperty prop;
+    /** the property which corresponds to the value. Can be null in which case the original property is used */	
+	private PlasmaProperty valueProp;
 	private Object value;
 	private int column;
 	private String propertyPath;
@@ -40,6 +42,10 @@ public class PropertyPair {
 	public PropertyPair(PlasmaProperty prop, Object value) {
     	this.prop = prop;
     	this.value = value;
+    	if (this.prop == null)
+    		throw new IllegalArgumentException("expected non-null 'prop' argument");
+    	if (this.value == null)
+    		throw new IllegalArgumentException("expected non-null 'value' argument");
     }
 	public PlasmaProperty getProp() {
 		return prop;
@@ -49,6 +55,13 @@ public class PropertyPair {
 	}
 	public int getColumn() {
 		return column;
+	}
+		
+	public PlasmaProperty getValueProp() {
+		return valueProp;
+	}
+	public void setValueProp(PlasmaProperty valueProp) {
+		this.valueProp = valueProp;
 	}
 	public void setColumn(int column) {
 		this.column = column;

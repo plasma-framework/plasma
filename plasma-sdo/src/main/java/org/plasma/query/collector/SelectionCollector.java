@@ -33,6 +33,7 @@ import org.plasma.query.InvalidPathPredicateException;
 import org.plasma.query.QueryException;
 import org.plasma.query.model.AbstractPathElement;
 import org.plasma.query.model.AbstractProperty;
+import org.plasma.query.model.OrderBy;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.PathElement;
 import org.plasma.query.model.PathNode;
@@ -61,6 +62,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	private static Set<commonj.sdo.Property> EMPTY_PROPERTY_SET = new HashSet<commonj.sdo.Property>();
 	private Select select;
 	private Where where;
+	private OrderBy orderBy;
 	
 	// FIXME: what to do with repeated/multiple predicates
 	private Map<commonj.sdo.Property, Where> predicateMap;
@@ -101,6 +103,21 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 		this.select = select;
 		this.where = where;
 	}
+	
+	public SelectionCollector(Select select, Where where, OrderBy orderBy, Type rootType) {
+		super(rootType);
+		this.select = select;
+		this.where = where;
+		this.orderBy = orderBy;
+	}
+
+	public SelectionCollector(Select select, Where where, OrderBy orderBy, Type rootType,
+			boolean onlySingularProperties) {
+		super(rootType, onlySingularProperties);
+		this.select = select;
+		this.where = where;
+		this.orderBy = orderBy;
+	}	
 	
 	public SelectionCollector(Where where, Type rootType) {
 		super(rootType);
@@ -165,6 +182,22 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 					}
 				};
 				this.where.accept(visitor);
+			}
+			if (this.orderBy != null) {
+				QueryVisitor visitor = new DefaultQueryVisitor() {
+					@Override
+					public void start(Property property) {
+						collect(property);
+						super.start(property);
+					}
+	
+					@Override
+					public void start(WildcardProperty wildcardProperty) {
+						collect(wildcardProperty);
+						super.start(wildcardProperty);
+					}
+				};
+				this.orderBy.accept(visitor);
 			}
 		}
 	}

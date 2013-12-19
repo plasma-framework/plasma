@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.1.5</version>
+      <version>1.1.6</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-maven-plugin</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
   <packaging>maven-plugin</packaging>
 
   <name>Plasma Maven Plugins</name>
@@ -90,12 +90,22 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-sdo</artifactId>
-      <version>1.1.5</version>
+      <version>1.1.6</version>
+      <exclusions>
+      	<exclusion>
+      		<artifactId>icu4j</artifactId>
+      		<groupId>com.ibm.icu</groupId>
+      	</exclusion>
+      	<exclusion>
+      		<artifactId>jaxen</artifactId>
+      		<groupId>jaxen</groupId>
+      	</exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-sdo-jdbc</artifactId>
-      <version>1.1.5</version>
+      <version>1.1.6</version>
     </dependency>
   </dependencies>
   <build>

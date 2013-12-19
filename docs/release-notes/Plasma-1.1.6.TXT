@@ -1,8 +1,8 @@
 Release Notes
 
-Plasma 1.1.5 Release Notes
+Plasma 1.1.6 Release Notes
 
-Plasma 1.1.5 is a production release of Plasma.
+Plasma 1.1.6 is a production release of Plasma.
 
 The full list of changes can be found in our issue management system github, and is reproduced below.
 See https://github.com/terrameta/plasma/issues. 
@@ -12,19 +12,18 @@ Major Changes
 
 Bugs
 
-[Issue #17] - CoreType Lazy Initialization Before Instance Properties Used
+[Issue #19] - CoreProperty Equals Method
 
 Improvements
 
-[Issue #16] - Selection Collector Cleanup
+[Issue #18] - Selection Collector Rework
+[Issue #20] - Add 'Value' Property to PropertyPair
 
 
 New Features
-NONE
+
 
 Tasks
-NONE
 
 Wish
-NONE
 

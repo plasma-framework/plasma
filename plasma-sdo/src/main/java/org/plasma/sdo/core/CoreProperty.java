@@ -189,7 +189,7 @@ public class CoreProperty implements PlasmaProperty {
     
     public boolean equals(Object other) {
     	if (other != null) {
-    		CoreType otherType = (CoreType)other;
+    		CoreProperty otherType = (CoreProperty)other;
     		return this.qnameHashCode == otherType.hashCode();
     	}
     	return false;	
