@@ -301,8 +301,10 @@ public class PropertyAssembler extends AbstractAssembler {
     	if (typeQName == null) {
         	LocalSimpleType lst = attribute.getSimpleType();
         	Restriction rest = lst.getRestriction();
-        	ValueConstraint constraint = constraintAssembler.buildValueConstraint(rest);
-        	property.setValueConstraint(constraint);
+        	if (rest != null) {
+        	    ValueConstraint constraint = constraintAssembler.buildValueConstraint(rest);
+        	    property.setValueConstraint(constraint);
+        	}
     	}
     	else {  
         	if (typeQName.getNamespaceURI() != null && typeQName.getNamespaceURI().equals(this.support.getSchema().getTargetNamespace())) {
@@ -313,7 +315,7 @@ public class PropertyAssembler extends AbstractAssembler {
 				buildDataTypeReference(property, typeQName);
 			}
 			else 
-    			log.warn("cliud not process namespace URI found for type, "
+    			log.warn("could not process namespace URI found for type, "
     					+ typeQName.toString());   
     	}
     	

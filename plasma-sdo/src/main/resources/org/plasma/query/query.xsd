@@ -303,12 +303,12 @@
 				<xsd:sequence>
 					<xsd:element name="Query" type="query:Query" minOccurs="0" />
 					<xsd:element name="As" type="query:Projection" minOccurs="0" />
+                    <xsd:element name="Function" type="query:Function" minOccurs="0" maxOccurs="unbounded"/>
 				</xsd:sequence>
 				<xsd:attribute name="name" type="xsd:string" use="required"/>
 				<xsd:attribute name="values" type="xsd:boolean" use="optional" default="false"/>
 				<xsd:attribute name="distinct" type="xsd:boolean" use="optional" default="false"/>
 				<xsd:attribute name="direction" type="query:SortDirectionValues" use="optional" default="ASC"/>
-				<xsd:attribute name="function" type="query:FunctionValues" use="optional" />
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -499,6 +499,30 @@
     
     <xsd:element name="NullLiteral" type="query:NullLiteral"/>
 
+    <xsd:complexType name="Function">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element ref="query:FunctionArg" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="query:FunctionValues" use="required" />
+    </xsd:complexType>
+
+    <xsd:element name="Function" type="query:Function"/>
+
+    <xsd:complexType name="FunctionArg">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="query:AbstractFunctionArg">
+                <xsd:attribute name="name" type="xsd:string" use="optional" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="FunctionArg" type="query:FunctionArg"/>
 
     <!-- abstract types -->
     <xsd:complexType name="AbstractPathElement" abstract="true">
@@ -518,9 +542,16 @@
 		    <xsd:element name="Path" type="query:Path" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
+    
+    <xsd:complexType name="AbstractFunctionArg" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
 
-
-	
     <!-- simple types -->
 	<xsd:simpleType name="RelationalOperatorValues">
 		<xsd:restriction base="xsd:string">
@@ -583,10 +614,27 @@
 	</xsd:simpleType>
 	<xsd:simpleType name="FunctionValues">
 		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="MIN"/>
-			<xsd:enumeration value="MAX"/>
-			<xsd:enumeration value="AVG"/>
-			<xsd:enumeration value="SUM"/>
+			<xsd:enumeration value="min"/>
+			<xsd:enumeration value="max"/>
+			<xsd:enumeration value="avg"/>
+			<xsd:enumeration value="sum"/>
+			
+            <xsd:enumeration value="abs"/>
+            <xsd:enumeration value="ceiling"/>
+            <xsd:enumeration value="floor"/>
+            <xsd:enumeration value="round"/>
+            
+            <xsd:enumeration value="substringBefore"/>
+            <xsd:enumeration value="substringAfter"/>
+            <xsd:enumeration value="normalizeSpace"/>
+            <xsd:enumeration value="upperCase"/>
+            <xsd:enumeration value="lowerCase"/>
+            
+            <xsd:enumeration value="yearFromDate"/>
+            <xsd:enumeration value="monthFromDate"/>
+            <xsd:enumeration value="dayFromDate"/>
+            <xsd:enumeration value="timezoneFromDate"/>
+            
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="QueryLanguageValues">

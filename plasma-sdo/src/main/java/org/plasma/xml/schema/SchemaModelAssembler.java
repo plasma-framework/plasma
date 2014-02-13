@@ -125,6 +125,8 @@ public class SchemaModelAssembler {
 		if (destNamespacePrefix == null || destNamespacePrefix.trim().length() == 0)
 			throw new IllegalArgumentException("expected 'destNamespacePrefix' argument");
 		
+		if (log.isDebugEnabled())
+		    log.debug("constructing schema for model: " + model.getName());
 		this.helper = 
 			new ModelAdapter(model);
 		
@@ -135,19 +137,28 @@ public class SchemaModelAssembler {
 		ComplexType serializationBaseType = buildSerializationBaseType();
 		
 		TypeAdapter[] types = helper.getTypesArray();
+		if (log.isDebugEnabled())
+		    log.debug("processing " + types.length + " types");
 
 		for (TypeAdapter adapter : types)
 		{	
-			if (!(adapter.getType() instanceof Class))
+			if (!(adapter.getType() instanceof Class)) {
+	    		if (log.isDebugEnabled())
+	    		    log.debug("ignoring type: " + adapter.getType().getName());
 				continue;
+			}
 			Class clss = (Class)adapter.getType();
             PlasmaType sdoType = (PlasmaType)PlasmaTypeHelper.INSTANCE.getType(
             		adapter.getUri(), adapter.getName());
+    		if (log.isDebugEnabled())
+    		    log.debug("processing class: " + clss.getName());
                         
             ComplexType complexType = null;
             if (clss.getSuperClasses().size() == 0) {            	
             	ComplexType baseType = serializationBaseType;
         		complexType = buildComplexType(adapter, baseType);
+        		if (log.isDebugEnabled())
+        		    log.debug("created complex type: " + complexType.getName());
                 addDatatypeAttributesAndElements(complexType, baseType, adapter, sdoType);
             }
             else {
@@ -155,6 +166,8 @@ public class SchemaModelAssembler {
             		throw new IllegalStateException("cannot process multiple base classes for type, " 
             				+ adapter.getKey());
             	complexType = buildComplexType(adapter, clss.getSuperClasses().get(0).getName());
+        		if (log.isDebugEnabled())
+        		    log.debug("created complex type: " + complexType.getName());
                 addDatatypeAttributesAndElements(complexType, null, adapter, sdoType);
             }            
             

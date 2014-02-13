@@ -3,6 +3,7 @@ package org.plasma.query.collector;
 import java.util.List;
 import java.util.Set;
 
+import org.plasma.query.model.Function;
 import org.plasma.query.model.Where;
 
 import commonj.sdo.Type;
@@ -188,8 +189,7 @@ public interface Selection {
 	 * properties collected for the given Type for the given
 	 * (query) graph edge source property.
 	 * @param type the type (query) graph edge source property
-	 * @param sourceProperty the 
-	 * @param level the specific graph level where the properties were specified in the selection
+	 * @param sourceProperty the (query) graph edge source property
 	 * @return the unique set of data and reference 
 	 * properties collected for the given Type for the given
 	 * (query) graph edge source property.
@@ -202,7 +202,7 @@ public interface Selection {
 	 * (query) graph edge source property at the given traversal 
 	 * level or graph depth.
 	 * @param type the type (query) graph edge source property
-	 * @param sourceProperty the 
+	 * @param sourceProperty the (query) graph edge source property
 	 * @param level the traversal level or graph depth
 	 * @return the unique set of data and reference 
 	 * properties collected for the given Type for the given
@@ -218,10 +218,50 @@ public interface Selection {
 	
 	/**
 	 * Returns the predicate for the given property or null
-	 * if the given property is not mapped. 
+	 * if the given property has no predicates. 
 	 * @param property the property
 	 * @return the predicate for the given property or null
-	 * if the given property is not mapped.
+	 * if the given property has no predicates.
 	 */
 	public Where getPredicate(commonj.sdo.Property property);
+	
+	/**
+	 * Returns the predicate, if exists, collected for the given property and for the given
+	 * (query) graph edge source property.
+	 * @param property the source property
+	 * @param sourceProperty the (query) graph edge source property
+	 * @return the predicate, if exists
+	 */
+	public Where getPredicate(commonj.sdo.Property property, commonj.sdo.Property sourceProperty);
+	
+	/**
+	 * Returns the predicate , if exists, collected for the given property for the given
+	 * traversal level or graph depth.
+	 * @param type the type (query) graph edge source property
+	 * @param sourceProperty the 
+	 * @param level the traversal level or graph depth
+	 * @return the predicate, if exists
+	 */
+	public Where getPredicate(commonj.sdo.Property property, int level);
+	
+	/**
+	 * Returns the functions for the given property or empty list
+	 * if the given property has no functions. 
+	 * @param property the property
+	 * @return the predicate for the given property or empty list
+	 * if the given property has no functions. 
+	 */
+	public List<Function> getFunctions(commonj.sdo.Property property);
+	
+	/**
+	 * Returns the functions for the given property for the given
+	 * traversal level or graph depth, or empty list
+	 * if the given property has no functions. 
+	 * @param property the property
+	 * @param level the traversal level or graph depth
+	 * @return the predicate for the given property for the given
+	 * traversal level or graph depth, or empty list
+	 * if the given property has no functions. 
+	 */
+	public List<Function> getFunctions(commonj.sdo.Property property, int level);
 }

@@ -52,7 +52,7 @@
     </SDO>
     
     <Repository> 
-        <!-- Would like to use our own namespace here (say 'http://www.servicelabs.org/plasma/sdo/profile') but MagicDraw
+        <!-- Would like to use our own namespace here (say 'http://www.terrameta.org/plasma/sdo/profile') but MagicDraw
             unfortunately bakes this namespace e.g. 'http://www.magicdraw.com/schemas/*'  
             into any and every model that references a profile. You can change
             the namespace declaration by hand in the XMI but next time the

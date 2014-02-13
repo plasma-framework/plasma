@@ -26,5 +26,42 @@ public enum DataFlavor {
     integral,
     real,
     string,
-    other
+    other;
+    
+	public static DataFlavor fromDataType(DataType dataType) {
+        switch (dataType) {
+        case Decimal:  
+        case Double:   
+        case Float:    
+        	return DataFlavor.real;
+        case Boolean:  
+        case Int:      
+        case Integer:  
+        case Long:     
+        case Short:    
+        	return DataFlavor.integral;
+        case Character:
+        case String:   
+        case Strings:  
+        	return DataFlavor.string;
+        case Date:     
+        case Duration: 
+        case DateTime: 
+        case Day:      
+        case Month:    
+        case MonthDay: 
+        case Year:     
+        case YearMonth:
+        case YearMonthDay:
+        case Time:     
+        	return DataFlavor.temporal;
+        case Byte:     
+        case Bytes:    
+        case URI:      
+        case Object:   
+        default:
+        	return DataFlavor.other;
+        }
+	}
+    
 }

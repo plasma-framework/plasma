@@ -38,6 +38,7 @@ import org.plasma.sdo.Alias;
 import org.plasma.sdo.Concurrent;
 import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.DataType;
+import org.plasma.sdo.Derivation;
 import org.plasma.sdo.EnumerationConstraint;
 import org.plasma.sdo.Key;
 import org.plasma.sdo.PlasmaDataObjectException;
@@ -233,41 +234,9 @@ public class CoreProperty implements PlasmaProperty {
 				+ this.getContainingType().getName() + "." + this.getName()
 				+ " is not a data type property");
 		DataType dataType = DataType.valueOf(this.getType().getName());
-        switch (dataType) {
-        case Decimal:  
-        case Double:   
-        case Float:    
-        	return DataFlavor.real;
-        case Boolean:  
-        case Int:      
-        case Integer:  
-        case Long:     
-        case Short:    
-        	return DataFlavor.integral;
-        case Character:
-        case String:   
-        case Strings:  
-        	return DataFlavor.string;
-        case Date:     
-        case Duration: 
-        case DateTime: 
-        case Day:      
-        case Month:    
-        case MonthDay: 
-        case Year:     
-        case YearMonth:
-        case YearMonthDay:
-        case Time:     
-        	return DataFlavor.temporal;
-        case Byte:     
-        case Bytes:    
-        case URI:      
-        case Object:   
-        default:
-        	return DataFlavor.other;
-        }
-	}    
-    
+		return DataFlavor.fromDataType(dataType);
+	}
+	    
 	@SuppressWarnings("unchecked")
 	public List<Comment> getDescription() {
 		return (List<Comment>)this.get(
@@ -406,6 +375,20 @@ public class CoreProperty implements PlasmaProperty {
     		return false;
     	return key.getType().ordinal() == keyType.ordinal();
     }
+    
+	@Override
+	public PlasmaProperty getKeySupplier() {
+    	Key key = this.property.findKey();
+    	if (key == null) {
+            org.modeldriven.fuml.repository.Property supplierProperty = this.property.findKeySupplier();
+            if (supplierProperty != null) {
+            	return lookup(supplierProperty);
+            }
+            else
+            	return null;
+		}
+		return null;
+	}
     
     public Concurrent getConcurrent() {
 		return this.property.findConcurrent();
@@ -615,35 +598,7 @@ public class CoreProperty implements PlasmaProperty {
             
             org.modeldriven.fuml.repository.Property oppositeProperty = this.property.getOpposite();
             if (oppositeProperty != null) {
-	            Class_ oppositeClass = oppositeProperty.getClass_();
-	            String oppositeClassNamespaceURI = this.property.getNamespaceURI(
-	                    oppositeClass);
-	            String oppositeTypeName = oppositeClass.getName();
-
-	            TypeBinding binding = PlasmaConfig.getInstance().findTypeBinding(oppositeClassNamespaceURI, oppositeClass.getName());
-	            if (binding != null) {
-	            	if (binding.getLogicalName() != null && binding.getLogicalName().trim().length() > 0)
-	            		oppositeTypeName = binding.getLogicalName().trim();
-	            }
-	            Type oppositeType = PlasmaTypeHelper.INSTANCE.getType(oppositeClassNamespaceURI, 
-	            		oppositeTypeName);
-	            String oppositePropertyName = oppositeProperty.getName();
-	            
-	            // lookup any property binding customization
-	            PropertyBinding propertyBinding = PlasmaConfig.getInstance().findPropertyBinding(oppositeClassNamespaceURI, 
-	            		oppositeClass.getName(), oppositeProperty.getName());
-	            if (propertyBinding != null) {
-	            	if (propertyBinding.getLogicalName() != null && propertyBinding.getLogicalName().trim().length() > 0)
-	            		oppositePropertyName = propertyBinding.getLogicalName().trim();
-	            }
-	            
-	            if (oppositePropertyName != null && oppositePropertyName.trim().length() > 0) {
-	                return oppositeType.getProperty(oppositePropertyName);
-	            }
-	            else {
-	            	oppositePropertyName = this.getDerivedName(oppositeProperty.getType().getName());
-	                return oppositeType.getProperty(oppositePropertyName);
-	            }
+            	return lookup(oppositeProperty);
             }
             else
             	return null;
@@ -767,5 +722,65 @@ public class CoreProperty implements PlasmaProperty {
     	else
     		return this.getName();    		
     }
+
+	@Override
+	public Derivation getDerivation() {
+		return this.property.findDerivation();
+	}
+
+	@Override
+	public PlasmaProperty getDerivationSupplier() {
+		
+		Derivation derivation = this.property.findDerivation();
+		if (derivation != null) {
+            org.modeldriven.fuml.repository.Property supplierProperty = this.property.findDerivationSupplier();
+            if (supplierProperty != null) {
+            	return lookup(supplierProperty);
+            }
+            else
+            	return null;
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * Finds a mapped SDO property adhering to any type or property name binding customizations.
+	 * @param repoProperty the repository property
+	 * @return a mapped SDO property adhering to any type or property name binding customizations.
+	 */
+	private PlasmaProperty lookup(org.modeldriven.fuml.repository.Property repoProperty) {
+        Class_ repoClass = repoProperty.getClass_();
+        String repoClassNamespaceURI = this.property.getNamespaceURI(
+                repoClass);
+        String repoTypeName = repoClass.getName();
+
+        TypeBinding binding = PlasmaConfig.getInstance().findTypeBinding(repoClassNamespaceURI, repoClass.getName());
+        if (binding != null) {
+        	if (binding.getLogicalName() != null && binding.getLogicalName().trim().length() > 0)
+        		repoTypeName = binding.getLogicalName().trim();
+        }
+        Type repoType = PlasmaTypeHelper.INSTANCE.getType(repoClassNamespaceURI, 
+        		repoTypeName);
+        String repoPropertyName = repoProperty.getName();
+        
+        // lookup any property binding customization
+        PropertyBinding propertyBinding = PlasmaConfig.getInstance().findPropertyBinding(repoClassNamespaceURI, 
+        		repoClass.getName(), repoProperty.getName());
+        if (propertyBinding != null) {
+        	if (propertyBinding.getLogicalName() != null && propertyBinding.getLogicalName().trim().length() > 0)
+        		repoPropertyName = propertyBinding.getLogicalName().trim();
+        }
+        
+        if (repoPropertyName != null && repoPropertyName.trim().length() > 0) {
+            return (PlasmaProperty)repoType.getProperty(repoPropertyName);
+        }
+        else {
+        	repoPropertyName = this.getDerivedName(repoProperty.getType().getName());
+            return (PlasmaProperty)repoType.getProperty(repoPropertyName);
+        }		
+	}
+
+	
 
 }

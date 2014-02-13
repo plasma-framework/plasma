@@ -213,6 +213,12 @@ public interface PlasmaProperty extends Property {
     public boolean isKey(KeyType keyType);
     
     /**
+     * Returns the key supplier property for this property or null if not exists.
+     * @return the key supplier property for this property or null if not exists.
+     */
+    public PlasmaProperty getKeySupplier();
+   
+    /**
      * Returns the concurrent information for this property if exists, or null
      * if not exists
      * @return the concurrent information, or null
@@ -323,4 +329,19 @@ public interface PlasmaProperty extends Property {
      * @see XmlProperty
      */
     public XmlProperty getXmlProperty();
+    
+    /**
+     * Returns the derivation information for this property if exists, or null
+     * if not exists
+     * @return the derivation information, or null
+     * if not exists
+     */
+    public Derivation getDerivation();
+    
+    /**
+     * Returns the derivation supplier property for this property or null if not exists.
+     * @return the derivation supplier property for this property or null if not exists.
+     */
+    public PlasmaProperty getDerivationSupplier();
+    
 }

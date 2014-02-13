@@ -37,6 +37,7 @@ import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.common.test.PlasmaTest;
 import org.plasma.platform.sdo.personalization.query.QProfile;
 import org.plasma.platform.sdo.personalization.query.QProfileElementSetting;
+import org.plasma.platform.sdo.personalization.query.QUser;
 import org.plasma.query.bind.PlasmaQueryDataBinding;
 import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.sdo.access.client.SDODataAccessClient;
@@ -52,7 +53,7 @@ public class QueryTestCase extends PlasmaTest {
     protected String classesDir = "./target/classes";
     protected String targetDir = "./target"; 
     int runs = 10;
-/*          
+          
     public void testGroupBy() throws Exception {
     	
     	QProfile profile = QProfile.newQuery();
@@ -70,8 +71,8 @@ public class QueryTestCase extends PlasmaTest {
             log.info(dataObject.dump());
         }
     }
-*/
-/*
+
+
     public void testSubquery() throws Exception {
     	
     	QUser subquery = QUser.newQuery(); 
@@ -95,9 +96,9 @@ public class QueryTestCase extends PlasmaTest {
             log.info(dataObject.dump());
         }
      }
-*/ 
+ 
     
-/*    
+    
      public void testWildcards() throws Exception {
     	QProfile profile = QProfile.newQuery();
     	profile.select(profile.wildcard());
@@ -122,8 +123,6 @@ public class QueryTestCase extends PlasmaTest {
         }
     }
     
-*/    
-    /*
     public void testRange() throws Exception {
     	
      	QProfile profile = QProfile.newQuery();
@@ -154,9 +153,7 @@ public class QueryTestCase extends PlasmaTest {
         float timeSeconds = ((float)(after - before)) / 1000;
         log.info("testRange: " + String.valueOf(timeSeconds));
     }
-    */
      
-    /*
     public void testSimple() throws Exception {
     	
     	QProfile profile = QProfile.newQuery();
@@ -182,9 +179,7 @@ public class QueryTestCase extends PlasmaTest {
         float timeSeconds = ((float)(after - before)) / 1000;
         log.info("testSimple: " + String.valueOf(timeSeconds));
     }
-    */
-    
-    /*
+
     public void testSimple2() throws Exception {
     	
     	QUser user = QUser.newQuery();
@@ -208,7 +203,7 @@ public class QueryTestCase extends PlasmaTest {
         float timeSeconds = ((float)(after - before)) / 1000;
         log.info("testSimple2: " + String.valueOf(timeSeconds));
     }
-    */
+    
 
     public void testPathPredicates() throws Exception {
     	
@@ -227,8 +222,8 @@ public class QueryTestCase extends PlasmaTest {
     	profile.where(profile.user().username().like("foo*")
     		   .or(profile.user().username().like("bar*")
     		   .or(profile.user().username().like("bas*"))));
-
-    	Query q2 = marshal(profile.getModel());
+    	
+     	Query q2 = marshal(profile.getModel());
         
         long before = System.currentTimeMillis();
         SDODataAccessClient service = new SDODataAccessClient();

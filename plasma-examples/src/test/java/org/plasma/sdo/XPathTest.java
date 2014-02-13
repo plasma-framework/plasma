@@ -75,7 +75,7 @@ public class XPathTest extends DASClientTestCase {
 	    person2.setSsn("111334444");
  	    
 	    Person person3 = user.createPerson();
-	    person3.setLastName("Wentworth");
+	    person3.setLastName("Thompson");
 	    person3.setFirstName("Fred");
 	    person3.setSsn("888334444");
 
@@ -154,13 +154,13 @@ public class XPathTest extends DASClientTestCase {
 	    assertTrue("expected result", result != null);
 	    assertTrue("expected result String not, " + result.getClass().getName(), 
 	    		result instanceof String);
-	    assertTrue("expected 'Wentworth' as lastName", 
-	    		"Wentworth".equals(result));
+	    assertTrue("expected 'Thompson' as lastName", 
+	    		"Thompson".equals(result));
 	    Object result2 = profile.get("user/person[@firstName='Fred']/@lastName");
 	    assertTrue("expected result String not, " + result2.getClass().getName(), 
 	    		result2 instanceof String);
-	    assertTrue("expected 'Wentworth' as lastName", 
-	    		"Wentworth".equals(result2));
+	    assertTrue("expected 'Thompson' as lastName", 
+	    		"Thompson".equals(result2));
     }  
       
     
@@ -240,4 +240,61 @@ public class XPathTest extends DASClientTestCase {
 	    		result.equals("New Child2 cat definition"));
     }  
      
+    public void testGetUpperCase() {
+    	Object result = profile.get("user/person[upper-case(firstName)='FRED']");
+	    assertTrue("expected result", result != null);
+	    assertTrue("expected result DataObject", result instanceof DataObject);
+		DataObject resultDataObject = (DataObject)result;
+	    assertTrue("expected result Person", resultDataObject instanceof Person);
+	    Person resultPerson = (Person)resultDataObject;
+	    assertTrue("expected 'Fred' as firstName", 
+	    		"Fred".equals(resultPerson.getFirstName()));
+    } 
+    
+    public void testGetLowerCase() {
+    	Object result = profile.get("user/person[lower-case(firstName)='fred']");
+	    assertTrue("expected result", result != null);
+	    assertTrue("expected result DataObject", result instanceof DataObject);
+		DataObject resultDataObject = (DataObject)result;
+	    assertTrue("expected result Person", resultDataObject instanceof Person);
+	    Person resultPerson = (Person)resultDataObject;
+	    assertTrue("expected 'Fred' as firstName", 
+	    		"Fred".equals(resultPerson.getFirstName()));
+    }     
+    
+    public void testGetStartsWith() {
+    	Object result = profile.get("user/person[starts-with(lastName, 'T')]");
+	    assertTrue("expected result", result != null);
+	    assertTrue("expected result List", result instanceof List);
+	    List<Object> resultList = (List<Object>)result;
+	    for (Object obj : resultList) {
+		    assertTrue("expected result DataObject", obj instanceof DataObject);
+			DataObject resultDataObject = (DataObject)obj;
+		    assertTrue("expected result Person", resultDataObject instanceof Person);
+		    Person resultPerson = (Person)resultDataObject;
+		    assertTrue("expected last name starts-with 'T'", 
+		    		resultPerson.getLastName().startsWith("T"));
+	    }
+    } 
+    
+    public void testGetLowerCaseStartsWith() {
+    	Object result = profile.get("user/person[starts-with(lower-case(lastName), 't')]");
+	    assertTrue("expected result", result != null);
+	    assertTrue("expected result List", result instanceof List);
+	    List<Object> resultList = (List<Object>)result;
+	    for (Object obj : resultList) {
+		    assertTrue("expected result DataObject", obj instanceof DataObject);
+			DataObject resultDataObject = (DataObject)obj;
+		    assertTrue("expected result Person", resultDataObject instanceof Person);
+		    Person resultPerson = (Person)resultDataObject;
+		    assertTrue("expected last name starts-with 'T'", 
+		    		resultPerson.getLastName().startsWith("T"));
+	    }
+    } 
+    
+    
+    
+    
+    
+    
 }

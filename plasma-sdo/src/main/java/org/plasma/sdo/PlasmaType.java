@@ -189,6 +189,20 @@ public interface PlasmaType extends Type {
     public Alias getAlias();
     
     /**
+     * Returns the derivation information for this type if exists, or null
+     * if not exists
+     * @return the derivation information, or null
+     * if not exists
+     */
+    public Derivation getDerivation();
+    
+    /**
+     * Returns the derivation supplier type for this type or null if not exists.
+     * @return the derivation supplier type for this type or null if not exists.
+     */
+    public PlasmaType getDerivationSupplier();
+
+    /**
      * Returns the logical name of the 
      * model package (if any) associated with this Type 
      * as a string, or null if no package exists.

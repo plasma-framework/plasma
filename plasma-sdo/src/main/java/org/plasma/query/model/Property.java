@@ -21,31 +21,42 @@
  */
 package org.plasma.query.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.plasma.query.DataProperty;
+import org.plasma.query.IntegralDataProperty;
+import org.plasma.query.RealDataProperty;
+import org.plasma.query.StringDataProperty;
+import org.plasma.query.TemporalDataProperty;
 import org.plasma.query.model.Query;
 import org.plasma.query.visitor.QueryVisitor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Property", propOrder = {
     "query",
-    "as"
+    "as",
+    "functions"
 })
 @XmlRootElement(name = "Property")
-public class Property
-    extends AbstractProperty implements DataProperty
+public class Property extends AbstractProperty 
+    implements StringDataProperty, IntegralDataProperty, RealDataProperty, TemporalDataProperty 
 {
 
     @XmlElement(name = "Query", namespace = "")
     protected Query query;
     @XmlElement(name = "As", namespace = "")
     protected Projection as;
+    @XmlElement(name = "Function", namespace = "")
+    protected List<Function> functions;
     @XmlAttribute(required = true)
     protected String name;    
     @XmlAttribute
@@ -54,8 +65,6 @@ public class Property
     protected Boolean distinct;
     @XmlAttribute
     protected SortDirectionValues direction;
-    @XmlAttribute
-    protected FunctionValues function;
 
     /** 
      * Stores the physical name associated with this 
@@ -109,7 +118,8 @@ public class Property
     public Property(String name, org.plasma.query.model.FunctionValues function) {
         this();
         this.setName(name);
-        this.setFunction(function);
+		Function func = new Function(function);
+		this.getFunctions().add(func);
     } 
 
     public Property(String name, Query query) {
@@ -269,26 +279,105 @@ public class Property
         this.query = (Query)value;
     }
     
+    @Override
 	public DataProperty min() {
-		this.setFunction(FunctionValues.MIN);
+		Function func = new Function(FunctionValues.MIN);
+		this.getFunctions().add(func);
 		return this;
 	}
 	
+    @Override
 	public DataProperty max() {
-		this.setFunction(FunctionValues.MAX);
+		Function func = new Function(FunctionValues.MAX);
+		this.getFunctions().add(func);
 		return this;
 	}
 	
+    @Override
 	public DataProperty sum() {
-		this.setFunction(FunctionValues.SUM);
+		Function func = new Function(FunctionValues.SUM);
+		this.getFunctions().add(func);
 		return this;
 	}
 	
+    @Override
 	public DataProperty avg() {
-		this.setFunction(FunctionValues.AVG);
+		Function func = new Function(FunctionValues.AVG);
+		this.getFunctions().add(func);
+		return this;
+	}
+
+    @Override
+	public IntegralDataProperty abs() {
+		Function func = new Function(FunctionValues.ABS);
+		this.getFunctions().add(func);
 		return this;
 	}
 	
+    @Override
+	public RealDataProperty ceiling() {
+		Function func = new Function(FunctionValues.CEILING);
+		this.getFunctions().add(func);
+		return this;
+	}
+	
+    @Override
+	public RealDataProperty floor() {
+		Function func = new Function(FunctionValues.FLOOR);
+		this.getFunctions().add(func);
+		return this;
+	}
+	
+    @Override
+	public RealDataProperty round() {
+		Function func = new Function(FunctionValues.ROUND);
+		this.getFunctions().add(func);
+		return this;
+	}
+	
+    @Override
+	public StringDataProperty substringBefore(String value) {
+		Function func = new Function(FunctionValues.SUBSTRING_BEFORE);
+		FunctionArg arg1 = new FunctionArg();
+		func.getFunctionArgs().add(arg1);
+		arg1.setName("arg1");
+		arg1.setValue(value);
+		this.getFunctions().add(func);
+		return this;
+	}
+	
+    @Override
+	public StringDataProperty substringAfter(String value) {
+		Function func = new Function(FunctionValues.SUBSTRING_AFTER);
+		FunctionArg arg1 = new FunctionArg();
+		func.getFunctionArgs().add(arg1);
+		arg1.setName("arg1");
+		arg1.setValue(value);
+		this.getFunctions().add(func);
+		return this;
+	}
+	
+    @Override
+	public StringDataProperty normalizeSpace() {
+		Function func = new Function(FunctionValues.NORMALIZE_SPACE);
+		this.getFunctions().add(func);
+		return this;
+	}
+
+    @Override
+	public StringDataProperty upperCase() {
+		Function func = new Function(FunctionValues.UPPER_CASE);
+		this.getFunctions().add(func);
+		return this;
+	}
+	
+    @Override
+	public StringDataProperty lowerCase() {
+		Function func = new Function(FunctionValues.LOWER_CASE);
+		this.getFunctions().add(func);
+		return this;
+	}
+		
 	public DataProperty asc() {
 		this.setDirection(SortDirectionValues.ASC);
 		return this;
@@ -311,6 +400,13 @@ public class Property
 	 */
     public void setAs(Projection value) {
         this.as = value;
+    }
+    
+    public List<Function> getFunctions() {
+        if (functions == null) {
+            functions = new ArrayList<Function>();
+        }
+        return this.functions;
     }
 
     public String getName() {
@@ -386,20 +482,6 @@ public class Property
 	 */
     public void setDirection(SortDirectionValues value) {
         this.direction = value;
-    }
-
-    /* (non-Javadoc)
-	 * @see org.plasma.query.model.Property2#getFunction()
-	 */
-    public FunctionValues getFunction() {
-        return function;
-    }
-
-    /* (non-Javadoc)
-	 * @see org.plasma.query.model.Property2#setFunction(org.plasma.query.model.FunctionValues)
-	 */
-    public void setFunction(FunctionValues value) {
-        this.function = value;
     }
     
     /**

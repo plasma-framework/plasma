@@ -73,7 +73,11 @@ public class PlasmaConfig {
     /** maps provider names to maps of namespace URI to provisioning structures */
     private Map<DataAccessProviderName, Map<String, NamespaceProvisioning>> dataAccessProviderProvisioningMap 
         = new HashMap<DataAccessProviderName,  Map<String, NamespaceProvisioning>>();    
-        
+
+    /** maps provider names to maps of provider properties */
+    private Map<DataAccessProviderName, Map<String, Property>> dataAccessProviderPropertyMap 
+        = new HashMap<DataAccessProviderName,  Map<String, Property>>();    
+    
     private PlasmaConfig()
     {
         log.debug("initializing...");
@@ -96,14 +100,14 @@ public class PlasmaConfig {
             }
             
             if (artifactMap.get(config.getSDO().getDefaultNamespace().getArtifact()) == null)
-                throw new PlasmaRuntimeException("Invalid SDO Namespace - could not find repository artifact based on URI '"
+                throw new ConfigurationException("Invalid SDO Namespace - could not find repository artifact based on URI '"
                         + config.getSDO().getDefaultNamespace().getArtifact() + "'");
             sdoNamespaceMap.put(config.getSDO().getDefaultNamespace().getUri(), 
                     new NamespaceAdapter(config.getSDO().getDefaultNamespace()));
             
             for (Namespace namespace : config.getSDO().getNamespaces()) {  
                 if (artifactMap.get(namespace.getArtifact()) == null)
-                    throw new PlasmaRuntimeException("Invalid SDO Namespace - could not find repository artifact based on URI '"
+                    throw new ConfigurationException("Invalid SDO Namespace - could not find repository artifact based on URI '"
                             + namespace.getArtifact() + "'"); 
                 
                 if (this.sdoNamespaceMap.get(namespace.getUri()) != null)
@@ -196,6 +200,15 @@ public class PlasmaConfig {
 	            		    provMap.put(namespaceLink.getUri(), 
 	            		    		namespaceLink.getProvisioning());		            		
 	            	}
+	            	
+	            	Map<String, Property> propertyMap = this.dataAccessProviderPropertyMap.get(provider.getName());
+	            	if (propertyMap == null) {
+	            		propertyMap = new HashMap<String, Property>();
+	            		this.dataAccessProviderPropertyMap.put(provider.getName(), propertyMap);
+	            	}
+	            	for (Property property : provider.getProperties()) {
+	            		propertyMap.put(property.getName(), property);
+	            	}
                 }
             }
         }
@@ -240,7 +253,7 @@ public class PlasmaConfig {
 	        if (stream == null)
 	            stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(configFileName);
 	        if (stream == null)
-	            throw new PlasmaRuntimeException("could not find configuration file resource '" 
+	            throw new ConfigurationException("could not find configuration file resource '" 
 	                    + configFileName 
 	                    + "' on the current classpath");        
 	        
@@ -307,7 +320,7 @@ public class PlasmaConfig {
         if (result != null)
             return result.getNamespace();
         else
-            throw new PlasmaRuntimeException("no configured SDO namespace found for URI '"
+            throw new ConfigurationException("no configured SDO namespace found for URI '"
                     + uri + "'");
     }
     
@@ -316,7 +329,7 @@ public class PlasmaConfig {
         if (result != null)
             return result.getNamespace();
         else
-            throw new PlasmaRuntimeException("no configured SDO namespace found for interface package name '"
+            throw new ConfigurationException("no configured SDO namespace found for interface package name '"
                     + packageName + "'");
     }
 
@@ -330,7 +343,7 @@ public class PlasmaConfig {
         		return null;
         }
         else
-            throw new PlasmaRuntimeException("no configured SDO namespace found for URI '"
+            throw new ConfigurationException("no configured SDO namespace found for URI '"
                     + uri + "'");
     }
     
@@ -340,7 +353,7 @@ public class PlasmaConfig {
         	namespaceAdapter.remapTypeBinding(typeBinding);
         }
         else
-            throw new PlasmaRuntimeException("no configured SDO namespace found for URI '"
+            throw new ConfigurationException("no configured SDO namespace found for URI '"
                     + uri + "'");
     }
 
@@ -360,7 +373,7 @@ public class PlasmaConfig {
         		return null;
         }
         else
-            throw new PlasmaRuntimeException("no configured SDO namespace found for URI '"
+            throw new ConfigurationException("no configured SDO namespace found for URI '"
                     + uri + "'");
     }
     
@@ -418,14 +431,14 @@ public class PlasmaConfig {
         if (result != null)
             return result;
         else
-            throw new PlasmaRuntimeException("no data access provider configuration found for '"
+            throw new ConfigurationException("no data access provider configuration found for '"
                     + providerName.value() + "'");
     }
     
     public RDBMSVendorName getRDBMSProviderVendor(DataAccessProviderName providerName) {
     	DataAccessProvider provider = this.dataAccessProviderMap.get(providerName);
         if (provider == null) 
-            throw new PlasmaRuntimeException("no data access provider configuration found for '"
+            throw new ConfigurationException("no data access provider configuration found for '"
                     + providerName.value() + "'");
         RDBMSVendorName vendor = null;
         switch (providerName) {
@@ -433,20 +446,49 @@ public class PlasmaConfig {
     	case JDO:
     	case JPA:
     	case HIBERNATE:
-    		Property driver = findDriverProperty(provider);
-    		vendor = findVendor(driver);
-    		if (vendor == null)
-                throw new PlasmaRuntimeException("could not determine RDBMS vendor from provider configuration '"
-                        + providerName.value() + "'");
+    		Property vendorProp = findProviderPropertyByName(provider, ConfigurationConstants.JDBC_VENDOR);
+    		if (vendorProp != null) {
+    			vendor = getVendorName(provider, vendorProp);
+    		}
+    		else {
+    			log.debug("no vendor property (" + ConfigurationConstants.JDBC_VENDOR + ") found for provider '"
+    		        + providerName.value() + "'- searching for vendor based on JDBC driver name");
+        		Property driverProp = findProviderPropertyByName(provider, ConfigurationConstants.JDBC_DRIVER_NAME);
+        		if (driverProp != null) {
+    		        vendor = matchVendorName(driverProp);
+        		}
+		        if (vendor == null)
+                    throw new ConfigurationException("could not determine RDBMS vendor for provider '"
+                        + providerName.value() + "' - no vendor property (" + ConfigurationConstants.JDBC_VENDOR + ")"
+                        + " or driver ("+ ConfigurationConstants.JDBC_DRIVER_NAME + ") properties found");
+    		}
     		break;
     	default:	
-            throw new PlasmaRuntimeException("could not determine RDBMS vendor from non-RDBMS provider configuration '"
+            throw new ConfigurationException("could not determine RDBMS vendor for non-RDBMS provider '"
                     + providerName.value() + "'");
     	}
     	return vendor;
     }
+    
+    private RDBMSVendorName getVendorName(DataAccessProvider provider, Property prop)    
+    {
+    	try {
+    	    return RDBMSVendorName.valueOf(prop.getValue());
+    	}
+    	catch (IllegalArgumentException e) {
+    		StringBuilder buf = new StringBuilder();
+    		for (int i = 0; i < RDBMSVendorName.values().length; i++) {
+    			if (i > 0)
+    				buf.append(", ");
+    			buf.append(RDBMSVendorName.values()[i].name());
+    		}
+            throw new ConfigurationException("could not determine RDBMS vendor for provider '"
+                    + provider.getName().value() + "' based on property value '"
+            		+ prop.getValue() + "' - expected one of [" + buf.toString() + "]");
+    	}    	
+    }    
         
-    private RDBMSVendorName findVendor(Property prop)    
+    private RDBMSVendorName matchVendorName(Property prop)    
     {
     	for (RDBMSVendorName vendor : RDBMSVendorName.values()) {
     		if (prop.getValue().toLowerCase().contains(vendor.name().toLowerCase()))
@@ -455,12 +497,20 @@ public class PlasmaConfig {
     	return null;
     }    
     
-    private Property findDriverProperty(DataAccessProvider provider) {
+    private Property findProviderPropertyContainingValue(DataAccessProvider provider, String value) {
     	for (Property prop : provider.getProperties()) {
-    		if (prop.getValue() != null && prop.getValue().toLowerCase().contains("driver"))
+    		if (prop.getValue() != null && prop.getValue().toLowerCase().contains(value))
     			return prop;
     	}
     	return null;
+    }    
+    
+    private Property findProviderPropertyByName(DataAccessProvider provider, String name) {
+    	Map<String, Property> propertyMap = this.dataAccessProviderPropertyMap.get(provider.getName());
+    	if (propertyMap != null)
+    	    return propertyMap.get(name);
+    	else
+    		return null;
     }
 
     public NamespaceProvisioning getProvisioningByNamespaceURI(DataAccessProviderName providerName, String uri) {

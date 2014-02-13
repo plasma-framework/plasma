@@ -42,6 +42,7 @@ import org.plasma.provisioning.PropertyNameCollisionException;
 import org.plasma.provisioning.TypeRef;
 import org.plasma.provisioning.ValueConstraint;
 import org.plasma.provisioning.adapter.FieldAdapter;
+import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.helper.DataConverter;
 import org.plasma.text.TextException;
@@ -280,7 +281,12 @@ public abstract class DefaultFactory {
 				this.context.usePrimitives());
 		}
     	return result;
-    }	
+    }
+	
+	protected DataFlavor getDataFlavor(DataTypeRef dataTypeRef) {
+		DataType sdoType = DataType.valueOf(dataTypeRef.getName());
+		return DataFlavor.fromDataType(sdoType);
+	}
 	
 	@Deprecated
 	protected String getTypeClassName(Class clss)

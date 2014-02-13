@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.1.6</version>
+      <version>1.1.7</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-sdo</artifactId>
-  <version>1.1.6</version>
+  <version>1.1.7</version>
   <packaging>jar</packaging>
 
   <name>Plasma SDO</name>
@@ -122,7 +122,7 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>
-      <version>1.1.6</version>
+      <version>1.1.7</version>
     </dependency>
   </dependencies>
 	<build>
@@ -202,7 +202,7 @@
 				            <staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-ddl</staleFile>
 				        </configuration>
 					</execution>
-					<!--
+					<!--   
 					<execution>
 					    <id>query-model</id>
 						<phase>generate-sources</phase>
@@ -210,9 +210,9 @@
 							<goal>xjc</goal>
 						</goals>
 				        <configuration>
-					        <schemaDirectory>${basedir}/src/main/resources/xsd/query</schemaDirectory>
+					        <schemaDirectory>${basedir}/src/main/resources/org/plasma/query</schemaDirectory>
 					        <schemaFiles>query.xsd</schemaFiles>
-					        <bindingDirectory>${basedir}/src/main/resources/xsd/query</bindingDirectory>
+					        <bindingDirectory>${basedir}/src/main/resources/org/plasma/query</bindingDirectory>
 					        <bindingFiles>query-jaxb-bindings.xml</bindingFiles>
 				        </configuration>
 					</execution>
@@ -248,7 +248,7 @@
                     <target>   
                       <echo message="####Generate profile classes####"/>                                              
                       <property name="compile_classpath" refid="maven.compile.classpath"/>
-                      <property name="release_suffix" value="1.1.6"/>
+                      <property name="release_suffix" value="1.1.7"/>
                                                                                                                                                                                                   
                       <!--                                                                                                                                                                                                                                           
                       <echo message="compile classpath: ${compile_classpath}"/>                                                                                                                                                                                      
@@ -278,7 +278,7 @@
                     <target>                                                 
                       <echo message="####Generate profile interfaces####"/>                                              
                       <property name="compile_classpath" refid="maven.compile.classpath"/>
-                      <property name="release_suffix" value="1.1.6"/>
+                      <property name="release_suffix" value="1.1.7"/>
                       <path id="cp">                                                                                                                                                                                                                             
                          <pathelement path="${compile_classpath}"/>                                                                                                                                                                                                  
                       </path>	                                                                                                                                                                                                                                       

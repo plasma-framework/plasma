@@ -19,9 +19,20 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.mojo;
+package org.plasma.query;
 
-public class MojoConstants {
-    public static final String MOJO_DIR = "./target/.plasma";
-    public static final String MOJO_STALE_FLAG = "stale_flag";
+
+/**
+ *  A non-reference property with a type which is a String data type.  
+ */
+public interface IntegralDataProperty extends DataProperty {
+
+	
+	/**
+	 * Constructs a value function, which returns absolute value of the data, and 
+	 * returns this data property for use in subsequent operations
+	 * @return this data property for use in subsequent operations
+	 */
+	public IntegralDataProperty abs();
+	
 }

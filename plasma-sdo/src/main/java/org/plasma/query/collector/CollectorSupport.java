@@ -31,9 +31,11 @@ import java.util.Set;
 import org.plasma.query.QueryException;
 import org.plasma.query.model.AbstractPathElement;
 import org.plasma.query.model.AbstractProperty;
+import org.plasma.query.model.Function;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.PathElement;
 import org.plasma.query.model.Property;
+import org.plasma.query.model.Where;
 import org.plasma.query.model.WildcardPathElement;
 import org.plasma.query.model.WildcardProperty;
 import org.plasma.sdo.PlasmaType;
@@ -155,6 +157,17 @@ abstract class CollectorSupport {
         }
     }
 	
+	protected void addPredicate(commonj.sdo.Property property, Integer level, Where predicate, 
+			Map<commonj.sdo.Property, Map<Integer, Where>> map)
+    {
+		Map<Integer, Where> levelMap = map.get(property);
+		if (levelMap == null) {
+			levelMap = new HashMap<Integer, Where>();
+			map.put(property, levelMap);
+		}
+		levelMap.put(level, predicate);
+    }
+	
 	protected void addProperty(Type type, commonj.sdo.Property edge, commonj.sdo.Property property, 
     		Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> map)
     {
@@ -176,6 +189,17 @@ abstract class CollectorSupport {
         }
     }
 	
+	protected void addPredicate(commonj.sdo.Property property, commonj.sdo.Property edge,
+			Where predicate,
+			Map<commonj.sdo.Property, Map<commonj.sdo.Property, Where>> map)
+    {
+		Map<commonj.sdo.Property, Where> edgeMap = map.get(property);
+		if (edgeMap == null) {
+			edgeMap = new HashMap<commonj.sdo.Property, Where>();
+			map.put(property, edgeMap);
+		}
+		edgeMap.put(edge, predicate);
+    }
 
 	protected void mapInheritedProperty(Type type, commonj.sdo.Property property, 
     		Map<Type, List<String>> map) {
@@ -250,6 +274,15 @@ abstract class CollectorSupport {
                 }
         }
     }
+	
+	protected void mapFunctions(commonj.sdo.Property prop, List<Function> functions,
+			Map<commonj.sdo.Property, List<Function>> map)
+    {
+		List<Function> list = map.get(prop);
+        if (list == null) {
+        	map.put(prop, functions);
+        }
+    }
 
 	protected void mapProperties(Type type, Integer level, commonj.sdo.Property[] props,
     		Map<Type, Map<Integer, Set<commonj.sdo.Property>>> map)
@@ -273,6 +306,21 @@ abstract class CollectorSupport {
                 if (!set.contains(prop)) {
                 	set.add(prop); 
                 }
+        }
+    }
+	
+	protected void mapFunctions(commonj.sdo.Property prop, Integer level, List<Function> functions,
+    		Map<commonj.sdo.Property, Map<Integer, List<Function>>> map)
+    {
+		Map<Integer, List<Function>> levelMap = map.get(prop);
+		if (levelMap == null) {
+			levelMap = new HashMap<Integer, List<Function>>();
+			map.put(prop, levelMap);
+		}
+		
+		List<Function> list = levelMap.get(level);
+        if (list == null) {
+        	levelMap.put(level, functions);
         }
     }
 	

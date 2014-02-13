@@ -31,6 +31,7 @@ import org.plasma.sdo.profile.ConcurrentDataFlavor;
 import org.plasma.sdo.profile.KeyType;
 import org.plasma.sdo.profile.SDOAlias;
 import org.plasma.sdo.profile.SDOConcurrent;
+import org.plasma.sdo.profile.SDODerivation;
 import org.plasma.sdo.profile.SDOEnumerationConstraint;
 import org.plasma.sdo.profile.SDOKey;
 import org.plasma.sdo.profile.SDOSort;
@@ -168,6 +169,22 @@ public class Property extends Element {
         return null;
 	}
     
+    public org.modeldriven.fuml.repository.Property findKeySupplier() {
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        if (stereotypes != null) {
+            for (Stereotype stereotype : stereotypes)
+                if (stereotype.getDelegate() instanceof SDOKey) {
+                	SDOKey key = (SDOKey)stereotype.getDelegate();
+                	fUML.Syntax.Classes.Kernel.NamedElement namedElem = key.getSupplier();
+                	org.modeldriven.fuml.repository.Element elem = PlasmaRepository.getInstance().getElementById(namedElem.getXmiId());
+                	if (elem instanceof org.modeldriven.fuml.repository.Property) {
+                		return (org.modeldriven.fuml.repository.Property)elem;               		
+                	}
+                }
+        }
+        return null;
+	}  
+    
     public SDOConcurrent findConcurrent() {
         List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
         if (stereotypes != null) {
@@ -247,7 +264,33 @@ public class Property extends Element {
         return null;
 	}    
     
+    public org.modeldriven.fuml.repository.Property findDerivationSupplier() {
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        if (stereotypes != null) {
+            for (Stereotype stereotype : stereotypes)
+                if (stereotype.getDelegate() instanceof SDODerivation) {
+                	SDODerivation deriv = (SDODerivation)stereotype.getDelegate();
+                	fUML.Syntax.Classes.Kernel.NamedElement namedElem = deriv.getSupplier();
+                	org.modeldriven.fuml.repository.Element elem = PlasmaRepository.getInstance().getElementById(namedElem.getXmiId());
+                	if (elem instanceof org.modeldriven.fuml.repository.Property) {
+                		return (org.modeldriven.fuml.repository.Property)elem;               		
+                	}
+                }
+        }
+        return null;
+	}  
     
+    public SDODerivation findDerivation() {
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        if (stereotypes != null) {
+            for (Stereotype stereotype : stereotypes)
+                if (stereotype.getDelegate() instanceof SDODerivation) {
+                	return (SDODerivation)stereotype.getDelegate();
+                }
+        }
+        return null;
+	}    
+   
     public boolean getIsPriKey() 
     {
         if (!property.isDataType())

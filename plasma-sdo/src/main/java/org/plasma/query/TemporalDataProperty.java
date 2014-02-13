@@ -19,9 +19,14 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.mojo;
+package org.plasma.query;
 
-public class MojoConstants {
-    public static final String MOJO_DIR = "./target/.plasma";
-    public static final String MOJO_STALE_FLAG = "stale_flag";
+
+/**
+ *  A non-reference property with a type which is a temporal data type.  
+ */
+public interface TemporalDataProperty extends DataProperty {
+
+	
+	
 }

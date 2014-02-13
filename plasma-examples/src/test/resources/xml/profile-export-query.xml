@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:Query xmlns:ns2="http://www.servicelabs.org/plasma/query">
+<ns2:Query xmlns:ns2="http://www.servicelabs.org/plasma/query" name="profile_query">
     <ns2:Clause>
         <ns2:Select>
             <ns2:Property name="username">
@@ -180,7 +180,7 @@
                     </ns2:Property>
                 </ns2:Term>
                 <ns2:Term>
-                    <ns2:RelationalOperator>==</ns2:RelationalOperator>
+                    <ns2:RelationalOperator>equals</ns2:RelationalOperator>
                 </ns2:Term>
                 <ns2:Term>
                     <ns2:Literal>skippy</ns2:Literal>

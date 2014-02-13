@@ -144,13 +144,14 @@ public interface DataProperty extends Property {
 	 * @return the data property
 	 */
 	public DataProperty sum();
+	
 	/**
 	 * Constructs a average aggregate within this data property and returns 
 	 * the data property for use in subsequent operations 
 	 * @return the data property
 	 */
 	public DataProperty avg();
-
+	
 	/**
 	 * Constructs a ascending ordering within this data property and returns 
 	 * the data property for use in subsequent operations 

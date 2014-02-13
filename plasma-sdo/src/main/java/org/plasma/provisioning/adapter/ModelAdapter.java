@@ -21,6 +21,7 @@
  */
 package org.plasma.provisioning.adapter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -73,14 +74,25 @@ public class ModelAdapter {
     	TypeAdapter result = typeMap.get(key);
     	return result;
     }
+	
+	private void findPackages(Model root, List<Package> packages) {
+		packages.add(root);
+    	for (Package childPkg : root.getPackages()) {
+    		packages.add(childPkg);
+    	}
+	}
     
     private void construct() {
 		if (log.isDebugEnabled())
 			log.debug("constructing...");
-    	for (Package pkg : model.getPackages())
+		
+		List<Package> allPkgs = new ArrayList<Package>();
+		findPackages(this.model, allPkgs);
+		
+    	for (Package pkg : allPkgs)
     		mapEnumerations(pkg);
     	
-    	for (Package pkg : model.getPackages())
+    	for (Package pkg : allPkgs)
     		mapClasses(pkg);
     	
     	for (TypeAdapter adapter : typeMap.values()) {

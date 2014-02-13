@@ -23,7 +23,11 @@ package org.plasma.query.dsl;
 
 import org.plasma.query.DataProperty;
 import org.plasma.query.Expression;
+import org.plasma.query.IntegralDataProperty;
 import org.plasma.query.Query;
+import org.plasma.query.RealDataProperty;
+import org.plasma.query.StringDataProperty;
+import org.plasma.query.TemporalDataProperty;
 import org.plasma.query.Wildcard;
 import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.FunctionValues;
@@ -34,7 +38,9 @@ import org.plasma.query.model.WildcardProperty;
 /**
  * A domain query node which is a data property end point within a query graph.
  */
-public class DataNode extends DomainEndpoint implements DataProperty {
+public class DataNode extends DomainEndpoint 
+    implements StringDataProperty, IntegralDataProperty, RealDataProperty, TemporalDataProperty 
+{
 
 	public DataNode(PathNode source, String name) {
 		super(source, name);
@@ -119,27 +125,81 @@ public class DataNode extends DomainEndpoint implements DataProperty {
 				subquery.getModel());
 	}
 
+    @Override
 	public DataProperty min() {
-		((org.plasma.query.model.Property) this.property)
-				.setFunction(FunctionValues.MIN);
+		((org.plasma.query.model.Property) this.property).min();				 
 		return this;
 	}
 
+    @Override
 	public DataProperty max() {
-		((org.plasma.query.model.Property) this.property)
-				.setFunction(FunctionValues.MAX);
+		((org.plasma.query.model.Property) this.property).max();				 
 		return this;
 	}
 
+    @Override
 	public DataProperty sum() {
-		((org.plasma.query.model.Property) this.property)
-				.setFunction(FunctionValues.SUM);
+		((org.plasma.query.model.Property) this.property).sum();				 
 		return this;
 	}
 
+    @Override
 	public DataProperty avg() {
-		((org.plasma.query.model.Property) this.property)
-				.setFunction(FunctionValues.AVG);
+		((org.plasma.query.model.Property) this.property).avg();				 
+		return this;
+	}
+	
+    @Override
+	public IntegralDataProperty abs() {
+		((org.plasma.query.model.Property) this.property).abs();				 
+		return this;
+	}
+	
+    @Override
+	public RealDataProperty ceiling() {
+		((org.plasma.query.model.Property) this.property).ceiling();				 
+		return this;
+	}
+	
+    @Override
+	public RealDataProperty floor() {
+		((org.plasma.query.model.Property) this.property).floor();				 
+		return this;
+	}
+	
+    @Override
+	public RealDataProperty round() {
+		((org.plasma.query.model.Property) this.property).round();				 
+		return this;
+	}
+	
+    @Override
+	public StringDataProperty substringBefore(String value) {
+		((org.plasma.query.model.Property) this.property).substringBefore(value);				 
+		return this;
+	}
+	
+    @Override
+	public StringDataProperty substringAfter(String value) {
+		((org.plasma.query.model.Property) this.property).substringAfter(value);				 
+		return this;
+	}
+	
+    @Override
+	public StringDataProperty upperCase() {
+		((org.plasma.query.model.Property) this.property).upperCase();				 
+		return this;
+	}
+	
+    @Override
+	public StringDataProperty lowerCase() {
+		((org.plasma.query.model.Property) this.property).lowerCase();				 
+		return this;
+	}
+	
+    @Override
+	public StringDataProperty normalizeSpace() {
+		((org.plasma.query.model.Property) this.property).normalizeSpace();				 
 		return this;
 	}
 

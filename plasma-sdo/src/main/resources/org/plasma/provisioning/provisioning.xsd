@@ -256,7 +256,7 @@
         <xs:complexContent>
             <xs:extension base="prov:Type">
                 <xs:sequence>
-                    <xs:element ref="prov:Documentation" maxOccurs="unbounded"/>
+                    <xs:element ref="prov:Documentation" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="prov:EnumerationLiteral" minOccurs="1" maxOccurs="unbounded"/>
                 </xs:sequence>
                 <xs:attribute name="uri" type="xs:string" use="required"/>

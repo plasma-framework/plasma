@@ -29,6 +29,7 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.query.QueryException;
 import org.plasma.query.model.AbstractPathElement;
 import org.plasma.query.model.AbstractProperty;
+import org.plasma.query.model.Function;
 import org.plasma.query.model.FunctionValues;
 import org.plasma.query.model.Literal;
 import org.plasma.query.model.Path;
@@ -86,27 +87,8 @@ public class SubqueryFilterAssembler extends SQLQueryFilterAssembler
                 
         filter.append("select ");
         
-        FunctionValues function = ((Property)property).getFunction();
-        if (function != null)
-            switch (function)
-            {
-                case MIN:
-                    filter.append("min( ");
-                    break;
-                case MAX:
-                    filter.append("max( ");
-                    break;
-                case AVG:
-                    filter.append("avg( ");
-                    break;
-                default:
-                    throw new QueryException("unsupported function '" + function.toString() + "'");
-            }
-        
         filter.append(alias + ".");
         filter.append(DATA_ACCESS_CLASS_MEMBER_PREFIX + prop.getName() + " ");
-        if (function != null)
-            filter.append(") ");
         filter.append("from org.plasma.sdo.das.pom." + contextType.getName() + " " + alias);
         
         this.getContext().setTraversal(Traversal.ABORT);
@@ -124,23 +106,6 @@ public class SubqueryFilterAssembler extends SQLQueryFilterAssembler
     	if (log.isDebugEnabled()) {
             log.debug("visit Property, " + property.getName());    
     	}
-
-        FunctionValues function = property.getFunction();
-        if (function != null)
-            switch (function)
-            {
-                case MIN:
-                    filter.append(" min( ");
-                    break;
-                case MAX:
-                    filter.append(" max( ");
-                    break;
-                case AVG:
-                    filter.append(" avg( ");
-                    break;
-                default:
-                    throw new QueryException("unsupported function '" + function.toString() + "'");
-            }
 
         Path path = property.getPath();
 
@@ -181,9 +146,6 @@ public class SubqueryFilterAssembler extends SQLQueryFilterAssembler
         commonj.sdo.Property endpoint = targetType.getProperty(property.getName());
         contextProperty = endpoint;
         filter.append(DATA_ACCESS_CLASS_MEMBER_PREFIX + endpoint.getName());
-        
-        if (function != null)
-            filter.append(" )");
         
         super.start(property);
     }

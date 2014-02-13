@@ -86,7 +86,18 @@ public class Classifier extends Element {
 	        }
     	}
         return null;
-    }        
+    }  
+    
+    public SDODerivation findDerivation() {
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier);
+        if (stereotypes != null) {
+            for (Stereotype stereotype : stereotypes)
+                if (stereotype.getDelegate() instanceof SDODerivation) {
+                	return (SDODerivation)stereotype.getDelegate();
+                }
+        }
+        return null;
+	}    
 	
 	public List<Comment> getComments() {
 		List<Comment> result = new ArrayList<Comment>();
@@ -170,15 +181,21 @@ public class Classifier extends Element {
         return null;
     }        
     
-    public NamedElement getDerivation() 
+    public org.modeldriven.fuml.repository.Classifier getDerivationSupplier() 
     {
         List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDODerivation) {
                 	SDODerivation sdoDerivationStereotype = (SDODerivation)stereotype.getDelegate();
-                    if (sdoDerivationStereotype.getSupplier() != null)
-                        return sdoDerivationStereotype.getSupplier();
+                    if (sdoDerivationStereotype.getSupplier() != null) {
+                    	SDODerivation deriv = (SDODerivation)stereotype.getDelegate();
+                       	fUML.Syntax.Classes.Kernel.NamedElement namedElem = deriv.getSupplier();
+                       	org.modeldriven.fuml.repository.Element elem = PlasmaRepository.getInstance().getElementById(namedElem.getXmiId());
+                    	if (elem instanceof org.modeldriven.fuml.repository.Classifier) {
+                    		return (org.modeldriven.fuml.repository.Classifier)elem;               		
+                    	}
+                    }
                 }
         }
         return null;

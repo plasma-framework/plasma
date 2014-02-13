@@ -21,22 +21,31 @@
  */
 package org.plasma.text.lang3gl.java;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.Class;
 import org.plasma.provisioning.ClassRef;
+import org.plasma.provisioning.DataTypeRef;
 import org.plasma.provisioning.Package;
 import org.plasma.provisioning.Property;
 import org.plasma.provisioning.adapter.FieldAdapter;
 import org.plasma.query.DataProperty;
 import org.plasma.query.Expression;
+import org.plasma.query.IntegralDataProperty;
+import org.plasma.query.RealDataProperty;
+import org.plasma.query.StringDataProperty;
+import org.plasma.query.TemporalDataProperty;
 import org.plasma.query.dsl.DataNode;
 import org.plasma.query.dsl.DomainRoot;
 import org.plasma.query.dsl.PathNode;
+import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
 import org.plasma.text.lang3gl.ClassFactory;
 import org.plasma.text.lang3gl.Lang3GLContext;
@@ -67,6 +76,8 @@ public class DSLClassFactory extends SDODefaultFactory
 		buf.append(this.createPackageDeclaration(pkg));
 		buf.append(LINE_SEP);
 		buf.append(this.createThirdPartyImportDeclarations(pkg, clss));
+		buf.append(LINE_SEP);
+		buf.append(this.createDSLImportDeclarations(pkg, clss));
 		buf.append(LINE_SEP);
 		buf.append(this.createSDOInterfaceReferenceImportDeclarations(pkg, clss));
 		buf.append(LINE_SEP);
@@ -351,10 +362,28 @@ public class DSLClassFactory extends SDODefaultFactory
 		buf.append(" * Returns a DSL data element for property, <b>");
 		buf.append(field.getName());
 		buf.append("</b>.");	
+		
+		DataFlavor flavor = this.getDataFlavor((DataTypeRef)field.getType());
 	    
 	    // return
 	    buf.append(newline(1));	
-		buf.append(" * @return a DSL data element for property, <b>");
+	    switch (flavor) {
+	    case temporal:
+			buf.append(" * @return a Temporal DSL data element for property, <b>");
+			break;
+	    case integral:
+			buf.append(" * @return an Integral DSL data element for property, <b>");
+			break;
+	    case real:
+			buf.append(" * @return a Real DSL data element for property, <b>");
+			break;
+	    case string:
+			buf.append(" * @return a String DSL data element for property, <b>");
+			break;
+	    case other:
+	    default:
+			buf.append(" * @return a DSL data element for property, <b>");
+	    }
 		buf.append(field.getName());
 		buf.append("</b>.");	
 	    
@@ -363,7 +392,23 @@ public class DSLClassFactory extends SDODefaultFactory
 
 		buf.append(newline(1));
 		buf.append("public "); 
-		buf.append(DataProperty.class.getSimpleName());
+	    switch (flavor) {
+	    case temporal:
+			buf.append(TemporalDataProperty.class.getSimpleName());
+			break;
+	    case integral:
+			buf.append(IntegralDataProperty.class.getSimpleName());
+			break;
+	    case real:
+			buf.append(RealDataProperty.class.getSimpleName());
+			break;
+	    case string:
+			buf.append(StringDataProperty.class.getSimpleName());
+			break;
+	    case other:
+	    default:
+			buf.append(DataProperty.class.getSimpleName());
+	    }
 		buf.append(" "); 
 		buf.append(field.getName()); 
 		buf.append("() {"); 
@@ -499,20 +544,59 @@ public class DSLClassFactory extends SDODefaultFactory
 		StringBuilder buf = new StringBuilder();
 		buf.append(LINE_SEP);
 		buf.append(this.createImportDeclaration(pkg, clss, PlasmaTypeHelper.class.getName()));
+				
+		return buf.toString();
+	}
+
+	protected String createDSLImportDeclarations(Package pkg, Class clss) {
+		StringBuilder buf = new StringBuilder();
 		buf.append(LINE_SEP);
 		buf.append(this.createImportDeclaration(pkg, clss, DomainRoot.class.getName()));
 		buf.append(LINE_SEP);
 		buf.append(this.createImportDeclaration(pkg, clss, PathNode.class.getName()));
 		buf.append(LINE_SEP);
-		buf.append(this.createImportDeclaration(pkg, clss, DataProperty.class.getName()));
-		buf.append(LINE_SEP);
 		buf.append(this.createImportDeclaration(pkg, clss, DataNode.class.getName()));
 		buf.append(LINE_SEP);
 		buf.append(this.createImportDeclaration(pkg, clss, Expression.class.getName()));
+
+		// collect unique data flavors from all fields including any super classes
+		Set<DataFlavor> flavors = new HashSet<DataFlavor>(); 
+		Map<String, FieldAdapter> fields = new TreeMap<String, FieldAdapter>();
+		collectProvisioningFields(pkg, clss, pkg, clss, fields);
+		Iterator<String> fieldIter = fields.keySet().iterator();
+		while (fieldIter.hasNext()) {
+			String name = fieldIter.next();
+			FieldAdapter adapter = fields.get(name);
+			if (adapter.getField().getType() instanceof DataTypeRef) {
+				DataTypeRef type = (DataTypeRef)adapter.getField().getType();
+				DataFlavor flavor = this.getDataFlavor(type);
+				flavors.add(flavor);
+			}
+		}
+		for (DataFlavor flavor : flavors) {
+			buf.append(LINE_SEP);
+		    switch (flavor) {
+		    case temporal:
+				buf.append(this.createImportDeclaration(pkg, clss, TemporalDataProperty.class.getName()));
+				break;
+		    case integral:
+				buf.append(this.createImportDeclaration(pkg, clss, IntegralDataProperty.class.getName()));
+				break;
+		    case real:
+				buf.append(this.createImportDeclaration(pkg, clss, RealDataProperty.class.getName()));
+				break;
+		    case string:
+				buf.append(this.createImportDeclaration(pkg, clss, StringDataProperty.class.getName()));
+				break;
+		    case other:
+		    default:
+				buf.append(this.createImportDeclaration(pkg, clss, DataProperty.class.getName()));
+		    }
+		}
 				
 		return buf.toString();
 	}
-
+	
 	protected String getImplementationClassName(Class clss) {		
 		String name = this.dslClassNameResolver.getName(clss);
 		return name;

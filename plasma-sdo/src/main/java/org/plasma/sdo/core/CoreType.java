@@ -41,6 +41,7 @@ import org.plasma.config.TypeBinding;
 import org.plasma.sdo.Alias;
 import org.plasma.sdo.AssociationPath;
 import org.plasma.sdo.DataType;
+import org.plasma.sdo.Derivation;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.helper.DataConverter;
@@ -56,7 +57,6 @@ import org.plasma.sdo.repository.PlasmaRepository;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
-
 import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 /**
@@ -1059,4 +1059,37 @@ public class CoreType implements PlasmaType {
 		return this.classifier.isRelation(other.getClassifier(), relationPath);
 	}
         
+	@Override
+	public Derivation getDerivation() {
+		return this.classifier.findDerivation();
+	}
+
+	@Override
+	public PlasmaType getDerivationSupplier() {
+		org.modeldriven.fuml.repository.Classifier classifier = this.classifier.getDerivationSupplier();
+		if (classifier != null) {
+		    return lookup(classifier);
+		}
+		return null;
+	}
+	
+	/**
+	 * Finds a mapped SDO type adhering to any type or binding customizations.
+	 * @param repoProperty the repository property
+	 * @return a mapped SDO property adhering to any type name binding customizations.
+	 */
+	private PlasmaType lookup(org.modeldriven.fuml.repository.Classifier repoClassifier) {
+        String repoClassNamespaceURI = this.classifier.getNamespaceURI(
+        		repoClassifier);
+        String repoTypeName = repoClassifier.getName();
+
+        TypeBinding binding = PlasmaConfig.getInstance().findTypeBinding(repoClassNamespaceURI, repoClassifier.getName());
+        if (binding != null) {
+        	if (binding.getLogicalName() != null && binding.getLogicalName().trim().length() > 0)
+        		repoTypeName = binding.getLogicalName().trim();
+        }
+        PlasmaType repoType = (PlasmaType)PlasmaTypeHelper.INSTANCE.getType(repoClassNamespaceURI, 
+        		repoTypeName);
+        return repoType;
+	}
 }

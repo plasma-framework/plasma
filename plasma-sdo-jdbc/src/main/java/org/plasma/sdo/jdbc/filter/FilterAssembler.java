@@ -22,6 +22,7 @@
 package org.plasma.sdo.jdbc.filter;
 
 // java imports
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -34,6 +35,7 @@ import org.plasma.query.bind.PlasmaQueryDataBinding;
 import org.plasma.query.model.AbstractPathElement;
 import org.plasma.query.model.Expression;
 import org.plasma.query.model.From;
+import org.plasma.query.model.Function;
 import org.plasma.query.model.Literal;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.PathElement;
@@ -213,9 +215,9 @@ public class FilterAssembler extends SQLQueryFilterAssembler
 
     public void start(Property property)
     {                
-        org.plasma.query.model.FunctionValues function = property.getFunction();
-        if (function != null)
-            throw new DataAccessException("aggregate functions only supported in subqueries not primary queries");
+        List<Function> functiosn = property.getFunctions();
+        if (functiosn != null || functiosn.size() > 0)
+            throw new DataAccessException("aggregate and other functions only supported in subqueries not primary queries");
           
         Path path = property.getPath();
 
