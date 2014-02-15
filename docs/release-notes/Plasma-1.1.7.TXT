@@ -1,0 +1,31 @@
+Release Notes
+
+Plasma 1.1.7 Release Notes
+
+Plasma 1.1.7 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+See https://github.com/terrameta/plasma/issues. 
+
+Major Changes
+
+
+Bugs
+[Issue #3] - Stale Flag for Mojo's
+[Issue #23] - Add Optional Check for Restriction for XSD Local Simple Type
+
+
+Improvements
+
+[Issue #21] - Query Functions XPath 2.0
+[Issue #24] - Expose Derivation Stereotype
+[Issue #25] - Add (SDO) Key Supplier
+
+
+New Features
+
+
+Tasks
+
+Wish
+
