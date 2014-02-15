@@ -378,16 +378,12 @@ public class CoreProperty implements PlasmaProperty {
     
 	@Override
 	public PlasmaProperty getKeySupplier() {
-    	Key key = this.property.findKey();
-    	if (key == null) {
-            org.modeldriven.fuml.repository.Property supplierProperty = this.property.findKeySupplier();
-            if (supplierProperty != null) {
-            	return lookup(supplierProperty);
-            }
-            else
-            	return null;
-		}
-		return null;
+        org.modeldriven.fuml.repository.Property supplierProperty = this.property.findKeySupplier();
+        if (supplierProperty != null) {
+        	return lookup(supplierProperty);
+        }
+        else
+        	return null;
 	}
     
     public Concurrent getConcurrent() {
