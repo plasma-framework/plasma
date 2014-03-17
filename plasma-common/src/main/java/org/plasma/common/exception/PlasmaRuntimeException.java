@@ -27,7 +27,10 @@ public class PlasmaRuntimeException extends RuntimeException {
 	public PlasmaRuntimeException() {
         super();
     }
-
+    public PlasmaRuntimeException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
     public PlasmaRuntimeException(Throwable t) {
         super(t);
     }

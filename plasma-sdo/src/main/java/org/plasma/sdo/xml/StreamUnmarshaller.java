@@ -133,6 +133,17 @@ public class StreamUnmarshaller extends Unmarshaller {
 	}
 	
 	/**
+	 * initialize for a new unmarshal run
+	 */
+	private void init() {
+		this.snapshotDate = new Timestamp((new Date()).getTime());
+	    this.stack.clear();
+	    this.keyMap.clear();
+	    this.charbuf = new StringBuilder();
+	}
+	
+	
+	/**
 	 * Reads the given input stream in its entirety, and closes the stream when 
 	 * complete. The data graph result is retrieved using the {@link #getResult() getResult}
 	 * method. 
@@ -143,14 +154,14 @@ public class StreamUnmarshaller extends Unmarshaller {
 	 */
 	public void unmarshal(InputStream stream) throws XMLStreamException, UnmarshallerException {
 		XMLStreamReader streamReader = factory.createXMLStreamReader(stream);
+		
+		init();
 
 		try {
 		    unmarshal(streamReader);
         }
 		finally {
 			streamReader.close();
-		    this.stack.clear();
-		    this.allocator = null;
 		}
 	}
 	
@@ -165,13 +176,12 @@ public class StreamUnmarshaller extends Unmarshaller {
 	 */
 	public void unmarshal(Source source) throws XMLStreamException, UnmarshallerException {
 		XMLStreamReader streamReader = factory.createXMLStreamReader(source);
+		init();
 		try {
 		    unmarshal(streamReader);
         }
 		finally {
 			streamReader.close();
-		    this.stack.clear();
-		    this.allocator = null;
 		}
 	}
 	
@@ -186,13 +196,12 @@ public class StreamUnmarshaller extends Unmarshaller {
 	 */
 	public void unmarshal(Reader reader) throws XMLStreamException, UnmarshallerException {
 		XMLStreamReader streamReader = factory.createXMLStreamReader(reader);
+		init();
 		try {
 		    unmarshal(streamReader);
         }
 		finally {
 			streamReader.close();
-		    this.stack.clear();
-		    this.allocator = null;
 		}
 	}
 

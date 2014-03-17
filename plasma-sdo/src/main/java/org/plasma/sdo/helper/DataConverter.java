@@ -47,6 +47,7 @@ import org.joda.time.format.PeriodFormatter;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.PlasmaDataObjectException;
 
+import commonj.sdo.Property;
 import commonj.sdo.Type;
 
 public class DataConverter {
@@ -68,16 +69,16 @@ public class DataConverter {
     private static Map<Class<?>, Method> javaClassToConverterFromMethodMap;
 
     
-    private DateFormat timeFormat;
-    private DateFormat dateFormat;
-    private DateFormat dateTimeFormat;
+    private SimpleDateFormat timeFormat;
+    private SimpleDateFormat dateFormat;
+    private SimpleDateFormat dateTimeFormat;
     private PeriodFormatter durationFormat;
-    private DateFormat dayFormat;
-    private DateFormat monthFormat;
-    private DateFormat monthDayFormat;
-    private DateFormat yearFormat;
-    private DateFormat yearMonthFormat;
-    private DateFormat yearMonthDayFormat;
+    private SimpleDateFormat dayFormat;
+    private SimpleDateFormat monthFormat;
+    private SimpleDateFormat monthDayFormat;
+    private SimpleDateFormat yearFormat;
+    private SimpleDateFormat yearMonthFormat;
+    private SimpleDateFormat yearMonthDayFormat;
     
     private DataConverter() {
     	timeFormat = new SimpleDateFormat(FORMAT_PATTERN_TIME);
@@ -832,8 +833,8 @@ public class DataConverter {
     
     /**
      * Converts the given value to a string. Uses java.util.Arrays
-     * formatting for 'many' properties. 
-     * @param sourceType the property type for the given property
+     * formatting if an array of objects of the target type is detected.   
+     * @param sourceType the target datatype
      * @param value the value to convert
      * @return the string value
      * @throws InvalidDataConversionException if the given source 
@@ -848,6 +849,16 @@ public class DataConverter {
         DataType sourceDataType = DataType.valueOf(sourceType.getName());
         switch (sourceDataType) {
         case String:
+        case DateTime: 
+        case Month:    
+        case MonthDay: 
+        case Day:      
+        case Time:     
+        case Year:     
+        case YearMonth:
+        case YearMonthDay:
+        case Duration: 
+        case URI:     
         	if (value instanceof String) {
                 return (String)value;
         	}
@@ -950,40 +961,25 @@ public class DataConverter {
                 buf.append(iter.next());
             }
             return buf.toString();
-        case URI:     
-        	// FIXME: add many condition
-        	if (!(value instanceof String))
-        		throw new IllegalArgumentException("expected value as class "
-        			+ String.class.getName() + ", not " 
-                    + value.getClass().getName() + ", for datatype '"
-        			+ sourceDataType.name() + "'");
-            return (String)value;
         case Date:     
-        	// FIXME: add many condition
-        	if (!(value instanceof Date))
-        		throw new IllegalArgumentException("expected value as class "
-        			+ Date.class.getName() + ", not " 
-                    + value.getClass().getName() + ", for datatype '"
-        			+ sourceDataType.name() + "'");
-        	return this.dateFormat.format(value);
-        case DateTime: 
-        case Month:    
-        case MonthDay: 
-        case Day:      
-        case Time:     
-        case Year:     
-        case YearMonth:
-        case YearMonthDay:
-        	// FIXME: add many condition
-        	if (!(value instanceof String))
-        		throw new IllegalArgumentException("expected value as class "
-        			+ String.class.getName() + ", not " 
-                    + value.getClass().getName() + ", for datatype '"
-        			+ sourceDataType.name() + "'");
-            return (String)value; // Temporal type except Date are String in Java
-        case Duration: 
-        	// FIXME: add many condition
-            return String.valueOf(value);
+        	if (value instanceof Date) {
+        		return this.dateFormat.format(value);
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<String> result = new ArrayList<String>();
+        			List<?> dateList = (List<?>)value;        			
+        			for (Object listValue : dateList) {
+        				if (!(listValue instanceof Date))
+        					throwExpectedInstance(sourceDataType, Date.class, listValue.getClass());
+        				result.add(this.dateFormat.format(value));
+        			}       			
+        			return Arrays.toString(result.toArray());
+        		}
+        		else {
+					throwExpectedInstance(sourceDataType, Date.class, value.getClass());
+        		}
+        	}   	
         case Object:   
         	// FIXME: add many condition
             return String.valueOf(value);
@@ -1014,6 +1010,227 @@ public class DataConverter {
     	return result;
     }
     
+    /**
+     * Converts the given value to a string. Uses java.util.Arrays
+     * formatting if the target property is a 'many' property. 
+     * If an array of objects of the target type is detected for the given value, 
+     * and the given property is not a 'many' property, 
+     * an IllegalArgumentException is thrown.   
+     * @param sourceProperty the property type for the given property
+     * @param value the value to convert
+     * @return the string value
+     * @throws InvalidDataConversionException If an array of objects of the target type 
+     * is detected for the given value, 
+     * and the given property is not a 'many' property
+     * @throws IllegalArgumentException if the given value is not
+     * the expected Java type as per the SDO 2.1 specification
+     * @throws IllegalArgumentException if an array of objects of the target type is detected for the given value, 
+     * and the given property is not a 'many' property
+     */
+    @SuppressWarnings("unchecked")
+    public String toString(Property property, Object value)
+    {    
+        DataType sourceDataType = DataType.valueOf(property.getType().getName());
+        switch (sourceDataType) {
+        case String:
+        case DateTime: 
+        case Month:    
+        case MonthDay: 
+        case Day:      
+        case Time:     
+        case Year:     
+        case YearMonth:
+        case YearMonthDay:
+        case Duration: 
+        case URI:     
+        	if (!property.isMany()) {
+        		if (value instanceof String) {
+        			return (String)value;
+        		}
+        		else
+        			throwExpectedInstance(sourceDataType, String.class, value.getClass());
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<?> list = (List<?>)value;        			
+        			for (Object listValue : (List<?>)value) 
+        				if (!(listValue instanceof String))
+        					throwExpectedInstance(sourceDataType, String.class, listValue.getClass());
+        			return Arrays.toString(list.toArray());
+        		}
+        		else {
+        			throw new IllegalArgumentException("expected value as instanceof List for 'many' property, "
+        					+ property.toString());
+        		}
+        	}
+        case Decimal: 
+        	if (!property.isMany()) {
+        		if (value instanceof BigDecimal) {
+        			return ((BigDecimal)value).toString();
+        		}
+        		else
+        			throwExpectedInstance(sourceDataType, BigDecimal.class, value.getClass());
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<?> list = (List<?>)value;        			
+        			for (Object listValue : (List<?>)value) 
+        				if (!(listValue instanceof BigDecimal))
+        					throwExpectedInstance(sourceDataType, BigDecimal.class, listValue.getClass());
+        			return Arrays.toString(list.toArray());
+        		}
+        		else {
+        			throw new IllegalArgumentException("expected value as instanceof List for 'many' property, "
+        					+ property.toString());
+        		}
+        	}
+        case Bytes:  
+        	if (!property.isMany()) {
+        		if (value instanceof byte[]) {
+        			return toHexString(((byte[])value)); // as per spec: [0-9A-F]+
+        		}
+        		else
+        			throwExpectedInstance(sourceDataType, byte[].class, value.getClass());
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<String> result = new ArrayList<String>();
+        			List<?> list = (List<?>)value;        			
+        			for (Object listValue : list) {
+        				if (!(listValue instanceof byte[]))
+        					throwExpectedInstance(sourceDataType, byte[].class, listValue.getClass());
+        				result.add(toHexString((byte[])listValue));
+        			}       			
+        			return Arrays.toString(result.toArray());
+        		}
+        		else {
+        			throw new IllegalArgumentException("expected value as instanceof List for 'many' property, "
+        					+ property.toString());
+        		}
+        	}
+        case Byte:  
+        	if (!property.isMany()) {
+        		if (value instanceof Byte) {
+            		// as per spec: 8 bits unsigned [0-9]+
+                    return Integer.valueOf(((Byte)value).byteValue() & 0xFF).toString();
+        		}
+        		else
+        			throwExpectedInstance(sourceDataType, Byte.class, value.getClass());
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<String> result = new ArrayList<String>();
+        			List<?> list = (List<?>)value;        			
+        			for (Object listValue : list) {
+        				if (!(listValue instanceof Byte))
+        					throwExpectedInstance(sourceDataType, Byte.class, listValue.getClass());
+        				result.add(Integer.valueOf(((Byte)listValue).byteValue() & 0xFF).toString());
+        			}       			
+        			return Arrays.toString(result.toArray());
+        		}
+        		else {
+        			throw new IllegalArgumentException("expected value as instanceof List for 'many' property, "
+        					+ property.toString());
+        		}
+        	}
+        case Boolean:  
+        	return toString(property, Boolean.class, value);
+        case Character:
+        	return toString(property, Character.class, value);
+        case Double:   
+        	return toString(property, Double.class, value);
+        case Float:    
+        	return toString(property, Float.class, value);
+        case Int:      
+        	return toString(property, Integer.class, value);
+        case Integer:  
+        	return toString(property, BigInteger.class, value);
+        case Long:  
+        	return toString(property, Long.class, value);
+        case Short:   
+        	return toString(property, Short.class, value);
+        case Strings:  
+        	// FIXME: add many condition
+        	if (!(value instanceof List))
+        		throw new IllegalArgumentException("expected value as class "
+        			+ List.class.getName() + ", not " 
+                    + value.getClass().getName() + ", for datatype '"
+        			+ sourceDataType.name() + "'");
+            StringBuffer buf = new StringBuffer();
+            List<String> list = (List<String>)value;
+            Iterator<String> iter = list.iterator();
+            for (int i = 0; iter.hasNext(); i++) {
+                if (i > 0)
+                    buf.append(" ");
+                buf.append(iter.next());
+            }
+            return buf.toString();
+        case Date:   
+        	if (!property.isMany()) {
+        		if (value instanceof Date) {
+        			return this.dateFormat.format(value);
+        		}
+        		else
+        			throwExpectedInstance(sourceDataType, Date.class, value.getClass());
+        	}
+        	else {
+        		if (value instanceof List) {
+        			List<String> result = new ArrayList<String>();
+        			List<?> dateList = (List<?>)value;        			
+        			for (Object listValue : dateList) {
+        				if (!(listValue instanceof Date))
+        					throwExpectedInstance(sourceDataType, Date.class, listValue.getClass());
+        				result.add(this.dateFormat.format(value));
+        			}       			
+        			return Arrays.toString(result.toArray());
+        		}
+        		else {
+        			throw new IllegalArgumentException("expected value as instanceof List for 'many' property, "
+        					+ property.toString());
+        		}
+        	}
+        case Object:   
+        	// FIXME: add many condition
+            return String.valueOf(value);
+        default: 
+            throw new InvalidDataConversionException(DataType.String, 
+                    sourceDataType, value);
+        }
+    }
+    
+    private String toString(Property property, Class<?> typeClass, Object value) {
+    	
+    	DataType sourceDataType = DataType.valueOf(property.getType().getName());
+    	String result = null;
+   	    	
+    	if (!property.isMany()) {
+    		if (typeClass.isAssignableFrom(value.getClass())) {
+    			result = String.valueOf(value);
+    		}
+    		else
+    			throwExpectedInstance(sourceDataType, Date.class, value.getClass());
+    	}
+    	else {
+    		if (value instanceof List) {
+        		if (value instanceof List) {
+        			List<?> list = (List<?>)value;        			
+        			for (Object listValue : (List<?>)value) 
+        				if (!(typeClass.isAssignableFrom(listValue.getClass())))
+        					throwExpectedInstance(sourceDataType, typeClass, listValue.getClass());        			
+        			result = Arrays.toString(list.toArray());
+        		}
+        		else {
+    				throwExpectedInstance(sourceDataType, typeClass, value.getClass());
+        		}
+    		}
+    		else {
+    			throw new IllegalArgumentException("expected value as instanceof List for 'many' property, "
+    					+ property.toString());
+    		}
+    	}
+    	return result;
+    }
+    
     private void throwExpectedInstance(DataType dataType, 
     		Class expectedClass, Class foundClass) {
 	    throw new IllegalArgumentException("expected value or list of class "
@@ -1025,8 +1242,8 @@ public class DataConverter {
     /**
      * Converts the given string value to an object appropriate
      * for the target type. If java.util.Arrays formatting
-     * is detected for the given string, the formatting is
-     * from removed and the arrays converted into a list
+     * is detected for the given string value, the formatting is
+     * removed and the arrays converted into a list
      * of elements appropriate for the target type.
      * @param targetType the target data type
      * @param value the value
@@ -1236,6 +1453,374 @@ public class DataConverter {
                     DataType.String, value);
         }
     }    
+
+    
+    /**
+     * Converts the given string value to an object appropriate
+     * for the target property and its type. If the given property is a 'many' property,
+     * java.util.Arrays formatting is expected.
+     * Any java.util.Arrays formatting is
+     * removed and the arrays converted into a list
+     * of elements appropriate for the target type.
+     * @param targetType the target data type
+     * @param value the value to convert from string
+     * @return the converted value
+     * @throws IllegalArgumentException if the given property is a 'many' property and no  
+     * java.util.Arrays formatting is detected for the given value.
+     */
+    public Object fromString(Property targetProperty, String value)
+    {    
+        DataType targetDataType = DataType.valueOf(targetProperty.getType().getName());
+        switch (targetDataType) {
+        case String:
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+                    return value;
+            	}
+            	else { // ignore arrays formatting for singular properties as these are allowed to contain '['
+            		return value;
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<String> list = new ArrayList<String>();            	
+                	for (String arrayValue : strings)
+                		list.add(arrayValue);
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Decimal: 
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+            		return new BigDecimal(value);
+            	}
+            	else { 
+            		throw new IllegalArgumentException("no java.util.Arrays formatting expected for the given value, for the given singular property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<BigDecimal> list = new ArrayList<BigDecimal>();            	
+                	for (String arrayValue : strings)
+                		list.add(new BigDecimal(arrayValue));
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Bytes:
+        	if (!targetProperty.isMany()) {
+        		return value.getBytes(); // FIXME: charset?
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<byte[]> list = new ArrayList<byte[]>();            	
+                	for (String arrayValue : strings)
+                		list.add(value.getBytes()); // FIXME: charset?
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Byte:  
+        	if (!targetProperty.isMany()) {
+        		byte[] byteArray = value.getBytes(); // FIXME: charset?
+                return new Byte(byteArray[0]); //TODO: truncation warning?
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<Byte> list = new ArrayList<Byte>();            	
+                	byte[] byteArray = null;
+                	for (String arrayValue : strings) {
+                		byteArray = arrayValue.getBytes();
+                		list.add( new Byte(byteArray[0]));
+                	}
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Boolean:  
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+                    return Boolean.valueOf(value);
+            	}
+            	else { 
+            		throw new IllegalArgumentException("no java.util.Arrays formatting expected for the given value, for the given singular property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<Boolean> list = new ArrayList<Boolean>();            	
+                	for (String arrayValue : strings)
+                		list.add(Boolean.valueOf(arrayValue));
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Character:
+        	if (!targetProperty.isMany()) {
+                return Character.valueOf(value.charAt(0)); // TODO: truncation warning?
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<Character> list = new ArrayList<Character>();            	
+                	for (String arrayValue : strings)
+                		list.add(Character.valueOf(arrayValue.charAt(0)));
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Double:  
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+            		return Double.valueOf(value);
+            	}
+            	else { 
+            		throw new IllegalArgumentException("no java.util.Arrays formatting expected for the given value, for the given singular property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<Double> list = new ArrayList<Double>();            	
+                	for (String arrayValue : strings)
+                		list.add(Double.valueOf(arrayValue));
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Float:    
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+            		return Float.valueOf(value);
+            	}
+            	else { 
+            		throw new IllegalArgumentException("no java.util.Arrays formatting expected for the given value, for the given singular property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<Float> list = new ArrayList<Float>();            	
+                	for (String arrayValue : strings)
+                		list.add(Float.valueOf(arrayValue));
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Int:      
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+            		return Integer.valueOf(value);
+            	}
+            	else { 
+            		throw new IllegalArgumentException("no java.util.Arrays formatting expected for the given value, for the given singular property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<Integer> list = new ArrayList<Integer>();            	
+                	for (String arrayValue : strings)
+                		list.add(Integer.valueOf(arrayValue));
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Integer:  
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+            		return new BigInteger(value);
+            	}
+            	else { 
+            		throw new IllegalArgumentException("no java.util.Arrays formatting expected for the given value, for the given singular property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<BigInteger> list = new ArrayList<BigInteger>();            	
+                	for (String arrayValue : strings)
+                		list.add(new BigInteger(arrayValue));
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Long:     
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+            		return Long.valueOf(value);
+            	}
+            	else { 
+            		throw new IllegalArgumentException("no java.util.Arrays formatting expected for the given value, for the given singular property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<Long> list = new ArrayList<Long>();            	
+                	for (String arrayValue : strings)
+                		list.add(Long.valueOf(arrayValue));
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Short:    
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+            		 return Short.valueOf(value);
+            	}
+            	else { 
+            		throw new IllegalArgumentException("no java.util.Arrays formatting expected for the given value, for the given singular property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<Short> list = new ArrayList<Short>();            	
+                	for (String arrayValue : strings)
+                		list.add(Short.valueOf(arrayValue));
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Strings:  
+        	if (!targetProperty.isMany()) {
+                String[] values = value.split("\\s");
+                List<String> list = new ArrayList<String>(values.length);
+                for (int i = 0; i < values.length; i++)
+                    list.add(values[i]); 
+                return list;
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		// don't replace whitespace internal to individual 'strings' value
+            		String tempValue = value.replaceAll("[\\[\\]]", "");
+            		tempValue.trim(); // just trim Arrays formatting
+            		String[] strings = tempValue.split(",");
+                	List<List<String>> list = new ArrayList<List<String>>();            	
+                	for (String arrayValue : strings) {
+                        String[] values = arrayValue.split("\\s");
+                        List<String> subList = new ArrayList<String>(values.length);
+                        for (int i = 0; i < values.length; i++)
+                        	subList.add(values[i]); 
+                        list.add(subList);
+                	}
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        case Date: 
+        	try {
+	        	if (!targetProperty.isMany()) {
+	        		 return dateFormat.parse(value);
+	        	}
+	        	else {
+	            	if (value.startsWith("[")) { 
+		        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+		            	List<Date> list = new ArrayList<Date>();            	
+		            	for (String arrayValue : strings)
+		            		list.add(dateFormat.parse(arrayValue));
+		            	return list;
+	            	} 
+	            	else {
+	            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+	            				+ targetProperty.toString());
+	            	}
+	        	}
+            } catch (ParseException e) {
+                throw new PlasmaDataObjectException(e);
+            }
+        case DateTime:
+        case Month:    
+        case MonthDay: 
+        case URI:  
+        case Day:      
+        case Duration: 
+        case Time:     
+        case Year:     
+        case YearMonth:
+        case YearMonthDay:
+        	if (!targetProperty.isMany()) {
+            	if (!value.startsWith("[")) { 
+                	// TODO: See lexical XML Schema string representation for these types
+                    return value;
+            	}
+            	else { 
+            		throw new IllegalArgumentException("no java.util.Arrays formatting expected for the given value, for the given singular property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        	else {
+            	if (value.startsWith("[")) { 
+            		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+                	List<String> list = new ArrayList<String>();            	
+                	for (String arrayValue : strings)
+                		list.add(arrayValue);
+                	return list;
+            	} 
+            	else {
+            		throw new IllegalArgumentException("no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+            				+ targetProperty.toString());
+            	}
+        	}
+        default: 
+            throw new InvalidDataConversionException(targetDataType, 
+                    DataType.String, value);
+        }
+    }    
     
     public List<String> toStrings(Type sourceType, Object value)
     {    
@@ -1278,30 +1863,51 @@ public class DataConverter {
     
     public java.util.Date toDate(Type sourceType, Object value)
     {    
+    	SimpleDateFormat format = null;
+    	
         DataType sourceDataType = DataType.valueOf(sourceType.getName());
         switch (sourceDataType) {
         case Date:
             return (Date)value;
         case Long:
             return new Date(((Long)value).longValue());
-        case DateTime:
         case Day:
-        case Duration:
+        	format = dayFormat;
+        	break;
         case Month:
+        	format = monthFormat;
+        	break;
         case MonthDay:
+        	format = monthDayFormat;
+        	break;
         case Time:
+        	format = timeFormat;
+        	break;
         case Year:
+        	format = yearFormat;
+        	break;
         case YearMonth:
+        	format = yearMonthFormat;
+        	break;
         case YearMonthDay:
+        	format = yearMonthDayFormat;
+        	break;
+        case Duration: // FIXME use correct parse
+        case DateTime:
         case String:
-            try {
-                return dateTimeFormat.parse((String)value);
-            } catch (ParseException e) {
-                throw new PlasmaDataObjectException(e);
-            }
+        	format = dateTimeFormat;
+        	break;
         default: 
             throw new InvalidDataConversionException(DataType.Date, 
                     sourceDataType, value);
+        }
+	     
+	    try {
+	    	return format.parse((String)value);
+        } catch (ParseException e) {
+            throw new InvalidDataFormatException(
+            	"expected "+sourceDataType.toString()+" pattern '" + format.toPattern() + "' for value '" +
+            			value.toString() + "'", e);
         }
     }
 

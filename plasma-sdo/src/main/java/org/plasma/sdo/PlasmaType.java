@@ -228,6 +228,21 @@ public interface PlasmaType extends Type {
 
     
     /**
+     * Returns the physical name alias of package containing this Type as a byte array 
+     * which may be cached or lazily cached on demand, or null if no physical alias name exists. 
+     * <p>
+     * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
+     * distributed "cloud" data stores typically storing lexicographically 
+     * ordered row and column keys as uninterpreted arrays of bytes. Fast dynamic
+     * construction of such keys is important as such services may necessarily construct
+     * unique composite keys based in part on qualified or unqualified logical or physical
+     * type names. 
+     * </p>
+     * @return the physical name alias of package containing this Type as a byte array, or null if no physical alias name exists.
+     */
+    public byte[] getPackagePhysicalNameBytes();
+    
+    /**
      * Returns an alphabetically sorted list of the Properties declared 
      * in this Type as opposed to
      * those declared in base Types. Properties are alphabetically sorted by name. 

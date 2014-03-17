@@ -139,5 +139,16 @@ public interface XMLOptions {
 	 */
 	public void setEncoding(String encoding);
     
+	/**
+     * For XML writer utilities, returns whether to indent and format the XML output.  
+     * @return  
+     */
+	public boolean isPrettyPrint();
+
+	/**
+	 * For XML writer utilities, sets whether to indent and format the XML output.  
+	 * @param prettyPrint whether to indent and format the XML output
+	 */
+	public void setPrettyPrint(boolean prettyPrint);
 
 }

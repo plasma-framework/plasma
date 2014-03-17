@@ -71,6 +71,7 @@ public interface PlasmaProperty extends Property {
     
     public static final PlasmaProperty INSTANCE_PROPERTY_BYTES_NAME_BYTES = CoreProperty.createInstanceProperty("NameBytes", DataType.Bytes);
     public static final PlasmaProperty INSTANCE_PROPERTY_BYTES_URI_BYTES = CoreProperty.createInstanceProperty("URIBytes", DataType.Bytes);
+    public static final PlasmaProperty INSTANCE_PROPERTY_BYTES_PACKAGE_PHYSICAL_NAME_BYTES = CoreProperty.createInstanceProperty("PackagePhysicalNameBytes", DataType.Bytes);
     public static final PlasmaProperty INSTANCE_PROPERTY_BYTES_PHYSICAL_NAME_BYTES = CoreProperty.createInstanceProperty("PhysicalNameBytes", DataType.Bytes);
     public static final PlasmaProperty INSTANCE_PROPERTY_BYTES_LOCAL_NAME_BYTES = CoreProperty.createInstanceProperty("LocalNameBytes", DataType.Bytes);
     

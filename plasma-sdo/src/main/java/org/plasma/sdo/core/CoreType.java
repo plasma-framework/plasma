@@ -559,6 +559,35 @@ public class CoreType implements PlasmaType {
     	return this.classifier.getPackagePhysicalName();    	
     }
     
+    /**
+     * Returns the physical name alias of package containing this Type as a byte array 
+     * which may be cached or lazily cached on demand, or null if no physical alias name exists. 
+     * <p>
+     * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
+     * distributed "cloud" data stores typically storing lexicographically 
+     * ordered row and column keys as uninterpreted arrays of bytes. Fast dynamic
+     * construction of such keys is important as such services may necessarily construct
+     * unique composite keys based in part on qualified or unqualified logical or physical
+     * type names. 
+     * </p>
+     * @return the physical name alias of package containing this Type as a byte array, or null if no physical alias name exists.
+     */
+    public byte[] getPackagePhysicalNameBytes() {
+    	if (this.instancePropertiesMap == null)
+    		this.lazyLoadProperties();
+    	byte[] result = (byte[])this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_BYTES_PACKAGE_PHYSICAL_NAME_BYTES);
+        if (result == null) {
+        	String name = this.getPackagePhysicalName();
+        	if (name != null) {
+	        	result = name.getBytes(
+	        		Charset.forName( CoreConstants.UTF8_ENCODING ) );
+				this.instancePropertiesMap.put(
+					PlasmaProperty.INSTANCE_PROPERTY_BYTES_PACKAGE_PHYSICAL_NAME_BYTES, result);
+        	}
+        }
+        return result;
+    }
+    
 	@SuppressWarnings("unchecked")
 	public List<Comment> getDescription() {
 		return (List<Comment>)this.get(

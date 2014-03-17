@@ -19,25 +19,24 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo;
-
-import org.plasma.common.exception.PlasmaRuntimeException;
+package org.plasma.sdo.helper;
 
 
 
-public class PlasmaDataObjectException extends PlasmaRuntimeException
-{
+public class InvalidDataFormatException extends IllegalArgumentException {
+
     private static final long serialVersionUID = 1L;
-    public PlasmaDataObjectException(String message)
-    {
-        super(message);
+    
+    public InvalidDataFormatException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public InvalidDataFormatException(String s) {
+		super(s);
+	}
+
+	public InvalidDataFormatException(Throwable t) {
+        super(t.getMessage());
     }
-    public PlasmaDataObjectException(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
-    public PlasmaDataObjectException(Throwable t)
-    {
-        super(t);
-    }
+
 }

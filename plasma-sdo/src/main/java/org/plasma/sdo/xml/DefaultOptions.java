@@ -33,6 +33,7 @@ public class DefaultOptions implements XMLOptions {
 	private boolean validate = true;
 	private ErrorHandler errorHandler;
 	private String encoding;
+	private boolean prettyPrint = true;
 	
 	public DefaultOptions(String rootElementNamespaceURI) {
 		super();
@@ -109,6 +110,16 @@ public class DefaultOptions implements XMLOptions {
 
 	public void setEncoding(String encoding) {
 		this.encoding = encoding;
+	}
+
+	@Override
+	public boolean isPrettyPrint() {
+		return prettyPrint;
+	}
+
+	@Override
+	public void setPrettyPrint(boolean prettyPrint) {
+		this.prettyPrint = prettyPrint;		
 	}
 
 }

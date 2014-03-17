@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -40,12 +42,15 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jaxen.JaxenException;
+import org.plasma.sdo.DataFlavor;
+import org.plasma.sdo.DataType;
 import org.plasma.sdo.PlasmaChangeSummary;
 import org.plasma.sdo.PlasmaDataGraph;
 import org.plasma.sdo.PlasmaDataGraphEventVisitor;
 import org.plasma.sdo.PlasmaDataGraphVisitor;
 import org.plasma.sdo.PlasmaDataLink;
 import org.plasma.sdo.PlasmaDataObject;
+import org.plasma.sdo.PlasmaDataObjectException;
 import org.plasma.sdo.PlasmaEdge;
 import org.plasma.sdo.PlasmaNode;
 import org.plasma.sdo.PlasmaProperty;
@@ -53,6 +58,8 @@ import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.DataAccessException;
 import org.plasma.sdo.access.provider.common.PropertyPair;
 import org.plasma.sdo.helper.DataConverter;
+import org.plasma.sdo.helper.InvalidDataConversionException;
+import org.plasma.sdo.helper.InvalidDataFormatException;
 import org.plasma.sdo.helper.PlasmaDataFactory;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
 import org.plasma.sdo.profile.ConcurrencyType;
@@ -754,7 +761,17 @@ dataObject.set(property, dataHelper.convert(property, value));
                 PlasmaDataLink link = createLink(property, targetNode);
                 propertyValue = link; // set the link into this node below
             }
-            else {
+            else { // data property
+            	DataFlavor flavor = ((PlasmaProperty)property).getDataFlavor();
+            	// attempt a conversion as a validation check
+            	if (flavor.ordinal() == DataFlavor.temporal.ordinal()) 
+            		try {
+            		    DataConverter.INSTANCE.toDate(property.getType(), value);
+            		}
+            	    catch (InvalidDataFormatException dfe) {
+            	    	throw new PlasmaDataObjectException("property, " + property.toString(), dfe);
+            	    }
+            	
                 Object existingValue = this.get(property);
                 if (existingValue != null && existingValue.equals(propertyValue))
                 {
@@ -777,20 +794,36 @@ dataObject.set(property, dataHelper.convert(property, value));
                 if (!property.getType().isDataType()) {
                     edgeList = new ArrayList<PlasmaEdge>(list.size());
                     propertyValue = edgeList; // set the link list into this node below
-                }
-            
-                for (Object listValue : list) {
-                    if (!instanceClass.isAssignableFrom(listValue.getClass())) 
-                        throw new ClassCastException("expected instance of " 
-                                + property.getType().getInstanceClass().getName()
-                                + " as value for property "
-                                + this.type.getURI() + "#" + this.type.getName() + "." + property.getName()
-                                + " - not class, " + listValue.getClass().getName());  
-                    if (edgeList != null) {
+                    for (Object listValue : list) {
+                        if (!instanceClass.isAssignableFrom(listValue.getClass())) 
+                            throw new ClassCastException("expected instance of " 
+                                    + property.getType().getInstanceClass().getName()
+                                    + " as value for property "
+                                    + this.type.getURI() + "#" + this.type.getName() + "." + property.getName()
+                                    + " - not class, " + listValue.getClass().getName());  
                     	PlasmaDataLink link = createLink(property, (PlasmaNode)listValue);
                         edgeList.add(link); 
                     }
-                }                                    
+                }
+                else { // data type property
+                	DataFlavor flavor = ((PlasmaProperty)property).getDataFlavor();
+                	try {
+	                    for (Object listValue : list) {
+	                        if (!instanceClass.isAssignableFrom(listValue.getClass())) 
+	                            throw new ClassCastException("expected instance of " 
+	                                    + property.getType().getInstanceClass().getName()
+	                                    + " as value for property "
+	                                    + this.type.getURI() + "#" + this.type.getName() + "." + property.getName()
+	                                    + " - not class, " + listValue.getClass().getName());  
+	                    	// attempt a conversion as a validation check
+	                    	if (flavor.ordinal() == DataFlavor.temporal.ordinal()) 
+	                		    DataConverter.INSTANCE.toDate(property.getType(), value);
+	                    }                 	
+            		}
+            	    catch (InvalidDataFormatException dfe) {
+            	    	throw new PlasmaDataObjectException("property, " + property.toString(), dfe);
+            	    }
+                }            
             }
             else
                 throw new ClassCastException("expected java.util.List Java Class for property "
@@ -822,7 +855,6 @@ dataObject.set(property, dataHelper.convert(property, value));
         */
     }   
     
-
     /**
      * Adds the given value to the given multi=valued property. 
      * @param property the multi-valued property

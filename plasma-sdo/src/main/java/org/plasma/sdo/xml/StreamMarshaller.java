@@ -135,7 +135,9 @@ public class StreamMarshaller extends Marshaller {
 		else
 			writer = factory.createXMLStreamWriter(stream);
 		
-		writer = new IndentingXMLStreamWriter(writer);
+		if (isPrettyPrint())
+		    writer = new IndentingXMLStreamWriter(writer);
+		
 		try {
 		    write(writer);
         }
@@ -194,6 +196,13 @@ public class StreamMarshaller extends Marshaller {
 			return this.getOptions().getEncoding();
 		else
 			return null;
+	}
+	
+	private boolean isPrettyPrint() {
+		if (this.getOptions() != null)
+			return this.getOptions().isPrettyPrint();
+		else
+			return true;
 	}
 	
 	private void write(XMLStreamWriter writer) throws XMLStreamException {
