@@ -1,0 +1,29 @@
+Release Notes
+
+Plasma 1.1.9 Release Notes
+
+Plasma 1.1.9 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+See https://github.com/terrameta/plasma/issues. 
+
+Major Changes
+
+
+Bugs
+[Issue #36] - Check for Opposite Singular Properties in RelationCache.isLateralSingularRelation
+
+
+
+Improvements
+
+[Issue #35] - Add Debugging in RelationCache
+
+
+
+New Features
+
+Tasks
+
+Wish
+

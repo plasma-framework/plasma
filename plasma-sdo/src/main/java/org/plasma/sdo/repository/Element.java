@@ -35,7 +35,7 @@ public abstract class Element {
         org.modeldriven.fuml.repository.Package p = classifier.getPackage();
         String uri = findSDONamespaceURI(p);
         if (uri == null)
-            throw new PlasmaRuntimeException("no SDO Namespace uri found for classifier, '"
+            throw new RepositoryException("no SDO Namespace uri found for classifier, '"
                 + classifier.getName() + "'");
         return uri;
     } 

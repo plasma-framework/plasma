@@ -61,6 +61,15 @@ public class Property extends Element {
 		this.property = property;
 	}
 	
+	public String toString() {
+		if (this.property.getName() != null) {
+			return this.property.getName();
+		}
+		else {
+			return this.property.getType().getName();
+		}
+	}
+	
 	public String getName() {
 		return this.property.getName();
 	}
@@ -176,9 +185,11 @@ public class Property extends Element {
                 if (stereotype.getDelegate() instanceof SDOKey) {
                 	SDOKey key = (SDOKey)stereotype.getDelegate();
                 	fUML.Syntax.Classes.Kernel.NamedElement namedElem = key.getSupplier();
-                	org.modeldriven.fuml.repository.Element elem = PlasmaRepository.getInstance().getElementById(namedElem.getXmiId());
-                	if (elem instanceof org.modeldriven.fuml.repository.Property) {
-                		return (org.modeldriven.fuml.repository.Property)elem;               		
+                	if (namedElem != null) {
+	                	org.modeldriven.fuml.repository.Element elem = PlasmaRepository.getInstance().getElementById(namedElem.getXmiId());
+	                	if (elem instanceof org.modeldriven.fuml.repository.Property) {
+	                		return (org.modeldriven.fuml.repository.Property)elem;               		
+	                	}
                 	}
                 }
         }
@@ -271,9 +282,11 @@ public class Property extends Element {
                 if (stereotype.getDelegate() instanceof SDODerivation) {
                 	SDODerivation deriv = (SDODerivation)stereotype.getDelegate();
                 	fUML.Syntax.Classes.Kernel.NamedElement namedElem = deriv.getSupplier();
-                	org.modeldriven.fuml.repository.Element elem = PlasmaRepository.getInstance().getElementById(namedElem.getXmiId());
-                	if (elem instanceof org.modeldriven.fuml.repository.Property) {
-                		return (org.modeldriven.fuml.repository.Property)elem;               		
+                	if (namedElem != null) {
+                	    org.modeldriven.fuml.repository.Element elem = PlasmaRepository.getInstance().getElementById(namedElem.getXmiId());
+                	    if (elem instanceof org.modeldriven.fuml.repository.Property) {
+                		    return (org.modeldriven.fuml.repository.Property)elem;               		
+                	    }
                 	}
                 }
         }

@@ -22,6 +22,7 @@
 package org.plasma.sdo.repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -49,12 +50,17 @@ public class RelationCache {
 			    result = new RelationPathResult(AssociationPath.singular, isRelated);
 		        if (log.isDebugEnabled())
 		            log.debug("cacheing ("+isRelated+") lateral-singular relation: "+ target.getName() 
-		                    + "/" + source.getName());
+		                    + "/" + source.getName() + " ("+key+")");
 			    synchronized (map) {
 			    	this.map.put(key, result);
 			    }
 			}
-			return result.isRelated();
+			else {
+		        if (log.isDebugEnabled())
+		            log.debug("cache hit ("+result.isRelated()+") lateral-singular relation: "+ target.getName() 
+		                    + "/" + source.getName() + " ("+key+")");
+			}
+		    return result.isRelated();
 		default:
 			//TODO: other cases
 			return false;
@@ -73,7 +79,7 @@ public class RelationCache {
     		org.modeldriven.fuml.repository.Property source) {
     	return target.getXmiId() + "/" + source.getXmiId();
     }
-    
+        
     /**
      * Returns true if the given target type is related to the given source type
      * through one or more singular reference properties.
@@ -87,84 +93,144 @@ public class RelationCache {
     		Map<String, Integer> visited) {
         
         if (log.isDebugEnabled())
-            log.debug("comparing "+ targetType.getName() 
-                    + "/" + sourceType.getName());
+            log.debug("comparing targetType/sourceType "+ targetType.toString() 
+                    + " / " + sourceType.toString());
                 
-        for (org.modeldriven.fuml.repository.Property targetProperty : targetType.getAllProperties()) {
-            if (targetProperty.getType().isDataType()) 
-                continue; // not a reference       
+        List<org.modeldriven.fuml.repository.Property> targetProperties = targetType.getAllProperties();
+        if (log.isDebugEnabled()) {
+            log.debug("checking targetType  "+ targetType.toString() 
+                    + " with " + targetProperties.size() + " properties");
+        }
+        
+        for (org.modeldriven.fuml.repository.Property targetProperty : targetProperties) {
+            if (log.isDebugEnabled())  
+                log.debug("checking "+ targetType.toString() + "." + getDebugName(targetProperty));
             
-            if (targetProperty.isSingular()) {
-            	
-            	// Our metadata is not a directed graph so we 
-            	// can't bypass traversals based on directionality, so
-            	// detect a loop based on source and target properties
-            	// And only visit a particular link
-            	// ever once.
-            	if (traversalSourceProperty != null) {
-	            	String linkKey = createHashKey(targetProperty, traversalSourceProperty);
-	            	Integer count = null;
-	            	if ((count = visited.get(linkKey)) == null)
-	            		visited.put(linkKey, Integer.valueOf(1));
-	            	else {	
-	            		
-	                	org.modeldriven.fuml.repository.Property opposite = targetProperty.getOpposite();
-	                	if (opposite != null && opposite.isSingular()) {
-	            		    log.warn("singular property "
-	                				+ targetType.getName() + "."
-	                        		+ (targetProperty.getName() == null ? targetProperty.getXmiId() : targetProperty.getName())
-	                        		+ " has opposite " 
-	                        		+ opposite.getClass_().getName()+"."
-	                        		+ (opposite.getName() == null ? opposite.getXmiId() : opposite.getName())
-	                        		+ " which is also singular");
-	                	}
-	                    if (log.isDebugEnabled())
-	                        log.debug("exiting - visited "+ targetType.getName() + "."
-	                        		+ targetProperty.getName());
 
-	                	return false;
-	            	}
-            	}
+            if (targetProperty.getType().isDataType()) { 
+                if (log.isDebugEnabled()) 
+                    log.debug("not a reference property "+ targetType.toString() + "." + getDebugName(targetProperty));
+                continue; // not a reference       
+            }
+            
+            // We are traversing BACK-TO the source type, so need to look at the multiplicity of the opposite
+            // properties.
+            org.modeldriven.fuml.repository.Property targetPropertyOpposite = targetProperty.getOpposite();
+            if (targetPropertyOpposite == null) {
+                if (log.isDebugEnabled()) 
+                    log.debug("no opposite "+ targetType.toString() + "." + getDebugName(targetProperty));
+            	continue;
+            }
+            
+            if (!targetPropertyOpposite.isSingular())
+            {
+                if (log.isDebugEnabled()) 
+                    log.debug("opposite not singular "+ targetType.toString() + "." + getDebugName(targetProperty));
+            	continue;
+            }                        
             	
-                if (log.isDebugEnabled())
-                    log.debug("processing "+ targetType.getName() + "."
-                    		+ targetProperty.getName());
-                
-                // if we've arrived at the target via singular relations
-            	if (targetProperty.getType().getXmiId().equals(sourceType.getId())) {
-	                if (targetType.getId().equals(sourceType.getId())) {
-	                    log.warn("potential circular reference: " + targetType.getNamespaceURI() + "#"+ targetType.getName()
-		                        + "." + targetProperty.getName()
-		                        + "->" + sourceType.getNamespaceURI() + "#"+ sourceType.getName());
-	                }
-	                if (log.isDebugEnabled())
-	                    log.debug("found child link property " + targetType.getName()
-	                        + "." + targetProperty.getName()
-	                        + "->" + sourceType.getName());
-	                return true; 
-            	}
-            	else { 
-            		// if we've not arrived at the target/root
-                    if (!(targetProperty.getType().getXmiId().equals(targetType.getId()))) {
-                    		
-                        if (log.isDebugEnabled())
-                            log.debug("traversing "+ targetType.getName() + "."
-                            		+ targetProperty.getName());
-                        org.modeldriven.fuml.repository.Classifier targetClassifier = (org.modeldriven.fuml.repository.Classifier)Repository.INSTANCE.getElementById(
-                        		targetProperty.getType().getXmiId());
-            		    if (isLateralSingularRelation(new Classifier(targetClassifier), 
-            		    		sourceType, // Note: stays constant across traversals 
-            		    		targetProperty, 
-            		    		visited))
-            		    	return true;
+            if (log.isDebugEnabled()) {
+                log.debug("processing "+ targetType.toString() + "." + getDebugName(targetProperty));
+            }
+
+            // Our metadata is not a directed graph so we 
+        	// can't bypass traversals based on directionality, so
+        	// detect a loop based on source and target properties
+        	// And only visit a particular link
+        	// ever once.
+        	if (traversalSourceProperty != null) {
+            	String linkKey = createHashKey(targetProperty, traversalSourceProperty);
+            	Integer count = null;
+            	if ((count = visited.get(linkKey)) == null)
+            		visited.put(linkKey, Integer.valueOf(1));
+            	else {	
+            		/*
+                	org.modeldriven.fuml.repository.Property opposite = targetProperty.getOpposite();
+                	if (opposite != null && opposite.isSingular()) {
+            		    log.warn("singular property "
+                				+ targetType.getName() + "."
+                        		+ (targetProperty.getName() == null ? targetProperty.getXmiId() : targetProperty.getName())
+                        		+ " has opposite " 
+                        		+ opposite.getClass_().getName()+"."
+                        		+ (opposite.getName() == null ? opposite.getXmiId() : opposite.getName())
+                        		+ " which is also singular");
+                	}
+                	*/
+                    if (log.isDebugEnabled()) {
+                        log.debug("exiting - visited  "+ targetType.toString() + "." + getDebugName(targetProperty));
                     }
+
+                	return false;
             	}
-            }    
+        	}
+        	
+            
+            if (log.isDebugEnabled()) {
+                log.debug("comparing " + targetType.toString()
+                        + "." + getDebugName(targetProperty) + " ("+targetProperty.getType().getXmiId()+")"
+                        + "->" + sourceType.toString() + " ("+sourceType.getId()+")");
+            }
+            // if we've arrived at the target via singular relations
+        	if (targetProperty.getType().getXmiId().equals(sourceType.getId())) {
+                if (targetType.getId().equals(sourceType.getId())) {
+                    log.warn("potential circular reference: " + targetType.toString()
+	                        + "." + getDebugName(targetProperty)
+	                        + "->" + sourceType.toString());
+                }
+                if (log.isDebugEnabled())
+                    log.debug("found child link property " + targetType.toString()
+                        + "." + getDebugName(targetProperty)
+                        + "->" + sourceType.toString());
+                return true; 
+        	}
+        	else { 
+        		// if we've not arrived at the target/root
+                if (!(targetProperty.getType().getXmiId().equals(targetType.getId()))) {
+                		
+                    if (log.isDebugEnabled())
+                        log.debug("traversing "+ targetType.toString() + "."
+                        		+ getDebugName(targetProperty));
+                    //FIXME: 
+                    org.modeldriven.fuml.repository.Classifier tempClassifier = (org.modeldriven.fuml.repository.Classifier)Repository.INSTANCE.getElementById(
+                    		targetProperty.getType().getXmiId());
+                    
+                    String urn = tempClassifier.getArtifact().getNamespaceURI();
+                    String qualifiedName = urn + "#" + tempClassifier.getName();
+                    org.modeldriven.fuml.repository.Classifier targetClassifier = PlasmaRepository.getInstance().getClassifier(
+                    		qualifiedName);
+                    Classifier nextClassifier = null;
+                    if (org.modeldriven.fuml.repository.Class_.class.isAssignableFrom(targetClassifier.getClass()))        	
+                    	nextClassifier = new Class_(
+                    		(org.modeldriven.fuml.repository.Class_)targetClassifier);
+                    else
+                    	nextClassifier = new Classifier(targetClassifier);
+                    
+        		    if (isLateralSingularRelation(nextClassifier, 
+        		    		sourceType, // Note: stays constant across traversals 
+        		    		targetProperty, 
+        		    		visited))
+        		    	return true;
+                }
+        	}
         }
         
         return false;
     }
     
+    /**
+     * UML properties are not required to be named, so at the repository level
+     * for debugging, construct some recognizable name. 
+     * @param prop the property
+     * @return the debug name
+     */
+    private String getDebugName(org.modeldriven.fuml.repository.Property prop) {
+    	if (prop.getName() != null && prop.getName().trim().length() > 0) {
+    		return prop.getName();
+    	}
+    	else {
+    		return prop.getType().getName();
+    	}
+    }
     
     class RelationPathResult {
         private AssociationPath relationPath;

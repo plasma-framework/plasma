@@ -24,6 +24,8 @@ package org.plasma.sdo.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import org.modeldriven.fuml.repository.Class_;
 import org.modeldriven.fuml.repository.Stereotype;
 import org.modeldriven.fuml.repository.Package;
@@ -41,7 +43,7 @@ import fUML.Syntax.Classes.Kernel.VisibilityKind;
 public class Classifier extends Element {
 
 	private org.modeldriven.fuml.repository.Classifier classifier;
-
+ 
 	@SuppressWarnings("unused")
 	private Classifier() {}
 	
@@ -57,6 +59,10 @@ public class Classifier extends Element {
 	public String getId() {
 		return this.classifier.getDelegate().getXmiId();
 	}	
+	
+	public String toString() {
+		return this.getNamespaceURI() + "#" + this.getName();
+	}
 	
 	public String getPackageName()
 	{
@@ -140,6 +146,7 @@ public class Classifier extends Element {
      * an SDO namespace stereotype, and if found, returns the URI.
      * @param classifier the classifier
      * @return the SDO namespace URI or null if not found.
+     * @throws RepositoryException if the URI is not found
      */
     public String getNamespaceURI() {
         return getNamespaceURI(this.classifier);
