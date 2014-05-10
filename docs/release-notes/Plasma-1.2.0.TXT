@@ -1,0 +1,29 @@
+Release Notes
+
+Plasma 1.2.0 Release Notes
+
+Plasma 1.2.0 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+See https://github.com/terrameta/plasma/issues. 
+
+Major Changes
+
+
+Bugs
+[Issue #37] - Use ThreadLocal in DataConverter for DataFormat Mapping  
+[Issue #38] - Change Artifact Qualified Classifier Name Lookup 
+
+
+
+Improvements
+
+
+
+
+New Features
+
+Tasks
+
+Wish
+
