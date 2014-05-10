@@ -104,10 +104,10 @@ public class CoreType implements PlasmaType {
             throw new IllegalArgumentException("namespace URI is a required argument");
         
         // ensure URI exists
-        Namespace namespace = PlasmaConfig.getInstance().getSDONamespaceByURI(uri);          
+        Namespace configNamespace = PlasmaConfig.getInstance().getSDONamespaceByURI(uri);          
 
-        this.artifactURI = namespace.getArtifact();
-        this.namespaceURI = namespace.getUri();
+        this.artifactURI = configNamespace.getArtifact();
+        this.namespaceURI = configNamespace.getUri();
         
         this.name = typeName;
         this.qname = new QName(this.namespaceURI, this.name);
@@ -132,16 +132,32 @@ public class CoreType implements PlasmaType {
         // Since the repository knows nothing about SDO namespace URIs,
         // we use the config to map namespaces to Artifact URIs, 
         // which the repo does know about.
-        String artifactQualifiedName = this.artifactURI
-            + "#" + lookupName;
+        // Artifact qualifying the classifier does not allow for 2 classifiers
+        // to exist within the same artifact. Need to lookup classifier qualified by UML package
+        // name. If that for some reason does not exist, throw a warning and lookup by
+        // artifact qualified name. 
+        org.modeldriven.fuml.repository.Classifier repoClassifier = null;
+        org.plasma.sdo.repository.Namespace repoNamespace = PlasmaRepository.getInstance().getNamespaceForUri(this.namespaceURI); 
+        String artifactQualifiedName = this.artifactURI + "#" + lookupName;
+        if (repoNamespace != null) {
+            String packageQualifiedName = repoNamespace.getQualifiedPackageName();
+            packageQualifiedName = packageQualifiedName + "." + lookupName;
+            repoClassifier = PlasmaRepository.getInstance().findClassifier(packageQualifiedName);
+            if (repoClassifier == null) {
+            	log.warn("no classifier found for package qualified name, " + packageQualifiedName + " - looking up classifier by artifact which could cause problems if multiple classifiers with the same name exist within the same artifact");
+                repoClassifier = PlasmaRepository.getInstance().getClassifier(artifactQualifiedName);
+            }
+        }
+        else {
+        	// can be profile namespace URI itself which won't map
+            repoClassifier = PlasmaRepository.getInstance().getClassifier(artifactQualifiedName);
+        }
         
-        org.modeldriven.fuml.repository.Classifier classifier = PlasmaRepository.getInstance().getClassifier(artifactQualifiedName);
-        
-        if (org.modeldriven.fuml.repository.Class_.class.isAssignableFrom(classifier.getClass()))        	
+        if (org.modeldriven.fuml.repository.Class_.class.isAssignableFrom(repoClassifier.getClass()))        	
             this.classifier = new Class_(
-        		(org.modeldriven.fuml.repository.Class_)classifier);
+        		(org.modeldriven.fuml.repository.Class_)repoClassifier);
         else
-        	this.classifier = new Classifier(classifier);
+        	this.classifier = new Classifier(repoClassifier);
     }
     
     public int hashCode() {

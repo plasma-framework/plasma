@@ -4,7 +4,7 @@
 
   <groupId>org.terrameta</groupId>
   <artifactId>plasma</artifactId>
-  <version>1.1.9</version>
+  <version>1.2.0</version>
   <packaging>pom</packaging>
   <name>Plasma</name>
   <description>The Plasma project is an SDO 2.1 implementation with associated provisioning and other tools. In its initial releases, the PlasmaSDO™ implementation seeks to address the need for automation and code generation under SDO for standard enterprise Java web applications while focusing on critical operational considerations these applications face, such as optimistic and pessimistic concurrency control. The PlasmaSDO™ implementation is not bound to any integrated development environment (IDE) and provides support for standard Java™ based build tools. Note: Such operational considerations such as optimistic and pessimistic concurrency control are seen as a feature gap within various commercial and open-source SDO offerings, and are facilitated in PlasmaSDO™ by a custom UML profile and various associated SDO API extensions.</description>  
@@ -39,7 +39,7 @@
   </modules>
   
   <properties>
-          <plasma.version>1.1.9</plasma.version>
+          <plasma.version>1.2.0</plasma.version>
           <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
@@ -90,7 +90,7 @@
     <build>
         <finalName>plasma</finalName>
         <plugins>
-	    <!--        
+	             
 	      <plugin>
 	          <groupId>org.apache.maven.plugins</groupId>
 	          <artifactId>maven-javadoc-plugin</artifactId>
@@ -103,8 +103,8 @@
 	            </execution>
 	          </executions>
 	      </plugin>
-	     -->    
-	  <!--          
+	         
+	             
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
@@ -119,7 +119,7 @@
               </execution>
             </executions>
           </plugin>
-          -->  
+             
              
           <!-- Produce ZIP with dependencies and samples. -->
           <!-- 

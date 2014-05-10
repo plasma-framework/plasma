@@ -46,6 +46,12 @@
                 <QueryDSL generate="true"/>
             </Provisioning>
         </Namespace>
+        <Namespace uri="http://examples.com/sdo/categorization2"
+            artifact="http://plasma.org/platform/examples/categorization">
+            <Provisioning packageName="com.examples.sdo.categorization2">
+                <QueryDSL generate="true"/>
+            </Provisioning>
+        </Namespace>
         
         <Namespace uri="http://plasma.org/platform/uml"
             artifact="http://plasma.org/platform/uml">
@@ -89,6 +95,7 @@
                 <NamespaceLink uri="http://plasma.org/platform/personalization"/> 
                 <NamespaceLink uri="http://plasma.org/platform/categorization"/> 
                 <NamespaceLink uri="http://examples.com/sdo/categorization"/> 
+                <NamespaceLink uri="http://examples.com/sdo/categorization2"/> 
                 <NamespaceLink uri="http://plasma.org/platform/uml"/>
                
                               

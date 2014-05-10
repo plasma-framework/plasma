@@ -43,6 +43,29 @@ public class Namespace {
 		return this.namespace.getName();
 	}
 	
+	private String packageQualifiedName; 
+	public String getQualifiedPackageName() {
+		if (packageQualifiedName == null) {
+			List<String> names = new ArrayList<String>();
+			names.add(this.namespace.getName());
+			org.modeldriven.fuml.repository.Package parent = this.namespace.getNestingPackage();
+			while (parent != null) {
+				names.add(parent.getName());
+				parent = parent.getNestingPackage();
+			}
+			StringBuilder buf = new StringBuilder();
+			int len = names.size();
+			for (int i = len-1; i >= 0; i--) {
+				if (i < len-1)
+					buf.append(".");
+				String name = names.get(i);
+				buf.append(name);
+			}
+			this.packageQualifiedName = buf.toString();
+		}
+		return this.packageQualifiedName;
+	}	 
+	
 	public String getUri() {
         List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(this.namespace);
         if (stereotypes != null) {

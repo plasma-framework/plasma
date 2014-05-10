@@ -23,6 +23,7 @@ package org.plasma.sdo.helper;
 
 
 
+import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -36,6 +37,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -56,6 +58,14 @@ public class DataConverter {
     static public DataConverter INSTANCE = initializeInstance();
     public static final String FORMAT_PATTERN_TIME 		= "HH:mm:ss'.'SSS'Z'";
     public static final String FORMAT_PATTERN_DATE 		= "yyyy-MM-dd'T'HH:mm:ss";
+	// Note: the Java class for SDO dataTime datatype is String. This seems unfortunate
+	// because a java.util.Date is certainly capable of representing
+	// far more precision that than month/day/year. It seems also
+    // that users would expect generated method signatures for
+    // dataTime to be java.util.Date. Have to comply w/the spec though
+    // but can compensate for this by allowing more precision
+    // in the SDO date datatype. See above data format which allows
+    // seconds precision.
     public static final String FORMAT_PATTERN_DATETIME 	= "yyyy-MM-dd'T'HH:mm:ss'.'SSS'Z'";
     public static final String FORMAT_PATTERN_DAY 		= "dd"; 
     public static final String FORMAT_PATTERN_MONTH 		= "MM";
@@ -69,55 +79,8 @@ public class DataConverter {
     private static Map<Class<?>, Method> javaClassToConverterFromMethodMap;
 
     
-    private SimpleDateFormat timeFormat;
-    private SimpleDateFormat dateFormat;
-    private SimpleDateFormat dateTimeFormat;
-    private PeriodFormatter durationFormat;
-    private SimpleDateFormat dayFormat;
-    private SimpleDateFormat monthFormat;
-    private SimpleDateFormat monthDayFormat;
-    private SimpleDateFormat yearFormat;
-    private SimpleDateFormat yearMonthFormat;
-    private SimpleDateFormat yearMonthDayFormat;
-    
     private DataConverter() {
-    	timeFormat = new SimpleDateFormat(FORMAT_PATTERN_TIME);
-    	timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-    	
-    	dateFormat = new SimpleDateFormat(FORMAT_PATTERN_DATE);
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-    	// Note: the Java class for SDO dataTime datatype is String. This seems unfortunate
-    	// because a java.util.Date is certainly capable of representing
-    	// far more precision that than month/day/year. It seems also
-        // that users would expect generated method signatures for
-        // dataTime to be java.util.Date. Have to comply w/the spec though
-        // but can compensate for this by allowing more precision
-        // in the SDO date datatype. See above data format which allows
-        // seconds precision.
-        dateTimeFormat = new SimpleDateFormat(FORMAT_PATTERN_DATETIME);
-        dateTimeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
- 
-    	durationFormat = ISOPeriodFormat.standard();
-    	
-    	dayFormat = new SimpleDateFormat(FORMAT_PATTERN_DAY);
-    	dayFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-    	monthFormat = new SimpleDateFormat(FORMAT_PATTERN_MONTH);
-    	monthFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-    	
-    	monthDayFormat = new SimpleDateFormat(FORMAT_PATTERN_MONTHDAY);
-    	monthDayFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-    	yearFormat = new SimpleDateFormat(FORMAT_PATTERN_YEAR);
-    	yearFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-    	yearMonthFormat = new SimpleDateFormat(FORMAT_PATTERN_YEARMONTH);
-    	yearMonthFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-    	yearMonthDayFormat = new SimpleDateFormat(FORMAT_PATTERN_YEARMONTHDAY);
-    	yearMonthDayFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-    	
+     	
         if (javaClassToAllowableTypesMap == null) {
             javaClassToAllowableTypesMap = new HashMap<Class<?>, Map<String,DataType>>();
             for (int i = 0; i < DataType.values().length; i++) {
@@ -196,6 +159,67 @@ public class DataConverter {
         }
     }
     
+    public DateFormat[] getDateFormats() {
+    	DateFormat[] result = new DateFormat[9];
+    	result[0] = DateFormatMap.get(FORMAT_PATTERN_TIME); 		
+    	result[1] = DateFormatMap.get(FORMAT_PATTERN_DATE); 		
+    	result[2] = DateFormatMap.get(FORMAT_PATTERN_DATETIME); 	
+    	result[3] = DateFormatMap.get(FORMAT_PATTERN_DAY); 		
+    	result[4] = DateFormatMap.get(FORMAT_PATTERN_MONTH); 		
+    	result[5] = DateFormatMap.get(FORMAT_PATTERN_MONTHDAY); 	
+    	result[6] = DateFormatMap.get(FORMAT_PATTERN_YEAR); 		
+    	result[7] = DateFormatMap.get(FORMAT_PATTERN_YEARMONTH); 	
+    	result[8] = DateFormatMap.get(FORMAT_PATTERN_YEARMONTHDAY);    	
+    	return result;
+    }
+    
+    /**
+     * A factory for {@link SimpleDateFormat}s. The instances are stored in a
+     * threadlocal way because SimpleDateFormat is not threadsafe as noted in
+     * {@link SimpleDateFormat its javadoc}.
+     */
+    final static class DateFormatMap {
+        private static final ThreadLocal<SoftReference<Map<String, SimpleDateFormat>>> 
+            THREADLOCAL_FORMATS = new ThreadLocal<SoftReference<Map<String, SimpleDateFormat>>>() {
+            @Override
+            protected SoftReference<Map<String, SimpleDateFormat>> initialValue() {
+                return new SoftReference<Map<String, SimpleDateFormat>>(
+                        new HashMap<String, SimpleDateFormat>());
+            }
+            
+        };
+        
+        /**
+         * creates a {@link SimpleDateFormat} for the requested format string.
+         * 
+         * @param pattern
+         *            a non-<code>null</code> format String according to
+         *            {@link SimpleDateFormat}. The format is not checked against
+         *            <code>null</code> since all paths go through
+         *            {@link DateUtils}.
+         * @return the requested format. This simple dateformat should not be used
+         *         to {@link SimpleDateFormat#applyPattern(String) apply} to a
+         *         different pattern.
+         */
+        public static SimpleDateFormat get(String pattern) {
+            SoftReference<Map<String, SimpleDateFormat>> ref = THREADLOCAL_FORMATS.get();
+            Map<String, SimpleDateFormat> formats = ref.get();
+            if (formats == null) {
+                formats = new HashMap<String, SimpleDateFormat>();
+                THREADLOCAL_FORMATS.set(
+                        new SoftReference<Map<String, SimpleDateFormat>>(formats));    
+            }
+            SimpleDateFormat format = formats.get(pattern);
+            if (format == null) {
+                format = new SimpleDateFormat(pattern, Locale.US);
+                format.setTimeZone(TimeZone.getTimeZone("GMT"));
+                formats.put(pattern, format);
+            }
+            return format;
+        }
+        
+    }   
+    
     private static synchronized DataConverter initializeInstance()
     {
         if (INSTANCE == null)
@@ -204,43 +228,43 @@ public class DataConverter {
     }    
  
     public DateFormat getDateTimeFormat() {
-        return dateTimeFormat;
+        return DateFormatMap.get(FORMAT_PATTERN_DATETIME);
     }
 
     public DateFormat getTimeFormat() {
-		return timeFormat;
+        return DateFormatMap.get(FORMAT_PATTERN_TIME);
 	}
 
 	public DateFormat getDateFormat() {
-		return dateFormat;
+        return DateFormatMap.get(FORMAT_PATTERN_DATE);
 	}
 
 	public PeriodFormatter getDurationFormat() {
-		return durationFormat;
+        return ISOPeriodFormat.standard();
 	}
 
 	public DateFormat getDayFormat() {
-		return dayFormat;
+	       return DateFormatMap.get(FORMAT_PATTERN_DAY);
 	}
 
 	public DateFormat getMonthFormat() {
-		return monthFormat;
+	       return DateFormatMap.get(FORMAT_PATTERN_MONTH);
 	}
 
 	public DateFormat getMonthDayFormat() {
-		return monthDayFormat;
+	       return DateFormatMap.get(FORMAT_PATTERN_MONTHDAY);
 	}
 
 	public DateFormat getYearFormat() {
-		return yearFormat;
+	       return DateFormatMap.get(FORMAT_PATTERN_YEAR);
 	}
 
 	public DateFormat getYearMonthFormat() {
-		return yearMonthFormat;
+	       return DateFormatMap.get(FORMAT_PATTERN_YEARMONTH);
 	}
 
 	public DateFormat getYearMonthDayFormat() {
-		return yearMonthDayFormat;
+	       return DateFormatMap.get(FORMAT_PATTERN_DAY);
 	}
 
     public Object convert(Type targetType, Object value) {
@@ -963,7 +987,7 @@ public class DataConverter {
             return buf.toString();
         case Date:     
         	if (value instanceof Date) {
-        		return this.dateFormat.format(value);
+        		return this.getDateFormat().format(value);
         	}
         	else {
         		if (value instanceof List) {
@@ -972,7 +996,7 @@ public class DataConverter {
         			for (Object listValue : dateList) {
         				if (!(listValue instanceof Date))
         					throwExpectedInstance(sourceDataType, Date.class, listValue.getClass());
-        				result.add(this.dateFormat.format(value));
+        				result.add(this.getDateFormat().format(value));
         			}       			
         			return Arrays.toString(result.toArray());
         		}
@@ -1168,7 +1192,7 @@ public class DataConverter {
         case Date:   
         	if (!property.isMany()) {
         		if (value instanceof Date) {
-        			return this.dateFormat.format(value);
+        			return this.getDateFormat().format(value);
         		}
         		else
         			throwExpectedInstance(sourceDataType, Date.class, value.getClass());
@@ -1180,7 +1204,7 @@ public class DataConverter {
         			for (Object listValue : dateList) {
         				if (!(listValue instanceof Date))
         					throwExpectedInstance(sourceDataType, Date.class, listValue.getClass());
-        				result.add(this.dateFormat.format(value));
+        				result.add(this.getDateFormat().format(value));
         			}       			
         			return Arrays.toString(result.toArray());
         		}
@@ -1415,13 +1439,13 @@ public class DataConverter {
         case Date:                 
             try {
 	        	if (!value.startsWith("[")) { 
-	                return dateFormat.parse(value);
+	                return getDateFormat().parse(value);
 	        	}
 	        	else {
 	        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
 	            	List<Date> list = new ArrayList<Date>();            	
 	            	for (String arrayValue : strings)
-	            		list.add(dateFormat.parse(arrayValue));
+	            		list.add(getDateFormat().parse(arrayValue));
 	            	return list;
 	        	}
             } catch (ParseException e) {
@@ -1765,14 +1789,14 @@ public class DataConverter {
         case Date: 
         	try {
 	        	if (!targetProperty.isMany()) {
-	        		 return dateFormat.parse(value);
+	        		 return getDateFormat().parse(value);
 	        	}
 	        	else {
 	            	if (value.startsWith("[")) { 
 		        		String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
 		            	List<Date> list = new ArrayList<Date>();            	
 		            	for (String arrayValue : strings)
-		            		list.add(dateFormat.parse(arrayValue));
+		            		list.add(getDateFormat().parse(arrayValue));
 		            	return list;
 	            	} 
 	            	else {
@@ -1863,7 +1887,7 @@ public class DataConverter {
     
     public java.util.Date toDate(Type sourceType, Object value)
     {    
-    	SimpleDateFormat format = null;
+    	DateFormat format = null;
     	
         DataType sourceDataType = DataType.valueOf(sourceType.getName());
         switch (sourceDataType) {
@@ -1872,30 +1896,30 @@ public class DataConverter {
         case Long:
             return new Date(((Long)value).longValue());
         case Day:
-        	format = dayFormat;
+        	format = getDayFormat();
         	break;
         case Month:
-        	format = monthFormat;
+        	format = getMonthFormat();
         	break;
         case MonthDay:
-        	format = monthDayFormat;
+        	format = getMonthDayFormat();
         	break;
         case Time:
-        	format = timeFormat;
+        	format = getTimeFormat();
         	break;
         case Year:
-        	format = yearFormat;
+        	format = getYearFormat();
         	break;
         case YearMonth:
-        	format = yearMonthFormat;
+        	format = getYearMonthFormat();
         	break;
         case YearMonthDay:
-        	format = yearMonthDayFormat;
+        	format = getYearMonthDayFormat();
         	break;
         case Duration: // FIXME use correct parse
         case DateTime:
         case String:
-        	format = dateTimeFormat;
+        	format = getDateTimeFormat();
         	break;
         default: 
             throw new InvalidDataConversionException(DataType.Date, 
@@ -1905,9 +1929,14 @@ public class DataConverter {
 	    try {
 	    	return format.parse((String)value);
         } catch (ParseException e) {
-            throw new InvalidDataFormatException(
-            	"expected "+sourceDataType.toString()+" pattern '" + format.toPattern() + "' for value '" +
-            			value.toString() + "'", e);
+        	if (format instanceof SimpleDateFormat)
+                throw new InvalidDataFormatException(
+            	    "expected "+sourceDataType.toString()+" pattern '" + ((SimpleDateFormat)format).toPattern() 
+            	     + "' for value '" + value.toString() + "'", e);
+        	else
+                throw new InvalidDataFormatException(
+                	    "expected "+sourceDataType.toString()+" pattern '" + "unknown" 
+                	     + "' for value '" + value.toString() + "'", e);
         }
     }
 
@@ -1918,25 +1947,25 @@ public class DataConverter {
         case Date:
             return value;
         case DateTime:
-            return this.dateTimeFormat.format(value);
+            return this.getDateTimeFormat().format(value);
         case Day:
-            return this.dayFormat.format(value);
+            return this.getDayFormat().format(value);
         case Month:
-            return this.monthFormat.format(value);
+            return this.getMonthFormat().format(value);
         case MonthDay:
-            return this.monthDayFormat.format(value);
+            return this.getMonthDayFormat().format(value);
         case Time:
-            return this.timeFormat.format(value);
+            return this.getTimeFormat().format(value);
         case Year:
-            return this.yearFormat.format(value);
+            return this.getYearFormat().format(value);
         case YearMonth:
-            return this.yearMonthFormat.format(value);
+            return this.getYearMonthFormat().format(value);
         case YearMonthDay:
-            return this.yearMonthDayFormat.format(value);
+            return this.getYearMonthDayFormat().format(value);
         case Long:
             return new Long(value.getTime());
         case String: // use format with max precision
-            return this.dateTimeFormat.format(value);
+            return this.getDateTimeFormat().format(value);
         case Duration:    
             return new Duration(value.getTime());
         default: 

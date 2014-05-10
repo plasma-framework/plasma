@@ -34,6 +34,7 @@ public interface Repository extends org.modeldriven.fuml.repository.Repository {
 	public List<String> getAllNamespaceUris();
 	
 	public List<Namespace> getAllNamespaces();
+	public Namespace getNamespaceForUri(String uri);
 	
     /**
      * Return the Classifier instances specified by the given uri.

@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.modeldriven.fuml.Fuml;
 import org.modeldriven.fuml.io.ResourceArtifact;
 import org.modeldriven.fuml.repository.Class_;
@@ -42,12 +44,14 @@ import org.plasma.common.exception.PlasmaRuntimeException;
 import org.plasma.config.Artifact;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.sdo.AssociationPath;
+import org.plasma.sdo.helper.PlasmaTypeHelper;
 import org.plasma.sdo.profile.SDONamespace;
 
 import fUML.Syntax.Classes.Kernel.PackageableElement;
 
 public class PlasmaRepository implements Repository {
 
+    private static Log log = LogFactory.getLog(PlasmaRepository.class);
     private static Repository instance;
     private static org.modeldriven.fuml.repository.Repository delegate;
     private RelationCache relationCache = new RelationCache();
@@ -82,6 +86,7 @@ public class PlasmaRepository implements Repository {
         }
     }
 
+    @Override
 	public List<String> getAllNamespaceUris() {
 		List<String> result = new ArrayList<String>();
 		List<Stereotype> list = delegate.getStereotypes(SDONamespace.class);
@@ -92,6 +97,7 @@ public class PlasmaRepository implements Repository {
 		return result;
 	}
 
+	@Override
 	public List<Namespace> getAllNamespaces() {
 		List<Namespace> result = new ArrayList<Namespace>();
 		List<Stereotype> list = delegate.getStereotypes(SDONamespace.class);
@@ -105,10 +111,12 @@ public class PlasmaRepository implements Repository {
 		return result;
 	}
 	
+	@Override
 	public Namespace getNamespaceForUri(String uri) {
 		List<Stereotype> list = delegate.getStereotypes(SDONamespace.class);
 		for (Stereotype s : list) {
 			SDONamespace namespace = (SDONamespace)s.getDelegate();
+			//log.info("checking " + namespace.getUri() + " : " + uri);
 			if (namespace.getUri().equals(uri)) {
 				String packageXmiId = namespace.getBase_Package().getXmiId();
 				org.modeldriven.fuml.repository.Package pkg = 

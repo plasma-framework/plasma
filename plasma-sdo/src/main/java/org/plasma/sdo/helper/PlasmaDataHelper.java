@@ -32,23 +32,11 @@ import java.util.Locale;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
 import commonj.sdo.helper.DataHelper;
+import fUML.Syntax.Classes.Kernel.DataType;
 
 public class PlasmaDataHelper implements DataHelper {
 
 	static public DataHelper INSTANCE = initializeInstance();
-	private DateFormat[] DATE_FORMATS = {
-			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS Z"),
-			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS"),
-			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),
-			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"),
-			new SimpleDateFormat(
-					"'P'yyyy'Y' MM'M' dd'D' 'T' HH'H' mm'M' ss'S.'SSS"),
-			new SimpleDateFormat("--MM zz"),
-			new SimpleDateFormat("--MM-dd zz"),
-			new SimpleDateFormat("---dd zz"),
-			new SimpleDateFormat("HH:mm:ss'.'SSS"),
-			new SimpleDateFormat("yyyy-MM-dd"),
-			new SimpleDateFormat("yyyy-MM"), new SimpleDateFormat("yyyy") };
 
 	private PlasmaDataHelper() {
 	}
@@ -93,10 +81,12 @@ public class PlasmaDataHelper implements DataHelper {
 	 *             if the value could not be converted
 	 * @see #convert(Type, Object)
 	 */
+	@Override
 	public Object convert(Property property, Object value) {
 		return DataConverter.INSTANCE.convert(property.getType(), value);
 	}
 
+	@Override
 	public Calendar toCalendar(String dateString) {
 		if (dateString == null) {
 			return null;
@@ -113,6 +103,7 @@ public class PlasmaDataHelper implements DataHelper {
 		return calendar;
 	}
 
+	@Override
 	public Calendar toCalendar(String dateString, Locale locale) {
 		if (dateString == null || locale == null) {
 			return null;
@@ -128,30 +119,31 @@ public class PlasmaDataHelper implements DataHelper {
 		return calendar;
 	}
 
+	@Override
 	public Date toDate(String dateString) {
 		if (dateString == null) {
 			return null;
 		}
-		for (int i = 0; i < DATE_FORMATS.length; ++i) {
+		
+		DateFormat[] formats = DataConverter.INSTANCE.getDateFormats();
+		for (int i = 0; i < formats.length; ++i) {
 			try {
-				return DATE_FORMATS[i].parse(dateString);
+				return formats[i].parse(dateString);
 			} catch (ParseException parseException) {
 			}
 		}
 		return null;
 	}
 
+	@Override
 	public String toDateTime(Date date) {
 		if (date == null) {
 			return null;
 		}
-
-		SimpleDateFormat f = new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss'.'SSS zz");
-
-		return f.format(date);
+		return DataConverter.INSTANCE.getDateTimeFormat().format(date);
 	}
 
+	@Override
 	public String toDateTime(Calendar calendar) {
 		if (calendar == null) {
 			return null;
@@ -160,16 +152,16 @@ public class PlasmaDataHelper implements DataHelper {
 		return toDateTime(calendar.getTime());
 	}
 
+	@Override
 	public String toDay(Date date) {
 		if (date == null) {
 			return null;
 		}
 
-		SimpleDateFormat f = new SimpleDateFormat("---dd zz");
-
-		return f.format(date);
+		return DataConverter.INSTANCE.getDayFormat().format(date);
 	}
 
+	@Override
 	public String toDay(Calendar calendar) {
 		if (calendar == null) {
 			return null;
@@ -178,6 +170,7 @@ public class PlasmaDataHelper implements DataHelper {
 		return toDay(calendar.getTime());
 	}
 
+	@Override
 	public String toDuration(Date date) {
 		if (date == null) {
 			return null;
@@ -189,6 +182,7 @@ public class PlasmaDataHelper implements DataHelper {
 		return f.format(date);
 	}
 
+	@Override
 	public String toDuration(Calendar calendar) {
 		if (calendar == null) {
 			return null;
@@ -197,16 +191,16 @@ public class PlasmaDataHelper implements DataHelper {
 		return toDuration(calendar.getTime());
 	}
 
+	@Override
 	public String toMonth(Date date) {
 		if (date == null) {
 			return null;
 		}
 
-		SimpleDateFormat f = new SimpleDateFormat("--MM zz");
-
-		return f.format(date);
+		return DataConverter.INSTANCE.getMonthFormat().format(date);
 	}
 
+	@Override
 	public String toMonth(Calendar calendar) {
 		if (calendar == null) {
 			return null;
@@ -215,16 +209,16 @@ public class PlasmaDataHelper implements DataHelper {
 		return toMonth(calendar.getTime());
 	}
 
+	@Override
 	public String toMonthDay(Date date) {
 		if (date == null) {
 			return null;
 		}
 
-		SimpleDateFormat f = new SimpleDateFormat("--MM-dd zz");
-
-		return f.format(date);
+		return DataConverter.INSTANCE.getMonthDayFormat().format(date);
 	}
 
+	@Override
 	public String toMonthDay(Calendar calendar) {
 		if (calendar == null) {
 			return null;
@@ -233,16 +227,15 @@ public class PlasmaDataHelper implements DataHelper {
 		return toMonthDay(calendar.getTime());
 	}
 
+	@Override
 	public String toTime(Date date) {
 		if (date == null) {
 			return null;
 		}
-
-		SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss'.'SSS zz");
-
-		return f.format(date);
+		return DataConverter.INSTANCE.getTimeFormat().format(date);
 	}
 
+	@Override
 	public String toTime(Calendar calendar) {
 		if (calendar == null) {
 			return null;
@@ -251,16 +244,16 @@ public class PlasmaDataHelper implements DataHelper {
 		return toTime(calendar.getTime());
 	}
 
+	@Override
 	public String toYear(Date date) {
 		if (date == null) {
 			return null;
 		}
 
-		SimpleDateFormat f = new SimpleDateFormat("yyyy zz");
-
-		return f.format(date);
+		return DataConverter.INSTANCE.getYearFormat().format(date);
 	}
 
+	@Override
 	public String toYear(Calendar calendar) {
 		if (calendar == null) {
 			return null;
@@ -269,16 +262,15 @@ public class PlasmaDataHelper implements DataHelper {
 		return toYear(calendar.getTime());
 	}
 
+	@Override
 	public String toYearMonth(Date date) {
 		if (date == null) {
 			return null;
 		}
-
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM zz");
-
-		return f.format(date);
+		return DataConverter.INSTANCE.getYearMonthFormat().format(date);
 	}
 
+	@Override
 	public String toYearMonth(Calendar calendar) {
 		if (calendar == null) {
 			return null;
@@ -287,16 +279,16 @@ public class PlasmaDataHelper implements DataHelper {
 		return toYearMonth(calendar.getTime());
 	}
 
+	@Override
 	public String toYearMonthDay(Date date) {
 		if (date == null) {
 			return null;
 		}
 
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd zz");
-
-		return f.format(date);
+		return DataConverter.INSTANCE.getYearMonthDayFormat().format(date);
 	}
 
+	@Override
 	public String toYearMonthDay(Calendar calendar) {
 		if (calendar == null) {
 			return null;
