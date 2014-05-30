@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-examples</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <packaging>jar</packaging>
 
   <name>Plasma Examples</name>
@@ -93,35 +93,35 @@
     <dependency>                                 
         <groupId>com.oracle</groupId>          
         <artifactId>ojdbc6</artifactId>    
-        <version>11.2.0.4</version>                   
+        <version>11.2.1.4</version>                   
     </dependency> 
     --> 
     <!--
     Note: for Oracle JDBC driver use e.g. : 
-    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc5 -Dversion=11.2.0.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc5.jar -DgeneratePom=true
-    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc6.jar -DgeneratePom=true 
+    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc5 -Dversion=11.2.1.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc5.jar -DgeneratePom=true
+    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.1.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc6.jar -DgeneratePom=true 
     -->
     
     <!-- plasma sub-projects -->
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-sdo</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-sdo-jdbc</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-maven-plugin</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
   </dependencies>
 	<build>
@@ -145,7 +145,7 @@
 	        <plugin>
 	            <groupId>org.terrameta</groupId>
 	            <artifactId>plasma-maven-plugin</artifactId>
-	            <version>1.2.0</version>
+	            <version>1.2.1</version>
 				<executions>
 				           
 					<execution>
@@ -415,7 +415,7 @@
 											plasma-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.2.0,)
+											[1.2.1,)
 										</versionRange>
 										<goals>
 											<goal>dsl</goal>

@@ -36,4 +36,8 @@ public class RepositoryException extends PlasmaRuntimeException
     {
         super(t);
     }
+	public RepositoryException(String message, Throwable cause) {
+		super(message, cause);
+	}
+    
 }

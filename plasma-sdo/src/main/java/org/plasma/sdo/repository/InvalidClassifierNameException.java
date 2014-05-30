@@ -24,15 +24,19 @@ package org.plasma.sdo.repository;
 
 
 
-public class IllegalCircularReferenceException extends RepositoryException
+public class InvalidClassifierNameException extends RepositoryCheckedException
 {
     private static final long serialVersionUID = 1L;
-    public IllegalCircularReferenceException(String message)
+    public InvalidClassifierNameException(String message)
     {
         super(message);
     }
-    public IllegalCircularReferenceException(Throwable t)
+    public InvalidClassifierNameException(Throwable t)
     {
         super(t);
     }
+	public InvalidClassifierNameException(String message, Throwable cause) {
+		super(message, cause);
+	}
+    
 }

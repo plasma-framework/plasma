@@ -38,6 +38,7 @@ import org.plasma.sdo.PlasmaDataObjectConstants;
 import org.plasma.sdo.PlasmaDataObjectException;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.core.CoreType;
+import org.plasma.sdo.repository.InvalidClassifierNameException;
 import org.plasma.sdo.repository.PlasmaRepository;
 
 import commonj.sdo.DataObject;
@@ -133,7 +134,13 @@ public class PlasmaTypeHelper implements TypeHelper {
         Type result = namespaceQualifiedNameToTypeMap.get(qualifiedName);
         if (result == null)
         {
-            result = new CoreType(uri, typeName);
+        	try {
+                result = new CoreType(uri, typeName);
+        	}
+        	catch (InvalidClassifierNameException e) {
+        		log.warn(e.getMessage(), e);
+        		return null;
+        	}
             namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
             // New type could have a name based on config type-binding
             // also map by new logical name if exists
@@ -180,7 +187,13 @@ public class PlasmaTypeHelper implements TypeHelper {
         Type result = namespaceQualifiedNameToTypeMap.get(qualifiedName);
         if (result == null)
         {
-            result = new CoreType(uri, interfaceClass.getSimpleName());
+        	try {
+                result = new CoreType(uri, interfaceClass.getSimpleName());
+        	}
+        	catch (InvalidClassifierNameException e) {
+        		log.warn(e.getMessage(), e);
+        		return null;
+        	}
             namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
             List<Type> namespaceTypes = namespaceToTypesMap.get(uri);
             if (namespaceTypes == null)

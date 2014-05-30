@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-sdo-jdbc</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <packaging>jar</packaging>
 
   <name>Plasma SDO JDBC</name>
@@ -89,30 +89,33 @@
 		<artifactId>commons-logging</artifactId>
 		<version>1.1.1</version>
 	</dependency>
+	 
 	<dependency>
 		<groupId>commons-dbcp</groupId>
 		<artifactId>commons-dbcp</artifactId>
 		<version>1.4</version>
 	</dependency>
-    <dependency>                                 
-        <groupId>com.oracle</groupId>          
-        <artifactId>ojdbc14</artifactId>    
-        <version>10.2.0.3.0</version>                   
-    </dependency>                                
-    <!--
-    Note: for Oracle JDBC driver use: 
-    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 \
- -Dversion=10.2.0.3.0 -Dpackaging=jar -Dfile=ojdbc.jar -DgeneratePom=true 
-    -->
+	
+         <dependency>                                 
+            <groupId>com.oracle</groupId>          
+            <artifactId>ojdbc6</artifactId>    
+            <version>11.2.0.4</version>                   
+        </dependency>  
+        
+        <!--
+        Note: for Oracle JDBC driver use e.g. : 
+        mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc5 -Dversion=11.2.0.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc5.jar -DgeneratePom=true
+        mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc6.jar -DgeneratePom=true 
+        -->
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-sdo</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>	
   </dependencies>
   <build>

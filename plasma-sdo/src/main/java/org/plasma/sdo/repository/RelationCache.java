@@ -190,7 +190,8 @@ public class RelationCache {
                     if (log.isDebugEnabled())
                         log.debug("traversing "+ targetType.toString() + "."
                         		+ getDebugName(targetProperty));
-                    //FIXME: 
+                    //FIXME: classifiers returned via XMI ID have no properties !!
+                    // See re-lookup by qualified name below
                     org.modeldriven.fuml.repository.Classifier tempClassifier = (org.modeldriven.fuml.repository.Classifier)Repository.INSTANCE.getElementById(
                     		targetProperty.getType().getXmiId());
                     

@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-sdo</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <packaging>jar</packaging>
 
   <name>Plasma SDO</name>
@@ -122,7 +122,7 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
   </dependencies>
 	<build>
@@ -248,7 +248,7 @@
                     <target>   
                       <echo message="####Generate profile classes####"/>                                              
                       <property name="compile_classpath" refid="maven.compile.classpath"/>
-                      <property name="release_suffix" value="1.2.0"/>
+                      <property name="release_suffix" value="1.2.1"/>
                                                                                                                                                                                                   
                       <!--                                                                                                                                                                                                                                           
                       <echo message="compile classpath: ${compile_classpath}"/>                                                                                                                                                                                      
@@ -278,7 +278,7 @@
                     <target>                                                 
                       <echo message="####Generate profile interfaces####"/>                                              
                       <property name="compile_classpath" refid="maven.compile.classpath"/>
-                      <property name="release_suffix" value="1.2.0"/>
+                      <property name="release_suffix" value="1.2.1"/>
                       <path id="cp">                                                                                                                                                                                                                             
                          <pathelement path="${compile_classpath}"/>                                                                                                                                                                                                  
                       </path>	                                                                                                                                                                                                                                       

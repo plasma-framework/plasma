@@ -21,18 +21,23 @@
  */
 package org.plasma.sdo.repository;
 
+import org.plasma.common.exception.PlasmaCheckedException;
 
 
 
-public class IllegalCircularReferenceException extends RepositoryException
+public class RepositoryCheckedException extends PlasmaCheckedException
 {
     private static final long serialVersionUID = 1L;
-    public IllegalCircularReferenceException(String message)
+    public RepositoryCheckedException(String message)
     {
         super(message);
     }
-    public IllegalCircularReferenceException(Throwable t)
+    public RepositoryCheckedException(Throwable t)
     {
         super(t);
     }
+	public RepositoryCheckedException(String message, Throwable cause) {
+		super(message, cause);
+	}
+    
 }

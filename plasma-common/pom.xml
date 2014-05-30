@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-common</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <packaging>jar</packaging>
   <name>Plasma Common</name>
   

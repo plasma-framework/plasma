@@ -1,0 +1,27 @@
+Release Notes
+
+Plasma 1.2.1 Release Notes
+
+Plasma 1.2.1 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+See https://github.com/terrameta/plasma/issues. 
+
+Major Changes
+
+
+Bugs
+[Issue #39] - PlasmaTypeHelper.getType() Does Not Properly Conform To SDO Spec 
+
+
+
+Improvements
+[Issue #40] - Make InvalidClassifierNameException a Checked Exception
+
+
+New Features
+
+Tasks
+
+Wish
+
