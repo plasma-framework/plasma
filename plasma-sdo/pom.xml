@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.2</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-sdo</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
   <packaging>jar</packaging>
 
   <name>Plasma SDO</name>
@@ -122,7 +122,7 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.2</version>
     </dependency>
   </dependencies>
 	<build>
@@ -146,6 +146,20 @@
 				            <staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-plasma-config</staleFile>
 				        </configuration>
 					</execution>
+                    <execution>
+                        <id>profile-config</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>${basedir}/src/main/resources/org/plasma/profile</schemaDirectory>
+                            <schemaFiles>profile-config.xsd</schemaFiles>
+                            <bindingDirectory>${basedir}/src/main/resources/org/plasma/profile</bindingDirectory>
+                            <bindingFiles>profile-config-jaxb-bindings.xml</bindingFiles>
+                            <staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-plasma-profile</staleFile>
+                        </configuration>
+                    </execution>
 					<execution>
 					    <id>env-config</id>
 						<phase>generate-sources</phase>
@@ -248,7 +262,7 @@
                     <target>   
                       <echo message="####Generate profile classes####"/>                                              
                       <property name="compile_classpath" refid="maven.compile.classpath"/>
-                      <property name="release_suffix" value="1.2.1"/>
+                      <property name="release_suffix" value="1.2.2"/>
                                                                                                                                                                                                   
                       <!--                                                                                                                                                                                                                                           
                       <echo message="compile classpath: ${compile_classpath}"/>                                                                                                                                                                                      
@@ -278,7 +292,7 @@
                     <target>                                                 
                       <echo message="####Generate profile interfaces####"/>                                              
                       <property name="compile_classpath" refid="maven.compile.classpath"/>
-                      <property name="release_suffix" value="1.2.1"/>
+                      <property name="release_suffix" value="1.2.2"/>
                       <path id="cp">                                                                                                                                                                                                                             
                          <pathelement path="${compile_classpath}"/>                                                                                                                                                                                                  
                       </path>	                                                                                                                                                                                                                                       
@@ -378,12 +392,11 @@
 				<!-- <configuration> <webXml>target/web.xml</webXml> </configuration> -->
 				<configuration>
 					<excludes>
-						<exclude>**/*.xml</exclude>
-                        <exclude>**/Plasma_SDO_Profile*.mdxml</exclude>
-						<!-- 
-						<exclude>**/*.mdxml</exclude>
-						-->
+						<exclude>**/plasma-config.xml</exclude>
+                        <exclude>**/plasma-fuml-config.xml</exclude>
 						<exclude>**/*.properties</exclude>
+						<exclude>uml/*</exclude>
+                        <exclude>xsl/**/*.xsl</exclude>
 						<exclude>com/*</exclude>
 						<exclude>**/test/*</exclude>
 					</excludes>
@@ -411,9 +424,14 @@
 
 
 					<forkMode>pertest</forkMode>
+					
 					<argLine>-Dlog4j.configuration=log4j.properties
-						-Dfuml.configuration=fuml-config.xml
-						-Dplasma.configuration=plasma-config.xml</argLine>
+					    -Dfuml.configuration=plasma-fuml-config.xml
+						-Dplasma.configuration=test-plasma-config.xml</argLine>
+					 
+					 <!--	
+                    <argLine>-Dlog4j.configuration=log4j.properties -Dfuml.configuration=plasma-fuml-config.xml -Dplasma.configuration=plasma-config.xml -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address=8001,server=y,suspend=y</argLine>
+                     -->
 				</configuration>
 			</plugin>
 		    <plugin>
@@ -471,6 +489,25 @@
 										</versionRange>
 										<goals>
 											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											build-helper-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.7,)
+										</versionRange>
+										<goals>
+											<goal>add-source</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

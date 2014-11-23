@@ -522,7 +522,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     			column.getDataPrecision(), column.getDataScale());
     	DataTypeRef dataTypeRef = new DataTypeRef();
         dataTypeRef.setName(sdoType.name());
-        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
         property.setType(dataTypeRef);  
         
         ValueConstraint valueConstraint = buildValueConstraint(oracleType, column.getDataLength(),
@@ -615,7 +615,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     			column.getDataPrecision(), column.getDataScale());
     	DataTypeRef dataTypeRef = new DataTypeRef();
         dataTypeRef.setName(sdoType.name());
-        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
         property.setType(dataTypeRef);  
         
         ValueConstraint valueConstraint = buildValueConstraint(oracleType, column.getDataLength(),

@@ -196,6 +196,7 @@ public abstract class JDBCSupport {
 	protected StringBuilder createSelect(PlasmaType type, List<String> names, 
 			List<PropertyPair> keyValues,
 			FilterAssembler filterAssembler,
+			List<Object> params,
 			AliasMap aliasMap) throws SQLException {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT ");		
@@ -208,7 +209,7 @@ public abstract class JDBCSupport {
 			if (count > 0)
 				sql.append(", ");
 			sql.append("t0.");
-			sql.append(((PlasmaProperty)pkProp).getPhysicalName());			
+			sql.append(((PlasmaProperty)pkProp).getPhysicalName());	
 			count++;
 		}
 		for (String name : names) {
@@ -236,13 +237,18 @@ public abstract class JDBCSupport {
     	}
     	sql.append(" ");
     	sql.append(filterAssembler.getFilter());
+    	for (Object filterParam : filterAssembler.getParams())
+    		params.add(filterParam);
+    	
         for (count = 0; count < keyValues.size(); count++) {
             sql.append(" AND ");
         	PropertyPair propValue = keyValues.get(count);
         	sql.append("t0.");  
         	sql.append(propValue.getProp().getPhysicalName());
-        	sql.append(" = "); 
-        	appendValue(propValue, sql);
+        	sql.append(" = ?"); 
+        	params.add(this.getParamValue(propValue));
+       	    //sql.append(" = "); 
+        	//appendValue(propValue, sql);
         }
         
         // add default ordering by given keys
@@ -257,38 +263,6 @@ public abstract class JDBCSupport {
 		
 		return sql;
 	}
-
-	private void appendValue(PropertyPair propValue, StringBuilder sql) throws SQLException
-	{
-    	PlasmaProperty dataProperty = propValue.getProp();
-    	if (!propValue.getProp().getType().isDataType()) {        		
-    		PlasmaType oppositeType = (PlasmaType)propValue.getProp().getType();
-        	List<Property> pkPropList = oppositeType.findProperties(KeyType.primary);
-            if (pkPropList == null || pkPropList.size() == 0)
-                throw new DataAccessException("no pri-key properties found for type '" 
-                        + oppositeType.getName() + "'");
-            if (pkPropList.size() > 1)
-                throw new DataAccessException("multiple pri-key properties found for type '" 
-                        + oppositeType.getName() + "' - cannot map to generated keys");
-            dataProperty = (PlasmaProperty)pkPropList.get(0);
-     	}        	
-    	
-    	Object jdbcValue = RDBDataConverter.INSTANCE.toJDBCDataValue(dataProperty, 
-    			propValue.getValue());
-    	DataFlavor dataFlavor = dataProperty.getDataFlavor();
-    	switch (dataFlavor) {
-    	case string:
-    	case temporal:
-    	case other:
-    	    sql.append("'");
-    	    sql.append(jdbcValue);
-    	    sql.append("'");
-    	    break;
-    	default:
-    	    sql.append(jdbcValue);
-     	   break;
-    	}		
-	}	
 	
 	protected StringBuilder createInsert(PlasmaType type, 
 			Map<String, PropertyPair> values) {
@@ -775,4 +749,60 @@ public abstract class JDBCSupport {
         return resultKeys;
  	}
 
+	private void appendValue(PropertyPair pair, StringBuilder sql) throws SQLException
+	{
+		appendValue(pair, false, sql);
+	}
+	
+	private void appendValue(PropertyPair pair, boolean useOldValue, StringBuilder sql) throws SQLException
+	{
+		PlasmaProperty valueProp = pair.getProp();
+		if (pair.getValueProp() != null)
+			valueProp = pair.getValueProp();
+		
+		Object jdbcValue = null;
+		if (!useOldValue || pair.getOldValue() == null)
+    	    jdbcValue = RDBDataConverter.INSTANCE.toJDBCDataValue(valueProp, 
+    			pair.getValue());
+		else
+    	    jdbcValue = RDBDataConverter.INSTANCE.toJDBCDataValue(valueProp, 
+    			pair.getOldValue());
+    	
+    	DataFlavor dataFlavor = RDBDataConverter.INSTANCE.toJDBCDataFlavor(valueProp);
+    	
+    	switch (dataFlavor) {
+    	case string:
+    	case temporal:
+    	case other:
+    	    sql.append("'");
+    	    sql.append(jdbcValue);
+    	    sql.append("'");
+    	    break;
+    	default:
+    	    sql.append(jdbcValue);
+     	   break;
+    	}		
+	}
+	
+	private Object getParamValue(PropertyPair pair) throws SQLException
+	{
+		PlasmaProperty valueProp = pair.getProp();
+		if (pair.getValueProp() != null)
+			valueProp = pair.getValueProp();
+		
+    	Object jdbcValue = RDBDataConverter.INSTANCE.toJDBCDataValue(valueProp, 
+    			pair.getValue());
+    	DataFlavor dataFlavor = RDBDataConverter.INSTANCE.toJDBCDataFlavor(valueProp);
+    	
+    	switch (dataFlavor) {
+    	case string:
+    	case temporal:
+    	case other:
+    	    break;
+    	default:
+     	   break;
+    	}	
+    	
+    	return jdbcValue;
+	}	
 }

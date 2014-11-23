@@ -178,7 +178,7 @@ public class CoreType implements PlasmaType {
         org.modeldriven.fuml.repository.Classifier resultClassifier = PlasmaRepository.getInstance().getClassifier(
         		qualifiedName);   
         if (!resultClassifier.getXmiId().equals(repoClassifier.getXmiId()))
-        	log.warn("found xmi-id mismatch for result and lookup classifier - ignoring");
+        	log.warn("found xmi-id mismatch for result ("+resultClassifier.getXmiId()+") and lookup ("+repoClassifier.getXmiId()+") classifier - ignoring");
          
         if (org.modeldriven.fuml.repository.Class_.class.isAssignableFrom(resultClassifier.getClass()))        	
             this.classifier = new Class_(
@@ -267,7 +267,7 @@ public class CoreType implements PlasmaType {
             	org.modeldriven.fuml.repository.Classifier propertyClassifier = prop.getType();	
         		DataType dataType = DataType.valueOf(propertyClassifier.getName());
         		propertyType = PlasmaTypeHelper.INSTANCE.getType(
-                        PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri(),
+                        PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri(),
                         dataType.name());
             }
             

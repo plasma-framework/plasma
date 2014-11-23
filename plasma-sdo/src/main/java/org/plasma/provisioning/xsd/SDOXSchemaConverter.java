@@ -361,7 +361,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
             
             DataTypeRef dataTypeRef = new DataTypeRef();
             dataTypeRef.setName(getOpenAttributeValue(datatypeQName, element));
-            dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+            dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
             property.setType(dataTypeRef);        	
         }
         
@@ -475,7 +475,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
         
         DataTypeRef dataTypeRef = new DataTypeRef();
         dataTypeRef.setName(getOpenAttributeValue(datatypeQName, attribute));
-        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
         property.setType(dataTypeRef);        	
                
         // is key

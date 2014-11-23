@@ -77,7 +77,7 @@ public class DataConverterTest extends PlasmaTest {
         testValues[DataType.Integer.ordinal()][0]        = new BigInteger("23");
         testValues[DataType.Long.ordinal()][0]           = (long)23;
         testValues[DataType.Short.ordinal()][0]          = (short)23;
-        testValues[DataType.String.ordinal()][0]         = "23";
+        testValues[DataType.String.ordinal()][0]         = "23"; // FIXME: this does not convert to a date !!
         testValues[DataType.Strings.ordinal()][0]        = list;
         testValues[DataType.Date.ordinal()][0]           = new Date();
         testValues[DataType.DateTime.ordinal()][0]       = DataConverter.INSTANCE.getDateTimeFormat().format(new Date());
@@ -180,7 +180,7 @@ public class DataConverterTest extends PlasmaTest {
         for (int i = 0; i< allTypes.length; i++)
         {
             DataType currentDataType = allTypes[i];
-            Type currentType = TypeHelper.INSTANCE.getType(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri(), 
+            Type currentType = TypeHelper.INSTANCE.getType(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri(), 
                     currentDataType.name());
             
             List<DataType> allowedFromTestDataType = DataConverter.INSTANCE.getAllowableTargetTypes(testDataType);
@@ -231,7 +231,7 @@ public class DataConverterTest extends PlasmaTest {
         for (int i = 0; i< allTypes.length; i++)
         {
             DataType currentDataType = allTypes[i];
-            Type currentType = TypeHelper.INSTANCE.getType(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri(), 
+            Type currentType = TypeHelper.INSTANCE.getType(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri(), 
                     currentDataType.name());
             
             

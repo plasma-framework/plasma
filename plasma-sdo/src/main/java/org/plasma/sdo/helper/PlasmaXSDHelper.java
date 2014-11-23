@@ -65,6 +65,7 @@ import org.plasma.xml.schema.Annotation;
 import org.plasma.xml.schema.Schema;
 import org.plasma.xml.schema.SchemaModelAssembler;
 import org.plasma.xml.schema.SchemaDataBinding;
+import org.plasma.xml.uml.MDModelAssembler;
 import org.plasma.xml.uml.UMLModelAssembler;
 import org.xml.sax.SAXException;
 
@@ -156,7 +157,7 @@ public class PlasmaXSDHelper implements XSDHelper {
 	   ModelAdapter helper = 
 		   new ModelAdapter(stagingModel);
 	   
-	   UMLModelAssembler assembler = new UMLModelAssembler(stagingModel, 
+	   UMLModelAssembler assembler = new MDModelAssembler(stagingModel, 
 			   schema.getTargetNamespace(), "tns");
 	   String xmi = assembler.getContent();
 	   if (log.isDebugEnabled()) {

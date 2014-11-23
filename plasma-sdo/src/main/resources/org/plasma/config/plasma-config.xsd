@@ -45,7 +45,7 @@
                             <xsd:documentation></xsd:documentation>       
                         </xsd:annotation>                                 
                     </xsd:element>
-		            <xsd:element name="DefaultNamespace" type="cfg:Namespace"  minOccurs="1" maxOccurs="1">
+		            <xsd:element name="DefaultNamespace" type="cfg:Namespace"  minOccurs="0" maxOccurs="1">
 		                <xsd:annotation>                                  
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 
@@ -467,9 +467,9 @@
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 
 		            </xsd:element>
-		            <xsd:element name="NamespaceLink" type="cfg:NamespaceLink"  minOccurs="1" maxOccurs="unbounded">
+		            <xsd:element name="NamespaceLink" type="cfg:NamespaceLink"  minOccurs="0" maxOccurs="unbounded">
 		                <xsd:annotation>                                  
-		                    <xsd:documentation></xsd:documentation>       
+		                    <xsd:documentation>Associates a namepsace with a data access provider for that nameapace</xsd:documentation>       
 		                </xsd:annotation>                                 
 		            </xsd:element>
 		        </xsd:sequence> 
@@ -612,7 +612,7 @@
         <xsd:complexContent>
             <xsd:extension base="cfg:Configuration">
 		        <xsd:sequence>
-		            <xsd:element name="Artifact" type="cfg:Artifact"  minOccurs="1" maxOccurs="unbounded">
+		            <xsd:element name="Artifact" type="cfg:Artifact"  minOccurs="0" maxOccurs="unbounded">
 		                <xsd:annotation>                                  
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 
@@ -680,10 +680,20 @@
         </xsd:annotation>
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="JDBC" />
-            <xsd:enumeration value="JDO" />
-            <xsd:enumeration value="JPA" />
-            <xsd:enumeration value="Hibernate" />
-            <xsd:enumeration value="HBASE" />
+            <xsd:enumeration value="JDO" /> <!-- to remove  -->
+            <xsd:enumeration value="JPA" /> <!-- to remove  -->
+            <!-- Wide Column Stores / Column Families -->
+            <xsd:enumeration value="ACCUMULO"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="CASSANDRA"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="HBASE"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="HYPERTABLE"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <!-- Document Stores -->
+            <xsd:enumeration value="MONGODB"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="COUCHBASE"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <!-- Key-Value / Tuple Stores -->
+            <xsd:enumeration value="DYNAMODB"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="RIAK"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="REDIS"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>        
         </xsd:restriction>
     </xsd:simpleType>
  

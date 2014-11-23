@@ -22,11 +22,18 @@
 package org.plasma.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,6 +53,10 @@ import org.plasma.common.exception.PlasmaRuntimeException;
 import org.plasma.config.adapter.NamespaceAdapter;
 import org.plasma.config.adapter.PropertyBindingAdapter;
 import org.plasma.config.adapter.TypeBindingAdapter;
+import org.plasma.profile.ProfileArtifact;
+import org.plasma.profile.ProfileConfig;
+import org.plasma.profile.ProfileURN;
+import org.plasma.provisioning.cli.RDBTool;
 import org.xml.sax.SAXException;
 
 
@@ -55,7 +66,8 @@ public class PlasmaConfig {
     private static PlasmaConfig instance = null;
     
     private static final String defaultConfigFileName = "plasma-config.xml";  
-    private String configFileName;
+    private String configFileNameOrURIString;
+    private URI configURI;
     private long configFileLastModifiedDate = System.currentTimeMillis();
     private PlasmaConfiguration config;
     private Map<String, Artifact> artifactMap = new HashMap<String, Artifact>();
@@ -83,134 +95,21 @@ public class PlasmaConfig {
         log.debug("initializing...");
         try {
             
-            this.configFileName = EnvProperties.instance().getProperty(
+            this.configFileNameOrURIString = EnvProperties.instance().getProperty(
                     EnvConstants.PROPERTY_NAME_ENV_CONFIG);
             
-            if (this.configFileName == null)
-            	this.configFileName = defaultConfigFileName;
+            if (this.configFileNameOrURIString == null)
+            	this.configFileNameOrURIString = defaultConfigFileName;
             
             PlasmaConfigDataBinding configBinding = new PlasmaConfigDataBinding(
 	        		new PlasmaConfigValidationEventHandler());
 	        
-            config = unmarshalConfig(this.configFileName, configBinding);
-            
-            
-            for (Artifact artifact : config.getRepository().getArtifacts()) {
-                artifactMap.put(artifact.getNamespaceUri(), artifact);
-            }
-            
-            if (artifactMap.get(config.getSDO().getDefaultNamespace().getArtifact()) == null)
-                throw new ConfigurationException("Invalid SDO Namespace - could not find repository artifact based on URI '"
-                        + config.getSDO().getDefaultNamespace().getArtifact() + "'");
-            sdoNamespaceMap.put(config.getSDO().getDefaultNamespace().getUri(), 
-                    new NamespaceAdapter(config.getSDO().getDefaultNamespace()));
-            
-            for (Namespace namespace : config.getSDO().getNamespaces()) {  
-                if (artifactMap.get(namespace.getArtifact()) == null)
-                    throw new ConfigurationException("Invalid SDO Namespace - could not find repository artifact based on URI '"
-                            + namespace.getArtifact() + "'"); 
-                
-                if (this.sdoNamespaceMap.get(namespace.getUri()) != null)
-        			throw new ConfigurationException("duplicate SDO namespace configuration - "
-        					+ "a namespace with URI '" + namespace.getUri() + "' already exists "
-        					+ "within the configucation");
-                
-                // create deflt provisioning based on namespace URI
-                if (namespace.getProvisioning() == null) {
-                	NamespaceProvisioning provisioning = createDefaultProvisioning(namespace.getUri());
-                	namespace.setProvisioning(provisioning);
-                }
-
-                
-                //map namespaces by URI and interface package
-                NamespaceAdapter namespaceAdapter = new NamespaceAdapter(namespace);
-                
-                this.sdoNamespaceMap.put(namespace.getUri(),  namespaceAdapter);
-                if (this.sdoNamespaceMap.get(namespace.getProvisioning().getPackageName()) != null)
-        			throw new ConfigurationException("duplicate SDO namespace configuration - "
-        					+ "a namespace with provisioning package name '" + namespace.getProvisioning().getPackageName() + "' already exists "
-        					+ "within the configucation");
-                this.sdoNamespaceMap.put(namespace.getProvisioning().getPackageName(),  namespaceAdapter);
-                
-                for (TypeBinding typeBinding : namespace.getTypeBindings()) {
-                	namespaceAdapter.addTypeBinding(typeBinding);
-                }
-            }
-            
-        	// create default SDO namespace configs based on artifact where
-            // config does not exist
-            Iterator<String> iter = artifactMap.keySet().iterator();
-            while (iter.hasNext()) {
-            	String artifactUri = iter.next();
-            	Artifact artifact = artifactMap.get(artifactUri);
-                if (this.sdoNamespaceMap.get(artifact.getNamespaceUri()) == null) {
-                	Namespace namespace = new Namespace();	
-                	namespace.setArtifact(artifact.getNamespaceUri());
-                	namespace.setUri(artifact.getNamespaceUri()); // SDO Namespace URI same as artifact URI 
-                	NamespaceProvisioning provisioning = createDefaultProvisioning(artifact.getNamespaceUri());
-                	namespace.setProvisioning(provisioning);
-                    NamespaceAdapter namespaceAdapter = new NamespaceAdapter(namespace);                    
-                    this.sdoNamespaceMap.put(namespace.getUri(),  namespaceAdapter);
-                }
-            }
-            
-            for (DataAccessService daconfig : config.getSDO().getDataAccessServices()) {
-            	
-             	for (DataAccessProvider provider : daconfig.getDataAccessProviders())
-             	{
-             		if (defaultProviderName == null)
-             			defaultProviderName = provider.name;
-             		
-             		this.dataAccessProviderMap.put(provider.getName(), provider);
-	            	Map<String, NamespaceProvisioning> provMap = dataAccessProviderProvisioningMap.get(provider.getName());
-	            	if (provMap == null) {
-	            		provMap = new HashMap<String, NamespaceProvisioning>();
-	            		dataAccessProviderProvisioningMap.put(provider.getName(), provMap);
-	            	}
-	            	Map<String, NamespaceLink> linkMap = dataStoreNamespaceLinkMap.get(daconfig.getDataStoreType());
-	            	if (linkMap == null) {
-	            		linkMap = new HashMap<String, NamespaceLink>();
-	            		dataStoreNamespaceLinkMap.put(daconfig.getDataStoreType(), linkMap);
-	            	}
-	            	for (NamespaceLink namespaceLink : provider.getNamespaceLinks()) {
-	            		if (namespaceLink.getUri() == null)
-	                        throw new ConfigurationException("expected namespace URI for Data Access Service configuration '"
-	                                + provider.getName().toString() + "'");  
-	            		linkMap.put(namespaceLink.getUri(), namespaceLink);
-	            		NamespaceAdapter adapter = sdoNamespaceMap.get(namespaceLink.getUri());
-	            		if (adapter == null)
-	                        throw new ConfigurationException("Invalid SDO Namespace - could not find SDO namespace based on namespace URI '"
-	                                + namespaceLink.getUri() + "' for Data Access Service configuration '"
-	                                + provider.getName().toString() + "'");  
-	            		if (adapter.getNamespace().getProvisioning() != null && 
-	            			adapter.getNamespace().getProvisioning().getPackageName() != null &&
-	            			namespaceLink.getProvisioning() != null) 
-	            		{
-	            			if (adapter.getNamespace().getProvisioning().getPackageName().equals(
-	            					namespaceLink.getProvisioning().getPackageName())) 
-	            			{
-	                            throw new ConfigurationException("Duplicate provisioning package name ("
-	                            		+ namespaceLink.getProvisioning().getPackageName() 
-	                            		+ ") for SDO Namespace '"
-	                                    + namespaceLink.getUri() + "' and Data Access Service configuration '"
-	                                    + provider.getName().toString() + "'");  
-	            			}				
-	            		}
-	            		if (namespaceLink.getProvisioning() != null)
-	            		    provMap.put(namespaceLink.getUri(), 
-	            		    		namespaceLink.getProvisioning());		            		
-	            	}
-	            	
-	            	Map<String, Property> propertyMap = this.dataAccessProviderPropertyMap.get(provider.getName());
-	            	if (propertyMap == null) {
-	            		propertyMap = new HashMap<String, Property>();
-	            		this.dataAccessProviderPropertyMap.put(provider.getName(), propertyMap);
-	            	}
-	            	for (Property property : provider.getProperties()) {
-	            		propertyMap.put(property.getName(), property);
-	            	}
-                }
-            }
+            config = unmarshalConfig(this.configFileNameOrURIString, configBinding);
+                        
+            constructArtifactAndNamespaceMappings();
+            constructKnownArtifacts();
+            constructDataAccessServiceMappings();
+            validateNamespaceToDataStoreMappings();
         }
         catch (SAXException e) {
             throw new ConfigurationException(e);
@@ -220,12 +119,334 @@ public class PlasmaConfig {
         }
     }
     
-    public String getConfigFileName() {
-		return configFileName;
-	}
+    private void constructArtifactAndNamespaceMappings() throws ConfigurationException {
+        // map declared artifacts
+        for (Artifact artifact : config.getRepository().getArtifacts()) {
+            this.artifactMap.put(artifact.getNamespaceUri(), artifact);
+        }
+        
+        // Default namespace now optional, load dynamically below if not found
+        if (config.getSDO().getDefaultNamespace() != null) {
+            if (artifactMap.get(config.getSDO().getDefaultNamespace().getArtifact()) == null)
+                throw new ConfigurationException("Invalid SDO Namespace - could not find repository artifact based on URI '"
+                    + config.getSDO().getDefaultNamespace().getArtifact() + "'");
+            if (log.isDebugEnabled())
+    	    	log.debug("setting default namespace: " + config.getSDO().getDefaultNamespace().getUri());
+            NamespaceAdapter defaultNamespace = new NamespaceAdapter(config.getSDO().getDefaultNamespace()); 
+            sdoNamespaceMap.put(config.getSDO().getDefaultNamespace().getUri(), 
+            		defaultNamespace);
+            this.profileNamespace = defaultNamespace;
+            this.dataTypesNamespace = defaultNamespace;                        
+        }
+        
+        // check declared SDO namespaces against repository artifacts
+        for (Namespace namespace : config.getSDO().getNamespaces()) {  
+            if (artifactMap.get(namespace.getArtifact()) == null)
+                throw new ConfigurationException("Invalid SDO Namespace - could not find repository artifact based on URI '"
+                        + namespace.getArtifact() + "'"); 
+            
+            if (this.sdoNamespaceMap.get(namespace.getUri()) != null)
+    			throw new ConfigurationException("duplicate SDO namespace configuration - "
+    					+ "a namespace with URI '" + namespace.getUri() + "' already exists "
+    					+ "within the configuration");
+            
+            // create deflt provisioning based on namespace URI
+            if (namespace.getProvisioning() == null) {
+            	NamespaceProvisioning provisioning = createDefaultProvisioning(namespace.getUri());
+            	namespace.setProvisioning(provisioning);
+            }
+            
+            //map namespaces by URI and interface package
+            NamespaceAdapter namespaceAdapter = new NamespaceAdapter(namespace);
+            
+            this.sdoNamespaceMap.put(namespace.getUri(),  namespaceAdapter);
+            if (this.sdoNamespaceMap.get(namespace.getProvisioning().getPackageName()) != null)
+    			throw new ConfigurationException("duplicate SDO namespace configuration - "
+    					+ "a namespace with provisioning package name '" + namespace.getProvisioning().getPackageName() + "' already exists "
+    					+ "within the configuration");
+            this.sdoNamespaceMap.put(namespace.getProvisioning().getPackageName(),  namespaceAdapter);
+            
+            for (TypeBinding typeBinding : namespace.getTypeBindings()) {
+            	namespaceAdapter.addTypeBinding(typeBinding);
+            }
+        }
+        
+    	// create default SDO namespace configs based on artifact where
+        // config does not exist
+        Iterator<String> iter = artifactMap.keySet().iterator();
+        while (iter.hasNext()) {
+        	String artifactUri = iter.next();
+        	Artifact artifact = artifactMap.get(artifactUri);
+            if (this.sdoNamespaceMap.get(artifact.getNamespaceUri()) == null) {
+            	Namespace namespace = new Namespace();	
+            	namespace.setArtifact(artifact.getNamespaceUri());
+            	namespace.setUri(artifact.getNamespaceUri()); // SDO Namespace URI same as artifact URI 
+            	NamespaceProvisioning provisioning = createDefaultProvisioning(artifact.getNamespaceUri());
+            	namespace.setProvisioning(provisioning);
+                NamespaceAdapter namespaceAdapter = new NamespaceAdapter(namespace);                    
+                this.sdoNamespaceMap.put(namespace.getUri(),  namespaceAdapter);
+            }
+        }    	
+    }   
+    
+    /**
+     * Dynamically instantiates appropriate profile artifacts based on any 
+     * user configured artifacts, which allows the profile artifacts to be omitted from
+     * the config. This is done by "peeking" into the artifact stream
+     * using a STaX based reader which finds the SDO Profile version. 
+     * throws ProfileVersionDetectionException if more than 1 profile version is detected across
+     * all artifacts. 
+     */
+    private void constructKnownArtifacts() throws ProfileVersionDetectionException {
+    	
+    	// Determine the profile version(s) required by the defined user artifacts 
+    	Map<String, ProfileArtifact> versions = new HashMap<String, ProfileArtifact>();
+        for (Artifact artifact : config.getRepository().getArtifacts()) {
+        	
+        	if (ProfileConfig.getInstance().findArtifactByUri(artifact.getNamespaceUri()) != null)
+        		continue; // validated elsewhere
+        	
+            InputStream stream = PlasmaConfig.class.getResourceAsStream(artifact.getUrn());
+            if (stream == null)
+                stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(artifact.getUrn());
+            if (stream == null) {
+            	if (this.configURI == null) {
+                    throw new PlasmaRuntimeException("could not find artifact resource '" 
+                        + artifact.getUrn() 
+                        + "' on the current classpath");   
+            	}
+            	else { // look for artifact as relative URI
+            		URI artifactURI = null;
+            		try {
+            		    artifactURI = this.configURI.resolve(artifact.getUrn());
+						stream = artifactURI.toURL().openStream();
+            		}
+            		catch (IllegalArgumentException e) {
+            			throw new PlasmaRuntimeException(e);
+					} catch (MalformedURLException e) {
+						throw new PlasmaRuntimeException(e);
+					} catch (IOException e) {
+						throw new PlasmaRuntimeException(e);
+					}
+            		if (stream == null)
+                        throw new PlasmaRuntimeException("could not find artifact resource '" 
+                            + artifact.getUrn() 
+                            + "' on the current classpath or as a relative URI based on the configuration URI, "
+                            + this.configURI.toString());   
+           	    }
+            }            
+            
+            ProfileVersionFinder finder = new ProfileVersionFinder();
+            ProfileArtifact version = finder.getVersion(artifact.getUrn(), stream); 
+            versions.put(version.getNamespaceUri(), version);
+        }
+        
+        // throw an error if more than one profile used across artifacts
+        if (versions.size() > 1) {
+			StringBuilder buf = new StringBuilder();
+			ProfileArtifact[] versionArray = new ProfileArtifact[versions.values().size()];
+			versions.values().toArray(versionArray);
+			for (int i = 0; i < versionArray.length; i++) {
+				if (i > 0)
+					buf.append(", ");
+				buf.append(versionArray[i].getNamespaceUri());
+			}
+			throw new ProfileVersionDetectionException("multiple profile versions detected("
+			        + buf.toString()+ ") for configured set of UML artifacts '" 
+			        + "' - all UML artifacts are required to be annotated with the same version "
+			        + "of the PlasmaSDO UML Profile");
+        }
+        
+        // If Plasma SDO Papyrus profile 1.0 is required and not already a defined artifact,
+        // load it and the separate data types modules
+        ProfileArtifact papyrusProfile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO___PROFILE___UML);
+        if (versions.get(papyrusProfile.getNamespaceUri()) != null) {
+        	if (this.artifactMap.get(papyrusProfile.getNamespaceUri()) == null) {
+	    		NamespaceAdapter namespaceAdapter = loadKnownArtifact(
+	    			papyrusProfile.getUrn().value(),
+	    			papyrusProfile.getNamespaceUri());
+	    		if (namespaceAdapter != null) {
+		    	    this.profileNamespace = namespaceAdapter;  
+	    		}
+	    		else
+	    			log.debug("no resource found for, " + papyrusProfile.getUrn().value());
+            }
+            ProfileArtifact papyrusProfileDatatypes = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO_DATA_TYPES___UML);		    
+        	if (this.artifactMap.get(papyrusProfileDatatypes.getNamespaceUri()) == null) {
+        		NamespaceAdapter namespaceAdapter = loadKnownArtifact(
+        				papyrusProfileDatatypes.getUrn().value(),
+        				papyrusProfileDatatypes.getNamespaceUri());
+	    		if (namespaceAdapter != null) {
+		    	    this.dataTypesNamespace = namespaceAdapter;      
+	    		}
+	    		else
+	    			log.debug("no resource found for, " + papyrusProfileDatatypes.getUrn().value());
+        	}
+        } 
+        else {	        
+	        // If Plasma SDO MagicDraw profile 1.0 is required and not already a defined artifact 
+	        // load it
+	        ProfileArtifact magicdrawProfile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA___SDO___PROFILE___MDXML);
+	        if (versions.get(magicdrawProfile.getNamespaceUri()) != null) {
+	        	if (this.artifactMap.get(magicdrawProfile.getNamespaceUri()) == null) {
+		    		NamespaceAdapter namespaceAdapter = loadKnownArtifact(
+		    				magicdrawProfile.getUrn().value(),
+		    				magicdrawProfile.getNamespaceUri());
+		    		if (namespaceAdapter != null) {
+			    	    this.profileNamespace = namespaceAdapter;  
+			    	    this.dataTypesNamespace = namespaceAdapter; 
+		    		}
+		    		else
+		    			log.debug("no resource found for, " + magicdrawProfile.getUrn().value());
+	            }
+	        }   
+        }
+        
+        
+        // finally if the case where no artifacts are configured, load the MD profile by default
+        if (this.profileNamespace == null) {
+	        ProfileArtifact magicdrawProfile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA___SDO___PROFILE___MDXML);
+    		NamespaceAdapter namespaceAdapter = loadKnownArtifact(
+    				magicdrawProfile.getUrn().value(),
+    				magicdrawProfile.getNamespaceUri());
+    		if (namespaceAdapter != null) {
+	    	    this.profileNamespace = namespaceAdapter;  
+	    	    this.dataTypesNamespace = namespaceAdapter; 
+    		}
+    		else
+    			log.debug("no resource found for, " + magicdrawProfile.getUrn().value());
+        }
+        
+    } 
+    
+    /**
+     * Construct SDO namespace where the Artifact namespace is the SAME as the
+     * SDO namespace. Only the actual artifact itself should know about the actual resource name. The 
+     * "artifact" member here is the namespace URI of the artifact, NOT the URN. 
+     * @param resource
+     * @param uri
+     * @return the new namespace or null if the resource does not exist
+     */
+    private NamespaceAdapter loadKnownArtifact(String resource, String uri) {
+    	InputStream stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(resource);
+    	if (stream == null)
+    		return null;
+	    if (log.isDebugEnabled())
+	    	log.debug("loading known UML/XMI artifact, " 
+	            + resource + " (" +uri + ")");
+        Fuml.load(new ResourceArtifact(resource, uri, stream));              	        		    	
+    	
+    	Namespace namespace = new Namespace();
+    	namespace.setArtifact(uri); 
+    	namespace.setUri(uri);
+    	namespace.setProvisioning(null);
+    	NamespaceAdapter namespaceAdapter = new NamespaceAdapter(namespace); 
+    	this.sdoNamespaceMap.put(namespace.getUri(),  namespaceAdapter);
+    	return namespaceAdapter;
+    }
+    
+    private NamespaceAdapter dataTypesNamespace;
+    public NamespaceAdapter getSDODataTypesNamespace() {
+    	return this.dataTypesNamespace;
+    }
 
+    private NamespaceAdapter profileNamespace;
+    public NamespaceAdapter getSDOProfileNamespace() {
+    	return this.profileNamespace;
+    }
+    
+    private void constructDataAccessServiceMappings() throws ConfigurationException {
+        for (DataAccessService daconfig : config.getSDO().getDataAccessServices()) {
+        	
+         	for (DataAccessProvider provider : daconfig.getDataAccessProviders())
+         	{
+         		if (defaultProviderName == null)
+         			defaultProviderName = provider.name;
+         		
+         		this.dataAccessProviderMap.put(provider.getName(), provider);
+            	Map<String, NamespaceProvisioning> provMap = dataAccessProviderProvisioningMap.get(provider.getName());
+            	if (provMap == null) {
+            		provMap = new HashMap<String, NamespaceProvisioning>();
+            		dataAccessProviderProvisioningMap.put(provider.getName(), provMap);
+            	}
+            	Map<String, NamespaceLink> linkMap = dataStoreNamespaceLinkMap.get(daconfig.getDataStoreType());
+            	if (linkMap == null) {
+            		linkMap = new HashMap<String, NamespaceLink>();
+            		dataStoreNamespaceLinkMap.put(daconfig.getDataStoreType(), linkMap);
+            	}
+            	for (NamespaceLink namespaceLink : provider.getNamespaceLinks()) {
+            		if (namespaceLink.getUri() == null)
+                        throw new ConfigurationException("expected namespace URI for Data Access Service configuration '"
+                                + provider.getName().toString() + "'");  
+            		linkMap.put(namespaceLink.getUri(), namespaceLink);
+            		NamespaceAdapter adapter = sdoNamespaceMap.get(namespaceLink.getUri());
+            		if (adapter == null)
+                        throw new ConfigurationException("Invalid SDO Namespace - could not find SDO namespace based on namespace URI '"
+                                + namespaceLink.getUri() + "' for Data Access Service configuration '"
+                                + provider.getName().toString() + "'");  
+            		if (adapter.getNamespace().getProvisioning() != null && 
+            			adapter.getNamespace().getProvisioning().getPackageName() != null &&
+            			namespaceLink.getProvisioning() != null) 
+            		{
+            			if (adapter.getNamespace().getProvisioning().getPackageName().equals(
+            					namespaceLink.getProvisioning().getPackageName())) 
+            			{
+                            throw new ConfigurationException("Duplicate provisioning package name ("
+                            		+ namespaceLink.getProvisioning().getPackageName() 
+                            		+ ") for SDO Namespace '"
+                                    + namespaceLink.getUri() + "' and Data Access Service configuration '"
+                                    + provider.getName().toString() + "'");  
+            			}				
+            		}
+            		if (namespaceLink.getProvisioning() != null)
+            		    provMap.put(namespaceLink.getUri(), 
+            		    		namespaceLink.getProvisioning());		            		
+            	}
+            	
+            	Map<String, Property> propertyMap = this.dataAccessProviderPropertyMap.get(provider.getName());
+            	if (propertyMap == null) {
+            		propertyMap = new HashMap<String, Property>();
+            		this.dataAccessProviderPropertyMap.put(provider.getName(), propertyMap);
+            	}
+            	for (Property property : provider.getProperties()) {
+            		propertyMap.put(property.getName(), property);
+            	}
+            }
+        }
+    }
+    
+    private void validateNamespaceToDataStoreMappings()
+    {
+    	// check SDO user namespaces against datastore mappings
+    	// ensure every user namespace is mapped to one data store provider
+        for (Namespace namespace : config.getSDO().getNamespaces()) {  
+        	int count = 0;
+    		for (Map<String, NamespaceLink> map : this.dataStoreNamespaceLinkMap.values()) {
+    			NamespaceLink link = map.get(namespace.getUri());
+    			if (link != null)
+    				count++;
+    		}
+        	if (count == 0)
+    			throw new ConfigurationException("SDO namespace '"+namespace.getUri()+"' not mapped to any "
+    					+ "data access provider - every namespace should ba mapped/linked to one provider using a " 
+    					+ NamespaceLink.class.getSimpleName() + " within the provider configuration");
+        	if (count > 1)
+    			throw new ConfigurationException("SDO namespace '"+namespace.getUri()+"' mapped to multiple "
+    					+ "data access providers - every namespace should ba mapped/linked to a single provider using a " 
+    					+ NamespaceLink.class.getSimpleName() + " within the provider configuration");
+    	}
+    }
+    
+    public String getConfigFileName() {
+		return configFileNameOrURIString;
+	}
+    
 	public long getConfigFileLastModifiedDate() {
 		return configFileLastModifiedDate;
+	}
+
+	public URI getConfigURI() {
+		return configURI;
 	}
 
 	public DataAccessProviderName getDefaultProviderName() {
@@ -246,22 +467,42 @@ public class PlasmaConfig {
     }
     
     @SuppressWarnings("unchecked")
-    private PlasmaConfiguration unmarshalConfig(String configFileName, PlasmaConfigDataBinding binding)
+    private PlasmaConfiguration unmarshalConfig(String configFileURI, PlasmaConfigDataBinding binding)
     {
     	try {
-	        InputStream stream = PlasmaConfig.class.getResourceAsStream(configFileName);
-	        if (stream == null)
-	            stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(configFileName);
-	        if (stream == null)
-	            throw new ConfigurationException("could not find configuration file resource '" 
-	                    + configFileName 
-	                    + "' on the current classpath");        
+    		try {
+				this.configURI = new URI(configFileURI);
+			} catch (URISyntaxException e) {
+			}
+    		InputStream stream = null;
+    		if (this.configURI == null || this.configURI.getScheme() == null) {    		
+		        stream = PlasmaConfig.class.getResourceAsStream(configFileURI);
+		        if (stream == null)
+		            stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(configFileURI);
+		        if (stream == null)
+		            throw new ConfigurationException("could not find configuration file resource '" 
+		                    + configFileURI 
+		                    + "' on the current classpath");        
+    		}
+    		else {
+    			try {
+					stream = configURI.toURL().openStream();
+				} catch (MalformedURLException e) {
+		            throw new ConfigurationException(e);
+				} catch (IOException e) {
+		            throw new ConfigurationException(e);
+				}
+		        if (stream == null)
+		            throw new ConfigurationException("could not open stream for configuration file resource '" 
+		                    + configFileURI 
+		                    + "'");        
+    		}
 	        
             PlasmaConfiguration result = (PlasmaConfiguration)binding.validate(stream);
 
-            URL url = PlasmaConfig.class.getResource(configFileName);
+            URL url = PlasmaConfig.class.getResource(configFileURI);
             if (url == null)
-            	url = PlasmaConfig.class.getClassLoader().getResource(configFileName);
+            	url = PlasmaConfig.class.getClassLoader().getResource(configFileURI);
             if (url != null) {
                 File urlFile = new File(url.getFile());
                 if (urlFile.exists()) 
@@ -389,7 +630,7 @@ public class PlasmaConfig {
         if (this.sdoNamespaceMap.get(namespace.getUri()) != null)
 			throw new ConfigurationException("duplicate SDO namespace configuration - "
 					+ "a namespace with URI '" + namespace.getUri() + "' already exists "
-					+ "within the configucation");
+					+ "within the configuration");
     	this.sdoNamespaceMap.put(uri, new NamespaceAdapter(namespace));
     	
     	// find the supplier URI where mapped and add a mapping to the
@@ -408,7 +649,7 @@ public class PlasmaConfig {
     	}    	
     }
     
-    public void addDynamicSDONamespace(String uri, String artifact,
+    public Namespace addDynamicSDONamespace(String uri, String artifact,
     		NamespaceProvisioning provisioning) {
     	Namespace namespace = new Namespace();
     	namespace.setArtifact(artifact); 
@@ -417,8 +658,9 @@ public class PlasmaConfig {
         if (this.sdoNamespaceMap.get(namespace.getUri()) != null)
 			throw new ConfigurationException("duplicate SDO namespace configuration - "
 					+ "a namespace with URI '" + namespace.getUri() + "' already exists "
-					+ "within the configucation");
+					+ "within the configuration");
     	this.sdoNamespaceMap.put(uri, new NamespaceAdapter(namespace));
+    	return namespace;
     }
 
     public DataAccessProvider findDataAccessProvider(DataAccessProviderName providerName) {
@@ -435,6 +677,22 @@ public class PlasmaConfig {
                     + providerName.value() + "'");
     }
     
+    /**
+     * Returns the property based on the given name for the given data 
+     * access provider, or null if not exists. 
+     * @param provider the data access provider
+     * @param name the property name
+     * @return the property based on the given name for the given data 
+     * access provider, or null if not exists. 
+     */
+    public Property findProviderProperty(DataAccessProvider provider, String name) {
+	    for (org.plasma.config.Property property : provider.getProperties()) {
+	    	if (property.getName().equals(name))
+	    		return property;
+	    }
+	    return null;
+    }
+    
     public RDBMSVendorName getRDBMSProviderVendor(DataAccessProviderName providerName) {
     	DataAccessProvider provider = this.dataAccessProviderMap.get(providerName);
         if (provider == null) 
@@ -445,7 +703,6 @@ public class PlasmaConfig {
     	case JDBC:
     	case JDO:
     	case JPA:
-    	case HIBERNATE:
     		Property vendorProp = findProviderPropertyByName(provider, ConfigurationConstants.JDBC_VENDOR);
     		if (vendorProp != null) {
     			vendor = getVendorName(provider, vendorProp);

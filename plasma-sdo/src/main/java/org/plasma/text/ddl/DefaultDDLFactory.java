@@ -73,6 +73,16 @@ public abstract class DefaultDDLFactory {
 		}
 		return false;
 	}
+	
+	protected boolean isFk(Table table, Column column) {
+		if (table.getFks() != null) {
+			for (Fk fk : table.getFks()) {				 
+				if (fk.getColumn().equals(column.getName()))
+					return true;
+			}
+		}
+		return false;
+	}
 
 	public String dropTable(Schema schema, Table table) {
 		StringBuilder buf = new StringBuilder();
@@ -93,6 +103,30 @@ public abstract class DefaultDDLFactory {
 		buf.append(";\n");
 		return buf.toString();
 	}
+		 
+	public String createView(Schema schema, Table table, Behavior create) {
+		StringBuilder buf = new StringBuilder();
+		String ddl = create.getValue();
+		if (ddl != null) {
+			ddl = ddl.trim();
+			buf.append(ddl);
+			if (!ddl.endsWith(";"))
+				buf.append(";");
+		}
+		return buf.toString();
+	}
+	 
+	public String dropView(Schema schema, Table table, Behavior drop) {
+		StringBuilder buf = new StringBuilder();
+		String ddl = drop.getValue();
+		if (ddl != null) {
+			ddl = ddl.trim();
+			buf.append(ddl);
+			if (!ddl.endsWith(";"))
+				buf.append(";");
+		}
+		return buf.toString();
+	}	
 
 	private DataAccessProvider getProvider() {
 		DataAccessProvider provider = PlasmaConfig.getInstance().findDataAccessProvider(DataAccessProviderName.JPA);
@@ -337,5 +371,14 @@ public abstract class DefaultDDLFactory {
 		buf.append(";\n");
 		return buf.toString();
 	}
+	
+	protected Column getColumn(Table table, String name) {
+		for (Column col : table.getColumns()) {
+			if (col.getName().equals(name))
+				return col;
+		}
+		throw new DDLException("could not find column '" + name + "' for table. " + table.getName());
+	}
+	
 
 }

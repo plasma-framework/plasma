@@ -25,4 +25,18 @@ public class ConfigurationConstants {
     /** The user password */
     public static final String JDBC_PASSWORD = JDBC_PROVIDER_PROPERTY_PREFIX + "ConnectionPassword";
 
+
+    // FIXME: this is not extensible
+    /** The Plasma SDO Profile artifact for MagicDraw */
+	//public static final String ARTIFACT_RESOURCE_PLASMA_PROFILE_MAGICDRAW = "Plasma_SDO_Profile.mdxml";	
+	//public static final String ARTIFACT_NAMESPACE_PLASMA_PROFILE_MAGICDRAW = "http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi";
+	    
+    /** The Plasma SDO Profile artifact for Eclipse Papyrus */
+	//public static final String ARTIFACT_RESOURCE_PLASMA_PROFILE_PAPYRUS = "PlasmaSDO.profile.uml";	
+	//public static final String ARTIFACT_NAMESPACE_PLASMA_PROFILE_PAPYRUS = "http:///schemas/PlasmaSDOProfile/_B_s5sDSPEeS0BI8SXekDLw/26";
+
+    /** The Plasma SDO Profile Datatypes artifact for Eclipse Papyrus */
+	//public static final String ARTIFACT_RESOURCE_PLASMA_DATATYPES_PAPYRUS = "PlasmaSDODataTypes.uml";	
+	//public static final String ARTIFACT_NAMESPACE_PLASMA_DATATYPES_PAPYRUS = "http:///schemas/PlasmaSDODataTypes";
+	
 }

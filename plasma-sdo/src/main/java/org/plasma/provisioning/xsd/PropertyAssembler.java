@@ -192,7 +192,7 @@ public class PropertyAssembler extends AbstractAssembler {
 	                DataType sdoType = this.support.mapType(xsdType);;
 	            	DataTypeRef dataTypeRef = new DataTypeRef();
 	                dataTypeRef.setName(sdoType.name());
-	                dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+	                dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
 	                property.setType(dataTypeRef);        	
 	
 	                if (element.getName() == null)
@@ -224,7 +224,7 @@ public class PropertyAssembler extends AbstractAssembler {
     	                DataType sdoType = this.support.mapType(xsdType);;
     	            	DataTypeRef dataTypeRef = new DataTypeRef();
     	                dataTypeRef.setName(sdoType.name());
-    	                dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+    	                dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
     	                property.setType(dataTypeRef);        	
     	                setupNames(clss, property, alias, 
     	                		element.getName(), element.getName());
@@ -323,7 +323,7 @@ public class PropertyAssembler extends AbstractAssembler {
         	DataType sdoType = this.support.mapType(XSDBuiltInType.xsd_string);
         	DataTypeRef dataTypeRef = new DataTypeRef();
             dataTypeRef.setName(sdoType.name());
-            dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+            dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
             property.setType(dataTypeRef);    
     	}
     	
@@ -426,7 +426,7 @@ public class PropertyAssembler extends AbstractAssembler {
     	
     	DataTypeRef dataTypeRef = new DataTypeRef();
         dataTypeRef.setName(sdoType.name());
-        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
         property.setType(dataTypeRef);        	
     }
 	

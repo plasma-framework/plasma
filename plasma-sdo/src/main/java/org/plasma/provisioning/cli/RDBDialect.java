@@ -23,5 +23,15 @@ package org.plasma.provisioning.cli;
 
 public enum RDBDialect {
     oracle,
-    mysql
+    mysql;
+    
+    public static String asString() {
+		StringBuilder buf = new StringBuilder();
+		for (int i = 0; i < RDBDialect.values().length; i++) {
+			if (i > 0)
+				buf.append(", ");
+			buf.append(RDBDialect.values()[i].name());
+		}
+		return buf.toString();
+    }
 }

@@ -35,6 +35,7 @@ import org.plasma.config.NonExistantNamespaceException;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.adapter.ModelAdapter;
 import org.plasma.provisioning.adapter.TypeAdapter;
+import org.plasma.provisioning.cli.RDBDialect;
 import org.plasma.provisioning.Class;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.PlasmaProperty;
@@ -243,13 +244,19 @@ public class DDLModelAssembler {
 		for (OpaqueBehavior behavior : behaviors) {
 			BehaviorType type = null;
 			try {
-			    type = BehaviorType.fromValue(behavior.getName());
+			    type = BehaviorType.fromValue(behavior.getName().toLowerCase());
 			}
 			catch (IllegalArgumentException e) {
+	    		StringBuilder buf = new StringBuilder();
+	    		for (int i = 0; i < BehaviorType.values().length; i++) {
+	    			if (i > 0)
+	    				buf.append(", ");
+	    			buf.append(BehaviorType.values()[i].value());
+	    		}
 				throw new DDLException("unknown behavior name '"
 						+ behavior.getName()
 						+ "' - expected one of ["
-						+ BehaviorType.values() + "]");
+						+ buf.toString() + "]");
 			}
 			Behavior ddlBehavior = new Behavior();
 			ddlBehavior.setType(type);

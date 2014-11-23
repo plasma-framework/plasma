@@ -49,6 +49,7 @@ import org.plasma.provisioning.SchemaProvisioningModelAssembler;
 import org.plasma.provisioning.adapter.ModelAdapter;
 import org.plasma.xml.schema.Schema;
 import org.plasma.xml.schema.SchemaDataBinding;
+import org.plasma.xml.uml.MDModelAssembler;
 import org.plasma.xml.uml.UMLModelAssembler;
 import org.xml.sax.SAXException;
 
@@ -185,7 +186,7 @@ public class XSDTool extends ProvisioningTool {
 	    ModelAdapter helper = 
 			   new ModelAdapter(stagingModel);
 		   
-	    UMLModelAssembler assembler = new UMLModelAssembler(stagingModel, 
+	    UMLModelAssembler assembler = new MDModelAssembler(stagingModel, 
 	    		namespaceURI, namespacePrefix);
         Document document = assembler.getDocument();
         

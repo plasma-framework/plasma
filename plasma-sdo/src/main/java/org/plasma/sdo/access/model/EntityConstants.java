@@ -36,7 +36,7 @@ public interface EntityConstants
     public static final String JAVAX_JDO_OPTION_CONNECTIONURL = "javax.jdo.option.ConnectionURL";
     public static final String JAVAX_JDO_OPTION_CONNECTIONPASSWORD = "javax.jdo.option.ConnectionPassword";
     public static final String JAVAX_JDO_OPTION_CONNECTIONDRIVERNAME = "javax.jdo.option.ConnectionDriverName";
-    public static final String JAVAX_JDO_OPTION_CONNECTIONFACTORYNAME = EnvConstants.PROPERTY_NAME_DATASOURCE;
+    public static final String JAVAX_JDO_OPTION_CONNECTIONFACTORYNAME = "javax.jdo.option.ConnectionFactoryName";
 
     
     

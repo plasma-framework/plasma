@@ -18,10 +18,12 @@
         </GlobalProvisioning>            
     
         <!-- default namespace used for SDO infra itself, such as SDO datatypes -->
+           <!-- 
         <DefaultNamespace uri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"
             artifact="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi">
             <Provisioning packageName="org.plasma.platform.sdo"/>
   		</DefaultNamespace>
+  		  --> 
   		 
         <Namespace uri="http://org.plasma/sdo/oracle/any/sys"
             artifact="http://Plasma_RDB_Oracle.mdxml">
@@ -47,7 +49,6 @@
                 <QueryDSL generate="true"/>
             </Provisioning>
         </Namespace>
-                
   	      	
     </SDO>
     
@@ -58,10 +59,12 @@
             the namespace declaration by hand in the XMI but next time the
             model is changed, MD will change it back !!
         -->
+        <!--      
         <Artifact name="Plasma_SDO_Profile.mdxml"
             urn="Plasma_SDO_Profile.mdxml" 
             namespaceUri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"/>
-  
+          
+         -->
         <Artifact name="Plasma_RDB_Oracle.mdxml"
             urn="Plasma_RDB_Oracle.mdxml" 
             namespaceUri="http://Plasma_RDB_Oracle.mdxml"/>  

@@ -66,6 +66,15 @@ public class RDBDataConverter {
 			INSTANCE = new RDBDataConverter();
 		return INSTANCE;
 	}
+	
+	public DataFlavor toJDBCDataFlavor(PlasmaProperty sourceProperty)
+	{
+		if (!sourceProperty.getType().isDataType())
+			throw new IllegalArgumentException("expected data type property, not " +
+					sourceProperty.toString());
+		PlasmaProperty dataProperty = sourceProperty;
+    	return dataProperty.getDataFlavor();
+	}
 
 	public Object fromJDBCDataType(ResultSet rs, int columnIndex,
 			int sourceType, PlasmaProperty targetProperty) throws SQLException {

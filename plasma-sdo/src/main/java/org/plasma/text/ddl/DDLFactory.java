@@ -26,6 +26,8 @@ public interface DDLFactory {
     public String getType(Table table, Column column);
     public String createTable(Schema schema, Table table);
     public String dropTable(Schema schema, Table table);
+    public String createView(Schema schema, Table table, Behavior create);
+    public String dropView(Schema schema, Table table, Behavior drop);
     public String truncateTable(Schema schema, Table table);
     public String createSequence(Schema schema, Table table);
     public String dropSequence(Schema schema, Table table);

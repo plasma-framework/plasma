@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfg:ProfileConfiguration  
+    xmlns:cfg="http://www.plasma.org/profile">
+  
+    <!-- MagicDraw Profile Versions -->
+    <Artifact urn="Plasma_SDO_Profile.mdxml" namespaceUri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"/>
+    
+    <!-- Papyrus Profile Versions -->
+    <Artifact urn="PlasmaSDO.profile.uml" namespaceUri="http:///schemas/PlasmaSDOProfile/_B_s5sDSPEeS0BI8SXekDLw/26"/>
+    <Artifact urn="PlasmaSDODataTypes.uml" namespaceUri="http:///schemas/PlasmaSDODataTypes"/>
+  
+</cfg:ProfileConfiguration>   

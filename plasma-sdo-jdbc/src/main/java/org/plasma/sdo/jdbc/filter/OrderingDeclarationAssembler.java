@@ -22,8 +22,11 @@
 package org.plasma.sdo.jdbc.filter;
 
 // java imports
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.plasma.query.model.Function;
 import org.plasma.query.model.OrderBy;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.Property;
@@ -85,11 +88,15 @@ public class OrderingDeclarationAssembler extends DefaultQueryVisitor
         String targetAlias = this.aliasMap.getAlias(targetType);
         if (targetAlias == null)
         	targetAlias = this.aliasMap.addAlias(targetType);
+
+        List<Function> functions = property.getFunctions();
+        if (functions == null || functions.size() == 0) {
+        	orderingDeclaration.append(targetAlias + "." + endpoint.getPhysicalName());
+        }
+        else {
+        	orderingDeclaration.append(Functions.wrap(endpoint, functions, targetAlias));
+        }                       
         
-        String alias = this.aliasMap.getAlias(targetType);
-        orderingDeclaration.append(alias);
-        orderingDeclaration.append(".");
-        orderingDeclaration.append(endpoint.getPhysicalName());
         if (property.getDirection() == null || property.getDirection().ordinal() == org.plasma.query.model.SortDirectionValues.ASC.ordinal())
             orderingDeclaration.append(" ASC");
         else  

@@ -640,7 +640,7 @@ public class ProvisioningModelAssembler {
 	private DataTypeRef createDatatype(String name) {
 		DataTypeRef dataTypeRef = new DataTypeRef();
 		dataTypeRef.setName(name);
-        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
 	    return dataTypeRef;
 	}
 	

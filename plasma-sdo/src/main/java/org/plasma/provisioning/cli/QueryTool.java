@@ -53,6 +53,7 @@ import org.plasma.sdo.core.CoreXMLDocument;
 import org.plasma.sdo.helper.PlasmaXSDHelper;
 import org.plasma.sdo.xml.MarshallerException;
 import org.plasma.sdo.xml.StreamMarshaller;
+import org.plasma.xml.uml.MDModelAssembler;
 import org.plasma.xml.uml.UMLModelAssembler;
 import org.xml.sax.SAXException;
 
@@ -209,7 +210,7 @@ public class QueryTool extends ProvisioningTool {
 			new ModelAdapter(model);
         
     	log.info("assembling XMI model");
-		UMLModelAssembler modelAssembler = new UMLModelAssembler(query, 
+		UMLModelAssembler modelAssembler = new MDModelAssembler(query, 
 				destNamespaceURI, destNamespacePrefix);
         Document document = modelAssembler.getDocument();
         

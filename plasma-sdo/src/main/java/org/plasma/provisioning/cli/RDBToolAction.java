@@ -44,12 +44,15 @@ public enum RDBToolAction {
 	 * within the source domain model artifact(s). Constraints are
 	 * then re-enabled.
 	 */
-    truncate,  
+    truncate;  
     
-    /**
-     * Read the the given schema(s) including tables, views, 
-     * indexes, constraints and
-	 * other artifacts and generate a UML model 
-     */
-    reverse  
+    public static String asString() {
+		StringBuilder buf = new StringBuilder();
+		for (int i = 0; i < RDBToolAction.values().length; i++) {
+			if (i > 0)
+				buf.append(", ");
+			buf.append(RDBToolAction.values()[i].name());
+		}
+		return buf.toString();
+    }
 }

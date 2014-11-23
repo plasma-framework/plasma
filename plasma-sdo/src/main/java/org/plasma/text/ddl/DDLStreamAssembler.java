@@ -130,11 +130,13 @@ public class DDLStreamAssembler extends DDLAssembler
     		for (Table table : schema.getTables()) {
     			if (!hasBehavior(BehaviorType.CREATE, schema, table))
     			    continue;
-				this.stream.write("\n".getBytes());
 				Behavior behavior = getBehavior(BehaviorType.CREATE, schema, table);
-			    this.stream.write(behavior.getValue().getBytes());
-				if (!behavior.getValue().trim().endsWith(";"))
-					this.stream.write(";".getBytes());
+			    String ddl = createView(schema, table, behavior);
+			    if (ddl != null && ddl.trim().length() > 0) {
+			    	ddl = ddl.trim();
+					this.stream.write("\n".getBytes());
+				    this.stream.write(ddl.getBytes());
+			    }
     		}
     	}
 		this.stream.write("\n".getBytes());
@@ -146,11 +148,13 @@ public class DDLStreamAssembler extends DDLAssembler
     		for (Table table : schema.getTables()) {
     			if (!hasBehavior(BehaviorType.DROP, schema, table))
     			    continue;
-				this.stream.write("\n".getBytes());
 				Behavior behavior = getBehavior(BehaviorType.DROP, schema, table);
-			    this.stream.write(behavior.getValue().getBytes());
-				if (!behavior.getValue().trim().endsWith(";"))
-					this.stream.write(";".getBytes());
+			    String ddl = dropView(schema, table, behavior);
+			    if (ddl != null && ddl.trim().length() > 0) {
+			    	ddl = ddl.trim();
+					this.stream.write("\n".getBytes());
+				    this.stream.write(ddl.getBytes());
+			    }
     		}
     	}    	
     }
@@ -335,6 +339,14 @@ public class DDLStreamAssembler extends DDLAssembler
 			
 	private String dropTable(Schema schema, Table table) {
 		return this.factory.dropTable(schema, table);
+	}
+	
+    private String createView(Schema schema, Table table, Behavior create) {
+    	return this.factory.createView(schema, table, create);
+    }		
+			
+	private String dropView(Schema schema, Table table, Behavior drop) {
+		return this.factory.dropView(schema, table, drop);
 	}
 	
 	private String truncateTable(Schema schema, Table table) {

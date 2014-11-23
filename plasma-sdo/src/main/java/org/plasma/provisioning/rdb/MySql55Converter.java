@@ -378,7 +378,9 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 	        		create.setLanguage("SQL");
 	        		create.setType(BehaviorType.CREATE);
 	        		create.setName(BehaviorType.CREATE.name().toLowerCase());
-	       		    create.setValue(filter(view.getViewDefinition()));
+	        		String definition = filter(view.getViewDefinition());
+	        		create.setValue("CREATE OR REPLACE VIEW " + pkg.getAlias().getPhysicalName() 
+		    				+ "." + clss.getAlias().getPhysicalName() + " AS " + definition);
 	        		clss.getBehaviors().add(create);
 	        	}
 	        	
@@ -422,7 +424,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
     			column.getDataPrecision(), column.getDataScale());
     	DataTypeRef dataTypeRef = new DataTypeRef();
         dataTypeRef.setName(sdoType.name());
-        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri());
+        dataTypeRef.setUri(PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri());
         property.setType(dataTypeRef);  
         
         ValueConstraint valueConstraint = buildValueConstraint(oracleType, column.getCharMaxLength(),

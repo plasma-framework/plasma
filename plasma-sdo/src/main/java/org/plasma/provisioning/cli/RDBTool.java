@@ -22,36 +22,15 @@
 package org.plasma.provisioning.cli;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdom2.Document;
-import org.jdom2.output.XMLOutputter;
-import org.modeldriven.fuml.Fuml;
-import org.modeldriven.fuml.io.ResourceArtifact;
 import org.plasma.common.bind.DefaultValidationEventHandler;
-import org.plasma.config.NamespaceProvisioning;
-import org.plasma.config.PlasmaConfig;
-import org.plasma.provisioning.Model;
-import org.plasma.provisioning.ProvisioningException;
-import org.plasma.provisioning.ProvisioningModelDataBinding;
-import org.plasma.provisioning.SchemaConverter;
-import org.plasma.provisioning.adapter.ModelAdapter;
-import org.plasma.provisioning.rdb.MySql55Converter;
-import org.plasma.provisioning.rdb.MySqlVersion;
-import org.plasma.provisioning.rdb.MySqlVersionFinder;
-import org.plasma.provisioning.rdb.Oracle11GConverter;
-import org.plasma.provisioning.rdb.OracleVersion;
-import org.plasma.provisioning.rdb.OracleVersionFinder;
 import org.plasma.provisioning.rdb.RDBConstants;
-import org.plasma.sdo.repository.PlasmaRepository;
 import org.plasma.text.ddl.DDLFactory;
 import org.plasma.text.ddl.DDLModelAssembler;
 import org.plasma.text.ddl.DDLModelDataBinding;
@@ -59,7 +38,6 @@ import org.plasma.text.ddl.DDLOperation;
 import org.plasma.text.ddl.DDLStreamAssembler;
 import org.plasma.text.ddl.MySQLFactory;
 import org.plasma.text.ddl.OracleFactory;
-import org.plasma.xml.uml.UMLModelAssembler;
 import org.xml.sax.SAXException;
 
 /**
@@ -68,32 +46,26 @@ import org.xml.sax.SAXException;
  * to and from Relational Database.  
  * <p></p> 
  * <b>Usage:</b> java org.plasma.provisioning.cli.RDBTool  
- * [-command &lt;create | drop | truncate | reverse&gt;]  
- * [dialect &lt;oracle | mysql, ...&gt;] [dest-file] [dest-namespace-URI]  
+ * [command &lt;create | drop | truncate&gt;]  
+ * [dialect &lt;oracle | mysql, ...&gt;] 
+ * [platform &lt;papyrus | magicdraw, ...&gt;] 
+ * [dest-file] [namespace1, namespace2, ...]  
  * [schema1, schema2, ...]<b>*</b>
  * <p></p> 
  * <b>Where:</b> 
- * <li><b>-command</b> is one of [create | drop | truncate | reverse]. The <i>create</i>, <i>drop</i> and 
+ * <li><b>-command</b> is one of [create | drop | truncate]. The <i>create</i>, <i>drop</i> and 
  * <i>truncate</i> commands generate a complete DDL script representing the configured
- * set of UML artifacts. 
- * The <i>reverse</i> command interrogates one or more database schemas, using
- * vendor specific system tables, and generates a UML model which captures the
- * the physical attributes of the database including all tables, 
- * columns, constraints, sequences and comments. Check constraints where the
- * search condition involves limiting the associated property to a list of values
- * are captured and used to produce annotated UML enumerations which 
- * are automatically linked as UML enumeration constraints to the 
- * source property. Note the <i>reverse</i> command requires a Plasma JDBC service
- * to be configured within the Plasma configuration, where the user
- * specified has read privileges for system schema(s) for the respective
- * database vendor</li>
- * <li><b>dialect</b> is one of [oracle | mysql, ...] and the specific database product version is determined at runtime</li>
- * <li><b>dest-file</b> is the file name for the target artifact</li> 
- * <li><b>namespaces</b> the destination or target namespace URIs. These are separated by commas and mapped (in order) to schema names in the resulting document</li> 
- * <li><b>schema1, schema2, ...</b> is a set of source RDB schemas separated by commas. This argument
- * <i>reverse</i> command as the physical schema names and namespace URI
+ * set of UML artifacts. For these commands the <i>platform</i>, <i>namespace</i> and <i>schema</i>
+ * arguments are not applicable as the physical schema names and namespace URI
  * associations are expected to be
- * part of the configured PlasmaSDO UML Profile annotated UML model artifact(s).</li> 
+ * part of the configured PlasmaSDO UML Profile annotated UML model artifact(s).
+ * <li><b>dialect</b> is one of [oracle | mysql, ...] and the specific database product version is determined at runtime</li>
+ * <li><b>platform</b> is one of [papyrus | magicdraw, ...]</li>
+ * <li><b>dest-file</b> is the file name for the target artifact</li> 
+ * <li><b>namespace1, namespace2, ...</b> is the comma separated set of namespace URIs used to annotate the UML package(s). If more than one 
+ * schema is used, each schema name is used as a suffix. If no namespace-URI is present
+ * a namespace URI based on the destination file name is constructed.</li> 
+ * <li><b>schema1, schema2, ...</b> is a set of source RDB schemas separated by commas</li> 
  */
 public class RDBTool extends ProvisioningTool implements RDBConstants {
     
@@ -104,30 +76,25 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
      * Command line entry point. 
      * <p></p>
 	 * <b>Usage:</b> java org.plasma.provisioning.cli.RDBTool  
-	 * [-command &lt;create | drop | truncate | reverse&gt;]  
-	 * [dialect &lt;oracle | mysql, ...&gt;] [dest-file] [dest-namespace-URI]  
+	 * [command &lt;create | drop | truncate&gt;]  
+	 * [dialect &lt;oracle | mysql, ...&gt;] 
+	 * [platform &lt;papyrus | magicdraw, ...&gt;] 
+	 * [dest-file] [namespace1, namespace2, ...]  
 	 * [schema1, schema2, ...]<b>*</b>
 	 * <p></p> 
 	 * <b>Where:</b> 
-	 * <li><b>-command</b> is one of [create | drop | truncate | reverse]. The <i>create</i>, <i>drop</i> and 
+	 * <li><b>-command</b> is one of [create | drop | truncate]. The <i>create</i>, <i>drop</i> and 
 	 * <i>truncate</i> commands generate a complete DDL script representing the configured
-	 * set of UML artifacts. For these commands the <i>schema-name, namespace-uri</i>
-	 * pairs are not applicable as the physical schema names and namespace URI
+	 * set of UML artifacts. For these commands the <i>platform</i>, <i>namespace</i> and <i>schema</i>
+	 * arguments are not applicable as the physical schema names and namespace URI
 	 * associations are expected to be
 	 * part of the configured PlasmaSDO UML Profile annotated UML model artifact(s).
-	 * The <i>reverse</i> command interrogates one or more database schemas, using
-	 * vendor specific system tables, and generates a UML model which captures the
-	 * the physical attributes of the database including all tables, 
-	 * columns, constraints, sequences and comments. Check constraints where the
-	 * search condition involves limiting the associated property to a list of values
-	 * are captured and used to produce annotated UML enumerations which 
-	 * are automatically linked as UML enumeration constraints to the 
-	 * source property.</li>
 	 * <li><b>dialect</b> is one of [oracle | mysql, ...] and the specific database product version is determined at runtime</li>
+	 * <li><b>platform</b> is one of [papyrus | magicdraw, ...]</li>
 	 * <li><b>dest-file</b> is the file name for the target artifact</li> 
-	 * <li><b>dest-namespace-URI</b> is the namespace URI used to annotate the UML package(s). If more than one 
-	 * schema is used, each schema name is used as a suffix. If no dest-namespace-URI is present
-	 * a nemsapace URI based on the destination file name is constructed.</li> 
+	 * <li><b>namespace1, namespace2, ...</b> is the comma separated set of namespace URIs used to annotate the UML package(s). If more than one 
+	 * schema is used, each schema name is used as a suffix. If no namespace-URI is present
+	 * a namespace URI based on the destination file name is constructed.</li> 
 	 * <li><b>schema1, schema2, ...</b> is a set of source RDB schemas separated by commas</li> 
      */
     public static void main(String[] args) throws JAXBException, SAXException, IOException {
@@ -141,8 +108,10 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
         }
         RDBToolAction command = null;
     	try {
-    		command = RDBToolAction.valueOf(
-                    args[0].substring(1));
+    		String commandArg = args[0];
+    		if (commandArg.startsWith("-"))
+    			commandArg = commandArg.substring(1);
+    		command = RDBToolAction.valueOf(commandArg);
     	}
     	catch (IllegalArgumentException e) {
     		StringBuilder buf = new StringBuilder();
@@ -152,7 +121,7 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
     			buf.append(RDBToolAction.values()[i].name());
     		}
     			
-    		throw new IllegalArgumentException("'" + args[0].substring(1) + "' - expected one of ["
+    		throw new IllegalArgumentException("'" + args[0] + "' - expected one of ["
     				+ buf.toString() + "]");
     	}
         switch (command) {
@@ -160,12 +129,6 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
         case drop:
         case truncate:
             if (args.length != 3) {
-                printUsage();
-                return;
-            }
-        	break;
-        case reverse:
-            if (args.length != 4 && args.length != 5) {
                 printUsage();
                 return;
             }
@@ -201,22 +164,20 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
         case truncate:
         	//FIXME: don't assume this command maps to operation
         	DDLOperation operation = DDLOperation.valueOf(command.name());
-
         	
         	DDLModelAssembler modelAssembler = new DDLModelAssembler();
         	DDLModelDataBinding binding = new DDLModelDataBinding(
         			new DefaultValidationEventHandler());
-            if (log.isDebugEnabled()) {
-            	File file = new File(dest.getParentFile(), "ddl-model.xml");
-            	FileOutputStream fos = new FileOutputStream(file);
-            	try {
-            	    binding.marshal(modelAssembler.getSchemas(), fos);
-            	    fos.flush();
-            	}
-            	finally {
-            	    fos.close();
-            	}
-            }
+        	File file = new File(dest.getParentFile(), "ddl-model.xml");
+        	FileOutputStream fos = new FileOutputStream(file);
+        	try {
+        	    binding.marshal(modelAssembler.getSchemas(), fos);
+        	    fos.flush();
+        	    log.info("marshalled DDL model XML to " + file.getAbsolutePath());
+        	}
+        	finally {
+        	    fos.close();
+        	}
        	
         	DDLFactory factory = null;
         	switch (dialect) {
@@ -237,133 +198,7 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
         		stream);
         	ddlAssembler.start();
         	stream.flush();
-            
-            break;
-        case reverse:
-        	String[] schemaNames = null;
-        	String[] namespaces = null;
-        	if (args.length == 5) {
-        		namespaces = args[3].split(",");
-        	    schemaNames = args[4].split(",");
-        	    if (namespaces.length != schemaNames.length)
-            		throw new RDBException("expected 'schemaNames' and 'namespaces' arguments with equal number of comma seperated  values");
-
-        	}
-        	else {
-        		schemaNames = args[3].split(",");
-        		namespaces = new String[schemaNames.length];
-        		for (int i = 0; i < schemaNames.length; i++)
-        			namespaces[i] = "http://" + schemaNames[i];
-        	}
-        	
-        	PlasmaRepository.getInstance(); // just force an init
-        	
-           	
-            // convert the schemas
-            Model model = null;
-        	switch (dialect) {
-        	case oracle: 
-        		loadDynamicArtifact(RDBConstants.ARTIFACT_RESOURCE_ORACLE);
-        		loadDynamicNamespace(ARTIFACT_NAMESPACE_ORACLE_ANY_SYS,
-        			org.plasma.provisioning.rdb.oracle.any.sys.Version.class.getPackage(),
-        			RDBConstants.ARTIFACT_RESOURCE_ORACLE);
-        		OracleVersionFinder versionFinder = new OracleVersionFinder();
-        		OracleVersion version = versionFinder.findVersion();
-        		log.info("detected version '" + version + "'");
-        		SchemaConverter converter = null;
-        		switch (version) {
-        		case _9i:
-        		case _10g:
-        		case _11g:
-            		loadDynamicNamespace(ARTIFACT_NAMESPACE_ORACLE_11G_SYS,
-            			org.plasma.provisioning.rdb.oracle.g11.sys.Version.class.getPackage(),
-            			RDBConstants.ARTIFACT_RESOURCE_ORACLE);
-            		converter = new Oracle11GConverter(
-            			schemaNames, namespaces);
-            		break;
-        		case _unknown:
-        		default:
-        			log.warn("unknown Oracle version - using 11g metamodel");
-            		loadDynamicNamespace(ARTIFACT_NAMESPACE_ORACLE_11G_SYS,
-            			org.plasma.provisioning.rdb.oracle.g11.sys.Version.class.getPackage(),
-            			RDBConstants.ARTIFACT_RESOURCE_ORACLE);
-            		converter = new Oracle11GConverter(
-                			schemaNames, namespaces);
-            		break;
-        		}
-        		
-        		model = converter.buildModel(); 
-        	    break;
-        	case mysql:  
-        		loadDynamicArtifact(RDBConstants.ARTIFACT_RESOURCE_MYSQL);
-        		loadDynamicNamespace(ARTIFACT_NAMESPACE_MYSQL_ANY,
-        			org.plasma.provisioning.rdb.mysql.any.GlobalVariable.class.getPackage(),
-        			RDBConstants.ARTIFACT_RESOURCE_MYSQL);
-        		MySqlVersionFinder mysqlVersionFinder = new MySqlVersionFinder();
-        		MySqlVersion mysqlVersion = mysqlVersionFinder.findVersion();
-        		log.info("detected version '" + mysqlVersion + "'");
-        		converter = null;
-        		switch (mysqlVersion) {
-        		case _5_5:
-            		loadDynamicNamespace(ARTIFACT_NAMESPACE_MYSQL_5_5,
-            			org.plasma.provisioning.rdb.mysql.v5_5.GlobalVariable.class.getPackage(),
-            			RDBConstants.ARTIFACT_RESOURCE_MYSQL);
-            		converter = new MySql55Converter(
-            	 	    schemaNames, namespaces);
-            		break;
-        		case _unknown:
-        		default:
-        			log.warn("unknown MySql version - using 5.5 metamodel");
-            		loadDynamicNamespace(ARTIFACT_NAMESPACE_MYSQL_5_5,
-            			org.plasma.provisioning.rdb.mysql.v5_5.GlobalVariable.class.getPackage(),
-            			RDBConstants.ARTIFACT_RESOURCE_MYSQL);
-            		converter = new MySql55Converter(
-                			schemaNames, namespaces);
-            		break;
-        		}
-        		
-        		model = converter.buildModel(); 
-        	    break;
-        	default:
-        		throw new RDBException("unknown dialect, '"
-        				+ dialect.name() + "'");
-        	}
-        	if (log.isDebugEnabled()) {
-        		ProvisioningModelDataBinding provBinding = new ProvisioningModelDataBinding(
-            			new DefaultValidationEventHandler());
-            	String xml = provBinding.marshal(model);
-        		File outFile = new File(dest.getParentFile(), "technical-model.xml");
-        		stream = new FileOutputStream(outFile);
-        		stream.write(xml.getBytes());
-        		stream.flush();
-        		stream.close();
-        		log.debug("wrote merged model file to: " 
-        				+ outFile.getAbsoluteFile());
-        		log.debug("reading merged model file: " 
-        				+ outFile.getAbsoluteFile());
-        		model = (Model)provBinding.unmarshal(
-        			new FileInputStream(outFile));
-        	}
-    	    ModelAdapter helper = 
-    				   new ModelAdapter(model);
-    			   
-    		UMLModelAssembler umlAssembler = new UMLModelAssembler(model, 
-    				namespaces[0], "tns");
-    		umlAssembler.setDerivePackageNamesFromURIs(false);
-    	    Document document = umlAssembler.getDocument();
-    	        
-	    	log.info("marshaling XMI model to file, '"
-	    			+ dest.getName() + "'");
-	        try {
-				FileOutputStream os = new FileOutputStream(dest);
-			    XMLOutputter outputter = new XMLOutputter();
-			    outputter.output(document, os);
-			} catch (FileNotFoundException e) {
-	            throw new ProvisioningException(e);
-			} catch (IOException e) {
-	            throw new ProvisioningException(e);
-			}
-        	
+        	log.info("wrote DDL model to " + dest.getAbsolutePath());
             break;        	
         default:
             throw new RDBException("unknown command '"
@@ -372,40 +207,9 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
        
     }
     
-    /**
-     * Dynamically loads the vendor metamodel for the given
-     * namespace and provisioning package adding
-     * a dynamic SDO namespace.
-     * @param namespace the SDO namespace URI
-     * @param pkg the provisioning package
-     */
-    private static void loadDynamicNamespace(String namespace, 
-    		java.lang.Package pkg, String artifactResourceName) {
-    		
-    	NamespaceProvisioning provisioning = new NamespaceProvisioning();
-    	provisioning.setPackageName(pkg.getName());
-    	
-        PlasmaConfig.getInstance().addDynamicSDONamespace(
-        		namespace, 
-        		artifactResourceName,
-        		provisioning);
-    }
-    
-    private static void loadDynamicArtifact(String artifactResourceName) {
-    	InputStream stream = RDBTool.class.getClassLoader().getResourceAsStream(
-    			artifactResourceName);
-    	
-	    if (log.isDebugEnabled())
-	    	log.info("loading UML/XMI model");
-        Fuml.load(new ResourceArtifact(
-        	artifactResourceName, 
-        	artifactResourceName, 
-        	stream));              	        		    	
-    }
-    
     private static void printUsage() {
     	log.info("Usage: java org.plasma.provisioning.cli.RDBTool "
-    		+ "[-command <create | drop | truncate | reverse>] "
+    		+ "[-command <create | drop | truncate>] "
     		+ "[dialect <oracle | mysql>] [dest-file] [dest-namespace-URI]"
     		+ "[schema-name]* ");
     }

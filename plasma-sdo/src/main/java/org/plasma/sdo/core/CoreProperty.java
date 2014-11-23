@@ -208,7 +208,7 @@ public class CoreProperty implements PlasmaProperty {
     public static PlasmaProperty createInstanceProperty(String name, DataType dataType) {
         
         CoreType type = (CoreType)PlasmaTypeHelper.INSTANCE.getType(
-                PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri(), 
+                PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri(), 
                 dataType.name());
         
         PlasmaProperty property = new CoreProperty(

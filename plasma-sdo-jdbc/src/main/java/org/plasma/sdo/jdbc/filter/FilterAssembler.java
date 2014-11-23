@@ -30,6 +30,8 @@ import javax.xml.bind.JAXBException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
+import org.plasma.config.PlasmaConfig;
+import org.plasma.config.RDBMSVendorName;
 import org.plasma.query.QueryException;
 import org.plasma.query.bind.PlasmaQueryDataBinding;
 import org.plasma.query.model.AbstractPathElement;
@@ -47,6 +49,7 @@ import org.plasma.query.model.Where;
 import org.plasma.query.model.WildcardOperator;
 import org.plasma.query.model.WildcardPathElement;
 import org.plasma.query.visitor.Traversal;
+import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.DataAccessException;
@@ -213,12 +216,16 @@ public class FilterAssembler extends SQLQueryFilterAssembler
 		filter.append("'");                                                                  
 	}
 
+	/**
+	 * Handles a property query node, traversing the property path appending 
+	 * SQL 'AND' expressions based on key relationships until the
+	 * property endpoint is reached. Superclass handlers deal with other query nodes such as
+	 * operators and literals.  
+	 */
+	@Override
     public void start(Property property)
     {                
-        List<Function> functiosn = property.getFunctions();
-        if (functiosn != null || functiosn.size() > 0)
-            throw new DataAccessException("aggregate and other functions only supported in subqueries not primary queries");
-          
+         
         Path path = property.getPath();
 
         if (filter.length() > 0)
@@ -276,9 +283,21 @@ public class FilterAssembler extends SQLQueryFilterAssembler
                filter.append(" AND ");
             }
         }
+        
+
+        // process endpoint
         PlasmaProperty endpointProp = (PlasmaProperty)targetType.getProperty(property.getName());
         contextProperty = endpointProp;
-        filter.append(targetAlias + "." + endpointProp.getPhysicalName());
+        
+        // start functions
+        List<Function> functions = property.getFunctions();
+        if (functions == null || functions.size() == 0) {
+            filter.append(targetAlias + "." + endpointProp.getPhysicalName());
+        }
+        else {
+            filter.append(Functions.wrap(endpointProp, functions, targetAlias));
+        }        
+        
         super.start(property);
     }
     	

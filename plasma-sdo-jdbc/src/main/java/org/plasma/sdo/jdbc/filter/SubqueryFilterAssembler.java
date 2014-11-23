@@ -101,6 +101,7 @@ public class SubqueryFilterAssembler extends SQLQueryFilterAssembler
         super.start(where); // continue QOM traversal
     }                               
 
+    @Override
     public void start(Property property)
     {                
     	if (log.isDebugEnabled()) {

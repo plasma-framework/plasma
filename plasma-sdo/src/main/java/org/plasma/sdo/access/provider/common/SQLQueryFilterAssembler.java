@@ -47,6 +47,8 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
     private static Log log = LogFactory.getLog(SQLQueryFilterAssembler.class);
 
 	public static final String ALIAS_PREFIX = "a";
+	public String parameterChar = "?";
+	public String wildcardChar = "%";
 
 	protected Type stringType;
 	protected RelationalOperator contextRelationalOperator;
@@ -60,15 +62,31 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 		this.contextType = contextType;
 		this.params = new ArrayList<Object>();
 		
-		String uri = PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri();
+		String uri = PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri();
 		stringType = PlasmaTypeHelper.INSTANCE.getType(uri, "String");
 	}
 
 	public SQLQueryFilterAssembler(Type contextType, List<Object> params) {
 		this.contextType = contextType;
 		this.params = params;
-		String uri = PlasmaConfig.getInstance().getSDO().getDefaultNamespace().getUri();
+		String uri = PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri();
 		stringType = PlasmaTypeHelper.INSTANCE.getType(uri, "String");
+	}
+
+	public String getParameterChar() {
+		return parameterChar;
+	}
+
+	public void setParameterChar(String parameterChar) {
+		this.parameterChar = parameterChar;
+	}
+
+	public String getWildcardChar() {
+		return wildcardChar;
+	}
+
+	public void setWildcardChar(String wildcardChar) {
+		this.wildcardChar = wildcardChar;
 	}
 
 	public void start(LogicalOperator operator) {
@@ -112,7 +130,7 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 		    filter.append(toString(this.contextRelationalOperator));
 		}
 		else {
-			content = content.replace(WILDCARD, "%");
+			content = content.replace(WILDCARD, this.wildcardChar);
 		    filter.append(toString(contextWildcardOperator));
 		}				
 		
@@ -121,7 +139,8 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 				this.contextProperty.getType(), 
 				this.stringType,
 				content));
-		filter.append(" ?");
+		filter.append(" ");
+		filter.append(this.parameterChar);
 	}
 
 	public void start(NullLiteral nullLiteral) {
@@ -142,7 +161,7 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 		}
 	}
 	
-	private String toString(RelationalOperator operator) {
+	protected String toString(RelationalOperator operator) {
 		String result = null;
 		switch (operator.getValue()) {
 		case EQUALS:
@@ -170,7 +189,7 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
         return result;
 	}
 	
-	private String toString(WildcardOperator operator) {
+	protected String toString(WildcardOperator operator) {
 		String result = null;
 		switch (operator.getValue()) {
 		case LIKE:

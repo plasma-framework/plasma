@@ -26,8 +26,6 @@ import java.io.FileOutputStream;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.RDBDialect;
-import org.plasma.provisioning.cli.DDLTool;
-import org.plasma.provisioning.cli.DDLToolAction;
 import org.plasma.provisioning.cli.RDBTool;
 import org.plasma.provisioning.cli.RDBToolAction;
 
@@ -42,7 +40,7 @@ import org.plasma.provisioning.cli.RDBToolAction;
  * @goal rdb
  * @phase generate-sources
  * 
- * @see org.plasma.provisioning.cli.DDLTool
+ * @see org.plasma.provisioning.cli.RDBTool
  */
 public class RDBMojo extends ClassRealmMojo
 {    
@@ -97,12 +95,12 @@ public class RDBMojo extends ClassRealmMojo
 
             getLog().info( "executing tool: "  + RDBTool.class.getName());                
         	if (this.schemaNames == null) {
-        		String[] args = {
-                	"-"+toolAction.name(), 
-                	toolDialect.name(), 
-                	this.outputDirectory + "/" + outputFile
-                };
-                RDBTool.main(args);
+    			String[] args = {
+	                	"-"+toolAction.name(), 
+	                	toolDialect.name(), 
+	                	this.outputDirectory + "/" + outputFile
+	                };
+                    RDBTool.main(args);
         	}
         	else {
         		String[] args = {

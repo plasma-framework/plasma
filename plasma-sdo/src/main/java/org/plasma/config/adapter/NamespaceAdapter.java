@@ -22,10 +22,13 @@
 package org.plasma.config.adapter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.plasma.config.ConfigurationException;
 import org.plasma.config.Namespace;
+import org.plasma.config.NamespaceProvisioning;
+import org.plasma.config.Property;
 import org.plasma.config.TypeBinding;
 
 public class NamespaceAdapter {
@@ -43,6 +46,21 @@ public class NamespaceAdapter {
 		return namespace;
 	}
 	
+	public List<Property> getProperties() {
+		return namespace.getProperties();
+	}
+	public NamespaceProvisioning getProvisioning() {
+		return namespace.getProvisioning();
+	}
+	public List<TypeBinding> getTypeBindings() {
+		return namespace.getTypeBindings();
+	}
+	public String getUri() {
+		return namespace.getUri();
+	}
+	public String getArtifact() {
+		return namespace.getArtifact();
+	}
 	public void addTypeBinding(TypeBinding typeBinding) {
 		if (this.typeBindings != null && this.typeBindings.get(typeBinding.getType()) != null)
 			throw new ConfigurationException("duplicate type binding - "

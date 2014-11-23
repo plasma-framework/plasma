@@ -196,9 +196,13 @@ public class GraphAssembler extends JDBCSupport
 			FilterAssembler filterAssembler = new FilterAssembler(where, 
 					targetType, aliasMap);	
 			try {
+				List<Object> params = new ArrayList<Object>();	
 				StringBuilder query = createSelect(targetType,
-			    	names, childKeyPairs, filterAssembler, aliasMap);
-				result = fetch(targetType, query, filterAssembler.getParams(),
+			    	names, childKeyPairs, filterAssembler, params, aliasMap);
+				Object[] paramArray = new Object[params.size()];
+				params.toArray(paramArray);
+				
+				result = fetch(targetType, query, paramArray,
 					this.con);
 			}
 			catch (SQLException e) {

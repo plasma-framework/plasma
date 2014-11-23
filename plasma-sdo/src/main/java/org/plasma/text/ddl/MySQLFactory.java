@@ -61,13 +61,13 @@ public class MySQLFactory extends DefaultDDLFactory
 			return "INT";
 		case Long:  
 			return "BIGINT";
-		case Bytes:      
- 		case Object:     
 		case Date:     
 		case DateTime:   
 			return "DATE";
 		case Time:       
 			return "TIMESTAMP";
+		case Bytes:      
+ 		case Object:     
 		case Day:        
 		case Duration:   
 		case Month:      
@@ -135,6 +135,16 @@ public class MySQLFactory extends DefaultDDLFactory
 		return buf.toString();
 	}
 	
+	@Override
+	public String createView(Schema schema, Table table, Behavior create) {
+		return create.getValue();
+	}
+
+	@Override
+	public String dropView(Schema schema, Table table, Behavior drop) {
+		return drop.getValue();
+	}	
+	
 	private boolean isEnumerativeCheck(Table table, Column column) {
 		for (Check check : table.getChecks()) {
 			if (column.getName().equals(check.getColumn()))
@@ -153,13 +163,13 @@ public class MySQLFactory extends DefaultDDLFactory
 	}	
 	
 	/**
-	 * Presume its a sequence if a PK and an integral type.
+	 * Returns true if the given column is presumed to be a sequence. 
 	 * @param table the table
 	 * @param column the column
-	 * @return true if a PK and an integral type. 
+	 * @return true true if the given column is presumed to be a sequence. 
 	 */
 	private boolean isSequence(Table table, Column column) {		
-		if (isPk(table, column)) {
+		if (isPk(table, column) && !(isFk(table, column))) {
 			DataType sdoType = DataType.valueOf(column.getType());
 			switch (sdoType) {
 			case Int:        
@@ -305,5 +315,5 @@ public class MySQLFactory extends DefaultDDLFactory
 		buf.append(";\n");
 		return buf.toString();
 	}
-	
+
 }

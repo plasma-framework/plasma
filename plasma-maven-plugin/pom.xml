@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.2</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-maven-plugin</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
   <packaging>maven-plugin</packaging>
 
   <name>Plasma Maven Plugins</name>
@@ -90,7 +90,7 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-sdo</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.2</version>
       <exclusions>
       	<exclusion>
       		<artifactId>icu4j</artifactId>
@@ -107,7 +107,7 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-sdo-jdbc</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.2</version>
     </dependency>
   </dependencies>
   <build>
@@ -176,6 +176,23 @@
                                 <action>
                                     <ignore></ignore>
                                 </action>
+                            </pluginExecution>
+                            <pluginExecution>
+                            	<pluginExecutionFilter>
+                            		<groupId>
+                            			org.apache.maven.plugins
+                            		</groupId>
+                            		<artifactId>
+                            			maven-plugin-plugin
+                            		</artifactId>
+                            		<versionRange>[3.2,)</versionRange>
+                            		<goals>
+                            			<goal>descriptor</goal>
+                            		</goals>
+                            	</pluginExecutionFilter>
+                            	<action>
+                            		<ignore></ignore>
+                            	</action>
                             </pluginExecution>
                         </pluginExecutions>
                     </lifecycleMappingMetadata>
