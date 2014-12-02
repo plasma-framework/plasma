@@ -52,7 +52,7 @@ import commonj.sdo.Property;
 import commonj.sdo.Type;
 
 public class DDLModelAssembler {
-	private static Log log = LogFactory.getLog(DDLModelAssembler.class);
+	private static Log log = LogFactory.getLog(DDLModelAssembler.class); // log
 
 	private Schemas schemas;
 	private Map<String, Map<String, PlasmaType>> schemaMap = new HashMap<String, Map<String, PlasmaType>>();
