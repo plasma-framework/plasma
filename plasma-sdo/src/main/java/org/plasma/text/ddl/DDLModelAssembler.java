@@ -51,6 +51,7 @@ import org.plasma.sdo.repository.PlasmaRepository;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
 
+
 public class DDLModelAssembler {
 	private static Log log = LogFactory.getLog(DDLModelAssembler.class);
 
