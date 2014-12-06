@@ -40,7 +40,8 @@ import org.plasma.query.visitor.VisitorContext;
 @XmlType(name = "Query", propOrder = {
     "clauses",
     "startRange",
-    "endRange"
+    "endRange",
+    "concurrencyType"
 })
 @XmlRootElement(name = "Query")
 public class Query implements org.plasma.query.Query {
@@ -51,6 +52,8 @@ public class Query implements org.plasma.query.Query {
     protected Integer startRange;
     @XmlElement(namespace = "", defaultValue = "0")
     protected Integer endRange;
+    @XmlElement(namespace = "", defaultValue = "none")
+    protected ConcurrencyTypeValues concurrencyType;
     @XmlAttribute
     protected String name;
 
@@ -164,6 +167,30 @@ public class Query implements org.plasma.query.Query {
 	 */
     public void setEndRange(Integer value) {
         this.endRange = value;
+    }
+    
+    /**
+     * Gets the value of the concurrencyType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ConcurrencyTypeValues }
+     *     
+     */
+    public ConcurrencyTypeValues getConcurrencyType() {
+        return concurrencyType;
+    }
+
+    /**
+     * Sets the value of the concurrencyType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ConcurrencyTypeValues }
+     *     
+     */
+    public void setConcurrencyType(ConcurrencyTypeValues value) {
+        this.concurrencyType = value;
     }
     
     /* (non-Javadoc)

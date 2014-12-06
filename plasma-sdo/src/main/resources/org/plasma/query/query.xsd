@@ -11,11 +11,20 @@
 			<xsd:element ref="query:Clause" maxOccurs="unbounded"/>
 			<xsd:element type="xsd:int" name="startRange"  default="0"  minOccurs="0" maxOccurs="1"></xsd:element>
 			<xsd:element type="xsd:int" name="endRange"  default="0"  minOccurs="0" maxOccurs="1"></xsd:element>
+            <xsd:element name="concurrencyType" type="query:ConcurrencyTypeValues" default="none" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>         
 	    <xsd:attribute name="name" type="xsd:string" use="optional"/>
     </xsd:complexType>
     
     <xsd:element name="Query" type="query:Query"/>
+
+    <xsd:simpleType name="ConcurrencyTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="none"/>
+            <xsd:enumeration value="threadPool"/>
+            <xsd:enumeration value="forkJoin"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 	
     <xsd:complexType name="Clause">
         <xsd:annotation>

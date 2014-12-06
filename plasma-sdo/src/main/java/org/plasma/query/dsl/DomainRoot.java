@@ -31,6 +31,7 @@ import org.plasma.query.Where;
 import org.plasma.query.Wildcard;
 import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.Clause;
+import org.plasma.query.model.ConcurrencyTypeValues;
 import org.plasma.query.model.Entity;
 import org.plasma.query.model.Path;
 
@@ -175,44 +176,53 @@ public class DomainRoot extends PathNode
 		return this;
 	}
 	
+	@Override
 	public From getFromClause() {
 		return this.query.getFromClause();
 	}
 	
+	@Override
 	public void clearOrderByClause() {
 		this.query.clearOrderByClause();		
 	}
 
+	@Override
 	public GroupBy findGroupByClause() {
 		return this.query.findGroupByClause();
 	}
 
+	@Override
 	public OrderBy findOrderByClause() {
 		return this.query.findOrderByClause();
 	}
 
+	@Override
 	public Where findWhereClause() {
 		return this.query.findWhereClause();
 	}
 
-
+	@Override
 	public Integer getEndRange() {
 		return this.query.getEndRange();
 	}
 
 
+	@Override
 	public String getName() {
 		return this.query.getName();
 	}
 
+	@Override
 	public Select getSelectClause() {
 		return this.query.getSelectClause();
 	}
 
+	@Override
 	public Integer getStartRange() {
 		return this.query.getStartRange();
 	}
 
+	@Override
 	public Where getWhereClause() {
 		return this.query.getWhereClause();
 	}
@@ -221,12 +231,24 @@ public class DomainRoot extends PathNode
 		this.query.setEndRange(value);		
 	}
 
+	@Override
 	public void setName(String value) {
 		this.query.setName(value);		
 	}
 
+	@Override
 	public void setStartRange(Integer value) {
 		this.query.setStartRange(value);		
+	}
+
+	@Override
+	public ConcurrencyTypeValues getConcurrencyType() {
+		return this.query.getConcurrencyType();
+	}
+
+	@Override
+	public void setConcurrencyType(ConcurrencyTypeValues value) {
+		this.query.setConcurrencyType(value);		
 	}
 
 

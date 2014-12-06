@@ -21,6 +21,8 @@
  */
 package org.plasma.query;
 
+import org.plasma.query.model.ConcurrencyTypeValues;
+
 /**
  * The PlasmaQuery#8482; API provides a flexible mechanism to fully describe 
  * any arbitrary SDO results Data Graph, independent of any persistence 
@@ -83,6 +85,26 @@ public interface Query extends Term {
 	 *     
 	 */
 	public void setEndRange(Integer value);
+    
+	/**
+     * Gets the value of the concurrencyType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ConcurrencyTypeValues }
+     *     
+     */
+    public ConcurrencyTypeValues getConcurrencyType();
+
+    /**
+     * Sets the value of the concurrencyType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ConcurrencyTypeValues }
+     *     
+     */
+    public void setConcurrencyType(ConcurrencyTypeValues value);
 
 	/**
 	 * Gets the value of the name property.
