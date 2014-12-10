@@ -21,6 +21,7 @@
  */
 package org.plasma.text.ddl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -52,13 +53,33 @@ import commonj.sdo.Property;
 import commonj.sdo.Type;
 
 public class DDLModelAssembler {
-	private static Log log = LogFactory.getLog(DDLModelAssembler.class); // log
+	private static Log log = LogFactory.getLog(DDLModelAssembler.class);
 
 	private Schemas schemas;
+	// maps namespace physical names to maps of type physical names to types
 	private Map<String, Map<String, PlasmaType>> schemaMap = new HashMap<String, Map<String, PlasmaType>>();
+	
+	// type physical names to namespace physical names
+	private Map<String, String> reverseSchemaMap = new HashMap<String, String>();
 	
 	public DDLModelAssembler() {
 		this(PlasmaRepository.getInstance().getAllNamespaces());
+	}
+	
+	public DDLModelAssembler(String[] namespaces) {
+		this(resultList(namespaces)); 
+	}
+	
+	private static List<Namespace> resultList(String[] namespaces) {
+		List<Namespace> result = new ArrayList<Namespace>();
+		Map<String, String> map = new HashMap<String, String>();
+		for (String uri : namespaces)
+			map.put(uri, uri);
+		for (Namespace namespace : PlasmaRepository.getInstance().getAllNamespaces()) {
+			if (map.containsKey(namespace.getUri()))
+				result.add(namespace);
+		}
+		return result;
 	}
 	
 	public DDLModelAssembler(List<Namespace> namespaces) {
@@ -72,26 +93,45 @@ public class DDLModelAssembler {
         		log.debug("ignoring non "+DataStoreType.RDBMS.name()+" namespace: " + namespace.getUri());
     			continue;     			
     		}
+    		// FIXME: Cassandra check
     		
         	List<Type> types = PlasmaTypeHelper.INSTANCE.getTypes(namespace.getUri());
         	for (Type type : types) {
         		PlasmaType plasmaType = (PlasmaType)type;
-        		if (plasmaType.getPhysicalName() == null || plasmaType.getPhysicalName().length() == 0)
-        			continue;
-        		Map<String, PlasmaType> typeMap = schemaMap.get(namespace.getPhysicalName());
+        		String typePhysicalName = null;
+        		if (plasmaType.getPhysicalName() == null || plasmaType.getPhysicalName().length() == 0) {
+        			typePhysicalName = this.derivePhysicalName(plasmaType);
+        		}
+        		else
+        			typePhysicalName = plasmaType.getPhysicalName();
+        		String namespacePhysicalName = null;
+        		if (namespace.getPhysicalName() == null || namespace.getPhysicalName().trim().length() == 0) {
+        			namespacePhysicalName = this.derivePhysicalName(namespace);
+        		}
+        		else
+        			namespacePhysicalName = namespace.getPhysicalName();
+        		Map<String, PlasmaType> typeMap = schemaMap.get(namespacePhysicalName);
         		if (typeMap == null) {
         			typeMap = new HashMap<String, PlasmaType>();
-        			schemaMap.put(namespace.getPhysicalName(), typeMap);
+        			schemaMap.put(namespacePhysicalName, typeMap);
         		}
-        		typeMap.put(plasmaType.getPhysicalName(), plasmaType);        		
+        		typeMap.put(typePhysicalName, plasmaType); 
+        		reverseSchemaMap.put(typePhysicalName, namespacePhysicalName);
         	}
     	}
     	
     	// create
     	for (String schemaName : schemaMap.keySet()) {
+    		log.debug("creating schema: " + schemaName);
        		Schema schema = createSchema(schemaName);
        	    Map<String, PlasmaType> typeMap = schemaMap.get(schemaName);
     		for (PlasmaType type : typeMap.values()) {
+    			if (type.isAbstract()) {
+    				if (log.isDebugEnabled())
+    					log.debug("skipping abstract type, " + type);
+    				continue;
+    			}
+    			
         		Table table = createTable(schema, type);
         		schema.getTables().add(table);
         		
@@ -209,29 +249,47 @@ public class DDLModelAssembler {
 		int i = 1;
 		for (Property prop : properties) {
 			PlasmaProperty plasmaProperty = (PlasmaProperty)prop;
-			if (plasmaProperty.getPhysicalName() == null) {
-				if (!plasmaProperty.isMany())
-					log.warn("no physical name found for singular property, "
-							+ plasmaProperty.getContainingType().getURI() + "#"
-							+ plasmaProperty.getContainingType().getName() + "."
-							+ plasmaProperty.getName());
-				continue;
-			}	
-			
 			if (plasmaProperty.getType().isDataType())
-				continue;
+				continue; // only ref props
+			if (plasmaProperty.isMany())
+				continue; // only singular props
+			
+			String physicalName = null;
+			if (plasmaProperty.getPhysicalName() == null) {
+				log.warn("no physical name found for singular property, "
+						+ plasmaProperty.getContainingType().getURI() + "#"
+						+ plasmaProperty.getContainingType().getName() + "."
+						+ plasmaProperty.getName() + " - deriving");
+				physicalName = this.derivePhysicalName(plasmaProperty);
+			}	
+			else
+				physicalName = plasmaProperty.getPhysicalName();
 			
 			Fk fk = new Fk();
 			fk.setName("FK_" + table.getName() + String.valueOf(i));
-			fk.setColumn(plasmaProperty.getPhysicalName());
+			fk.setColumn(physicalName);
 			
 		    Type oppositeType = plasmaProperty.getType();
 			if (!oppositeType.isAbstract()) {
-			    fk.setToTable(((PlasmaType)oppositeType).getPhysicalName());
+				String typePhysicalName = null;
+				if (((PlasmaType)oppositeType).getPhysicalName() != null)
+					typePhysicalName = ((PlasmaType)oppositeType).getPhysicalName();
+				else
+					typePhysicalName = this.derivePhysicalName((PlasmaType)oppositeType);
+				String schemaPhysicalname = this.reverseSchemaMap.get(typePhysicalName);
+				fk.setToTable(typePhysicalName);
+				fk.setToSchema(schemaPhysicalname);
 			}
 			else // FIXME: collapse all references in abstract classes into subclass
 			{
-			    fk.setToTable(plasmaType.getPhysicalName());
+				String typePhysicalName = null;
+				if (plasmaType.getPhysicalName() != null)
+					typePhysicalName = plasmaType.getPhysicalName();
+				else
+					typePhysicalName = this.derivePhysicalName(plasmaType);
+				String schemaPhysicalname = this.reverseSchemaMap.get(typePhysicalName);
+				fk.setToTable(typePhysicalName);
+				fk.setToSchema(schemaPhysicalname);
 			}
 			
 			table.getFks().add(fk);
@@ -261,8 +319,39 @@ public class DDLModelAssembler {
 			Behavior ddlBehavior = new Behavior();
 			ddlBehavior.setType(type);
 			ddlBehavior.setValue(behavior.getBody());
+			if (!ddlBehavior.getValue().trim().endsWith(":")) {
+				if (log.isDebugEnabled())
+					log.debug("appending DDL statement terminator for '" + ddlBehavior.getType() + "'");				 
+				ddlBehavior.setValue(ddlBehavior.getValue().trim() + ";");
+			}
 			table.getBehaviors().add(ddlBehavior);
 		}		
+	}
+	
+	private String derivePhysicalName(PlasmaProperty plasmaProperty) {
+		String derivedPhysicalName = null;
+	    if (plasmaProperty.getType().isDataType()) { 
+	    	derivedPhysicalName = plasmaProperty.getName().toUpperCase();
+	    }
+	    else {
+		    Type oppositeType = plasmaProperty.getType();
+		    derivedPhysicalName = ((PlasmaType)oppositeType).getPhysicalName();	
+		    if (derivedPhysicalName == null)
+		    	derivedPhysicalName = derivePhysicalName((PlasmaType)oppositeType);
+	    }
+	    if (derivedPhysicalName == null || derivedPhysicalName.trim().length() == 0)
+	    	throw new DDLException("could not derive physical name for property, " + plasmaProperty);
+	    return derivedPhysicalName;
+	}
+
+	private String derivePhysicalName(PlasmaType plasmatype) {
+		String derivedPhysicalName = plasmatype.getName().toUpperCase();
+	    return derivedPhysicalName;
+	}
+	
+	private String derivePhysicalName(Namespace namespace) {
+		String derivedPhysicalName = namespace.getName().toUpperCase();
+	    return derivedPhysicalName;
 	}
 	
 	private void createColumns(Schema schema, Table table, PlasmaType plasmaType, 
@@ -270,17 +359,27 @@ public class DDLModelAssembler {
 	{
 		for (Property prop : properties) {
 			PlasmaProperty plasmaProperty = (PlasmaProperty)prop;
-			if (plasmaProperty.getPhysicalName() == null) {
-				if (!plasmaProperty.isMany())
-					log.warn("no physical name found for singular property, "
-							+ plasmaProperty.getContainingType().getURI() + "#"
-							+ plasmaProperty.getContainingType().getName() + "."
-							+ plasmaProperty.getName());
+			if (plasmaProperty.isMany())
 				continue;
+			String derivedPhysicalName = null;
+			if (plasmaProperty.getPhysicalName() == null) {
+				log.warn("no physical name found for singular property, "
+						+ plasmaProperty.getContainingType().getURI() + "#"
+						+ plasmaProperty.getContainingType().getName() + "."
+						+ plasmaProperty.getName() + " - deriving");
+				derivedPhysicalName = derivePhysicalName(plasmaProperty);
 			}	
-			Column column = createColumn(schema, table,
+			Column column = null;
+			if (derivedPhysicalName == null) {
+			    column = createColumn(schema, table,
 					plasmaType,
 					plasmaProperty);
+			}
+			else {
+			    column = createColumn(schema, table,
+					plasmaType,
+					plasmaProperty, derivedPhysicalName);
+			}
 			table.getColumns().add(column);
 		}		
 	}
@@ -312,8 +411,16 @@ public class DDLModelAssembler {
 	
 	private Column createColumn(Schema schema, Table table, PlasmaType plasmaType, 
 			PlasmaProperty plasmaProperty) {
+		return this.createColumn(schema, table, plasmaType, plasmaProperty, null);
+	}
+	
+	private Column createColumn(Schema schema, Table table, PlasmaType plasmaType, 
+			PlasmaProperty plasmaProperty, String derivedPhysicalName) {
 		Column column = new Column();
-		column.setName(plasmaProperty.getPhysicalName());
+		if (derivedPhysicalName != null)
+			column.setName(derivedPhysicalName);
+		else
+		    column.setName(plasmaProperty.getPhysicalName());
 		column.setNullable(plasmaProperty.isNullable());
 		if (plasmaProperty.getMaxLength() > 0)
 		    column.setSize(plasmaProperty.getMaxLength());
@@ -361,7 +468,13 @@ public class DDLModelAssembler {
 	
 	private Table createTable(Schema schema, PlasmaType plasmaType) {
 		Table table = new Table();
-		table.setName(plasmaType.getPhysicalName());
+		String typePhysicalName = null;
+		if (plasmaType.getPhysicalName() != null)
+			typePhysicalName = plasmaType.getPhysicalName();
+		else
+			typePhysicalName = this.derivePhysicalName(plasmaType);
+		log.debug("creating table: " + typePhysicalName);
+		table.setName(typePhysicalName);
 		return table;
 	}
 	
