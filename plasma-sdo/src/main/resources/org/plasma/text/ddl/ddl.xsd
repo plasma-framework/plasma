@@ -50,6 +50,7 @@
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="delete-action" type="xs:string" use="required"/>
         <xs:attribute name="to-table" type="xs:string" use="required"/>
+        <xs:attribute name="to-schema" type="xs:string" use="required"/>
         <xs:attribute name="column" type="xs:string"/>
     </xs:complexType>
 	<xs:element name="fk" type="ddl:fk"/>
@@ -168,3 +169,4 @@
     </xs:simpleType>
 	
 </xs:schema>
+
