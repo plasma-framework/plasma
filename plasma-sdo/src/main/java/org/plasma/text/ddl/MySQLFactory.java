@@ -317,3 +317,4 @@ public class MySQLFactory extends DefaultDDLFactory
 	}
 
 }
+
