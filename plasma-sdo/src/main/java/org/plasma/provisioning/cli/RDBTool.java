@@ -128,7 +128,7 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
         case create:
         case drop:
         case truncate:
-            if (args.length != 3) {
+            if (args.length < 3 || args.length > 5) {
                 printUsage();
                 return;
             }
@@ -157,6 +157,11 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
         if (!dest.getParentFile().exists())
         	dest.getParentFile().mkdirs();
         
+        String[] namespaces = null;
+        if (args.length > 3) {
+        	namespaces = args[3].split(",");
+        }
+        
         
         switch (command) {
         case create:
@@ -165,7 +170,11 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
         	//FIXME: don't assume this command maps to operation
         	DDLOperation operation = DDLOperation.valueOf(command.name());
         	
-        	DDLModelAssembler modelAssembler = new DDLModelAssembler();
+        	DDLModelAssembler modelAssembler = null;
+        	if (namespaces != null)
+        		modelAssembler = new DDLModelAssembler(namespaces);
+        	else
+        		modelAssembler = new DDLModelAssembler();
         	DDLModelDataBinding binding = new DDLModelDataBinding(
         			new DefaultValidationEventHandler());
         	File file = new File(dest.getParentFile(), "ddl-model.xml");
@@ -210,7 +219,9 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
     private static void printUsage() {
     	log.info("Usage: java org.plasma.provisioning.cli.RDBTool "
     		+ "[-command <create | drop | truncate>] "
-    		+ "[dialect <oracle | mysql>] [dest-file] [dest-namespace-URI]"
-    		+ "[schema-name]* ");
+    		+ "[dialect <oracle | mysql>] [dest-file] [dest-namespace-URIs]"
+    		+ "[schema-names]* ");
     }
 }
+
+

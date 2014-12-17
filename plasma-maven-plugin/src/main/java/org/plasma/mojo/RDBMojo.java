@@ -98,7 +98,8 @@ public class RDBMojo extends ClassRealmMojo
     			String[] args = {
 	                	"-"+toolAction.name(), 
 	                	toolDialect.name(), 
-	                	this.outputDirectory + "/" + outputFile
+	                	this.outputDirectory + "/" + outputFile,
+                    	this.namespaces != null ? this.namespaces : "http://" + outputFile, 
 	                };
                     RDBTool.main(args);
         	}
