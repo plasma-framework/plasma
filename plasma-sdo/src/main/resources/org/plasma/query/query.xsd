@@ -11,21 +11,13 @@
 			<xsd:element ref="query:Clause" maxOccurs="unbounded"/>
 			<xsd:element type="xsd:int" name="startRange"  default="0"  minOccurs="0" maxOccurs="1"></xsd:element>
 			<xsd:element type="xsd:int" name="endRange"  default="0"  minOccurs="0" maxOccurs="1"></xsd:element>
-            <xsd:element name="concurrencyType" type="query:ConcurrencyTypeValues" default="none" minOccurs="0" maxOccurs="1"/>
+            <xsd:element ref="query:ConfigurationProperty" maxOccurs="unbounded"/>
 		</xsd:sequence>         
 	    <xsd:attribute name="name" type="xsd:string" use="optional"/>
     </xsd:complexType>
     
     <xsd:element name="Query" type="query:Query"/>
 
-    <xsd:simpleType name="ConcurrencyTypeValues">
-        <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="none"/>
-            <xsd:enumeration value="threadPool"/>
-            <xsd:enumeration value="forkJoin"/>
-        </xsd:restriction>
-    </xsd:simpleType>
-	
     <xsd:complexType name="Clause">
         <xsd:annotation>
             <xsd:documentation></xsd:documentation>
@@ -560,6 +552,21 @@
             <xsd:extension base="xsd:string"/>
         </xsd:simpleContent>
     </xsd:complexType>
+    
+    <xsd:complexType name="ConfigurationProperty">
+        <xsd:annotation><xsd:documentation>defines a named configuration property element with simple string content used to pass query specific configuration information to data access services</xsd:documentation></xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:extension>                
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:element name="ConfigurationProperty" type="query:ConfigurationProperty">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
 
     <!-- simple types -->
 	<xsd:simpleType name="RelationalOperatorValues">

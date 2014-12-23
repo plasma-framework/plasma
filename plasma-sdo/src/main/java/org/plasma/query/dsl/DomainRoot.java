@@ -31,7 +31,6 @@ import org.plasma.query.Where;
 import org.plasma.query.Wildcard;
 import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.Clause;
-import org.plasma.query.model.ConcurrencyTypeValues;
 import org.plasma.query.model.Entity;
 import org.plasma.query.model.Path;
 
@@ -242,15 +241,13 @@ public class DomainRoot extends PathNode
 	}
 
 	@Override
-	public ConcurrencyTypeValues getConcurrencyType() {
-		return this.query.getConcurrencyType();
+    public void addConfigurationProperty(String name, String value) {
+		this.query.addConfigurationProperty(name, value);		
 	}
-
+	
 	@Override
-	public void setConcurrencyType(ConcurrencyTypeValues value) {
-		this.query.setConcurrencyType(value);		
+    public String getConfigurationProperty(String name) {
+		return this.query.getConfigurationProperty(name);		
 	}
-
-
 
 }

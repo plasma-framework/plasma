@@ -21,7 +21,9 @@
  */
 package org.plasma.query;
 
-import org.plasma.query.model.ConcurrencyTypeValues;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * The PlasmaQuery#8482; API provides a flexible mechanism to fully describe 
@@ -86,28 +88,23 @@ public interface Query extends Term {
 	 */
 	public void setEndRange(Integer value);
     
-	/**
-     * Gets the value of the concurrencyType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ConcurrencyTypeValues }
-     *     
-     */
-    public ConcurrencyTypeValues getConcurrencyType();
-
     /**
-     * Sets the value of the concurrencyType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ConcurrencyTypeValues }
-     *     
+     * Appends the given property to the configuration property list.  
+     * @param name the property name
+     * @param value the property value
      */
-    public void setConcurrencyType(ConcurrencyTypeValues value);
-
+    public void addConfigurationProperty(String name, String value);
+    
+    /**
+     * Returns the configuration property value for the given name
+     * @param name the property name
+     * @return the property value
+     */
+    public String getConfigurationProperty(String name);
+     
+    
 	/**
-	 * Gets the value of the name property.
+	 * Gets the value of the name property for the query.
 	 * 
 	 * @return
 	 *     possible object is
@@ -117,7 +114,7 @@ public interface Query extends Term {
 	public String getName();
 
 	/**
-	 * Sets the value of the name property.
+	 * Sets the value of the name property for the query.
 	 * 
 	 * @param value
 	 *     allowed object is

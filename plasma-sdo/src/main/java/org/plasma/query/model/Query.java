@@ -41,7 +41,7 @@ import org.plasma.query.visitor.VisitorContext;
     "clauses",
     "startRange",
     "endRange",
-    "concurrencyType"
+    "configurationProperties"
 })
 @XmlRootElement(name = "Query")
 public class Query implements org.plasma.query.Query {
@@ -52,8 +52,8 @@ public class Query implements org.plasma.query.Query {
     protected Integer startRange;
     @XmlElement(namespace = "", defaultValue = "0")
     protected Integer endRange;
-    @XmlElement(namespace = "", defaultValue = "none")
-    protected ConcurrencyTypeValues concurrencyType;
+    @XmlElement(name = "ConfigurationProperty", required = true)
+    protected List<ConfigurationProperty> configurationProperties;
     @XmlAttribute
     protected String name;
 
@@ -170,27 +170,52 @@ public class Query implements org.plasma.query.Query {
     }
     
     /**
-     * Gets the value of the concurrencyType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ConcurrencyTypeValues }
-     *     
+     * Gets the value of the configurationProperties property.
+     *       
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link ConfigurationProperty }
      */
-    public ConcurrencyTypeValues getConcurrencyType() {
-        return concurrencyType;
+    public List<ConfigurationProperty> getConfigurationProperties() {
+        if (configurationProperties == null) {
+            configurationProperties = new ArrayList<ConfigurationProperty>();
+        }
+        return this.configurationProperties;
     }
-
+    
     /**
-     * Sets the value of the concurrencyType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ConcurrencyTypeValues }
-     *     
+     * Appends the given property to the configuration property list.  
+     * @param prop
      */
-    public void setConcurrencyType(ConcurrencyTypeValues value) {
-        this.concurrencyType = value;
+    public void addConfigurationProperty(ConfigurationProperty prop) {
+    	getConfigurationProperties().add(prop);
+    }  
+    
+    /**
+     * Appends the given property to the configuration property list.  
+     * @param name the property name
+     * @param value the property value
+     */
+    @Override
+    public void addConfigurationProperty(String name, String value) {
+    	ConfigurationProperty prop = new ConfigurationProperty();
+    	prop.setName(name);
+    	prop.setValue(value);
+    	addConfigurationProperty(prop);
+    }
+ 
+    /**
+     * Returns the configuration property value for the given name
+     * @param name the property name
+     * @return the property value
+     */
+    @Override
+    public String getConfigurationProperty(String name) {
+    	for (ConfigurationProperty prop : getConfigurationProperties()) {
+    		if (prop.getName().equals(name))
+    			return prop.getValue();
+    	}
+    	return null;
     }
     
     /* (non-Javadoc)

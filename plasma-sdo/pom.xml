@@ -216,7 +216,7 @@
 				            <staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-ddl</staleFile>
 				        </configuration>
 					</execution>
-					<!--   
+					<!--        
 					<execution>
 					    <id>query-model</id>
 						<phase>generate-sources</phase>
@@ -230,7 +230,7 @@
 					        <bindingFiles>query-jaxb-bindings.xml</bindingFiles>
 				        </configuration>
 					</execution>
-					-->
+					--> 
 				</executions>
 				<configuration>
 					<!-- HACK: where is 'generated-sources' defined ?? -->
