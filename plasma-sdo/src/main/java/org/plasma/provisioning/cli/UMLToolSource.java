@@ -21,15 +21,26 @@
  */
 package org.plasma.provisioning.cli;
 
-public enum UMLToolSource {
+public enum UMLToolSource implements OptionEnum {
 	/**
 	 * An XML Schema model provisioning source type
 	 */
-    xsd,
+    xsd("An XML Schema model provisioning source type"),
     /**
      * A relational database (RDB) model provisioning source type
      */
-    rdb;
+    rdb("A relational database (RDB) model provisioning source type");
+
+    private String description;
+
+	private UMLToolSource(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
     
     public static String asString() {
 		StringBuilder buf = new StringBuilder();
