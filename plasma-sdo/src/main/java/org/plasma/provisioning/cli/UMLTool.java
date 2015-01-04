@@ -30,6 +30,11 @@ import java.io.OutputStream;
 
 import javax.xml.bind.JAXBException;
 
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdom2.Document;
@@ -50,30 +55,19 @@ import org.xml.sax.SAXException;
  * The Unified Modeling Language (UML) Tool is used to provision
  * UML modeling artifacts from various sources.  
  * <p></p> 
- * <b>Usage:</b> java org.plasma.provisioning.cli.UMLTool  
- * [source &lt;rdb | xsd, ...&gt;] 
- * [dialect &lt;oracle | mysql, ...&gt;] 
- * [platform &lt;papyrus | magicdraw, ...&gt;] 
- * [dest-file] [namespace1, namespace2, ...]  
- * [schema1, schema2, ...] <b>*</b>
- * <p></p> 
- * <b>Where:</b> 
- * <li><b>-source</b> is one of [rdb | xsd, ...]. 
- * The <i>rdb</i> source interrogates one or more database schemas, using
- * vendor specific system tables, and generates a UML model for the given UML editing <i>platform</i> 
- * which captures the physical attributes of the database including all tables, 
- * columns, constraints, sequences and comments. Check constraints where the
- * search condition involves limiting the associated property to a list of values
- * are captured and used to produce annotated UML enumerations which 
- * are automatically linked as UML enumeration constraints to the 
- * source property.</li>
- * <li><b>dialect</b> is one of [oracle | mysql, ...] and the specific database product version is determined at runtime</li>
- * <li><b>platform</b> is one of [papyrus | magicdraw, ...]</li>
- * <li><b>dest-file</b> is the file name for the target artifact</li> 
- * <li><b>namespace1, namespace2, ...</b> is the comma separated set of namespace URIs used to annotate the UML package(s). If more than one 
- * schema is used, each schema name is used as a suffix. If no namespace-URI is present
- * a namespace URI based on the destination file name is constructed.</li> 
- * <li><b>schema1, schema2, ...</b> is a set of source RDB schemas separated by commas</li> 
+ * <b>Usage:</b> java <@link org.plasma.provisioning.cli.UMLTool>  
+ * Option                       Description
+ * ------                       ----------
+ * --dest [File]                the fully qualified tool output destination file or directory name
+ * --dialect <RDBDialect>       the vocabulary or usage which is characteristic for this context - used when sourceType is rdb - one
+ * of [oracle, mysql] is expected
+ * --help                       prints help on this tool
+ * --namespaces                 a comma separated list of namespace URIs
+ * --platform <UMLDialect>      the UML modeling or other platform for this context - one of [papyrus, magicdraw] is expected
+ * --schemas                    a comma separated list of schema names
+ * --silent                     whether to log or print no messages at all (typically for testing)
+ * --sourceType <UMLToolSource> a qualifier describing the input source - one of [xsd, rdb] is expected
+ * --verbose                    whether to log or print detailed messages
  */
 public class UMLTool extends ProvisioningTool implements RDBConstants {
     
@@ -83,166 +77,165 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
     /**
      * Command line entry point. 
      * <p></p>
-	 * <b>Usage:</b> java org.plasma.provisioning.cli.UMLTool  
-	 * [source &lt;rdb | xsd, ...&gt;] 
-	 * [dialect &lt;oracle | mysql, ...&gt;] 
-	 * [platform &lt;papyrus | magicdraw, ...&gt;] 
-	 * [dest-file] [namespace1, namespace2, ...]  
-	 * [schema1, schema2, ...] <b>*</b>
-	 * <p></p> 
-	 * <b>Where:</b> 
-	 * <li><b>-source</b> is one of [rdb | xsd, ...]. 
-	 * The <i>rdb</i> source interrogates one or more database schemas, using
-	 * vendor specific system tables, and generates a UML model for the given UML editing <i>platform</i> 
-	 * which captures the physical attributes of the database including all tables, 
-	 * columns, constraints, sequences and comments. Check constraints where the
-	 * search condition involves limiting the associated property to a list of values
-	 * are captured and used to produce annotated UML enumerations which 
-	 * are automatically linked as UML enumeration constraints to the 
-	 * source property.</li>
-	 * <li><b>dialect</b> is one of [oracle | mysql, ...] and the specific database product version is determined at runtime</li>
-	 * <li><b>platform</b> is one of [papyrus | magicdraw, ...]</li>
-	 * <li><b>dest-file</b> is the file name for the target artifact</li> 
-	 * <li><b>namespace1, namespace2, ...</b> is the comma separated set of namespace URIs used to annotate the UML package(s). If more than one 
-	 * schema is used, each schema name is used as a suffix. If no namespace-URI is present
-	 * a namespace URI based on the destination file name is constructed.</li> 
-	 * <li><b>schema1, schema2, ...</b> is a set of source RDB schemas separated by commas</li> 
+	 * <b>Usage:</b> java <@link org.plasma.provisioning.cli.UMLTool>  
+	 * Option                       Description
+	 * ------                       ----------
+	 * --dest [File]                the fully qualified tool output destination file or directory name
+	 * --dialect <RDBDialect>       the vocabulary or usage which is characteristic for this context - used when sourceType is rdb - one
+	 * of [oracle, mysql] is expected
+	 * --help                       prints help on this tool
+	 * --namespaces                 a comma separated list of namespace URIs
+	 * --platform <UMLDialect>      the UML modeling or other platform for this context - one of [papyrus, magicdraw] is expected
+	 * --schemas                    a comma separated list of schema names
+	 * --silent                     whether to log or print no messages at all (typically for testing)
+	 * --sourceType <UMLToolSource> a qualifier describing the input source - one of [xsd, rdb] is expected
+	 * --verbose                    whether to log or print detailed messages
      */
     public static void main(String[] args) throws JAXBException, SAXException, IOException {
-        if (args.length < 1) {
-            printUsage();
-            return;
-        }
-        UMLToolSource source = null;
-    	try {
-    		String sourceArg = args[0];
-    		if (sourceArg.startsWith("-"))
-    			sourceArg = sourceArg.substring(1);
-    		source = UMLToolSource.valueOf(sourceArg);
+        
+    	OptionParser parser = new OptionParser();    	  
+    	OptionSpecBuilder verboseOpt = parser.accepts( ProvisioningToolOption.verbose.name(), ProvisioningToolOption.verbose.getDescription() );    	 
+    	OptionSpecBuilder silentOpt = parser.accepts( ProvisioningToolOption.silent.name(), ProvisioningToolOption.silent.getDescription() );    	 
+    	
+    	OptionSpecBuilder helpOpt = parser.accepts( ProvisioningToolOption.help.name(), ProvisioningToolOption.help.getDescription() );    	 
+    	OptionSpecBuilder sourceTypeOpt = parser.accepts( ProvisioningToolOption.sourceType.name(), 
+    			ProvisioningToolOption.sourceType.getDescription() + " - one of [" + UMLToolSource.asString() + "] is expected");    	 
+    	sourceTypeOpt.withRequiredArg().ofType( UMLToolSource.class );    	 
+    	OptionSpecBuilder platformOpt = parser.accepts( ProvisioningToolOption.platform.name(), 
+    			ProvisioningToolOption.platform.getDescription() + " - one of [" + UMLDialect.asString() + "] is expected");    	 
+    	platformOpt.withRequiredArg().ofType( UMLDialect.class );    	 
+    	OptionSpecBuilder dialectOpt = parser.accepts( ProvisioningToolOption.dialect.name(), 
+    			ProvisioningToolOption.dialect.getDescription()
+    			+ " - used when " + ProvisioningToolOption.sourceType.name() + " is " + UMLToolSource.rdb.name()
+    			+ " - one of [" + RDBDialect.asString() + "] is expected");    	 
+    	dialectOpt.withRequiredArg().ofType( RDBDialect.class ); 
+    	OptionSpec<String> namespacesOpt = parser.accepts( ProvisioningToolOption.namespaces.name(), 
+    			ProvisioningToolOption.namespaces.getDescription()).withOptionalArg().ofType( String.class );
+    	OptionSpec<String> schemasOpt = parser.accepts( ProvisioningToolOption.schemas.name(), 
+    			ProvisioningToolOption.schemas.getDescription()).withOptionalArg().ofType( String.class );
+    	OptionSpec<File> destOpt = parser.accepts( ProvisioningToolOption.dest.name(), 
+    			ProvisioningToolOption.dest.getDescription()).withOptionalArg().ofType( File.class );
+
+    	OptionSet options = parser.parse(args);  
+
+    	if (options.has(helpOpt)) {
+    		printUsage(parser, log);
+    		return;
     	}
-    	catch (IllegalArgumentException e) {
-    		throw new IllegalArgumentException("'" + args[0] + "' - expected one of ["
-    				+ UMLToolSource.asString() + "]");
-    	}    	
+    	
+    	if (!options.has(ProvisioningToolOption.sourceType.name())) {
+    		if (!options.has(silentOpt))
+    		    printUsage(parser, log);
+    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.sourceType.name() + "'");
+    	}
+    	UMLToolSource source = (UMLToolSource)options.valueOf(ProvisioningToolOption.sourceType.name());
     	RDBDialect dialect = null;
     	
         switch (source) {
         case rdb:
-        	try {
-        		String dialectArg = args[1];
-        		if (dialectArg.startsWith("-"))
-        			dialectArg = dialectArg.substring(1);
-        		dialect = RDBDialect.valueOf(dialectArg);
+        	if (!options.has(ProvisioningToolOption.dialect.name())) {
+        		if (!options.has(silentOpt))
+        		    printUsage(parser, log);
+        		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.dialect.name() + "'");
         	}
-        	catch (IllegalArgumentException e) {
-                printUsage();
-        		throw new IllegalArgumentException("'" + args[1] + "' - expected one of ["
-        				+ RDBDialect.asString() + "]");
+        	dialect = (RDBDialect)options.valueOf(ProvisioningToolOption.dialect.name());
+
+        	File dest = new File("./target/" + UMLTool.class.getSimpleName() + ".out");
+            if (options.has(destOpt)) {
+            	dest = destOpt.value(options);
         	}
-            File dest = new File(args[2]);
             if (!dest.getParentFile().exists())
             	dest.getParentFile().mkdirs();
             break;
         case xsd:
         default:
-            printUsage();
-        	break;
+        	printUsage(parser, log);
+            throw new IllegalArgumentException("unsupported "+ProvisioningToolOption.sourceType.name()+" value '" + source + "'");
         }
         
-        	UMLDialect platform = UMLDialect.papyrus;
-        	String[] schemaNames = null;
-        	String[] namespaces = null;
-        	if (args.length == 6) {
-        		namespaces = args[4].split(",");
-        	    schemaNames = args[5].split(",");
-        	    if (namespaces.length != schemaNames.length)
-            		throw new RDBException("expected 'schemaNames' and 'namespaces' arguments with equal number of comma seperated  values");
-                
-            	try {
-            		String platformArg = args[3];
-            		if (platformArg.startsWith("-"))
-            			platformArg = platformArg.substring(1);
-            	    platform = UMLDialect.valueOf(platformArg);
-            	}
-            	catch (IllegalArgumentException e) {
-            		throw new IllegalArgumentException("'" + args[3] + "' - expected one of ["
-            				+ UMLDialect.asString() + "]");
-            	}
-        	}
-        	else if (args.length == 5) {
-        		namespaces = args[3].split(",");
-        	    schemaNames = args[4].split(",");
-        	    if (namespaces.length != schemaNames.length)
-            		throw new RDBException("expected 'schemaNames' and 'namespaces' arguments with equal number of comma seperated  values");
+    	UMLDialect platform = UMLDialect.papyrus;
+    	if (options.has(ProvisioningToolOption.platform.name())) {
+    		platform = (UMLDialect)options.valueOf(ProvisioningToolOption.platform.name());
+    	}
+    	
+    	String[] schemaNames = null;
+    	String[] namespaces = null;   	
+    	if (options.has(ProvisioningToolOption.namespaces.name())) {
+    		namespaces = namespacesOpt.value(options).split(",");
+    		schemaNames = schemasOpt.value(options).split(",");
+    	    if (namespaces.length != 1)
+        		throw new ProvisioningException("expected single value for '"+ProvisioningToolOption.namespaces.name()+" option - only single value currently supported");
+    	    if (schemaNames.length != 1)
+        		throw new ProvisioningException("expected single value for '"+ProvisioningToolOption.schemas.name()+" option - only single value currently supported");
+    	    if (namespaces.length != schemaNames.length)
+        		throw new ProvisioningException("expected '"+ProvisioningToolOption.schemas.name()+"' and '"+ProvisioningToolOption.namespaces.name()+"' arguments with equal number of comma seperated  values");
+    	}
+    	else if (options.has(ProvisioningToolOption.schemas.name()))
+    	{
+    		schemaNames = schemasOpt.value(options).split(",");
+    	    if (schemaNames.length != 1)
+        		throw new ProvisioningException("expected single value for '"+ProvisioningToolOption.schemas.name()+" option - only single value currently supported");
+    		namespaces = new String[schemaNames.length];
+    		for (int i = 0; i < schemaNames.length; i++)
+    			namespaces[i] = "http://" + schemaNames[i];   		
+    	}
+    	
+    	Model model = (new RDBReader()).read(dialect, schemaNames, namespaces);
 
-        	}
-        	else {
-        		schemaNames = args[3].split(",");
-        		namespaces = new String[schemaNames.length];
-        		for (int i = 0; i < schemaNames.length; i++)
-        			namespaces[i] = "http://" + schemaNames[i];
-        	}
-        	
-        	Model model = (new RDBReader()).read(dialect, schemaNames, namespaces);
-
-            File dest = new File(args[2]);
-            if (!dest.getParentFile().exists())
-            	dest.getParentFile().mkdirs();
-       	
-        	if (log.isDebugEnabled()) {
-        		ProvisioningModelDataBinding provBinding = new ProvisioningModelDataBinding(
-            			new DefaultValidationEventHandler());
-            	String xml = provBinding.marshal(model);
-        		File outFile = new File(dest.getParentFile(), "technical-model.xml");
-        		OutputStream stream = new FileOutputStream(outFile);
-        		stream.write(xml.getBytes());
-        		stream.flush();
-        		stream.close();
-        		log.debug("wrote merged model file to: " 
-        				+ outFile.getAbsoluteFile());
-        		log.debug("reading merged model file: " 
-        				+ outFile.getAbsoluteFile());
-        		model = (Model)provBinding.unmarshal(
-        			new FileInputStream(outFile));
-        	}
-        	
-    	    ModelAdapter helper = 
-    				   new ModelAdapter(model);
-    	    UMLModelAssembler umlAssembler = null;
-    		switch (platform) {
-    		case papyrus:
-    			umlAssembler = new PapyrusModelAssembler(model, 
-        				namespaces[0], "tns");
-    			break;
-    		case magicdraw:
-    			umlAssembler = new MDModelAssembler(model, 
-        				namespaces[0], "tns");
-    			break;
-    		}
-    		umlAssembler.setDerivePackageNamesFromURIs(false);
-    	    Document document = umlAssembler.getDocument();
-    	        
-	    	log.info("marshaling XMI model to "
-	    			+ dest.getAbsolutePath());
-	        try {
-				FileOutputStream os = new FileOutputStream(dest);
-			    XMLOutputter outputter = new XMLOutputter();
-			    outputter.setFormat(Format.getPrettyFormat());
-			    outputter.output(document, os);
-			} catch (FileNotFoundException e) {
-	            throw new ProvisioningException(e);
-			} catch (IOException e) {
-	            throw new ProvisioningException(e);
-			}
-       
+    	File dest = new File("./target/" + UMLTool.class.getSimpleName() + ".out");
+        if (options.has(destOpt)) {
+        	dest = destOpt.value(options);
+    	}
+        if (!dest.getParentFile().exists())
+        	dest.getParentFile().mkdirs();
+   	
+    	if (log.isDebugEnabled()) {
+    		ProvisioningModelDataBinding provBinding = new ProvisioningModelDataBinding(
+        			new DefaultValidationEventHandler());
+        	String xml = provBinding.marshal(model);
+    		File outFile = new File(dest.getParentFile(), "technical-model.xml");
+    		OutputStream stream = new FileOutputStream(outFile);
+    		stream.write(xml.getBytes());
+    		stream.flush();
+    		stream.close();
+    		log.debug("wrote merged model file to: " 
+    				+ outFile.getAbsoluteFile());
+    		log.debug("reading merged model file: " 
+    				+ outFile.getAbsoluteFile());
+    		model = (Model)provBinding.unmarshal(
+    			new FileInputStream(outFile));
+    	}
+    	
+	    ModelAdapter helper = 
+				   new ModelAdapter(model);
+	    UMLModelAssembler umlAssembler = null;
+		switch (platform) {
+		case papyrus:
+			umlAssembler = new PapyrusModelAssembler(model, 
+    				namespaces[0], "tns");
+			break;
+		case magicdraw:
+			umlAssembler = new MDModelAssembler(model, 
+    				namespaces[0], "tns");
+			break;
+		}
+		umlAssembler.setDerivePackageNamesFromURIs(false);
+	    Document document = umlAssembler.getDocument();
+	    if (!options.has(silentOpt))    
+    	    log.info("marshaling XMI model to "
+    			+ dest.getAbsolutePath());
+        try {
+			FileOutputStream os = new FileOutputStream(dest);
+		    XMLOutputter outputter = new XMLOutputter();
+		    outputter.setFormat(Format.getPrettyFormat());
+		    outputter.output(document, os);
+		} catch (FileNotFoundException e) {
+            throw new ProvisioningException(e);
+		} catch (IOException e) {
+            throw new ProvisioningException(e);
+		}
+   
     }
         
-    private static void printUsage() {
-    	log.info("Usage: java "+UMLTool.class.getName()+" "
-    	  + "[source &lt;rdb | xsd, ...&gt;]" 
-    	  + "[dialect &lt;oracle | mysql, ...&gt;]" 
-    	  + "[platform &lt;papyrus | magicdraw, ...&gt;]" 
-    	  + "[dest-file] [namespace1, namespace2, ...]"  
-    	  + "[schema1, schema2, ...] *");
-    }
+
 }
