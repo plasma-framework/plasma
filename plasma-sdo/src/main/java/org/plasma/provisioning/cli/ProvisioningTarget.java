@@ -21,13 +21,34 @@
  */
 package org.plasma.provisioning.cli;
 
-public enum ProvisioningTarget {
+public enum ProvisioningTarget implements OptionEnum {
 	/**
 	 * An XML Schema model provisioning target type
 	 */
-    xsd,
+    xsd("an XML Schema model provisioning target type"),
     /**
      * An UML/XMI model provisioning target type
      */
-    xmi
+    xmi("an UML/XMI model provisioning target type");
+    
+	private String description;
+
+	private ProvisioningTarget(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public static String asString() {
+		StringBuilder buf = new StringBuilder();
+		for (int i = 0; i < ProvisioningTarget.values().length; i++) {
+			if (i > 0)
+				buf.append(", ");
+			buf.append(ProvisioningTarget.values()[i].name());
+		}
+		return buf.toString();
+	}
 }
