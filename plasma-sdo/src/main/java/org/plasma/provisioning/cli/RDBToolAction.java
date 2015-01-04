@@ -21,14 +21,14 @@
  */
 package org.plasma.provisioning.cli;
 
-public enum RDBToolAction {
+public enum RDBToolAction  implements OptionEnum {
 	/** 
 	 * Generate a DDL 'create' script which creates all 
 	 * tables, views, indexes, constraints and
 	 * other artifacts defined within the source domain
 	 * model artifact(s).
 	 */
-    create,  
+    create("Generate a DDL 'create' script which creates all tables, views, indexes, constraints and other artifacts defined within the source domain model artifact(s)"),  
 	
     /** 
 	 * Generate a DDL 'drop' script which drops all 
@@ -36,7 +36,7 @@ public enum RDBToolAction {
 	 * other artifacts defined within the source domain
 	 * model artifact(s).
 	 */
-    drop,  
+    drop("Generate a DDL 'drop' script which drops all tables, views, indexes, constraints and other artifacts defined within the source domain model artifact(s)"),  
 	
     /** 
 	 * Generate a DDL 'truncate' script which first disables
@@ -44,8 +44,19 @@ public enum RDBToolAction {
 	 * within the source domain model artifact(s). Constraints are
 	 * then re-enabled.
 	 */
-    truncate;  
+    truncate("Generate a DDL 'truncate' script which first disables constraints then truncates all tables defined within the source domain model artifact(s). Constraints are then re-enabled");  
     
+	private String description;
+	   
+	private RDBToolAction(String description) {
+	    this.description = description;
+	}
+
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
+   
     public static String asString() {
 		StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < RDBToolAction.values().length; i++) {
