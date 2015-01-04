@@ -21,7 +21,7 @@
  */
 package org.plasma.provisioning.cli;
 
-public enum QueryToolAction {
+public enum QueryToolAction implements OptionEnum {
     
     /** 
      * Takes the XML representation for a query, as described by a PlasmaQuery<sup>TM</sup> or other supported
@@ -30,12 +30,33 @@ public enum QueryToolAction {
      * @see org.plasma.query.Query 
      * @see QueryToolTargetType
      */
-    compile,  
+    compile("takes the XML representation for a query, as described by a PlasmaQuery<sup>TM</sup> or other supported declarative query framework, and generates an output model based on the target type"),  
     /** 
      * Takes the XML representation for a query, as described by a PlasmaQuery<sup>TM</sup> or other supported
      * declarative query framework, runs the query against the Plasma SDO runtime, 
      * and generates/returns SDO compliant XML. 
      * @see org.plasma.query.Query 
      */
-    run  
+    run("takes the XML representation for a query, as described by a PlasmaQuery<sup>TM</sup> or other supported declarative query framework, runs the query against the Plasma SDO runtime, and generates/returns SDO compliant XML");
+
+	private String description;
+	   
+	private QueryToolAction(String description) {
+	    this.description = description;
+	}
+
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
+	 
+	public static String asString() {
+		StringBuilder buf = new StringBuilder();
+		for (int i = 0; i < QueryToolAction.values().length; i++) {
+			if (i > 0)
+				buf.append(", ");
+			buf.append(QueryToolAction.values()[i].name());
+		}
+		return buf.toString();
+	}
 }
