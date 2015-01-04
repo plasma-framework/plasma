@@ -27,6 +27,11 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
@@ -44,55 +49,77 @@ import org.plasma.text.lang3gl.java.SDOAssembler;
 import org.plasma.text.lang3gl.java.SDOFactory;
 import org.xml.sax.SAXException;
 
+/**
+ * The SDO Tool is used to provision SDO code artifacts.  
+ * <p></p> 
+ * <b>Usage:</b> java <@link org.plasma.provisioning.cli.SDOTool>  
+ * <p></p>
+ * Option                    Description
+ * ------                    -----------
+ * --command <SDOToolAction> the primary action or command performed by this tool - one of [create, export] is expected
+ * --dest [File]             the fully qualified tool output destination file or directory name
+ * --help                    prints help on this tool
+ * --lastExecution <Long>    a long integer representing the last time the tool was executed
+ * --silent                  whether to log or print no messages at all (typically for testing)
+ * --verbose                 whether to log or print detailed messages
+ */
 public class SDOTool extends ProvisioningTool {
     
     private static Log log =LogFactory.getLog(
             SDOTool.class); 
 
-        
+    /**
+     * Command line entry point. 
+     * <p></p> 
+     * <b>Usage:</b> java <@link org.plasma.provisioning.cli.SDOTool>  
+     * <p></p>
+     * Option                    Description
+     * ------                    -----------
+     * --command <SDOToolAction> the primary action or command performed by this tool - one of [create, export] is expected
+     * --dest [File]             the fully qualified tool output destination file or directory name
+     * --help                    prints help on this tool
+     * --lastExecution <Long>    a long integer representing the last time the tool was executed
+     * --silent                  whether to log or print no messages at all (typically for testing)
+     * --verbose                 whether to log or print detailed messages
+     */
     public static void main(String[] args) throws JAXBException, SAXException, IOException {
-        if (args.length < 2) {
-            throw new IllegalArgumentException(getUsage());
-        }
-        if (!args[0].startsWith("-")) {
-            throw new IllegalArgumentException(getUsage());
-        }
-        SDOToolAction command = null;
-    	try {
-    		command = SDOToolAction.valueOf(
-                    args[0].substring(1));
-    	}
-    	catch (IllegalArgumentException e) {
-    		StringBuilder buf = new StringBuilder();
-    		for (int i = 0; i < SDOToolAction.values().length; i++) {
-    			if (i > 0)
-    				buf.append(", ");
-    			buf.append(SDOToolAction.values()[i].name());
-    		}
-    			
-    		throw new IllegalArgumentException("'" + args[0].substring(1) + "' - expected one of ["
-    				+ buf.toString() + "]");
+    	
+    	OptionParser parser = new OptionParser();    	  
+    	OptionSpecBuilder verboseOpt = parser.accepts( ProvisioningToolOption.verbose.name(), ProvisioningToolOption.verbose.getDescription() );    	 
+    	OptionSpecBuilder silentOpt = parser.accepts( ProvisioningToolOption.silent.name(), ProvisioningToolOption.silent.getDescription() );    	 
+    	
+    	OptionSpecBuilder helpOpt = parser.accepts( ProvisioningToolOption.help.name(), ProvisioningToolOption.help.getDescription() );    	 
+    	OptionSpecBuilder commandOpt = parser.accepts( ProvisioningToolOption.command.name(), 
+    			ProvisioningToolOption.command.getDescription() + " - one of [" + SDOToolAction.asString() + "] is expected");    	 
+    	commandOpt.withRequiredArg().ofType( SDOToolAction.class );    	 
+    	
+    	OptionSpec<Long> lastExecutionOpt = parser.accepts( ProvisioningToolOption.lastExecution.name(),
+    			ProvisioningToolOption.lastExecution.getDescription() ).withRequiredArg().ofType( Long.class );
+    	OptionSpec<File> destOpt = parser.accepts( ProvisioningToolOption.dest.name(), 
+    			ProvisioningToolOption.dest.getDescription()).withOptionalArg().ofType( File.class );
+
+    	OptionSet options = parser.parse(args);  
+
+    	if (options.has(helpOpt)) {
+    		printUsage(parser, log);
+    		return;
     	}
     	
-    	Lang3GLDialect dialect = null;
-    	try {
-    		dialect = Lang3GLDialect.valueOf(args[1]);
+    	if (!options.has(ProvisioningToolOption.command.name())) {
+    		if (!options.has(silentOpt))
+    		    printUsage(parser, log);
+    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.command.name() + "'");
     	}
-    	catch (IllegalArgumentException e) {
-    		StringBuilder buf = new StringBuilder();
-    		for (int i = 0; i < Lang3GLDialect.values().length; i++) {
-    			if (i > 0)
-    				buf.append(", ");
-    			buf.append(Lang3GLDialect.values()[i].name());
-    		}
-    			
-    		throw new IllegalArgumentException("'" + args[1] + "' - expected one of ["
-    				+ buf.toString() + "]");
-    	}
+    	SDOToolAction command = (SDOToolAction)options.valueOf(ProvisioningToolOption.command.name());
+    	
+    	Lang3GLDialect dialect = Lang3GLDialect.java;
         
         switch (command) {
         case export:
-            File destFile = new File(args[2]);
+        	File destFile = new File("./target/" + "technical-model.xml");
+            if (options.has(destOpt)) {
+            	destFile = destOpt.value(options);
+        	}
             if (destFile.getParentFile() == null || !destFile.getParentFile().exists()) {
                 log.info("given destination directory '"
                         + destFile.getParentFile().getAbsolutePath() + "' does not exist, creating");
@@ -102,7 +129,8 @@ public class SDOTool extends ProvisioningTool {
             }
             if (destFile.isDirectory())
             	destFile = new File(destFile, "technical-model.xml");
-            log.info("dest: " + destFile.getAbsoluteFile());
+            if (!options.has(silentOpt))
+                log.info("dest: " + destFile.getAbsoluteFile());
             ProvisioningModelAssembler modelAssembler = new ProvisioningModelAssembler();
             ProvisioningModelDataBinding binding = new ProvisioningModelDataBinding(
         			new DefaultValidationEventHandler());
@@ -112,34 +140,38 @@ public class SDOTool extends ProvisioningTool {
     		stream.flush();
     		stream.close();
     		validateStagingModel(destFile);
-    		log.info("wrote merged model file to: " 
+    		if (!options.has(silentOpt))
+    		    log.info("wrote merged model file to: " 
     				+ destFile.getAbsoluteFile());
             break;        	
         case create:
         	Lang3GLOperation operation = Lang3GLOperation.valueOf(command.name());
         	
-            File destDir = new File(args[2]);
+            File destDir = new File("./target/");
+            if (options.has(destOpt)) {
+            	destDir = destOpt.value(options);
+        	}
+            
             if (!destDir.exists()) {
-                log.debug("given destination dir '"
+            	if (!options.has(silentOpt))
+                    log.debug("given destination dir '"
                         + destDir.getName() + "' does not exist");
                 if (!destDir.mkdirs())
             		throw new IllegalArgumentException("given destination dir '"
                             + destDir.getName() + "' could not be created");                	
             }
-            log.debug("dest: " + destDir.getName());
+            if (!options.has(silentOpt))
+                log.debug("dest: " + destDir.getName());
             
         	long lastExecution = 0L;
-            if (args.length >= 4) {
-            	try {
-            		lastExecution = Long.valueOf(args[3]).longValue();
-            	}
-            	catch (NumberFormatException e) {
-            		throw new IllegalArgumentException(getUsage());                	
-            	}
+        	
+        	if (options.has(lastExecutionOpt)) {
+        		lastExecution = lastExecutionOpt.value(options).longValue();
             }
     	    
             if (!regenerate(lastExecution)) {
-                log.info("skipping SDO creation - no stale artifacts detected");	
+            	if (!options.has(silentOpt))
+                    log.info("skipping SDO creation - no stale artifacts detected");	
                 return;
             }            	
             
@@ -153,7 +185,8 @@ public class SDOTool extends ProvisioningTool {
         		stream.write(xml.getBytes());
         		stream.flush();
         		stream.close();
-        		log.debug("wrote merged model file to: " 
+        		if (!options.has(silentOpt))
+        		    log.debug("wrote merged model file to: " 
         				+ outFile.getAbsoluteFile());
         		//log.debug(xml);
         	}
@@ -178,31 +211,25 @@ public class SDOTool extends ProvisioningTool {
         		operation,
         		destDir);
         	assembler.start();
-            log.info("generated "
+        	
+        	if (!options.has(silentOpt)) {
+                log.info("generated "
                 	+ assembler.getResultInterfacesCount()
                 	+" interfaces to output to directory: " 
                 	+ destDir.getAbsolutePath());
-            log.info("generated "
+                log.info("generated "
                 	+ assembler.getResultClassesCount()
                 	+" classes to output to directory: " 
                 	+ destDir.getAbsolutePath());
-            log.info("generated "
+                log.info("generated "
                 	+ assembler.getResultEnumerationsCount()
                 	+" enumerations to output to directory: " 
                 	+ destDir.getAbsolutePath());
-            
+        	}
             break;
         default:
             throw new ProvisioningException("unknown command '"
                     + command.toString() + "'");
         }        
     }
-    
-    private static String getUsage() {
-    	return "usage: -command dialect dest-dir [last-execution-time]";
-    }
-    
-    private static void printUsage() {
-        log.info(getUsage());
-    }
-}
+ }
