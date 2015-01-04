@@ -21,10 +21,31 @@
  */
 package org.plasma.provisioning.cli;
 
-public enum DSLToolAction {
-	/** 
-	 * Provisions query Domain Specific Language (DSL) classes for the 
-	 * current configuration.
-     */
-    create,  
+public enum DSLToolAction implements OptionEnum {
+	/**
+	 * Provisions query Domain Specific Language (DSL) classes for the current
+	 * configuration.
+	 */
+	create("provisions query Domain Specific Language (DSL) classes for the current configuration");
+
+	private String description;
+
+	private DSLToolAction(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
+
+	public static String asString() {
+		StringBuilder buf = new StringBuilder();
+		for (int i = 0; i < DSLToolAction.values().length; i++) {
+			if (i > 0)
+				buf.append(", ");
+			buf.append(DSLToolAction.values()[i].name());
+		}
+		return buf.toString();
+	}
 }
