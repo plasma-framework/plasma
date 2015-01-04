@@ -21,16 +21,37 @@
  */
 package org.plasma.provisioning.cli;
 
-public enum SDOToolAction {
+public enum SDOToolAction implements OptionEnum {
     /** 
      * Generate SDO interfaces, classes and enumerations
      * based on the current configuration.
      */
-	create,
+	create("Generate SDO interfaces, classes and enumerations based on the current configuration"),
 	/**
 	 * Exports the configured repository artifacts as a merged
 	 * XML based provisioning or "technical" model. This can be
 	 * used for application specific transformations.  
 	 */
-    export
+    export("Exports the configured repository artifacts as a merged XML based provisioning or \"technical\" model. This can be used for application specific transformations");
+    
+	private String description;
+	   
+	private SDOToolAction(String description) {
+	    this.description = description;
+	}
+
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
+	
+    public static String asString() {
+		StringBuilder buf = new StringBuilder();
+		for (int i = 0; i < SDOToolAction.values().length; i++) {
+			if (i > 0)
+				buf.append(", ");
+			buf.append(SDOToolAction.values()[i].name());
+		}
+		return buf.toString();
+    }
 }
