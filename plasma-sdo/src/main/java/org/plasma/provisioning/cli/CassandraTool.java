@@ -27,9 +27,15 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
+import org.plasma.provisioning.ProvisioningException;
 import org.plasma.text.ddl.CassandraFactory;
 import org.plasma.text.ddl.DDLFactory;
 import org.plasma.text.ddl.DDLModelAssembler;
@@ -42,27 +48,16 @@ import org.xml.sax.SAXException;
  * The Cassandra NoSQL Database (CQL) Tool is used to provision
  * various artifacts useful for management and migration
  * to and from Cassandra NoSQL Database.  
- * <p></p> 
- * <b>Usage:</b> java org.plasma.provisioning.cli.CassandraTool  
- * [command &lt;create | drop | truncate&gt;]  
- * [platform &lt;papyrus | magicdraw, ...&gt;] 
- * [dest-file] [namespace1, namespace2, ...]  
- * [schema1, schema2, ...]<b>*</b>
- * <p></p> 
- * <b>Where:</b> 
- * <li><b>-command</b> is one of [create | drop | truncate]. The <i>create</i>, <i>drop</i> and 
- * <i>truncate</i> commands generate a complete DDL script representing the configured
- * set of UML artifacts. For these commands the <i>platform</i>, <i>namespace</i> and <i>schema</i>
- * arguments are not applicable as the physical schema names and namespace URI
- * associations are expected to be
- * part of the configured PlasmaSDO UML Profile annotated UML model artifact(s).
- * <li><b>dialect</b> is one of [oracle | mysql, ...] and the specific database product version is determined at runtime</li>
- * <li><b>platform</b> is one of [papyrus | magicdraw, ...]</li>
- * <li><b>dest-file</b> is the file name for the target artifact</li> 
- * <li><b>namespace1, namespace2, ...</b> is the comma separated set of namespace URIs used to annotate the UML package(s). If more than one 
- * schema is used, each schema name is used as a suffix. If no namespace-URI is present
- * a namespace URI based on the destination file name is constructed.</li> 
- * <li><b>schema1, schema2, ...</b> is a set of source RDB schemas separated by commas</li> 
+ * <p></p>
+ * <b>Usage:</b> java <@link org.plasma.provisioning.cli.CassandraTool>  
+ *  Option                          Description
+ * -----                          -----------
+ * -command <@link CassandraToolAction> the primary action or command performed by this tool - one of [create, drop, truncate] is expected
+ * -dest [File]                   the fully qualified tool output destination file or directory name
+ * -help                          prints help on this tool
+ * -namespaces                    a comma separated list of namespace URIs
+ * -silent                        whether to log or print no messages at all (typically for testing)
+ * -verbose                       whether to log or print detailed messages    	  
  */
 public class CassandraTool extends ProvisioningTool {
     
@@ -72,52 +67,62 @@ public class CassandraTool extends ProvisioningTool {
     /**
      * Command line entry point. 
      * <p></p>
-	 * <b>Usage:</b> java org.plasma.provisioning.cli.CassandraTool  
-	 * [command &lt;create | drop | truncate&gt;]  
-	 * [dialect &lt;oracle | mysql, ...&gt;] 
-	 * [platform &lt;papyrus | magicdraw, ...&gt;] 
-	 * [dest-file] [namespace1, namespace2, ...]  
-	 * [schema1, schema2, ...]<b>*</b>
-	 * <p></p> 
-	 * <b>Where:</b> 
-	 * <li><b>-command</b> is one of [create | drop | truncate]. The <i>create</i>, <i>drop</i> and 
-	 * <i>truncate</i> commands generate a complete DDL script representing the configured
-	 * set of UML artifacts. For these commands the <i>platform</i>, <i>namespace</i> and <i>schema</i>
-	 * arguments are not applicable as the physical schema names and namespace URI
-	 * associations are expected to be
-	 * part of the configured PlasmaSDO UML Profile annotated UML model artifact(s).
-	 * <li><b>platform</b> is one of [papyrus | magicdraw, ...]</li>
-	 * <li><b>dest-file</b> is the file name for the target artifact</li> 
-	 * <li><b>namespace1, namespace2, ...</b> is the comma separated set of namespace URIs used to annotate the UML package(s). If more than one 
-	 * schema is used, each schema name is used as a suffix. If no namespace-URI is present
-	 * a namespace URI based on the destination file name is constructed.</li> 
-	 * <li><b>schema1, schema2, ...</b> is a set of source RDB schemas separated by commas</li> 
-     */
+	 * <b>Usage:</b> java <@link org.plasma.provisioning.cli.CassandraTool>  
+	 *  Option                          Description
+	 * -----                          -----------
+	 * -command <@link CassandraToolAction> the primary action or command performed by this tool - one of [create, drop, truncate] is expected
+	 * -dest [File]                   the fully qualified tool output destination file or directory name
+	 * -help                          prints help on this tool
+	 * -namespaces                    a comma separated list of namespace URIs
+	 * -silent                        whether to log or print no messages at all (typically for testing)
+	 * -verbose                       whether to log or print detailed messages    	 * 
+	 */
     public static void main(String[] args) throws JAXBException, SAXException, IOException {
-        if (args.length < 1) {
-            printUsage();
-            return;
-        }
-        if (!args[0].startsWith("-")) {
-            printUsage();
-            return;
-        }
-        CassandraToolAction command = null;
-    	try {
-    		String commandArg = args[0];
-    		if (commandArg.startsWith("-"))
-    			commandArg = commandArg.substring(1);
-    		command = CassandraToolAction.valueOf(commandArg);
+    	OptionParser parser = new OptionParser();    	  
+    	OptionSpecBuilder verboseOpt = parser.accepts( ProvisioningToolOption.verbose.name(), ProvisioningToolOption.verbose.getDescription() );    	 
+    	OptionSpecBuilder silentOpt = parser.accepts( ProvisioningToolOption.silent.name(), ProvisioningToolOption.silent.getDescription() );    	 
+    	
+    	OptionSpecBuilder helpOpt = parser.accepts( ProvisioningToolOption.help.name(), ProvisioningToolOption.help.getDescription() );    	 
+    	OptionSpecBuilder commandOpt = parser.accepts( ProvisioningToolOption.command.name(), 
+    			ProvisioningToolOption.command.getDescription() + " - one of [" + CassandraToolAction.asString() + "] is expected");    	 
+    	commandOpt.withRequiredArg().ofType( CassandraToolAction.class );    	 
+    	OptionSpec<String> namespacesOpt = parser.accepts( ProvisioningToolOption.namespaces.name(), 
+    			ProvisioningToolOption.namespaces.getDescription()).withOptionalArg().ofType( String.class );
+    	OptionSpec<File> destOpt = parser.accepts( ProvisioningToolOption.dest.name(), 
+    			ProvisioningToolOption.dest.getDescription()).withOptionalArg().ofType( File.class );
+
+    	OptionSet options = parser.parse(args);  
+
+    	if (options.has(helpOpt)) {
+    		printUsage(parser, log);
+    		return;
     	}
-    	catch (IllegalArgumentException e) {
-    		throw new IllegalArgumentException("'" + args[0] + "' - expected one of ["
-    				+ CassandraToolAction.asString() + "]");
+    	
+    	if (!options.has(ProvisioningToolOption.command.name())) {
+    		if (!options.has(silentOpt))
+    		    printUsage(parser, log);
+    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.command.name() + "'");
     	}
-        
-        File dest = new File(args[1]);
+        CassandraToolAction command = (CassandraToolAction)options.valueOf(ProvisioningToolOption.command.name());
+
+        if (!options.has(ProvisioningToolOption.dialect.name())) {
+    		if (!options.has(silentOpt))
+    		    printUsage(parser, log);
+    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.dialect.name() + "'");
+    	}
+ 
+    	File dest = new File("./target/" + CassandraTool.class.getSimpleName() + ".out");
+        if (options.has(destOpt)) {
+        	dest = destOpt.value(options);
+    	}
         if (!dest.getParentFile().exists())
         	dest.getParentFile().mkdirs();
-                
+        
+        String[] namespaces = null;
+        if (options.has(namespacesOpt)) {
+        	namespaces = namespacesOpt.value(options).split(",");
+        }        
+        
         switch (command) {
         case create:
         case drop:
@@ -125,20 +130,24 @@ public class CassandraTool extends ProvisioningTool {
         	//FIXME: don't assume this command maps to operation
         	DDLOperation operation = DDLOperation.valueOf(command.name());
         	
-        	DDLModelAssembler modelAssembler = new DDLModelAssembler();
+        	DDLModelAssembler modelAssembler = null;
+        	if (namespaces != null)
+        		modelAssembler = new DDLModelAssembler(namespaces);
+        	else
+        		modelAssembler = new DDLModelAssembler();
         	DDLModelDataBinding binding = new DDLModelDataBinding(
         			new DefaultValidationEventHandler());
-            if (log.isDebugEnabled()) {
-            	File file = new File(dest.getParentFile(), "ddl-model.xml");
-            	FileOutputStream fos = new FileOutputStream(file);
-            	try {
-            	    binding.marshal(modelAssembler.getSchemas(), fos);
-            	    fos.flush();
-            	}
-            	finally {
-            	    fos.close();
-            	}
-            }
+        	File file = new File(dest.getParentFile(), "ddl-model.xml");
+        	FileOutputStream fos = new FileOutputStream(file);
+        	try {
+        	    binding.marshal(modelAssembler.getSchemas(), fos);
+        	    fos.flush();
+        	    if (!options.has(silentOpt))
+        	        log.info("marshalled DDL model XML to " + file.getAbsolutePath());
+        	}
+        	finally {
+        	    fos.close();
+        	}
        	
         	DDLFactory factory = new CassandraFactory();
         	
@@ -152,16 +161,9 @@ public class CassandraTool extends ProvisioningTool {
         	stream.flush();
             break;        	
         default:
-            throw new RDBException("unknown command '"
+            throw new ProvisioningException("unknown command '"
                     + command.toString() + "'");
         } 
        
-    }
-    
-    private static void printUsage() {
-    	log.info("Usage: java org.plasma.provisioning.cli.CassandraTool "
-    		+ "[-command <create | drop | truncate>] "
-    		+ "[dest-file] [dest-namespace-URIs]"
-    		+ "[schema-names]* ");
     }
 }
