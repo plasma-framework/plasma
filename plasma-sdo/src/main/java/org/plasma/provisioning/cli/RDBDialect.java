@@ -21,11 +21,24 @@
  */
 package org.plasma.provisioning.cli;
 
-public enum RDBDialect {
-    oracle,
-    mysql;
+public enum RDBDialect implements OptionEnum {
+	/** the Plasma RDB dialect for Oracle RDBMS */
+    oracle("the Plasma RDB dialect for Oracle RDBMS"),
+    /** the Plasma RDB dialect for MySql RDBMS */
+    mysql("the Plasma RDB dialect for MySql RDBMS");
     
-    public static String asString() {
+	private String description;
+	   
+	private RDBDialect(String description) {
+	    this.description = description;
+	}
+
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
+	 
+	public static String asString() {
 		StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < RDBDialect.values().length; i++) {
 			if (i > 0)
@@ -33,5 +46,5 @@ public enum RDBDialect {
 			buf.append(RDBDialect.values()[i].name());
 		}
 		return buf.toString();
-    }
+	}
 }
