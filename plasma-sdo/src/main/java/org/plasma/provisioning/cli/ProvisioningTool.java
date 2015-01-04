@@ -24,21 +24,20 @@ package org.plasma.provisioning.cli;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
+
+import joptsimple.BuiltinHelpFormatter;
+import joptsimple.HelpFormatter;
+import joptsimple.OptionParser;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
-import org.plasma.common.xslt.XSLTUtils;
 import org.plasma.config.Artifact;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.Model;
@@ -50,39 +49,15 @@ public abstract class ProvisioningTool {
     private static Log log =LogFactory.getLog(
     		ProvisioningTool.class); 
 
-    protected static File createStagingModel(File source, File classesDir) 
-        throws IOException, TransformerConfigurationException, TransformerException, JAXBException, SAXException 
+    protected static void printUsage(OptionParser parser, Log theLog) throws IOException
     {
-        String stagingXsl = "PlasmaUMLModelToStagingModel.xsl";
-        URL stagingXslUrl = ProvisioningTool.class.getResource(stagingXsl);
-        if (stagingXslUrl == null) 
-            stagingXslUrl = ProvisioningTool.class.getClassLoader().getResource(stagingXsl);
-        if (stagingXslUrl == null)    
-            throw new RuntimeException("templte file '"
-                    + stagingXsl + "' does not exist as resource associated with class, " +
-                    ProvisioningTool.class.getName() + " or anywhere on the current classpath");
-        Properties props = new Properties();
-        File pimFile = null;
-        if (classesDir != null) {
-            pimFile = new File(classesDir, "pim.xml");
-            if (pimFile.exists() && pimFile.lastModified() > source.lastModified())
-                return pimFile;
-        }
-        else {
-            File baseTempDir = new File(System.getProperty("java.io.tmpdir"));  
-            
-            pimFile = new File(baseTempDir, "pim.xml");
-            if (pimFile.exists() && pimFile.lastModified() > source.lastModified())
-                return pimFile;
-        }
-        
-        XSLTUtils xslt = new XSLTUtils();
-        xslt.transform(pimFile, source, stagingXslUrl, props); 
-        
-        
-        return pimFile;
-    }
-    
+		HelpFormatter helpFormat = new BuiltinHelpFormatter(640, 1);
+		parser.formatHelpWith(helpFormat);
+		ByteArrayOutputStream helpOs = new ByteArrayOutputStream();
+		parser.printHelpOn(helpOs);
+		theLog.info("\n" + new String(helpOs.toByteArray()));   	
+    }    
+
     protected static Model validateStagingModel(File source) 
         throws JAXBException, SAXException, IOException 
     {
@@ -101,19 +76,6 @@ public abstract class ProvisioningTool {
 			new ModelAdapter(model);
 		
 		return model;
-    }
-    
-    protected static File createTempFileFromJar(String javaXsl, File baseDir) throws IOException
-    {
-        InputStream javaXslStream = QueryTool.class.getResourceAsStream(javaXsl);
-        if (javaXslStream == null)    
-            throw new RuntimeException("templte file '"
-                + javaXsl + "' does not exist as stream resource associated with class, " +
-                QueryTool.class.getName());        
-        File javaXslUrlFile = new File(baseDir, javaXsl);
-        OutputStream javaXslOutputStream = new FileOutputStream(javaXslUrlFile);
-        writeContent(javaXslStream, javaXslOutputStream);
-        return javaXslUrlFile;
     }
     
     protected static boolean regenerate(long lastExecution)
