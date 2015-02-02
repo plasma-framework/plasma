@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.util.Date;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.plasma.provisioning.cli.ProvisioningToolOption;
 import org.plasma.provisioning.cli.SDOTool;
 import org.plasma.provisioning.cli.SDOToolAction;
 
@@ -56,24 +57,17 @@ public class SDOMojo extends ClassRealmMojo
     */
     private String outputDirectory;
     
-    /**
-    * The target 3GL language for generated source.
-    * @parameter expression="${sdo.dialect}" default-value="java"
-    */
-    private String dialect;
     
     public void execute() throws MojoExecutionException
     {
     	super.execute();
     	
         getLog().debug( "tool: " + SDOTool.class.getName());
-        getLog().debug( "dialect: " + this.dialect);
+        getLog().debug( "action: " + this.action);
         getLog().debug( "classRealm: " + this.classRealm);
         
         try
         {        
-        	SDOToolAction toolAction = getToolAction(this.action);
-
         	long lastExecution = 0L;
         	File mojoDir = new File(MojoConstants.MOJO_DIR);
             if (mojoDir.exists()) {
@@ -88,10 +82,9 @@ public class SDOMojo extends ClassRealmMojo
             }
         	
             String[] args = {
-                	"-"+toolAction.name(), 
-                	this.dialect, 
-                	this.outputDirectory,
-                	String.valueOf(lastExecution)
+                	"-"+ProvisioningToolOption.command.name(), this.action,
+                	"-"+ProvisioningToolOption.dest.name(), this.outputDirectory,
+                	"-"+ProvisioningToolOption.lastExecution.name(), String.valueOf(lastExecution)
                 };        	
             getLog().info("executing tool: "  + SDOTool.class.getName());
             SDOTool.main(args);
@@ -125,25 +118,5 @@ public class SDOMojo extends ClassRealmMojo
         {
             throw new MojoExecutionException(e.getMessage(), e);
         }        
-    }
-    
-    private SDOToolAction getToolAction(String action)
-    {
-        SDOToolAction command = null;
-    	try {
-    		command = SDOToolAction.valueOf(action);
-    	}
-    	catch (IllegalArgumentException e) {
-    		StringBuilder buf = new StringBuilder();
-    		for (int i = 0; i < SDOToolAction.values().length; i++) {
-    			if (i > 0)
-    				buf.append(", ");
-    			buf.append(SDOToolAction.values()[i].name());
-    		}
-    			
-    		throw new IllegalArgumentException("'" + action + "' - expected one of ["
-    				+ buf.toString() + "]");
-    	}  
-    	return command;
-    }
+    }    
 }

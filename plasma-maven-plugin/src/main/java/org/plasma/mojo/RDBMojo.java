@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.plasma.provisioning.cli.ProvisioningToolOption;
 import org.plasma.provisioning.cli.RDBDialect;
 import org.plasma.provisioning.cli.RDBTool;
 import org.plasma.provisioning.cli.RDBToolAction;
@@ -90,26 +91,24 @@ public class RDBMojo extends ClassRealmMojo
     	        
         try
         {        
-        	RDBToolAction toolAction = getToolAction(this.action);
-        	RDBDialect toolDialect = getToolDialect(this.dialect);
 
             getLog().info( "executing tool: "  + RDBTool.class.getName());                
         	if (this.schemaNames == null) {
     			String[] args = {
-	                	"-"+toolAction.name(), 
-	                	toolDialect.name(), 
-	                	this.outputDirectory + "/" + outputFile,
-                    	this.namespaces != null ? this.namespaces : "http://" + outputFile, 
+                    	"-"+ProvisioningToolOption.command.name(), this.action,
+                    	"-"+ProvisioningToolOption.dialect.name(), this.dialect,
+                    	"-"+ProvisioningToolOption.dest.name(), this.outputDirectory + "/" + outputFile,
+                    	"-"+ProvisioningToolOption.namespaces.name(), this.namespaces != null ? this.namespaces : "http://" + outputFile, 
 	                };
                     RDBTool.main(args);
         	}
         	else {
         		String[] args = {
-                    	"-"+toolAction.name(), 
-                    	toolDialect.name(), 
-                    	this.outputDirectory + "/" + outputFile,
-                    	this.namespaces != null ? this.namespaces : "http://" + outputFile, 
-                    	this.schemaNames
+                    	"-"+ProvisioningToolOption.command.name(), this.action,
+                    	"-"+ProvisioningToolOption.dialect.name(), this.dialect,
+                    	"-"+ProvisioningToolOption.dest.name(), this.outputDirectory + "/" + outputFile,
+                    	"-"+ProvisioningToolOption.namespaces.name(), this.namespaces != null ? this.namespaces : "http://" + outputFile, 
+                    	"-"+ProvisioningToolOption.schemas.name(), this.schemaNames
                     };
                 RDBTool.main(args);
         	}

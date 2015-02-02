@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.DSLTool;
 import org.plasma.provisioning.cli.DSLToolAction;
+import org.plasma.provisioning.cli.ProvisioningToolOption;
 
 /**
  * Mojo implementation for generating DSL artifacts, such as
@@ -55,26 +56,17 @@ public class DSLMojo extends ClassRealmMojo
     */
     private String outputDirectory;
     
-    /**
-    * The target 3GL language for generated source.
-    * @parameter expression="${dsl.dialect}" default-value="java"
-    */
-    private String dialect;
-        
-    
     
     public void execute() throws MojoExecutionException
     {
     	super.execute();
     	
         getLog().debug( "tool: " + DSLTool.class.getName());
-        getLog().debug( "dialect: " + this.dialect);
+        getLog().debug( "action: " + this.action);
         getLog().debug( "classRealm: " + this.classRealm);
         
         try
         {        
-        	DSLToolAction toolAction = getToolAction(this.action);
-
         	long lastExecution = 0L;
         	File mojoDir = new File(MojoConstants.MOJO_DIR);
             if (mojoDir.exists()) {
@@ -86,12 +78,10 @@ public class DSLMojo extends ClassRealmMojo
             }
         	
             String[] args = {
-                	"-"+toolAction.name(), 
-                	this.dialect, 
-                	this.outputDirectory,
-                	String.valueOf(lastExecution)		
-                };
-        	
+                	"-"+ProvisioningToolOption.command.name(), this.action,
+                	"-"+ProvisioningToolOption.dest.name(), this.outputDirectory,
+                	"-"+ProvisioningToolOption.lastExecution.name(), String.valueOf(lastExecution)
+                };        	
             getLog().info( "executing tool: "  + DSLTool.class.getName());
             
             DSLTool.main(args);
@@ -128,23 +118,4 @@ public class DSLMojo extends ClassRealmMojo
         }        
     }
     
-    private DSLToolAction getToolAction(String action)
-    {
-    	DSLToolAction command = null;
-    	try {
-    		command = DSLToolAction.valueOf(action);
-    	}
-    	catch (IllegalArgumentException e) {
-    		StringBuilder buf = new StringBuilder();
-    		for (int i = 0; i < DSLToolAction.values().length; i++) {
-    			if (i > 0)
-    				buf.append(", ");
-    			buf.append(DSLToolAction.values()[i].name());
-    		}
-    			
-    		throw new IllegalArgumentException("'" + action + "' - expected one of ["
-    				+ buf.toString() + "]");
-    	}  
-    	return command;
-    }
 }

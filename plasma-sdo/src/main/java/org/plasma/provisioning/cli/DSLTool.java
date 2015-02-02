@@ -26,6 +26,11 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.provisioning.ProvisioningException;
@@ -41,80 +46,97 @@ import org.plasma.text.lang3gl.java.DSLAssembler;
 import org.plasma.text.lang3gl.java.DSLFactory;
 import org.xml.sax.SAXException;
 
+/**
+ * The DSL Tool is used to provision Query DSL code artifacts.  
+ * <p></p> 
+ * <b>Usage:</b> java <@link org.plasma.provisioning.cli.DSLTool>  
+ * Option                    Description
+ * ------                    -----------
+ * --command <DSLToolAction> the primary action or command performed by this tool - one of [create] is expected
+ * --dest [File]             the fully qualified tool output destination file or directory name
+ * --help                    prints help on this tool
+ * --lastExecution <Long>    a long integer representing the last time the tool was executed
+ * --silent                  whether to log or print no messages at all (typically for testing)
+ * --verbose                 whether to log or print detailed messages     *     
+ */
 public class DSLTool extends ProvisioningTool {
     
     private static Log log =LogFactory.getLog(
             DSLTool.class); 
 
-        
+    /**
+     * Command line entry point. 
+     * Option                    Description
+     * ------                    -----------
+     * --command <DSLToolAction> the primary action or command performed by this tool - one of [create] is expected
+     * --dest [File]             the fully qualified tool output destination file or directory name
+     * --help                    prints help on this tool
+     * --lastExecution <Long>    a long integer representing the last time the tool was executed
+     * --silent                  whether to log or print no messages at all (typically for testing)
+     * --verbose                 whether to log or print detailed messages     *     
+     * @param args
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
     public static void main(String[] args) throws JAXBException, SAXException, IOException {
-        if (args.length < 2) {
-            printUsage();
-            return;
-        }
-        if (!args[0].startsWith("-")) {
-            printUsage();
-            return;
-        }
-        DSLToolAction command = null;
-    	try {
-    		command = DSLToolAction.valueOf(
-                    args[0].substring(1));
+    	OptionParser parser = new OptionParser();    	  
+    	OptionSpecBuilder verboseOpt = parser.accepts( ProvisioningToolOption.verbose.name(), ProvisioningToolOption.verbose.getDescription() );    	 
+    	OptionSpecBuilder silentOpt = parser.accepts( ProvisioningToolOption.silent.name(), ProvisioningToolOption.silent.getDescription() );    	 
+    	
+    	OptionSpecBuilder helpOpt = parser.accepts( ProvisioningToolOption.help.name(), ProvisioningToolOption.help.getDescription() );    	 
+    	OptionSpecBuilder commandOpt = parser.accepts( ProvisioningToolOption.command.name(), 
+    			ProvisioningToolOption.command.getDescription() + " - one of [" + DSLToolAction.asString() + "] is expected");    	 
+    	commandOpt.withRequiredArg().ofType( DSLToolAction.class );    	 
+    	
+    	OptionSpec<Long> lastExecutionOpt = parser.accepts( ProvisioningToolOption.lastExecution.name(),
+    			ProvisioningToolOption.lastExecution.getDescription() ).withRequiredArg().ofType( Long.class );
+    	OptionSpec<File> destOpt = parser.accepts( ProvisioningToolOption.dest.name(), 
+    			ProvisioningToolOption.dest.getDescription()).withOptionalArg().ofType( File.class );
+
+    	OptionSet options = parser.parse(args);  
+
+    	if (options.has(helpOpt)) {
+    		printUsage(parser, log);
+    		return;
     	}
-    	catch (IllegalArgumentException e) {
-    		StringBuilder buf = new StringBuilder();
-    		for (int i = 0; i < DSLToolAction.values().length; i++) {
-    			if (i > 0)
-    				buf.append(", ");
-    			buf.append(DSLToolAction.values()[i].name());
-    		}
-    			
-    		throw new IllegalArgumentException("'" + args[0].substring(1) + "' - expected one of ["
-    				+ buf.toString() + "]");
+    	
+    	if (!options.has(ProvisioningToolOption.command.name())) {
+    		if (!options.has(silentOpt))
+    		    printUsage(parser, log);
+    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.command.name() + "'");
     	}
+    	DSLToolAction command = (DSLToolAction)options.valueOf(ProvisioningToolOption.command.name());
+    	
+    	Lang3GLDialect dialect = Lang3GLDialect.java;
         
         switch (command) {
         case create:
         	Lang3GLOperation operation = Lang3GLOperation.valueOf(command.name());
 
-        	Lang3GLDialect dialect = null;
-        	try {
-        		dialect = Lang3GLDialect.valueOf(args[1]);
+        	File destDir = new File("./target");
+            if (options.has(destOpt)) {
+            	destDir = destOpt.value(options);
         	}
-        	catch (IllegalArgumentException e) {
-        		StringBuilder buf = new StringBuilder();
-        		for (int i = 0; i < Lang3GLDialect.values().length; i++) {
-        			if (i > 0)
-        				buf.append(", ");
-        			buf.append(Lang3GLDialect.values()[i].name());
-        		}
-        			
-        		throw new IllegalArgumentException("'" + args[1] + "' - expected one of ["
-        				+ buf.toString() + "]");
-        	}
-        	
-            File destDir = new File(args[2]);
-            if (!destDir.exists()) {
-                log.debug("given destination dir '"
-                        + destDir.getName() + "' does not exist");
-                if (!destDir.mkdirs())
-            		throw new IllegalArgumentException("given destination dir '"
-                            + destDir.getName() + "' could not be created");                	
+            if (destDir.getParentFile() == null || !destDir.getParentFile().exists()) {
+                log.info("given destination directory '"
+                        + destDir.getParentFile().getAbsolutePath() + "' does not exist, creating");
+                if (!destDir.getParentFile().mkdirs())
+            		throw new IllegalArgumentException("given destination directory '"
+                            + destDir.getParentFile() + "' could not be created");                	
             }
-            log.debug("dest: " + destDir.getName());
+            if (!options.has(silentOpt))
+                log.debug("dest: " + destDir.getName());
 
         	long lastExecution = 0L;
-            if (args.length >= 4) {
-            	try {
-            		lastExecution = Long.valueOf(args[3]).longValue();
-            	}
-            	catch (NumberFormatException e) {
-            		throw new IllegalArgumentException(getUsage());                	
-            	}
+        	
+        	if (options.has(lastExecutionOpt)) {
+        		lastExecution = lastExecutionOpt.value(options).longValue();
             }
     	    
             if (!regenerate(lastExecution)) {
-                log.info("skipping DSL creation - no stale artifacts detected");	
+            	if (!options.has(silentOpt))
+                    log.info("skipping DSL creation - no stale artifacts detected");	
                 return;
             }            	
             
@@ -140,10 +162,11 @@ public class DSLTool extends ProvisioningTool {
         		operation,
         		destDir);
         	assembler.start();
-            log.info("generated "
-            	+ assembler.getResultClassesCount()
-            	+" classes to output to directory: " 
-            	+ destDir.getAbsolutePath());
+        	if (!options.has(silentOpt))
+                log.info("generated "
+            	    + assembler.getResultClassesCount()
+            	    +" classes to output to directory: " 
+            	    + destDir.getAbsolutePath());
             
             break;
         default:
@@ -151,13 +174,5 @@ public class DSLTool extends ProvisioningTool {
                     + command.toString() + "'");
         } 
        
-    }
-    
-    private static String getUsage() {
-        return "usage: command dialect dest-dir [last-execution-time]";
-    }
-    
-    private static void printUsage() {
-        log.info(getUsage());
     }
 }

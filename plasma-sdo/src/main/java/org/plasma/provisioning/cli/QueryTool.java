@@ -35,6 +35,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdom2.Document;
@@ -60,60 +65,121 @@ import org.xml.sax.SAXException;
 import commonj.sdo.DataGraph;
 import commonj.sdo.helper.XMLDocument;
 
+/**
+ * Query tool. 
+ * <p></p> 
+ * <b>Usage:</b> java <@link org.plasma.provisioning.cli.QueryTool>  
+ * Option                          Description
+ * ------                          -----------
+ * --command <QueryToolAction>     the primary action or command performed by this tool - one of [compile, run] is expected
+ * --dest [File]                   the fully qualified tool output destination file or directory name
+ * --destType <ProvisioningTarget> a qualifier describing the output destination - one of [xsd, xmi] is expected
+ * --help                          prints help on this tool
+ * --namespace                     a single namespace URI
+ * --namespacePrefix               a single namespace prefix
+ * --silent                        whether to log or print no messages at all (typically for testing)
+ * --source [File]                 the fully qualified tool input source file or directory name
+ * --verbose                       whether to log or print detailed messages   
+*/
 public class QueryTool extends ProvisioningTool {
     
     private static Log log = LogFactory.getLog(
             QueryTool.class); 
-        
+    
+    /**
+     * Command line entry point. 
+     * <p></p> 
+     * <b>Usage:</b> java <@link org.plasma.provisioning.cli.QueryTool>  
+     * Option                          Description
+     * ------                          -----------
+     * --command <QueryToolAction>     the primary action or command performed by this tool - one of [compile, run] is expected
+     * --dest [File]                   the fully qualified tool output destination file or directory name
+     * --destType <ProvisioningTarget> a qualifier describing the output destination - one of [xsd, xmi] is expected
+     * --help                          prints help on this tool
+     * --namespace                     a single namespace URI
+     * --namespacePrefix               a single namespace prefix
+     * --silent                        whether to log or print no messages at all (typically for testing)
+     * --source [File]                 the fully qualified tool input source file or directory name
+     * --verbose                       whether to log or print detailed messages   
+    */
     public static void main(String[] args) 
         throws TransformerConfigurationException, 
         IOException, TransformerException, ClassNotFoundException {
-        
-        if (args.length != 6) {
-            printUsage();
-            return;
-        }
-        if (!args[0].startsWith("-")) {
-            printUsage();
-            return;
-        }
-        QueryToolAction command = QueryToolAction.valueOf(
-                args[0].substring(1));
 
-        File sourceFile = new File(args[1]);
+    	OptionParser parser = new OptionParser();    	  
+    	OptionSpecBuilder verboseOpt = parser.accepts( ProvisioningToolOption.verbose.name(), ProvisioningToolOption.verbose.getDescription() );    	 
+    	OptionSpecBuilder silentOpt = parser.accepts( ProvisioningToolOption.silent.name(), ProvisioningToolOption.silent.getDescription() );    	 
+    	
+    	OptionSpecBuilder helpOpt = parser.accepts( ProvisioningToolOption.help.name(), ProvisioningToolOption.help.getDescription() );    	 
+    	OptionSpecBuilder commandOpt = parser.accepts( ProvisioningToolOption.command.name(), 
+    			ProvisioningToolOption.command.getDescription() + " - one of [" + QueryToolAction.asString() + "] is expected");    	 
+    	commandOpt.withRequiredArg().ofType( QueryToolAction.class );    	 
+    	
+       	OptionSpec<File> srcOpt = parser.accepts( ProvisioningToolOption.source.name(), 
+    			ProvisioningToolOption.source.getDescription()).withOptionalArg().ofType( File.class );
+    	OptionSpec<File> destOpt = parser.accepts( ProvisioningToolOption.dest.name(), 
+    			ProvisioningToolOption.dest.getDescription()).withOptionalArg().ofType( File.class );
+    	OptionSpecBuilder destTypeOpt = parser.accepts( ProvisioningToolOption.destType.name(), 
+    			ProvisioningToolOption.destType.getDescription() + " - one of [" + ProvisioningTarget.asString() + "] is expected");    	 
+    	destTypeOpt.withRequiredArg().ofType( ProvisioningTarget.class );    	 
+    	OptionSpec<String> namespaceOpt = parser.accepts( ProvisioningToolOption.namespace.name(), 
+    			ProvisioningToolOption.namespace.getDescription()).withOptionalArg().ofType( String.class );
+    	OptionSpec<String> namespacePrefixOpt = parser.accepts( ProvisioningToolOption.namespacePrefix.name(), 
+    			ProvisioningToolOption.namespacePrefix.getDescription()).withOptionalArg().ofType( String.class );
+
+    	OptionSet options = parser.parse(args);  
+
+    	if (options.has(helpOpt)) {
+    		printUsage(parser, log);
+    		return;
+    	}
+    	
+    	if (!options.has(ProvisioningToolOption.command.name())) {
+    		if (!options.has(silentOpt))
+    		    printUsage(parser, log);
+    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.command.name() + "'");
+    	}
+    	QueryToolAction command = (QueryToolAction)options.valueOf(ProvisioningToolOption.command.name());
+
+    	File sourceFile = null;
+        if (options.has(srcOpt)) {
+        	sourceFile = srcOpt.value(options);
+    	}
+        else
+    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.source.name() + "'");
         if (!sourceFile.exists())
             throw new IllegalArgumentException("given source file '"
-                    + args[1] + "' does not exist");
-        File destFile = new File(args[2]);
+                    + sourceFile.getName() + "' does not exist");
+        
+        
+        File destFile = new File("./target/" + QueryTool.class.getSimpleName() + ".out");
+        if (options.has(destOpt)) {
+        	destFile = destOpt.value(options);
+    	}
         if (destFile.getParentFile() != null)
             if (!destFile.getParentFile().exists())
                 if (!destFile.getParentFile().mkdirs())
                     throw new IllegalArgumentException("directory path cannot be created for given dest file '"
-                        + args[2] + "' ");
+                        + destFile.getAbsolutePath() + "' ");
         
-        String destFileType = args[3];
-        if (destFileType == null || destFileType.trim().length() == 0)
-            throw new IllegalArgumentException("expected argument, destFileType"); 
-        
-        ProvisioningTarget targetType = null;
-        try {
-            targetType = ProvisioningTarget.valueOf(destFileType);
-        }
-        catch (IllegalArgumentException e) {
-        	List<String> displayValues = new ArrayList<String>();
-        	for (ProvisioningTarget v : ProvisioningTarget.values())
-        		displayValues.add(v.name());
-            throw new IllegalArgumentException("unknown target type '"
-                    + destFileType + "' - expected one of "
-                    + displayValues + "");
-        }	
+    	if (!options.has(ProvisioningToolOption.destType.name())) {
+    		if (!options.has(silentOpt))
+    		    printUsage(parser, log);
+    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.destType.name() + "'");
+    	}
+        ProvisioningTarget targetType = (ProvisioningTarget)options.valueOf(ProvisioningToolOption.destType.name());
     
-        String destNamespaceURI = args[4];
-        if (destNamespaceURI == null || destNamespaceURI.trim().length() == 0)
-            throw new IllegalArgumentException("expected argument, destNamespaceURI");            
-        String destNamespacePrefix = args[5];
-        if (destNamespacePrefix == null || destNamespacePrefix.trim().length() == 0)
-        	destNamespacePrefix = "tns";            
+    	if (!options.has(ProvisioningToolOption.namespace.name())) {
+    		if (!options.has(silentOpt))
+    		    printUsage(parser, log);
+    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.namespace.name() + "'");
+    	}
+    	String destNamespaceURI = (String)options.valueOf(ProvisioningToolOption.namespace.name());
+
+    	String destNamespacePrefix = "tns";
+    	if (options.has(ProvisioningToolOption.namespacePrefix.name())) {
+    		destNamespacePrefix = (String)options.valueOf(ProvisioningToolOption.namespacePrefix.name());
+    	}
                         
         switch (command) {
         case compile:
@@ -291,8 +357,4 @@ public class QueryTool extends ProvisioningTool {
         } 
         return query;
     }
-     
-    private static void printUsage() {
-        log.info("usage: -action sourceFile destFile destFileType destNamespaceURI [destNamespacePrefix]");
-    }
-}
+ }

@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.CassandraTool;
 import org.plasma.provisioning.cli.CassandraToolAction;
+import org.plasma.provisioning.cli.ProvisioningToolOption;
 import org.plasma.provisioning.cli.RDBDialect;
 import org.plasma.provisioning.cli.RDBTool;
 import org.plasma.provisioning.cli.RDBToolAction;
@@ -86,22 +87,20 @@ public class CassandraMojo extends ClassRealmMojo
     	        
         try
         {        
-        	CassandraToolAction toolAction = getToolAction(this.action);
-
             getLog().info( "executing tool: "  + CassandraTool.class.getName());                
         	if (this.schemaNames == null) {
     			String[] args = {
-	                	"-"+toolAction.name(), 
-	                	this.outputDirectory + "/" + outputFile
+                    	"-"+ProvisioningToolOption.command.name(), this.action,
+                    	"-"+ProvisioningToolOption.dest.name(), this.outputDirectory + "/" + outputFile,
 	                };
     			CassandraTool.main(args);
         	}
         	else {
         		String[] args = {
-                    	"-"+toolAction.name(), 
-                    	this.outputDirectory + "/" + outputFile,
-                    	this.namespaces != null ? this.namespaces : "http://" + outputFile, 
-                    	this.schemaNames
+                    	"-"+ProvisioningToolOption.command.name(), this.action,
+                    	"-"+ProvisioningToolOption.dest.name(), this.outputDirectory + "/" + outputFile,
+                    	"-"+ProvisioningToolOption.namespaces.name(), this.namespaces != null ? this.namespaces : "http://" + outputFile, 
+                    	"-"+ProvisioningToolOption.schemas.name(), this.schemaNames
                     };
         		CassandraTool.main(args);
         	}
@@ -113,19 +112,6 @@ public class CassandraMojo extends ClassRealmMojo
         {
             throw new MojoExecutionException(e.getMessage(), e);
         }        
-    }
-    
-    private CassandraToolAction getToolAction(String action)
-    {
-    	CassandraToolAction command = null;
-    	try {
-    		command = CassandraToolAction.valueOf(action);
-    	}
-    	catch (IllegalArgumentException e) {
-    		throw new IllegalArgumentException("'" + action + "' - expected one of ["
-    				+ CassandraToolAction.asString() + "]");
-    	}  
-    	return command;
     }
     
     

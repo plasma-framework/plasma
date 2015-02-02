@@ -14,6 +14,11 @@ public enum ProvisioningToolOption implements OptionEnum {
     dialect("the vocabulary or usage which is characteristic for this context"),
     /** the UML modeling or other platform for this context */
     platform("the UML modeling or other platform for this context"),
+    /** a single namespace URI */
+    namespace("a single namespace URI"),
+    /** a single namespace prefix */
+    namespacePrefix("a single namespace prefix"),
+
     /** a comma separated list of namespace URIs */
     namespaces("a comma separated list of namespace URIs"),
     /** a comma separated list of schema names */

@@ -9,6 +9,7 @@ import org.modeldriven.fuml.io.ResourceArtifact;
 import org.plasma.config.NamespaceProvisioning;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.provisioning.Model;
+import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.SchemaConverter;
 import org.plasma.provisioning.rdb.MySql55Converter;
 import org.plasma.provisioning.rdb.MySqlVersion;
@@ -93,7 +94,7 @@ public class RDBReader implements RDBConstants {
     		model = converter.buildModel(); 
     	    break;
     	default:
-    		throw new RDBException("unknown dialect, '"
+    		throw new ProvisioningException("unknown dialect, '"
     				+ dialect.name() + "'");
     	}
 	    

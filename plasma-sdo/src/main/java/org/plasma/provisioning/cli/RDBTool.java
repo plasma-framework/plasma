@@ -170,7 +170,7 @@ public class RDBTool extends ProvisioningTool implements RDBConstants {
         	case mysql: factory = new MySQLFactory();
         	    break;
         	default:
-        		throw new RDBException("unknown dialect, '"
+        		throw new ProvisioningException("unknown dialect, '"
         				+ dialect.name() + "'");
         	}
         	
