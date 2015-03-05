@@ -33,7 +33,7 @@ import commonj.sdo.helper.XSDHelper;
 
 public class PlasmaHelperContext implements HelperContext {
 
-    static public PlasmaHelperContext INSTANCE = initializeInstance();
+    static public volatile PlasmaHelperContext INSTANCE = initializeInstance();
 
     private PlasmaHelperContext() {       
     }
