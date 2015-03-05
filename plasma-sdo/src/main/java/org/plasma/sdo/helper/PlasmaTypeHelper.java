@@ -55,7 +55,7 @@ import commonj.sdo.helper.TypeHelper;
 public class PlasmaTypeHelper implements TypeHelper {
 
     private static Log log = LogFactory.getLog(PlasmaTypeHelper.class);
-    static public PlasmaTypeHelper INSTANCE = initializeInstance();
+    static public volatile PlasmaTypeHelper INSTANCE = initializeInstance();
     
     private Map<String, Type> namespaceQualifiedNameToTypeMap = new HashMap<String, Type>();
     private Map<String, List<Type>> namespaceToTypesMap = new HashMap<String, List<Type>>();
