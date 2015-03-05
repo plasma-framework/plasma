@@ -36,7 +36,7 @@ import fUML.Syntax.Classes.Kernel.DataType;
 
 public class PlasmaDataHelper implements DataHelper {
 
-	static public DataHelper INSTANCE = initializeInstance();
+	static public volatile DataHelper INSTANCE = initializeInstance();
 
 	private PlasmaDataHelper() {
 	}
