@@ -52,7 +52,7 @@ import fUML.Syntax.Classes.Kernel.PackageableElement;
 public class PlasmaRepository implements Repository {
 
     private static Log log = LogFactory.getLog(PlasmaRepository.class);
-    private static Repository instance;
+    private static volatile Repository instance;
     private static org.modeldriven.fuml.repository.Repository delegate;
     private RelationCache relationCache = new RelationCache();
     
