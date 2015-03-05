@@ -43,7 +43,7 @@ import commonj.sdo.helper.TypeHelper;
 public class PlasmaDataFactory implements DataFactory {
 
     private static Log log = LogFactory.getLog(PlasmaDataFactory.class);
-    static public PlasmaDataFactory INSTANCE = initializeInstance();
+    static public volatile PlasmaDataFactory INSTANCE = initializeInstance();
 
     private PlasmaDataFactory() {   	
     }
