@@ -78,7 +78,7 @@ public class PlasmaQueryHelper {
     private static Log log = LogFactory.getLog(
     		PlasmaQueryHelper.class); 
 
-    static public PlasmaQueryHelper INSTANCE = initializeInstance();
+    static public volatile PlasmaQueryHelper INSTANCE = initializeInstance();
 
     private PlasmaQueryHelper() {       
     }

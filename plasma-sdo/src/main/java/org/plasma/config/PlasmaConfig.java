@@ -63,7 +63,7 @@ import org.xml.sax.SAXException;
 public class PlasmaConfig {
 
     private static Log log = LogFactory.getLog(PlasmaConfig.class);
-    private static PlasmaConfig instance = null;
+    private static volatile PlasmaConfig instance = null;
     
     private static final String defaultConfigFileName = "plasma-config.xml";  
     private String configFileNameOrURIString;

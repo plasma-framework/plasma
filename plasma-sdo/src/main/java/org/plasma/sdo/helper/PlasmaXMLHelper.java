@@ -82,7 +82,7 @@ public class PlasmaXMLHelper implements XMLHelper {
 
     private static Log log = LogFactory.getLog(PlasmaXMLHelper.class);
     
-    static public PlasmaXMLHelper INSTANCE = initializeInstance();
+    static public volatile PlasmaXMLHelper INSTANCE = initializeInstance();
 
     private PlasmaXMLHelper() {       
     }

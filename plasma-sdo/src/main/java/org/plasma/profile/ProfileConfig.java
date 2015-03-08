@@ -47,8 +47,7 @@ import org.xml.sax.SAXException;
 public class ProfileConfig {
 
     private static Log log = LogFactory.getLog(ProfileConfig.class);
-    private static ProfileConfig instance = null;
-    
+    private static volatile ProfileConfig instance;
     private static final String defaultConfigFileName = "profile-config.xml";  
     private String configFileName;
     private long configFileLastModifiedDate = System.currentTimeMillis();

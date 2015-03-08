@@ -77,7 +77,7 @@ public class PlasmaXSDHelper implements XSDHelper {
     private static Log log = LogFactory.getLog(
     		PlasmaXSDHelper.class); 
 
-    static public PlasmaXSDHelper INSTANCE = initializeInstance();
+    static public volatile PlasmaXSDHelper INSTANCE = initializeInstance();
 
     private PlasmaXSDHelper() {       
     }

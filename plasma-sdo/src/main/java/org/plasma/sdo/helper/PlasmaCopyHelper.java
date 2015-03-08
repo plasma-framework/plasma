@@ -44,7 +44,7 @@ import commonj.sdo.helper.CopyHelper;
  */
 public class PlasmaCopyHelper implements CopyHelper {
 
-    static public PlasmaCopyHelper INSTANCE = initializeInstance();
+    static public volatile PlasmaCopyHelper INSTANCE = initializeInstance();
 
     private PlasmaCopyHelper() {       
     }

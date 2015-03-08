@@ -55,7 +55,7 @@ import commonj.sdo.Type;
 public class DataConverter {
     
     private static Log log = LogFactory.getFactory().getInstance(DataConverter.class);
-    static public DataConverter INSTANCE = initializeInstance();
+    static public volatile DataConverter INSTANCE = initializeInstance();
     public static final String FORMAT_PATTERN_TIME 		= "HH:mm:ss'.'SSS'Z'";
     public static final String FORMAT_PATTERN_DATE 		= "yyyy-MM-dd'T'HH:mm:ss";
 	// Note: the Java class for SDO dataTime datatype is String. This seems unfortunate

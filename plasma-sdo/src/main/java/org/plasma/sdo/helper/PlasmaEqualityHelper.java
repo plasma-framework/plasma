@@ -26,7 +26,7 @@ import commonj.sdo.helper.EqualityHelper;
 
 public class PlasmaEqualityHelper implements EqualityHelper {
 
-    static public PlasmaEqualityHelper INSTANCE = initializeInstance();
+    static public volatile PlasmaEqualityHelper INSTANCE = initializeInstance();
 
     private PlasmaEqualityHelper() {       
     }
