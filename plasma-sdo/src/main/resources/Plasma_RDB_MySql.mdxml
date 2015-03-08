@@ -8,7 +8,7 @@
 			<module resource='file:/C:/MagicDraw%20UML%2017.0%20SP6/profiles/UML_Standard_Profile.xml' autoloadType='ALWAYS_LOAD' readOnly='true' loadIndex='false' requiredVersion='-1' version='17.0_'>
 				<mount mountPoint='magicdraw_uml_standard_profile_v_0001' mountedOn='eee_1045467100313_135436_2938222'/>
 			</module>
-			<module resource='file:/C:/%3Cproject.dir%3E/Plasma_SDO_Profile.mdxml' autoloadType='ALWAYS_LOAD' readOnly='true' loadIndex='true' requiredVersion='-1'>
+			<module resource='file:/C:/%3Cproject.dir%3E/Plasma_SDO_Profile_v1_1.mdxml' autoloadType='ALWAYS_LOAD' readOnly='true' loadIndex='true' requiredVersion='-1'>
 				<mount mountPoint='_16_0_1_1707042b_1278513361573_159825_364' mountedOn='eee_1045467100313_135436_2938222'/>
 			</module>
 		</mountTable>
@@ -26,7 +26,7 @@
 					<packagedElement xmi:type='uml:Package' xmi:id='_17_0_6_1707042b_1376077133462_365530_1834777' name='any' visibility='public'>
 						<packagedElement xmi:type='uml:Class' xmi:id='_17_0_6_1707042b_1376081793381_415741_2560' name='GlobalVariable' visibility='public'>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376081793383_424199_2561' name='name' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -43,7 +43,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376081793384_33564_2562' name='value' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -64,7 +64,7 @@
 					<packagedElement xmi:type='uml:Package' xmi:id='_17_0_6_1707042b_1376077648022_200069_1850' name='5_5' visibility='public'>
 						<packagedElement xmi:type='uml:Class' xmi:id='_17_0_6_1707042b_1376077713161_851693_1856' name='GlobalVariable' visibility='public'>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376081520858_682743_2548' name='name' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -81,7 +81,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376081547713_602297_2554' name='value' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -103,7 +103,7 @@
 								<annotatedElement xmi:idref='_17_0_6_1707042b_1376078052330_950514_2258'/>
 							</ownedComment>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078052339_24048_2270' name='columnName' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -123,7 +123,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078052340_209972_2271' name='dataType' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -139,7 +139,7 @@
 								<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_17_0_6_1707042b_1376078052358_399312_2308' visibility='public'/>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078052341_183468_2272' name='nullable' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -155,7 +155,7 @@
 								<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_17_0_6_1707042b_1376078052359_471302_2312' visibility='public'/>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078052344_63695_2274' name='charMaxLength' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-Int'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-Int'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::Int' referentType='DataType'/>
 									</xmi:Extension>
@@ -171,7 +171,7 @@
 								<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_17_0_6_1707042b_1376078052361_87570_2320' visibility='public'/>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078052345_378445_2275' name='dataPrecision' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-Int'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-Int'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::Int' referentType='DataType'/>
 									</xmi:Extension>
@@ -187,7 +187,7 @@
 								<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_17_0_6_1707042b_1376078052362_473856_2324' visibility='public'/>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078052346_477525_2276' name='dataScale' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-Int'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-Int'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::Int' referentType='DataType'/>
 									</xmi:Extension>
@@ -203,7 +203,7 @@
 								<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_17_0_6_1707042b_1376078052363_825381_2328' visibility='public'/>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078052348_274977_2277' name='columnKey' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -219,7 +219,7 @@
 								<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_17_0_6_1707042b_1376078052364_757255_2332' visibility='public'/>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078052349_741238_2278' name='characterSetName' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -235,7 +235,7 @@
 								<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_17_0_6_1707042b_1376078052365_172840_2336' visibility='public'/>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078052350_611250_2279' name='owner' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -255,7 +255,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376078406010_688131_2474' name='columnComment' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -280,7 +280,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376171329622_502456_1676' name='columnType' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -293,7 +293,7 @@
 								<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_17_0_6_1707042b_1376171343779_112830_1678' visibility='public'/>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376171475642_953002_1684' name='octetMaxLength' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-Int'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-Int'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::Int' referentType='DataType'/>
 									</xmi:Extension>
@@ -523,7 +523,7 @@
 						</packagedElement>
 						<packagedElement xmi:type='uml:Class' xmi:id='_17_0_6_1707042b_1376082968614_741163_2610' name='TableConstraint' visibility='public'>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376083004017_476247_2614' name='name' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -540,7 +540,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376083054322_598771_2620' name='owner' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -557,7 +557,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376083371360_299349_2672' name='constraintType' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -608,7 +608,7 @@
 						</packagedElement>
 						<packagedElement xmi:type='uml:Class' xmi:id='_17_0_6_1707042b_1376085266566_362234_2813' name='TableColumnConstraint' visibility='public'>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376085349481_288353_2818' name='owner' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -625,7 +625,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376085436281_689581_2830' name='name' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -656,7 +656,7 @@
 						</packagedElement>
 						<packagedElement xmi:type='uml:Class' xmi:id='_17_0_6_1707042b_1376086240260_818994_2889' name='TableColumnKeyUsage' visibility='public'>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376086240262_749_2890' name='owner' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -673,7 +673,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376086240263_675148_2891' name='name' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -690,7 +690,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376086331623_676984_2911' name='columnName' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -707,7 +707,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376086450867_674332_2917' name='referencedTableSchema' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -724,7 +724,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376086482438_325496_2923' name='referencedTableName' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -741,7 +741,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376086506750_625903_2929' name='referencedColumnName' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -772,7 +772,7 @@
 						</packagedElement>
 						<packagedElement xmi:type='uml:Class' xmi:id='_17_0_6_1707042b_1376144743370_927586_2997' name='Table' visibility='public'>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376144780370_283189_3001' name='owner' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -789,7 +789,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376144816578_128329_3007' name='tableName' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -806,7 +806,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376144864010_332523_3015' name='autoIncrement' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-Boolean'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-Boolean'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::Boolean' referentType='DataType'/>
 									</xmi:Extension>
@@ -835,7 +835,7 @@
 								<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_17_0_6_1707042b_1376145415954_148550_3159' visibility='public'/>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1376150216448_721395_3281' name='tableComment' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -852,7 +852,7 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1379711390673_904658_1870' name='tableType' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -895,7 +895,7 @@
 						</packagedElement>
 						<packagedElement xmi:type='uml:Class' xmi:id='_17_0_6_1707042b_1379711142096_425205_1754' name='View' visibility='public'>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1379711243411_318390_1759' name='owner' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -912,14 +912,14 @@
 								</xmi:Extension>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1379711631718_891180_2015' name='isUpdatable' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
 								</type>
 							</ownedAttribute>
 							<ownedAttribute xmi:type='uml:Property' xmi:id='_17_0_6_1707042b_1379711688219_467518_2019' name='viewDefinition' visibility='private'>
-								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-String'>
+								<type xmi:type='uml:DataType' href='Plasma_SDO_Profile_v1_1.mdxml#plasma-sdo-profile-datatypes-String'>
 									<xmi:Extension extender='MagicDraw UML 17.0'>
 										<referenceExtension referentPath='Plasma SDO Profile::datatypes::String' referentType='DataType'/>
 									</xmi:Extension>
@@ -962,7 +962,7 @@
 				<referenceExtension referentPath='UML Standard Profile' referentType='Package'/>
 			</xmi:Extension>
 		</packagedElement>
-		<packagedElement xmi:type='uml:Profile' href='Plasma_SDO_Profile.mdxml#_16_0_1_1707042b_1278513361573_159825_364'>
+		<packagedElement xmi:type='uml:Profile' href='Plasma_SDO_Profile_v1_1.mdxml#_16_0_1_1707042b_1278513361573_159825_364'>
 			<xmi:Extension extender='MagicDraw UML 17.0'>
 				<referenceExtension referentPath='Plasma SDO Profile' referentType='Profile'/>
 			</xmi:Extension>
@@ -1299,7 +1299,7 @@
 		<privateProxies>
 			<proxy xmi:type='uml:Profile' xmi:id='_16_0_1_1707042b_1278513361573_159825_364' name='Plasma SDO Profile' visibility='public'>
 				<xmi:Extension extender='MagicDraw UML 17.0'>
-					<moduleExtension moduleRoot='::Plasma SDO Profile' moduleName='Plasma_SDO_Profile.mdxml' remoteProjectID='' remoteModuleVersion='1374171895683' moduleUsedByProject='true'/>
+					<moduleExtension moduleRoot='::Plasma SDO Profile' moduleName='Plasma_SDO_Profile_v1_1.mdxml' remoteProjectID='' remoteModuleVersion='1374171895683' moduleUsedByProject='true'/>
 				</xmi:Extension>
 				<packagedElement xmi:type='uml:Package' xmi:id='_16_0_1_1707042b_1280150752936_668515_249' name='datatypes' visibility='public'>
 					<packagedElement xmi:type='uml:DataType' xmi:id='plasma-sdo-profile-datatypes-Int' name='Int' visibility='public'/>

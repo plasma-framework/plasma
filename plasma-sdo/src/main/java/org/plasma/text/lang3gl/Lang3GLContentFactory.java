@@ -21,7 +21,7 @@
  */
 package org.plasma.text.lang3gl;
 
-import org.plasma.provisioning.Package;
+import org.plasma.metamodel.Package;
 import org.plasma.sdo.DataType;
 
 public interface Lang3GLContentFactory {

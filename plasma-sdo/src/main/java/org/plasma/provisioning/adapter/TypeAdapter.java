@@ -29,11 +29,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.Documentation;
-import org.plasma.provisioning.Enumeration;
-import org.plasma.provisioning.Property;
-import org.plasma.provisioning.Type;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.Documentation;
+import org.plasma.metamodel.Enumeration;
+import org.plasma.metamodel.Property;
+import org.plasma.metamodel.Type;
 
 public class TypeAdapter {
 	private static List<Documentation> EMPTY_DOC_LIST = new ArrayList<Documentation>();

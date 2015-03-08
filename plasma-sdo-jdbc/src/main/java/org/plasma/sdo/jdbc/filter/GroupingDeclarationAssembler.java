@@ -32,7 +32,7 @@ import org.plasma.query.visitor.DefaultQueryVisitor;
 import org.plasma.query.visitor.Traversal;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
-import org.plasma.sdo.access.model.EntityConstants;
+import org.plasma.sdo.access.provider.common.EntityConstants;
 import org.plasma.sdo.access.provider.jdbc.AliasMap;
 
 public class GroupingDeclarationAssembler extends DefaultQueryVisitor

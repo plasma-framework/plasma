@@ -6,10 +6,10 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.Enumeration;
-import org.plasma.provisioning.Model;
-import org.plasma.provisioning.Property;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.Enumeration;
+import org.plasma.metamodel.Model;
+import org.plasma.metamodel.Property;
 import org.plasma.sdo.access.client.JDBCPojoDataAccessClient;
 
 public class ConverterSupport {

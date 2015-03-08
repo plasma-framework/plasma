@@ -41,8 +41,9 @@ import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.plasma.common.bind.DefaultValidationEventHandler;
-import org.plasma.provisioning.Model;
+import org.plasma.metamodel.Model;
 import org.plasma.provisioning.ProvisioningException;
+import org.plasma.provisioning.ProvisioningModelAssembler;
 import org.plasma.provisioning.ProvisioningModelDataBinding;
 import org.plasma.provisioning.adapter.ModelAdapter;
 import org.plasma.provisioning.rdb.RDBConstants;
@@ -63,7 +64,7 @@ import org.xml.sax.SAXException;
  * of [oracle, mysql] is expected
  * --help                       prints help on this tool
  * --namespaces                 a comma separated list of namespace URIs
- * --platform <UMLDialect>      the UML modeling or other platform for this context - one of [papyrus, magicdraw] is expected
+ * --platform <UMLPlatform>      the UML modeling or other platform for this context - one of [papyrus, magicdraw] is expected
  * --schemas                    a comma separated list of schema names
  * --silent                     whether to log or print no messages at all (typically for testing)
  * --sourceType <UMLToolSource> a qualifier describing the input source - one of [xsd, rdb] is expected
@@ -74,7 +75,7 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
     private static Log log =LogFactory.getLog(
             UMLTool.class); 
       
-    /**
+	/**
      * Command line entry point. 
      * <p></p>
 	 * <b>Usage:</b> java <@link org.plasma.provisioning.cli.UMLTool>  
@@ -85,36 +86,38 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
 	 * of [oracle, mysql] is expected
 	 * --help                       prints help on this tool
 	 * --namespaces                 a comma separated list of namespace URIs
-	 * --platform <UMLDialect>      the UML modeling or other platform for this context - one of [papyrus, magicdraw] is expected
+	 * --platform <UMLPlatform>      the UML modeling or other platform for this context - one of [papyrus, magicdraw] is expected
 	 * --schemas                    a comma separated list of schema names
 	 * --silent                     whether to log or print no messages at all (typically for testing)
 	 * --sourceType <UMLToolSource> a qualifier describing the input source - one of [xsd, rdb] is expected
 	 * --verbose                    whether to log or print detailed messages
      */
     public static void main(String[] args) throws JAXBException, SAXException, IOException {
-        
-    	OptionParser parser = new OptionParser();    	  
-    	OptionSpecBuilder verboseOpt = parser.accepts( ProvisioningToolOption.verbose.name(), ProvisioningToolOption.verbose.getDescription() );    	 
-    	OptionSpecBuilder silentOpt = parser.accepts( ProvisioningToolOption.silent.name(), ProvisioningToolOption.silent.getDescription() );    	 
+        log.info(args.toString());
     	
-    	OptionSpecBuilder helpOpt = parser.accepts( ProvisioningToolOption.help.name(), ProvisioningToolOption.help.getDescription() );    	 
-    	OptionSpecBuilder sourceTypeOpt = parser.accepts( ProvisioningToolOption.sourceType.name(), 
+        OptionParser parser = new OptionParser();    	  
+        OptionSpecBuilder verboseOpt = parser.accepts( ProvisioningToolOption.verbose.name(), ProvisioningToolOption.verbose.getDescription() );    	 
+        OptionSpecBuilder silentOpt = parser.accepts( ProvisioningToolOption.silent.name(), ProvisioningToolOption.silent.getDescription() );    	 
+    	
+        OptionSpecBuilder helpOpt = parser.accepts( ProvisioningToolOption.help.name(), ProvisioningToolOption.help.getDescription() );    	 
+        OptionSpecBuilder sourceTypeOpt = parser.accepts( ProvisioningToolOption.sourceType.name(), 
     			ProvisioningToolOption.sourceType.getDescription() + " - one of [" + UMLToolSource.asString() + "] is expected");    	 
-    	sourceTypeOpt.withRequiredArg().ofType( UMLToolSource.class );    	 
-    	OptionSpecBuilder platformOpt = parser.accepts( ProvisioningToolOption.platform.name(), 
-    			ProvisioningToolOption.platform.getDescription() + " - one of [" + UMLDialect.asString() + "] is expected");    	 
-    	platformOpt.withRequiredArg().ofType( UMLDialect.class );    	 
-    	OptionSpecBuilder dialectOpt = parser.accepts( ProvisioningToolOption.dialect.name(), 
+        OptionSpecBuilder platformOpt = parser.accepts( ProvisioningToolOption.platform.name(), 
+    			ProvisioningToolOption.platform.getDescription() + " - one of [" + UMLPlatform.asString() + "] is expected");    	 
+        OptionSpecBuilder dialectOpt = parser.accepts( ProvisioningToolOption.dialect.name(), 
     			ProvisioningToolOption.dialect.getDescription()
     			+ " - used when " + ProvisioningToolOption.sourceType.name() + " is " + UMLToolSource.rdb.name()
     			+ " - one of [" + RDBDialect.asString() + "] is expected");    	 
-    	dialectOpt.withRequiredArg().ofType( RDBDialect.class ); 
     	OptionSpec<String> namespacesOpt = parser.accepts( ProvisioningToolOption.namespaces.name(), 
     			ProvisioningToolOption.namespaces.getDescription()).withOptionalArg().ofType( String.class );
     	OptionSpec<String> schemasOpt = parser.accepts( ProvisioningToolOption.schemas.name(), 
     			ProvisioningToolOption.schemas.getDescription()).withOptionalArg().ofType( String.class );
     	OptionSpec<File> destOpt = parser.accepts( ProvisioningToolOption.dest.name(), 
     			ProvisioningToolOption.dest.getDescription()).withOptionalArg().ofType( File.class );
+    	
+    	sourceTypeOpt.withRequiredArg().ofType( UMLToolSource.class );    	 
+    	platformOpt.withRequiredArg().ofType( UMLPlatform.class );    	 
+    	dialectOpt.withRequiredArg().ofType( RDBDialect.class ); 
 
     	OptionSet options = parser.parse(args);  
 
@@ -129,34 +132,6 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
     		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.sourceType.name() + "'");
     	}
     	UMLToolSource source = (UMLToolSource)options.valueOf(ProvisioningToolOption.sourceType.name());
-    	RDBDialect dialect = null;
-    	
-        switch (source) {
-        case rdb:
-        	if (!options.has(ProvisioningToolOption.dialect.name())) {
-        		if (!options.has(silentOpt))
-        		    printUsage(parser, log);
-        		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.dialect.name() + "'");
-        	}
-        	dialect = (RDBDialect)options.valueOf(ProvisioningToolOption.dialect.name());
-
-        	File dest = new File("./target/" + UMLTool.class.getSimpleName() + ".out");
-            if (options.has(destOpt)) {
-            	dest = destOpt.value(options);
-        	}
-            if (!dest.getParentFile().exists())
-            	dest.getParentFile().mkdirs();
-            break;
-        case xsd:
-        default:
-        	printUsage(parser, log);
-            throw new IllegalArgumentException("unsupported "+ProvisioningToolOption.sourceType.name()+" value '" + source + "'");
-        }
-        
-    	UMLDialect platform = UMLDialect.papyrus;
-    	if (options.has(ProvisioningToolOption.platform.name())) {
-    		platform = (UMLDialect)options.valueOf(ProvisioningToolOption.platform.name());
-    	}
     	
     	String[] schemaNames = null;
     	String[] namespaces = null;   	
@@ -179,8 +154,37 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
     		for (int i = 0; i < schemaNames.length; i++)
     			namespaces[i] = "http://" + schemaNames[i];   		
     	}
+    	if (namespaces == null) {
+    		namespaces = new String[1];
+    		namespaces[0] = "http://" + destOpt.value(options).getName();
+    	}    	
     	
-    	Model model = (new RDBReader()).read(dialect, schemaNames, namespaces);
+    	RDBDialect dialect = null;
+    	Model model = null;    	
+        switch (source) {
+        case rdb:
+        	if (!options.has(ProvisioningToolOption.dialect.name())) {
+        		if (!options.has(silentOpt))
+        		    printUsage(parser, log);
+        		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.dialect.name() + "'");
+        	}
+        	dialect = (RDBDialect)options.valueOf(ProvisioningToolOption.dialect.name());
+        	model = (new RDBReader()).read(dialect, schemaNames, namespaces);
+            break;
+        case uml:
+            ProvisioningModelAssembler modelAssembler = new ProvisioningModelAssembler();
+        	model = modelAssembler.getModel();
+            break;
+        case xsd:
+        default:
+        	printUsage(parser, log);
+            throw new IllegalArgumentException("unsupported "+ProvisioningToolOption.sourceType.name()+" value '" + source + "'");
+        }
+        
+    	UMLPlatform platform = UMLPlatform.papyrus;
+    	if (options.has(ProvisioningToolOption.platform.name())) {
+    		platform = (UMLPlatform)options.valueOf(ProvisioningToolOption.platform.name());
+    	}
 
     	File dest = new File("./target/" + UMLTool.class.getSimpleName() + ".out");
         if (options.has(destOpt)) {
@@ -206,17 +210,17 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
     			new FileInputStream(outFile));
     	}
     	
-	    ModelAdapter helper = 
+	    ModelAdapter validator = 
 				   new ModelAdapter(model);
 	    UMLModelAssembler umlAssembler = null;
 		switch (platform) {
 		case papyrus:
 			umlAssembler = new PapyrusModelAssembler(model, 
-    				namespaces[0], "tns");
+					namespaces[0], "tns");
 			break;
 		case magicdraw:
 			umlAssembler = new MDModelAssembler(model, 
-    				namespaces[0], "tns");
+					namespaces[0], "tns");
 			break;
 		}
 		umlAssembler.setDerivePackageNamesFromURIs(false);

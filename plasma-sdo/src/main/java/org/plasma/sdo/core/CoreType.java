@@ -39,6 +39,7 @@ import org.modeldriven.fuml.repository.RepositorylException;
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.config.TypeBinding;
+import org.plasma.config.adapter.TypeBindingAdapter;
 import org.plasma.sdo.Alias;
 import org.plasma.sdo.AssociationPath;
 import org.plasma.sdo.DataType;
@@ -125,7 +126,7 @@ public class CoreType implements PlasmaType {
         
         String lookupName = this.name;
         
-        TypeBinding binding = PlasmaConfig.getInstance().findTypeBinding(uri, typeName);
+        TypeBindingAdapter binding = PlasmaConfig.getInstance().findTypeBinding(uri, typeName);
         if (binding != null) {
         	if (binding.getLogicalName() != null && binding.getLogicalName().trim().length() > 0) {
         	    this.name = binding.getLogicalName().trim();
@@ -148,9 +149,11 @@ public class CoreType implements PlasmaType {
         // not exist, throw an error. 
         org.modeldriven.fuml.repository.Classifier repoClassifier = null;
         org.plasma.sdo.repository.Namespace repoNamespace = PlasmaRepository.getInstance().getNamespaceForUri(this.namespaceURI); 
-        String artifactQualifiedName = this.artifactURI + "#" + lookupName;
         if (repoNamespace != null) {
             String packageQualifiedName = repoNamespace.getQualifiedPackageName();
+        	if (log.isDebugEnabled())
+        		log.debug("found repo namespace/package "+packageQualifiedName+" (" 
+        	        + repoNamespace.getId() + ") linked to URI: " + this.namespaceURI);
             packageQualifiedName = packageQualifiedName + "." + lookupName;
             try {
                 repoClassifier = PlasmaRepository.getInstance().getClassifier(packageQualifiedName);
@@ -161,6 +164,7 @@ public class CoreType implements PlasmaType {
             }
         }
         else { // can be profile namespace URI itself        	
+            String artifactQualifiedName = this.artifactURI + "#" + lookupName;
         	try {
                 repoClassifier = PlasmaRepository.getInstance().getClassifier(artifactQualifiedName);
             }
@@ -202,9 +206,16 @@ public class CoreType implements PlasmaType {
     public String toString() {
     	return this.qname.toString();
     }
-
+    
     private void lazyLoadProperties() {
-        
+        synchronized (this) {
+    	    if (this.declaredPropertiesMap == null) {
+    		    _lazyLoadProperties();
+    	    }
+        }
+    }
+    
+    private void _lazyLoadProperties() {
         this.declaredPropertiesMap = new HashMap<String, PlasmaProperty>();
         this.declaredPropertiesList = new ArrayList<Property>();
                 
@@ -321,7 +332,6 @@ public class CoreType implements PlasmaType {
  
         }
     }
-
 
     /**
      * Returns the name of the type.
@@ -691,9 +701,15 @@ public class CoreType implements PlasmaType {
         if (this.instancePropertiesMap == null)
             lazyLoadProperties();
         List<String> aliasList = new ArrayList<String>();
-        String physicalName = (String)this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_STRING_PHYSICAL_NAME);
-        if (physicalName != null)
-            aliasList.add(physicalName);
+        String alias = (String)this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_STRING_PHYSICAL_NAME);
+        if (alias != null)
+            aliasList.add(alias);
+        alias = (String)this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_STRING_LOCAL_NAME);
+        if (alias != null)
+            aliasList.add(alias);
+        alias = (String)this.instancePropertiesMap.get(PlasmaProperty.INSTANCE_PROPERTY_STRING_BUSINESS_NAME);
+        if (alias != null)
+            aliasList.add(alias);
         return aliasList;
     }
 
@@ -1155,7 +1171,7 @@ public class CoreType implements PlasmaType {
         		repoClassifier);
         String repoTypeName = repoClassifier.getName();
 
-        TypeBinding binding = PlasmaConfig.getInstance().findTypeBinding(repoClassNamespaceURI, repoClassifier.getName());
+        TypeBindingAdapter binding = PlasmaConfig.getInstance().findTypeBinding(repoClassNamespaceURI, repoClassifier.getName());
         if (binding != null) {
         	if (binding.getLogicalName() != null && binding.getLogicalName().trim().length() > 0)
         		repoTypeName = binding.getLogicalName().trim();

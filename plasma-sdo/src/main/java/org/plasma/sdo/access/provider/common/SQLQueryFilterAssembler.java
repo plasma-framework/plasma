@@ -35,7 +35,6 @@ import org.plasma.query.model.QueryConstants;
 import org.plasma.query.model.RelationalOperator;
 import org.plasma.query.model.WildcardOperator;
 import org.plasma.sdo.access.DataAccessException;
-import org.plasma.sdo.access.model.EntityConstants;
 import org.plasma.sdo.helper.DataConverter;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
 

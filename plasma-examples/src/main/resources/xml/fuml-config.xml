@@ -36,7 +36,6 @@
 
     <!-- adapters -->
     <Adapter type="assembly" className="OpaqueExpression" adapterClassName="org.modeldriven.fuml.assembly.adapter.OpaqueExpressionAdapter"/>    
-    <Adapter type="assembly" className="Profile" adapterClassName="org.modeldriven.fuml.assembly.adapter.ProfileAdapter"/>    
     
     <ExtensionPackage name="org.modeldriven.fuml.repository.ext"/>
     <ExtensionPackage name="org.plasma.sdo.profile"/>

@@ -21,8 +21,8 @@
  */
 package org.plasma.text.lang3gl;
 
-import org.plasma.provisioning.Enumeration;
-import org.plasma.provisioning.Package;
+import org.plasma.metamodel.Enumeration;
+import org.plasma.metamodel.Package;
 
 public interface EnumerationFactory extends Lang3GLContentFactory {
 	

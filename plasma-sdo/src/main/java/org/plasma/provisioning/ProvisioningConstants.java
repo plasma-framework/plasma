@@ -23,7 +23,7 @@ package org.plasma.provisioning;
 
 public interface ProvisioningConstants {
     
-	public static String PROVISIONING_NAMESPACE_URI = "http://www.servicelabs.org/plasma/provisioning";
+	public static String PROVISIONING_NAMESPACE_URI = "http://www.terrameta.org/plasma/metamodel";
 	
     public final static String TEMPLATE_PARAM_NAME_PACKAGE_CONFIG = "cfg";
     public final static String TEMPLATE_PARAM_NAME_TARGET_DIRECTORY = "dir";

@@ -26,6 +26,10 @@ public enum UMLToolSource implements OptionEnum {
 	 * An XML Schema model provisioning source type
 	 */
     xsd("An XML Schema model provisioning source type"),
+	/**
+	 * A UML model provisioning source type
+	 */
+    uml("A UML model provisioning source type"),
     /**
      * A relational database (RDB) model provisioning source type
      */

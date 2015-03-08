@@ -26,5 +26,5 @@
 // Generated on: 2011.04.12 at 12:34:50 PM EDT 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.servicelabs.org/plasma/query", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.terrameta.org/plasma/query", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.plasma.query.model;

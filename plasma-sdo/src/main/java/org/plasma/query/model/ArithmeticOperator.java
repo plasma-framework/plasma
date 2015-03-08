@@ -38,7 +38,7 @@ import org.plasma.query.visitor.QueryVisitor;
  * <pre>
  * &lt;complexType name="ArithmeticOperator">
  *   &lt;simpleContent>
- *     &lt;extension base="&lt;http://www.servicelabs.org/plasma/query>ArithmeticOperatorValues">
+ *     &lt;extension base="&lt;http://www.terrameta.org/plasma/query>ArithmeticOperatorValues">
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>

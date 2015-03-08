@@ -53,7 +53,7 @@ import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.DataAccessException;
-import org.plasma.sdo.access.model.EntityConstants;
+import org.plasma.sdo.access.provider.common.EntityConstants;
 import org.plasma.sdo.access.provider.common.SQLQueryFilterAssembler;
 import org.plasma.sdo.access.provider.jdbc.AliasMap;
 import org.plasma.sdo.helper.PlasmaTypeHelper;

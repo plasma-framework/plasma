@@ -34,6 +34,8 @@ import org.modeldriven.fuml.repository.Class_;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.config.PropertyBinding;
 import org.plasma.config.TypeBinding;
+import org.plasma.config.adapter.PropertyBindingAdapter;
+import org.plasma.config.adapter.TypeBindingAdapter;
 import org.plasma.sdo.Alias;
 import org.plasma.sdo.Concurrent;
 import org.plasma.sdo.DataFlavor;
@@ -101,7 +103,7 @@ public class CoreProperty implements PlasmaProperty {
         if (this.name == null)
         	throw new IllegalArgumentException("expected name argument");
         if (containingType != null) {
-	        PropertyBinding binding = PlasmaConfig.getInstance().findPropertyBinding(containingType.getURI(), 
+	        PropertyBindingAdapter binding = PlasmaConfig.getInstance().findPropertyBinding(containingType.getURI(), 
 	        		containingType.getName(), name);
 	        if (binding != null) {
 	        	if (binding.getLogicalName() != null && binding.getLogicalName().trim().length() > 0)
@@ -135,7 +137,7 @@ public class CoreProperty implements PlasmaProperty {
                     + this.type.getName());  
         	this.name = getDerivedName(this.type); 
         }
-        PropertyBinding binding = PlasmaConfig.getInstance().findPropertyBinding(containingType.getURI(), 
+        PropertyBindingAdapter binding = PlasmaConfig.getInstance().findPropertyBinding(containingType.getURI(), 
         		containingType.getName(), name);
         if (binding != null) {
         	if (binding.getLogicalName() != null && binding.getLogicalName().trim().length() > 0)
@@ -751,7 +753,7 @@ public class CoreProperty implements PlasmaProperty {
                 repoClass);
         String repoTypeName = repoClass.getName();
 
-        TypeBinding binding = PlasmaConfig.getInstance().findTypeBinding(repoClassNamespaceURI, repoClass.getName());
+        TypeBindingAdapter binding = PlasmaConfig.getInstance().findTypeBinding(repoClassNamespaceURI, repoClass.getName());
         if (binding != null) {
         	if (binding.getLogicalName() != null && binding.getLogicalName().trim().length() > 0)
         		repoTypeName = binding.getLogicalName().trim();
@@ -761,7 +763,7 @@ public class CoreProperty implements PlasmaProperty {
         String repoPropertyName = repoProperty.getName();
         
         // lookup any property binding customization
-        PropertyBinding propertyBinding = PlasmaConfig.getInstance().findPropertyBinding(repoClassNamespaceURI, 
+        PropertyBindingAdapter propertyBinding = PlasmaConfig.getInstance().findPropertyBinding(repoClassNamespaceURI, 
         		repoClass.getName(), repoProperty.getName());
         if (propertyBinding != null) {
         	if (propertyBinding.getLogicalName() != null && propertyBinding.getLogicalName().trim().length() > 0)

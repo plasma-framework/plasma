@@ -22,7 +22,7 @@
 package org.plasma.query.model;
 
 import org.plasma.query.Wildcard;
-import org.plasma.sdo.access.model.EntityConstants;
+import org.plasma.sdo.access.provider.common.EntityConstants;
 
 public interface QueryConstants 
 {    

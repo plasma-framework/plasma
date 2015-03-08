@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cfg:ProfileConfiguration  
     xmlns:cfg="http://www.plasma.org/profile">
+    
+    <!-- Note the namespace URI's  here must match the respective namespace mapping targets in the active FUML config -->
   
     <!-- MagicDraw Profile Versions -->
-    <Artifact urn="Plasma_SDO_Profile.mdxml" namespaceUri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"/>
+    <Artifact urn="Plasma_SDO_Profile_v1_1.mdxml" 
+        id="eee_1045467100313_135436_1" version="1.1" 
+        namespaceUri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"
+        umlNamespaceUri="http://schema.omg.org/spec/UML/2.1.2" umlVersion="2.1.2" 
+        xmiNamespaceUri="http://schema.omg.org/spec/XMI/2.1" xmiVersion="2.1"/>
     
     <!-- Papyrus Profile Versions -->
-    <Artifact urn="PlasmaSDO.profile.uml" namespaceUri="http:///schemas/PlasmaSDOProfile/_B_s5sDSPEeS0BI8SXekDLw/26"/>
-    <Artifact urn="PlasmaSDODataTypes.uml" namespaceUri="http:///schemas/PlasmaSDODataTypes"/>
-  
+    <Artifact urn="PlasmaSDO.profile_v1_1.uml" 
+        id="_Ta1lIMTtEeSkYpwPkZ5I3w"  version="1.1"
+        namespaceUri="http:///schemas/PlasmaSDOProfile/_Ta1lIMTtEeSkYpwPkZ5I3w/0"
+        umlNamespaceUri="http://www.eclipse.org/uml2/5.0.0/UML" umlVersion="5.0.0" 
+        xmiNamespaceUri="http://www.omg.org/spec/XMI/20131001" xmiVersion="20131001"
+        ecoreNamespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
+    <Artifact urn="PlasmaSDODataTypes_v1_1.uml" 
+        id="_Z68-YCG2EeSfsoM4aIlAPw"  version="1.1"
+        namespaceUri="http:///schemas/PlasmaSDODataTypes/_Z68-YCG2EeSfsoM4aIlAPw"
+        umlNamespaceUri="http://www.eclipse.org/uml2/5.0.0/UML" umlVersion="5.0.0"        
+        xmiNamespaceUri="http://www.omg.org/spec/XMI/20131001" xmiVersion="20131001"
+        ecoreNamespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
+   
 </cfg:ProfileConfiguration>   

@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="FunctionArg">
  *   &lt;simpleContent>
- *     &lt;extension base="&lt;http://www.servicelabs.org/plasma/query>AbstractFunctionArg">
+ *     &lt;extension base="&lt;http://www.terrameta.org/plasma/query>AbstractFunctionArg">
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/simpleContent>

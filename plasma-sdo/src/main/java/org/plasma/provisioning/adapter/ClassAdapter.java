@@ -21,8 +21,8 @@
  */
 package org.plasma.provisioning.adapter;
 
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.Type;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.Type;
 
 public class ClassAdapter extends TypeAdapter {
 

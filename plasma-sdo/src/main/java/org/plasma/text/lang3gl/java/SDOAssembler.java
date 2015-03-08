@@ -27,11 +27,11 @@ import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.Documentation;
-import org.plasma.provisioning.Enumeration;
-import org.plasma.provisioning.Model;
-import org.plasma.provisioning.Package;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.Documentation;
+import org.plasma.metamodel.Enumeration;
+import org.plasma.metamodel.Model;
+import org.plasma.metamodel.Package;
 import org.plasma.text.lang3gl.ClassFactory;
 import org.plasma.text.lang3gl.DefaultStreamAssembler;
 import org.plasma.text.lang3gl.EnumerationFactory;

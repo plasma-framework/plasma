@@ -2,11 +2,15 @@ package org.plasma.xml.uml;
 
 import org.jdom2.Element;
 import org.jdom2.Namespace;
-import org.plasma.provisioning.Model;
+import org.plasma.metamodel.Model;
+import org.plasma.profile.ProfileConfig;
+import org.plasma.profile.ProfileURN;
+import org.plasma.profile.adapter.ProfileArtifactAdapter;
 import org.plasma.query.Query;
 import org.plasma.xml.schema.Schema;
 
 public class MDModelAssembler extends DefaultUMLModelAssembler implements UMLModelAssembler {
+	private ProfileArtifactAdapter profile; 
 	public MDModelAssembler(Model model, String destNamespaceURI,
     		String destNamespacePrefix) {
 		super(model, destNamespaceURI, destNamespacePrefix);
@@ -28,12 +32,13 @@ public class MDModelAssembler extends DefaultUMLModelAssembler implements UMLMod
 	}
 	
 	private void construct() {
-	    // FIXME: hard baked namespaces w/versions
-	    this.umlNs = Namespace.getNamespace("uml", "http://schema.omg.org/spec/UML/2.1.2"); 
-	    this.xmiNs = Namespace.getNamespace("xmi", "http://schema.omg.org/spec/XMI/2.1"); 
-	    this.plasmaNs = Namespace.getNamespace("Plasma_SDO_Profile", "http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"); 
-	    this.xmiVersion = "2.1";
-	    this.dataTypeHRefPrefix = "Plasma_SDO_Profile.mdxml#plasma-sdo-profile-datatypes-";
+		// FIXME profile version as arg
+		this.profile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA___SDO___PROFILE___V_1___1___MDXML);
+	    this.umlNs = Namespace.getNamespace("uml", this.profile.getUmlNamespaceUri()); 
+	    this.xmiNs = Namespace.getNamespace("xmi", this.profile.getXmiNamespaceUri()); 
+	    this.plasmaNs = Namespace.getNamespace("Plasma_SDO_Profile", this.profile.getNamespaceUri()); 
+	    this.xmiVersion = this.profile.getXmiVersion();
+	    this.dataTypeHRefPrefix = this.profile.getUrn().value() + "#plasma-sdo-profile-datatypes-";
 	}
 	
 	protected Element buildProfileApplication() {

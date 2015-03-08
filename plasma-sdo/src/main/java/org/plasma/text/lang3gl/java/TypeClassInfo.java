@@ -21,8 +21,8 @@
  */
 package org.plasma.text.lang3gl.java;
 
-import org.plasma.provisioning.ClassRef;
-import org.plasma.provisioning.DataTypeRef;
+import org.plasma.metamodel.ClassRef;
+import org.plasma.metamodel.DataTypeRef;
 import org.plasma.sdo.DataType;
 
 public class TypeClassInfo {

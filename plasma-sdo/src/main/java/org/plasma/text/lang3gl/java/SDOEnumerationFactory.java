@@ -21,10 +21,10 @@
  */
 package org.plasma.text.lang3gl.java;
 
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.Enumeration;
-import org.plasma.provisioning.EnumerationLiteral;
-import org.plasma.provisioning.Package;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.Enumeration;
+import org.plasma.metamodel.EnumerationLiteral;
+import org.plasma.metamodel.Package;
 import org.plasma.sdo.PlasmaEnum;
 import org.plasma.text.lang3gl.EnumerationFactory;
 import org.plasma.text.lang3gl.Lang3GLContext;

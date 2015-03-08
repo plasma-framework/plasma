@@ -52,7 +52,7 @@ public class SchemaDataBinding implements DataBinding {
     public static Class<?>[] FACTORIES = { 
     	org.plasma.xml.schema.ObjectFactory.class,
     	org.plasma.xml.sdox.ObjectFactory.class,
-    	org.plasma.provisioning.ObjectFactory.class,
+    	org.plasma.metamodel.ObjectFactory.class,
     };
 
     @SuppressWarnings("unused")

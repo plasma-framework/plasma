@@ -29,9 +29,9 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.io.StreamAssembler;
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.Package;
-import org.plasma.provisioning.Model;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.Model;
+import org.plasma.metamodel.Package;
 import org.plasma.text.TextException;
 
 public abstract class DefaultStreamAssembler extends DefaultLang3GLAssembler 

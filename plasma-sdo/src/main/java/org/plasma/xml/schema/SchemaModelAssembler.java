@@ -33,15 +33,15 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.ClassAppInfo;
-import org.plasma.provisioning.DataTypeRef;
-import org.plasma.provisioning.Documentation;
-import org.plasma.provisioning.Model;
-import org.plasma.provisioning.ModelAppInfo;
-import org.plasma.provisioning.PropertyAppInfo;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.ClassAppInfo;
+import org.plasma.metamodel.DataTypeRef;
+import org.plasma.metamodel.Documentation;
+import org.plasma.metamodel.Model;
+import org.plasma.metamodel.ModelAppInfo;
+import org.plasma.metamodel.PropertyAppInfo;
+import org.plasma.metamodel.VisibilityType;
 import org.plasma.provisioning.ProvisioningConstants;
-import org.plasma.provisioning.VisibilityType;
 import org.plasma.provisioning.adapter.ModelAdapter;
 import org.plasma.provisioning.adapter.TypeAdapter;
 import org.plasma.sdo.DataFlavor;
@@ -54,6 +54,7 @@ import org.plasma.sdo.helper.PlasmaXSDHelper;
 import org.plasma.sdo.repository.Comment;
 import org.plasma.xml.sdox.BaseDataGraphType;
 import org.plasma.xml.sdox.SDOXConstants;
+
 
 
 import commonj.sdo.Type;
@@ -181,7 +182,7 @@ public class SchemaModelAssembler {
         
 		
 		// add datatype attributes and elements
-        for (org.plasma.provisioning.Property prop : adapter.getDeclaredPropertiesArray()) {
+        for (org.plasma.metamodel.Property prop : adapter.getDeclaredPropertiesArray()) {
         	PlasmaProperty property = (PlasmaProperty)sdoType.getProperty(prop.getName());
         	if (!(prop.getType() instanceof DataTypeRef))
         		continue; // datatype prop
@@ -234,7 +235,7 @@ public class SchemaModelAssembler {
 	
 	private void addReferenceElements(ComplexType complexType, TypeAdapter adapter, PlasmaType sdoType) {
         // add reference elements
-        for (org.plasma.provisioning.Property prop : adapter.getDeclaredPropertiesArray()) {
+        for (org.plasma.metamodel.Property prop : adapter.getDeclaredPropertiesArray()) {
         	PlasmaProperty property = (PlasmaProperty)sdoType.getProperty(prop.getName());
         	if (prop.getType() instanceof DataTypeRef)
         		continue; // datatype prop
@@ -484,7 +485,7 @@ public class SchemaModelAssembler {
 	}
 	
     private Element buildReferenceElementModel(TypeAdapter adapter, PlasmaType type, 
-    		org.plasma.provisioning.Property prop, PlasmaProperty property, Schema schema) {
+    		org.plasma.metamodel.Property prop, PlasmaProperty property, Schema schema) {
         Element element = new Element();
         element.setName(PlasmaXSDHelper.INSTANCE.getLocalName(property));        
         
@@ -533,7 +534,7 @@ public class SchemaModelAssembler {
     }
  
     private Element buildDataElementModel(TypeAdapter adapter, PlasmaType type, 
-    		org.plasma.provisioning.Property prop, PlasmaProperty property, Schema schema) {
+    		org.plasma.metamodel.Property prop, PlasmaProperty property, Schema schema) {
         Element element = new Element();
         element.setName(PlasmaXSDHelper.INSTANCE.getLocalName(property));
         if (property.getRestriction() == null) {
@@ -573,7 +574,7 @@ public class SchemaModelAssembler {
     }
     
     private Attribute buildDataAttributeModel(TypeAdapter adapter, PlasmaType type, 
-    		org.plasma.provisioning.Property prop, PlasmaProperty property, Schema schema) 
+    		org.plasma.metamodel.Property prop, PlasmaProperty property, Schema schema) 
     {
     	Attribute attr = new Attribute();
         attr.setName(PlasmaXSDHelper.INSTANCE.getLocalName(property));

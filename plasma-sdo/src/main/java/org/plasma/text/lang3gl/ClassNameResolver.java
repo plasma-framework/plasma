@@ -21,8 +21,8 @@
  */
 package org.plasma.text.lang3gl;
 
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.ClassRef;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.ClassRef;
 
 public interface ClassNameResolver {
 	

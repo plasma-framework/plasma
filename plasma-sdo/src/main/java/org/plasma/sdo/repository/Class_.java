@@ -26,12 +26,10 @@ import java.util.List;
 
 import org.modeldriven.fuml.repository.OpaqueBehavior;
 
-public class Class_ extends Classifier {
-	private org.modeldriven.fuml.repository.Class_ class_;
+public class Class_ extends Classifier<org.modeldriven.fuml.repository.Class_> {
 
 	public Class_(org.modeldriven.fuml.repository.Class_ class_) {
 		super(class_);
-		this.class_ = class_;
 	}
 	
 	public String findOpaqueBehaviorBody(String name, String language) {
@@ -46,7 +44,7 @@ public class Class_ extends Classifier {
 			boolean supressError) {
 		
 		String result = null;
-		for (OpaqueBehavior behavior : this.class_.getOpaqueBehaviors()) {
+		for (OpaqueBehavior behavior : ((org.modeldriven.fuml.repository.Class_)this.element).getOpaqueBehaviors()) {
 			if (behavior.getName().equals(name) && behavior.getLanguage().equals(language)) {
 				result = behavior.getBody();
 			}				
@@ -61,7 +59,7 @@ public class Class_ extends Classifier {
 	public List<OpaqueBehavior> getOpaqueBehaviors(String language) {
 		
 		List<OpaqueBehavior> result = new ArrayList<OpaqueBehavior>();
-		for (OpaqueBehavior behavior : this.class_.getOpaqueBehaviors()) {
+		for (OpaqueBehavior behavior : ((org.modeldriven.fuml.repository.Class_)this.element).getOpaqueBehaviors()) {
 			if (behavior.getLanguage().equalsIgnoreCase(language)) {
 				result.add(behavior);
 			}				

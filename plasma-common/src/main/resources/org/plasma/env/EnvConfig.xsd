@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v5 U (http://www.xmlspy.com) by Anh-Tuan Le (SRA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://www.plasma.org/env"
+    xmlns:env="http://www.plasma.org/env"
+    elementFormDefault="qualified" 
+    attributeFormDefault="unqualified">
+    <xs:element name="DeploymentRealm">
+		<xs:complexType>
+			<xs:attribute name="name" type="env:EnvName" use="required"/>
+		</xs:complexType>
+    </xs:element>
+
+	<xs:simpleType name="EnvName">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DESKTOP"/>
+			<xs:enumeration value="DESKTOPECON"/>
+			<xs:enumeration value="QA"/>
+			<xs:enumeration value="SB"/>
+			<xs:enumeration value="DEV"/>
+			<xs:enumeration value="DEVB"/>
+			<xs:enumeration value="DEVTEST"/>
+			<xs:enumeration value="DEMO"/>
+			<xs:enumeration value="PRODTEST"/>
+			<xs:enumeration value="TESTB"/>
+			<xs:enumeration value="PROD"/>
+			<xs:enumeration value="ECON"/>
+			<xs:enumeration value="ESDT"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

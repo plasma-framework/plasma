@@ -50,8 +50,8 @@ import org.plasma.query.Wildcard;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="pathElement" type="{http://www.servicelabs.org/plasma/query}AbstractPathElement"/>
- *         &lt;element ref="{http://www.servicelabs.org/plasma/query}Where" minOccurs="0"/>
+ *         &lt;element name="pathElement" type="{http://www.terrameta.org/plasma/query}AbstractPathElement"/>
+ *         &lt;element ref="{http://www.terrameta.org/plasma/query}Where" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

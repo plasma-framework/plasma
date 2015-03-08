@@ -42,8 +42,6 @@ import org.plasma.query.model.WildcardPathElement;
 import org.plasma.query.model.WildcardProperty;
 import org.plasma.query.visitor.DefaultQueryVisitor;
 import org.plasma.query.visitor.QueryVisitor;
-import org.plasma.sdo.PlasmaProperty;
-import org.plasma.sdo.PlasmaType;
 
 import commonj.sdo.Type;
 
@@ -412,7 +410,7 @@ public class PropertySelectionCollector extends CollectorSupport
         StringBuilder buf = new StringBuilder();
 		Iterator<Type> typeIter = this.propertyMap.keySet().iterator();
         while (typeIter.hasNext()) {
-        	PlasmaType type = (PlasmaType)typeIter.next();
+        	Type type = typeIter.next();
         	buf.append("\n" + type.getURI() + "#" + type.getName());
         	List<String> names = this.propertyMap.get(type);
             for (String name : names) {
@@ -426,7 +424,7 @@ public class PropertySelectionCollector extends CollectorSupport
         StringBuilder buf = new StringBuilder();
 		Iterator<Type> typeIter = this.inheritedPropertyMap.keySet().iterator();
         while (typeIter.hasNext()) {
-        	PlasmaType type = (PlasmaType)typeIter.next();
+        	Type type = typeIter.next();
         	buf.append("\n" + type.getURI() + "#" + type.getName());
         	List<String> names = this.inheritedPropertyMap.get(type);
             for (String name : names) {

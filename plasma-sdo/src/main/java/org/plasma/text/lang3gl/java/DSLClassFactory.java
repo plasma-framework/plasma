@@ -30,11 +30,11 @@ import java.util.TreeMap;
 
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.ClassRef;
-import org.plasma.provisioning.DataTypeRef;
-import org.plasma.provisioning.Package;
-import org.plasma.provisioning.Property;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.ClassRef;
+import org.plasma.metamodel.DataTypeRef;
+import org.plasma.metamodel.Package;
+import org.plasma.metamodel.Property;
 import org.plasma.provisioning.adapter.FieldAdapter;
 import org.plasma.query.DataProperty;
 import org.plasma.query.Expression;

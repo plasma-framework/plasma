@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="nameType" use="required" type="{http://www.servicelabs.org/plasma/query}ProjectionNameType" />
+ *       &lt;attribute name="nameType" use="required" type="{http://www.terrameta.org/plasma/query}ProjectionNameType" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>

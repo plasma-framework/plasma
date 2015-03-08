@@ -21,6 +21,8 @@
  */
 package org.plasma.provisioning;
 
+import org.plasma.metamodel.Model;
+
 
 public interface SchemaConverter {
 	public Model buildModel();

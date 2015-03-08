@@ -44,79 +44,70 @@ import org.plasma.sdo.profile.SDOXmlProperty;
 import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 
-public class Property extends Element {
+public class Property extends Element<org.modeldriven.fuml.repository.Property> {
 
-	private org.modeldriven.fuml.repository.Property property;
     /** Cached locally as the call into FUML RI property is
      * goes into upperValue etc... and is showing up in
      * CPU profiling output. 
      */
 	private Boolean isMany;
 	
-	@SuppressWarnings("unused")
-	private Property() {}
-	
 	public Property(org.modeldriven.fuml.repository.Property property) {
-		super();
-		this.property = property;
+		super(property);
 	}
 	
 	public String toString() {
-		if (this.property.getName() != null) {
-			return this.property.getName();
+		if (this.element.getName() != null) {
+			return this.element.getName();
 		}
 		else {
-			return this.property.getType().getName();
+			return this.element.getType().getName();
 		}
-	}
-	
-	public String getName() {
-		return this.property.getName();
 	}
 	
 	public Object findPropertyDefault() {
-		return this.property.findPropertyDefault();
+		return this.element.findPropertyDefault();
 	}
 	
     public boolean isMany() {    	
     	if (this.isMany == null) {
-    		this.isMany = !this.property.isSingular();
+    		this.isMany = !this.element.isSingular();
     	}
     	return this.isMany.booleanValue();
     }
     
     public boolean isNullable() {
-        return !this.property.isRequired();
+        return !this.element.isRequired();
     }
 	
 	public org.modeldriven.fuml.repository.Property getOpposite() {
-		return this.property.getOpposite();
+		return this.element.getOpposite();
 	}
 	 
 	public List<Comment> getComments() {
 		List<Comment> result = new ArrayList<Comment>();
-		for (fUML.Syntax.Classes.Kernel.Comment comment : property.getDelegate().ownedComment)
+		for (fUML.Syntax.Classes.Kernel.Comment comment : element.getDelegate().ownedComment)
 			result.add(new Comment(comment));
 		return result;	
 	}
 	
 	public boolean isDataType() {
-		return this.property.getType().isDataType();
+		return this.element.getType().isDataType();
 	}
 	
 	public VisibilityKind getVisibility()
 	{
-        return this.property.getDelegate().visibility;		
+        return this.element.getDelegate().visibility;		
 	}	
 	
 	public boolean getIsReadonly()
 	{
-		return this.property.getDelegate().isReadOnly;
+		return this.element.getDelegate().isReadOnly;
 	}
 	
     public String findPhysicalName() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         validate(stereotypes);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
@@ -130,13 +121,13 @@ public class Property extends Element {
         }
         else
             throw new PlasmaRuntimeException("no stereotypes found for property, '"
-                + property.getClass_().getName() + "." + property.getName() + "'");
+                + element.getClass_().getName() + "." + element.getName() + "'");
         return null;
     }    
 
     public String getLocalName() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         validate(stereotypes);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
@@ -151,13 +142,13 @@ public class Property extends Element {
         }
         else
             throw new PlasmaRuntimeException("no stereotypes found for property, '"
-                + property.getClass_().getName() + "." + property.getName() + "'");
+                + element.getClass_().getName() + "." + element.getName() + "'");
         return null;
     } 
     
     public SDOAlias findAlias() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOAlias) {
@@ -168,7 +159,7 @@ public class Property extends Element {
     }        
 
     public SDOKey findKey() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOKey) {
@@ -179,7 +170,7 @@ public class Property extends Element {
 	}
     
     public org.modeldriven.fuml.repository.Property findKeySupplier() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOKey) {
@@ -197,7 +188,7 @@ public class Property extends Element {
 	}  
     
     public SDOConcurrent findConcurrent() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -209,7 +200,7 @@ public class Property extends Element {
     
 
     public SDOTemporal findTemporal() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOTemporal) {
@@ -220,7 +211,7 @@ public class Property extends Element {
 	}
 
     public SDOEnumerationConstraint findEnumerationConstraint() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOEnumerationConstraint) {
@@ -232,7 +223,7 @@ public class Property extends Element {
     
 
     public SDOValueSetConstraint findValueSetConstraint() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOValueSetConstraint) {
@@ -243,7 +234,7 @@ public class Property extends Element {
 	}
     
     public SDOValueConstraint findValueConstraint() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOValueConstraint) {
@@ -254,7 +245,7 @@ public class Property extends Element {
 	}
     
     public SDOSort findSort() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOSort) {
@@ -265,7 +256,7 @@ public class Property extends Element {
 	}
     
     public SDOUniqueConstraint findUniqueConstraint() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOUniqueConstraint) {
@@ -276,7 +267,7 @@ public class Property extends Element {
 	}    
     
     public org.modeldriven.fuml.repository.Property findDerivationSupplier() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDODerivation) {
@@ -294,7 +285,7 @@ public class Property extends Element {
 	}  
     
     public SDODerivation findDerivation() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDODerivation) {
@@ -306,11 +297,11 @@ public class Property extends Element {
    
     public boolean getIsPriKey() 
     {
-        if (!property.isDataType())
+        if (!element.isDataType())
             throw new IllegalArgumentException("property " 
-                    + property.getClass_().getName() + "." + 
-                    property.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+                    + element.getClass_().getName() + "." + 
+                    element.getName() + " is not a datatype property");
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOKey) {
@@ -320,17 +311,17 @@ public class Property extends Element {
         }
         else
             throw new PlasmaRuntimeException("no stereotypes found for property, '"
-                + property.getClass_().getName() + "." + property.getName() + "'");
+                + element.getClass_().getName() + "." + element.getName() + "'");
         return false;
     }    
 
     public Long getMaxLength() 
     {
-        if (!property.isDataType())
+        if (!element.isDataType())
             throw new IllegalArgumentException("property " 
-                    + property.getClass_().getName() + "." + 
-                    property.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+                    + element.getClass_().getName() + "." + 
+                    element.getName() + " is not a datatype property");
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOValueConstraint) {
@@ -341,7 +332,7 @@ public class Property extends Element {
         }
         else
             throw new PlasmaRuntimeException("no stereotypes found for property, '"
-                + property.getClass_().getName() + "." + property.getName() + "'");
+                + element.getClass_().getName() + "." + element.getName() + "'");
         return null;
     }    
  
@@ -356,7 +347,7 @@ public class Property extends Element {
     }  
     
     public SDOXmlProperty findXmlProperty() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOXmlProperty) {
@@ -368,7 +359,7 @@ public class Property extends Element {
 
     public boolean getIsConcurrencyUser() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -382,11 +373,11 @@ public class Property extends Element {
    
     public boolean getIsConcurrencyVersion() 
     {
-        if (!property.isDataType())
+        if (!element.isDataType())
             throw new IllegalArgumentException("property " 
-                    + property.getClass_().getName() + "." + 
-                    property.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+                    + element.getClass_().getName() + "." + 
+                    element.getName() + " is not a datatype property");
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -401,7 +392,7 @@ public class Property extends Element {
 
     public boolean getIsLockingUser() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -415,11 +406,11 @@ public class Property extends Element {
    
     public boolean getIsLockingTimestamp() 
     {
-        if (!property.isDataType())
+        if (!element.isDataType())
             throw new IllegalArgumentException("property " 
-                    + property.getClass_().getName() + "." + 
-                    property.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+                    + element.getClass_().getName() + "." + 
+                    element.getName() + " is not a datatype property");
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -433,7 +424,7 @@ public class Property extends Element {
 
     public boolean getIsOriginationUser() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -447,11 +438,11 @@ public class Property extends Element {
    
     public boolean getIsOriginationTimestamp() 
     {
-        if (!property.isDataType())
+        if (!element.isDataType())
             throw new IllegalArgumentException("property " 
-                    + property.getClass_().getName() + "." + 
-                    property.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+                    + element.getClass_().getName() + "." + 
+                    element.getName() + " is not a datatype property");
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -465,7 +456,7 @@ public class Property extends Element {
 
     public boolean getIsUnique() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(property);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOUniqueConstraint) {
@@ -475,7 +466,7 @@ public class Property extends Element {
         }
         else
             throw new PlasmaRuntimeException("no stereotypes found for property, '"
-                + property.getName() + "'");
+                + element.getName() + "'");
         return false;
     }
     

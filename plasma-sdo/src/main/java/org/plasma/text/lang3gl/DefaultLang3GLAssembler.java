@@ -21,7 +21,7 @@
  */
 package org.plasma.text.lang3gl;
 
-import org.plasma.provisioning.Model;
+import org.plasma.metamodel.Model;
 
 
 public abstract class DefaultLang3GLAssembler {

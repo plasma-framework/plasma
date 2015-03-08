@@ -24,10 +24,10 @@ package org.plasma.text.lang3gl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.ClassRef;
-import org.plasma.provisioning.Package;
-import org.plasma.provisioning.Model;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.ClassRef;
+import org.plasma.metamodel.Model;
+import org.plasma.metamodel.Package;
 
 public class DefaultLang3GLContext implements Lang3GLContext {
 

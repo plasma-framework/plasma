@@ -25,9 +25,9 @@ import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.provisioning.EnumerationConstraint;
-import org.plasma.provisioning.EnumerationRef;
-import org.plasma.provisioning.ValueConstraint;
+import org.plasma.metamodel.EnumerationConstraint;
+import org.plasma.metamodel.EnumerationRef;
+import org.plasma.metamodel.ValueConstraint;
 import org.plasma.xml.schema.AbstractSimpleType;
 import org.plasma.xml.schema.Facet;
 import org.plasma.xml.schema.Pattern;

@@ -21,17 +21,35 @@
  */
 package org.plasma.sdo.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modeldriven.fuml.repository.Package;
 import org.modeldriven.fuml.repository.Stereotype;
-import org.plasma.common.exception.PlasmaRuntimeException;
+import org.plasma.sdo.profile.SDOAlias;
 import org.plasma.sdo.profile.SDONamespace;
 
-public abstract class Element {
+public class Element<T extends org.modeldriven.fuml.repository.NamedElement> {
+		
+	protected T element;
 	
+	protected Element(T delegate) {
+		this.element = delegate;
+	}
 	
-    public String getNamespaceURI(org.modeldriven.fuml.repository.Classifier classifier) {
+    public T getDelegate() {
+		return element;
+	}
+    
+	public String getName() {
+		return this.element.getName();
+	}
+	
+	public String getId() {
+		return this.element.getDelegate().getXmiId();
+	}	
+	
+	public String getNamespaceURI(org.modeldriven.fuml.repository.Classifier classifier) {
         org.modeldriven.fuml.repository.Package p = classifier.getPackage();
         String uri = findSDONamespaceURI(p);
         if (uri == null)
@@ -64,4 +82,36 @@ public abstract class Element {
         return null;
     } 
 
+    public String getPhysicalName() 
+    {
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(this.element);
+        if (stereotypes != null) {
+            for (Stereotype stereotype : stereotypes)
+                if (stereotype.getDelegate() instanceof SDOAlias) {
+                	SDOAlias sdoAliasStereotype = (SDOAlias)stereotype.getDelegate();
+                    if (sdoAliasStereotype.getPhysicalName() != null)
+                        return sdoAliasStereotype.getPhysicalName();
+                }
+        }
+        return null;
+    }  
+    
+    public SDOAlias findAlias() 
+    {
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(this.element);
+        if (stereotypes != null) {
+            for (Stereotype stereotype : stereotypes)
+                if (stereotype.getDelegate() instanceof SDOAlias) {
+                	return (SDOAlias)stereotype.getDelegate();
+                }
+        }
+        return null;
+    }  
+    
+	public List<Comment> getComments() {
+		List<Comment> result = new ArrayList<Comment>();
+		for (fUML.Syntax.Classes.Kernel.Comment comment : element.getDelegate().ownedComment)
+			result.add(new Comment(comment));
+		return result;	
+	}
 }

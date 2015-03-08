@@ -46,7 +46,7 @@ import org.jdom2.Document;
 import org.jdom2.output.XMLOutputter;
 import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.common.exception.PlasmaRuntimeException;
-import org.plasma.provisioning.Model;
+import org.plasma.metamodel.Model;
 import org.plasma.provisioning.ProvisioningModelAssembler;
 import org.plasma.provisioning.ProvisioningModelDataBinding;
 import org.plasma.provisioning.adapter.ModelAdapter;

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.terrameta.org/plasma/text/ddl"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    xmlns:ddl="http://www.terrameta.org/plasma/text/ddl">
+    <xs:complexType name="schemas">
+        <xs:sequence>
+            <xs:element ref="ddl:schema" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="schemas" type="ddl:schemas"/>
+
+    <xs:complexType name="schema">
+        <xs:sequence>
+            <xs:element ref="ddl:table" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:element name="schema" type="ddl:schema"/>
+
+    <xs:complexType name="table">
+        <xs:sequence>
+            <xs:element ref="ddl:pk" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="ddl:column" maxOccurs="unbounded"/>
+            <xs:element ref="ddl:fk" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ddl:index" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ddl:behavior" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ddl:unique" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ddl:check" minOccurs="0" maxOccurs="unbounded"/>
+            <!--
+            <xs:element ref="ddl:sequence" minOccurs="0" maxOccurs="unbounded"/>
+            -->
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:element name="table" type="ddl:table"/>
+
+    <xs:complexType name="column">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="nullable" type="xs:boolean"/>
+        <xs:attribute name="size" type="xs:long" use="required" />
+        <xs:attribute name="decimal-digits" type="xs:string"/>
+    </xs:complexType>
+	<xs:element name="column" type="ddl:column"/>
+
+    <xs:complexType name="fk">
+        <xs:sequence>
+            <xs:element ref="ddl:join" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="delete-action" type="xs:string" use="required"/>
+        <xs:attribute name="to-table" type="xs:string" use="required"/>
+        <xs:attribute name="to-schema" type="xs:string" use="required"/>
+        <xs:attribute name="column" type="xs:string"/>
+    </xs:complexType>
+	<xs:element name="fk" type="ddl:fk"/>
+
+    <xs:complexType name="unique">
+        <xs:sequence>
+            <xs:element ref="ddl:on" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="column" type="xs:string"/>
+    </xs:complexType>
+    <xs:element name="unique" type="ddl:unique"/>
+
+    <xs:complexType name="check">
+        <xs:sequence>
+            <xs:element name="value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="column" type="xs:string"/>
+    </xs:complexType>
+    <xs:element name="check" type="ddl:check"/>
+<!--
+    <xs:complexType name="sequence">
+        <xs:sequence>
+            <xs:element ref="ddl:on" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="column" type="xs:string"/>
+        <xs:attribute name="min" type="xs:long" use="optional" default="1"/>
+        <xs:attribute name="max" type="xs:string" use="optional" default="999999999999999999999999999"/>
+        <xs:attribute name="start" type="xs:long" use="optional" default="1"/>
+        <xs:attribute name="increment" type="xs:long" use="optional" default="1"/>
+        <xs:attribute name="cache" type="xs:long" use="optional" default="20"/>
+    </xs:complexType>
+    <xs:element name="sequence" type="ddl:sequence"/>
+-->
+    <xs:complexType name="index">
+        <xs:sequence>
+            <xs:element ref="ddl:on" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="unique" type="xs:boolean" use="optional"/>
+        <xs:attribute name="column" type="xs:string"/>
+    </xs:complexType>
+	<xs:element name="index" type="ddl:index"/>
+
+    <xs:complexType name="join">
+        <xs:attribute name="column" type="xs:string" use="required"/>
+        <xs:attribute name="to-column" type="xs:string" use="required"/>
+    </xs:complexType>
+	<xs:element name="join" type="ddl:join"/>
+
+    <xs:complexType name="on">
+        <xs:attribute name="column" type="xs:string" use="required"/>
+    </xs:complexType>
+	<xs:element name="on" type="ddl:on"/>
+
+    <xs:complexType name="pk">
+        <xs:sequence>
+            <xs:element ref="ddl:on" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="column" type="xs:string"/>
+    </xs:complexType>
+	<xs:element name="pk" type="ddl:pk"/>
+
+    <xs:complexType name="behavior">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" type="ddl:behaviorType" use="required"/>
+            </xs:extension>                
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:element name="behavior" type="ddl:behavior"/>
+
+    <xs:simpleType name="behaviorType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="create"/>        
+            <xs:enumeration value="drop"/>       
+        </xs:restriction>
+    </xs:simpleType>
+                
+    <xs:simpleType name="JDBCType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ARRAY"/>        
+            <xs:enumeration value="BIGINT"/>       
+            <xs:enumeration value="BINARY"/>          
+            <xs:enumeration value="BIT"/>      
+            <xs:enumeration value="BLOB"/>         
+            <xs:enumeration value="BOOLEAN"/>  
+            <xs:enumeration value="CHAR"/>         
+            <xs:enumeration value="CLOB"/>         
+            <xs:enumeration value="DATALINK"/>    
+            <xs:enumeration value="DATE"/>         
+            <xs:enumeration value="DECIMAL"/>  
+            <xs:enumeration value="DISTINCT"/>     
+            <xs:enumeration value="DOUBLE"/>       
+            <xs:enumeration value="FLOAT"/>        
+            <xs:enumeration value="INTEGER"/>  
+            <xs:enumeration value="JAVA_OBJECT"/>  
+            <xs:enumeration value="LONGVARBINARY"/>    
+            <xs:enumeration value="LONGVARCHAR"/>  
+            <xs:enumeration value="NULL"/>         
+            <xs:enumeration value="NUMERIC"/>  
+            <xs:enumeration value="OTHER"/>        
+            <xs:enumeration value="REAL"/>         
+            <xs:enumeration value="REF"/>      
+            <xs:enumeration value="SMALLINT"/>     
+            <xs:enumeration value="STRUCT"/>       
+            <xs:enumeration value="TIME"/>        
+            <xs:enumeration value="TIMESTAMP"/>            
+            <xs:enumeration value="TINYINT"/>  
+            <xs:enumeration value="VARBINARY"/>    
+            <xs:enumeration value="VARCHAR"/>  
+        </xs:restriction>
+    </xs:simpleType>
+	
+</xs:schema>
+

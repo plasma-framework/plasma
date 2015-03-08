@@ -45,8 +45,8 @@ import org.plasma.query.visitor.Traversal;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://www.servicelabs.org/plasma/query}Property" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element ref="{http://www.servicelabs.org/plasma/query}TextContent" minOccurs="0"/>
+ *         &lt;element ref="{http://www.terrameta.org/plasma/query}Property" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://www.terrameta.org/plasma/query}TextContent" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

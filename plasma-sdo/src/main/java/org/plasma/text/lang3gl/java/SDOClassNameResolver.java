@@ -25,8 +25,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.ClassRef;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.ClassRef;
 import org.plasma.text.lang3gl.ClassNameResolver;
 
 public class SDOClassNameResolver extends DefaultNameResolver

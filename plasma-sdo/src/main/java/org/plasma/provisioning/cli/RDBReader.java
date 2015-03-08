@@ -8,7 +8,7 @@ import org.modeldriven.fuml.Fuml;
 import org.modeldriven.fuml.io.ResourceArtifact;
 import org.plasma.config.NamespaceProvisioning;
 import org.plasma.config.PlasmaConfig;
-import org.plasma.provisioning.Model;
+import org.plasma.metamodel.Model;
 import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.SchemaConverter;
 import org.plasma.provisioning.rdb.MySql55Converter;

@@ -27,8 +27,8 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.plasma.provisioning.EnumerationConstraint;
-import org.plasma.provisioning.ValueConstraint;
+import org.plasma.metamodel.EnumerationConstraint;
+import org.plasma.metamodel.ValueConstraint;
 import org.plasma.xml.schema.AbstractSimpleType;
 import org.plasma.xml.schema.Schema;
 import org.plasma.xml.schema.SimpleType;

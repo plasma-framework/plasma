@@ -21,6 +21,7 @@
  */
 package org.plasma.provisioning;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +33,33 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.config.DataAccessProviderName;
 import org.plasma.config.NonExistantNamespaceException;
 import org.plasma.config.PlasmaConfig;
+import org.plasma.metamodel.Alias;
+import org.plasma.metamodel.Body;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.ClassRef;
+import org.plasma.metamodel.ConcurentDataFlavor;
+import org.plasma.metamodel.ConcurrencyType;
+import org.plasma.metamodel.Concurrent;
+import org.plasma.metamodel.DataTypeRef;
+import org.plasma.metamodel.Derivation;
+import org.plasma.metamodel.Documentation;
+import org.plasma.metamodel.DocumentationType;
+import org.plasma.metamodel.Enumeration;
+import org.plasma.metamodel.EnumerationConstraint;
+import org.plasma.metamodel.EnumerationLiteral;
+import org.plasma.metamodel.EnumerationRef;
+import org.plasma.metamodel.Key;
+import org.plasma.metamodel.KeyType;
+import org.plasma.metamodel.Model;
+import org.plasma.metamodel.Package;
+import org.plasma.metamodel.PackageRef;
+import org.plasma.metamodel.Property;
+import org.plasma.metamodel.Sort;
+import org.plasma.metamodel.TypeRef;
+import org.plasma.metamodel.ValueConstraint;
+import org.plasma.metamodel.VisibilityType;
+import org.plasma.metamodel.XmlNodeType;
+import org.plasma.metamodel.XmlProperty;
 import org.plasma.query.Query;
 import org.plasma.query.collector.PropertySelection;
 import org.plasma.query.collector.PropertySelectionCollector;
@@ -104,11 +132,9 @@ public class ProvisioningModelAssembler {
 	private void construct(List<Namespace> namespaces) {
 		this.namespaces = namespaces;
 
-		this.model = new Model();
 		
-		// create and map packages, classes
+		List<Namespace> namespacesToProcess = new ArrayList<Namespace>();
     	for (Namespace namespace : this.namespaces) {
-    		log.debug("processing namespace: " + namespace.getUri());
     		if (this.serviceName != null) {
     			try {
     			    PlasmaConfig.getInstance().getProvisioningByNamespaceURI(this.serviceName, 
@@ -119,6 +145,18 @@ public class ProvisioningModelAssembler {
 	    			continue; 
 	    		}
 	        }
+    		namespacesToProcess.add(namespace);
+    	}
+    	
+    	if (namespacesToProcess.size() > 1) {
+		    this.model = new Model();
+		    this.model.setId(UUID.randomUUID().toString());
+		    this.model.setName("plasma derived model");
+    	}
+    	
+		// create and map packages, classes
+    	for (Namespace namespace : namespacesToProcess) {
+    		log.debug("processing namespace: " + namespace.getUri());
     		
         	List<commonj.sdo.Type> types = PlasmaTypeHelper.INSTANCE.getTypes(namespace.getUri());
         	for (commonj.sdo.Type type : types) {
@@ -126,8 +164,15 @@ public class ProvisioningModelAssembler {
         		        		
         		Package pkg = this.packageMap.get(plasmaType.getURI());
         		if (pkg == null) {
-        			pkg = createPackage(namespace, plasmaType);        			
-            		this.packageMap.put(plasmaType.getURI(), pkg);
+        			if (namespacesToProcess.size() > 1) {
+        			    pkg = createPackage(namespace, plasmaType, false);        			
+        		        this.model.getPackages().add(pkg);
+        			}
+        			else {
+        			    pkg = createPackage(namespace, plasmaType, true);        			
+        		        this.model = (Model)pkg;
+        			}
+        		    this.packageMap.put(plasmaType.getURI(), pkg);
         		}
         		String qualifiedName = plasmaType.getURI() + "#" + plasmaType.getName();
         		Class clss = this.classMap.get(qualifiedName);
@@ -644,8 +689,12 @@ public class ProvisioningModelAssembler {
 	    return dataTypeRef;
 	}
 	
-	private Package createPackage(Namespace namespace, PlasmaType type) {
-		Package pkg = new Package();
+	private Package createPackage(Namespace namespace, PlasmaType type, boolean modelPackage) {
+		Package pkg = null;
+		if (!modelPackage)
+			pkg = new Package();
+		else 
+			pkg = new Model();
 		pkg.setName(namespace.getName());
 		pkg.setId(UUID.randomUUID().toString());
 				
@@ -667,7 +716,6 @@ public class ProvisioningModelAssembler {
 			doc.setBody(body);
 			pkg.getDocumentations().add(doc);
 		}
-	    this.model.getPackages().add(pkg);
 	    pkg.setUri(type.getURI());
 	    return pkg;
 	}

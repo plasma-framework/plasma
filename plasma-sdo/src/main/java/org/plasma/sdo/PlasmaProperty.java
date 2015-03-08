@@ -68,6 +68,7 @@ public interface PlasmaProperty extends Property {
     public static final PlasmaProperty INSTANCE_PROPERTY_STRING_PHYSICAL_NAME = CoreProperty.createInstanceProperty("PhysicalName", DataType.String);
     public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_VISIBILITY = CoreProperty.createInstanceProperty("Visibility", DataType.Object);
     public static final PlasmaProperty INSTANCE_PROPERTY_STRING_LOCAL_NAME = CoreProperty.createInstanceProperty("LocalName", DataType.String);
+    public static final PlasmaProperty INSTANCE_PROPERTY_STRING_BUSINESS_NAME = CoreProperty.createInstanceProperty("BusinessName", DataType.String);
     
     public static final PlasmaProperty INSTANCE_PROPERTY_BYTES_NAME_BYTES = CoreProperty.createInstanceProperty("NameBytes", DataType.Bytes);
     public static final PlasmaProperty INSTANCE_PROPERTY_BYTES_URI_BYTES = CoreProperty.createInstanceProperty("URIBytes", DataType.Bytes);

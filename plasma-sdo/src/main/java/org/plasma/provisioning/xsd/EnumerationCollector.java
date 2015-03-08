@@ -27,7 +27,7 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.plasma.provisioning.Enumeration;
+import org.plasma.metamodel.Enumeration;
 import org.plasma.xml.schema.AbstractSimpleType;
 import org.plasma.xml.schema.Schema;
 import org.plasma.xml.schema.SimpleType;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.servicelabs.org/plasma/query" 
-    xmlns:query="http://www.servicelabs.org/plasma/query"
+<xsd:schema targetNamespace="http://www.terrameta.org/plasma/query" 
+    xmlns:query="http://www.terrameta.org/plasma/query"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
       	
     <xsd:complexType name="Query">

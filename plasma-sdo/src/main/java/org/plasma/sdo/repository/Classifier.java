@@ -24,40 +24,20 @@ package org.plasma.sdo.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
 import org.modeldriven.fuml.repository.Class_;
 import org.modeldriven.fuml.repository.Stereotype;
-import org.modeldriven.fuml.repository.Package;
-import org.plasma.common.exception.PlasmaRuntimeException;
-import org.plasma.sdo.Alias;
 import org.plasma.sdo.AssociationPath;
-import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.profile.SDOAlias;
 import org.plasma.sdo.profile.SDODerivation;
 
-import fUML.Syntax.Classes.Kernel.NamedElement;
 import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 
-public class Classifier extends Element {
-
-	private org.modeldriven.fuml.repository.Classifier classifier;
- 
-	@SuppressWarnings("unused")
-	private Classifier() {}
+public class Classifier<T extends org.modeldriven.fuml.repository.Classifier> 
+    extends Element<org.modeldriven.fuml.repository.Classifier> {
 	
-	public Classifier(org.modeldriven.fuml.repository.Classifier classifier) {
-		super();
-		this.classifier = classifier;
-	}
-	
-	public String getName() {
-		return this.classifier.getName();
-	}
-	
-	public String getId() {
-		return this.classifier.getDelegate().getXmiId();
+	public Classifier(T delegate) {
+		super(delegate);
 	}	
 	
 	public String toString() {
@@ -66,8 +46,8 @@ public class Classifier extends Element {
 	
 	public String getPackageName()
 	{
-    	if (classifier.getPackage() != null) 
-		    return this.classifier.getPackage().getName();
+    	if (element.getPackage() != null) 
+		    return this.element.getPackage().getName();
 		else
 			return null;
 	}
@@ -82,8 +62,8 @@ public class Classifier extends Element {
 	
     public SDOAlias findPackageAlias() 
     {
-    	if (classifier.getPackage() != null) {
-	        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier.getPackage());
+    	if (element.getPackage() != null) {
+	        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element.getPackage());
 	        if (stereotypes != null) {
 	            for (Stereotype stereotype : stereotypes)
 	                if (stereotype.getDelegate() instanceof SDOAlias) {
@@ -95,7 +75,7 @@ public class Classifier extends Element {
     }  
     
     public SDODerivation findDerivation() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDODerivation) {
@@ -107,38 +87,38 @@ public class Classifier extends Element {
 	
 	public List<Comment> getComments() {
 		List<Comment> result = new ArrayList<Comment>();
-		for (fUML.Syntax.Classes.Kernel.Comment comment : classifier.getDelegate().ownedComment)
+		for (fUML.Syntax.Classes.Kernel.Comment comment : element.getDelegate().ownedComment)
 			result.add(new Comment(comment));
 		return result;	
 	}
 	
 	public VisibilityKind getVisibility()
 	{
-        return this.classifier.getDelegate().visibility;		
+        return this.element.getDelegate().visibility;		
 	}
 	
     public boolean isAbstract() {
-        return this.classifier.isAbstract(); 
+        return this.element.isAbstract(); 
     }
     
     public boolean isDataType() {
-        return this.classifier.isDataType();
+        return this.element.isDataType();
     }
     
     public List<org.modeldriven.fuml.repository.Classifier> getGeneralization() {
-    	return classifier.getGeneralization();
+    	return element.getGeneralization();
     }
     
     public List<org.modeldriven.fuml.repository.Classifier> getSpecializations() {
-    	return PlasmaRepository.getInstance().getSpecializations(this.classifier);
+    	return PlasmaRepository.getInstance().getSpecializations(this.element);
     }
     
     public List<org.modeldriven.fuml.repository.Property> getDeclaredProperties() {
-    	return ((Class_)this.classifier).getDeclaredProperties();
+    	return ((Class_)this.element).getDeclaredProperties();
     }
     
     public List<org.modeldriven.fuml.repository.Property> getAllProperties() {
-    	return ((Class_)this.classifier).getAllProperties();
+    	return ((Class_)this.element).getAllProperties();
     }
 
     /**
@@ -149,7 +129,7 @@ public class Classifier extends Element {
      * @throws RepositoryException if the URI is not found
      */
     public String getNamespaceURI() {
-        return getNamespaceURI(this.classifier);
+        return getNamespaceURI(this.element);
     } 
      
     public String getPhysicalName() 
@@ -178,7 +158,7 @@ public class Classifier extends Element {
 
     public SDOAlias findAlias() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOAlias) {
@@ -190,7 +170,7 @@ public class Classifier extends Element {
     
     public org.modeldriven.fuml.repository.Classifier getDerivationSupplier() 
     {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(classifier);
+        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDODerivation) {

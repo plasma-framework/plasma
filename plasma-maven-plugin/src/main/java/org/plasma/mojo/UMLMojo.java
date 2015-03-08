@@ -21,9 +21,14 @@
  */
 package org.plasma.mojo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.maven.plugin.MojoExecutionException;
+import org.plasma.provisioning.cli.OptionPair;
+import org.plasma.provisioning.cli.ProvisioningToolOption;
 import org.plasma.provisioning.cli.RDBDialect;
-import org.plasma.provisioning.cli.UMLDialect;
+import org.plasma.provisioning.cli.UMLPlatform;
 import org.plasma.provisioning.cli.UMLTool;
 import org.plasma.provisioning.cli.UMLToolSource;
 
@@ -41,6 +46,24 @@ import org.plasma.provisioning.cli.UMLToolSource;
  */
 public class UMLMojo extends ClassRealmMojo
 {    
+    /**
+    * The help option
+    * @parameter expression="${uml.help}"  
+    */
+    private String help;
+
+    /**
+    * The verbose option
+    * @parameter expression="${uml.verbose}"  
+    */
+    private String verbose;
+    
+    /**
+    * The silent option
+    * @parameter expression="${uml.silent}"  
+    */
+    private String silent;
+
     /**
     * The tool source to be read
     * @parameter expression="${uml.source}" default-value="rdb"
@@ -93,36 +116,26 @@ public class UMLMojo extends ClassRealmMojo
     	        
         try
         {        
-        	UMLToolSource toolSource = getToolSource(this.source);
-        	RDBDialect toolDialect = getToolDialect(this.dialect);
-
-            getLog().info( "executing tool: "  + UMLTool.class.getName());                
-        	if (this.schemaNames == null) {
-    			if (this.platform == null)
-    				this.platform = UMLDialect.papyrus.name();
-    			UMLDialect platform = getToolPlatform(this.platform);
-    			String[] args = {
-                	"-"+toolSource.name(), 
-                	toolDialect.name(), 
-                	this.outputDirectory + "/" + outputFile,
-                	platform.name()
-                };
-    			UMLTool.main(args);
-        	}
-        	else {
-    			if (this.platform == null)
-    				this.platform = UMLDialect.papyrus.name();
-    			UMLDialect platform = getToolPlatform(this.platform);
-        		String[] args = {
-                    	"-"+toolSource.name(), 
-                    	toolDialect.name(), 
-                    	this.outputDirectory + "/" + outputFile,
-                    	platform.name(),
-                    	this.namespaces != null ? this.namespaces : "http://" + outputFile, 
-                    	this.schemaNames
-                    };
-        		UMLTool.main(args);
-        	}
+        	List<OptionPair> pairs = new ArrayList<OptionPair>();
+        	if (this.help != null)
+        		pairs.add(new OptionPair(ProvisioningToolOption.help, this.help));
+        	if (this.verbose != null)
+        		pairs.add(new OptionPair(ProvisioningToolOption.verbose, this.verbose));
+        	if (this.silent != null)
+        		pairs.add(new OptionPair(ProvisioningToolOption.silent, this.silent));
+        	if (this.source != null)
+        		pairs.add(new OptionPair(ProvisioningToolOption.sourceType, this.source));
+        	if (this.dialect != null)
+        		pairs.add(new OptionPair(ProvisioningToolOption.dialect, this.dialect));
+        	if (this.platform != null)
+        		pairs.add(new OptionPair(ProvisioningToolOption.platform, this.platform));
+        	if (this.namespaces != null)
+        		pairs.add(new OptionPair(ProvisioningToolOption.namespaces, this.namespaces));
+        	if (this.schemaNames != null)
+        		pairs.add(new OptionPair(ProvisioningToolOption.schemas, this.schemaNames));
+    		pairs.add(new OptionPair(ProvisioningToolOption.dest, this.outputDirectory + "/" + outputFile));
+    		
+    		UMLTool.main(MojoUtils.toArgs(pairs));
         }
         catch (IllegalArgumentException e) {
             throw new MojoExecutionException(e.getMessage(), e);
@@ -131,51 +144,5 @@ public class UMLMojo extends ClassRealmMojo
         {
             throw new MojoExecutionException(e.getMessage(), e);
         }        
-    }
-    
-    private UMLToolSource getToolSource(String source)
-    {
-    	UMLToolSource command = null;
-    	try {
-    		command = UMLToolSource.valueOf(source);
-    	}
-    	catch (IllegalArgumentException e) {
-    		throw new IllegalArgumentException("'" + source + "' - expected one of ["
-    				+ UMLToolSource.asString() + "]");
-    	}  
-    	return command;
-    }
-    
-    private RDBDialect getToolDialect(String dialectValue)
-    {
-    	RDBDialect dialect = null;
-    	try {
-    		dialect = RDBDialect.valueOf(dialectValue);
-    	}
-    	catch (IllegalArgumentException e) {
-    		throw new IllegalArgumentException("'" + dialectValue + "' - expected one of ["
-    				+ RDBDialect.asString() + "]");
-    	}
-    	return dialect;
-    }
-    
-    private UMLDialect getToolPlatform(String platformValue)
-    {
-    	UMLDialect platform = null;
-    	try {
-    		platform = UMLDialect.valueOf(platformValue);
-    	}
-    	catch (IllegalArgumentException e) {
-    		StringBuilder buf = new StringBuilder();
-    		for (int i = 0; i < UMLDialect.values().length; i++) {
-    			if (i > 0)
-    				buf.append(", ");
-    			buf.append(UMLDialect.values()[i].name());
-    		}
-    			
-    		throw new IllegalArgumentException("'" + platformValue + "' - expected one of ["
-    				+ buf.toString() + "]");
-    	}
-    	return platform;
     }
 }

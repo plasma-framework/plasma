@@ -15,12 +15,14 @@ import commonj.sdo.helper.EqualityHelper;
 import commonj.sdo.helper.TypeHelper;
 import commonj.sdo.helper.XMLHelper;
 import commonj.sdo.helper.XSDHelper;
+import commonj.sdo.impl.ExternalizableDelegator;
+import commonj.sdo.impl.HelperProvider;
 import commonj.sdo.impl.ExternalizableDelegator.Resolvable;
 
 public class HelperProviderImpl extends HelperProvider {
     
     public HelperProviderImpl() {
-        
+       super(); 
     }
 
     @Override

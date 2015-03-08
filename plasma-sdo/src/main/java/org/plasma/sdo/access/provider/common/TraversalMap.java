@@ -29,8 +29,7 @@ import java.util.Map;
 
 import org.plasma.config.DataAccessProviderName;
 import org.plasma.config.PlasmaConfig;
-import org.plasma.sdo.access.model.EntityConstants;
-import org.plasma.sdo.access.model.EntityException;
+import org.plasma.sdo.access.DataAccessException;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
 
 import commonj.sdo.Property;
@@ -241,7 +240,7 @@ public class TraversalMap
             }                                                                                   
         }
         catch (ClassNotFoundException e) {
-            throw new EntityException(e);
+            throw new DataAccessException(e);
         }
         return classMap;
     }

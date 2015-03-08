@@ -21,9 +21,9 @@
  */
 package org.plasma.provisioning.adapter;
 
-import org.plasma.provisioning.Package;
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.Property;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.Package;
+import org.plasma.metamodel.Property;
 
 public class FieldAdapter {
     private Package fieldPackage;

@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.config.Artifact;
 import org.plasma.config.PlasmaConfig;
-import org.plasma.provisioning.Model;
+import org.plasma.metamodel.Model;
 import org.plasma.provisioning.ProvisioningModelDataBinding;
 import org.plasma.provisioning.adapter.ModelAdapter;
 import org.xml.sax.SAXException;

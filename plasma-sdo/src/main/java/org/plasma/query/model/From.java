@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.plasma.query.visitor.QueryVisitor;
 import org.plasma.query.visitor.Traversal;
-import org.plasma.sdo.helper.PlasmaTypeHelper;
 
 import commonj.sdo.Type;
+import commonj.sdo.impl.HelperProvider;
 
 
 /**
@@ -44,7 +44,7 @@ import commonj.sdo.Type;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://www.servicelabs.org/plasma/query}Entity"/>
+ *         &lt;element ref="{http://www.terrameta.org/plasma/query}Entity"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -79,7 +79,7 @@ public class From implements org.plasma.query.From {
 
     public From(Class c) {
         this();
-        Type type = PlasmaTypeHelper.INSTANCE.getType(c);
+        Type type = HelperProvider.getTypeHelper().getType(c);
         
         setEntity(new Entity(type.getName(), type.getURI()));
     } 

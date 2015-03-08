@@ -27,6 +27,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.plasma.metamodel.Model;
 import org.plasma.provisioning.xsd.XSDSchemaConverter;
 import org.plasma.provisioning.xsd.SDOXSchemaConverter;
 import org.plasma.xml.schema.OpenAttrs;

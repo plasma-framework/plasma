@@ -27,11 +27,11 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.provisioning.Alias;
-import org.plasma.provisioning.Class;
-import org.plasma.provisioning.ClassRef;
-import org.plasma.provisioning.Documentation;
-import org.plasma.provisioning.DocumentationType;
+import org.plasma.metamodel.Alias;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.ClassRef;
+import org.plasma.metamodel.Documentation;
+import org.plasma.metamodel.DocumentationType;
 import org.plasma.provisioning.NameUtils;
 import org.plasma.xml.schema.ComplexRestrictionType;
 import org.plasma.xml.schema.ComplexType;

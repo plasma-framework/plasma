@@ -39,16 +39,16 @@ import org.xml.sax.SAXException;
 public class ProvisioningModelDataBinding implements DataBinding {
 
     private static Log log = LogFactory.getLog(ProvisioningModelDataBinding.class);
-    public static String FILENAME_SCHEMA_CHAIN_ROOT = "provisioning.xsd";
+    public static String FILENAME_SCHEMA_CHAIN_ROOT = "metamodel.xsd";
 
     // just classes in the same package where can find the above respective
     // schema files via Class.getResource*
-    public static java.lang.Class<?> RESOURCE_CLASS = ProvisioningModelDataBinding.class;
+    public static java.lang.Class<?> RESOURCE_CLASS = org.plasma.metamodel.ObjectFactory.class;
 
     private static ValidatingUnmarshaler validatingUnmarshaler;
 
     public static java.lang.Class<?>[] FACTORIES = { 
-    	org.plasma.provisioning.ObjectFactory.class
+    	org.plasma.metamodel.ObjectFactory.class
     };
 
     @SuppressWarnings("unused")
