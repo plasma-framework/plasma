@@ -23,9 +23,7 @@ package org.plasma.sdo.repository;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +33,6 @@ import org.modeldriven.fuml.repository.Class_;
 import org.modeldriven.fuml.repository.Classifier;
 import org.modeldriven.fuml.repository.Element;
 import org.modeldriven.fuml.repository.Extension;
-import org.modeldriven.fuml.repository.NamedElement;
 import org.modeldriven.fuml.repository.Package;
 import org.modeldriven.fuml.repository.RepositoryMapping;
 import org.modeldriven.fuml.repository.RepositorylException;
@@ -43,8 +40,6 @@ import org.modeldriven.fuml.repository.Stereotype;
 import org.plasma.common.exception.PlasmaRuntimeException;
 import org.plasma.config.Artifact;
 import org.plasma.config.PlasmaConfig;
-import org.plasma.sdo.AssociationPath;
-import org.plasma.sdo.helper.PlasmaTypeHelper;
 import org.plasma.sdo.profile.SDONamespace;
 
 import fUML.Syntax.Classes.Kernel.PackageableElement;
@@ -114,17 +109,20 @@ public class PlasmaRepository implements Repository {
 	@Override
 	public Namespace getNamespaceForUri(String uri) {
 		List<Stereotype> list = delegate.getStereotypes(SDONamespace.class);
+		Namespace result = null;
 		for (Stereotype s : list) {
 			SDONamespace namespace = (SDONamespace)s.getDelegate();
-			//log.info("checking " + namespace.getUri() + " : " + uri);
 			if (namespace.getUri().equals(uri)) {
+				if (result != null)
+					throw new RepositoryException("multiple namespaces stereotyped as " 
+				        + SDONamespace.class.getSimpleName() + " with URI " + uri);
 				String packageXmiId = namespace.getBase_Package().getXmiId();
 				org.modeldriven.fuml.repository.Package pkg = 
 					(org.modeldriven.fuml.repository.Package)delegate.findElementById(packageXmiId);			
-				return new Namespace(pkg);
+				result = new Namespace(pkg);
 			}
 		}		
-		return null;
+		return result;
 	}
 
 	/**
