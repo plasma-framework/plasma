@@ -36,7 +36,6 @@ import org.plasma.sdo.ChangeType;
 import org.plasma.sdo.PathAssembler;
 import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.sdo.PlasmaNode;
-import org.plasma.sdo.PlasmaSetting;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataObject;

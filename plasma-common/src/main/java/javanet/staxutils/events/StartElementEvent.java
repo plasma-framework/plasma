@@ -40,15 +40,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javanet.staxutils.NamespaceContextAdapter;
+import javanet.staxutils.StaticNamespaceContext;
+
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Namespace;
 import javax.xml.stream.events.StartElement;
-
-import javanet.staxutils.NamespaceContextAdapter;
-import javanet.staxutils.StaticNamespaceContext;
 
 /**
  * {@link StartElement} event implementation. This event will coalesce its namespaces

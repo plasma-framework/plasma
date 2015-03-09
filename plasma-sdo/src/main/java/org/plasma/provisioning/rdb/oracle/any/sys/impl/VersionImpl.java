@@ -1,9 +1,9 @@
 package org.plasma.provisioning.rdb.oracle.any.sys.impl;
 
 import java.io.Serializable;
-import org.plasma.sdo.core.CoreDataObject;
-import java.lang.String;
+
 import org.plasma.provisioning.rdb.oracle.any.sys.Version;
+import org.plasma.sdo.core.CoreDataObject;
 
 /**
  * Generated implementation class representing the domain model entity <b>Version</b>.

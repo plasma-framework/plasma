@@ -1,16 +1,16 @@
 package org.plasma.provisioning.rdb.mysql.v5_5.impl;
 
 import java.io.Serializable;
-import org.plasma.sdo.core.CoreDataObject;
-import java.util.List;
 import java.util.ArrayList;
-import java.lang.String;
+import java.util.List;
+
 import org.plasma.provisioning.rdb.mysql.v5_5.Table;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumn;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnConstraint;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnKeyUsage;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableConstraint;
 import org.plasma.provisioning.rdb.mysql.v5_5.View;
+import org.plasma.sdo.core.CoreDataObject;
 
 /**
  * Generated implementation class representing the domain model entity <b>Table</b>.

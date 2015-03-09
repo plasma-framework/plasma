@@ -33,14 +33,15 @@
  */
 package javanet.staxutils;
 
+import java.util.Stack;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import java.util.Stack;
 
 /**
  * This is a simple utility class that adapts SAX events into StAX

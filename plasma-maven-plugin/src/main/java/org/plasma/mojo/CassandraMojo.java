@@ -21,16 +21,9 @@
  */
 package org.plasma.mojo;
 
-import java.io.File;
-import java.io.FileOutputStream;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.CassandraTool;
-import org.plasma.provisioning.cli.CassandraToolAction;
 import org.plasma.provisioning.cli.ProvisioningToolOption;
-import org.plasma.provisioning.cli.RDBDialect;
-import org.plasma.provisioning.cli.RDBTool;
-import org.plasma.provisioning.cli.RDBToolAction;
 
 /**
  * Mojo implementation for generating Cassandra NoSQL Database related artifacts, such as

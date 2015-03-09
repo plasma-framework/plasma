@@ -29,8 +29,6 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.query.QueryException;
 import org.plasma.query.model.AbstractPathElement;
 import org.plasma.query.model.AbstractProperty;
-import org.plasma.query.model.Function;
-import org.plasma.query.model.FunctionValues;
 import org.plasma.query.model.Literal;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.PathElement;

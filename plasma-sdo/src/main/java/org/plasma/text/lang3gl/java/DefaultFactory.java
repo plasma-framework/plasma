@@ -30,7 +30,6 @@ import java.util.TreeMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.WordWrap;
-import org.plasma.config.PlasmaConfig;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
 import org.plasma.metamodel.DataTypeRef;
@@ -46,8 +45,8 @@ import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.helper.DataConverter;
 import org.plasma.text.TextException;
-import org.plasma.text.lang3gl.Lang3GLContext;
 import org.plasma.text.lang3gl.ClassNameResolver;
+import org.plasma.text.lang3gl.Lang3GLContext;
 
 public abstract class DefaultFactory {
     private static Log log =LogFactory.getLog(

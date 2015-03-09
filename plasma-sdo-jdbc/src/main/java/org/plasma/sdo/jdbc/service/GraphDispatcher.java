@@ -26,7 +26,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -55,8 +54,6 @@ import org.plasma.sdo.access.InvalidSnapshotException;
 import org.plasma.sdo.access.LockedEntityException;
 import org.plasma.sdo.access.RequiredPropertyException;
 import org.plasma.sdo.access.SequenceGenerator;
-import org.plasma.sdo.access.provider.common.CreatedObjectCollector;
-import org.plasma.sdo.access.provider.common.DataObjectCommitComparator;
 import org.plasma.sdo.access.provider.common.DeletedObjectCollector;
 import org.plasma.sdo.access.provider.common.ModifiedObjectCollector;
 import org.plasma.sdo.access.provider.common.PropertyPair;
@@ -69,8 +66,6 @@ import org.plasma.sdo.core.SnapshotMap;
 import org.plasma.sdo.profile.ConcurrencyType;
 import org.plasma.sdo.profile.ConcurrentDataFlavor;
 import org.plasma.sdo.profile.KeyType;
-
-
 
 import commonj.sdo.DataGraph;
 import commonj.sdo.DataObject;

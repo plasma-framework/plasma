@@ -24,8 +24,6 @@ package org.plasma.sdo.xml;
 import org.apache.commons.logging.Log;
 import org.xml.sax.ErrorHandler;
 
-import commonj.sdo.DataGraph;
-
 public interface XMLOptions {
 	
 	/**

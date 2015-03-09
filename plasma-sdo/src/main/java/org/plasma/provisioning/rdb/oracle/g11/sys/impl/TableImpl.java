@@ -1,16 +1,16 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys.impl;
 
 import java.io.Serializable;
-import org.plasma.sdo.core.CoreDataObject;
-import java.util.List;
 import java.util.ArrayList;
-import java.lang.String;
+import java.util.List;
+
 import org.plasma.provisioning.rdb.oracle.g11.sys.Constraint;
 import org.plasma.provisioning.rdb.oracle.g11.sys.Table;
 import org.plasma.provisioning.rdb.oracle.g11.sys.TableColumn;
 import org.plasma.provisioning.rdb.oracle.g11.sys.TableColumnComment;
 import org.plasma.provisioning.rdb.oracle.g11.sys.TableColumnConstraint;
 import org.plasma.provisioning.rdb.oracle.g11.sys.TableComment;
+import org.plasma.sdo.core.CoreDataObject;
 
 /**
  * Represents a system table definition

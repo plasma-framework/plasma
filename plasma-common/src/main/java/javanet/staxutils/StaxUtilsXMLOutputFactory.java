@@ -31,6 +31,7 @@
 package javanet.staxutils;
 
 import javanet.staxutils.helpers.FilterXMLOutputFactory;
+
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;

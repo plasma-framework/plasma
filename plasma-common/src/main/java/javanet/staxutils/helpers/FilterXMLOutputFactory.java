@@ -32,6 +32,7 @@ package javanet.staxutils.helpers;
 
 import java.io.OutputStream;
 import java.io.Writer;
+
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;

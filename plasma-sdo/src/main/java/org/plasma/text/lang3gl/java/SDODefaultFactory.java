@@ -29,14 +29,10 @@ import org.plasma.config.InterfaceProvisioning;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.config.PropertyNameStyle;
 import org.plasma.metamodel.Class;
-import org.plasma.metamodel.ClassRef;
-import org.plasma.metamodel.DataTypeRef;
 import org.plasma.metamodel.Package;
 import org.plasma.metamodel.Property;
-import org.plasma.metamodel.TypeRef;
-import org.plasma.sdo.DataType;
-import org.plasma.text.lang3gl.Lang3GLContext;
 import org.plasma.text.lang3gl.ClassNameResolver;
+import org.plasma.text.lang3gl.Lang3GLContext;
 
 public abstract class SDODefaultFactory extends DefaultFactory {
 	

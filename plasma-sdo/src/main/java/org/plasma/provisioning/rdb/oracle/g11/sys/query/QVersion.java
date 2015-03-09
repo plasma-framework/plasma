@@ -1,14 +1,12 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys.query;
 
-import org.plasma.sdo.helper.PlasmaTypeHelper;
+import org.plasma.provisioning.rdb.oracle.g11.sys.Version;
+import org.plasma.query.DataProperty;
+import org.plasma.query.Expression;
+import org.plasma.query.dsl.DataNode;
 import org.plasma.query.dsl.DomainRoot;
 import org.plasma.query.dsl.PathNode;
-import org.plasma.query.DataProperty;
-import org.plasma.query.dsl.DataNode;
-import org.plasma.query.Expression;
-
-
-import org.plasma.provisioning.rdb.oracle.g11.sys.Version;
+import org.plasma.sdo.helper.PlasmaTypeHelper;
 
 /**
  * Generated Domain Specific Language (DSL) implementation class representing the domain model entity <b>Version</b>.

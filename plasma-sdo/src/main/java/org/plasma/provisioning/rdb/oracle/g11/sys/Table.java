@@ -1,11 +1,6 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys;
 
 
-import org.plasma.provisioning.rdb.oracle.g11.sys.Constraint;
-import org.plasma.provisioning.rdb.oracle.g11.sys.TableColumn;
-import org.plasma.provisioning.rdb.oracle.g11.sys.TableColumnComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.TableColumnConstraint;
-import org.plasma.provisioning.rdb.oracle.g11.sys.TableComment;
 import org.plasma.sdo.PlasmaDataObject;
 
 /**

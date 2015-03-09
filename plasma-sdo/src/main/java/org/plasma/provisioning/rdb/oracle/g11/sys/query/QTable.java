@@ -1,19 +1,12 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys.query;
 
-import org.plasma.sdo.helper.PlasmaTypeHelper;
+import org.plasma.provisioning.rdb.oracle.g11.sys.Table;
+import org.plasma.query.DataProperty;
+import org.plasma.query.Expression;
+import org.plasma.query.dsl.DataNode;
 import org.plasma.query.dsl.DomainRoot;
 import org.plasma.query.dsl.PathNode;
-import org.plasma.query.DataProperty;
-import org.plasma.query.dsl.DataNode;
-import org.plasma.query.Expression;
-
-
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QConstraint;
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QTableColumn;
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QTableColumnComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QTableColumnConstraint;
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QTableComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.Table;
+import org.plasma.sdo.helper.PlasmaTypeHelper;
 
 /**
  * Represents a system table definition

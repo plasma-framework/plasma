@@ -22,7 +22,6 @@
 package org.plasma.sdo.helper;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -31,9 +30,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.ValidationEvent;
@@ -50,29 +47,16 @@ import org.plasma.common.exception.PlasmaRuntimeException;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.Model;
-import org.plasma.metamodel.ModelAppInfo;
 import org.plasma.provisioning.ProvisioningModelAssembler;
 import org.plasma.provisioning.ProvisioningModelDataBinding;
-import org.plasma.provisioning.SchemaProvisioningModelAssembler;
 import org.plasma.provisioning.adapter.ModelAdapter;
 import org.plasma.query.Query;
 import org.plasma.query.bind.PlasmaQueryDataBinding;
-import org.plasma.sdo.PlasmaProperty;
-import org.plasma.sdo.PlasmaType;
-import org.plasma.sdo.repository.PlasmaRepository;
-import org.plasma.xml.schema.OpenAttrs;
-import org.plasma.xml.schema.Appinfo;
-import org.plasma.xml.schema.Annotation;
-import org.plasma.xml.schema.Schema;
-import org.plasma.xml.schema.SchemaModelAssembler;
-import org.plasma.xml.schema.SchemaDataBinding;
 import org.plasma.xml.uml.MDModelAssembler;
 import org.plasma.xml.uml.UMLModelAssembler;
 import org.xml.sax.SAXException;
 
-import commonj.sdo.Property;
 import commonj.sdo.Type;
-import commonj.sdo.helper.XSDHelper;
 
 public class PlasmaQueryHelper {
     private static Log log = LogFactory.getLog(

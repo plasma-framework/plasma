@@ -1,17 +1,12 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys.query;
 
-import org.plasma.sdo.helper.PlasmaTypeHelper;
+import org.plasma.provisioning.rdb.oracle.g11.sys.View;
+import org.plasma.query.DataProperty;
+import org.plasma.query.Expression;
+import org.plasma.query.dsl.DataNode;
 import org.plasma.query.dsl.DomainRoot;
 import org.plasma.query.dsl.PathNode;
-import org.plasma.query.DataProperty;
-import org.plasma.query.dsl.DataNode;
-import org.plasma.query.Expression;
-
-
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QViewColumn;
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QViewColumnComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QViewComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.View;
+import org.plasma.sdo.helper.PlasmaTypeHelper;
 
 /**
  * Represents a system view definition

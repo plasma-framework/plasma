@@ -38,8 +38,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
-import javanet.staxutils.XMLStreamEventReader;
-
 import javax.xml.stream.EventFilter;
 import javax.xml.stream.StreamFilter;
 import javax.xml.stream.XMLEventReader;

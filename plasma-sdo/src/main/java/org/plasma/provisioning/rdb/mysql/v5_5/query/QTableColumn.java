@@ -1,15 +1,12 @@
 package org.plasma.provisioning.rdb.mysql.v5_5.query;
 
-import org.plasma.sdo.helper.PlasmaTypeHelper;
+import org.plasma.provisioning.rdb.mysql.v5_5.TableColumn;
+import org.plasma.query.DataProperty;
+import org.plasma.query.Expression;
+import org.plasma.query.dsl.DataNode;
 import org.plasma.query.dsl.DomainRoot;
 import org.plasma.query.dsl.PathNode;
-import org.plasma.query.DataProperty;
-import org.plasma.query.dsl.DataNode;
-import org.plasma.query.Expression;
-
-
-import org.plasma.provisioning.rdb.mysql.v5_5.query.QTable;
-import org.plasma.provisioning.rdb.mysql.v5_5.TableColumn;
+import org.plasma.sdo.helper.PlasmaTypeHelper;
 
 /**
  * Represents a system column definition which is linked to its

@@ -1,14 +1,14 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys.impl;
 
 import java.io.Serializable;
-import org.plasma.sdo.core.CoreDataObject;
-import java.util.List;
 import java.util.ArrayList;
-import java.lang.String;
+import java.util.List;
+
 import org.plasma.provisioning.rdb.oracle.g11.sys.View;
 import org.plasma.provisioning.rdb.oracle.g11.sys.ViewColumn;
 import org.plasma.provisioning.rdb.oracle.g11.sys.ViewColumnComment;
 import org.plasma.provisioning.rdb.oracle.g11.sys.ViewComment;
+import org.plasma.sdo.core.CoreDataObject;
 
 /**
  * Represents a system view definition

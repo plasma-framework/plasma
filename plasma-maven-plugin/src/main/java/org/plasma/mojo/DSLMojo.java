@@ -26,7 +26,6 @@ import java.io.FileOutputStream;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.DSLTool;
-import org.plasma.provisioning.cli.DSLToolAction;
 import org.plasma.provisioning.cli.ProvisioningToolOption;
 
 /**

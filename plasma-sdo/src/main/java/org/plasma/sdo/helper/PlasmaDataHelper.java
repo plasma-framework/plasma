@@ -32,7 +32,6 @@ import java.util.Locale;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
 import commonj.sdo.helper.DataHelper;
-import fUML.Syntax.Classes.Kernel.DataType;
 
 public class PlasmaDataHelper implements DataHelper {
 

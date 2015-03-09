@@ -21,8 +21,6 @@
  */
 package org.plasma.query;
 
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**

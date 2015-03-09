@@ -40,10 +40,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javanet.staxutils.SimpleNamespaceContext;
+
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
-
-import javanet.staxutils.SimpleNamespaceContext;
 
 /**
  * Encapsulates access to contextual element information, such as the element name,

@@ -43,7 +43,10 @@ import java.util.Map;
 
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.*;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.Namespace;
+import javax.xml.stream.events.StartElement;
 import javax.xml.stream.util.XMLEventConsumer;
 
 import org.xml.sax.Attributes;

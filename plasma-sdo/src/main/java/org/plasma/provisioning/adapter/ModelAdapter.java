@@ -37,9 +37,9 @@ import org.plasma.metamodel.EnumerationRef;
 import org.plasma.metamodel.Model;
 import org.plasma.metamodel.Package;
 import org.plasma.metamodel.Property;
+import org.plasma.provisioning.PropertyNameCollisionException;
 import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.TypeNameCollisionException;
-import org.plasma.provisioning.PropertyNameCollisionException;
 
 public class ModelAdapter {
     private static Log log = LogFactory.getLog(

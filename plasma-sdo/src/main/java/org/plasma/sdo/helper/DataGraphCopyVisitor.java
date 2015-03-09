@@ -28,15 +28,12 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.sdo.PlasmaDataGraph;
 import org.plasma.sdo.PlasmaDataGraphVisitor;
 import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.sdo.core.CoreChangeSummary;
 import org.plasma.sdo.core.CoreConstants;
 import org.plasma.sdo.core.CoreDataObject;
 import org.plasma.sdo.core.CoreNode;
-import org.plasma.sdo.core.CoreObject;
-import org.plasma.sdo.helper.PlasmaDataFactory;
 
 import commonj.sdo.DataGraph;
 import commonj.sdo.DataObject;

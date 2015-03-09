@@ -33,9 +33,6 @@ import javax.xml.stream.Location;
 import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
-import org.plasma.sdo.core.CoreHelper;
-
-import commonj.sdo.Property;
 
 class StreamObject extends StreamNode {
 	protected PlasmaProperty source;

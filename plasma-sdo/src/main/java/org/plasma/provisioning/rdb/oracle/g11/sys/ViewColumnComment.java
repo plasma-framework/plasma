@@ -1,7 +1,6 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys;
 
 
-import org.plasma.provisioning.rdb.oracle.g11.sys.View;
 import org.plasma.sdo.PlasmaDataObject;
 
 /**

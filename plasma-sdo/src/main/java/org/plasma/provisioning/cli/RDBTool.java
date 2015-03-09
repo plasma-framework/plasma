@@ -21,15 +21,12 @@
  */
 package org.plasma.provisioning.cli;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
-import joptsimple.BuiltinHelpFormatter;
-import joptsimple.HelpFormatter;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;

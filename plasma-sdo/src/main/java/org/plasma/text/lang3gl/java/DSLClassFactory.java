@@ -21,7 +21,6 @@
  */
 package org.plasma.text.lang3gl.java;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -48,8 +47,8 @@ import org.plasma.query.dsl.PathNode;
 import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
 import org.plasma.text.lang3gl.ClassFactory;
-import org.plasma.text.lang3gl.Lang3GLContext;
 import org.plasma.text.lang3gl.ClassNameResolver;
+import org.plasma.text.lang3gl.Lang3GLContext;
 
 
 public class DSLClassFactory extends SDODefaultFactory 

@@ -29,23 +29,17 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
-import javax.xml.bind.annotation.XmlEnumValue;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.modeldriven.fuml.Fuml;
-import org.modeldriven.fuml.io.FileArtifact;
 import org.modeldriven.fuml.io.ResourceArtifact;
 import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.common.env.EnvConstants;
@@ -64,7 +58,7 @@ import org.xml.sax.SAXException;
 public class PlasmaConfig {
 
     private static Log log = LogFactory.getLog(PlasmaConfig.class);
-    private static PlasmaConfig instance = null;
+    private static volatile PlasmaConfig instance = null;
 	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
    
     private static final String defaultConfigFileName = "plasma-config.xml";  

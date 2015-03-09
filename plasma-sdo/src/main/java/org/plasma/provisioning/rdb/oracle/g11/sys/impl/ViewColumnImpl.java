@@ -1,10 +1,10 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys.impl;
 
 import java.io.Serializable;
-import org.plasma.sdo.core.CoreDataObject;
-import java.lang.String;
+
 import org.plasma.provisioning.rdb.oracle.g11.sys.View;
 import org.plasma.provisioning.rdb.oracle.g11.sys.ViewColumn;
+import org.plasma.sdo.core.CoreDataObject;
 
 /**
  * Represents a system column definition which is linked to its

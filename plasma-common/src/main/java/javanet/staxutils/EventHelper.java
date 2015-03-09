@@ -33,6 +33,8 @@
  */
 package javanet.staxutils;
 
+import java.io.Writer;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLStreamException;
@@ -40,7 +42,6 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-import java.io.Writer;
 
 /**
  * Partial base class implementation of {@link javax.xml.stream.events.XMLEvent}.

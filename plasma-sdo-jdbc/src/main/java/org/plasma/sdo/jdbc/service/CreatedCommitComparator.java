@@ -23,13 +23,9 @@ package org.plasma.sdo.jdbc.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.sdo.AssociationPath;
 import org.plasma.sdo.PlasmaChangeSummary;
-import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.core.CoreDataObject;
-
-import commonj.sdo.DataObject;
 
 /**
  * Comparator which imposes a commit ordering on created objects. 

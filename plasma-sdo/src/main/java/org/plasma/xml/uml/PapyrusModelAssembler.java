@@ -10,7 +10,6 @@ import org.plasma.profile.ProfileConfig;
 import org.plasma.profile.ProfileURN;
 import org.plasma.profile.adapter.ProfileArtifactAdapter;
 import org.plasma.query.Query;
-import org.plasma.sdo.profile.SDONamespace;
 import org.plasma.xml.schema.Schema;
 
 public class PapyrusModelAssembler extends DefaultUMLModelAssembler implements UMLModelAssembler {

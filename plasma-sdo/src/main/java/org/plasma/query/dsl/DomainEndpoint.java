@@ -21,10 +21,8 @@
  */
 package org.plasma.query.dsl;
 
-import org.plasma.query.Wildcard;
 import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.Path;
-import org.plasma.query.model.WildcardProperty;
 
 
 /**

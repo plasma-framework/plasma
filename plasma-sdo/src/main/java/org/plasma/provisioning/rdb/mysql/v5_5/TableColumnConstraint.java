@@ -1,7 +1,6 @@
 package org.plasma.provisioning.rdb.mysql.v5_5;
 
 
-import org.plasma.provisioning.rdb.mysql.v5_5.Table;
 import org.plasma.sdo.PlasmaDataObject;
 
 /**

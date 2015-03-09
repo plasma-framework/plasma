@@ -38,13 +38,11 @@ import org.apache.commons.logging.LogFactory;
 import org.modeldriven.fuml.repository.RepositorylException;
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
-import org.plasma.config.TypeBinding;
 import org.plasma.config.adapter.TypeBindingAdapter;
 import org.plasma.sdo.Alias;
 import org.plasma.sdo.AssociationPath;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.Derivation;
-import org.plasma.sdo.IllegalArgumentUserException;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.helper.DataConverter;
@@ -61,6 +59,7 @@ import org.plasma.sdo.repository.PlasmaRepository;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
+
 import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 /**

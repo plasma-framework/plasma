@@ -21,6 +21,8 @@
  */
 package org.plasma.sdo.access.service;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -37,13 +39,10 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.config.DataAccessProviderName;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.query.model.Query;
-import org.plasma.sdo.access.DataAccessService;
-import org.plasma.sdo.core.SnapshotMap;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.plasma.sdo.access.DataAccessException;
+import org.plasma.sdo.access.DataAccessService;
 import org.plasma.sdo.access.PlasmaDataAccessService;
+import org.plasma.sdo.core.SnapshotMap;
 
 import commonj.sdo.DataGraph;
 

@@ -35,7 +35,6 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.BindingValidationEventHandler;
 import org.plasma.common.bind.DataBinding;
 import org.plasma.common.bind.ValidatingUnmarshaler;
-import org.plasma.xml.wsdl.v20.ObjectFactory;
 import org.xml.sax.SAXException;
 
 public class WSDLDataBinding implements DataBinding {

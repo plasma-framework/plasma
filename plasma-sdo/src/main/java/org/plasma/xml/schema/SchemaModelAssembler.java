@@ -55,10 +55,6 @@ import org.plasma.sdo.repository.Comment;
 import org.plasma.xml.sdox.BaseDataGraphType;
 import org.plasma.xml.sdox.SDOXConstants;
 
-
-
-import commonj.sdo.Type;
-
 /**
  * Creates an XML Schema model. 
  * @see org.plasma.query.PathNode

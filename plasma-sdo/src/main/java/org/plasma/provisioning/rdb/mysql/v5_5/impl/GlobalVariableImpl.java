@@ -1,9 +1,9 @@
 package org.plasma.provisioning.rdb.mysql.v5_5.impl;
 
 import java.io.Serializable;
-import org.plasma.sdo.core.CoreDataObject;
-import java.lang.String;
+
 import org.plasma.provisioning.rdb.mysql.v5_5.GlobalVariable;
+import org.plasma.sdo.core.CoreDataObject;
 
 /**
  * Generated implementation class representing the domain model entity <b>GlobalVariable</b>.

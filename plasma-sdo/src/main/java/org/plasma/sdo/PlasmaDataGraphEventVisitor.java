@@ -21,7 +21,6 @@
  */
 package org.plasma.sdo;
 
-import commonj.sdo.DataObject;
 
 
 

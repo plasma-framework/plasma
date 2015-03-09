@@ -1,15 +1,12 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys.query;
 
-import org.plasma.sdo.helper.PlasmaTypeHelper;
+import org.plasma.provisioning.rdb.oracle.g11.sys.ViewColumnComment;
+import org.plasma.query.DataProperty;
+import org.plasma.query.Expression;
+import org.plasma.query.dsl.DataNode;
 import org.plasma.query.dsl.DomainRoot;
 import org.plasma.query.dsl.PathNode;
-import org.plasma.query.DataProperty;
-import org.plasma.query.dsl.DataNode;
-import org.plasma.query.Expression;
-
-
-import org.plasma.provisioning.rdb.oracle.g11.sys.query.QView;
-import org.plasma.provisioning.rdb.oracle.g11.sys.ViewColumnComment;
+import org.plasma.sdo.helper.PlasmaTypeHelper;
 
 /**
  * The comment for a column

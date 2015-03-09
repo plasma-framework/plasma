@@ -1,10 +1,10 @@
 package org.plasma.provisioning.rdb.mysql.v5_5.impl;
 
 import java.io.Serializable;
-import org.plasma.sdo.core.CoreDataObject;
-import java.lang.String;
+
 import org.plasma.provisioning.rdb.mysql.v5_5.Table;
 import org.plasma.provisioning.rdb.mysql.v5_5.TableColumn;
+import org.plasma.sdo.core.CoreDataObject;
 
 /**
  * Represents a system column definition which is linked to its

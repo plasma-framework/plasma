@@ -24,10 +24,6 @@ package org.plasma.sdo.provisioning.cli;
 
 
 
-import java.io.IOException;
-
-import javax.xml.bind.JAXBException;
-
 import joptsimple.OptionException;
 import junit.framework.Test;
 
@@ -35,15 +31,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.test.PlasmaTest;
 import org.plasma.common.test.PlasmaTestSetup;
-import org.plasma.provisioning.cli.CassandraTool;
-import org.plasma.provisioning.cli.DSLTool;
-import org.plasma.provisioning.cli.QueryTool;
-import org.plasma.provisioning.cli.RDBDialect;
-import org.plasma.provisioning.cli.RDBTool;
 import org.plasma.provisioning.cli.ProvisioningToolOption;
-import org.plasma.provisioning.cli.RDBToolAction;
-import org.plasma.provisioning.cli.SDOTool;
-import org.xml.sax.SAXException;
+import org.plasma.provisioning.cli.QueryTool;
 
 /**
  * Tests for DSL tool

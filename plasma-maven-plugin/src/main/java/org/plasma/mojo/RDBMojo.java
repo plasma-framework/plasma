@@ -21,9 +21,6 @@
  */
 package org.plasma.mojo;
 
-import java.io.File;
-import java.io.FileOutputStream;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.ProvisioningToolOption;
 import org.plasma.provisioning.cli.RDBDialect;

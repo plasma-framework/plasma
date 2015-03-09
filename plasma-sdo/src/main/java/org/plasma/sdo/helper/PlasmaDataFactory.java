@@ -29,16 +29,12 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.sdo.PlasmaDataGraph;
-import org.plasma.sdo.PlasmaDataObject;
-import org.plasma.sdo.access.client.PojoDataAccessClient;
-import org.plasma.sdo.core.CoreConstants;
 import org.plasma.sdo.core.CoreDataGraph;
 import org.plasma.sdo.core.CoreDataObject;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 import commonj.sdo.helper.DataFactory;
-import commonj.sdo.helper.TypeHelper;
 
 public class PlasmaDataFactory implements DataFactory {
 

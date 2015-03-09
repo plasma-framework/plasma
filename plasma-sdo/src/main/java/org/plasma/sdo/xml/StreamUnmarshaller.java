@@ -56,8 +56,6 @@ import org.plasma.sdo.core.CoreXMLDocument;
 import org.plasma.sdo.helper.PlasmaDataFactory;
 import org.plasma.sdo.helper.PlasmaDataHelper;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
-import org.plasma.sdo.profile.KeyType;
-import org.plasma.xml.schema.SchemaConstants;
 import org.plasma.xml.schema.SchemaUtil;
 
 import commonj.sdo.DataGraph;

@@ -17,6 +17,7 @@
 package commonj.sdo.helper;
 
 import commonj.sdo.DataObject;
+import commonj.sdo.Property;
 import commonj.sdo.impl.HelperProvider;
 
 /**

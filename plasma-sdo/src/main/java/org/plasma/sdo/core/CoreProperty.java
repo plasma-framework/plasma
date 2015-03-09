@@ -32,8 +32,6 @@ import javax.xml.namespace.QName;
 
 import org.modeldriven.fuml.repository.Class_;
 import org.plasma.config.PlasmaConfig;
-import org.plasma.config.PropertyBinding;
-import org.plasma.config.TypeBinding;
 import org.plasma.config.adapter.PropertyBindingAdapter;
 import org.plasma.config.adapter.TypeBindingAdapter;
 import org.plasma.sdo.Alias;
@@ -63,6 +61,7 @@ import org.plasma.sdo.repository.Enumeration;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
+
 import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 /**

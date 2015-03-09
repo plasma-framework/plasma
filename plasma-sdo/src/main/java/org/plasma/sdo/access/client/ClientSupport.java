@@ -24,7 +24,6 @@ package org.plasma.sdo.access.client;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.plasma.config.PlasmaConfig;
 import org.plasma.sdo.access.DataAccessException;
 import org.plasma.sdo.access.PlasmaDataAccessService;
 

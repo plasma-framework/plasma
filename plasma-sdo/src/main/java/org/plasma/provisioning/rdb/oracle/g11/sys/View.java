@@ -1,9 +1,6 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys;
 
 
-import org.plasma.provisioning.rdb.oracle.g11.sys.ViewColumn;
-import org.plasma.provisioning.rdb.oracle.g11.sys.ViewColumnComment;
-import org.plasma.provisioning.rdb.oracle.g11.sys.ViewComment;
 import org.plasma.sdo.PlasmaDataObject;
 
 /**

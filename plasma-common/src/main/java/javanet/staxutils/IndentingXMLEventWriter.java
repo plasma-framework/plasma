@@ -35,8 +35,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.regex.Pattern;
+
 import javanet.staxutils.events.AbstractCharactersEvent;
 import javanet.staxutils.helpers.EventWriterDelegate;
+
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;

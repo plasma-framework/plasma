@@ -19,7 +19,6 @@ import javax.xml.stream.util.XMLEventAllocator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.profile.ProfileArtifact;
 import org.plasma.profile.ProfileConfig;
 import org.plasma.profile.ProfileURN;
 import org.plasma.profile.adapter.ProfileArtifactAdapter;

@@ -27,10 +27,7 @@ import java.util.List;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.OptionPair;
 import org.plasma.provisioning.cli.ProvisioningToolOption;
-import org.plasma.provisioning.cli.RDBDialect;
-import org.plasma.provisioning.cli.UMLPlatform;
 import org.plasma.provisioning.cli.UMLTool;
-import org.plasma.provisioning.cli.UMLToolSource;
 
 /**
  * Mojo implementation for generating  

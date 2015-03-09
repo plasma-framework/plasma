@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -37,7 +36,6 @@ import org.plasma.query.IntegralDataProperty;
 import org.plasma.query.RealDataProperty;
 import org.plasma.query.StringDataProperty;
 import org.plasma.query.TemporalDataProperty;
-import org.plasma.query.model.Query;
 import org.plasma.query.visitor.QueryVisitor;
 
 @XmlAccessorType(XmlAccessType.FIELD)

@@ -53,7 +53,6 @@ import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumnConstraint;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableColumnKeyUsage;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QTableConstraint;
 import org.plasma.provisioning.rdb.mysql.v5_5.query.QView;
-import org.plasma.provisioning.rdb.oracle.g11.sys.ViewComment;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.helper.PlasmaXMLHelper;
 import org.plasma.sdo.xml.DefaultOptions;

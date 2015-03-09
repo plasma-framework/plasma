@@ -31,8 +31,8 @@ import org.jaxen.expr.EqualityExpr;
 import org.jaxen.expr.Expr;
 import org.jaxen.expr.LogicalExpr;
 import org.jaxen.expr.RelationalExpr;
-import org.plasma.query.model.RelationalOperator;
 import org.plasma.query.model.Expression;
+import org.plasma.query.model.RelationalOperator;
 import org.plasma.query.model.Where;
 import org.plasma.sdo.xpath.XPathExprVisitor;
 

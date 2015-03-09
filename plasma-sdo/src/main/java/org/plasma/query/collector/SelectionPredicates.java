@@ -1,11 +1,6 @@
 package org.plasma.query.collector;
 
-import java.util.List;
-import java.util.Set;
-
 import org.plasma.query.model.Where;
-
-import commonj.sdo.Type;
 
 
 /**

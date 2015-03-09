@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlType;
 import org.plasma.query.QueryException;
 import org.plasma.query.visitor.QueryVisitor;
 import org.plasma.query.visitor.Traversal;
-import org.plasma.query.visitor.VisitorContext;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Query", propOrder = {

@@ -33,13 +33,13 @@
  */
 package javanet.staxutils;
 
+import javanet.staxutils.events.ExtendedXMLEvent;
+import javanet.staxutils.io.XMLWriterUtils;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
-import javanet.staxutils.events.ExtendedXMLEvent;
-import javanet.staxutils.io.XMLWriterUtils;
 
 /**
  * {@link javax.xml.stream.XMLEventWriter} that writes events to a

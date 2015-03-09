@@ -26,10 +26,8 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import javanet.staxutils.IndentingXMLStreamWriter;
 
@@ -46,7 +44,6 @@ import org.plasma.sdo.PlasmaNode;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.helper.DataConverter;
-import org.plasma.sdo.helper.PlasmaTypeHelper;
 import org.plasma.sdo.helper.PlasmaXSDHelper;
 import org.plasma.sdo.profile.KeyType;
 import org.plasma.xml.schema.SchemaConstants;

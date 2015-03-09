@@ -1,11 +1,6 @@
 package org.plasma.provisioning.rdb.mysql.v5_5;
 
 
-import org.plasma.provisioning.rdb.mysql.v5_5.TableColumn;
-import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnConstraint;
-import org.plasma.provisioning.rdb.mysql.v5_5.TableColumnKeyUsage;
-import org.plasma.provisioning.rdb.mysql.v5_5.TableConstraint;
-import org.plasma.provisioning.rdb.mysql.v5_5.View;
 import org.plasma.sdo.PlasmaDataObject;
 
 /**

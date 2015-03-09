@@ -28,7 +28,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.sdo.AssociationPath;
-import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.sdo.PlasmaNode;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.core.CoreDataObject;

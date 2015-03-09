@@ -33,9 +33,6 @@
  */
 package javanet.staxutils;
 
-import javanet.staxutils.SimpleLocation;
-import javanet.staxutils.StaticLocation;
-import javanet.staxutils.XMLStreamUtils;
 import javanet.staxutils.error.IllegalStreamStateException;
 
 import javax.xml.namespace.QName;

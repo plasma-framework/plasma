@@ -36,11 +36,11 @@ package javanet.staxutils.helpers;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javanet.staxutils.BaseXMLEventReader;
+
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-
-import javanet.staxutils.BaseXMLEventReader;
 
 /**
  * {@link XMLEventReader} that reads events from a {@link List}.

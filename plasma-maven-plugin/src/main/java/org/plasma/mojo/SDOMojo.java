@@ -28,7 +28,6 @@ import java.util.Date;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.plasma.provisioning.cli.ProvisioningToolOption;
 import org.plasma.provisioning.cli.SDOTool;
-import org.plasma.provisioning.cli.SDOToolAction;
 
 /**
  * Mojo implementation for generating SDO artifacts, such as

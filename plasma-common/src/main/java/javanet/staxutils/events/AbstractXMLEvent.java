@@ -38,6 +38,10 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import javanet.staxutils.helpers.EventMatcher;
+import javanet.staxutils.helpers.UnknownLocation;
+import javanet.staxutils.io.XMLWriterUtils;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLStreamException;
@@ -46,10 +50,6 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
-import javanet.staxutils.helpers.EventMatcher;
-import javanet.staxutils.helpers.UnknownLocation;
-import javanet.staxutils.io.XMLWriterUtils;
 
 /**
  * Abstract base class for {@link XMLEvent} implementations.

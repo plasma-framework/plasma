@@ -27,7 +27,6 @@ import org.jaxen.Context;
 import org.jaxen.JaxenException;
 import org.jaxen.Navigator;
 
-import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 
 /** 

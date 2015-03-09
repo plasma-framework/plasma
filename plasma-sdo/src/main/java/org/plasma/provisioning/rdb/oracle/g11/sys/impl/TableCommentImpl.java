@@ -1,10 +1,10 @@
 package org.plasma.provisioning.rdb.oracle.g11.sys.impl;
 
 import java.io.Serializable;
-import org.plasma.sdo.core.CoreDataObject;
-import java.lang.String;
+
 import org.plasma.provisioning.rdb.oracle.g11.sys.Table;
 import org.plasma.provisioning.rdb.oracle.g11.sys.TableComment;
+import org.plasma.sdo.core.CoreDataObject;
 
 /**
  * A comment on a table
