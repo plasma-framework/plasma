@@ -42,39 +42,42 @@ public class PapyrusModelAssembler extends DefaultUMLModelAssembler implements U
 	    
 	    this.plasmaNs = Namespace.getNamespace("PlasmaSDOProfile", this.profile.getNamespaceUri()); 
 	    this.xmiVersion = this.profile.getXmiVersion();
-	    this.dataTypeHRefPrefix = "pathmap://PLASMA_LIBRARIES/PlasmaSDODataTypes.uml#plasma-sdo-profile-datatypes-";
+	    this.dataTypeHRefPrefix = "pathmap://PLASMA_LIBRARIES/PlasmaSDODataTypes_v1_1.uml#plasma-sdo-profile-datatypes-"; // FIXME
 	    
 	    this.platformNs = Namespace.getNamespace("ecore", this.profile.getEcoreNamespaceUri()); 
 	    
 	    this.xsiNs = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-	    this.xsiSchemaLocation = this.plasmaNs.getURI() + " pathmap://PLASMA_PROFILES/PlasmaSDO.profile.uml#" + this.profile.getId();
+	    this.xsiSchemaLocation = this.plasmaNs.getURI() 
+	    	+ " pathmap://PLASMA_PROFILES/" + this.profile.getUrn().value() + "#" + this.profile.getEcoreId(); // use the ID for the ECORE profile contents
 	}
 	
 	protected Element buildProfileApplication() 
 	{
     	Element profileApplicationElem = new Element("profileApplication");
-    	profileApplicationElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	profileApplicationElem.setAttribute(new Attribute("type", "uml:ProfileApplication", xmiNs));
+    	profileApplicationElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	
     	Element eAnnotationsElem = new Element("eAnnotations");
     	profileApplicationElem.addContent(eAnnotationsElem);
-    	eAnnotationsElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	eAnnotationsElem.setAttribute(new Attribute("type", "ecore:EAnnotation", xmiNs));
+    	eAnnotationsElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	eAnnotationsElem.setAttribute(new Attribute("source", 
     			this.profile.getUmlNamespaceUri()));   
     	Element referencesElem = new Element("references");
     	eAnnotationsElem.addContent(referencesElem);
-    	referencesElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	referencesElem.setAttribute(new Attribute("type", "ecore:EPackage", xmiNs));
+    	// Note: Papyrus does not generate ID here (?)
+    	referencesElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	referencesElem.setAttribute(new Attribute("href", 
-        	"pathmap://PLASMA_PROFILES/PlasmaSDO.profile.uml#" + this.profile.getId()));  
+        	"pathmap://PLASMA_PROFILES/" + this.profile.getUrn().value() + "#" + this.profile.getEcoreId())); // use the ID for the ECORE profile contents 
     	
     	Element appliedProfileElem = new Element("appliedProfile");
     	profileApplicationElem.addContent(appliedProfileElem);
-    	appliedProfileElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	appliedProfileElem.setAttribute(new Attribute("type", "uml:Profile", xmiNs));
+    	// Note: Papyrus does not generate ID here (?)
+    	appliedProfileElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
     	appliedProfileElem.setAttribute(new Attribute("href", 
-    		"pathmap://PLASMA_PROFILES/PlasmaSDO.profile.uml#" + this.profile.getId()));  
+    		"pathmap://PLASMA_PROFILES/" + this.profile.getUrn().value() + "#" + this.profile.getId()));  
     	
     	return profileApplicationElem;
 

@@ -389,9 +389,6 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     	    this.modelElem = this.buildModelFromURITokens(model);
     	else
 	        this.modelElem = this.buildModelFromPackageNames(model);
-    	Element profileApplicationElem = buildProfileApplication();
-    	if (profileApplicationElem != null)
-    		this.modelElem.addContent(profileApplicationElem);
     	
     	collectPackages(model);
     	collectClasses(model);
@@ -445,8 +442,13 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     				
     			}
          	}
-    	}   	
-    	
+    	}   
+	    
+	    // add profile applications
+    	Element profileApplicationElem = buildProfileApplication();
+    	if (profileApplicationElem != null)
+    		this.modelElem.addContent(profileApplicationElem);
+   	
 		return document;
     }
 	

@@ -82,5 +82,9 @@ public class ProfileArtifactAdapter {
 	public String getEcoreVersion() {
 		return artifact.getEcoreVersion();
 	}
+
+	public String getEcoreId() {
+		return artifact.getEcoreId();
+	}
     
 }

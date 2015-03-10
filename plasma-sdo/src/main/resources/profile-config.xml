@@ -12,8 +12,13 @@
         xmiNamespaceUri="http://schema.omg.org/spec/XMI/2.1" xmiVersion="2.1"/>
     
     <!-- Papyrus Profile Versions -->
+    <!-- 
+         For profiles, the id should be the XMI ID of the UML Profile element. The ecoreId ID should be 
+         the XMI ID if the eAnnotations contents block 
+         (be careful, Papyrus appends another entire contents block for every profile change) 
+    -->
     <Artifact urn="PlasmaSDO.profile_v1_1.uml" 
-        id="_Ta1lIMTtEeSkYpwPkZ5I3w"  version="1.1"
+        id="_NlmngCJUEeSXvPZh3aumVA" ecoreId="_Ta1lIsTtEeSkYpwPkZ5I3w" version="1.1"
         namespaceUri="http:///schemas/PlasmaSDOProfile/_Ta1lIMTtEeSkYpwPkZ5I3w/0"
         umlNamespaceUri="http://www.eclipse.org/uml2/5.0.0/UML" umlVersion="5.0.0" 
         xmiNamespaceUri="http://www.omg.org/spec/XMI/20131001" xmiVersion="20131001"

@@ -80,7 +80,13 @@
 				<xsd:attribute name="id" type="xsd:string"
 					use="required">
 					<xsd:annotation>
-						<xsd:documentation>the id for the artifact</xsd:documentation>
+						<xsd:documentation>the XMI id for the UML Profile element</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="ecoreId" type="xsd:string"
+					use="optional">
+					<xsd:annotation>
+						<xsd:documentation>the Eclipse ECORE XMI id for the contents element for a Papyrus UML profile</xsd:documentation>
 					</xsd:annotation>
 				</xsd:attribute>
 				<xsd:attribute name="version" type="xsd:string"
