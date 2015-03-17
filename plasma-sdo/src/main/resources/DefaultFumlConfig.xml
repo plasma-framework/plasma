@@ -37,7 +37,15 @@
         domain="ecore" uri="http:///schemas/PlasmaSDOProfile" 
         target="http:///schemas/PlasmaSDOProfile/_Ta1lIMTtEeSkYpwPkZ5I3w/0" /> 
         
+    <NamespaceMapping pathmap="pathmap://PLASMA_PROFILES/PlasmaSDO.profile_v1_1.uml" 
+        domain="ecore" uri="http:///schemas/PlasmaSDOProfile" 
+        target="http:///schemas/PlasmaSDOProfile/_Ta1lIMTtEeSkYpwPkZ5I3w/0" /> 
+
     <NamespaceMapping pathmap="pathmap://PLASMA_LIBRARIES/PlasmaSDODataTypes.uml" 
+        domain="ecore" uri="http:///schemas/PlasmaSDODataTypes" 
+        target="http:///schemas/PlasmaSDODataTypes/_Z68-YCG2EeSfsoM4aIlAPw" /> 
+
+    <NamespaceMapping pathmap="pathmap://PLASMA_LIBRARIES/PlasmaSDODataTypes_v1_1.uml" 
         domain="ecore" uri="http:///schemas/PlasmaSDODataTypes" 
         target="http:///schemas/PlasmaSDODataTypes/_Z68-YCG2EeSfsoM4aIlAPw" /> 
          
