@@ -9,9 +9,21 @@ See https://github.com/terrameta/plasma/issues.
 
 
 Major Changes
+[Issue #52] - Maven Module Reorg enhancement
+
 Bugs
+[Issue #46] - Concurrent Mod On Artifact Load bug
+[Issue #42] - Remove JDBC Driver Dependency From JDBC Provider bug
+
 Improvements
-[Issue #47] - Evaluate/Integrate Command Line Parser For CLI Tools
+[Issue #55] - Determine Profile Version and Load Profile Automatically
+[Issue #54] - Validate Models Against a Profile Version enhancement
+[Issue #53] - Support Profile Versions For All Supported Modelling Platforms enhancement
+[Issue #22] - Automatically Load Known Required Artifacts enhancement
+[Issue #47] - Add Unstructured Name/value Pair Properties to Query enhancement 
+
 New Features
 Tasks
 Wish
+
+
