@@ -1,0 +1,17 @@
+Release Notes
+
+Plasma 1.2.3 Release Notes
+Plasma 1.2.3 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/terrameta/plasma/issues.
+
+
+Major Changes
+Bugs
+Improvements
+[Issue #47] - Evaluate/Integrate Command Line Parser For CLI Tools
+New Features
+Tasks
+Wish
