@@ -20,7 +20,7 @@ import commonj.sdo.impl.ExternalizableDelegator.Resolvable;
 public class HelperProviderImpl extends HelperProvider {
     
     public HelperProviderImpl() {
-       super(); 
+        
     }
 
     @Override
