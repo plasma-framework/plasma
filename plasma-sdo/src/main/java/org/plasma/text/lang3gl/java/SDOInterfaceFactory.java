@@ -24,6 +24,7 @@ package org.plasma.text.lang3gl.java;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.plasma.config.InterfaceProvisioning;
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.metamodel.Class;
@@ -31,6 +32,8 @@ import org.plasma.metamodel.ClassRef;
 import org.plasma.metamodel.Package;
 import org.plasma.metamodel.Property;
 import org.plasma.sdo.PlasmaDataObject;
+import org.plasma.text.TextBuilder;
+import org.plasma.text.TextProvisioningException;
 import org.plasma.text.lang3gl.ClassNameResolver;
 import org.plasma.text.lang3gl.InterfaceFactory;
 import org.plasma.text.lang3gl.Lang3GLContext;
@@ -45,7 +48,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 	}
 		
 	public String createContent(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		
 		buf.append(this.createPackageDeclaration(pkg));
 		buf.append(LINE_SEP);
@@ -60,7 +63,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		buf.append(this.beginBody());
 
 		buf.append(LINE_SEP);
-		buf.append(this.createStaticFieldDeclarations(clss));
+		buf.append(this.createStaticFieldDeclarations(pkg, clss));
 
 		buf.append(LINE_SEP);
 		buf.append(this.createMethodDeclarations(clss));
@@ -76,7 +79,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 	}
 
 	protected String createThirdPartyImportDeclarations(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		
 		// FIXME: add array/list accessor collection config option
 		//if (!hasOnlySingilarFields(clss)) {
@@ -87,7 +90,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 	}
 
 	protected String createTypeDeclaration(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		
 		String javadoc = createTypeDeclarationJavadoc(pkg, clss);
 		buf.append(javadoc);
@@ -116,7 +119,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 	}	
 	
 	private String createTypeDeclarationJavadoc(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		
 		buf.append("/**"); // begin javadoc
 		
@@ -184,68 +187,69 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		return buf.toString();
 	}	
 	
-	protected String createStaticFieldDeclarations(Class clss) {
-		StringBuilder buf = new StringBuilder();
+	protected String createStaticFieldDeclarations(Package pkg, Class clss) {
+		InterfaceProvisioning interfaceProvisioning = PlasmaConfig.getInstance().getSDOInterfaceProvisioning(pkg.getUri());
+		if (interfaceProvisioning == null)
+			interfaceProvisioning = this.globalInterfaceProvisioning;
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		
 		// the namespace URI
-		buf.append(this.indent(1));
-		buf.append("/** The <a href=\"http://plasma-sdo.org\">SDO</a> namespace URI associated with the <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a> for this class. */");
-		buf.append(this.newline(1));
-		buf.append("public static final String NAMESPACE_URI = \"");
+		buf.appendln(1, "/** The <a href=\"http://plasma-sdo.org\">SDO</a> namespace URI associated with the <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a> for this class. */");
+		buf.appendln(1, "public static final String NAMESPACE_URI = \"");
 		buf.append(clss.getUri());
 		buf.append("\";");
 		buf.append(LINE_SEP);
 		
 		//the entity name
-		buf.append(this.newline(1));
-		buf.append("/** The entity or <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a> logical name associated with this class. */");
-		buf.append(this.newline(1));
-		buf.append("public static final String TYPE_NAME_");
+		buf.appendln(1, "/** The entity or <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a> logical name associated with this class. */");
+		buf.appendln(1, "public static final String TYPE_NAME_");
 		buf.append(toConstantName(clss.getName()));
 		buf.append(" = \"");
 		buf.append(clss.getName());
 		buf.append("\";");
 
-		buf.append(this.newline(1));
+		buf.appendln(1, ""); 
 
-		switch (this.interfaceProvisioning.getPropertyNameStyle()) {
+		switch (interfaceProvisioning.getPropertyNameStyle()) {
 		case ENUMS:
-			// the static enums
-			buf.append(this.newline(1));
-			buf.append("/** The declared logical property names for this <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a>. */");
-			buf.append(this.newline(1));
-			buf.append("public static enum PROPERTY {");
-			int enumCount = 0;
-			for (Property field : clss.getProperties()) {
-				if (enumCount > 0)
-					buf.append(",");
-				buf.append(this.newline(2));	
-			    String javadoc = createStaticFieldDeclarationJavadoc(clss, field, 2);
-			    buf.append(javadoc);				
-				buf.append(this.newline(2));
-				buf.append(field.getName());
-				enumCount++;
+			switch(interfaceProvisioning.getEnumSource()) {
+			case DERIVED:
+				// the static enums
+				buf.appendln(1, "/** The declared logical property names for this <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a>. */");
+				buf.appendln(1, "public static enum PROPERTY {");
+				int enumCount = 0;
+				for (Property field : clss.getProperties()) {
+					if (enumCount > 0)
+						buf.append(",");
+					buf.append(this.newline(2));	
+				    String javadoc = createStaticFieldDeclarationJavadoc(clss, field, 2);
+				    buf.append(javadoc);				
+					buf.append(this.newline(2));
+					buf.append(field.getName());
+					enumCount++;
+				}
+				buf.appendln(1, "}");
+				break;
+			case EXTERNAL: // noop
+				break;
+			default:
+				throw new TextProvisioningException("unexpected enum source, " + interfaceProvisioning.getEnumSource());
 			}
-			buf.append(this.newline(1));
-			buf.append("}");
 			break;
 		case CONSTANTS:
 			// static constants
-			buf.append(this.newline(1));
+			buf.appendln(1, "");
 			for (Property field : clss.getProperties()) {
-				buf.append(this.newline(1));	
-				
 			    String javadoc = createStaticFieldDeclarationJavadoc(clss, field, 1);
-			    buf.append(javadoc);
+				buf.appendln(1, javadoc);
 				
-				buf.append(this.newline(1));
-				buf.append("public static final String ");
+				buf.appendln(1, "public static final String ");
 				buf.append(toConstantName(field.getName()));
 				buf.append(" = \"");
 				buf.append(field.getName());
 				buf.append("\";");
 			}
-			buf.append(this.newline(1));
+			buf.appendln(1, ""); 
 			break;
 			default:	
 		}
@@ -255,7 +259,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 
 	private String createStaticFieldDeclarationJavadoc(Class clss, Property field, int indent)
 	{
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		buf.append(this.newline(indent));
 		buf.append("/**"); // begin javadoc
 		
@@ -304,8 +308,8 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 	}
 
 	protected String createMethodDeclarations(Class clss, Property field) {
-		StringBuilder buf = new StringBuilder();
-		TypeClassInfo typeClassName = this.getTypeClassName(field.getType());
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
+		MetaClassInfo typeClassName = this.getTypeClassName(field.getType());
 
 		buf.append(LINE_SEP);			    
 		createIsSetDeclaration(null, clss, field, typeClassName, buf);
@@ -369,16 +373,16 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		return buf.toString();
 	}
 	
-	public String createFileName(Class clss) {
+	public String createFileName(Class clss, Package pkg) {
 		SDOInterfaceNameResolver interfaceResolver = new SDOInterfaceNameResolver();
-		StringBuilder buf = new StringBuilder();		
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());		
 		buf.append(interfaceResolver.getName(clss));
 		buf.append(".java");		
 		return buf.toString();
 	}
 
 	protected String createSDOInterfaceReferenceImportDeclarations(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		
 		// for interfaces we extend our superclasses, so need to reference them
 		// FIXME: only 1 level though

@@ -27,6 +27,8 @@ import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
+import org.plasma.metamodel.Package;
+import org.plasma.text.NamingCollisionException;
 import org.plasma.text.lang3gl.ClassNameResolver;
 
 public class SDOInterfaceNameResolver extends DefaultNameResolver
@@ -41,12 +43,12 @@ public class SDOInterfaceNameResolver extends DefaultNameResolver
 	}
 	
 	@Override
-	public String getQualifiedName(Class clss) {		
+	public String getQualifiedName(Class clss, Package pkg) {		
 		Namespace sdoNamespace = PlasmaConfig.getInstance().getSDONamespaceByURI(clss.getUri());
 		String packageName = sdoNamespace.getProvisioning().getPackageName();
 		String qualifiedName = packageName + "." 
 		    + replaceReservedCharacters(clss.getName()); 				
-		
+		checkUnresolvableNameCollision(qualifiedName, clss, pkg);
 		return qualifiedName;
 	}
 

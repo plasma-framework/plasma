@@ -38,6 +38,7 @@ public class NamespaceAdapter {
 	private Namespace namespace;
 	private Map<String, TypeBindingAdapter> typeBindings;
 	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+	private boolean systemArtifact = false;
 	
 	@SuppressWarnings("unused")
 	private NamespaceAdapter() {}
@@ -63,6 +64,12 @@ public class NamespaceAdapter {
 	}
 	public String getArtifact() {
 		return namespace.getArtifact();
+	}
+	public boolean isSystemArtifact() {
+		return systemArtifact;
+	}
+	public void setSystemArtifact(boolean systemArtifact) {
+		this.systemArtifact = systemArtifact;
 	}
 	public void addTypeBinding(TypeBinding typeBinding) {
 		 

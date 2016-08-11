@@ -30,8 +30,8 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.Documentation;
 import org.plasma.metamodel.Enumeration;
-import org.plasma.metamodel.Model;
 import org.plasma.metamodel.Package;
+import org.plasma.provisioning.adapter.ProvisioningModel;
 import org.plasma.text.lang3gl.ClassFactory;
 import org.plasma.text.lang3gl.DefaultStreamAssembler;
 import org.plasma.text.lang3gl.EnumerationFactory;
@@ -44,15 +44,16 @@ public class SDOAssembler extends DefaultStreamAssembler {
     private static Log log =LogFactory.getLog(
     		SDOAssembler.class); 
     
-	public SDOAssembler(Model packages, Lang3GLFactory factory,
+	public SDOAssembler(ProvisioningModel provisioningModel, Lang3GLFactory factory,
 			Lang3GLOperation operation, File dest) {
-		super(packages, factory, operation, dest);
+		super(provisioningModel, factory, operation, dest);
 	}
 
+	@Override
 	public void createEnumerationClasses() throws IOException 
     {
     	EnumerationFactory enumFactory = factory.getEnumerationFactory();
-    	for (Package pkg : this.packages.getPackages()) {
+    	for (Package pkg : this.provisioningModel.getLeafPackages()) {
 			File dir = new File(dest, factory.getEnumerationFactory().createBaseDirectoryName(pkg));
 			log.debug("processing package: " + dir.getAbsolutePath());
 			if (!dir.exists()) {
@@ -76,11 +77,12 @@ public class SDOAssembler extends DefaultStreamAssembler {
     }
 
 	
+	@Override
     public void createInterfaceClasses() throws IOException 
     {
     	InterfaceFactory interfaceFactory = factory.getInterfaceFactory();
     	
-    	for (Package pkg : this.packages.getPackages()) {
+    	for (Package pkg : this.provisioningModel.getLeafPackages()) {
 			File dir = new File(dest, interfaceFactory.createBaseDirectoryName(pkg));
 			log.debug("processing package: " + dir.getAbsolutePath());
 			if (!dir.exists()) {
@@ -90,7 +92,7 @@ public class SDOAssembler extends DefaultStreamAssembler {
     			log.debug("created package: " + dir.getAbsolutePath());
 			}
     		for (Class clss : pkg.getClazzs()) {
-                File file = new File(dir, interfaceFactory.createFileName(clss));
+                File file = new File(dir, interfaceFactory.createFileName(clss, pkg));
     			log.debug("creating file: " + file.getAbsolutePath());
     			FileOutputStream stream = new FileOutputStream(file);
     			StringBuilder buf = new StringBuilder();
@@ -103,11 +105,12 @@ public class SDOAssembler extends DefaultStreamAssembler {
     	}    	
     }
     
+	@Override
     public void createImplementationClasses() throws IOException 
     {
     	ClassFactory classFactory = factory.getClassFactory();
     	
-    	for (Package pkg : this.packages.getPackages()) {
+    	for (Package pkg : this.provisioningModel.getLeafPackages()) {
 			File dir = new File(dest, classFactory.createDirectoryName(pkg));
 			log.debug("processing package: " + dir.getAbsolutePath());
 			if (!dir.exists()) {
@@ -117,7 +120,7 @@ public class SDOAssembler extends DefaultStreamAssembler {
     			log.debug("created package: " + dir.getAbsolutePath());
 			}
     		for (Class clss : pkg.getClazzs()) {
-                File file = new File(dir, classFactory.createFileName(clss));
+                File file = new File(dir, classFactory.createFileName(clss, pkg));
     			log.debug("creating file: " + file.getAbsolutePath());
     			FileOutputStream stream = new FileOutputStream(file);
     			
@@ -132,8 +135,9 @@ public class SDOAssembler extends DefaultStreamAssembler {
     	}    	
     }
 
+	@Override
 	public void createInterfacePackageDocs() throws IOException {
-    	for (Package pkg : this.packages.getPackages()) {
+    	for (Package pkg : this.provisioningModel.getLeafPackages()) {
 			File dir = new File(dest, factory.getInterfaceFactory().createBaseDirectoryName(pkg));
 			log.debug("processing package: " + dir.getAbsolutePath());
 			if (!dir.exists()) {

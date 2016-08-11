@@ -150,14 +150,19 @@
 
     <xsd:complexType name="InterfaceProvisioning">
         <xsd:annotation>
-            <xsd:documentation>specific provisioning properties for interfaces under this context</xsd:documentation>
+            <xsd:documentation>Specific provisioning properties for interfaces under this context</xsd:documentation>
         </xsd:annotation>
 
         <xsd:complexContent>
             <xsd:extension base="cfg:ClassProvisioning">
                 <xsd:attribute name="propertyNameStyle" type="cfg:PropertyNameStyle" use="optional" default="enums">
                     <xsd:annotation>                                  
-                        <xsd:documentation>Specifies how logical property names are generated and referenced within SDO interfaes and implementation classes.</xsd:documentation>       
+                        <xsd:documentation>Specifies how logical property names are generated and referenced within SDO interfaces and implementation classes.</xsd:documentation>       
+                    </xsd:annotation>                                 
+                </xsd:attribute>
+                <xsd:attribute name="enumSource" type="cfg:EnumSource" use="optional" default="derived">
+                    <xsd:annotation>                                  
+                        <xsd:documentation>When logical property names are generated as enums within generated code, specifies how enums are originated</xsd:documentation>       
                     </xsd:annotation>                                 
                 </xsd:attribute>
             </xsd:extension>
@@ -172,7 +177,7 @@
 
     <xsd:complexType name="ImplementationProvisioning">
         <xsd:annotation>
-            <xsd:documentation>specific provisioning properties for implementation classes under this context</xsd:documentation>
+            <xsd:documentation>Specific provisioning properties for implementation classes under this context</xsd:documentation>
         </xsd:annotation>
 
         <xsd:complexContent>
@@ -732,27 +737,42 @@
 
     <xsd:simpleType name="PropertyNameStyle">
         <xsd:annotation>
-            <xsd:documentation>Specifies how logical property names are generated and referenced within SDO interfaes and implementation classes.</xsd:documentation>
+            <xsd:documentation>Specifies how logical property names are generated and referenced within SDO interfaces and implementation classes.</xsd:documentation>
         </xsd:annotation>
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="constants">
                 <xsd:annotation>
-                    <xsd:documentation>use static string constants</xsd:documentation>
+                    <xsd:documentation>Use static string constants</xsd:documentation>
                 </xsd:annotation>
             </xsd:enumeration>
             <xsd:enumeration value="enums">
                 <xsd:annotation>
-                    <xsd:documentation>use inner-class enumnerations </xsd:documentation>
+                    <xsd:documentation>Use either derived inner-class enumerations or enumerations from an external source</xsd:documentation>
                 </xsd:annotation>
             </xsd:enumeration>
             <xsd:enumeration value="none">
                 <xsd:annotation>
-                    <xsd:documentation>use the actual quoted property name</xsd:documentation>
+                    <xsd:documentation>Use the actual property name literal</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="EnumSource">
+        <xsd:annotation><xsd:documentation>When logical property names are generated as enums within generated code, specifies how enums are originated</xsd:documentation></xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="external">
+                <xsd:annotation>
+                    <xsd:documentation>Reference enums from some external source</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="derived">
+                <xsd:annotation>
+                    <xsd:documentation>Derive enums from metadata</xsd:documentation>
                 </xsd:annotation>
             </xsd:enumeration>
 
         </xsd:restriction>
     </xsd:simpleType>
-
     
 </xsd:schema>

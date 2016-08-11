@@ -39,7 +39,6 @@
             <xs:extension base="prov:Package">
 		        <xs:sequence>
 		            <xs:element name="RootClass" type="prov:ClassRef" minOccurs="0" maxOccurs="1"/>
-		            <xs:element ref="prov:Package" minOccurs="0" maxOccurs="unbounded"/>
 		        </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -62,8 +61,10 @@
             <xs:extension base="prov:NamedElement">
 		        <xs:sequence>
 		            <xs:element ref="prov:Documentation" minOccurs="0" maxOccurs="unbounded"/>
-		            <xs:element ref="prov:Class" minOccurs="1" maxOccurs="unbounded"/>
+		            <xs:element ref="prov:NamespaceProvisioning" minOccurs="0" maxOccurs="1"/>
+		            <xs:element ref="prov:Class" minOccurs="0" maxOccurs="unbounded"/>
 		            <xs:element ref="prov:Enumeration" minOccurs="0" maxOccurs="unbounded"/>
+		            <xs:element ref="prov:Package" minOccurs="0" maxOccurs="unbounded"/>
 		        </xs:sequence>
 		        <xs:attribute name="uri" type="xs:string" use="required"/>
             </xs:extension>
@@ -92,6 +93,28 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="PackageAppInfo" type="prov:PackageAppInfo"/>
+
+    <xs:complexType name="NamespaceProvisioning">
+        <xs:annotation>
+            <xs:documentation>The code generation meta data associated with a namespace</xs:documentation>
+        </xs:annotation>
+	    <xs:attribute name="packageName" type="xs:string" use="required">
+            <xs:annotation>                                  
+                <xs:documentation>The qualified Java package for generated classes for this namespace</xs:documentation>       
+            </xs:annotation>                                 
+        </xs:attribute>
+	    <xs:attribute name="originatingPackageName" type="xs:string" use="optional">
+            <xs:annotation>                                  
+                <xs:documentation>The qualified Java package for the originating package, if any</xs:documentation>       
+            </xs:annotation>                                 
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:element name="NamespaceProvisioning" type="prov:NamespaceProvisioning">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+    </xs:element>
 
     <xs:complexType name="Documentation">
         <xs:annotation>
@@ -139,6 +162,7 @@
             <xs:extension base="prov:Type">
                 <xs:sequence>
                     <xs:element ref="prov:Documentation" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element ref="prov:ClassProvisioning" minOccurs="0" maxOccurs="1"/>
                     <xs:element ref="prov:Property" maxOccurs="unbounded"/>
                     <xs:element name="SuperClass" type="prov:ClassRef" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="prov:Behavior" minOccurs="0" maxOccurs="unbounded"/>
@@ -149,6 +173,28 @@
         </xs:complexContent>
     </xs:complexType>   
     <xs:element name="Class" type="prov:Class"/>
+
+    <xs:complexType name="ClassProvisioning">
+        <xs:annotation>
+            <xs:documentation>The code generation meta data associated with a class</xs:documentation>
+        </xs:annotation>
+	    <xs:attribute name="className" type="xs:string" use="required">
+            <xs:annotation>                                  
+                <xs:documentation>The class name for the generated class</xs:documentation>       
+            </xs:annotation>                                 
+        </xs:attribute>
+	    <xs:attribute name="originatingClassName" type="xs:string" use="optional">
+            <xs:annotation>                                  
+                <xs:documentation>The class name for the originating class, if any</xs:documentation>       
+            </xs:annotation>                                 
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:element name="ClassProvisioning" type="prov:ClassProvisioning">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+    </xs:element>
     
     <xs:complexType name="Behavior">
         <xs:simpleContent>
@@ -206,6 +252,7 @@
             <xs:extension base="prov:NamedElement">
 		        <xs:sequence>
 		            <xs:element ref="prov:Documentation" minOccurs="0" maxOccurs="unbounded"/>
+		            <xs:element ref="prov:PropertyProvisioning" minOccurs="0" maxOccurs="1"/>
 		            <xs:element name="type" type="prov:TypeRef" minOccurs="1" maxOccurs="1"/>
 		            <xs:element ref="prov:Key" minOccurs="0" maxOccurs="1"/>
 		            <xs:element ref="prov:Concurrent" minOccurs="0" maxOccurs="1"/>
@@ -248,6 +295,23 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="PropertyAppInfo" type="prov:PropertyAppInfo"/>
+
+    <xs:complexType name="PropertyProvisioning">
+        <xs:annotation>
+            <xs:documentation>The code generation meta data associated with a property</xs:documentation>
+        </xs:annotation>
+	    <xs:attribute name="originatingPropertyName" type="xs:string" use="optional">
+            <xs:annotation>                                  
+                <xs:documentation>The property name for the originating enum or other property, if any</xs:documentation>       
+            </xs:annotation>                                 
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:element name="PropertyProvisioning" type="prov:PropertyProvisioning">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+    </xs:element>
 
     <xs:complexType name="Enumeration">
         <xs:annotation>

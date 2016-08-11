@@ -59,9 +59,9 @@ import org.plasma.metamodel.Model;
 import org.plasma.metamodel.Package;
 import org.plasma.metamodel.Property;
 import org.plasma.metamodel.ValueConstraint;
-import org.plasma.provisioning.ProvisioningModelAssembler;
-import org.plasma.provisioning.ProvisioningModelDataBinding;
-import org.plasma.provisioning.SchemaProvisioningModelAssembler;
+import org.plasma.provisioning.MetamodelAssembler;
+import org.plasma.provisioning.MetamodelDataBinding;
+import org.plasma.provisioning.SchemaMetamodelAssembler;
 import org.plasma.query.Query;
 import org.plasma.sdo.profile.SDOAlias;
 import org.plasma.sdo.profile.SDOEnumerationConstraint;
@@ -308,7 +308,7 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 	private Document buildDocumentModel(Query query, 
     		String destNamespaceURI, String destNamespacePrefix) 
     {
-        ProvisioningModelAssembler stagingAssembler = new ProvisioningModelAssembler(query, 
+        MetamodelAssembler stagingAssembler = new MetamodelAssembler(query, 
         		destNamespaceURI, destNamespacePrefix);
         Model model = stagingAssembler.getModel();
         
@@ -343,8 +343,8 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 				        return true;
 					}			    	
 			    };
-			    ProvisioningModelDataBinding binding = 
-				   new ProvisioningModelDataBinding(debugHandler);
+			    MetamodelDataBinding binding = 
+				   new MetamodelDataBinding(debugHandler);
 			    String xml = binding.marshal(model);
 			    binding.validate(xml);
 			    log.debug(xml);
@@ -362,7 +362,7 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 	private Document buildDocumentModel(Schema schema, 
     		String destNamespaceURI, String destNamespacePrefix) 
     {
-		SchemaProvisioningModelAssembler stagingAssembler = new SchemaProvisioningModelAssembler(schema, 
+		SchemaMetamodelAssembler stagingAssembler = new SchemaMetamodelAssembler(schema, 
         		destNamespaceURI, destNamespacePrefix);
         Model model = stagingAssembler.getModel();
         return buildDocumentModel(model, destNamespaceURI, destNamespacePrefix);
@@ -452,38 +452,35 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 		return document;
     }
 	
-	private void collectPackages(Model model) {
-        if (model.getUri() != null) {
-    	    packageMap.put(model.getUri() + "#" + model.getName(), model);    	
+	private void collectPackages(Package pkg) {
+        if (pkg.getUri() != null) {
+    	    packageMap.put(pkg.getUri() + "#" + pkg.getName(), pkg);    	
         }
-        for (Package pkg : model.getPackages())	{
-	        if (pkg.getUri() != null) {
-        	    packageMap.put(pkg.getUri() + "#" + pkg.getName(), pkg);    	
-	        }
+        for (Package child : pkg.getPackages())	{
+        	collectPackages(child);
         }
 	}
 
-	//FIXME: only a model can have packages? A package cannot?
-	private void collectClasses(Model model) {
-		collectClasses((Package)model);
-        for (Package pkg : model.getPackages())	
-        	collectClasses(pkg);
+	private void collectClasses(Package pkg) {
+		mapClasses(pkg);
+        for (Package child : pkg.getPackages())	
+        	collectClasses(child);
 	}
 	
-	private void collectClasses(Package pkg) {
+	private void mapClasses(Package pkg) {
 	    for (Class clss : pkg.getClazzs()) {
 	        classMap.put(clss.getUri() + "#" + clss.getName(), clss); 
 	        classPackageMap.put(clss, pkg);
 	    } 
 	}
 	
-	private void collectEnumerations(Model model) {
-		collectEnumerations((Package)model);
-        for (Package pkg : model.getPackages())	
-        	collectEnumerations(pkg);
+	private void collectEnumerations(Package pkg) {
+		mapEnumerations(pkg);
+        for (Package child : pkg.getPackages())	
+        	collectEnumerations(child);
 	}
 	
-	private void collectEnumerations(Package pkg) {
+	private void mapEnumerations(Package pkg) {
 	    for (Enumeration enm : pkg.getEnumerations()) {
 	        enumMap.put(enm.getUri() + "#" + enm.getName(), enm);    	
 	        enumPackageMap.put(enm, pkg);
@@ -506,7 +503,7 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     	    }
      	
     	// Only a root (model) package
-    	// tag the model w/a SDO namespace streotype, else tag the 
+    	// tag the model w/a SDO namespace stereotype, else tag the 
     	// last package descendant below
     	if (model.getPackages().size() == 0) {
 	    	Element modelStereotype = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
@@ -517,32 +514,42 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 	    	if (model.getAlias() != null)
 	    	    addAlias(model.getAlias(), model.getId());
     	}
-    	
-    	for (Package pkg : model.getPackages()) {
-
-        	Element pkgElem = new Element("packagedElement");
-        	modelElem.addContent(pkgElem); // add package child
-        	pkgElem.setAttribute(new Attribute("type", "uml:Package", xmiNs));
-        	pkgElem.setAttribute(new Attribute("id", pkg.getId(), xmiNs));
-        	pkgElem.setAttribute(new Attribute("name", pkg.getName()));
-        	pkgElem.setAttribute(new Attribute("visibility", "public"));
-        	elementMap.put(pkg.getId(), pkgElem);
-	    	if (pkg.getAlias() != null)
-	    	    addAlias(pkg.getAlias(), pkg.getId());
-        	
-        	Element pkgStereotypeElem = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
-        	this.xmiElem.addContent(pkgStereotypeElem);
-        	pkgStereotypeElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
-        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.BASE__PACKAGE, pkg.getId()));
-        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.URI, pkg.getUri()));               	
-        	if (pkg.getDocumentations() != null)
-        	    for (Documentation doc : model.getDocumentations()) {
-            		addOwnedComment(pkgElem, pkg.getId(), 
-            				doc.getBody().getValue());
-	        	}
-        }    	
+    	else {
+    		for (Package child : model.getPackages())
+    	        addPackages(child, modelElem);
+    	}
     	
     	return modelElem;
+	}
+	
+	private void addPackages(Package pkg, Element parent)
+	{
+    	Element pkgElem = new Element("packagedElement");
+    	parent.addContent(pkgElem); // add package child
+    	pkgElem.setAttribute(new Attribute("type", "uml:Package", xmiNs));
+    	pkgElem.setAttribute(new Attribute("id", pkg.getId(), xmiNs));
+    	pkgElem.setAttribute(new Attribute("name", pkg.getName()));
+    	pkgElem.setAttribute(new Attribute("visibility", "public"));
+    	elementMap.put(pkg.getId(), pkgElem);
+    	if (pkg.getAlias() != null)
+    	    addAlias(pkg.getAlias(), pkg.getId());
+    	
+    	if (pkg.getUri() != null && pkg.getUri().length() > 0) {
+	    	Element pkgStereotypeElem = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
+	    	this.xmiElem.addContent(pkgStereotypeElem);
+	    	pkgStereotypeElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
+	    	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.BASE__PACKAGE, pkg.getId()));
+	    	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.URI, pkg.getUri()));  
+    	}
+    	
+    	if (pkg.getDocumentations() != null)
+    	    for (Documentation doc : pkg.getDocumentations()) {
+        		addOwnedComment(pkgElem, pkg.getId(), 
+        				doc.getBody().getValue());
+        	}
+    	for (Package child : pkg.getPackages())
+    		addPackages(child, pkgElem);
+		
 	}
 		
 	private Element buildModelFromURITokens(Model model)
@@ -647,19 +654,20 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
         	generalizationElem.setAttribute(new Attribute("type", "uml:Generalization", xmiNs));
         	generalizationElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
         	clssElem.addContent(generalizationElem);
-        	Class baseClass = classMap.get(baseRef.getUri() + "#" + baseRef.getName());
-        	generalizationElem.setAttribute(new Attribute("general", baseClass.getId()));
-        	
-        	/* --for an external reference
-        	Element generalElem = new Element("general");
-        	generalizationElem.addContent(generalElem);
-        	generalElem.setAttribute(new Attribute("type", "uml:Class", xmiNs));
-        	generalElem.setAttribute(new Attribute("type", "uml:Class"));
-        	generalElem.setAttribute(new Attribute("href", baseClass.getId()));
-        	*/
+        	String ref = baseRef.getUri() + "#" + baseRef.getName();
+        	Class baseClass = classMap.get(ref);
+        	if (baseClass != null) {
+        	    generalizationElem.setAttribute(new Attribute("general", baseClass.getId()));
+        	}
+        	else { // assume an external reference
+               	Element generalElem = new Element("general");
+            	generalizationElem.addContent(generalElem);
+            	generalElem.setAttribute(new Attribute("type", "uml:Class", xmiNs));
+            	generalElem.setAttribute(new Attribute("href", ref));
+        	} 
     	}
 /*
-  --for an external reference
+  --e.g. XMI for an external reference
 		<generalization xmi:type='uml:Generalization' xmi:id='_16_0_1_1707042b_1325701279933_851156_1151'>
 			<general xmi:type='uml:Class' href='plasma-platform-common.mdxml#_16_0_1_1707042b_1318367153137_813743_576'>
 			</general>

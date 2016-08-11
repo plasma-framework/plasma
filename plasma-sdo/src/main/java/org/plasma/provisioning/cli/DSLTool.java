@@ -26,16 +26,13 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
-import joptsimple.OptionSpecBuilder;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.plasma.provisioning.AnnotationMetamodelAssembler;
+import org.plasma.provisioning.MetamodelAssembler;
 import org.plasma.provisioning.ProvisioningException;
-import org.plasma.provisioning.ProvisioningModelAssembler;
 import org.plasma.provisioning.adapter.ModelAdapter;
+import org.plasma.provisioning.adapter.ProvisioningModel;
 import org.plasma.text.lang3gl.DefaultLang3GLContext;
 import org.plasma.text.lang3gl.DefaultStreamAssembler;
 import org.plasma.text.lang3gl.Lang3GLContext;
@@ -45,6 +42,11 @@ import org.plasma.text.lang3gl.Lang3GLOperation;
 import org.plasma.text.lang3gl.java.DSLAssembler;
 import org.plasma.text.lang3gl.java.DSLFactory;
 import org.xml.sax.SAXException;
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
 
 /**
  * The DSL Tool is used to provision Query DSL code artifacts.  
@@ -109,24 +111,23 @@ public class DSLTool extends ProvisioningTool {
     	DSLToolAction command = (DSLToolAction)options.valueOf(ProvisioningToolOption.command.name());
     	
     	Lang3GLDialect dialect = Lang3GLDialect.java;
-        
+
+        File destDir = new File("./target/");
+        if (options.has(destOpt)) {
+        	destDir = destOpt.value(options);
+    	}
+        if (!destDir.exists()) {
+        	if (!options.has(silentOpt))
+                log.debug("given destination dir '"
+                    + destDir.getName() + "' does not exist");
+            if (!destDir.mkdirs())
+        		throw new IllegalArgumentException("given destination dir '"
+                        + destDir.getName() + "' could not be created");                	
+        }
+    	
         switch (command) {
         case create:
         	Lang3GLOperation operation = Lang3GLOperation.valueOf(command.name());
-
-        	File destDir = new File("./target");
-            if (options.has(destOpt)) {
-            	destDir = destOpt.value(options);
-        	}
-            if (destDir.getParentFile() == null || !destDir.getParentFile().exists()) {
-                log.info("given destination directory '"
-                        + destDir.getParentFile().getAbsolutePath() + "' does not exist, creating");
-                if (!destDir.getParentFile().mkdirs())
-            		throw new IllegalArgumentException("given destination directory '"
-                            + destDir.getParentFile() + "' could not be created");                	
-            }
-            if (!options.has(silentOpt))
-                log.debug("dest: " + destDir.getName());
 
         	long lastExecution = 0L;
         	
@@ -139,13 +140,16 @@ public class DSLTool extends ProvisioningTool {
                     log.info("skipping DSL creation - no stale artifacts detected");	
                 return;
             }            	
+            AnnotationMetamodelAssembler annotationAssembler = new AnnotationMetamodelAssembler();
+            if (annotationAssembler.hasAnnotatedClasses())
+            	loadAnnotationModel(annotationAssembler, destDir,
+            			options, silentOpt);
             
-            ProvisioningModelAssembler modelAssembler = new ProvisioningModelAssembler();
-            // FIXME: pass this to factories
-    		ModelAdapter validator = 
+            MetamodelAssembler modelAssembler = new MetamodelAssembler();
+            ProvisioningModel validator = 
     				new ModelAdapter(modelAssembler.getModel());
             
-            Lang3GLContext factoryContext = new DefaultLang3GLContext(modelAssembler.getModel());
+            Lang3GLContext factoryContext = new DefaultLang3GLContext(validator);
             
             Lang3GLFactory factory = null;
         	switch (dialect) {
@@ -157,7 +161,7 @@ public class DSLTool extends ProvisioningTool {
         	}           
        	
         	DefaultStreamAssembler assembler = new DSLAssembler(
-        		modelAssembler.getModel(),
+        		validator,
         		factory, 
         		operation,
         		destDir);

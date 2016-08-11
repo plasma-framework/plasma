@@ -59,7 +59,6 @@ import org.plasma.sdo.repository.PlasmaRepository;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
-
 import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 /**

@@ -27,11 +27,6 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
-import joptsimple.OptionSpecBuilder;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
@@ -45,6 +40,11 @@ import org.plasma.text.ddl.DDLStreamAssembler;
 import org.plasma.text.ddl.MySQLFactory;
 import org.plasma.text.ddl.OracleFactory;
 import org.xml.sax.SAXException;
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
 
 /**
  * The Relational Database (RDB) Tool is used to provision

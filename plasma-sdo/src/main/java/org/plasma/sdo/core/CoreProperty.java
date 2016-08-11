@@ -61,7 +61,6 @@ import org.plasma.sdo.repository.Enumeration;
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
-
 import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 /**

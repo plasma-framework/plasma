@@ -43,6 +43,7 @@ import org.plasma.metamodel.PropertyAppInfo;
 import org.plasma.metamodel.VisibilityType;
 import org.plasma.provisioning.ProvisioningConstants;
 import org.plasma.provisioning.adapter.ModelAdapter;
+import org.plasma.provisioning.adapter.ProvisioningModel;
 import org.plasma.provisioning.adapter.TypeAdapter;
 import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.DataType;
@@ -72,7 +73,7 @@ public class SchemaModelAssembler {
 	private Model model;
 	private Schema schema;
 	private boolean createNonContainmentReferenceTypes = true;
-	private ModelAdapter helper;
+	private ProvisioningModel helper;
     private Map<String, SimpleType> topLevelTypes = new HashMap<String, SimpleType>();
 	
 	@SuppressWarnings("unused")

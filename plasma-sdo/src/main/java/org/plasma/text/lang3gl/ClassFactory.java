@@ -31,10 +31,11 @@ public interface ClassFactory extends Lang3GLContentFactory {
 	 * configuration settings.
 	 * @see Class
 	 * @param clss the class
+	 * @param pkg the Package
 	 * @return an 3Gl language specific file name for the given Class based on
 	 * configuration settings
 	 */
-	public String createFileName(Class clss);
+	public String createFileName(Class clss, Package pkg);
 	
 	/**
 	 * Returns an 3Gl language specific content for the given Package and Type

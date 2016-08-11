@@ -40,7 +40,7 @@ import org.apache.xerces.dom.ElementNSImpl;
 import org.plasma.metamodel.Body;
 import org.plasma.metamodel.Documentation;
 import org.plasma.metamodel.DocumentationType;
-import org.plasma.provisioning.NameUtils;
+import org.plasma.provisioning.common.NameUtils;
 import org.plasma.xml.schema.Annotated;
 import org.plasma.xml.schema.Appinfo;
 

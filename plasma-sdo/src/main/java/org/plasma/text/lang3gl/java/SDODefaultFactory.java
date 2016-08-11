@@ -25,12 +25,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.plasma.config.EnumSource;
 import org.plasma.config.InterfaceProvisioning;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.config.PropertyNameStyle;
 import org.plasma.metamodel.Class;
+import org.plasma.metamodel.ClassProvisioning;
+import org.plasma.metamodel.NamespaceProvisioning;
 import org.plasma.metamodel.Package;
 import org.plasma.metamodel.Property;
+import org.plasma.metamodel.PropertyProvisioning;
+import org.plasma.text.TextBuilder;
+import org.plasma.text.TextProvisioningException;
 import org.plasma.text.lang3gl.ClassNameResolver;
 import org.plasma.text.lang3gl.Lang3GLContext;
 
@@ -44,25 +50,27 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 	};
 	
 	private Map<String, String> reservedGetterNameMap =  new HashMap<String, String>();
-	protected InterfaceProvisioning interfaceProvisioning;
+	protected InterfaceProvisioning globalInterfaceProvisioning;
 	protected ClassNameResolver interfaceResolver = new SDOInterfaceNameResolver();
 	protected ClassNameResolver classResolver = new SDOClassNameResolver();
+	protected ClassNameResolver enumResolver = new SDOEnumerationNameResolver();
 	
 	public SDODefaultFactory(Lang3GLContext context) {
 		super(context);
 		for (String name : SDO_RESERVED_NAMES)
 			this.reservedGetterNameMap.put(name, name);
 		
-		this.interfaceProvisioning = PlasmaConfig.getInstance().getSDO().getGlobalProvisioning().getInterface();
-		if (interfaceProvisioning == null) {
-			interfaceProvisioning = new InterfaceProvisioning();
-			interfaceProvisioning.setPropertyNameStyle(PropertyNameStyle.ENUMS);
+		this.globalInterfaceProvisioning = PlasmaConfig.getInstance().getSDO().getGlobalProvisioning().getInterface();
+		if (globalInterfaceProvisioning == null) {
+			globalInterfaceProvisioning = new InterfaceProvisioning();
+			globalInterfaceProvisioning.setPropertyNameStyle(PropertyNameStyle.ENUMS);
+			globalInterfaceProvisioning.setEnumSource(EnumSource.DERIVED);
 		}
 	}
 
 	protected String createPackageDeclaration(Package pkg) {
 		String packageName = PlasmaConfig.getInstance().getSDOInterfacePackageName(pkg.getUri());
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		buf.append("package " + packageName);
 		buf.append(";");
 		return buf.toString();
@@ -72,7 +80,7 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 	{
 		String packageName = PlasmaConfig.getInstance().getSDOInterfacePackageName(pkg.getUri());
 		String packageDir = packageName.replace(".", "/");
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		buf.append(packageDir);
 		return buf.toString();
 	}
@@ -80,19 +88,38 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 	public String createDirectoryName(Package pkg) {
 		String packageName = PlasmaConfig.getInstance().getSDOInterfacePackageName(pkg.getUri());
 		String packageDir = packageName.replace(".", "/");
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		buf.append(packageDir);
 		return buf.toString();
 	}
 	
-	protected String toQualifiedPropertyNameReference(Class clss, Property field) {
-		StringBuilder buf = new StringBuilder();
-		switch (this.interfaceProvisioning.getPropertyNameStyle()) {
+	protected String toQualifiedPropertyNameReference(Package pkg, Class clss, Property field) {
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
+		
+		InterfaceProvisioning interfaceProvisioning = PlasmaConfig.getInstance().getSDOInterfaceProvisioning(pkg.getUri());
+		if (interfaceProvisioning == null)
+			interfaceProvisioning = this.globalInterfaceProvisioning;
+		
+		switch (interfaceProvisioning.getPropertyNameStyle()) {
 		case ENUMS:
-			buf.append(this.interfaceResolver.getName(clss));
-			buf.append(".PROPERTY.");
-			buf.append(field.getName());
-			buf.append(".name()");
+			switch(interfaceProvisioning.getEnumSource()) {
+			case DERIVED:
+				// use generated enums derived from metadata
+				buf.append(this.interfaceResolver.getName(clss));
+				buf.append(".PROPERTY.");
+				buf.append(field.getName());
+				buf.append(".name()");
+				break;
+			case EXTERNAL:
+				// use eternally created enums
+				buf.append(this.enumResolver.getQualifiedName(clss, pkg));
+				buf.append(".");
+				buf.append(field.getAlias().getLocalName());
+				buf.append(".name()");				
+				break;
+			default:
+				throw new TextProvisioningException("unexpected enum source, " + interfaceProvisioning.getEnumSource());
+			}
 			break;
 		case CONSTANTS:
 			buf.append(this.interfaceResolver.getName(clss));
@@ -110,7 +137,7 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 	}
 		
 	protected String createSDOInterfaceReferenceImportDeclarations(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		
 		Map<String, String> nameMap = new TreeMap<String, String>();
 		ClassNameResolver resolver = new SDOInterfaceNameResolver();
@@ -125,7 +152,7 @@ public abstract class SDODefaultFactory extends DefaultFactory {
 		return buf.toString();
 	}
 
-	protected String getImplementationClassName(Class clss) {
+	protected String getImplementationClassName(Class clss, Package pkg) {
 		SDOClassNameResolver resolver = new SDOClassNameResolver();
 		String name = resolver.getName(clss);
 		return name;

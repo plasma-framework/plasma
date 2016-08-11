@@ -21,6 +21,11 @@
  */
 package org.plasma.text.lang3gl.java;
 
+import org.plasma.text.NamingCollisionException;
+import org.plasma.metamodel.Class;
+import org.plasma.metamodel.ClassRef;
+import org.plasma.metamodel.Package;
+
 public abstract class DefaultNameResolver {
 
 	
@@ -40,5 +45,17 @@ public abstract class DefaultNameResolver {
 		result = result.replace('@', '_');
 		result = result.replace(' ', '_');
 		return result;
+	}
+	
+	
+	protected void checkUnresolvableNameCollision(String qualifiedName, Class clss, Package pkg) {
+		String localName = null;
+		if (pkg.getAlias() != null && pkg.getAlias().getLocalName() != null && pkg.getAlias().getLocalName().length() > 0)
+			localName = pkg.getAlias().getLocalName();
+		if (clss.getAlias() != null && clss.getAlias().getLocalName() != null && clss.getAlias().getLocalName().length() > 0)
+			localName = localName + "." + clss.getAlias().getLocalName(); 		
+		if (localName != null && localName.equals(qualifiedName))
+			throw new NamingCollisionException("unresolvable name collision - identical local source and provisioning target classes ("
+				+ qualifiedName + ") - please adjust the class or package, source or provisioning target name(s)");
 	}
 }

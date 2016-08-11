@@ -23,6 +23,7 @@ package org.plasma.text.lang3gl;
 
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
+import org.plasma.metamodel.Package;
 
 public interface ClassNameResolver {
 	
@@ -36,9 +37,10 @@ public interface ClassNameResolver {
     /**
 	 * Returns a qualified class name for the given provisioning model class.
 	 * @param clss the provisioning class
+	 * @param pkg the provisioning package
 	 * @return a qualified class name
 	 */
-    public String getQualifiedName(Class clss);
+    public String getQualifiedName(Class clss, Package pkg);
     
 	/**
 	 * Returns a qualified class name for the given provisioning model class reference.

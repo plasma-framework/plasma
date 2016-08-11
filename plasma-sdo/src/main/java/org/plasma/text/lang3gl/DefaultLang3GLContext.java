@@ -21,48 +21,45 @@
  */
 package org.plasma.text.lang3gl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
-import org.plasma.metamodel.Model;
 import org.plasma.metamodel.Package;
+import org.plasma.provisioning.adapter.ProvisioningModel;
+import org.plasma.provisioning.adapter.TypeAdapter;
+import org.plasma.text.TextProvisioningException;
 
 public class DefaultLang3GLContext implements Lang3GLContext {
 
-	private Map<String, Class> classMap = new HashMap<String, Class>();
-	private Map<String, Package> packageMap = new HashMap<String, Package>();
+	private ProvisioningModel ProvisioningModel;
 	
 	@SuppressWarnings("unused")
 	private DefaultLang3GLContext() {}
 	
-	public DefaultLang3GLContext(Model packages) {
-		for (Package pkg : packages.getPackages()) {
-			for (Class cls : pkg.getClazzs()) {
-				String key = pkg.getUri() + "#" + cls.getName();
-				classMap.put(key, cls);
-				packageMap.put(key, pkg);
-			}
-		}
+	public DefaultLang3GLContext(ProvisioningModel ProvisioningModel) {
+		this.ProvisioningModel = ProvisioningModel;
 	}
 
 	public Class findClass(ClassRef cref) {
 		String key = cref.getUri() + "#" + cref.getName();
-		return classMap.get(key);
+		return findClass(key);
 	}
 	
 	public Class findClass(String qualifiedName) {
-		return classMap.get(qualifiedName);
+		TypeAdapter type = this.ProvisioningModel.findType(qualifiedName);
+		if (!type.isClass())
+			throw new TextProvisioningException("expected instanceof Class not, " + type.getType().getClass());
+		
+		return (Class)type.getType();
 	}
 	
 	public Package findPackage(ClassRef cref) {
 		String key = cref.getUri() + "#" + cref.getName();
-		return packageMap.get(key);
+		return this.findPackage(key);
 	}
 	
 	public Package findPackage(String qualifiedName) {
-		return packageMap.get(qualifiedName);
+		TypeAdapter type = this.ProvisioningModel.findType(qualifiedName);
+		return this.ProvisioningModel.getPackage(type);
 	}
 
 	public boolean usePrimitives() {

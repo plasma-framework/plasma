@@ -29,8 +29,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.metamodel.Class;
-import org.plasma.metamodel.Model;
 import org.plasma.metamodel.Package;
+import org.plasma.provisioning.adapter.ProvisioningModel;
 import org.plasma.text.lang3gl.ClassFactory;
 import org.plasma.text.lang3gl.DefaultStreamAssembler;
 import org.plasma.text.lang3gl.Lang3GLFactory;
@@ -41,24 +41,29 @@ public class DSLAssembler extends DefaultStreamAssembler {
     private static Log log =LogFactory.getLog(
     		DSLAssembler.class); 
     
-	public DSLAssembler(Model packages, Lang3GLFactory factory,
+	public DSLAssembler(ProvisioningModel provisioningModel, Lang3GLFactory factory,
 			Lang3GLOperation operation, File dest) {
-		super(packages, factory, operation, dest);
+		super(provisioningModel, factory, operation, dest);
 	}
 
+	@Override
 	public void createEnumerationClasses() throws IOException 
     {
+		// noop
     }
 	
+	@Override
 	public void createInterfaceClasses() throws IOException 
     {
+		// noop
     }
     
+	@Override
 	public void createImplementationClasses() throws IOException 
     {
     	ClassFactory classFactory = factory.getClassFactory();
     	
-    	for (Package pkg : this.packages.getPackages()) {
+    	for (Package pkg : this.provisioningModel.getLeafPackages()) {
 			File dir = new File(dest, classFactory.createDirectoryName(pkg));
 			log.debug("processing package: " + dir.getAbsolutePath());
     		for (Class clss : pkg.getClazzs()) {    			
@@ -72,7 +77,7 @@ public class DSLAssembler extends DefaultStreamAssembler {
         			log.debug("created package: " + dir.getAbsolutePath());
     			}
 
-    			File file = new File(dir, classFactory.createFileName(clss));
+    			File file = new File(dir, classFactory.createFileName(clss, pkg));
     			log.debug("creating file: " + file.getAbsolutePath());
     			FileOutputStream stream = new FileOutputStream(file);
     			
@@ -90,8 +95,7 @@ public class DSLAssembler extends DefaultStreamAssembler {
 
 	@Override
 	public void createInterfacePackageDocs() throws IOException {
-		// TODO Auto-generated method stub
-		
+		// noop
 	}   
 	
 

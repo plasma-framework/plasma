@@ -29,8 +29,10 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -39,6 +41,7 @@ import javax.xml.bind.UnmarshalException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.atteo.classindex.ClassIndex;
 import org.modeldriven.fuml.Fuml;
 import org.modeldriven.fuml.io.ResourceArtifact;
 import org.plasma.common.bind.DefaultValidationEventHandler;
@@ -53,6 +56,8 @@ import org.plasma.profile.ProfileConfig;
 import org.plasma.profile.ProfileURN;
 import org.plasma.profile.adapter.ProfileArtifactAdapter;
 import org.xml.sax.SAXException;
+
+import commonj.sdo.DataObject;
 
 
 public class PlasmaConfig {
@@ -69,6 +74,7 @@ public class PlasmaConfig {
     private Map<String, Artifact> artifactMap = new HashMap<String, Artifact>();
     private Map<String, NamespaceAdapter> sdoNamespaceMap = new HashMap<String, NamespaceAdapter>();
     private DataAccessProviderName defaultProviderName;
+    private List<Class<?>> metadataClasses = new ArrayList<Class<?>>();
     
     /** maps data store types to maps of namespace links */
     private Map<DataStoreType, Map<String, NamespaceLink>> dataStoreNamespaceLinkMap 
@@ -97,10 +103,35 @@ public class PlasmaConfig {
             if (this.configFileNameOrURIString == null)
             	this.configFileNameOrURIString = defaultConfigFileName;
             
-            PlasmaConfigDataBinding configBinding = new PlasmaConfigDataBinding(
+        	for (Class<?> c : ClassIndex.getAnnotated(org.plasma.sdo.annotation.Type.class))
+        		metadataClasses.add(c);
+
+        	PlasmaConfigDataBinding configBinding = new PlasmaConfigDataBinding(
 	        		new PlasmaConfigValidationEventHandler());
 	        
-            config = unmarshalConfig(this.configFileNameOrURIString, configBinding);
+            InputStream stream = this.findConfigStream(this.configFileNameOrURIString);
+	        if (stream != null) {
+                config = unmarshalConfig(this.configFileNameOrURIString, stream, configBinding);
+	        	if (metadataClasses.size() > 0) {
+	        		//throw new RuntimeException("not impl add to config");
+	        	}
+	        }
+	        else {
+	        	if (metadataClasses.size() > 0) {
+	        		this.config = this.deriveConfig();
+	        	}
+	        	else {
+	        		if (this.configFileNameOrURIString.equals(defaultConfigFileName))
+	                    throw new ConfigurationException("could not find default configuration file resource '" 
+	                        + this.configFileNameOrURIString 
+	                        + "' on the current classpath and could not derive configuration from annotated classes and packages"
+	                        + " - please ensure all annotated classes are on the classpath");        
+	        		else 
+	                    throw new ConfigurationException("could not find default configuration file resource '" 
+		                        + this.configFileNameOrURIString 
+		                        + "' on the current classpath and could not derive configuration from annotated classes and packages on the current classpath");        
+	        	}
+	        }
                         
             constructArtifactAndNamespaceMappings();
             constructKnownArtifacts();
@@ -113,6 +144,47 @@ public class PlasmaConfig {
         catch (JAXBException e) {
             throw new ConfigurationException(e);
         }
+    }
+    
+    private PlasmaConfiguration deriveConfig() {
+    	PlasmaConfiguration config = new PlasmaConfiguration();
+    	
+    	SDO sdo = new SDO();
+    	config.setSDO(sdo);
+    	GlobalProvisioning gp = deriveGlobalProvisioning();
+    	sdo.setGlobalProvisioning(gp);
+    	
+    	//List<Namespace> namespaces = deriveNamespaces();
+    	//for (Namespace ns : namespaces)
+    	//	sdo.getNamespaces().add(ns);
+    	
+    	Repository repo = new Repository();
+    	config.setRepository(repo);
+    	
+    	return config;
+    }
+    
+    private GlobalProvisioning deriveGlobalProvisioning()
+    {
+    	GlobalProvisioning globalProvisioning = new GlobalProvisioning(); 
+    	globalProvisioning.setPackageName("org.plasma.platform.sdo");
+    	InterfaceProvisioning intfs = new InterfaceProvisioning();
+    	globalProvisioning.setInterface(intfs);
+    	intfs.setPropertyNameStyle(PropertyNameStyle.ENUMS);
+    	intfs.setEnumSource(EnumSource.DERIVED);
+    	
+    	ImplementationProvisioning impl = new ImplementationProvisioning();
+    	globalProvisioning.setImplementation(impl);
+    	impl.setClassNameSuffix("Impl");
+    	impl.setChildPackageName("impl");
+    	 
+    	QueryDSLProvisioning queryDSL = new QueryDSLProvisioning();
+    	globalProvisioning.setQueryDSL(queryDSL);
+    	ImplementationProvisioning impl2 = new ImplementationProvisioning();
+    	queryDSL.setImplementation(impl2);
+    	impl2.setClassNamePrefix("Q");
+    	impl2.setChildPackageName("query");
+    	return globalProvisioning;
     }
     
     private void constructArtifactAndNamespaceMappings() throws ConfigurationException {
@@ -262,7 +334,7 @@ public class PlasmaConfig {
         	ProfileArtifactAdapter papyrusProfile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO___PROFILE___V_1___1___UML);
 	        if (versions.get(papyrusProfile.getNamespaceUri()) != null) {
 	        	if (this.artifactMap.get(papyrusProfile.getNamespaceUri()) == null) {
-		    		NamespaceAdapter namespaceAdapter = loadKnownArtifact(
+		    		NamespaceAdapter namespaceAdapter = loadSystemArtifact(
 		    			papyrusProfile.getUrn().value(),
 		    			papyrusProfile.getNamespaceUri());
 		    		if (namespaceAdapter != null) {
@@ -273,7 +345,7 @@ public class PlasmaConfig {
 	            }
 	        	ProfileArtifactAdapter papyrusProfileDatatypes = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO_DATA_TYPES___V_1___1___UML);		    
 	        	if (this.artifactMap.get(papyrusProfileDatatypes.getNamespaceUri()) == null) {
-	        		NamespaceAdapter namespaceAdapter = loadKnownArtifact(
+	        		NamespaceAdapter namespaceAdapter = loadSystemArtifact(
 	        				papyrusProfileDatatypes.getUrn().value(),
 	        				papyrusProfileDatatypes.getNamespaceUri());
 		    		if (namespaceAdapter != null) {
@@ -290,7 +362,7 @@ public class PlasmaConfig {
         // load it
         if (this.profileNamespace == null) {
         	ProfileArtifactAdapter magicdrawProfile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA___SDO___PROFILE___V_1___1___MDXML);
-    		NamespaceAdapter namespaceAdapter = loadKnownArtifact(
+    		NamespaceAdapter namespaceAdapter = loadSystemArtifact(
     				magicdrawProfile.getUrn().value(),
     				magicdrawProfile.getNamespaceUri());
     		if (namespaceAdapter != null) {
@@ -311,7 +383,7 @@ public class PlasmaConfig {
      * @param uri
      * @return the new namespace or null if the resource does not exist
      */
-    private NamespaceAdapter loadKnownArtifact(String resource, String uri) {
+    private NamespaceAdapter loadSystemArtifact(String resource, String uri) {
     	InputStream stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(resource);
     	if (stream == null)
     		return null;
@@ -325,6 +397,7 @@ public class PlasmaConfig {
     	namespace.setUri(uri);
     	namespace.setProvisioning(null);
     	NamespaceAdapter namespaceAdapter = new NamespaceAdapter(namespace); 
+    	namespaceAdapter.setSystemArtifact(true);
     	this.sdoNamespaceMap.put(namespace.getUri(),  namespaceAdapter);
     	return namespaceAdapter;
     }
@@ -449,38 +522,40 @@ public class PlasmaConfig {
     	provisioning.setPackageName(buf.toString());
     	return provisioning;
     }
-    
-    @SuppressWarnings("unchecked")
-    private PlasmaConfiguration unmarshalConfig(String configFileURI, PlasmaConfigDataBinding binding)
-    {
-    	try {
-    		try {
+	
+    private InputStream findConfigStream(String configFileURI)
+	{
+		if (this.configURI == null)
+			try {
 				this.configURI = new URI(configFileURI);
 			} catch (URISyntaxException e) {
 			}
-    		InputStream stream = null;
-    		if (this.configURI == null || this.configURI.getScheme() == null) {    		
-		        stream = PlasmaConfig.class.getResourceAsStream(configFileURI);
-		        if (stream == null)
-		            stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(configFileURI);
-		        if (stream == null)
-		            throw new ConfigurationException("could not find configuration file resource '" 
-		                    + configFileURI 
-		                    + "' on the current classpath");        
-    		}
-    		else {
-    			try {
-					stream = configURI.toURL().openStream();
-				} catch (MalformedURLException e) {
-		            throw new ConfigurationException(e);
-				} catch (IOException e) {
-		            throw new ConfigurationException(e);
-				}
-		        if (stream == null)
-		            throw new ConfigurationException("could not open stream for configuration file resource '" 
-		                    + configFileURI 
-		                    + "'");        
-    		}
+		InputStream stream = null;
+		if (this.configURI == null || this.configURI.getScheme() == null) {    		
+	        stream = PlasmaConfig.class.getResourceAsStream(configFileURI);
+	        if (stream == null)
+	            stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(configFileURI);
+		}
+		else {
+			try {
+				stream = this.configURI.toURL().openStream();
+			} catch (MalformedURLException e) {
+	            throw new ConfigurationException(e);
+			} catch (IOException e) {
+	            throw new ConfigurationException(e);
+			}
+	        if (stream == null)
+	            log.debug("could not open stream for configuration file resource '" 
+	                    + configFileURI 
+	                    + "'");        			
+		}
+		return stream;
+	}
+    
+    @SuppressWarnings("unchecked")
+    private PlasmaConfiguration unmarshalConfig(String configFileURI, InputStream stream, PlasmaConfigDataBinding binding)
+    {
+    	try {
 	        
             PlasmaConfiguration result = (PlasmaConfiguration)binding.validate(stream);
 
@@ -491,8 +566,7 @@ public class PlasmaConfig {
                 File urlFile = new File(url.getFile());
                 if (urlFile.exists()) 
                 	this.configFileLastModifiedDate = urlFile.lastModified();
-            }
-            
+            }            
             
             return result;
     	}
@@ -549,6 +623,13 @@ public class PlasmaConfig {
                     + uri + "'");
     }
     
+    public boolean hasSDONamespace(String uri) {
+        NamespaceAdapter result = sdoNamespaceMap.get(uri);
+        if (result != null)
+            return true;
+        return false;
+    }
+   
     public Namespace getSDONamespaceByInterfacePackage(String packageName) {
     	NamespaceAdapter result = sdoNamespaceMap.get(packageName);
         if (result != null)
@@ -556,6 +637,15 @@ public class PlasmaConfig {
         else
             throw new ConfigurationException("no configured SDO namespace found for interface package name '"
                     + packageName + "'");
+    }
+    
+    public int getSDONamespaceCount() {
+    	int count = 0;
+    	for (NamespaceAdapter adapter : sdoNamespaceMap.values()) {
+    		if (!adapter.isSystemArtifact())
+    			count++;
+    	}
+        return count;
     }
 
     public TypeBindingAdapter findTypeBinding(String uri, String typeName) {
@@ -796,6 +886,12 @@ public class PlasmaConfig {
 		Namespace sdoNamespace = this.getSDONamespaceByURI(uri);
 		String packageName = sdoNamespace.getProvisioning().getPackageName();
     	return packageName;
+    }
+
+    public  InterfaceProvisioning getSDOInterfaceProvisioning(String uri) {		
+		Namespace sdoNamespace = this.getSDONamespaceByURI(uri);
+		InterfaceProvisioning prov = sdoNamespace.getProvisioning().getInterface();
+    	return prov;
     }
     
     public String getSDOImplementationClassName(String uri, String name) {

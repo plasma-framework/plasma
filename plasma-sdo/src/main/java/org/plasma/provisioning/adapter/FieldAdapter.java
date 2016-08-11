@@ -38,6 +38,12 @@ public class FieldAdapter {
 		this.fieldPackage = fieldPackage;
 		this.fieldClass = fieldClass;
 		this.field = field;
+		if (this.fieldPackage == null)
+			throw new IllegalArgumentException("missing argument, 'fieldPackage'");
+		if (this.fieldClass == null)
+			throw new IllegalArgumentException("missing argument, 'fieldClass'");
+		if (this.field == null)
+			throw new IllegalArgumentException("missing argument, 'field'");
 	}
 	public Package getFieldPackage() {
 		return fieldPackage;

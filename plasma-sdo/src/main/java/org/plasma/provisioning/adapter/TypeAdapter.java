@@ -66,6 +66,14 @@ public class TypeAdapter {
 	public Type getType() {
 		return type;
 	}
+	
+	public boolean isClass() {
+    	return this.type instanceof Class;
+	}
+	
+	public boolean isEnumeration() {
+    	return this.type instanceof Enumeration;
+	}
     
 	public String getKey() {
 		return key;

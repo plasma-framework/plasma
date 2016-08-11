@@ -50,10 +50,11 @@ import org.plasma.config.PlasmaConfig;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.Model;
 import org.plasma.metamodel.ModelAppInfo;
-import org.plasma.provisioning.ProvisioningModelAssembler;
-import org.plasma.provisioning.ProvisioningModelDataBinding;
-import org.plasma.provisioning.SchemaProvisioningModelAssembler;
+import org.plasma.provisioning.MetamodelAssembler;
+import org.plasma.provisioning.MetamodelDataBinding;
+import org.plasma.provisioning.SchemaMetamodelAssembler;
 import org.plasma.provisioning.adapter.ModelAdapter;
+import org.plasma.provisioning.adapter.ProvisioningModel;
 import org.plasma.query.Query;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
@@ -142,8 +143,8 @@ public class PlasmaXSDHelper implements XSDHelper {
 
        if (log.isDebugEnabled())
 		   log.debug("provisioning UML/XMI model");
- 	   SchemaProvisioningModelAssembler stagingAssembler = 
-		   new SchemaProvisioningModelAssembler(schema, 
+ 	   SchemaMetamodelAssembler stagingAssembler = 
+		   new SchemaMetamodelAssembler(schema, 
 			   schema.getTargetNamespace(), "tns");
 	   Model stagingModel = stagingAssembler.getModel();
 	   if (log.isDebugEnabled())
@@ -152,7 +153,7 @@ public class PlasmaXSDHelper implements XSDHelper {
 		    		this.getClass().getSimpleName()
 	    			+ "-" + schema.getId() + "-model.xml");
 	   	   
-	   ModelAdapter helper = 
+	   ProvisioningModel helper = 
 		   new ModelAdapter(stagingModel);
 	   
 	   UMLModelAssembler assembler = new MDModelAssembler(stagingModel, 
@@ -311,7 +312,7 @@ public class PlasmaXSDHelper implements XSDHelper {
         if (targetNamespaceURI == null || targetNamespaceURI.trim().length() == 0)
         	throw new IllegalArgumentException("expected argument 'targetNamespaceURI'");
     	
-        ProvisioningModelAssembler assembler = new ProvisioningModelAssembler(query,
+        MetamodelAssembler assembler = new MetamodelAssembler(query,
         		targetNamespaceURI, targetNamespacePrefix);
         Model model = assembler.getModel();
  	    if (log.isDebugEnabled())
@@ -474,8 +475,8 @@ public class PlasmaXSDHelper implements XSDHelper {
 				        return true;
 					}			    	
 			    };
-			    ProvisioningModelDataBinding binding = 
-				   new ProvisioningModelDataBinding(debugHandler);
+			    MetamodelDataBinding binding = 
+				   new MetamodelDataBinding(debugHandler);
 			    String xml = binding.marshal(stagingModel);
 			    binding.validate(xml);
 			    

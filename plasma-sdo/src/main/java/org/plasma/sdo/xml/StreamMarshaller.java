@@ -29,8 +29,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
-import javanet.staxutils.IndentingXMLStreamWriter;
-
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -53,6 +51,7 @@ import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
 import commonj.sdo.helper.XMLDocument;
+import javanet.staxutils.IndentingXMLStreamWriter;
 
 
 /**

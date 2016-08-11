@@ -44,9 +44,10 @@ import org.plasma.common.bind.BindingValidationEventHandler;
 import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.common.exception.PlasmaRuntimeException;
 import org.plasma.metamodel.Model;
-import org.plasma.provisioning.ProvisioningModelDataBinding;
-import org.plasma.provisioning.SchemaProvisioningModelAssembler;
+import org.plasma.provisioning.MetamodelDataBinding;
+import org.plasma.provisioning.SchemaMetamodelAssembler;
 import org.plasma.provisioning.adapter.ModelAdapter;
+import org.plasma.provisioning.adapter.ProvisioningModel;
 import org.plasma.xml.schema.Schema;
 import org.plasma.xml.schema.SchemaDataBinding;
 import org.plasma.xml.uml.MDModelAssembler;
@@ -170,8 +171,8 @@ public class XSDTool extends ProvisioningTool {
   	    String namespacePrefix = destNamespacePrefix;
   	    if (namespacePrefix == null)
   	    	namespacePrefix = "tns";
-  	  	SchemaProvisioningModelAssembler stagingAssembler = 
-  		    new SchemaProvisioningModelAssembler(schema, 
+  	  	SchemaMetamodelAssembler stagingAssembler = 
+  		    new SchemaMetamodelAssembler(schema, 
   		    		namespaceURI, namespacePrefix);	    
   	    
   	    Model stagingModel = stagingAssembler.getModel();
@@ -183,7 +184,7 @@ public class XSDTool extends ProvisioningTool {
 		       ".", XSDTool.class.getSimpleName()
 	    	   + "-" + schemaName + "-model.xml");
 	    }
-	    ModelAdapter helper = 
+	    ProvisioningModel helper = 
 			   new ModelAdapter(stagingModel);
 		   
 	    UMLModelAssembler assembler = new MDModelAssembler(stagingModel, 
@@ -224,8 +225,8 @@ public class XSDTool extends ProvisioningTool {
 			        return true;
 				}			    	
 		    };
-		    ProvisioningModelDataBinding binding = 
-			   new ProvisioningModelDataBinding(debugHandler);
+		    MetamodelDataBinding binding = 
+			   new MetamodelDataBinding(debugHandler);
 		    String xml = binding.marshal(stagingModel);
 		    binding.validate(xml);
 		    

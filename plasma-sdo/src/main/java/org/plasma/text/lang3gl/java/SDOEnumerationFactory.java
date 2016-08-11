@@ -26,6 +26,7 @@ import org.plasma.metamodel.Enumeration;
 import org.plasma.metamodel.EnumerationLiteral;
 import org.plasma.metamodel.Package;
 import org.plasma.sdo.PlasmaEnum;
+import org.plasma.text.TextBuilder;
 import org.plasma.text.lang3gl.EnumerationFactory;
 import org.plasma.text.lang3gl.Lang3GLContext;
 
@@ -34,18 +35,17 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 
 	public SDOEnumerationFactory(Lang3GLContext context) {
 		super(context);
-	}
-	
+	}	
 
 	public String createFileName(Enumeration clss) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		buf.append(clss.getName());
 		buf.append(".java");		
 		return buf.toString();
 	}
 
 	public String createContent(Package pkg, Enumeration enm) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		buf.append(this.createPackageDeclaration(pkg));
 		buf.append(LINE_SEP);
 		buf.append(this.createThirdPartyImportDeclarations(pkg, null));
@@ -77,7 +77,7 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	}
 	
 	protected String createTypeDeclaration(Package pkg, Enumeration enumeration) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		
 		String javadocs = createTypeDeclarationJavadoc(pkg, enumeration);
 	    buf.append(javadocs);	
@@ -91,7 +91,7 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	}
 
 	private String createTypeDeclarationJavadoc(Package pkg, Enumeration enm) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		
 		buf.append("/**"); // begin javadoc
 		
@@ -131,97 +131,62 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	}	
 	
 	protected String createConstructors(Package pkg, Enumeration enm) {
-		StringBuilder buf = new StringBuilder();
-		buf.append(this.newline(1));
-		buf.append("private ");
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
+		buf.appendln(1, "private ");
 		buf.append(enm.getName());
 		buf.append("(String instanceName, String description) {");
-		buf.append(this.newline(1));
-		buf.append("    this.instanceName = instanceName;");
-		buf.append(this.newline(1));
-		buf.append("    this.description = description;");
-		buf.append(this.newline(1));
-		buf.append("}");
+		buf.appendln(1, "    this.instanceName = instanceName;");
+		buf.appendln(1, "    this.description = description;");
+		buf.appendln(1, "}");
 		buf.append(LINE_SEP);        
 		return buf.toString();
 	}
 
 	protected String createOperations(Package pkg, Enumeration enm) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 
-		buf.append(this.newline(1));
-		buf.append("/**"); 
-		buf.append(this.newline(1));
-		buf.append("* Returns the logical name associated with this enumeration literal.");
-		buf.append(this.newline(1));
-		buf.append("*/"); 
-		buf.append(this.newline(1));
-		buf.append("public String getName()");
-		buf.append(this.newline(1));
-		buf.append("{");
-		buf.append(this.newline(1));
-		buf.append("    return this.name();");
-		buf.append(this.newline(1));
-		buf.append("}");
+		buf.appendln(1, "/**"); 
+		buf.appendln(1, "* Returns the logical name associated with this enumeration literal.");
+		buf.appendln(1, "*/"); 
+		buf.appendln(1, "public String getName()");
+		buf.appendln(1, "{");
+		buf.appendln(1, "    return this.name();");
+		buf.appendln(1, "}");
 		buf.append(LINE_SEP);        
 
-		buf.append(this.newline(1));
-		buf.append("/**"); 
-		buf.append(this.newline(1));
-		buf.append("* Returns the physical or instance name associated with this enumeration literal.");
-		buf.append(this.newline(1));
-		buf.append("*/"); 
-		buf.append(this.newline(1));
-		buf.append("public String getInstanceName() {");
-		buf.append(this.newline(1));
-		buf.append("    return this.instanceName;");
-		buf.append(this.newline(1));
-		buf.append("}");
+		buf.appendln(1, "/**"); 
+		buf.appendln(1, "* Returns the physical or instance name associated with this enumeration literal.");
+		buf.appendln(1, "*/"); 
+		buf.appendln(1, "public String getInstanceName() {");
+		buf.appendln(1, "    return this.instanceName;");
+		buf.appendln(1, "}");
 		buf.append(LINE_SEP);        
 
-		buf.append(this.newline(1));
-		buf.append("/**"); 
-		buf.append(this.newline(1));
-		buf.append("* Returns the descriptive text associated with this enumeration literal.");
-		buf.append(this.newline(1));
-		buf.append("*/"); 
-		buf.append(this.newline(1));
-		buf.append("public String getDescription() {");
-		buf.append(this.newline(1));
-		buf.append("    return this.description;");
-		buf.append(this.newline(1));
-		buf.append("}");
+		buf.appendln(1, "/**"); 
+		buf.appendln(1, "* Returns the descriptive text associated with this enumeration literal.");
+		buf.appendln(1, "*/"); 
+		buf.appendln(1, "public String getDescription() {");
+		buf.appendln(1, "    return this.description;");
+		buf.appendln(1, "}");
 		buf.append(LINE_SEP);        
 
-		buf.append(this.newline(1));
-		buf.append("/**"); 
-		buf.append(this.newline(1));
-		buf.append("* Returns the enum values for this class as an array of implemented interfaces");
-		buf.append(this.newline(1));
-		buf.append("* @see "); 
+		buf.appendln(1, "/**"); 
+		buf.appendln(1, "* Returns the enum values for this class as an array of implemented interfaces");
+		buf.appendln(1, "* @see "); 
 		buf.append(PlasmaEnum.class.getSimpleName()); 
-		buf.append(this.newline(1));
-		buf.append("*/"); 
-		buf.append(this.newline(1));
-		buf.append("public static ");
+		buf.appendln(1, "*/"); 
+		buf.appendln(1, "public static ");
 		buf.append(PlasmaEnum.class.getSimpleName());
 		buf.append("[] enumValues()");
-		buf.append(this.newline(1));
-		buf.append("{");
-		buf.append(this.newline(1));
-		buf.append("    return values();");
-		buf.append(this.newline(1));
-		buf.append("}");
+		buf.appendln(1, "{");
+		buf.appendln(1, "    return values();");
+		buf.appendln(1, "}");
 		buf.append(LINE_SEP);   
 		
-		buf.append(this.newline(1));
-		buf.append("/**"); 
-		buf.append(this.newline(1));
-		buf.append("* Returns the enumeration value matching the given name.");
-		buf.append(this.newline(1));
-		buf.append("*/"); 
-		buf.append(this.newline(1));
-		buf.append("public static ");
+		buf.appendln(1, "/**"); 
+		buf.appendln(1, "* Returns the enumeration value matching the given name.");
+		buf.appendln(1, "*/"); 
+		buf.appendln(1, "public static ");
 		buf.append(enm.getName());
 		buf.append(" fromName(String name) {");
 		buf.append(this.newline(2));
@@ -240,18 +205,13 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 		buf.append("throw new ");
 		buf.append(IllegalArgumentException.class.getSimpleName());
 		buf.append("(\"no enumeration value found for name '\" + name + \"'\");");
-		buf.append(this.newline(1));
-		buf.append("}");		
+		buf.appendln(1, "}");		
 		buf.append(LINE_SEP);   
 
-		buf.append(this.newline(1));
-		buf.append("/**"); 
-		buf.append(this.newline(1));
-		buf.append("* Returns the enumeration value matching the given physical or instance name.");
-		buf.append(this.newline(1));
-		buf.append("*/"); 
-		buf.append(this.newline(1));
-		buf.append("public static ");
+		buf.appendln(1, "/**"); 
+		buf.appendln(1, "* Returns the enumeration value matching the given physical or instance name.");
+		buf.appendln(1, "*/"); 
+		buf.appendln(1, "public static ");
 		buf.append(enm.getName());
 		buf.append(" fromInstanceName(String instanceName) {");
 		buf.append(this.newline(2));
@@ -270,8 +230,7 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 		buf.append("throw new ");
 		buf.append(IllegalArgumentException.class.getSimpleName());
 		buf.append("(\"no enumeration value found for instance name '\" + instanceName + \"'\");");
-		buf.append(this.newline(1));
-		buf.append("}");
+		buf.appendln(1, "}");
 		
 		return buf.toString();
 	}
@@ -283,12 +242,12 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	}
 
 	protected String createSDOInterfaceReferenceImportDeclarations(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		return buf.toString();
 	}
 
 	protected String createThirdPartyImportDeclarations(Package pkg, Class clss) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		buf.append("import ");
 		buf.append(PlasmaEnum.class.getName());
 		buf.append(";");
@@ -296,15 +255,13 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	}
 	
 	protected String createStaticFieldDeclarations(Enumeration enumeration) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		for (int i = 0; i < enumeration.getEnumerationLiterals().size(); i++) {
 			EnumerationLiteral literal = enumeration.getEnumerationLiterals().get(i);
 			if (i > 0)
     			buf.append(",");    					
-			buf.append(newline(1));
-			buf.append(createEnumerationLiteralDeclarationJavadoc(enumeration, literal));
-			buf.append(newline(1));
-			buf.append(toEnumLiteralName(literal.getName()));
+			buf.appendln(1, createEnumerationLiteralDeclarationJavadoc(enumeration, literal));
+			buf.appendln(1, toEnumLiteralName(literal.getName()));
 			if (literal.getAlias() != null && 
 				literal.getAlias().getPhysicalName() != null && 
 				literal.getAlias().getPhysicalName().length() > 0) {
@@ -331,9 +288,8 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	
 	private String createEnumerationLiteralDeclarationJavadoc(Enumeration enumeration, EnumerationLiteral literal)
 	{
-		StringBuilder buf = new StringBuilder();
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
+		buf.appendln(1, "/**"); // begin javadoc
 		
 		// add formatted doc from UML if exists		
 		// always put model definition first so it appears
@@ -341,17 +297,14 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 		String docs = getWrappedDocmentations(literal.getDocumentations(), 1);
 		if (docs.trim().length() > 0) {
 		    buf.append(docs);	
-		    buf.append(newline(1));	
-			buf.append(" * <p></p>");
+		    buf.appendln(1, " * <p></p>");
 		}
 		
-        buf.append(newline(1));	
-		buf.append(" * Holds the logical and physical names for literal <b>");
+        buf.appendln(1, " * Holds the logical and physical names for literal <b>");
 		buf.append(literal.getName());
 		buf.append("</b>."); 					
 		
-		buf.append(this.newline(1));
-		buf.append(" */"); // end javadoc			
+		buf.appendln(1, " */"); // end javadoc			
 		return buf.toString();
 	}	
 	
@@ -361,7 +314,7 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	}
 
 	protected String createPrivateFieldDeclarations(Enumeration enm) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
 		buf.append(this.indent(1));
 		buf.append("private String instanceName;");
 		buf.append(LINE_SEP);        

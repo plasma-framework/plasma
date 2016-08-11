@@ -33,11 +33,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
-import joptsimple.OptionSpecBuilder;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdom2.Document;
@@ -45,9 +40,10 @@ import org.jdom2.output.XMLOutputter;
 import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.common.exception.PlasmaRuntimeException;
 import org.plasma.metamodel.Model;
-import org.plasma.provisioning.ProvisioningModelAssembler;
-import org.plasma.provisioning.ProvisioningModelDataBinding;
+import org.plasma.provisioning.MetamodelAssembler;
+import org.plasma.provisioning.MetamodelDataBinding;
 import org.plasma.provisioning.adapter.ModelAdapter;
+import org.plasma.provisioning.adapter.ProvisioningModel;
 import org.plasma.query.Query;
 import org.plasma.query.bind.PlasmaQueryDataBinding;
 import org.plasma.sdo.PlasmaDataObject;
@@ -62,6 +58,10 @@ import org.xml.sax.SAXException;
 
 import commonj.sdo.DataGraph;
 import commonj.sdo.helper.XMLDocument;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
 
 /**
  * Query tool. 
@@ -254,13 +254,13 @@ public class QueryTool extends ProvisioningTool {
     			+ queryFile.getName() + "'");
         Query query = unmarshalQuery(queryFile);
         
-        ProvisioningModelAssembler stagingAssembler = new ProvisioningModelAssembler(query, 
+        MetamodelAssembler stagingAssembler = new MetamodelAssembler(query, 
         		destNamespaceURI, destNamespacePrefix);
         Model model = stagingAssembler.getModel();
         
         try {
             FileOutputStream os = new FileOutputStream(new File(destFile.getParentFile(), "query-pim.xml"));
-            ProvisioningModelDataBinding binding = new ProvisioningModelDataBinding(new DefaultValidationEventHandler());
+            MetamodelDataBinding binding = new MetamodelDataBinding(new DefaultValidationEventHandler());
 			binding.marshal(model, os);
 			
 		} catch (FileNotFoundException e) {
@@ -270,7 +270,7 @@ public class QueryTool extends ProvisioningTool {
 		} catch (SAXException e) {
             throw new PlasmaRuntimeException(e);
 		}
-		ModelAdapter validator = 
+        ProvisioningModel validator = 
 			new ModelAdapter(model);
         
     	log.info("assembling XMI model");

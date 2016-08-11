@@ -27,11 +27,6 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
-import joptsimple.OptionSpecBuilder;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.DefaultValidationEventHandler;
@@ -43,6 +38,11 @@ import org.plasma.text.ddl.DDLModelDataBinding;
 import org.plasma.text.ddl.DDLOperation;
 import org.plasma.text.ddl.DDLStreamAssembler;
 import org.xml.sax.SAXException;
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
 
 /**
  * The Cassandra NoSQL Database (CQL) Tool is used to provision

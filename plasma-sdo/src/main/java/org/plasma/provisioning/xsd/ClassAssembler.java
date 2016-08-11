@@ -32,7 +32,7 @@ import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
 import org.plasma.metamodel.Documentation;
 import org.plasma.metamodel.DocumentationType;
-import org.plasma.provisioning.NameUtils;
+import org.plasma.provisioning.common.NameUtils;
 import org.plasma.xml.schema.ComplexRestrictionType;
 import org.plasma.xml.schema.ComplexType;
 import org.plasma.xml.schema.Element;

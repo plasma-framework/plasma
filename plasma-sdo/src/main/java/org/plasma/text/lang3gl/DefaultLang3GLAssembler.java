@@ -21,21 +21,21 @@
  */
 package org.plasma.text.lang3gl;
 
-import org.plasma.metamodel.Model;
+import org.plasma.provisioning.adapter.ProvisioningModel;
 
 
 public abstract class DefaultLang3GLAssembler {
-	protected Model packages;
+	protected ProvisioningModel provisioningModel;
 	protected Lang3GLFactory factory;
 	protected Lang3GLOperation operation;
 	
 	@SuppressWarnings("unused")
 	private DefaultLang3GLAssembler() {}
 	
-	protected DefaultLang3GLAssembler(Model packages,
+	protected DefaultLang3GLAssembler(ProvisioningModel provisioningModel,
 			Lang3GLFactory factory, 
 			Lang3GLOperation operation) {
-		this.packages = packages;
+		this.provisioningModel = provisioningModel;
 		this.operation = operation;
     	this.factory = factory;
 	}

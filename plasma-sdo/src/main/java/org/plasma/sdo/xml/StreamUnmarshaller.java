@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import javanet.staxutils.events.EventAllocator;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
@@ -61,6 +59,7 @@ import org.plasma.xml.schema.SchemaUtil;
 import commonj.sdo.DataGraph;
 import commonj.sdo.Property;
 import commonj.sdo.helper.XMLDocument;
+import javanet.staxutils.events.EventAllocator;
 
 
 /**

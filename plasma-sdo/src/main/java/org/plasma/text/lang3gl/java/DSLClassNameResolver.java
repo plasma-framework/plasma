@@ -25,14 +25,17 @@ import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
+import org.plasma.metamodel.Package;
 import org.plasma.text.lang3gl.ClassNameResolver;
 
 public class DSLClassNameResolver  extends DefaultNameResolver
     implements ClassNameResolver {
 
 	@Override
-	public String getQualifiedName(Class clss) {		
-		return getQualifiedName(clss.getUri(), clss.getName());
+	public String getQualifiedName(Class clss, Package pkg) {		
+		String qualifiedName = getQualifiedName(clss.getUri(), clss.getName());
+		checkUnresolvableNameCollision(qualifiedName, clss, pkg);
+		return qualifiedName;
 	}
 
 	@Override

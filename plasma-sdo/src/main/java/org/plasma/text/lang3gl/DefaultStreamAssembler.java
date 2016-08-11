@@ -23,16 +23,12 @@ package org.plasma.text.lang3gl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.io.StreamAssembler;
-import org.plasma.metamodel.Class;
-import org.plasma.metamodel.Model;
-import org.plasma.metamodel.Package;
-import org.plasma.text.TextException;
+import org.plasma.provisioning.adapter.ProvisioningModel;
+import org.plasma.text.TextProvisioningException;
 
 public abstract class DefaultStreamAssembler extends DefaultLang3GLAssembler 
     implements StreamAssembler, Lang3GLAssembler {
@@ -43,19 +39,18 @@ public abstract class DefaultStreamAssembler extends DefaultLang3GLAssembler
     protected boolean indent = false;
 	protected static final String LINE_SEP = System.getProperty("line.separator");
 	protected static final String FILE_SEP = System.getProperty("file.separator");
-	protected Map<String, Class> classMap = new HashMap<String, Class>();
 	
 	protected int resultInterfacesCount;
 	protected int resultClassesCount;
 	protected int resultEnumerationsCount;
     
-	public DefaultStreamAssembler(Model packages, 
+	public DefaultStreamAssembler(ProvisioningModel provisioningModel, 
 			Lang3GLFactory factory, 
 			Lang3GLOperation operation,
 			File dest) {
-		super(packages, factory, operation);
-    	if (this.packages == null)
-    		throw new IllegalArgumentException("expected 'packages' argument");
+		super(provisioningModel, factory, operation);
+    	if (this.provisioningModel == null)
+    		throw new IllegalArgumentException("expected 'provisioningModel' argument");
     	if (this.factory == null)
     		throw new IllegalArgumentException("expected 'factory' argument");		
     	if (this.operation == null)
@@ -65,14 +60,13 @@ public abstract class DefaultStreamAssembler extends DefaultLang3GLAssembler
     		throw new IllegalArgumentException("expected 'dest' argument");		
 	}
 	
+	public abstract void createEnumerationClasses() throws IOException;
+	public abstract void createInterfaceClasses() throws IOException;
+	public abstract void createInterfacePackageDocs() throws IOException;
+	public abstract void createImplementationClasses() throws IOException;
+	
     public void start() {
         try {
-        	// map classes
-	    	for (Package pkg : this.packages.getPackages()) {
-	    		for (Class clss : pkg.getClazzs()) {	    			
-	    			classMap.put(clss.getUri() + "#" + clss.getName(), clss);
-	    		}
-	    	}
 			switch (this.operation) {
 			case create:
 		    	createEnumerationClasses();
@@ -82,7 +76,7 @@ public abstract class DefaultStreamAssembler extends DefaultLang3GLAssembler
 			    break;
 			}
 		} catch (IOException e) {
-			throw new TextException(e);
+			throw new TextProvisioningException(e);
 		}
     }
     	

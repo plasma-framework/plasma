@@ -98,7 +98,7 @@ public abstract class ClassRealmMojo extends AbstractMojo
             } catch (MalformedURLException e) {
                 throw new MojoExecutionException(e.getMessage() + e);
             }
-            getLog().debug("adding URL:" + url.toString());
+            getLog().info("adding URL:" + url.toString());
             this.addURL(url);
         }
         

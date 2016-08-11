@@ -42,7 +42,7 @@ import org.plasma.metamodel.ValueConstraint;
 import org.plasma.metamodel.VisibilityType;
 import org.plasma.metamodel.XmlNodeType;
 import org.plasma.metamodel.XmlProperty;
-import org.plasma.provisioning.NameUtils;
+import org.plasma.provisioning.common.NameUtils;
 import org.plasma.sdo.DataType;
 import org.plasma.xml.schema.AbstractComplexType;
 import org.plasma.xml.schema.AbstractSimpleType;

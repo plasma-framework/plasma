@@ -23,6 +23,7 @@ package org.plasma.provisioning.adapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +42,15 @@ import org.plasma.provisioning.PropertyNameCollisionException;
 import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.TypeNameCollisionException;
 
-public class ModelAdapter {
+public class ModelAdapter implements ProvisioningModel {
     private static Log log = LogFactory.getLog(
 			   ModelAdapter.class); 
 
     private Model model;
     private Map<String, TypeAdapter> typeMap = new HashMap<String, TypeAdapter>();
+    private List<Package> leafPackages = new ArrayList<Package>();
+    private List<Package> allPackages = new ArrayList<Package>();
+    private Map<TypeAdapter, Package> packageTypeMap = new HashMap<TypeAdapter, Package>();
     
     @SuppressWarnings("unused")
 	private ModelAdapter() {}
@@ -56,43 +60,89 @@ public class ModelAdapter {
     	construct();
     }
     
-    public Model getModel() {
+    /* (non-Javadoc)
+	 * @see org.plasma.provisioning.adapter.MetamodelAdapter#getModel()
+	 */
+    @Override
+	public Model getModel() {
 		return model;
 	}
     
-    public Collection<TypeAdapter> getTypes() {
+	@Override
+	public List<Package> getPackages() {
+		return Collections.unmodifiableList(this.allPackages);
+	}
+    
+    
+    /* (non-Javadoc)
+	 * @see org.plasma.provisioning.adapter.MetamodelAdapter#getLeafPackages()
+	 */
+    @Override
+	public List<Package> getLeafPackages() {
+    	return Collections.unmodifiableList(this.leafPackages);
+    }
+    
+	@Override
+	public Package getPackage(TypeAdapter type) {
+		return this.packageTypeMap.get(type);
+	}
+    
+    /* (non-Javadoc)
+	 * @see org.plasma.provisioning.adapter.MetamodelAdapter#getTypes()
+	 */
+    @Override
+	public Collection<TypeAdapter> getTypes() {
     	return typeMap.values();
     }
     
-    public TypeAdapter[] getTypesArray() {
+    /* (non-Javadoc)
+	 * @see org.plasma.provisioning.adapter.MetamodelAdapter#getTypesArray()
+	 */
+    @Override
+	public TypeAdapter[] getTypesArray() {
     	TypeAdapter[] result = new TypeAdapter[typeMap.size()];
     	typeMap.values().toArray(result);
     	return result;
     }
+    
+    /* (non-Javadoc)
+	 * @see org.plasma.provisioning.adapter.MetamodelAdapter#getTypesArray()
+	 */
+	@Override
+	public Map<String, TypeAdapter> getTypeMap() {
+		return Collections.unmodifiableMap(typeMap);
+	}
 
+	/* (non-Javadoc)
+	 * @see org.plasma.provisioning.adapter.MetamodelAdapter#findType(java.lang.String)
+	 */
+	@Override
 	public TypeAdapter findType(String key) {
     	TypeAdapter result = typeMap.get(key);
     	return result;
     }
 	
-	private void findPackages(Model root, List<Package> packages) {
-		packages.add(root);
-    	for (Package childPkg : root.getPackages()) {
-    		packages.add(childPkg);
+	private void findPackages(Package parent, List<Package> packages) {
+		packages.add(parent);
+    	for (Package childPkg : parent.getPackages()) {
+    		findPackages(childPkg, packages);
     	}
 	}
-    
+	
     private void construct() {
 		if (log.isDebugEnabled())
 			log.debug("constructing...");
 		
-		List<Package> allPkgs = new ArrayList<Package>();
-		findPackages(this.model, allPkgs);
+		findPackages(this.model, this.allPackages);
 		
-    	for (Package pkg : allPkgs)
+    	for (Package pkg : this.allPackages)
+    		if (pkg.getPackages().size() == 0)
+    			this.leafPackages.add(pkg);		
+		
+    	for (Package pkg : this.allPackages)
     		mapEnumerations(pkg);
     	
-    	for (Package pkg : allPkgs)
+    	for (Package pkg : this.allPackages)
     		mapClasses(pkg);
     	
     	for (TypeAdapter adapter : typeMap.values()) {
@@ -120,6 +170,8 @@ public class ModelAdapter {
     }
     
     private void mapEnumerations(Package pkg) {
+		if (log.isDebugEnabled())
+			log.debug("mapping enumerations for package " + pkg.getUri() + " (" + pkg.getName() + ")" );
     	for (Enumeration enm : pkg.getEnumerations()) {
     		String key = enm.getUri() + "#" + enm.getName();
     		if (log.isDebugEnabled())
@@ -128,7 +180,9 @@ public class ModelAdapter {
     			throw new TypeNameCollisionException(
     				"detected multiple types named '"+enm.getName()+"' under the same URI '"
     				+ enm.getUri() + "'");
-    		typeMap.put(key, new TypeAdapter(enm));
+    		TypeAdapter adapter = new TypeAdapter(enm);
+    		this.typeMap.put(key, adapter);
+    		this.packageTypeMap.put(adapter, pkg);
     	}
     }   
     
@@ -143,7 +197,8 @@ public class ModelAdapter {
 					+ cls.getUri() + "'");
 			
 			TypeAdapter adapter = new TypeAdapter(cls);
-			typeMap.put(key, adapter);
+    		this.typeMap.put(key, adapter);
+    		this.packageTypeMap.put(adapter, pkg);
 			if (log.isDebugEnabled())
 				log.debug("map: " + adapter.getKey());
 		}
@@ -261,5 +316,7 @@ public class ModelAdapter {
         }
         return null;
     }
-    
+
+
+
 }

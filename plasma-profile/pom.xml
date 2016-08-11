@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>org.terrameta</groupId>
 		<artifactId>plasma</artifactId>
-		<version>1.2.3</version>
+		<version>1.2.4</version>
 	</parent>
 	<groupId>org.terrameta</groupId>
 	<artifactId>plasma-profile</artifactId>
-	<version>1.2.3</version>
+	<version>1.2.4</version>
 	<packaging>jar</packaging>
 	<name>Plasma Profile</name>
 
@@ -54,33 +54,38 @@
 			<groupId>xalan</groupId>
 			<version>2.6.0</version>
 		</dependency>
-    <dependency>
-      <groupId>org.modeldriven</groupId>
-      <artifactId>fuml</artifactId>
-      <version>1.1.0c</version>
-      <exclusions>
-      	<exclusion>
-      		<artifactId>xml-apis</artifactId>
-      		<groupId>xml-apis</groupId>
-      	</exclusion>
-      	<exclusion>
-      		<artifactId>jaxb-api</artifactId>
-      		<groupId>javax.xml.bind</groupId>
-      	</exclusion>
-      	<exclusion>
-      		<artifactId>jaxb-xjc</artifactId>
-      		<groupId>com.sun.xml.bind</groupId>
-      	</exclusion>
-      	<exclusion>
-      		<artifactId>jaxb-impl</artifactId>
-      		<groupId>com.sun.xml.bind</groupId>
-      	</exclusion>
-      </exclusions>
-    </dependency>
+		<dependency>
+			<groupId>org.atteo.classindex</groupId>
+			<artifactId>classindex</artifactId>
+			<version>3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.modeldriven</groupId>
+			<artifactId>fuml</artifactId>
+			<version>1.1.0c</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-api</artifactId>
+					<groupId>javax.xml.bind</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-xjc</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-impl</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>org.terrameta</groupId>
 			<artifactId>plasma-common</artifactId>
-			<version>1.2.3</version>
+			<version>1.2.4</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -100,6 +105,36 @@
 				</dependencies>
 
 				<executions>
+                      
+					<execution>
+						<id>gen_profile_annotations</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<echo message="####Generate profile annotations####" />
+								<property name="compile_classpath" refid="maven.compile.classpath" />
+								<property name="release_suffix" value="1.2.4" />
+								<path id="cp">
+									<pathelement path="${compile_classpath}" />
+								</path>
+								<java failonerror="yes" fork="yes"
+									classname="org.plasma.common.xslt.XSLTUtils">
+									<classpath refid="cp" />
+									<arg value="${basedir}/dummy.out" />
+									<arg
+										value="${basedir}/src/main/resources/uml/Plasma_SDO_Profile.mdxml" />
+									<arg
+										value="${basedir}/src/main/resources/xsl/profile/ProfileToJavaAnnotationMetamodel.xsl" />
+									<arg
+										value="basedir=${basedir}/target/generated-sources/java pkg=org.plasma.sdo.annotation implpkg=org.plasma.sdo.profile author=Plasma-Team version=${release_suffix} separator=${file.separator}" />
+								</java>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+                      
 					<execution>
 						<id>gen_profile_classes</id>
 						<phase>generate-sources</phase>
@@ -107,9 +142,8 @@
 							<target>
 								<echo message="####Generate profile classes####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="1.2.3" />
+								<property name="release_suffix" value="1.2.4" />
 
-								<!-- <echo message="compile classpath: ${compile_classpath}"/> -->
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
 								</path>
@@ -138,7 +172,7 @@
 							<target>
 								<echo message="####Generate profile interfaces####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="1.2.3" />
+								<property name="release_suffix" value="1.2.4" />
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
 								</path>
@@ -159,6 +193,7 @@
 							<goal>run</goal>
 						</goals>
 					</execution>
+					 
 				</executions>
 			</plugin>
 			<plugin>

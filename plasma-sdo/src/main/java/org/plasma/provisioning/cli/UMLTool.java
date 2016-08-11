@@ -30,11 +30,6 @@ import java.io.OutputStream;
 
 import javax.xml.bind.JAXBException;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
-import joptsimple.OptionSpecBuilder;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdom2.Document;
@@ -42,15 +37,21 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.metamodel.Model;
+import org.plasma.provisioning.MetamodelAssembler;
+import org.plasma.provisioning.MetamodelDataBinding;
 import org.plasma.provisioning.ProvisioningException;
-import org.plasma.provisioning.ProvisioningModelAssembler;
-import org.plasma.provisioning.ProvisioningModelDataBinding;
 import org.plasma.provisioning.adapter.ModelAdapter;
+import org.plasma.provisioning.adapter.ProvisioningModel;
 import org.plasma.provisioning.rdb.RDBConstants;
 import org.plasma.xml.uml.MDModelAssembler;
 import org.plasma.xml.uml.PapyrusModelAssembler;
 import org.plasma.xml.uml.UMLModelAssembler;
 import org.xml.sax.SAXException;
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
 
 /**
  * The Unified Modeling Language (UML) Tool is used to provision
@@ -172,7 +173,7 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
         	model = (new RDBReader()).read(dialect, schemaNames, namespaces);
             break;
         case uml:
-            ProvisioningModelAssembler modelAssembler = new ProvisioningModelAssembler();
+            MetamodelAssembler modelAssembler = new MetamodelAssembler();
         	model = modelAssembler.getModel();
             break;
         case xsd:
@@ -194,7 +195,7 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
         	dest.getParentFile().mkdirs();
    	
     	if (log.isDebugEnabled()) {
-    		ProvisioningModelDataBinding provBinding = new ProvisioningModelDataBinding(
+    		MetamodelDataBinding provBinding = new MetamodelDataBinding(
         			new DefaultValidationEventHandler());
         	String xml = provBinding.marshal(model);
     		File outFile = new File(dest.getParentFile(), "technical-model.xml");
@@ -210,7 +211,7 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
     			new FileInputStream(outFile));
     	}
     	
-	    ModelAdapter validator = 
+    	ProvisioningModel validator = 
 				   new ModelAdapter(model);
 	    UMLModelAssembler umlAssembler = null;
 		switch (platform) {

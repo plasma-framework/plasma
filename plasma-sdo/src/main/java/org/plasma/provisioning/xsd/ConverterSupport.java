@@ -52,7 +52,7 @@ import org.plasma.metamodel.DocumentationType;
 import org.plasma.metamodel.Enumeration;
 import org.plasma.metamodel.EnumerationLiteral;
 import org.plasma.metamodel.Property;
-import org.plasma.provisioning.NameUtils;
+import org.plasma.provisioning.common.NameUtils;
 import org.plasma.sdo.DataType;
 import org.plasma.xml.schema.AbstractSimpleType;
 import org.plasma.xml.schema.Annotated;

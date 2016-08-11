@@ -44,7 +44,8 @@ import org.plasma.provisioning.adapter.FieldAdapter;
 import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.helper.DataConverter;
-import org.plasma.text.TextException;
+import org.plasma.text.TextBuilder;
+import org.plasma.text.TextProvisioningException;
 import org.plasma.text.lang3gl.ClassNameResolver;
 import org.plasma.text.lang3gl.Lang3GLContext;
 
@@ -140,7 +141,7 @@ public abstract class DefaultFactory {
         case Decimal:       
         	return "0"; 
         default:
-            throw new TextException("unknown primitive type, " 
+            throw new TextProvisioningException("unknown primitive type, " 
                     + dataType.toString());
         }
     }	
@@ -246,7 +247,8 @@ public abstract class DefaultFactory {
 	}
 	
 	protected String createImportDeclaration(Package pkg, Class clss, String qualifiedname) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, 
+				this.context.getIndentationToken());
 	    buf.append("import ");
 	    buf.append(qualifiedname);
 	    buf.append(";");
@@ -261,9 +263,9 @@ public abstract class DefaultFactory {
 		return "}";
 	}
 	
-	protected TypeClassInfo getTypeClassName(TypeRef type)
+	protected MetaClassInfo getTypeClassName(TypeRef type)
     {
-		TypeClassInfo result = null;
+		MetaClassInfo result = null;
 		if (type instanceof DataTypeRef) {
 			DataTypeRef dataTypeRef = (DataTypeRef)type;
 			DataType sdoType = DataType.valueOf(dataTypeRef.getName());
@@ -271,12 +273,12 @@ public abstract class DefaultFactory {
 			java.lang.Class<?> primitiveTypeClass = getTypeClass(sdoType, true);
 			java.lang.Class<?> wrapperTypeClass = getTypeClass(sdoType, false);
 			
-            result = new TypeClassInfo(dataTypeRef, sdoType,
+            result = new MetaClassInfo(dataTypeRef, sdoType,
 			    primitiveTypeClass, wrapperTypeClass, 
 			    this.context.usePrimitives());
 		}
 		else if (type instanceof ClassRef) {
-			result = new TypeClassInfo((ClassRef)type, 
+			result = new MetaClassInfo((ClassRef)type, 
 				this.context.usePrimitives());
 		}
     	return result;
@@ -303,7 +305,8 @@ public abstract class DefaultFactory {
 	
 	protected String toEnumLiteralName(String name) {
 		name = toConstantName(name);		
-    	StringBuilder buf = new StringBuilder();
+    	TextBuilder buf = new TextBuilder(LINE_SEP, 
+				this.context.getIndentationToken());
     	char[] array = name.toCharArray();
         for (int i = 0; i < array.length; i++) {
         	if (i == 0) {
@@ -317,7 +320,8 @@ public abstract class DefaultFactory {
 	
 	protected String toConstantName(String name) {
 		name = name.trim();
-    	StringBuilder buf = new StringBuilder();
+    	TextBuilder buf = new TextBuilder(LINE_SEP, 
+				this.context.getIndentationToken());
     	char[] array = name.toCharArray();
         for (int i = 0; i < array.length; i++) {
     		String lit = reservedJavaCharToLiteralMap.get(Character.valueOf(array[i]));
@@ -345,14 +349,16 @@ public abstract class DefaultFactory {
 	}
 	
 	protected String indent(int num) {
-    	StringBuilder buf = new StringBuilder();
+    	TextBuilder buf = new TextBuilder(LINE_SEP, 
+				this.context.getIndentationToken());
     	for (int i = 0; i < num; i++)
     		buf.append(this.getContext().getIndentationToken());
     	return buf.toString();
 	}
 
 	protected String newline(int num) {
-    	StringBuilder buf = new StringBuilder();
+    	TextBuilder buf = new TextBuilder(LINE_SEP, 
+				this.context.getIndentationToken());
 		buf.append(LINE_SEP);			    
     	for (int i = 0; i < num; i++)
     		buf.append(this.getContext().getIndentationToken());
@@ -381,33 +387,26 @@ public abstract class DefaultFactory {
 	}
 	
 	protected void createSingularGetterDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf) {
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Returns the value of the <b>");
+			MetaClassInfo typeClassName, TextBuilder buf) {
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Returns the value of the <b>");
 		buf.append(field.getName());
 		buf.append("</b> property.");	
 	    
 		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
-			buf.append(newline(1));	
-			buf.append(" * <p></p>");
-			buf.append(newline(1));	
-			buf.append(" * <b>Property Definition: </b>");
+			buf.appendln(1, " * <p></p>");
+			buf.appendln(1, " * <b>Property Definition: </b>");
 			buf.append(definition);
 	    }	    
 
-		buf.append(newline(1));	
-		buf.append(" * @return the value of the <b>");
+		buf.appendln(1, " * @return the value of the <b>");
 		buf.append(field.getName());
 		buf.append("</b> property.");	
 	    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 		
-		buf.append(newline(1));
-		buf.append("public ");
+		buf.appendln(1, "public ");
 		buf.append(typeClassName.getSimpleName());
 		buf.append(" get");
 		buf.append(toMethodFieldName(field.getName()));
@@ -415,101 +414,80 @@ public abstract class DefaultFactory {
 	}
 	
 	protected void createSingularSetterDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf) {
+			MetaClassInfo typeClassName, TextBuilder buf) {
 		
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Sets the value of the <b>");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Sets the value of the <b>");
 		buf.append(field.getName());
 		buf.append("</b> property to the given value.");	
 	    
 		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
-			buf.append(newline(1));	
-			buf.append(" * <p></p>");
-			buf.append(newline(1));	
-			buf.append(" * <b>Property Definition: </b>");
+			buf.appendln(1, " * <p></p>");
+			buf.appendln(1, " * <b>Property Definition: </b>");
 			buf.append(definition);
 	    }	
 	    
 	    if (field.getValueConstraint() != null || field.getEnumerationConstraint() != null) {	    	
 			if (field.getValueConstraint() != null) {
-		    	buf.append(newline(1));	
-				buf.append(" * <p></p>");
-				buf.append(newline(1));	
-				buf.append(" * <b>Value Constraints: </b>");
+		    	buf.appendln(1, " * <p></p>");
+				buf.appendln(1, " * <b>Value Constraints: </b>");
 				buf.append("<pre>");	
 				ValueConstraint vc = field.getValueConstraint();
 				if (vc.getMinLength() != null) {
-					buf.append(newline(1));	
-					buf.append(" *     minLength: ");	
+					buf.appendln(1, " *     minLength: ");	
 					buf.append(vc.getMinLength());						
 				}
 				if (vc.getMaxLength() != null) {
-					buf.append(newline(1));	
-					buf.append(" *     maxLength: ");	
+					buf.appendln(1, " *     maxLength: ");	
 					buf.append(vc.getMaxLength());						
 				}
 				if (vc.getMinInclusive() != null) {
-					buf.append(newline(1));	
-					buf.append(" *     minInclusive: ");	
+					buf.appendln(1, " *     minInclusive: ");	
 					buf.append(vc.getMinInclusive());						
 				}
 				if (vc.getMaxInclusive() != null) {
-					buf.append(newline(1));	
-					buf.append(" *     maxInclusive: ");	
+					buf.appendln(1, " *     maxInclusive: ");	
 					buf.append(vc.getMaxInclusive());						
 				}
 				if (vc.getMinExclusive() != null) {
-					buf.append(newline(1));	
-					buf.append(" *     minExclusive: ");	
+					buf.appendln(1, " *     minExclusive: ");	
 					buf.append(vc.getMinExclusive());						
 				}
 				if (vc.getMaxExclusive() != null) {
-					buf.append(newline(1));	
-					buf.append(" *     maxExclusive: ");	
+					buf.appendln(1, " *     maxExclusive: ");	
 					buf.append(vc.getMaxExclusive());						
 				}
 				if (vc.getFractionDigits() != null) {
-					buf.append(newline(1));	
-					buf.append(" *     fractionDigits: ");	
+					buf.appendln(1, " *     fractionDigits: ");	
 					buf.append(vc.getFractionDigits());						
 				}
 				if (vc.getTotalDigits() != null) {
-					buf.append(newline(1));	
-					buf.append(" *     totalDigits: ");	
+					buf.appendln(1, " *     totalDigits: ");	
 					buf.append(vc.getTotalDigits());						
 				}
 				if (vc.getPattern() != null) {
-					buf.append(newline(1));	
-					buf.append(" *     pattern: ");	
+					buf.appendln(1, " *     pattern: ");	
 					buf.append(vc.getPattern());						
 				}
 				buf.append("</pre>");	
 			}
 			else if (field.getEnumerationConstraint() != null) {
-		    	buf.append(newline(1));	
-				buf.append(" * <p></p>");
-				buf.append(newline(1));	
-				buf.append(" * <b>Enumeration Constraints: </b>");
+		    	buf.appendln(1, " * <p></p>");
+				buf.appendln(1, " * <b>Enumeration Constraints: </b>");
 				buf.append("<pre>");	
 				EnumerationConstraint ec = field.getEnumerationConstraint();
-				buf.append(newline(1));	
-				buf.append(" *     <b>name:</b> ");	
+				buf.appendln(1, " *     <b>name:</b> ");	
 				buf.append(ec.getValue().getName());						
-				buf.append(newline(1));	
-				buf.append(" *     <b>URI:</b>");	
+				buf.appendln(1, " *     <b>URI:</b>");	
 				buf.append(ec.getValue().getUri());						
 				buf.append("</pre>");	
 			}
 	    }
 	    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 		
-		buf.append(newline(1));
-	    buf.append("public void set");
+		buf.appendln(1, "public void set");
 		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(");
 		buf.append(typeClassName.getSimpleName());
@@ -517,12 +495,10 @@ public abstract class DefaultFactory {
 	}
 
 	protected void createUnsetterDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf) {
+			MetaClassInfo typeClassName, TextBuilder buf) {
 
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Unsets the <b>");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Unsets the <b>");
 		buf.append(field.getName());
 		buf.append("</b> property, ");
 		if (field.isMany()) {
@@ -530,14 +506,11 @@ public abstract class DefaultFactory {
 		}
 		else {
 			buf.append("the value");
-			buf.append(newline(1));	
-			buf.append(" * of the property of the object being set to the property's");
-			buf.append(newline(1));	
-			buf.append(" * default value. ");
+			buf.appendln(1, " * of the property of the object being set to the property's");
+			buf.appendln(1, " * default value. ");
 		}
 		buf.append("The property will no longer be");
-		buf.append(newline(1));	
-		buf.append(" * considered set.");		
+		buf.appendln(1, " * considered set.");		
 	    
 		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
@@ -545,24 +518,19 @@ public abstract class DefaultFactory {
 	    		typeClassName, buf);
 	    }
 	    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 		
-		buf.append(newline(1));
-		buf.append("public void unset");
+		buf.appendln(1, "public void unset");
 		buf.append(toMethodFieldName(field.getName()));
 		buf.append("()");
 	}	
 	
 	private void addPropertyModelDocLinks(Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf)
+			MetaClassInfo typeClassName, TextBuilder buf)
 	{
-		buf.append(newline(1));	
-		buf.append(" * <p></p>");
-		buf.append(newline(1));	
-		buf.append(" * <b>Property Definition: </b>");
-		buf.append(newline(1));	
-		buf.append(" * See {@link #get");
+		buf.appendln(1, " * <p></p>");
+		buf.appendln(1, " * <b>Property Definition: </b>");
+		buf.appendln(1, " * See {@link #get");
 		buf.append(toMethodFieldName(field.getName()));
 		buf.append("() get");
 		buf.append(toMethodFieldName(field.getName()));
@@ -586,12 +554,10 @@ public abstract class DefaultFactory {
 	}
 	
 	protected void createIsSetDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf) {
+			MetaClassInfo typeClassName, TextBuilder buf) {
 		
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Returns true if the <b>");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Returns true if the <b>");
 		buf.append(field.getName());
 		buf.append("</b> property is set.");	
 	    
@@ -602,27 +568,22 @@ public abstract class DefaultFactory {
 	    }
 	    
 	    // return
-	    buf.append(newline(1));	
-		buf.append(" * @return true if the <b>");
+	    buf.appendln(1, " * @return true if the <b>");
 		buf.append(field.getName());
 		buf.append("</b> property is set.");	
 	    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 		
-		buf.append(newline(1));
-		buf.append("public boolean isSet");
+		buf.appendln(1, "public boolean isSet");
 		buf.append(toMethodFieldName(field.getName()));
 		buf.append("()");
 	}
 	
 	protected void createCreatorDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf) {
+			MetaClassInfo typeClassName, TextBuilder buf) {
 
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Creates and returns a new instance of Type {@link ");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Creates and returns a new instance of Type {@link ");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("} automatically establishing a containment relationship ");
 		buf.append("through the object's reference property, <b>");
@@ -636,19 +597,16 @@ public abstract class DefaultFactory {
 	    }
 	    
 	    // return
-	    buf.append(newline(1));	
-		buf.append(" * @return a new instance of Type {@link ");
+	    buf.appendln(1, " * @return a new instance of Type {@link ");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("} automatically establishing a containment relationship ");
 		buf.append("through the object's reference property <b>");
 		buf.append(field.getName());
 		buf.append("</b>.");		
 	    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 
-		buf.append(newline(1));
-		buf.append("public ");
+		buf.appendln(1, "public ");
 		buf.append(typeClassName.getSimpleName());
 		buf.append(" create");
 		buf.append(toMethodFieldName(field.getName()));
@@ -656,12 +614,10 @@ public abstract class DefaultFactory {
 	}	
 
 	protected void createCreatorByAbstractClassDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf) {
+			MetaClassInfo typeClassName, TextBuilder buf) {
 
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Creates and returns a new instance of the given subclass Type for abstract base Type {@link ");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Creates and returns a new instance of the given subclass Type for abstract base Type {@link ");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("} automatically establishing a containment relationship ");
 		buf.append("through the object's reference property, <b>");
@@ -675,20 +631,16 @@ public abstract class DefaultFactory {
 	    }
 	    
 	    //params
-		buf.append(newline(1));	
-		buf.append(" * @param clss the subclass Type");	
+		buf.appendln(1, " * @param clss the subclass Type");	
 
 	    //return
-		buf.append(newline(1));	
-		buf.append(" * Returns a new instance of the given subclass Type for abstract base Type {@link ");
+		buf.appendln(1, " * Returns a new instance of the given subclass Type for abstract base Type {@link ");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("}.");	
 	    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 		
-		buf.append(newline(1));
-		buf.append("public ");
+		buf.appendln(1, "public ");
 		buf.append(typeClassName.getSimpleName());
 		buf.append(" create");
 		buf.append(toMethodFieldName(field.getName()));
@@ -698,12 +650,10 @@ public abstract class DefaultFactory {
 	}	
 	
 	protected void createManyGetterDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf)
+			MetaClassInfo typeClassName, TextBuilder buf)
 	{		
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Returns an array of <b>");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Returns an array of <b>");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("</b> set for the object's multi-valued property <b>");
 		buf.append(field.getName());
@@ -711,26 +661,21 @@ public abstract class DefaultFactory {
 	    
 		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
-			buf.append(newline(1));	
-			buf.append(" * <p></p>");
-			buf.append(newline(1));	
-			buf.append(" * <b>Property Definition: </b>");
+			buf.appendln(1, " * <p></p>");
+			buf.appendln(1, " * <b>Property Definition: </b>");
 			buf.append(definition);
 	    }
 
 	    // return 
-		buf.append(newline(1));	
-		buf.append(" * @return an array of <b>");
+		buf.appendln(1, " * @return an array of <b>");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("</b> set for the object's multi-valued property <b>");
 		buf.append(field.getName());
 		buf.append("</b>.");	
 
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 		
-		buf.append(newline(1));
-		buf.append("public ");
+		buf.appendln(1, "public ");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("[] get");
 		buf.append(toMethodFieldName(field.getName()));
@@ -738,12 +683,10 @@ public abstract class DefaultFactory {
 	}	
 
 	protected void createManyIndexGetterDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf)
+			MetaClassInfo typeClassName, TextBuilder buf)
 	{		
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Returns the <b>");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Returns the <b>");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("</b> set for the object's multi-valued property <b>");
 		buf.append(field.getName());
@@ -756,22 +699,18 @@ public abstract class DefaultFactory {
 	    }
 
 	    // params
-		buf.append(newline(1));	
-		buf.append(" * @param idx the index");
+		buf.appendln(1, " * @param idx the index");
 		
 		// return 
-		buf.append(newline(1));	
-		buf.append(" * @return the <b>");
+		buf.appendln(1, " * @return the <b>");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("</b> set for the object's multi-valued property <b>");
 		buf.append(field.getName());
 		buf.append("</b> based on the given index.");	
 	    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 
-		buf.append(newline(1));
-		buf.append("public ");
+		buf.appendln(1, "public ");
 		buf.append(typeClassName.getSimpleName());
 		buf.append(" get");
 		buf.append(toMethodFieldName(field.getName()));
@@ -779,12 +718,10 @@ public abstract class DefaultFactory {
 	}	
 
 	protected void createManyCountDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf)
+			MetaClassInfo typeClassName, TextBuilder buf)
 	{		
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Returns a count for multi-valued property <b>");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Returns a count for multi-valued property <b>");
 		buf.append(field.getName());
 		buf.append("</b>.");	
 	    
@@ -795,27 +732,22 @@ public abstract class DefaultFactory {
 	    }
 
 	    // return 
-		buf.append(newline(1));	
-		buf.append(" * @return a count for multi-valued property <b>");
+		buf.appendln(1, " * @return a count for multi-valued property <b>");
 		buf.append(field.getName());
 		buf.append("</b>.");	
 
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 		
-		buf.append(newline(1));
-		buf.append("public int get");
+		buf.appendln(1, "public int get");
 		buf.append(toMethodFieldName(field.getName()));
 		buf.append("Count()");
 	}	
 	
 	protected void createManySetterDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf)
+			MetaClassInfo typeClassName, TextBuilder buf)
 	{		
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Sets the given array of Type <b>");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Sets the given array of Type <b>");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("</b> for the object's multi-valued property <b>");
 		buf.append(field.getName());
@@ -823,22 +755,17 @@ public abstract class DefaultFactory {
 	    
 		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
-			buf.append(newline(1));	
-			buf.append(" * <p></p>");
-			buf.append(newline(1));	
-			buf.append(" * <b>Property Definition: </b>");
+			buf.appendln(1, " * <p></p>");
+			buf.appendln(1, " * <b>Property Definition: </b>");
 			buf.append(definition);
 	    }
 
 	    // params
-		buf.append(newline(1));	
-		buf.append(" * @param value the array value");
+		buf.appendln(1, " * @param value the array value");
 			    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 
-		buf.append(newline(1));
-		buf.append("public void set");
+		buf.appendln(1, "public void set");
 		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(");
 		buf.append(typeClassName.getSimpleName());
@@ -846,12 +773,10 @@ public abstract class DefaultFactory {
 	}
 	 
 	protected void createManyAdderDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf)
+			MetaClassInfo typeClassName, TextBuilder buf)
 	{		
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Adds the given value of Type <b>");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Adds the given value of Type <b>");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("</b> for the object's multi-valued property <b>");
 		buf.append(field.getName());
@@ -864,14 +789,11 @@ public abstract class DefaultFactory {
 	    }
 
 	    // params
-		buf.append(newline(1));	
-		buf.append(" * @param value the value to add");
+		buf.appendln(1, " * @param value the value to add");
 			    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 
-		buf.append(newline(1));
-		buf.append("public void add");
+		buf.appendln(1, "public void add");
 		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(");
 		buf.append(typeClassName.getSimpleName());
@@ -879,12 +801,10 @@ public abstract class DefaultFactory {
 	}
 	
 	protected void createManyRemoverDeclaration(Package pkg, Class clss, Property field, 
-			TypeClassInfo typeClassName, StringBuilder buf)
+			MetaClassInfo typeClassName, TextBuilder buf)
 	{		
-		buf.append(this.newline(1));
-		buf.append("/**"); // begin javadoc
-		buf.append(newline(1));	
-		buf.append(" * Removes the given value of Type <b>");
+		buf.appendln(1, "/**"); // begin javadoc
+		buf.appendln(1, " * Removes the given value of Type <b>");
 		buf.append(typeClassName.getSimpleName());
 		buf.append("</b> for the object's multi-valued property <b>");
 		buf.append(field.getName());
@@ -897,14 +817,11 @@ public abstract class DefaultFactory {
 	    }
 
 	    // params
-		buf.append(newline(1));	
-		buf.append(" * @param value the value to remove");
+		buf.appendln(1, " * @param value the value to remove");
 			    
-	    buf.append(newline(1));	
-		buf.append(" */"); // end javadoc
+	    buf.appendln(1, " */"); // end javadoc
 
-		buf.append(newline(1));
-		buf.append("public void remove");
+		buf.appendln(1, "public void remove");
 		buf.append(toMethodFieldName(field.getName()));
 		buf.append("(");
 		buf.append(typeClassName.getSimpleName());
@@ -994,7 +911,7 @@ public abstract class DefaultFactory {
 		        if (superClass.isAbstract() && !collectAbstractClasses)
 		        	continue;
 		        Package superClassPackage = this.context.findPackage(cref);
-				String qualifiedName = resolver.getQualifiedName(superClass); 				
+				String qualifiedName = resolver.getQualifiedName(superClass, superClassPackage); 				
 				nameMap.put(qualifiedName, qualifiedName);
 		        // recurse
 		        collectSuperClassNames(superClassPackage, superClass, 
@@ -1089,7 +1006,8 @@ public abstract class DefaultFactory {
 	}
 	
 	protected String createImportDeclarations(Map<String, String> nameMap) {
-		StringBuilder buf = new StringBuilder();
+		TextBuilder buf = new TextBuilder(LINE_SEP, 
+				this.context.getIndentationToken());
 		
 		for (String name : nameMap.values()) {
 		    buf.append(LINE_SEP);	
@@ -1103,7 +1021,8 @@ public abstract class DefaultFactory {
 	
 	protected String getWrappedDocmentations(List<Documentation> docs, int indent) {
 		// add formatted doc from UML or derived default doc
-		StringBuilder docsBuf = new StringBuilder();
+		TextBuilder docsBuf = new TextBuilder(LINE_SEP, 
+				this.context.getIndentationToken());
 		if (docs != null) {
 			for (Documentation doc : docs) {
 				if (doc.getBody() == null || doc.getBody().getValue() == null)
