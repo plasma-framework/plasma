@@ -19,26 +19,23 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo.repository;
+package org.plasma.sdo.repository.fuml;
 
-import java.util.List;
+import org.plasma.sdo.repository.Comment;
 
-import org.plasma.sdo.profile.SDOAlias;
+class FumlComment implements Comment {
+	private fUML.Syntax.Classes.Kernel.Comment comment;
 
-/**
- * 
- * @author Scott Cinnamond
- * @since 1.2.4
- */public interface Element {
-
-	String getName();
-
-	String getId();
-
-	String getPhysicalName();
-
-	SDOAlias findAlias();
-
-	List<Comment> getComments();
-
+	public FumlComment(fUML.Syntax.Classes.Kernel.Comment comment) {
+		super();
+		this.comment = comment;		
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.plasma.sdo.repository.fuml.Comment#getBody()
+	 */
+	@Override
+	public String getBody() {
+		return this.comment.body;
+	}	
 }

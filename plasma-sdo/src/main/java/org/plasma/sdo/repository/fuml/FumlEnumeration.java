@@ -19,26 +19,33 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo.repository;
+package org.plasma.sdo.repository.fuml;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.plasma.sdo.profile.SDOAlias;
+import org.plasma.sdo.repository.Enumeration;
+import org.plasma.sdo.repository.EnumerationLiteral;
 
-/**
- * 
- * @author Scott Cinnamond
- * @since 1.2.4
- */public interface Element {
 
-	String getName();
 
-	String getId();
+class FumlEnumeration extends FumlElement<org.modeldriven.fuml.repository.Enumeration> implements Enumeration {
 
-	String getPhysicalName();
-
-	SDOAlias findAlias();
-
-	List<Comment> getComments();
-
+	public FumlEnumeration(org.modeldriven.fuml.repository.Enumeration enumeration) {
+		super(enumeration);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.plasma.sdo.repository.fuml.Enumeration#getOwnedLiteral()
+	 */
+	@Override
+	public List<EnumerationLiteral> getOwnedLiteral() {
+		List<EnumerationLiteral> result = new ArrayList<EnumerationLiteral>();
+		
+		for (org.modeldriven.fuml.repository.EnumerationLiteral literal : this.element.getOwnedLiteral()) {
+			result.add(new FumlEnumerationLiteral(literal));
+		}
+	    return result;	
+	}
+	
 }

@@ -19,26 +19,13 @@
  * <http://plasma-sdo.org/licenses/>.
  *  
  */
-package org.plasma.sdo.repository;
+package org.plasma.sdo.repository.fuml;
 
-import java.util.List;
+import org.plasma.sdo.repository.Stereotype;
 
-import org.plasma.sdo.profile.SDOAlias;
+class FumlStereotype extends FumlClass_ implements Stereotype {
 
-/**
- * 
- * @author Scott Cinnamond
- * @since 1.2.4
- */public interface Element {
-
-	String getName();
-
-	String getId();
-
-	String getPhysicalName();
-
-	SDOAlias findAlias();
-
-	List<Comment> getComments();
-
+	public FumlStereotype(org.modeldriven.fuml.repository.Class_ class_) {
+		super(class_);
+	}
 }

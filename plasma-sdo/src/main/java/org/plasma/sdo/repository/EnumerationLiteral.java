@@ -21,36 +21,12 @@
  */
 package org.plasma.sdo.repository;
 
-import java.util.List;
+/**
+ * 
+ * @author Scott Cinnamond
+ * @since 1.2.4
+ */public interface EnumerationLiteral extends Element {
 
-import org.modeldriven.fuml.repository.Stereotype;
-import org.plasma.common.exception.PlasmaRuntimeException;
-import org.plasma.sdo.profile.SDOAlias;
-
-public class EnumerationLiteral extends Element<org.modeldriven.fuml.repository.EnumerationLiteral> {
-
-	public EnumerationLiteral(org.modeldriven.fuml.repository.EnumerationLiteral literal) {
-		super(literal);
-	}
-	
-	@Override
-	public String getPhysicalName() 
-    {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(this.element);
-        if (stereotypes != null) {
-            for (Stereotype stereotype : stereotypes)
-                if (stereotype.getDelegate() instanceof SDOAlias) {
-                	SDOAlias sdoAliasStereotype = (SDOAlias)stereotype.getDelegate();
-                    if (sdoAliasStereotype.getPhysicalName() != null)
-                        return sdoAliasStereotype.getPhysicalName();
-                    else    
-                        throw new PlasmaRuntimeException("expected SDOAlias 'physicalName' property for Enumerationliteral, '"
-                                + this.element.getEnumeration().getName() + "." 
-                                + this.element.getName() + "'");
-                    
-                }
-        }
-        return null;
-    }    
+	String getPhysicalName();
 
 }

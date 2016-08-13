@@ -21,24 +21,11 @@
  */
 package org.plasma.sdo.repository;
 
-import java.util.List;
-
-import org.plasma.sdo.profile.SDOAlias;
-
 /**
  * 
  * @author Scott Cinnamond
  * @since 1.2.4
- */public interface Element {
-
-	String getName();
-
-	String getId();
-
-	String getPhysicalName();
-
-	SDOAlias findAlias();
-
-	List<Comment> getComments();
+ */
+public interface Association extends Classifier {
 
 }

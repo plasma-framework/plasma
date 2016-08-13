@@ -22,16 +22,11 @@
 package org.plasma.text.lang3gl.java;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.config.PlasmaConfig;
-import org.plasma.metamodel.Class;
-import org.plasma.metamodel.Package;
 import org.plasma.provisioning.adapter.ProvisioningModel;
-import org.plasma.text.lang3gl.ClassFactory;
 import org.plasma.text.lang3gl.DefaultStreamAssembler;
 import org.plasma.text.lang3gl.Lang3GLFactory;
 import org.plasma.text.lang3gl.Lang3GLOperation;

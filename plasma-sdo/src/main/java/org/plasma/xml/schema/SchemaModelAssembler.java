@@ -39,6 +39,7 @@ import org.plasma.metamodel.DataTypeRef;
 import org.plasma.metamodel.Documentation;
 import org.plasma.metamodel.Model;
 import org.plasma.metamodel.ModelAppInfo;
+import org.plasma.metamodel.Property;
 import org.plasma.metamodel.PropertyAppInfo;
 import org.plasma.metamodel.VisibilityType;
 import org.plasma.provisioning.ProvisioningConstants;
@@ -179,7 +180,7 @@ public class SchemaModelAssembler {
         
 		
 		// add datatype attributes and elements
-        for (org.plasma.metamodel.Property prop : adapter.getDeclaredPropertiesArray()) {
+        for (Property prop : adapter.getDeclaredPropertiesArray()) {
         	PlasmaProperty property = (PlasmaProperty)sdoType.getProperty(prop.getName());
         	if (!(prop.getType() instanceof DataTypeRef))
         		continue; // datatype prop
@@ -232,7 +233,7 @@ public class SchemaModelAssembler {
 	
 	private void addReferenceElements(ComplexType complexType, TypeAdapter adapter, PlasmaType sdoType) {
         // add reference elements
-        for (org.plasma.metamodel.Property prop : adapter.getDeclaredPropertiesArray()) {
+        for (Property prop : adapter.getDeclaredPropertiesArray()) {
         	PlasmaProperty property = (PlasmaProperty)sdoType.getProperty(prop.getName());
         	if (prop.getType() instanceof DataTypeRef)
         		continue; // datatype prop
@@ -482,7 +483,7 @@ public class SchemaModelAssembler {
 	}
 	
     private Element buildReferenceElementModel(TypeAdapter adapter, PlasmaType type, 
-    		org.plasma.metamodel.Property prop, PlasmaProperty property, Schema schema) {
+    		Property prop, PlasmaProperty property, Schema schema) {
         Element element = new Element();
         element.setName(PlasmaXSDHelper.INSTANCE.getLocalName(property));        
         
@@ -531,7 +532,7 @@ public class SchemaModelAssembler {
     }
  
     private Element buildDataElementModel(TypeAdapter adapter, PlasmaType type, 
-    		org.plasma.metamodel.Property prop, PlasmaProperty property, Schema schema) {
+    		Property prop, PlasmaProperty property, Schema schema) {
         Element element = new Element();
         element.setName(PlasmaXSDHelper.INSTANCE.getLocalName(property));
         if (property.getRestriction() == null) {
@@ -571,7 +572,7 @@ public class SchemaModelAssembler {
     }
     
     private Attribute buildDataAttributeModel(TypeAdapter adapter, PlasmaType type, 
-    		org.plasma.metamodel.Property prop, PlasmaProperty property, Schema schema) 
+    		Property prop, PlasmaProperty property, Schema schema) 
     {
     	Attribute attr = new Attribute();
         attr.setName(PlasmaXSDHelper.INSTANCE.getLocalName(property));

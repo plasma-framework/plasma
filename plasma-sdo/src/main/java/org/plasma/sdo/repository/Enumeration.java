@@ -21,24 +21,11 @@
  */
 package org.plasma.sdo.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
+public interface Enumeration extends Element {
 
-public class Enumeration extends Element<org.modeldriven.fuml.repository.Enumeration> {
+	List<EnumerationLiteral> getOwnedLiteral();
 
-	public Enumeration(org.modeldriven.fuml.repository.Enumeration enumeration) {
-		super(enumeration);
-	}
-	
-	public List<EnumerationLiteral> getOwnedLiteral() {
-		List<EnumerationLiteral> result = new ArrayList<EnumerationLiteral>();
-		
-		for (org.modeldriven.fuml.repository.EnumerationLiteral literal : this.element.getOwnedLiteral()) {
-			result.add(new EnumerationLiteral(literal));
-		}
-	    return result;	
-	}
-	
 }

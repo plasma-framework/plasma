@@ -21,52 +21,15 @@
  */
 package org.plasma.sdo.repository;
 
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * 
+ * @author Scott Cinnamond
+ * @since 1.2.4
+ */
+public interface Namespace extends Element {
 
-import org.modeldriven.fuml.repository.Stereotype;
-import org.plasma.sdo.profile.SDONamespace;
+	String getUri();
 
-public class Namespace extends Element<org.modeldriven.fuml.repository.Package>{
-
-	private String packageQualifiedName; 
-		
-	public Namespace(org.modeldriven.fuml.repository.Package namespace) {
-		super(namespace);
-	}
-		
-	public String getUri() {
-        List<Stereotype> stereotypes = PlasmaRepository.getInstance().getStereotypes(this.element);
-        if (stereotypes != null) {
-            for (Stereotype stereotype : stereotypes)
-                if (stereotype.getDelegate() instanceof SDONamespace) {
-                	SDONamespace sdoNamespaceStereotype = (SDONamespace)stereotype.getDelegate();
-                	return sdoNamespaceStereotype.getUri();
-                }
-        }
-        return null;
-	}
-
-	public String getQualifiedPackageName() {
-		if (packageQualifiedName == null) {
-			List<String> names = new ArrayList<String>();
-			names.add(this.element.getName());
-			org.modeldriven.fuml.repository.Package parent = this.element.getNestingPackage();
-			while (parent != null) {
-				names.add(parent.getName());
-				parent = parent.getNestingPackage();
-			}
-			StringBuilder buf = new StringBuilder();
-			int len = names.size();
-			for (int i = len-1; i >= 0; i--) {
-				if (i < len-1)
-					buf.append(".");
-				String name = names.get(i);
-				buf.append(name);
-			}
-			this.packageQualifiedName = buf.toString();
-		}
-		return this.packageQualifiedName;
-	}	 	
+	String getQualifiedPackageName();
 
 }

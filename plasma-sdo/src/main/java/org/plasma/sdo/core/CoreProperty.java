@@ -30,7 +30,6 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.modeldriven.fuml.repository.Class_;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.config.adapter.PropertyBindingAdapter;
 import org.plasma.config.adapter.TypeBindingAdapter;
@@ -378,7 +377,7 @@ public class CoreProperty implements PlasmaProperty {
     
 	@Override
 	public PlasmaProperty getKeySupplier() {
-        org.modeldriven.fuml.repository.Property supplierProperty = this.property.findKeySupplier();
+		org.plasma.sdo.repository.Property supplierProperty = this.property.findKeySupplier();
         if (supplierProperty != null) {
         	return lookup(supplierProperty);
         }
@@ -592,7 +591,7 @@ public class CoreProperty implements PlasmaProperty {
     public Property getOpposite() {
         if (!this.getType().isDataType()) {
             
-            org.modeldriven.fuml.repository.Property oppositeProperty = this.property.getOpposite();
+        	org.plasma.sdo.repository.Property oppositeProperty = this.property.getOpposite();
             if (oppositeProperty != null) {
             	return lookup(oppositeProperty);
             }
@@ -729,7 +728,7 @@ public class CoreProperty implements PlasmaProperty {
 		
 		Derivation derivation = this.property.findDerivation();
 		if (derivation != null) {
-            org.modeldriven.fuml.repository.Property supplierProperty = this.property.findDerivationSupplier();
+			org.plasma.sdo.repository.Property supplierProperty = this.property.findDerivationSupplier();
             if (supplierProperty != null) {
             	return lookup(supplierProperty);
             }
@@ -745,10 +744,9 @@ public class CoreProperty implements PlasmaProperty {
 	 * @param repoProperty the repository property
 	 * @return a mapped SDO property adhering to any type or property name binding customizations.
 	 */
-	private PlasmaProperty lookup(org.modeldriven.fuml.repository.Property repoProperty) {
-        Class_ repoClass = repoProperty.getClass_();
-        String repoClassNamespaceURI = this.property.getNamespaceURI(
-                repoClass);
+	private PlasmaProperty lookup(org.plasma.sdo.repository.Property repoProperty) {
+		org.plasma.sdo.repository.Class_ repoClass = repoProperty.getClass_();
+        String repoClassNamespaceURI = repoClass.getNamespaceURI();
         String repoTypeName = repoClass.getName();
 
         TypeBindingAdapter binding = PlasmaConfig.getInstance().findTypeBinding(repoClassNamespaceURI, repoClass.getName());

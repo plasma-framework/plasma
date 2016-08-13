@@ -35,7 +35,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.modeldriven.fuml.repository.RepositorylException;
 import org.plasma.config.Namespace;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.config.adapter.TypeBindingAdapter;
@@ -55,6 +54,7 @@ import org.plasma.sdo.repository.Classifier;
 import org.plasma.sdo.repository.Comment;
 import org.plasma.sdo.repository.InvalidClassifierNameException;
 import org.plasma.sdo.repository.PlasmaRepository;
+import org.plasma.sdo.repository.RepositoryException;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
@@ -79,6 +79,11 @@ public class CoreType implements PlasmaType {
     private QName qname;
     private int qnameHashCode;
     
+    /** 
+     * Its repository delegate. This is a Classifier rather than a Class because 
+     * (degenerate) SDO types are used for data types as well as types, and 
+     * these inherit from classifier in UML.  
+     */
     private Classifier classifier;
     private List<Type> baseTypes;
     private List<Type> subTypes;
@@ -145,7 +150,7 @@ public class CoreType implements PlasmaType {
         // to exist within the same artifact. Need to lookup classifier qualified by UML package
         // name. If the namespace/package exists and the classifier for some reason does
         // not exist, throw an error. 
-        org.modeldriven.fuml.repository.Classifier repoClassifier = null;
+        org.plasma.sdo.repository.Classifier repoClassifier = null;
         org.plasma.sdo.repository.Namespace repoNamespace = PlasmaRepository.getInstance().getNamespaceForUri(this.namespaceURI); 
         if (repoNamespace != null) {
             String packageQualifiedName = repoNamespace.getQualifiedPackageName();
@@ -156,7 +161,7 @@ public class CoreType implements PlasmaType {
             try {
                 repoClassifier = PlasmaRepository.getInstance().getClassifier(packageQualifiedName);
             }
-            catch (RepositorylException e) {
+            catch (RepositoryException e) {
             	throw new InvalidClassifierNameException("namespace/package qualified classifier '"
             		+ packageQualifiedName + "' does not exist", e);
             }
@@ -166,7 +171,7 @@ public class CoreType implements PlasmaType {
         	try {
                 repoClassifier = PlasmaRepository.getInstance().getClassifier(artifactQualifiedName);
             }
-            catch (RepositorylException e) {
+            catch (RepositoryException e) {
             	throw new InvalidClassifierNameException("artifact qualified classifier '"
             		+ artifactQualifiedName + "' does not exist", e);
             }
@@ -175,18 +180,13 @@ public class CoreType implements PlasmaType {
         // not our local SDO mapping to it. This is the only API which 
         // correctly initializes the classifier with all its declared and inherited properties
         // which is a bug in FUML RI
-        String urn = repoClassifier.getArtifact().getNamespaceURI();
+        String urn = repoClassifier.getArtifactNamespaceURI();
         String qualifiedName = urn + "#" + repoClassifier.getName();
-        org.modeldriven.fuml.repository.Classifier resultClassifier = PlasmaRepository.getInstance().getClassifier(
+        org.plasma.sdo.repository.Classifier resultClassifier = PlasmaRepository.getInstance().getClassifier(
         		qualifiedName);   
-        if (!resultClassifier.getXmiId().equals(repoClassifier.getXmiId()))
-        	log.warn("found xmi-id mismatch for result ("+resultClassifier.getXmiId()+") and lookup ("+repoClassifier.getXmiId()+") classifier - ignoring");
-         
-        if (org.modeldriven.fuml.repository.Class_.class.isAssignableFrom(resultClassifier.getClass()))        	
-            this.classifier = new Class_(
-        		(org.modeldriven.fuml.repository.Class_)resultClassifier);
-        else
-        	this.classifier = new Classifier(resultClassifier);
+        if (!resultClassifier.getId().equals(repoClassifier.getId()))
+        	log.warn("found xmi-id mismatch for result ("+resultClassifier.getId()+") and lookup ("+repoClassifier.getId()+") classifier - ignoring");
+        this.classifier = resultClassifier; 
     }
     
     public int hashCode() {
@@ -241,20 +241,19 @@ public class CoreType implements PlasmaType {
         	visibility = this.classifier.getVisibility();
         instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_VISIBILITY, 
         		visibility);        
-        
-        List<org.modeldriven.fuml.repository.Property> properties = this.classifier.getDeclaredProperties();
+                  
+        List<org.plasma.sdo.repository.Property> properties = ((Class_)this.classifier).getDeclaredProperties();
                 
-        for (org.modeldriven.fuml.repository.Property prop : properties) 
+        for (org.plasma.sdo.repository.Property prop : properties) 
         {                
             Type propertyType = null;
             // if a reference prop
             if (!prop.isDataType()) {
                 
-                org.modeldriven.fuml.repository.Property oppositeProperty = prop.getOpposite();
+            	org.plasma.sdo.repository.Property oppositeProperty = prop.getOpposite();
                 if (oppositeProperty != null) {
-                	org.modeldriven.fuml.repository.Class_ oppositeClass = oppositeProperty.getClass_();
-	                String oppositeClassNamespaceURI = this.classifier.getNamespaceURI(
-	                        oppositeClass);
+                	org.plasma.sdo.repository.Class_ oppositeClass = oppositeProperty.getClass_();
+	                String oppositeClassNamespaceURI = oppositeClass.getNamespaceURI();
 	                propertyType = PlasmaTypeHelper.INSTANCE.getType(oppositeClassNamespaceURI, 
 	                        oppositeClass.getName()); 
                 }
@@ -263,8 +262,7 @@ public class CoreType implements PlasmaType {
         			// will necessarily create an association owned-end as it cannot modify the target read-only class. This
         			// can be the case when imported read-only modules are used. In such cases a property may not 
                 	// have an opposite. 
-                	org.modeldriven.fuml.repository.Classifier oppositeClassifier = prop.getType();
-                	Classifier repoClassifier = new Classifier(oppositeClassifier);
+                	org.plasma.sdo.repository.Classifier repoClassifier = prop.getType();
                 	String oppositeClassNamespaceURI = repoClassifier.getNamespaceURI();
                 	propertyType = PlasmaTypeHelper.INSTANCE.getType(oppositeClassNamespaceURI, 
                     		repoClassifier.getName()); 
@@ -273,7 +271,7 @@ public class CoreType implements PlasmaType {
             }
             else
             {            
-            	org.modeldriven.fuml.repository.Classifier propertyClassifier = prop.getType();	
+            	org.plasma.sdo.repository.Classifier propertyClassifier = prop.getType();	
         		DataType dataType = DataType.valueOf(propertyClassifier.getName());
         		propertyType = PlasmaTypeHelper.INSTANCE.getType(
                         PlasmaConfig.getInstance().getSDODataTypesNamespace().getUri(),
@@ -281,9 +279,7 @@ public class CoreType implements PlasmaType {
             }
             
             PlasmaProperty property = new CoreProperty(
-            		(CoreType)propertyType, 
-            		new org.plasma.sdo.repository.Property(prop), 
-            		this);
+            		(CoreType)propertyType, prop, this);
             
             this.declaredPropertiesMap.put(property.getName(), property);
         	PlasmaProperty existing = null;
@@ -723,10 +719,9 @@ public class CoreType implements PlasmaType {
     	if (this.baseTypes == null) {
     		this.baseTypes = new ArrayList<Type>();
     		PlasmaTypeHelper helper = PlasmaTypeHelper.INSTANCE;
-	    	List<org.modeldriven.fuml.repository.Classifier> generalizations = this.classifier.getGeneralization();
-	    	for (org.modeldriven.fuml.repository.Classifier classifier : generalizations) {                
-	    		String namespaceURI = this.classifier.getNamespaceURI(
-	    				classifier);
+	    	List<org.plasma.sdo.repository.Classifier> generalizations = this.classifier.getGeneralization();
+	    	for (org.plasma.sdo.repository.Classifier classifier : generalizations) {                
+	    		String namespaceURI = classifier.getNamespaceURI();
 	    		Type type = helper.getType(namespaceURI, 
 	    				classifier.getName());
 	    		this.baseTypes.add(type);
@@ -766,10 +761,9 @@ public class CoreType implements PlasmaType {
     	if (this.subTypes == null) {
     		this.subTypes = new ArrayList<Type>();
     		PlasmaTypeHelper helper = PlasmaTypeHelper.INSTANCE;
-	    	List<org.modeldriven.fuml.repository.Classifier> specializations = this.classifier.getSpecializations();
-	    	for (org.modeldriven.fuml.repository.Classifier classifier : specializations) {                
-	    		String namespaceURI = this.classifier.getNamespaceURI(
-	    				classifier);
+	    	List<org.plasma.sdo.repository.Classifier> specializations = this.classifier.getSpecializations();
+	    	for (org.plasma.sdo.repository.Classifier classifier : specializations) {                
+	    		String namespaceURI = classifier.getNamespaceURI();
 	    		Type type = helper.getType(namespaceURI, 
 	    				classifier.getName());
 	    		this.subTypes.add(type);
@@ -1142,7 +1136,7 @@ public class CoreType implements PlasmaType {
     }
 
 	public boolean isRelation(PlasmaType other, AssociationPath relationPath) {
-		return this.classifier.isRelation(other.getClassifier(), relationPath);
+		return ((Class_)this.classifier).isRelation(((Class_)other.getClassifier()), relationPath);
 	}
         
 	@Override
@@ -1152,7 +1146,7 @@ public class CoreType implements PlasmaType {
 
 	@Override
 	public PlasmaType getDerivationSupplier() {
-		org.modeldriven.fuml.repository.Classifier classifier = this.classifier.getDerivationSupplier();
+		org.plasma.sdo.repository.Classifier classifier = this.classifier.getDerivationSupplier();
 		if (classifier != null) {
 		    return lookup(classifier);
 		}
@@ -1164,9 +1158,8 @@ public class CoreType implements PlasmaType {
 	 * @param repoProperty the repository property
 	 * @return a mapped SDO property adhering to any type name binding customizations.
 	 */
-	private PlasmaType lookup(org.modeldriven.fuml.repository.Classifier repoClassifier) {
-        String repoClassNamespaceURI = this.classifier.getNamespaceURI(
-        		repoClassifier);
+	private PlasmaType lookup(org.plasma.sdo.repository.Classifier repoClassifier) {
+        String repoClassNamespaceURI = repoClassifier.getNamespaceURI();
         String repoTypeName = repoClassifier.getName();
 
         TypeBindingAdapter binding = PlasmaConfig.getInstance().findTypeBinding(repoClassNamespaceURI, repoClassifier.getName());

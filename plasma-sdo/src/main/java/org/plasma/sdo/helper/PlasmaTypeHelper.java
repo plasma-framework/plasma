@@ -29,13 +29,13 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.modeldriven.fuml.repository.Classifier;
-import org.modeldriven.fuml.repository.Stereotype;
 import org.plasma.sdo.PlasmaDataObjectConstants;
 import org.plasma.sdo.PlasmaDataObjectException;
 import org.plasma.sdo.core.CoreType;
+import org.plasma.sdo.repository.Classifier;
 import org.plasma.sdo.repository.InvalidClassifierNameException;
 import org.plasma.sdo.repository.PlasmaRepository;
+import org.plasma.sdo.repository.Stereotype;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;

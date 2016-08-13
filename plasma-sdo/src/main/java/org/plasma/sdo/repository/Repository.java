@@ -22,26 +22,59 @@
 package org.plasma.sdo.repository;
 
 import java.util.List;
+ 
+/**
+ * 
+ * @author Scott Cinnamond
+ * @since 1.2.4
+ */
+public interface Repository {
 
-import org.modeldriven.fuml.repository.Classifier;
+	List<String> getAllNamespaceUris();
 
-public interface Repository extends org.modeldriven.fuml.repository.Repository {
+	List<Namespace> getAllNamespaces();
 
-    /**
-     * Returns all SDO namespace URIs within the repository.
-     * @return all SDO namespace URIs within the repository.
-     */
-	public List<String> getAllNamespaceUris();
-	
-	public List<Namespace> getAllNamespaces();
-	public Namespace getNamespaceForUri(String uri);
-	
-    /**
-     * Return the Classifier instances specified by the given uri.
-     * @param uri The namespace uri;
-     * @return the Classifier instances specified by the given uri.
-     */
-	public List<Classifier> getClassifiers(String uri);
-	
-	public RelationCache getRelationCache();
+	Namespace getNamespaceForUri(String uri);
+
+	/**
+	 * Returns a list of classifiers contained by the package, as well as all 
+	 * classifiers within its contained packages, linked/stereotyped through an SDONamespace
+	 * stereotype where the stereotype uri matches the given uri. 
+	 * @see org.plasma.sdo.profile.SDONamespace
+	 * @param uri the SDO namespace URI
+	 * @return a list of classifiers contained by the package, as wells as all 
+	 * classifiers within its contained packages, linked through an SDONamespace
+	 * stereotype where the uri which matches the given uri.  
+	 */
+	List<Classifier> getClassifiers(String uri);
+
+	Classifier getClassifier(String name);
+
+	Classifier findClassifier(String name);
+
+	Element findElementById(String id);
+
+	Element findElementByName(String name);
+
+	Element findElementByQualifiedName(String qualifiedName);
+
+	Class_ getClassById(String id);
+	Enumeration getEnumerationById(String id);
+	EnumerationLiteral getEnumerationLiteralById(String id);
+	Classifier getClassifierById(String id);
+	Property getPropertyById(String id);
+	Element getElementById(String id);
+
+	Element getElementByName(String name);
+
+	Element getElementByQualifiedName(String qualifiedName);
+
+	Classifier getClassifierByName(String name);
+
+	Classifier getClassifierByQualifiedName(String qualifiedName);
+
+	String getDefaultUMLNamespaceURI();
+
+	RelationCache getRelationCache();
+
 }

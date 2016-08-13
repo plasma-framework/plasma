@@ -18,7 +18,7 @@ import org.plasma.provisioning.rdb.Oracle11GConverter;
 import org.plasma.provisioning.rdb.OracleVersion;
 import org.plasma.provisioning.rdb.OracleVersionFinder;
 import org.plasma.provisioning.rdb.RDBConstants;
-import org.plasma.sdo.repository.PlasmaRepository;
+import org.plasma.sdo.repository.fuml.FumlRepository;
 
 public class RDBReader implements RDBConstants {
     private static Log log =LogFactory.getLog(
@@ -26,7 +26,7 @@ public class RDBReader implements RDBConstants {
 
 	public Model read(RDBDialect dialect, String[] schemaNames, String[] namespaces) {
 		
-    	PlasmaRepository.getInstance(); // just force an init    	
+    	FumlRepository.getInstance(); // just force an init    	
        	
         // convert the schemas
         Model model = null;

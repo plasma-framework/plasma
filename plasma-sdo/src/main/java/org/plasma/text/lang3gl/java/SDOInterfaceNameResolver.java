@@ -28,7 +28,6 @@ import org.plasma.config.PlasmaConfig;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
 import org.plasma.metamodel.Package;
-import org.plasma.text.NamingCollisionException;
 import org.plasma.text.lang3gl.ClassNameResolver;
 
 public class SDOInterfaceNameResolver extends DefaultNameResolver
