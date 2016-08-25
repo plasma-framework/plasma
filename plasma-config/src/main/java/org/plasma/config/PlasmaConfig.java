@@ -156,10 +156,10 @@ public class PlasmaConfig {
     	
     	//List<Namespace> namespaces = deriveNamespaces();
     	//for (Namespace ns : namespaces)
-    	//	sdo.getNamespaces().add(ns);
+    	//	sdo.getNamespace().add(ns);
     	
     	Repository repo = new Repository();
-    	config.getRepositories().add(repo);
+    	config.getRepository().add(repo);
     	
     	return config;
     }
@@ -189,8 +189,8 @@ public class PlasmaConfig {
     
     private void constructArtifactAndNamespaceMappings() throws ConfigurationException {
         // map declared artifacts
-        for (Repository repo : config.getRepositories()) {
-            for (Artifact artifact : repo.getArtifacts()) {
+        for (Repository repo : config.getRepository()) {
+            for (Artifact artifact : repo.getArtifact()) {
                 this.artifactMap.put(artifact.getNamespaceUri(), artifact);
             }
         }
@@ -210,7 +210,7 @@ public class PlasmaConfig {
         }
         
         // check declared SDO namespaces against repository artifacts
-        for (Namespace namespace : config.getSDO().getNamespaces()) {  
+        for (Namespace namespace : config.getSDO().getNamespace()) {  
             if (artifactMap.get(namespace.getArtifact()) == null)
                 throw new ConfigurationException("Invalid SDO Namespace - could not find repository artifact based on URI '"
                         + namespace.getArtifact() + "'"); 
@@ -236,7 +236,7 @@ public class PlasmaConfig {
     					+ "within the configuration");
             this.sdoNamespaceMap.put(namespace.getProvisioning().getPackageName(),  namespaceAdapter);
             
-            for (TypeBinding typeBinding : namespace.getTypeBindings()) {
+            for (TypeBinding typeBinding : namespace.getTypeBinding()) {
             	namespaceAdapter.addTypeBinding(typeBinding);
             }
         }
@@ -272,8 +272,8 @@ public class PlasmaConfig {
     	// Determine the profile version(s) required by the defined user artifacts 
     	Map<String, ProfileArtifactAdapter> versions = new HashMap<String, ProfileArtifactAdapter>();
 
-        for (Repository repo : config.getRepositories()) {
-	    	for (Artifact artifact : repo.getArtifacts()) {
+        for (Repository repo : config.getRepository()) {
+	    	for (Artifact artifact : repo.getArtifact()) {
 	        	
 	        	if (ProfileConfig.getInstance().findArtifactByUri(artifact.getNamespaceUri()) != null)
 	        		continue; // validated elsewhere
@@ -336,7 +336,7 @@ public class PlasmaConfig {
         // If Plasma SDO Papyrus profile 1.0 is required and not already a defined artifact,
         // load it and the separate data types modules
         if (this.profileNamespace == null) {
-        	ProfileArtifactAdapter papyrusProfile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO___PROFILE___V_1___1___UML);
+        	ProfileArtifactAdapter papyrusProfile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO_PROFILE_V_1_1_UML);
 	        if (versions.get(papyrusProfile.getNamespaceUri()) != null) {
 	        	if (this.artifactMap.get(papyrusProfile.getNamespaceUri()) == null) {
 		    		NamespaceAdapter namespaceAdapter = loadSystemArtifact(
@@ -348,7 +348,7 @@ public class PlasmaConfig {
 		    		else
 		    			log.debug("no resource found for, " + papyrusProfile.getUrn().value());
 	            }
-	        	ProfileArtifactAdapter papyrusProfileDatatypes = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO_DATA_TYPES___V_1___1___UML);		    
+	        	ProfileArtifactAdapter papyrusProfileDatatypes = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO_DATA_TYPES_V_1_1_UML);		    
 	        	if (this.artifactMap.get(papyrusProfileDatatypes.getNamespaceUri()) == null) {
 	        		NamespaceAdapter namespaceAdapter = loadSystemArtifact(
 	        				papyrusProfileDatatypes.getUrn().value(),
@@ -366,7 +366,7 @@ public class PlasmaConfig {
         // If Plasma SDO MagicDraw profile 1.0 is required and not already a defined artifact 
         // load it
         if (this.profileNamespace == null) {
-        	ProfileArtifactAdapter magicdrawProfile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA___SDO___PROFILE___V_1___1___MDXML);
+        	ProfileArtifactAdapter magicdrawProfile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO_PROFILE_V_1_1_MDXML);
     		NamespaceAdapter namespaceAdapter = loadSystemArtifact(
     				magicdrawProfile.getUrn().value(),
     				magicdrawProfile.getNamespaceUri());
@@ -418,9 +418,9 @@ public class PlasmaConfig {
     }
     
     private void constructDataAccessServiceMappings() throws ConfigurationException {
-        for (DataAccessService daconfig : config.getSDO().getDataAccessServices()) {
+        for (DataAccessService daconfig : config.getSDO().getDataAccessService()) {
         	
-         	for (DataAccessProvider provider : daconfig.getDataAccessProviders())
+         	for (DataAccessProvider provider : daconfig.getDataAccessProvider())
          	{
          		if (defaultProviderName == null)
          			defaultProviderName = provider.name;
@@ -436,7 +436,7 @@ public class PlasmaConfig {
             		linkMap = new HashMap<String, NamespaceLink>();
             		dataStoreNamespaceLinkMap.put(daconfig.getDataStoreType(), linkMap);
             	}
-            	for (NamespaceLink namespaceLink : provider.getNamespaceLinks()) {
+            	for (NamespaceLink namespaceLink : provider.getNamespaceLink()) {
             		if (namespaceLink.getUri() == null)
                         throw new ConfigurationException("expected namespace URI for Data Access Service configuration '"
                                 + provider.getName().toString() + "'");  
@@ -470,7 +470,7 @@ public class PlasmaConfig {
             		propertyMap = new HashMap<String, Property>();
             		this.dataAccessProviderPropertyMap.put(provider.getName(), propertyMap);
             	}
-            	for (Property property : provider.getProperties()) {
+            	for (Property property : provider.getProperty()) {
             		propertyMap.put(property.getName(), property);
             	}
             }
@@ -481,7 +481,7 @@ public class PlasmaConfig {
     {
     	// check SDO user namespaces against datastore mappings
     	// ensure every user namespace is mapped to one data store provider
-        for (Namespace namespace : config.getSDO().getNamespaces()) {  
+        for (Namespace namespace : config.getSDO().getNamespace()) {  
         	int count = 0;
     		for (Map<String, NamespaceLink> map : this.dataStoreNamespaceLinkMap.values()) {
     			NamespaceLink link = map.get(namespace.getUri());
@@ -561,8 +561,8 @@ public class PlasmaConfig {
     private PlasmaConfiguration unmarshalConfig(String configFileURI, InputStream stream, PlasmaConfigDataBinding binding)
     {
     	try {
-	        
-            PlasmaConfiguration result = (PlasmaConfiguration)binding.validate(stream);
+    		javax.xml.bind.JAXBElement<?> element = (javax.xml.bind.JAXBElement<?>)binding.validate(stream);
+            PlasmaConfiguration result = (PlasmaConfiguration)element.getValue();
 
             URL url = PlasmaConfig.class.getResource(configFileURI);
             if (url == null)
@@ -776,7 +776,7 @@ public class PlasmaConfig {
      * access provider, or null if not exists. 
      */
     public Property findProviderProperty(DataAccessProvider provider, String name) {
-	    for (org.plasma.config.Property property : provider.getProperties()) {
+	    for (org.plasma.config.Property property : provider.getProperty()) {
 	    	if (property.getName().equals(name))
 	    		return property;
 	    }
@@ -845,7 +845,7 @@ public class PlasmaConfig {
     }    
     
     private Property findProviderPropertyContainingValue(DataAccessProvider provider, String value) {
-    	for (Property prop : provider.getProperties()) {
+    	for (Property prop : provider.getProperty()) {
     		if (prop.getValue() != null && prop.getValue().toLowerCase().contains(value))
     			return prop;
     	}
@@ -876,11 +876,11 @@ public class PlasmaConfig {
     }
     
     public Repository getRepository() {
-        return config.getRepositories().get(0);
+        return config.getRepository().get(0);
     }
     
     public List<Repository> getRepositories() {
-        return config.getRepositories();
+        return config.getRepository();
     }
 
     public String getSDOInterfaceClassName(String uri, String name) {

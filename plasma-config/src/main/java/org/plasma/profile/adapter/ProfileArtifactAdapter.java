@@ -40,7 +40,7 @@ public class ProfileArtifactAdapter {
 	}
 
 	public List<Property> getProperties() {
-		return Collections.unmodifiableList(artifact.getProperties());
+		return Collections.unmodifiableList(artifact.getProperty());
 	}
 
 	public ProfileURN getUrn() {

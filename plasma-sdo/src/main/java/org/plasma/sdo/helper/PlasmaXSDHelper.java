@@ -203,7 +203,7 @@ public class PlasmaXSDHelper implements XSDHelper {
            PlasmaConfig.getInstance().addDynamicSDONamespace(
         		   schema.getTargetNamespace(), null);
        
-       List<Class> entities = stagingAssembler.getModel().getClazzs();
+       List<Class> entities = stagingAssembler.getModel().getClazz();
 	   List<Type> result = new ArrayList<Type>(entities.size());
        for (Class cls : entities) {
     	   result.add(PlasmaTypeHelper.INSTANCE.getType(

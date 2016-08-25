@@ -33,7 +33,7 @@ public class MDModelAssembler extends DefaultUMLModelAssembler implements UMLMod
 	
 	private void construct() {
 		// FIXME profile version as arg
-		this.profile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA___SDO___PROFILE___V_1___1___MDXML);
+		this.profile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO_PROFILE_V_1_1_MDXML);
 	    this.umlNs = Namespace.getNamespace("uml", this.profile.getUmlNamespaceUri()); 
 	    this.xmiNs = Namespace.getNamespace("xmi", this.profile.getXmiNamespaceUri()); 
 	    this.plasmaNs = Namespace.getNamespace("Plasma_SDO_Profile", this.profile.getNamespaceUri()); 

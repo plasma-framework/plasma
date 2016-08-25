@@ -127,7 +127,7 @@ public class DDLModelAssembler {
     			}
     			
         		Table table = createTable(schema, type);
-        		schema.getTables().add(table);
+        		schema.getTable().add(table);
         		
         		
         		List<Property> properties = type.getProperties(); // returns all base type(s) props as well
@@ -165,7 +165,7 @@ public class DDLModelAssembler {
 			Index index = new Index();
 			index.setName("I_" + table.getName() + String.valueOf(i));
 			index.setColumn(plasmaProperty.getPhysicalName());
-			table.getIndices().add(index);
+			table.getIndex().add(index);
 			i++;
 		}		
 	}
@@ -186,10 +186,10 @@ public class DDLModelAssembler {
 			Check check = new Check();
 			check.setName("CK_" + table.getName() + "_" + String.valueOf(i));
 			check.setColumn(plasmaProperty.getPhysicalName());
-			table.getChecks().add(check);
+			table.getCheck().add(check);
 			Enumeration restriction = plasmaProperty.getRestriction();
 			for (EnumerationLiteral lit : restriction.getOwnedLiteral()) {
-				check.getValues().add(lit.getPhysicalName());
+				check.getValue().add(lit.getPhysicalName());
 			}
 			i++;
 		}		
@@ -215,7 +215,7 @@ public class DDLModelAssembler {
 		if (uniqueCount > 0) {
 			Unique unique = new Unique();
 			unique.setName("UK_" + table.getName());
-			table.getUniques().add(unique);
+			table.getUnique().add(unique);
 			
 			int i = 1;
 			for (Property prop : properties) {
@@ -231,7 +231,7 @@ public class DDLModelAssembler {
 					continue;
 			    On on = new On();
 			    on.setColumn(plasmaProperty.getPhysicalName());
-			    unique.getOns().add(on);
+			    unique.getOn().add(on);
 				i++;
 			}		
 		}		
@@ -286,7 +286,7 @@ public class DDLModelAssembler {
 				fk.setToSchema(schemaPhysicalname);
 			}
 			
-			table.getFks().add(fk);
+			table.getFk().add(fk);
 			i++;
 		}		
 	}
@@ -318,7 +318,7 @@ public class DDLModelAssembler {
 					log.debug("appending DDL statement terminator for '" + ddlBehavior.getType() + "'");				 
 				ddlBehavior.setValue(ddlBehavior.getValue().trim() + ";");
 			}
-			table.getBehaviors().add(ddlBehavior);
+			table.getBehavior().add(ddlBehavior);
 		}		
 	}
 	
@@ -374,7 +374,7 @@ public class DDLModelAssembler {
 					plasmaType,
 					plasmaProperty, derivedPhysicalName);
 			}
-			table.getColumns().add(column);
+			table.getColumn().add(column);
 		}		
 	}
 	
@@ -393,7 +393,7 @@ public class DDLModelAssembler {
 		    }
 		    On on = new On();
 		    on.setColumn(plasmaProperty.getPhysicalName());
-			table.getPk().getOns().add(on);
+			table.getPk().getOn().add(on);
 		}		
 	}
 	
@@ -474,7 +474,7 @@ public class DDLModelAssembler {
 	
 	private Schema createSchema(String name) {
 		Schema schema = new Schema();
-	    this.schemas.getSchemas().add(schema);
+	    this.schemas.getSchema().add(schema);
 	    schema.setName(name);
 	    return schema;
 	}

@@ -66,7 +66,7 @@ public class DSLAssembler extends DefaultStreamAssembler {
     	for (Package pkg : this.provisioningModel.getLeafPackages()) {
 			File dir = new File(dest, classFactory.createDirectoryName(pkg));
 			log.debug("processing package: " + dir.getAbsolutePath());
-    		for (Class clss : pkg.getClazzs()) {    			
+    		for (Class clss : pkg.getClazz()) {    			
     			if (!PlasmaConfig.getInstance().generateQueryDSL(clss.getUri(), clss.getName()))
     				continue; 			
     			

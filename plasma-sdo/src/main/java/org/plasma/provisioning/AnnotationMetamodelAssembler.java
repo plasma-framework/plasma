@@ -196,7 +196,7 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 					pkg = this.createPackage(tokens[i], namespace, javaPkg, isLeaf, false);
 				map.put(key.toString(), pkg);
 				if (parent != null) 
-					parent.getPackages().add(pkg);
+					parent.getPackage().add(pkg);
 				 
 				if (isLeaf) {
 					String uri = null;
@@ -267,7 +267,7 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 			doc.setType(DocumentationType.DEFINITION);
 			Body body = new Body();
 			doc.setBody(body);
-			pkg.getDocumentations().add(doc);
+			pkg.getDocumentation().add(doc);
 			if (srcComment != null && srcComment.body().length() > 0) {
 				body.setValue(srcComment.body());
 			} else {
@@ -281,7 +281,7 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 			java.lang.Class<?>[] generalizations, Package pkg) {
 
 		Class clss = new Class();
-		pkg.getClazzs().add(clss);
+		pkg.getClazz().add(clss);
 		clss.setId(UUID.randomUUID().toString());
 
 		clss.setName(name);
@@ -325,7 +325,7 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 			ClassRef ref = new ClassRef();
 			ref.setName(genDataObject.name());
 			ref.setUri(genPkg.getUri());
-			clss.getSuperClasses().add(ref);
+			clss.getSuperClass().add(ref);
 		}
 
 		org.plasma.sdo.annotation.Comment srcComment = javaClass.getAnnotation(org.plasma.sdo.annotation.Comment.class);
@@ -333,7 +333,7 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 		doc.setType(DocumentationType.DEFINITION);
 		Body body = new Body();
 		doc.setBody(body);
-		clss.getDocumentations().add(doc);
+		clss.getDocumentation().add(doc);
 		if (srcComment != null && srcComment.body().length() > 0) {
 			body.setValue(srcComment.body());
 		} else {
@@ -347,7 +347,7 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 			Package pkg) throws NoSuchFieldException, SecurityException {
 		Property property = createProperty(javaField, sourceEnum, dataProperty.isNullable(), dataProperty.isMany(), dataProperty.isReadOnly(),
 				clss, pkg);
-		clss.getProperties().add(property);
+		clss.getProperty().add(property);
 
 		DataType sdoType = dataProperty.dataType();
 		TypeRef type = createDatatype(sdoType.name());
@@ -412,7 +412,7 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 			Enumeration enumeration = this.enumerationMap.get(enumKey);
 			if (enumeration == null) {
 				enumeration = createEnumeration(clss, srcEnumerationConstraint.targetEnum());
-				pkg.getEnumerations().add(enumeration);
+				pkg.getEnumeration().add(enumeration);
 				this.enumerationMap.put(enumKey, enumeration);
 			}
 
@@ -430,7 +430,7 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 			Class clss, Package pkg) {
 		Property property = createProperty(javaField, sourceEnum, referenceProperty.isNullable(), referenceProperty.isMany(),
 				referenceProperty.readOnly(), clss, pkg);
-		clss.getProperties().add(property);
+		clss.getProperty().add(property);
 		String qualifiedName = null;
 
 		java.lang.Class<?> targetJavaClass = referenceProperty.targetClass();
@@ -494,7 +494,7 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 		doc.setType(DocumentationType.DEFINITION);
 		Body body = new Body();
 		doc.setBody(body);
-		property.getDocumentations().add(doc);
+		property.getDocumentation().add(doc);
 		if (srcComment != null && srcComment.body().length() > 0) {
 			body.setValue(srcComment.body());
 		} else {
@@ -539,14 +539,14 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
 			doc.setType(DocumentationType.DEFINITION);
 			Body body = new Body();
 			doc.setBody(body);
-			literal.getDocumentations().add(doc);
+			literal.getDocumentation().add(doc);
 			if (srcComment != null && srcComment.body().length() > 0) {
 				body.setValue(srcComment.body());
 			} else {
 				body.setValue("Derived from field " + field.getName());
 			}
 			
-			enumeration.getEnumerationLiterals().add(literal);
+			enumeration.getEnumerationLiteral().add(literal);
 		}		
 		
 		return enumeration;

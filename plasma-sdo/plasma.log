@@ -1,936 +1,470 @@
-21 Nov 2015 10:34:21,628 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 10:34:21,878 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 10:34:21,878 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 10:34:21,878 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 10:34:21,878 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 10:34:21,878 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 10:34:21,878 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 10:34:21,878 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 10:34:21,888 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:34:21,888 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 10:34:21,888 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:34:21,888 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 10:34:21,888 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:34:21,888 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 10:34:21,888 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:34:21,893 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:34:21,898 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 10:34:21,918 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 10:34:21,933 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 10:34:22,439 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 10:34:22,444 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 10:34:22,524 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 10:34:22,529 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 10:34:22,614 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 10:34:22,659 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 10:34:22,839 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 10:34:22,844 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 10:34:22,884 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 10:34:22,904 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 10:34:22,959 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 10:34:22,994 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 10:34:22,999 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 10:34:23,054 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 10:34:23,099 INFO  [main] library.Library initializing...
-21 Nov 2015 10:34:23,684 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 10:34:23,684 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 10:34:23,689 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 10:34:23,689 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:34:23,689 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 10:34:23,689 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 10:34:23,689 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:34:23,694 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 10:34:23,739 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 10:34:23,739 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 10:34:23,739 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:34:23,739 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 10:34:23,744 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 10:34:23,744 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 10:34:23,749 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 10:34:23,749 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/23f0f14b-02a6-4e3d-ba74-d7df5734ba60 (org)
-21 Nov 2015 10:34:23,749 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 10:34:23,749 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 10:34:23,749 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 10:34:23,749 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 10:34:23,749 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 10:34:23,749 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:34:23,754 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:34:23,759 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:34:23,759 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:34:23,759 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:34:23,759 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 10:51:54,702 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 10:51:54,937 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 10:51:54,937 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 10:51:54,937 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 10:51:54,937 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 10:51:54,937 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 10:51:54,942 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 10:51:54,942 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 10:51:54,947 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:51:54,947 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 10:51:54,947 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:51:54,947 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 10:51:54,952 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:51:54,952 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 10:51:54,952 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:51:54,952 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:51:54,967 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 10:51:54,977 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 10:51:54,987 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 10:51:55,343 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 10:51:55,353 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 10:51:55,458 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 10:51:55,468 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 10:51:55,573 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 10:51:55,613 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 10:51:55,808 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 10:51:55,808 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 10:51:55,848 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 10:51:55,868 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 10:51:55,938 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 10:51:55,968 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 10:51:55,978 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 10:51:56,028 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 10:51:56,073 INFO  [main] library.Library initializing...
-21 Nov 2015 10:51:56,543 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:51:56,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 10:51:56,553 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 10:51:56,553 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 10:51:56,553 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/a9581d23-8e52-4476-949c-4f85b228536b (org)
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:51:56,558 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:51:56,563 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:51:56,563 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 10:52:49,995 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 10:52:50,240 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 10:52:50,240 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 10:52:50,240 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 10:52:50,240 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 10:52:50,240 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 10:52:50,240 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 10:52:50,240 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 10:52:50,250 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:52:50,250 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 10:52:50,250 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:52:50,250 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 10:52:50,250 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:52:50,250 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 10:52:50,255 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:52:50,255 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:52:50,270 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 10:52:50,285 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 10:52:50,295 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 10:52:50,735 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 10:52:50,735 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 10:52:50,805 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 10:52:50,810 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 10:52:50,900 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 10:52:50,930 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 10:52:51,095 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 10:52:51,095 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 10:52:51,140 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 10:52:51,165 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 10:52:51,225 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 10:52:51,260 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 10:52:51,265 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 10:52:51,330 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 10:52:51,365 INFO  [main] library.Library initializing...
-21 Nov 2015 10:52:51,896 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 10:52:51,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 10:52:51,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:52:51,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 10:52:51,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 10:52:51,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:52:51,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 10:52:51,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 10:52:51,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 10:52:51,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:52:51,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 10:52:51,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 10:52:51,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 10:52:51,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 10:52:51,921 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 10:52:51,921 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/a6c296ae-7fb2-4001-99fa-238d5786b081 (org)
-21 Nov 2015 10:52:51,921 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 10:52:51,921 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 10:52:51,921 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 10:52:51,921 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 10:52:51,921 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 10:52:51,921 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:52:51,926 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 10:52:51,931 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 11:05:46,200 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 11:05:46,440 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 11:05:46,440 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 11:05:46,440 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 11:05:46,440 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 11:05:46,445 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 11:05:46,445 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 11:05:46,445 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 11:05:46,450 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:05:46,450 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 11:05:46,450 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:05:46,450 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 11:05:46,455 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:05:46,455 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 11:05:46,455 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:05:46,455 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:05:46,460 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 11:05:46,470 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 11:05:46,475 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 11:05:46,841 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 11:05:46,841 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 11:05:46,906 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 11:05:46,911 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 11:05:47,001 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 11:05:47,031 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 11:05:47,236 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 11:05:47,236 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 11:05:47,286 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 11:05:47,316 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 11:05:47,406 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 11:05:47,451 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 11:05:47,456 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 11:05:47,516 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 11:05:47,566 INFO  [main] library.Library initializing...
-21 Nov 2015 11:05:48,086 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 11:05:48,091 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 11:05:48,091 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:05:48,091 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 11:05:48,091 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 11:05:48,091 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:05:48,091 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 11:05:48,091 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 11:05:48,091 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 11:05:48,096 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 11:05:48,096 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:05:48,096 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 11:05:48,101 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 11:05:48,106 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 11:05:48,111 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 11:05:48,111 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/3b150e70-8cb2-4c2d-b23a-eb821447d997 (org)
-21 Nov 2015 11:05:48,111 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 11:05:48,111 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 11:05:48,111 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 11:05:48,111 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 11:05:48,111 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 11:05:48,111 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:05:48,116 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:05:48,121 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 11:11:17,650 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 11:11:17,895 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 11:11:17,895 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 11:11:17,895 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 11:11:17,895 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 11:11:17,895 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 11:11:17,895 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 11:11:17,895 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 11:11:17,900 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:11:17,905 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 11:11:17,905 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:11:17,905 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 11:11:17,905 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:11:17,905 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 11:11:17,905 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:11:17,905 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:11:17,910 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 11:11:17,920 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 11:11:17,930 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 11:11:18,291 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 11:11:18,296 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 11:11:18,396 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 11:11:18,406 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 11:11:18,511 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 11:11:18,546 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 11:11:18,791 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 11:11:18,791 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 11:11:18,836 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 11:11:18,861 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 11:11:18,916 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 11:11:18,951 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 11:11:18,956 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 11:11:19,021 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 11:11:19,066 INFO  [main] library.Library initializing...
-21 Nov 2015 11:11:19,561 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 11:11:19,561 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 11:11:19,561 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:11:19,561 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 11:11:19,561 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 11:11:19,561 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:11:19,561 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 11:11:19,561 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 11:11:19,561 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 11:11:19,566 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 11:11:19,566 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:11:19,566 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 11:11:19,571 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 11:11:19,571 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 11:11:19,576 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 11:11:19,576 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/6b9d2029-69a0-4d0c-bf22-5906f62e6e30 (org)
-21 Nov 2015 11:11:19,576 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 11:11:19,576 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 11:11:19,576 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 11:11:19,576 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 11:11:19,576 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 11:11:19,576 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:11:19,581 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:11:19,586 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:11:19,586 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:11:19,586 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:11:19,586 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:11:19,586 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 11:14:11,536 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 11:14:11,836 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 11:14:11,836 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 11:14:11,836 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 11:14:11,836 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 11:14:11,836 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 11:14:11,836 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 11:14:11,836 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 11:14:11,846 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:14:11,846 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 11:14:11,846 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:14:11,846 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 11:14:11,846 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:14:11,846 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 11:14:11,846 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:14:11,846 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:14:11,851 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 11:14:11,861 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 11:14:11,866 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 11:14:12,241 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 11:14:12,246 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 11:14:12,316 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 11:14:12,316 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 11:14:12,406 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 11:14:12,441 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 11:14:12,616 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 11:14:12,616 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 11:14:12,661 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 11:14:12,686 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 11:14:12,741 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 11:14:12,771 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 11:14:12,776 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 11:14:12,831 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 11:14:12,871 INFO  [main] library.Library initializing...
-21 Nov 2015 11:14:13,427 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 11:14:13,427 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:14:13,432 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 11:14:13,432 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 11:14:13,432 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 11:14:13,432 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 11:14:13,432 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:14:13,437 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 11:14:13,437 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 11:14:13,442 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 11:14:13,442 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:14:13,442 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 11:14:13,442 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 11:14:13,442 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 11:14:13,447 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 11:14:13,447 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/97d676de-b2a1-401c-8d94-547b49de73a3 (org)
-21 Nov 2015 11:14:13,447 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 11:14:13,447 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 11:14:13,447 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 11:14:13,447 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 11:14:13,447 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:14:13,452 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:14:13,457 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 11:19:54,148 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 11:19:54,393 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 11:19:54,393 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 11:19:54,393 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 11:19:54,393 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 11:19:54,398 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 11:19:54,398 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 11:19:54,398 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 11:19:54,403 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:19:54,403 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 11:19:54,403 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:19:54,403 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 11:19:54,403 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:19:54,408 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 11:19:54,408 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:19:54,408 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:19:54,413 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 11:19:54,423 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 11:19:54,428 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 11:19:54,863 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 11:19:54,868 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 11:19:54,948 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 11:19:54,948 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 11:19:55,043 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 11:19:55,078 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 11:19:55,248 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 11:19:55,248 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 11:19:55,293 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 11:19:55,323 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 11:19:55,373 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 11:19:55,408 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 11:19:55,413 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 11:19:55,468 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 11:19:55,508 INFO  [main] library.Library initializing...
-21 Nov 2015 11:19:55,988 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 11:19:55,988 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:19:55,993 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 11:19:55,993 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 11:19:55,993 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 11:19:55,998 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 11:19:55,998 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:19:55,998 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 11:19:55,998 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 11:19:55,998 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 11:19:55,998 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:19:56,004 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 11:19:56,004 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 11:19:56,013 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 11:19:56,018 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 11:19:56,018 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/446abbaa-4478-4491-9067-9f596162178d (org)
-21 Nov 2015 11:19:56,023 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 11:19:56,028 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 11:19:56,028 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 11:19:56,028 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 11:19:56,028 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 11:19:56,033 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 11:19:56,038 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 11:19:56,038 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:19:56,038 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:19:56,038 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:19:56,043 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:19:56,043 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:19:56,043 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:19:56,043 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:19:56,043 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:19:56,043 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:19:56,043 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 11:19:56,048 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 11:19:56,048 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 11:19:56,048 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:19:56,048 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 11:19:56,058 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 12:01:44,045 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:01:44,290 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 12:01:44,290 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 12:01:44,295 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 12:01:44,295 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:01:44,295 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 12:01:44,295 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 12:01:44,295 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 12:01:44,300 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:01:44,300 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 12:01:44,300 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:01:44,300 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 12:01:44,300 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:01:44,300 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 12:01:44,305 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:01:44,305 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:01:44,310 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 12:01:44,315 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 12:01:44,325 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 12:01:44,710 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 12:01:44,715 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 12:01:44,815 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 12:01:44,820 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 12:01:44,925 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 12:01:44,975 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 12:01:45,145 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 12:01:45,145 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 12:01:45,185 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 12:01:45,205 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 12:01:45,270 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 12:01:45,305 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 12:01:45,315 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 12:01:45,365 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 12:01:45,405 INFO  [main] library.Library initializing...
-21 Nov 2015 12:01:45,860 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 12:01:45,860 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:01:45,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 12:01:45,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 12:01:45,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 12:01:45,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 12:01:45,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:01:45,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 12:01:45,870 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 12:01:45,875 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 12:01:45,875 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:01:45,875 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 12:01:45,875 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 12:01:45,875 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/d7ebcbbc-07d3-4a3f-ac7c-fb60c0acfac3 (org)
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:01:45,880 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:01:45,885 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:01:45,890 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 12:07:09,036 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:07:09,281 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 12:07:09,281 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 12:07:09,281 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 12:07:09,281 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 12:07:09,281 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 12:07:09,286 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:07:09,286 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 12:07:09,291 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:07:09,291 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 12:07:09,291 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:07:09,291 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 12:07:09,291 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:07:09,291 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 12:07:09,291 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:07:09,291 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:07:09,296 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 12:07:09,306 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 12:07:09,311 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 12:07:09,706 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 12:07:09,706 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 12:07:09,801 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 12:07:09,801 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 12:07:09,936 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 12:07:09,971 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 12:07:10,146 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 12:07:10,146 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 12:07:10,191 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 12:07:10,211 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 12:07:10,271 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 12:07:10,306 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 12:07:10,311 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 12:07:10,376 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 12:07:10,416 INFO  [main] library.Library initializing...
-21 Nov 2015 12:07:10,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 12:07:10,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:07:10,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 12:07:10,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 12:07:10,906 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 12:07:10,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 12:07:10,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:07:10,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 12:07:10,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 12:07:10,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 12:07:10,911 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:07:10,916 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 12:07:10,921 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 12:07:10,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 12:07:10,931 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 12:07:10,931 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/fce99320-aae1-40ec-977c-0e593c113ccd (org)
-21 Nov 2015 12:07:10,931 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 12:07:10,931 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:07:10,936 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:07:10,941 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:07:10,941 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:07:10,941 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:07:10,941 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:07:10,941 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:07:10,941 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:07:10,941 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:07:10,946 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 12:09:25,665 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:09:25,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 12:09:25,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 12:09:25,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 12:09:25,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 12:09:25,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 12:09:25,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:09:25,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 12:09:25,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:09:25,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 12:09:25,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:09:25,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 12:09:25,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:09:25,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 12:09:25,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:09:25,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:09:25,940 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 12:09:25,950 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 12:09:25,955 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 12:09:26,321 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 12:09:26,326 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 12:09:26,396 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 12:09:26,396 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 12:09:26,481 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 12:09:26,521 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 12:09:26,711 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 12:09:26,711 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 12:09:26,761 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 12:09:26,781 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 12:09:26,836 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 12:09:26,876 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 12:09:26,891 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 12:09:26,976 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 12:09:27,096 INFO  [main] library.Library initializing...
-21 Nov 2015 12:09:27,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 12:09:27,926 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:09:27,931 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 12:09:27,931 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 12:09:27,931 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 12:09:27,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 12:09:27,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:09:27,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 12:09:27,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 12:09:27,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 12:09:27,936 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:09:27,941 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 12:09:27,946 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 12:09:27,946 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 12:09:27,981 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 12:09:27,981 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/2375f55c-1c61-437f-8d97-4c3cef8906c7 (org)
-21 Nov 2015 12:09:27,981 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 12:09:27,981 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 12:09:27,981 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 12:09:27,981 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 12:09:27,981 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:09:27,986 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:09:27,991 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:09:27,991 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:09:27,991 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:09:27,991 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:09:27,991 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:09:27,991 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:09:27,991 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 12:32:07,605 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 12:32:07,855 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 12:32:07,855 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:32:07,855 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 12:32:07,855 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:32:07,855 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 12:32:07,855 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 12:32:07,855 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 12:32:07,860 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:32:07,860 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 12:32:07,860 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:32:07,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 12:32:07,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:32:07,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 12:32:07,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:32:07,865 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:32:07,875 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 12:32:07,885 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 12:32:07,895 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 12:32:08,300 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 12:32:08,305 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 12:32:08,415 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 12:32:08,420 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 12:32:08,520 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 12:32:08,545 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 12:32:08,715 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 12:32:08,715 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 12:32:08,760 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 12:32:08,780 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 12:32:08,840 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 12:32:08,870 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 12:32:08,880 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 12:32:08,945 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 12:32:08,980 INFO  [main] library.Library initializing...
-21 Nov 2015 12:32:09,460 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 12:32:09,465 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 12:32:09,465 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:32:09,465 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 12:32:09,465 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 12:32:09,465 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:32:09,465 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 12:32:09,470 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 12:32:09,475 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 12:32:09,475 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:32:09,475 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 12:32:09,475 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 12:32:09,475 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 12:32:09,475 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 12:32:09,480 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 12:32:09,480 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/1234b3c5-07a4-432a-83f2-d45f79b65c39 (org)
-21 Nov 2015 12:32:09,480 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 12:32:09,480 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 12:32:09,480 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 12:32:09,480 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 12:32:09,480 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 12:32:09,480 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:32:09,485 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:32:09,490 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 12:38:05,392 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:38:05,712 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 12:38:05,712 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 12:38:05,712 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 12:38:05,712 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 12:38:05,712 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 12:38:05,712 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:38:05,712 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 12:38:05,722 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:05,722 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 12:38:05,722 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:05,722 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 12:38:05,722 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:05,722 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 12:38:05,727 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:05,727 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:05,742 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 12:38:05,752 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 12:38:05,762 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 12:38:06,158 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 12:38:06,163 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 12:38:06,228 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 12:38:06,233 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 12:38:06,318 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 12:38:06,353 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 12:38:06,518 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 12:38:06,523 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 12:38:06,568 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 12:38:06,588 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 12:38:06,643 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 12:38:06,688 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 12:38:06,698 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 12:38:06,788 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 12:38:06,838 INFO  [main] library.Library initializing...
-21 Nov 2015 12:38:07,348 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:07,353 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 12:38:07,358 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/b1642e94-ea20-4b61-8fbe-aa75fcc18601 (org)
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:07,363 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:07,368 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:07,368 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:07,368 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:07,368 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:07,368 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:07,368 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:07,368 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:07,368 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:07,368 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:07,373 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
-21 Nov 2015 12:38:57,861 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:38:58,106 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
-21 Nov 2015 12:38:58,106 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
-21 Nov 2015 12:38:58,106 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
-21 Nov 2015 12:38:58,106 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
-21 Nov 2015 12:38:58,106 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
-21 Nov 2015 12:38:58,106 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
-21 Nov 2015 12:38:58,106 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
-21 Nov 2015 12:38:58,116 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:58,116 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
-21 Nov 2015 12:38:58,116 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:58,116 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
-21 Nov 2015 12:38:58,116 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:58,116 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
-21 Nov 2015 12:38:58,116 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:58,116 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:58,131 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
-21 Nov 2015 12:38:58,143 DEBUG [main] config.PlasmaConfig initializing...
-21 Nov 2015 12:38:58,151 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
-21 Nov 2015 12:38:58,581 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
-21 Nov 2015 12:38:58,586 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
-21 Nov 2015 12:38:58,681 INFO  [main] config.FumlConfiguration initializing...
-21 Nov 2015 12:38:58,686 INFO  [main] config.FumlConfigDataBinding loading schema chain...
-21 Nov 2015 12:38:58,776 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
-21 Nov 2015 12:38:58,806 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
-21 Nov 2015 12:38:58,996 INFO  [main] model.InMemoryRepository initializing...
-21 Nov 2015 12:38:59,001 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
-21 Nov 2015 12:38:59,036 INFO  [main] model.PrimitiveTypesAssembler initializing...
-21 Nov 2015 12:38:59,061 INFO  [main] model.InfrastructureAssembler initializing...
-21 Nov 2015 12:38:59,126 INFO  [main] model.SuperstructureAssembler initializing...
-21 Nov 2015 12:38:59,161 INFO  [main] model.fUML_SyntaxAssembler initializing...
-21 Nov 2015 12:38:59,166 INFO  [main] model.InMemoryRepository performing package merge...
-21 Nov 2015 12:38:59,226 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
-21 Nov 2015 12:38:59,266 INFO  [main] library.Library initializing...
-21 Nov 2015 12:38:59,736 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
-21 Nov 2015 12:38:59,741 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
-21 Nov 2015 12:38:59,746 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
-21 Nov 2015 12:38:59,751 DEBUG [main] adapter.ModelAdapter constructing...
-21 Nov 2015 12:38:59,751 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/137e77e2-767b-437b-8b96-3207afdec276 (org)
-21 Nov 2015 12:38:59,751 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
-21 Nov 2015 12:38:59,751 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
-21 Nov 2015 12:38:59,751 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
-21 Nov 2015 12:38:59,751 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
-21 Nov 2015 12:38:59,751 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:59,756 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
-21 Nov 2015 12:38:59,761 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
+25 Aug 2016 15:04:59,886 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
+25 Aug 2016 15:05:00,071 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
+25 Aug 2016 15:05:00,071 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
+25 Aug 2016 15:05:00,072 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
+25 Aug 2016 15:05:00,072 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:05:00,073 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
+25 Aug 2016 15:05:00,073 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:05:00,074 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
+25 Aug 2016 15:05:00,081 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:05:00,081 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
+25 Aug 2016 15:05:00,083 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:05:00,083 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
+25 Aug 2016 15:05:00,084 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:05:00,084 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
+25 Aug 2016 15:05:00,085 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:05:00,085 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:05:00,089 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
+25 Aug 2016 15:05:00,099 DEBUG [main] config.PlasmaConfig initializing...
+25 Aug 2016 15:05:00,107 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
+25 Aug 2016 15:11:25,304 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:11:25,491 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
+25 Aug 2016 15:11:25,491 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:11:25,492 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
+25 Aug 2016 15:11:25,492 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
+25 Aug 2016 15:11:25,493 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
+25 Aug 2016 15:11:25,494 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
+25 Aug 2016 15:11:25,494 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
+25 Aug 2016 15:11:25,504 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:11:25,504 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
+25 Aug 2016 15:11:25,505 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:11:25,505 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
+25 Aug 2016 15:11:25,506 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:11:25,506 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
+25 Aug 2016 15:11:25,506 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:11:25,506 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:11:25,513 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
+25 Aug 2016 15:11:25,524 DEBUG [main] config.PlasmaConfig initializing...
+25 Aug 2016 15:11:25,529 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
+25 Aug 2016 15:13:21,394 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:13:21,587 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
+25 Aug 2016 15:13:21,587 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:13:21,587 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
+25 Aug 2016 15:13:21,588 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
+25 Aug 2016 15:13:21,588 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
+25 Aug 2016 15:13:21,589 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
+25 Aug 2016 15:13:21,590 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
+25 Aug 2016 15:13:21,597 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:13:21,597 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
+25 Aug 2016 15:13:21,598 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:13:21,598 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
+25 Aug 2016 15:13:21,598 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:13:21,599 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
+25 Aug 2016 15:13:21,599 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:13:21,599 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:13:21,606 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
+25 Aug 2016 15:13:21,616 DEBUG [main] config.PlasmaConfig initializing...
+25 Aug 2016 15:13:21,623 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
+25 Aug 2016 15:13:22,046 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
+25 Aug 2016 15:13:22,048 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
+25 Aug 2016 15:13:22,117 INFO  [main] config.FumlConfiguration initializing...
+25 Aug 2016 15:13:22,120 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+25 Aug 2016 15:13:22,180 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
+25 Aug 2016 15:13:22,205 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+25 Aug 2016 15:13:22,325 INFO  [main] model.InMemoryRepository initializing...
+25 Aug 2016 15:13:22,329 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+25 Aug 2016 15:13:22,375 INFO  [main] model.PrimitiveTypesAssembler initializing...
+25 Aug 2016 15:13:22,400 INFO  [main] model.InfrastructureAssembler initializing...
+25 Aug 2016 15:13:22,453 INFO  [main] model.SuperstructureAssembler initializing...
+25 Aug 2016 15:13:22,483 INFO  [main] model.fUML_SyntaxAssembler initializing...
+25 Aug 2016 15:13:22,488 INFO  [main] model.InMemoryRepository performing package merge...
+25 Aug 2016 15:13:22,514 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+25 Aug 2016 15:13:22,546 INFO  [main] library.Library initializing...
+25 Aug 2016 15:13:23,004 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
+25 Aug 2016 15:13:23,009 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
+25 Aug 2016 15:13:23,010 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:13:23,010 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
+25 Aug 2016 15:13:23,011 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
+25 Aug 2016 15:13:23,011 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:13:23,012 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
+25 Aug 2016 15:13:23,012 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
+25 Aug 2016 15:13:23,012 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
+25 Aug 2016 15:13:23,013 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
+25 Aug 2016 15:13:23,014 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:13:23,015 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
+25 Aug 2016 15:13:23,015 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
+25 Aug 2016 15:13:23,016 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
+25 Aug 2016 15:13:23,021 DEBUG [main] adapter.ModelAdapter constructing...
+25 Aug 2016 15:13:23,021 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/3127e78e-aabc-48b3-b396-dc75c2dbefaa (org)
+25 Aug 2016 15:13:23,022 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
+25 Aug 2016 15:13:23,023 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
+25 Aug 2016 15:13:23,024 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
+25 Aug 2016 15:13:23,025 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
+25 Aug 2016 15:13:23,025 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
+25 Aug 2016 15:13:23,027 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
+25 Aug 2016 15:13:23,027 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
+25 Aug 2016 15:13:23,028 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:13:23,029 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:13:23,030 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:13:23,030 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:13:23,031 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:13:23,032 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:13:23,032 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:13:23,035 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:13:23,036 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:13:23,037 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:13:23,037 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:13:23,037 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:13:23,037 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:13:23,038 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:13:23,042 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
+25 Aug 2016 15:35:02,178 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:35:02,378 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
+25 Aug 2016 15:35:02,379 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:35:02,380 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
+25 Aug 2016 15:35:02,381 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
+25 Aug 2016 15:35:02,381 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
+25 Aug 2016 15:35:02,382 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
+25 Aug 2016 15:35:02,382 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
+25 Aug 2016 15:35:02,392 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:02,392 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
+25 Aug 2016 15:35:02,393 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:02,394 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
+25 Aug 2016 15:35:02,394 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:02,395 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
+25 Aug 2016 15:35:02,395 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:02,395 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:02,403 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
+25 Aug 2016 15:35:02,415 DEBUG [main] config.PlasmaConfig initializing...
+25 Aug 2016 15:35:02,422 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
+25 Aug 2016 15:35:02,886 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
+25 Aug 2016 15:35:02,889 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
+25 Aug 2016 15:35:02,964 INFO  [main] config.FumlConfiguration initializing...
+25 Aug 2016 15:35:02,967 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+25 Aug 2016 15:35:03,035 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
+25 Aug 2016 15:35:03,060 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+25 Aug 2016 15:35:03,192 INFO  [main] model.InMemoryRepository initializing...
+25 Aug 2016 15:35:03,193 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+25 Aug 2016 15:35:03,227 INFO  [main] model.PrimitiveTypesAssembler initializing...
+25 Aug 2016 15:35:03,247 INFO  [main] model.InfrastructureAssembler initializing...
+25 Aug 2016 15:35:03,295 INFO  [main] model.SuperstructureAssembler initializing...
+25 Aug 2016 15:35:03,324 INFO  [main] model.fUML_SyntaxAssembler initializing...
+25 Aug 2016 15:35:03,331 INFO  [main] model.InMemoryRepository performing package merge...
+25 Aug 2016 15:35:03,360 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+25 Aug 2016 15:35:03,394 INFO  [main] library.Library initializing...
+25 Aug 2016 15:35:03,845 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
+25 Aug 2016 15:35:03,850 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
+25 Aug 2016 15:35:03,850 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:03,851 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
+25 Aug 2016 15:35:03,851 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
+25 Aug 2016 15:35:03,852 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:03,852 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
+25 Aug 2016 15:35:03,853 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
+25 Aug 2016 15:35:03,853 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
+25 Aug 2016 15:35:03,853 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
+25 Aug 2016 15:35:03,854 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:03,854 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
+25 Aug 2016 15:35:03,855 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
+25 Aug 2016 15:35:03,855 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
+25 Aug 2016 15:35:03,858 DEBUG [main] adapter.ModelAdapter constructing...
+25 Aug 2016 15:35:03,859 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/c94ad20a-30f5-4183-951d-a9f86c8df7fa (org)
+25 Aug 2016 15:35:03,859 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
+25 Aug 2016 15:35:03,859 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
+25 Aug 2016 15:35:03,859 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
+25 Aug 2016 15:35:03,860 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
+25 Aug 2016 15:35:03,860 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
+25 Aug 2016 15:35:03,861 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
+25 Aug 2016 15:35:03,861 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
+25 Aug 2016 15:35:03,862 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:03,862 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:03,862 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:03,863 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:03,863 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:03,863 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:03,864 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:03,865 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:03,865 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:03,865 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:03,866 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:03,866 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:03,866 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:03,867 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:03,870 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
+25 Aug 2016 15:35:36,147 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:35:36,336 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
+25 Aug 2016 15:35:36,336 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:35:36,336 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
+25 Aug 2016 15:35:36,337 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
+25 Aug 2016 15:35:36,337 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
+25 Aug 2016 15:35:36,338 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
+25 Aug 2016 15:35:36,338 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
+25 Aug 2016 15:35:36,346 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:36,346 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
+25 Aug 2016 15:35:36,347 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:36,347 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
+25 Aug 2016 15:35:36,347 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:36,348 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
+25 Aug 2016 15:35:36,348 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:36,348 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:36,355 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
+25 Aug 2016 15:35:36,367 DEBUG [main] config.PlasmaConfig initializing...
+25 Aug 2016 15:35:36,373 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
+25 Aug 2016 15:35:36,814 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
+25 Aug 2016 15:35:36,818 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
+25 Aug 2016 15:35:36,891 INFO  [main] config.FumlConfiguration initializing...
+25 Aug 2016 15:35:36,893 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+25 Aug 2016 15:35:36,959 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
+25 Aug 2016 15:35:36,985 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+25 Aug 2016 15:35:37,094 INFO  [main] model.InMemoryRepository initializing...
+25 Aug 2016 15:35:37,097 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+25 Aug 2016 15:35:37,131 INFO  [main] model.PrimitiveTypesAssembler initializing...
+25 Aug 2016 15:35:37,152 INFO  [main] model.InfrastructureAssembler initializing...
+25 Aug 2016 15:35:37,201 INFO  [main] model.SuperstructureAssembler initializing...
+25 Aug 2016 15:35:37,232 INFO  [main] model.fUML_SyntaxAssembler initializing...
+25 Aug 2016 15:35:37,237 INFO  [main] model.InMemoryRepository performing package merge...
+25 Aug 2016 15:35:37,267 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+25 Aug 2016 15:35:37,297 INFO  [main] library.Library initializing...
+25 Aug 2016 15:35:37,761 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
+25 Aug 2016 15:35:37,768 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
+25 Aug 2016 15:35:37,769 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:37,769 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
+25 Aug 2016 15:35:37,770 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
+25 Aug 2016 15:35:37,771 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:37,771 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
+25 Aug 2016 15:35:37,772 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
+25 Aug 2016 15:35:37,772 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
+25 Aug 2016 15:35:37,773 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
+25 Aug 2016 15:35:37,775 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:37,775 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
+25 Aug 2016 15:35:37,776 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
+25 Aug 2016 15:35:37,777 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
+25 Aug 2016 15:35:37,782 DEBUG [main] adapter.ModelAdapter constructing...
+25 Aug 2016 15:35:37,783 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/2e61b986-7142-46c9-86fa-9097a3549b73 (org)
+25 Aug 2016 15:35:37,784 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
+25 Aug 2016 15:35:37,784 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
+25 Aug 2016 15:35:37,785 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
+25 Aug 2016 15:35:37,785 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
+25 Aug 2016 15:35:37,785 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
+25 Aug 2016 15:35:37,787 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
+25 Aug 2016 15:35:37,788 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
+25 Aug 2016 15:35:37,789 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:37,789 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:37,789 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:37,790 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:37,790 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:37,790 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:37,790 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:37,791 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:37,791 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:35:37,792 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:37,792 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:35:37,792 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:35:37,792 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:37,793 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:35:37,796 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
+25 Aug 2016 15:36:22,006 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:36:22,191 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
+25 Aug 2016 15:36:22,192 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:36:22,193 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
+25 Aug 2016 15:36:22,194 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
+25 Aug 2016 15:36:22,194 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
+25 Aug 2016 15:36:22,195 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
+25 Aug 2016 15:36:22,196 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
+25 Aug 2016 15:36:22,206 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:22,207 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
+25 Aug 2016 15:36:22,207 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:22,208 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
+25 Aug 2016 15:36:22,209 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:22,209 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
+25 Aug 2016 15:36:22,209 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:22,209 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:22,216 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
+25 Aug 2016 15:36:22,224 DEBUG [main] config.PlasmaConfig initializing...
+25 Aug 2016 15:36:22,231 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
+25 Aug 2016 15:36:22,686 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
+25 Aug 2016 15:36:22,689 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
+25 Aug 2016 15:36:22,760 INFO  [main] config.FumlConfiguration initializing...
+25 Aug 2016 15:36:22,762 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+25 Aug 2016 15:36:22,821 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
+25 Aug 2016 15:36:22,847 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+25 Aug 2016 15:36:22,959 INFO  [main] model.InMemoryRepository initializing...
+25 Aug 2016 15:36:22,961 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+25 Aug 2016 15:36:22,994 INFO  [main] model.PrimitiveTypesAssembler initializing...
+25 Aug 2016 15:36:23,014 INFO  [main] model.InfrastructureAssembler initializing...
+25 Aug 2016 15:36:23,070 INFO  [main] model.SuperstructureAssembler initializing...
+25 Aug 2016 15:36:23,108 INFO  [main] model.fUML_SyntaxAssembler initializing...
+25 Aug 2016 15:36:23,113 INFO  [main] model.InMemoryRepository performing package merge...
+25 Aug 2016 15:36:23,144 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+25 Aug 2016 15:36:23,174 INFO  [main] library.Library initializing...
+25 Aug 2016 15:36:23,610 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
+25 Aug 2016 15:36:23,617 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
+25 Aug 2016 15:36:23,617 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:23,618 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
+25 Aug 2016 15:36:23,618 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
+25 Aug 2016 15:36:23,618 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:23,619 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
+25 Aug 2016 15:36:23,619 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
+25 Aug 2016 15:36:23,620 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
+25 Aug 2016 15:36:23,620 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
+25 Aug 2016 15:36:23,620 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:23,621 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
+25 Aug 2016 15:36:23,622 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
+25 Aug 2016 15:36:23,623 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
+25 Aug 2016 15:36:23,629 DEBUG [main] adapter.ModelAdapter constructing...
+25 Aug 2016 15:36:23,630 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/c2cc65af-ec9a-4623-9c88-6bb4d510596c (org)
+25 Aug 2016 15:36:23,631 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
+25 Aug 2016 15:36:23,631 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
+25 Aug 2016 15:36:23,632 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
+25 Aug 2016 15:36:23,632 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
+25 Aug 2016 15:36:23,633 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
+25 Aug 2016 15:36:23,634 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
+25 Aug 2016 15:36:23,635 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
+25 Aug 2016 15:36:23,635 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:23,635 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:23,636 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:23,636 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:23,636 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:23,636 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:23,637 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:23,637 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:23,637 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:23,638 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:23,638 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:23,638 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:23,638 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:23,639 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:23,644 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
+25 Aug 2016 15:36:45,330 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
+25 Aug 2016 15:36:45,567 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
+25 Aug 2016 15:36:45,567 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
+25 Aug 2016 15:36:45,568 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
+25 Aug 2016 15:36:45,569 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:36:45,570 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
+25 Aug 2016 15:36:45,570 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:36:45,571 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
+25 Aug 2016 15:36:45,580 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:45,581 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
+25 Aug 2016 15:36:45,583 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:45,584 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
+25 Aug 2016 15:36:45,585 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:45,585 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
+25 Aug 2016 15:36:45,586 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:45,586 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:45,591 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
+25 Aug 2016 15:36:45,607 DEBUG [main] config.PlasmaConfig initializing...
+25 Aug 2016 15:36:45,619 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
+25 Aug 2016 15:36:46,192 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
+25 Aug 2016 15:36:46,196 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
+25 Aug 2016 15:36:46,297 INFO  [main] config.FumlConfiguration initializing...
+25 Aug 2016 15:36:46,300 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+25 Aug 2016 15:36:46,403 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
+25 Aug 2016 15:36:46,431 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+25 Aug 2016 15:36:46,622 INFO  [main] model.InMemoryRepository initializing...
+25 Aug 2016 15:36:46,624 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+25 Aug 2016 15:36:46,675 INFO  [main] model.PrimitiveTypesAssembler initializing...
+25 Aug 2016 15:36:46,702 INFO  [main] model.InfrastructureAssembler initializing...
+25 Aug 2016 15:36:46,777 INFO  [main] model.SuperstructureAssembler initializing...
+25 Aug 2016 15:36:46,815 INFO  [main] model.fUML_SyntaxAssembler initializing...
+25 Aug 2016 15:36:46,824 INFO  [main] model.InMemoryRepository performing package merge...
+25 Aug 2016 15:36:46,871 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+25 Aug 2016 15:36:46,941 INFO  [main] library.Library initializing...
+25 Aug 2016 15:36:47,609 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
+25 Aug 2016 15:36:47,609 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
+25 Aug 2016 15:36:47,610 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:47,610 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
+25 Aug 2016 15:36:47,611 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
+25 Aug 2016 15:36:47,611 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
+25 Aug 2016 15:36:47,614 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
+25 Aug 2016 15:36:47,615 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:47,615 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
+25 Aug 2016 15:36:47,616 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
+25 Aug 2016 15:36:47,616 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:47,619 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
+25 Aug 2016 15:36:47,623 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
+25 Aug 2016 15:36:47,629 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
+25 Aug 2016 15:36:47,632 DEBUG [main] adapter.ModelAdapter constructing...
+25 Aug 2016 15:36:47,633 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/d218d5d1-b905-42d1-a8dc-9d98c6f4f6ea (org)
+25 Aug 2016 15:36:47,634 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
+25 Aug 2016 15:36:47,635 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
+25 Aug 2016 15:36:47,635 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
+25 Aug 2016 15:36:47,635 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
+25 Aug 2016 15:36:47,636 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
+25 Aug 2016 15:36:47,636 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
+25 Aug 2016 15:36:47,636 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
+25 Aug 2016 15:36:47,638 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:47,639 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:47,639 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:47,639 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:47,640 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:47,640 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:47,640 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:47,641 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:47,641 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:36:47,642 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:47,643 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:36:47,643 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:36:47,644 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:47,644 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:36:47,648 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
+25 Aug 2016 15:39:12,305 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
+25 Aug 2016 15:39:12,495 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
+25 Aug 2016 15:39:12,495 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
+25 Aug 2016 15:39:12,496 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://org.plasma.provisioning.example.pers
+25 Aug 2016 15:39:12,496 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:39:12,497 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://org.plasma.provisioning.example.org
+25 Aug 2016 15:39:12,497 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+25 Aug 2016 15:39:12,497 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Concurrent
+25 Aug 2016 15:39:12,504 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:39:12,504 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
+25 Aug 2016 15:39:12,506 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:39:12,506 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Staples
+25 Aug 2016 15:39:12,507 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:39:12,507 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
+25 Aug 2016 15:39:12,507 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:39:12,507 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:39:12,513 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.createdDate
+25 Aug 2016 15:39:12,524 DEBUG [main] config.PlasmaConfig initializing...
+25 Aug 2016 15:39:12,532 DEBUG [main] config.PlasmaConfigDataBinding loading schema chain...
+25 Aug 2016 15:39:13,017 DEBUG [main] config.PlasmaConfig loading known UML/XMI artifact, Plasma_SDO_Profile_v1_1.mdxml (http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi)
+25 Aug 2016 15:39:13,022 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile_v1_1.mdxml
+25 Aug 2016 15:39:13,097 INFO  [main] config.FumlConfiguration initializing...
+25 Aug 2016 15:39:13,099 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+25 Aug 2016 15:39:13,166 INFO  [main] config.FumlConfiguration loading configuration, test-plasma-fuml-config.xml
+25 Aug 2016 15:39:13,191 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[158:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+25 Aug 2016 15:39:13,316 INFO  [main] model.InMemoryRepository initializing...
+25 Aug 2016 15:39:13,318 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+25 Aug 2016 15:39:13,354 INFO  [main] model.PrimitiveTypesAssembler initializing...
+25 Aug 2016 15:39:13,376 INFO  [main] model.InfrastructureAssembler initializing...
+25 Aug 2016 15:39:13,428 INFO  [main] model.SuperstructureAssembler initializing...
+25 Aug 2016 15:39:13,459 INFO  [main] model.fUML_SyntaxAssembler initializing...
+25 Aug 2016 15:39:13,465 INFO  [main] model.InMemoryRepository performing package merge...
+25 Aug 2016 15:39:13,494 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+25 Aug 2016 15:39:13,527 INFO  [main] library.Library initializing...
+25 Aug 2016 15:39:14,040 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedBy
+25 Aug 2016 15:39:14,041 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Concurrent.lastUpdatedDate
+25 Aug 2016 15:39:14,041 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:39:14,042 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.name
+25 Aug 2016 15:39:14,044 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.age
+25 Aug 2016 15:39:14,045 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.pers#Person.dateOfBirth
+25 Aug 2016 15:39:14,049 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.pers#Person.org
+25 Aug 2016 15:39:14,050 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:39:14,050 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.STAPLES_STORE_ID_
+25 Aug 2016 15:39:14,051 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Staples.OTHER_NAMES
+25 Aug 2016 15:39:14,051 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:39:14,054 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.name
+25 Aug 2016 15:39:14,057 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.org#Organization.type
+25 Aug 2016 15:39:14,063 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://org.plasma.provisioning.example.org#Organization.employees
+25 Aug 2016 15:39:14,068 DEBUG [main] adapter.ModelAdapter constructing...
+25 Aug 2016 15:39:14,069 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://derived-artifact/1f0752c0-66b1-4342-8fa6-c26ef52b85a6 (org)
+25 Aug 2016 15:39:14,069 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (plasma)
+25 Aug 2016 15:39:14,070 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (provisioning)
+25 Aug 2016 15:39:14,070 DEBUG [main] adapter.ModelAdapter mapping enumerations for package null (example)
+25 Aug 2016 15:39:14,071 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.common (common)
+25 Aug 2016 15:39:14,071 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.pers (pers)
+25 Aug 2016 15:39:14,071 DEBUG [main] adapter.ModelAdapter mapping enumerations for package http://org.plasma.provisioning.example.org (org)
+25 Aug 2016 15:39:14,072 DEBUG [main] adapter.ModelAdapter mapping enumeration: http://org.plasma.provisioning.example.org#OrgType
+25 Aug 2016 15:39:14,073 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:39:14,074 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:39:14,074 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:39:14,074 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:39:14,074 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:39:14,075 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:39:14,075 DEBUG [main] adapter.ModelAdapter mapping class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:39:14,075 DEBUG [main] adapter.ModelAdapter map: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:39:14,075 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.common#Concurrent
+25 Aug 2016 15:39:14,076 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:39:14,076 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.pers#Person
+25 Aug 2016 15:39:14,076 DEBUG [main] adapter.ModelAdapter constructing class: http://org.plasma.provisioning.example.org#Organization
+25 Aug 2016 15:39:14,076 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:39:14,077 DEBUG [main] adapter.ModelAdapter construct deep: http://org.plasma.provisioning.example.org#Staples
+25 Aug 2016 15:39:14,080 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...

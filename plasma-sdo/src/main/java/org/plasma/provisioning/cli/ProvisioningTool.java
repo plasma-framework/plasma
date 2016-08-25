@@ -105,7 +105,7 @@ public abstract class ProvisioningTool {
 
 		if (!stale) {
 			// check repo artifacts
-			for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifacts()) {
+			for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifact()) {
 				URL url = PlasmaConfig.class.getResource(artifact.getUrn());
 				if (url == null)
 					url = PlasmaConfig.class.getClassLoader().getResource(artifact.getUrn());

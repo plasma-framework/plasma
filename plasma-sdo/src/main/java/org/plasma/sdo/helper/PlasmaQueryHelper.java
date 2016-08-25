@@ -201,7 +201,7 @@ public class PlasmaQueryHelper {
         		   targetNamespaceURI, supplierUri);
        }
        
-       List<Class> entities = stagingAssembler.getModel().getClazzs();
+       List<Class> entities = stagingAssembler.getModel().getClazz();
 	   List<Type> result = new ArrayList<Type>(entities.size());
        for (Class cls : entities) {
     	   result.add(PlasmaTypeHelper.INSTANCE.getType(

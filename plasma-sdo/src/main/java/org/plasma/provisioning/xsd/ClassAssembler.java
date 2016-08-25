@@ -69,7 +69,7 @@ public class ClassAssembler extends AbstractAssembler {
 		Documentation documentation = createDocumentation(
             	DocumentationType.DEFINITION,
             	getDocumentationContent(complexType));
-		clss.getDocumentations().add(documentation);
+		clss.getDocumentation().add(documentation);
 		
 		if (complexType.getComplexContent() != null) { // has a base type
 			ExtensionType extension = complexType.getComplexContent().getExtension(); 
@@ -81,7 +81,7 @@ public class ClassAssembler extends AbstractAssembler {
 					String formattedClassName = formatLocalClassName(base.getLocalPart());
 					baseRef.setName(formattedClassName);
 					baseRef.setUri(this.destNamespaceURI);
-					clss.getSuperClasses().add(baseRef);
+					clss.getSuperClass().add(baseRef);
 	    	    }
 			}
 			ComplexRestrictionType restriction = complexType.getComplexContent().getRestriction(); 
@@ -93,7 +93,7 @@ public class ClassAssembler extends AbstractAssembler {
 					String formattedClassName = formatLocalClassName(base.getLocalPart());
 					baseRef.setName(formattedClassName);
 					baseRef.setUri(this.destNamespaceURI);
-					clss.getSuperClasses().add(baseRef);
+					clss.getSuperClass().add(baseRef);
 	    	    }
 			}
 		}
@@ -120,7 +120,7 @@ public class ClassAssembler extends AbstractAssembler {
 		Documentation documentation = createDocumentation(
             	DocumentationType.DEFINITION,
             	getDocumentationContent(element));
-		clss.getDocumentations().add(documentation);
+		clss.getDocumentation().add(documentation);
 		
 		if (element.getComplexType() != null && element.getComplexType().getComplexContent() != null) { // has a base type
 			ExtensionType baseType = element.getComplexType().getComplexContent().getExtension(); 
@@ -131,7 +131,7 @@ public class ClassAssembler extends AbstractAssembler {
 				String formattedClassName = formatLocalClassName(base.getLocalPart());
 				baseRef.setName(formattedClassName);
 				baseRef.setUri(this.destNamespaceURI);
-				clss.getSuperClasses().add(baseRef);
+				clss.getSuperClass().add(baseRef);
     	    }
 		}
 		else if (element.getSubstitutionGroup() != null) {
@@ -142,7 +142,7 @@ public class ClassAssembler extends AbstractAssembler {
 				String formattedClassName = formatLocalClassName(base.getLocalPart());
 				baseRef.setName(formattedClassName);
 				baseRef.setUri(this.destNamespaceURI);
-				clss.getSuperClasses().add(baseRef);
+				clss.getSuperClass().add(baseRef);
     	    }
 		}
     	

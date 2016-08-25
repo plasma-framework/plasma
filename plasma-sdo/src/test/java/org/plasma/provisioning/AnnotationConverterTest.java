@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +41,10 @@ public class AnnotationConverterTest extends PlasmaTest {
 				new ModelAdapter(model);
     	MetamodelDataBinding binding = new MetamodelDataBinding(
     			new DefaultValidationEventHandler());
-    	String xml = binding.marshal(model);
+		javax.xml.bind.JAXBElement<Model> element = new JAXBElement<Model>(new QName("root"), 
+				Model.class, model);
+
+    	String xml = binding.marshal(element);
 		File outFile = new File("./target", AnnotationConverterTest.class.getSimpleName().toLowerCase()  + "_technical-model.xml");
 		FileOutputStream stream = new FileOutputStream(outFile);
 		stream.write(xml.getBytes());

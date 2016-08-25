@@ -68,7 +68,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		buf.append(LINE_SEP);
 		buf.append(this.createMethodDeclarations(clss));
 		
-		for (Property field : clss.getProperties()) {
+		for (Property field : clss.getProperty()) {
 			buf.append(LINE_SEP);
 			buf.append(this.createMethodDeclarations(clss, field));
 		}
@@ -100,9 +100,9 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		buf.append("public interface ");
 		buf.append(interfaceResolver.getName(clss));
 		buf.append(" extends ");
-		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0) {
+		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0) {
 		    int i = 0;
-			for (ClassRef ref : clss.getSuperClasses()) {
+			for (ClassRef ref : clss.getSuperClass()) {
 				if (i > 0)
 			        buf.append(", ");
 				buf.append(ref.getName());
@@ -126,7 +126,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		// add formatted doc from UML if exists		
 		// always put model definition first so it appears
 		// on package summary line for class
-		String docs = getWrappedDocmentations(clss.getDocumentations(), 0);
+		String docs = getWrappedDocmentations(clss.getDocumentation(), 0);
 		if (docs.trim().length() > 0) {
 		    buf.append(docs);
 		    
@@ -165,7 +165,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 
 		// add @see items for referenced classes
 		Map<String, Class> classMap = new TreeMap<String, Class>();
-		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0)		
+		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0)		
 		    this.collectProvisioningSuperclasses(pkg, clss, classMap);
 		//for interfaces we have definitions for all methods generated
 		// based on local fields, not fields from superclasses
@@ -218,7 +218,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 				buf.appendln(1, "/** The declared logical property names for this <a href=\"http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html\">Type</a>. */");
 				buf.appendln(1, "public static enum PROPERTY {");
 				int enumCount = 0;
-				for (Property field : clss.getProperties()) {
+				for (Property field : clss.getProperty()) {
 					if (enumCount > 0)
 						buf.append(",");
 					buf.append(this.newline(2));	
@@ -239,7 +239,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		case CONSTANTS:
 			// static constants
 			buf.appendln(1, "");
-			for (Property field : clss.getProperties()) {
+			for (Property field : clss.getProperty()) {
 			    String javadoc = createStaticFieldDeclarationJavadoc(clss, field, 1);
 				buf.appendln(1, javadoc);
 				
@@ -266,7 +266,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		// add formatted doc from UML if exists		
 		// always put model definition first so it appears
 		// on package summary line for class
-		String docs = getWrappedDocmentations(field.getDocumentations(), indent);
+		String docs = getWrappedDocmentations(field.getDocumentation(), indent);
 		if (docs.trim().length() > 0) {
 		    buf.append(docs);	
 		    buf.append(newline(indent));	
@@ -388,7 +388,7 @@ public class SDOInterfaceFactory extends SDODefaultFactory
 		// FIXME: only 1 level though
 		ClassNameResolver resolver = new SDOInterfaceNameResolver();
 		Map<String, String> nameMap = new TreeMap<String, String>();
-		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0)		
+		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0)		
 		    this.collectSuperclassNames(pkg, clss, nameMap, resolver);
 		else // it extends DataObject, so import it
 			nameMap.put(PlasmaDataObject.class.getName(), PlasmaDataObject.class.getName());

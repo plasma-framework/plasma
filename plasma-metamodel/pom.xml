@@ -81,46 +81,26 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.12.3</version>
 				<executions>
 					<execution>
 						<id>ddl-model</id>
 						<phase>generate-sources</phase>
 						<goals>
-							<goal>xjc</goal>
-						</goals>
-						<configuration>
-							<schemaDirectory>${basedir}/src/main/resources/org/plasma/text/ddl</schemaDirectory>
-							<schemaFiles>ddl.xsd</schemaFiles>
-							<bindingDirectory>${basedir}/src/main/resources/org/plasma/text/ddl</bindingDirectory>
-							<bindingFiles>ddl-jaxb-bindings.xml</bindingFiles>
-							<staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-ddl</staleFile>
-						</configuration>
-					</execution>
-					<execution>
-					    <id>meta-model</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>xjc</goal>
+							<goal>generate</goal>
 						</goals>
 				        <configuration>
-					        <schemaDirectory>${basedir}/src/main/resources/org/plasma/metamodel</schemaDirectory>
-					        <schemaFiles>metamodel.xsd</schemaFiles>
-					        <bindingDirectory>${basedir}/src/main/resources/org/plasma/metamodel</bindingDirectory>
-					        <bindingFiles>metamodel-jaxb-bindings.xml</bindingFiles>
-				            <staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-metamodel</staleFile>
+				            <generateDirectory>${basedir}/target/generated-sources/java</generateDirectory>
+							<clearOutputDir>false</clearOutputDir>
+							<extensions>true</extensions>
+							<bindingDirectory>${basedir}/src/main/resources</bindingDirectory>
+							<target>2.0</target>
+							<encoding>cp1252</encoding>
 				        </configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<!-- HACK: where is 'generated-sources' defined ?? -->
-					<outputDirectory>${basedir}/target/generated-sources/java</outputDirectory>
-					<clearOutputDir>false</clearOutputDir>
-					<extension>true</extension>
-					<target>2.0</target>
-					<encoding>Cp1252</encoding>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

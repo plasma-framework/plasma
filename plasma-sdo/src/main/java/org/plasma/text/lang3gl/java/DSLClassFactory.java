@@ -105,7 +105,7 @@ public class DSLClassFactory extends SDODefaultFactory
 		
 		buf.append(LINE_SEP);
 
-		for (Property field : clss.getProperties()) {
+		for (Property field : clss.getProperty()) {
 			buf.append(this.createPrivateFieldDeclaration(clss, field));
 		}
 				
@@ -160,7 +160,7 @@ public class DSLClassFactory extends SDODefaultFactory
 		// add formatted doc from UML if exists		
 		// always put model definition first so it appears
 		// on package summary line for class
-		String docs = getWrappedDocmentations(clss.getDocumentations(), 0);
+		String docs = getWrappedDocmentations(clss.getDocumentation(), 0);
 		if (docs.trim().length() > 0) {
 		    buf.append(docs);
 		    
@@ -296,10 +296,10 @@ public class DSLClassFactory extends SDODefaultFactory
 	protected String createOperations(Package pkg, Class clss) {
 		TextBuilder buf = new TextBuilder(LINE_SEP, 
 				this.context.getIndentationToken());
-		if (clss.getSuperClasses() != null)
-		    for (ClassRef cref : clss.getSuperClasses()) {
+		if (clss.getSuperClass() != null)
+		    for (ClassRef cref : clss.getSuperClass()) {
 			   Class sclss = this.context.findClass(cref);
-			   for (Property field : sclss.getProperties()) {
+			   for (Property field : sclss.getProperty()) {
 				   String sclassOpers = createOperations(pkg, sclss, field);
 				   buf.append(sclassOpers);
 			   }

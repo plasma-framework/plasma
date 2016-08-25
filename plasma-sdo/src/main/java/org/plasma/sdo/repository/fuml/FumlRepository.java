@@ -77,7 +77,7 @@ public class FumlRepository implements Repository {
         if (instance == null) {
             
             for (org.plasma.config.Repository repo : PlasmaConfig.getInstance().getRepositories()) {
-    	    	for (Artifact artifact : repo.getArtifacts()) {
+    	    	for (Artifact artifact : repo.getArtifact()) {
                     InputStream stream = PlasmaConfig.class.getResourceAsStream(artifact.getUrn());
                     if (stream == null)
                         stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(artifact.getUrn());

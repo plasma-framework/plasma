@@ -88,25 +88,12 @@
 		<groupId>commons-logging</groupId>
 		<artifactId>commons-logging</artifactId>
 		<version>1.1.1</version>
-	</dependency>
-	 
+	</dependency>	 
 	<dependency>
 		<groupId>commons-dbcp</groupId>
 		<artifactId>commons-dbcp</artifactId>
 		<version>1.4</version>
 	</dependency>
-	
-         <dependency>                                 
-            <groupId>com.oracle</groupId>          
-            <artifactId>ojdbc6</artifactId>    
-            <version>11.2.0.4</version>                   
-        </dependency>  
-        
-        <!--
-        Note: for Oracle JDBC driver use e.g. : 
-        mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc5 -Dversion=11.2.0.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc5.jar -DgeneratePom=true
-        mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc6.jar -DgeneratePom=true 
-        -->
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>

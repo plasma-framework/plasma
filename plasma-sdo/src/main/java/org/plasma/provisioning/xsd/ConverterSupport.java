@@ -201,7 +201,7 @@ public class ConverterSupport {
     	Map<String, Property> baseResult = this.classPropertyMap.get(clss);
     	if (baseResult != null)
     	    properties.putAll(baseResult);
-        for (ClassRef ref : clss.getSuperClasses()) {
+        for (ClassRef ref : clss.getSuperClass()) {
         	Class base = this.classQualifiedNameMap.get(
         			ref.getUri() + "#" + ref.getName());
         	collect(base, properties);
@@ -211,7 +211,7 @@ public class ConverterSupport {
     public List<Class> getRootClasses() {
     	List<Class> result = new ArrayList<Class>();
 	    for (Class clss : this.classQualifiedNameMap.values()) {
-	    	if (clss.getSuperClasses() == null || clss.getSuperClasses().size() == 0)
+	    	if (clss.getSuperClass() == null || clss.getSuperClass().size() == 0)
 	    		result.add(clss);
 	    }
 	    return result;
@@ -235,7 +235,7 @@ public class ConverterSupport {
     public void collectSubclasses() {
         for (Class clss : this.getClassQualifiedNameMap().values())
         {
-            for (ClassRef ref : clss.getSuperClasses()) {
+            for (ClassRef ref : clss.getSuperClass()) {
             	Class base = this.getClassQualifiedNameMap().get(
             			ref.getUri() + "#" + ref.getName());
             	HashSet<Class> subclasses = this.subclassMap.get(base);

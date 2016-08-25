@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://www.terrameta.org/plasma/text/ddl"
+<xs:schema targetNamespace="http://plasma.org/text/ddl"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    xmlns:ddl="http://www.terrameta.org/plasma/text/ddl">
+    xmlns:ddl="http://plasma.org/text/ddl">
     <xs:complexType name="schemas">
         <xs:sequence>
             <xs:element ref="ddl:schema" maxOccurs="unbounded"/>

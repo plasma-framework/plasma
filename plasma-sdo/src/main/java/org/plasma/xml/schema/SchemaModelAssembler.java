@@ -153,7 +153,7 @@ public class SchemaModelAssembler {
     		    log.debug("processing class: " + clss.getName());
                         
             ComplexType complexType = null;
-            if (clss.getSuperClasses().size() == 0) {            	
+            if (clss.getSuperClass().size() == 0) {            	
             	ComplexType baseType = serializationBaseType;
         		complexType = buildComplexType(adapter, baseType);
         		if (log.isDebugEnabled())
@@ -161,10 +161,10 @@ public class SchemaModelAssembler {
                 addDatatypeAttributesAndElements(complexType, baseType, adapter, sdoType);
             }
             else {
-            	if (clss.getSuperClasses().size() > 1)
+            	if (clss.getSuperClass().size() > 1)
             		throw new IllegalStateException("cannot process multiple base classes for type, " 
             				+ adapter.getKey());
-            	complexType = buildComplexType(adapter, clss.getSuperClasses().get(0).getName());
+            	complexType = buildComplexType(adapter, clss.getSuperClass().get(0).getName());
         		if (log.isDebugEnabled())
         		    log.debug("created complex type: " + complexType.getName());
                 addDatatypeAttributesAndElements(complexType, null, adapter, sdoType);
@@ -275,9 +275,9 @@ public class SchemaModelAssembler {
         
         Annotation annotation = new Annotation();
     	schema.getIncludesAndImportsAndRedefines().add(annotation);
-        if (model.getDocumentations() != null && model.getDocumentations().size() > 0) {
+        if (model.getDocumentation() != null && model.getDocumentation().size() > 0) {
             org.plasma.xml.schema.Documentation docum = new org.plasma.xml.schema.Documentation();
-            docum.getContent().add(model.getDocumentations().get(0).getBody().getValue());
+            docum.getContent().add(model.getDocumentation().get(0).getBody().getValue());
             annotation.getAppinfosAndDocumentations().add(docum);
         }
         

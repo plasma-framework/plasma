@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://www.terrameta.org/plasma/metamodel"
+<xs:schema targetNamespace="http://plasma.org/metamodel"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    xmlns:prov="http://www.terrameta.org/plasma/metamodel">
+    xmlns:prov="http://plasma.org/metamodel">
 
     <xs:annotation>
         <xs:documentation>

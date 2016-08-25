@@ -36,7 +36,7 @@ public class PapyrusModelAssembler extends DefaultUMLModelAssembler implements U
 
 	private void construct() {
 		// FIXME profile version as arg
-		this.profile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO___PROFILE___V_1___1___UML);
+		this.profile = ProfileConfig.getInstance().findArtifactByUrn(ProfileURN.PLASMA_SDO_PROFILE_V_1_1_UML);
 	    this.umlNs = Namespace.getNamespace("uml", this.profile.getUmlNamespaceUri()); 
 	    this.xmiNs = Namespace.getNamespace("xmi", this.profile.getXmiNamespaceUri()); 
 	    

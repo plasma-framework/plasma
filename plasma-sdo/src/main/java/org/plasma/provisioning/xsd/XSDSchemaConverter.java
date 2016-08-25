@@ -104,7 +104,7 @@ public class XSDSchemaConverter
         		if (doc != null && doc.length() > 0) {
         			Documentation documentation = this.support.createDocumentation(
         	            	DocumentationType.DEFINITION, doc);
-        			model.getDocumentations().add(documentation);
+        			model.getDocumentation().add(documentation);
         		}
         	}
         }
@@ -153,7 +153,7 @@ public class XSDSchemaConverter
         				this.support.getSimpleTypeMap(), enumerationAssembler);
         		simpleType.accept(collector);
         		for (Enumeration enumeration : collector.getResult())
-        			model.getEnumerations().add(enumeration);
+        			model.getEnumeration().add(enumeration);
         	}
         }
         
@@ -164,7 +164,7 @@ public class XSDSchemaConverter
         		ComplexType complexType = this.support.getComplexTypeMap().get(element.getName());
         		if (complexType != null) { // element has type
             	    Class cls = classAssembler.buildClass(complexType);
-            	    model.getClazzs().add(cls);
+            	    model.getClazz().add(cls);
             	    this.support.getClassQualifiedNameMap().put(destNamespaceURI + "#" + cls.getName(), cls);        	
             	    this.support.getClassLocalNameMap().put(cls.getAlias().getLocalName(), cls); 
             	    if (log.isDebugEnabled())
@@ -172,7 +172,7 @@ public class XSDSchemaConverter
         		}
         		else {
             	    Class cls = classAssembler.buildClass(element);
-            	    model.getClazzs().add(cls);
+            	    model.getClazz().add(cls);
             	    this.support.getClassQualifiedNameMap().put(destNamespaceURI + "#" + cls.getName(), cls);        	
             	    this.support.getClassLocalNameMap().put(cls.getAlias().getLocalName(), cls);        	
             	    if (log.isDebugEnabled())
@@ -183,7 +183,7 @@ public class XSDSchemaConverter
         else {
         	for (ComplexType complexType : this.support.getComplexTypeMap().values()) {
         	    Class cls = classAssembler.buildClass(complexType);
-        	    model.getClazzs().add(cls);
+        	    model.getClazz().add(cls);
         	    this.support.getClassQualifiedNameMap().put(destNamespaceURI + "#" + cls.getName(), cls);        	
         	    this.support.getClassLocalNameMap().put(cls.getAlias().getLocalName(), cls);        	
         	    if (log.isDebugEnabled())
@@ -231,8 +231,8 @@ public class XSDSchemaConverter
         // add derived target properties
         for (Class cls : this.support.getClassQualifiedNameMap().values())
         {
-        	Property[] props = new Property[cls.getProperties().size()];
-        	cls.getProperties().toArray(props); // avoid concurrent mods for recursive relationships
+        	Property[] props = new Property[cls.getProperty().size()];
+        	cls.getProperty().toArray(props); // avoid concurrent mods for recursive relationships
         	for (Property prop : props) {
         		if (prop.getType() == null)
         			throw new IllegalStateException("property "
@@ -248,8 +248,8 @@ public class XSDSchemaConverter
         			throw new IllegalStateException("no class definition found for qualified name '"
         					+ qualifiedName + "'");
         		Property targetProperty = null;
-        		Property[] pdefs2 = new Property[targetClass.getProperties().size()];
-        		targetClass.getProperties().toArray(pdefs2);
+        		Property[] pdefs2 = new Property[targetClass.getProperty().size()];
+        		targetClass.getProperty().toArray(pdefs2);
         		for (Property pdef2 : pdefs2) {
         			if (pdef2.getName().equals(prop.getOpposite())) {
         				targetProperty = pdef2;
@@ -259,7 +259,7 @@ public class XSDSchemaConverter
         		if (targetProperty == null) {
         			if (prop.getOpposite() != null) {
         			    targetProperty = this.propertyAssembler.createDerivedPropertyOpposite(cls, prop);
-        			    targetClass.getProperties().add(targetProperty);
+        			    targetClass.getProperty().add(targetProperty);
         			}
         		}
         	}
@@ -333,7 +333,7 @@ public class XSDSchemaConverter
 	    					// the value of this element or type
 	    					Property property = this.propertyAssembler.buildElementContentDatatypeProperty(cls,
 	    				    		base);
-	            		    cls.getProperties().add(property);
+	            		    cls.getProperty().add(property);
 	            	        Map<String, Property> classProps = this.support.getClassPropertyMap().get(cls);
 	            	        if (classProps == null) {
 	            	        	classProps = new HashMap<String, Property>();
@@ -401,7 +401,7 @@ public class XSDSchemaConverter
         		if (element.getValue() instanceof LocalElement) {
         		    LocalElement localElement = (LocalElement)element.getValue();
         		    Property property = this.propertyAssembler.buildProperty(cls, complexType, explicitGroup, null, localElement, i);
-        		    cls.getProperties().add(property);
+        		    cls.getProperty().add(property);
         	        Map<String, Property> classProps = this.support.getClassPropertyMap().get(cls);
         	        if (classProps == null) {
         	        	classProps = new HashMap<String, Property>();
@@ -419,7 +419,7 @@ public class XSDSchemaConverter
         	        		    LocalElement localElement = (LocalElement)element2.getValue();
         	        		    Property property = this.propertyAssembler.buildProperty(cls, complexType, 
         	        		    		explicitGroup, childGroup, localElement, j);
-        	        		    cls.getProperties().add(property);
+        	        		    cls.getProperty().add(property);
         	        	        Map<String, Property> classProps = this.support.getClassPropertyMap().get(cls);
         	        	        if (classProps == null) {
         	        	        	classProps = new HashMap<String, Property>();
@@ -437,7 +437,7 @@ public class XSDSchemaConverter
         	        	        		    LocalElement localElement = (LocalElement)element3.getValue();
         	        	        		    Property property = this.propertyAssembler.buildProperty(cls, complexType, 
         	        	        		    		childGroup, grandChildGroup, localElement, k);
-        	        	        		    cls.getProperties().add(property);
+        	        	        		    cls.getProperty().add(property);
         	        	        	        Map<String, Property> classProps = this.support.getClassPropertyMap().get(cls);
         	        	        	        if (classProps == null) {
         	        	        	        	classProps = new HashMap<String, Property>();
@@ -479,7 +479,7 @@ public class XSDSchemaConverter
         	if (annot instanceof Attribute) {
         		Attribute attribute = (Attribute)annot;
         		Property property = this.propertyAssembler.buildDatatypeProperty(cls, complexType, attribute);
-        		cls.getProperties().add(property);
+        		cls.getProperty().add(property);
     	        Map<String, Property> classProps = this.support.getClassPropertyMap().get(cls);
     	        if (classProps == null) {
     	        	classProps = new HashMap<String, Property>();
@@ -497,7 +497,7 @@ public class XSDSchemaConverter
         			if (annot2 instanceof Attribute) {
                 		Attribute attribute = (Attribute)annot2;
            				Property property = this.propertyAssembler.buildDatatypeProperty(cls, complexType, attribute);
-                		cls.getProperties().add(property);
+                		cls.getProperty().add(property);
             	        Map<String, Property> classProps = this.support.getClassPropertyMap().get(cls);
             	        if (classProps == null) {
             	        	classProps = new HashMap<String, Property>();

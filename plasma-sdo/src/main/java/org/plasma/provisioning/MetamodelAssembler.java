@@ -161,7 +161,7 @@ public class MetamodelAssembler {
 			Body body = new Body();
 			body.setValue("derived model");
 			documentation.setBody(body);
-			this.model.getDocumentations().add(documentation);		    
+			this.model.getDocumentation().add(documentation);		    
     	}
     	
 		// create and map packages, classes
@@ -177,7 +177,7 @@ public class MetamodelAssembler {
         		if (pkg == null) {
         			if (namespacesToProcess.size() > 1) {
         			    pkg = createPackage(namespace, plasmaType, false);        			
-        		        this.model.getPackages().add(pkg);
+        		        this.model.getPackage().add(pkg);
         			}
         			else {
         			    pkg = createPackage(namespace, plasmaType, true);        			
@@ -238,7 +238,7 @@ public class MetamodelAssembler {
 		Body body = new Body();
 		body.setValue("derived model");
 		documentation.setBody(body);
-		this.model.getDocumentations().add(documentation);		    
+		this.model.getDocumentation().add(documentation);		    
 		
         
         // collect types/properties from the Select within the
@@ -289,7 +289,7 @@ public class MetamodelAssembler {
         			sequence.setKey(String.valueOf(list.indexOf(plasmaProperty.getName())));
         			field.setSort(sequence);
                 	
-                	clss.getProperties().add(field);                	
+                	clss.getProperty().add(field);                	
                 }
             }  
 
@@ -324,7 +324,7 @@ public class MetamodelAssembler {
     			sequence.setKey(String.valueOf(list.indexOf(plasmaProperty.getName())));
     			field.setSort(sequence);
             	
-            	clss.getProperties().add(field);                	
+            	clss.getProperty().add(field);                	
             }
             
             constructImplicitDatatypeProperties(query, sdoType, clss, list);
@@ -388,10 +388,10 @@ public class MetamodelAssembler {
                 	field.setNullable(true);
                 	
         			Sort sequence = new Sort();
-        			sequence.setKey(String.valueOf(clss.getProperties().size()));
+        			sequence.setKey(String.valueOf(clss.getProperty().size()));
         			field.setSort(sequence);
                 	
-                	clss.getProperties().add(field);               	
+                	clss.getProperty().add(field);               	
                 }
             }
         } 		
@@ -416,10 +416,10 @@ public class MetamodelAssembler {
     		    property.setVisibility(VisibilityType.PRIVATE);
             	
     			Sort sequence = new Sort();
-    			sequence.setKey(String.valueOf(clss.getProperties().size()));
+    			sequence.setKey(String.valueOf(clss.getProperty().size()));
     			property.setSort(sequence);
     		    
-            	clss.getProperties().add(property);  
+            	clss.getProperty().add(property);  
         	}
         	*/
         	       	
@@ -444,10 +444,10 @@ public class MetamodelAssembler {
         		    property.setVisibility(VisibilityType.PRIVATE);
                 	
         			Sort sequence = new Sort();
-        			sequence.setKey(String.valueOf(clss.getProperties().size()));
+        			sequence.setKey(String.valueOf(clss.getProperty().size()));
         			property.setSort(sequence);
         		    
-                	clss.getProperties().add(property);  
+                	clss.getProperty().add(property);  
         		}
         	}
         }		
@@ -475,7 +475,7 @@ public class MetamodelAssembler {
 				if (log.isDebugEnabled())
 					log.debug("adding reference property " + clss.getUri() + "#" + clss.getName() + "." + field.getName());				
 			}
-			clss.getProperties().add(field);
+			clss.getProperty().add(field);
 			
 		}
 	}
@@ -504,7 +504,7 @@ public class MetamodelAssembler {
 			Enumeration enumeration = this.enumerationMap.get(enumKey);
 			if (enumeration == null) {
 			    enumeration = createEnumeration(clss, sdoEnumeration);
-			    pkg.getEnumerations().add(enumeration);
+			    pkg.getEnumeration().add(enumeration);
 			    this.enumerationMap.put(enumKey, enumeration);
 			}
 		}
@@ -546,11 +546,11 @@ public class MetamodelAssembler {
 					Body body = new Body();
 					body.setValue(comment.getBody());
 					documentation.setBody(body);
-					literal.getDocumentations().add(documentation);
+					literal.getDocumentation().add(documentation);
 			    }
 			}
 			
-			enumeration.getEnumerationLiterals().add(literal);
+			enumeration.getEnumerationLiteral().add(literal);
 		}		
 		
 		return enumeration;
@@ -623,7 +623,7 @@ public class MetamodelAssembler {
 			Enumeration enumeration = this.enumerationMap.get(enumKey);
             if (enumeration == null) {
 			    enumeration = createEnumeration(clss, sdoEnum);
-			    pkg.getEnumerations().add(enumeration);
+			    pkg.getEnumeration().add(enumeration);
 			    this.enumerationMap.put(enumKey, enumeration);
             }
             
@@ -698,7 +698,7 @@ public class MetamodelAssembler {
 				Body body = new Body();
 				body.setValue(comment.getBody());
 				documentation.setBody(body);
-				property.getDocumentations().add(documentation);
+				property.getDocumentation().add(documentation);
 		    }
 		}
 		
@@ -738,7 +738,7 @@ public class MetamodelAssembler {
 			Body body = new Body();
 			body.setValue(cmt.getBody());
 			doc.setBody(body);
-			pkg.getDocumentations().add(doc);
+			pkg.getDocumentation().add(doc);
 		}
 	    pkg.setUri(type.getURI());
 	    return pkg;
@@ -746,7 +746,7 @@ public class MetamodelAssembler {
 	
 	private Class createClass(Package pkg, PlasmaType plasmaType) {
 		Class clss = new Class();
-		pkg.getClazzs().add(clss);
+		pkg.getClazz().add(clss);
 		clss.setId(UUID.randomUUID().toString());
 		clss.setName(plasmaType.getName());
 		clss.setUri(plasmaType.getURI());		
@@ -769,7 +769,7 @@ public class MetamodelAssembler {
 		    ClassRef ref = new ClassRef();
 		    ref.setName(baseType.getName());
 		    ref.setUri(baseType.getURI());
-		    clss.getSuperClasses().add(ref);
+		    clss.getSuperClass().add(ref);
 		}
 		if (plasmaType.getDescription() != null && plasmaType.getDescription().size() > 0) {
 			for (Comment comment : plasmaType.getDescription()) {
@@ -778,7 +778,7 @@ public class MetamodelAssembler {
 				Body body = new Body();
 				body.setValue(comment.getBody());
 				documentation.setBody(body);
-				clss.getDocumentations().add(documentation);
+				clss.getDocumentation().add(documentation);
 		    }
 		}
 
