@@ -30,8 +30,7 @@ import org.plasma.sdo.profile.SDODerivation;
 import org.plasma.sdo.repository.Classifier;
 import org.plasma.sdo.repository.Comment;
 import org.plasma.sdo.repository.Element;
-
-import fUML.Syntax.Classes.Kernel.VisibilityKind;
+import org.plasma.sdo.repository.Visibility;
 
 
 class FumlClassifier<T extends org.modeldriven.fuml.repository.Classifier> 
@@ -80,7 +79,7 @@ class FumlClassifier<T extends org.modeldriven.fuml.repository.Classifier>
 	public SDOAlias findPackageAlias() 
     {
     	if (element.getPackage() != null) {
-	        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element.getPackage());
+	        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element.getPackage());
 	        if (stereotypes != null) {
 	            for (Stereotype stereotype : stereotypes)
 	                if (stereotype.getDelegate() instanceof SDOAlias) {
@@ -96,7 +95,7 @@ class FumlClassifier<T extends org.modeldriven.fuml.repository.Classifier>
 	 */
     @Override
 	public SDODerivation findDerivation() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDODerivation) {
@@ -121,9 +120,9 @@ class FumlClassifier<T extends org.modeldriven.fuml.repository.Classifier>
 	 * @see org.plasma.sdo.repository.fuml.Classifier#getVisibility()
 	 */
 	@Override
-	public VisibilityKind getVisibility()
+	public Visibility getVisibility()
 	{
-        return this.element.getDelegate().visibility;		
+        return Visibility.valueOf(this.element.getDelegate().visibility.name());		
 	}
 	
     /* (non-Javadoc)
@@ -159,7 +158,7 @@ class FumlClassifier<T extends org.modeldriven.fuml.repository.Classifier>
     @Override
 	public List<Classifier> getSpecializations() {
     	List<Classifier> result = new ArrayList<>();
-    	for (org.modeldriven.fuml.repository.Classifier c : FumlRepository.getInstance().getSpecializations(this.element))
+    	for (org.modeldriven.fuml.repository.Classifier c : FumlRepository.getFumlRepositoryInstance().getSpecializations(this.element))
     		result.add(new FumlClassifier<org.modeldriven.fuml.repository.Classifier>(c));
     	return result;
     }
@@ -214,7 +213,7 @@ class FumlClassifier<T extends org.modeldriven.fuml.repository.Classifier>
     @Override
 	public SDOAlias findAlias() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOAlias) {
@@ -230,7 +229,7 @@ class FumlClassifier<T extends org.modeldriven.fuml.repository.Classifier>
     @Override
 	public Classifier getDerivationSupplier() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDODerivation) {
@@ -238,7 +237,7 @@ class FumlClassifier<T extends org.modeldriven.fuml.repository.Classifier>
                     if (sdoDerivationStereotype.getSupplier() != null) {
                     	SDODerivation deriv = (SDODerivation)stereotype.getDelegate();
                        	fUML.Syntax.Classes.Kernel.NamedElement namedElem = deriv.getSupplier();
-                       	Element elem = FumlRepository.getInstance().getElementById(namedElem.getXmiId());
+                       	Element elem = FumlRepository.getFumlRepositoryInstance().getElementById(namedElem.getXmiId());
                     	if (elem instanceof Classifier) {
                     		return (Classifier)elem;               		
                     	}

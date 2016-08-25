@@ -26,6 +26,17 @@ import java.util.List;
 
 import org.modeldriven.fuml.repository.Stereotype;
 import org.plasma.common.exception.PlasmaRuntimeException;
+import org.plasma.sdo.Alias;
+import org.plasma.sdo.Concurrent;
+import org.plasma.sdo.Derivation;
+import org.plasma.sdo.EnumerationConstraint;
+import org.plasma.sdo.Key;
+import org.plasma.sdo.Sort;
+import org.plasma.sdo.Temporal;
+import org.plasma.sdo.UniqueConstraint;
+import org.plasma.sdo.ValueConstraint;
+import org.plasma.sdo.ValueSetConstraint;
+import org.plasma.sdo.XmlProperty;
 import org.plasma.sdo.profile.ConcurrencyType;
 import org.plasma.sdo.profile.ConcurrentDataFlavor;
 import org.plasma.sdo.profile.KeyType;
@@ -46,6 +57,7 @@ import org.plasma.sdo.repository.Comment;
 import org.plasma.sdo.repository.Element;
 import org.plasma.sdo.repository.Enumeration;
 import org.plasma.sdo.repository.Property;
+import org.plasma.sdo.repository.Visibility;
 
 import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
@@ -134,9 +146,12 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#getVisibility()
 	 */
 	@Override
-	public VisibilityKind getVisibility()
+	public Visibility getVisibility()
 	{
-        return this.element.getDelegate().visibility;		
+		VisibilityKind v = this.element.getDelegate().visibility;
+		if (v != null)
+            return Visibility.valueOf(v.name());	
+		return Visibility.public_;
 	}	
 	
 	/* (non-Javadoc)
@@ -154,7 +169,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
     @Override
 	public String findPhysicalName() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         validate(stereotypes);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
@@ -178,7 +193,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
     @Override
 	public String getLocalName() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         validate(stereotypes);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
@@ -201,9 +216,9 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findAlias()
 	 */
     @Override
-	public SDOAlias findAlias() 
+	public Alias findAlias() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOAlias) {
@@ -217,8 +232,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findKey()
 	 */
     @Override
-	public SDOKey findKey() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public Key findKey() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOKey) {
@@ -233,14 +248,14 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 */
     @Override
 	public Property findKeySupplier() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOKey) {
                 	SDOKey key = (SDOKey)stereotype.getDelegate();
                 	fUML.Syntax.Classes.Kernel.NamedElement namedElem = key.getSupplier();
                 	if (namedElem != null) {
-	                	Element elem = FumlRepository.getInstance().getElementById(namedElem.getXmiId());
+	                	Element elem = FumlRepository.getFumlRepositoryInstance().getElementById(namedElem.getXmiId());
 	                	if (elem instanceof Property) {
 	                		return (Property)elem;               		
 	                	}
@@ -254,8 +269,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findConcurrent()
 	 */
     @Override
-	public SDOConcurrent findConcurrent() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public Concurrent findConcurrent() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -270,8 +285,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findTemporal()
 	 */
     @Override
-	public SDOTemporal findTemporal() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public Temporal findTemporal() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOTemporal) {
@@ -285,8 +300,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findEnumerationConstraint()
 	 */
     @Override
-	public SDOEnumerationConstraint findEnumerationConstraint() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public EnumerationConstraint findEnumerationConstraint() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOEnumerationConstraint) {
@@ -301,8 +316,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findValueSetConstraint()
 	 */
     @Override
-	public SDOValueSetConstraint findValueSetConstraint() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public ValueSetConstraint findValueSetConstraint() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOValueSetConstraint) {
@@ -316,8 +331,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findValueConstraint()
 	 */
     @Override
-	public SDOValueConstraint findValueConstraint() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public ValueConstraint findValueConstraint() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOValueConstraint) {
@@ -331,8 +346,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findSort()
 	 */
     @Override
-	public SDOSort findSort() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public Sort findSort() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOSort) {
@@ -346,8 +361,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findUniqueConstraint()
 	 */
     @Override
-	public SDOUniqueConstraint findUniqueConstraint() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public UniqueConstraint findUniqueConstraint() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOUniqueConstraint) {
@@ -362,14 +377,14 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 */
     @Override
 	public Property findDerivationSupplier() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDODerivation) {
                 	SDODerivation deriv = (SDODerivation)stereotype.getDelegate();
                 	fUML.Syntax.Classes.Kernel.NamedElement namedElem = deriv.getSupplier();
                 	if (namedElem != null) {
-                	    Element elem = FumlRepository.getInstance().getElementById(namedElem.getXmiId());
+                	    Element elem = FumlRepository.getFumlRepositoryInstance().getElementById(namedElem.getXmiId());
                 	    if (elem instanceof Property) {
                 		    return (Property)elem;               		
                 	    }
@@ -383,8 +398,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findDerivation()
 	 */
     @Override
-	public SDODerivation findDerivation() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public Derivation findDerivation() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDODerivation) {
@@ -404,7 +419,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
             throw new IllegalArgumentException("property " 
                     + element.getClass_().getName() + "." + 
                     element.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOKey) {
@@ -428,7 +443,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
             throw new IllegalArgumentException("property " 
                     + element.getClass_().getName() + "." + 
                     element.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOValueConstraint) {
@@ -449,9 +464,9 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
     @Override
 	public Enumeration getRestriction() 
     {
-        SDOEnumerationConstraint sdoEnumerationConstraintStereotype = this.findEnumerationConstraint();
+        SDOEnumerationConstraint sdoEnumerationConstraintStereotype = (SDOEnumerationConstraint)this.findEnumerationConstraint();
         if (sdoEnumerationConstraintStereotype != null) {
-        	return FumlRepository.getInstance().getEnumerationById(
+        	return FumlRepository.getFumlRepositoryInstance().getEnumerationById(
         			sdoEnumerationConstraintStereotype.getValue().getXmiId());
         }
         return null;
@@ -461,8 +476,8 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
 	 * @see org.plasma.sdo.repository.fuml.Property#findXmlProperty()
 	 */
     @Override
-	public SDOXmlProperty findXmlProperty() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+	public XmlProperty findXmlProperty() {
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOXmlProperty) {
@@ -478,7 +493,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
     @Override
 	public boolean getIsConcurrencyUser() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -500,7 +515,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
             throw new IllegalArgumentException("property " 
                     + element.getClass_().getName() + "." + 
                     element.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -519,7 +534,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
     @Override
 	public boolean getIsLockingUser() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -541,7 +556,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
             throw new IllegalArgumentException("property " 
                     + element.getClass_().getName() + "." + 
                     element.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -559,7 +574,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
     @Override
 	public boolean getIsOriginationUser() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -581,7 +596,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
             throw new IllegalArgumentException("property " 
                     + element.getClass_().getName() + "." + 
                     element.getName() + " is not a datatype property");
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOConcurrent) {
@@ -599,7 +614,7 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
     @Override
 	public boolean getIsUnique() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOUniqueConstraint) {

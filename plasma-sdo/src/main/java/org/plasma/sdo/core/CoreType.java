@@ -55,11 +55,11 @@ import org.plasma.sdo.repository.Comment;
 import org.plasma.sdo.repository.InvalidClassifierNameException;
 import org.plasma.sdo.repository.PlasmaRepository;
 import org.plasma.sdo.repository.RepositoryException;
+import org.plasma.sdo.repository.Visibility;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
-import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 /**
  * A representation of the type of a {@link Property property} or 
@@ -181,12 +181,17 @@ public class CoreType implements PlasmaType {
         // correctly initializes the classifier with all its declared and inherited properties
         // which is a bug in FUML RI
         String urn = repoClassifier.getArtifactNamespaceURI();
-        String qualifiedName = urn + "#" + repoClassifier.getName();
-        org.plasma.sdo.repository.Classifier resultClassifier = PlasmaRepository.getInstance().getClassifier(
-        		qualifiedName);   
-        if (!resultClassifier.getId().equals(repoClassifier.getId()))
-        	log.warn("found xmi-id mismatch for result ("+resultClassifier.getId()+") and lookup ("+repoClassifier.getId()+") classifier - ignoring");
-        this.classifier = resultClassifier; 
+        if (urn != null) {
+	        String qualifiedName = urn + "#" + repoClassifier.getName();
+	        org.plasma.sdo.repository.Classifier resultClassifier = PlasmaRepository.getInstance().getClassifier(
+	        		qualifiedName);   
+	        if (!resultClassifier.getId().equals(repoClassifier.getId()))
+	        	log.warn("found xmi-id mismatch for result ("+resultClassifier.getId()+") and lookup ("+repoClassifier.getId()+") classifier - ignoring");
+	        this.classifier = resultClassifier;
+        }
+        else {
+	        this.classifier = repoClassifier;      	
+        }
     }
     
     public int hashCode() {
@@ -236,7 +241,7 @@ public class CoreType implements PlasmaType {
         // UUID, visibility and other instance properties on Type
         instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_STRING_UUID, 
         		UUID.randomUUID().toString());        
-        VisibilityKind visibility = VisibilityKind.public_;
+        Visibility visibility = Visibility.public_;
         if (this.classifier.getVisibility() != null)
         	visibility = this.classifier.getVisibility();
         instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_VISIBILITY, 

@@ -204,12 +204,12 @@ class FumlRelationCache implements RelationCache {
                         		+ getDebugName(targetProperty));
                     //FIXME: classifiers returned via XMI ID have no properties !!
                     // See re-lookup by qualified name below
-                    org.plasma.sdo.repository.Classifier tempClassifier = FumlRepository.getInstance().getClassifierById(
+                    org.plasma.sdo.repository.Classifier tempClassifier = FumlRepository.getFumlRepositoryInstance().getClassifierById(
                     		targetProperty.getType().getId());
                     
                     String urn = tempClassifier.getArtifactNamespaceURI();
                     String qualifiedName = urn + "#" + tempClassifier.getName();
-                    org.plasma.sdo.repository.Classifier targetClassifier = FumlRepository.getInstance().getClassifier(
+                    org.plasma.sdo.repository.Classifier targetClassifier = FumlRepository.getFumlRepositoryInstance().getClassifier(
                     		qualifiedName);
                     org.plasma.sdo.repository.Class_ nextClassifier = null;
                     if (org.plasma.sdo.repository.Class_.class.isAssignableFrom(targetClassifier.getClass()))        	

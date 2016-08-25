@@ -48,6 +48,7 @@ import org.plasma.sdo.repository.Property;
 import org.plasma.sdo.repository.RelationCache;
 import org.plasma.sdo.repository.Repository;
 import org.plasma.sdo.repository.RepositoryException;
+import org.plasma.sdo.repository.RepositoryLoader;
 
 import fUML.Syntax.Classes.Kernel.PackageableElement;
 
@@ -60,28 +61,36 @@ public class FumlRepository implements Repository {
     
     private FumlRepository() {}
     
-    public static FumlRepository getInstance() throws RepositoryException {
-        if (instance == null)
+    public static Repository getInstance() throws RepositoryException {
+        return getFumlRepositoryInstance();
+    }
+
+    // package
+    static FumlRepository getFumlRepositoryInstance() throws RepositoryException {
+        if (instance == null) {
             initializeInstance();
+        }
         return instance;
     }
 
     private static synchronized void initializeInstance() throws RepositorylException {
         if (instance == null) {
             
-            for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifacts()) {
-                InputStream stream = PlasmaConfig.class.getResourceAsStream(artifact.getUrn());
-                if (stream == null)
-                    stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(artifact.getUrn());
-                if (stream == null)
-                    throw new PlasmaRuntimeException("could not find artifact resource '" 
-                            + artifact.getUrn() 
-                            + "' on the current classpath");        
-                Fuml.load(new ResourceArtifact(
-                    artifact.getUrn(), 
-                    artifact.getNamespaceUri(), 
-                    stream));                
-            }           
+            for (org.plasma.config.Repository repo : PlasmaConfig.getInstance().getRepositories()) {
+    	    	for (Artifact artifact : repo.getArtifacts()) {
+                    InputStream stream = PlasmaConfig.class.getResourceAsStream(artifact.getUrn());
+                    if (stream == null)
+                        stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(artifact.getUrn());
+                    if (stream == null)
+                        throw new PlasmaRuntimeException("could not find artifact resource '" 
+                                + artifact.getUrn() 
+                                + "' on the current classpath");        
+                    Fuml.load(new ResourceArtifact(
+                        artifact.getUrn(), 
+                        artifact.getNamespaceUri(), 
+                        stream));                
+    	    	}
+            }
             
             delegate = org.modeldriven.fuml.repository.Repository.INSTANCE;
             instance = new FumlRepository();
@@ -174,7 +183,7 @@ public class FumlRepository implements Repository {
 	/* (non-Javadoc)
 	 * @see org.plasma.sdo.repository.fuml.Repository#getElementById(java.lang.String)
 	 */
-	@Override
+	//@Override
 	public org.plasma.sdo.repository.Element getElementById(String id) {	
 		NamedElement e = (NamedElement)delegate.getElementById(id);
 		if (e == null)			
@@ -182,7 +191,7 @@ public class FumlRepository implements Repository {
 		return new FumlElement<org.modeldriven.fuml.repository.NamedElement>(e);			
 	}
 
-	@Override
+	//@Override
 	public Class_ getClassById(String id) {
 		Element e = (NamedElement)delegate.getElementById(id);
 		if (e == null)			
@@ -190,7 +199,7 @@ public class FumlRepository implements Repository {
 		return new FumlClass_((org.modeldriven.fuml.repository.Class_)e);			
 	}
 
-	@Override
+	//@Override
 	public Enumeration getEnumerationById(String id) {
 		Element e = (NamedElement)delegate.getElementById(id);
 		if (e == null)			
@@ -198,7 +207,7 @@ public class FumlRepository implements Repository {
 		return new FumlEnumeration((org.modeldriven.fuml.repository.Enumeration)e);			
 	}
 
-	@Override
+	//@Override
 	public EnumerationLiteral getEnumerationLiteralById(String id) {
 		Element e = (NamedElement)delegate.getElementById(id);
 		if (e == null)			
@@ -206,7 +215,7 @@ public class FumlRepository implements Repository {
 		return new FumlEnumerationLiteral((org.modeldriven.fuml.repository.EnumerationLiteral)e);			
 	}
 
-	@Override
+	//@Override
 	public org.plasma.sdo.repository.Classifier getClassifierById(String id) {
 		Element e = (NamedElement)delegate.getElementById(id);
 		if (e == null)			
@@ -214,7 +223,7 @@ public class FumlRepository implements Repository {
 		return new FumlClassifier<org.modeldriven.fuml.repository.Classifier>((org.modeldriven.fuml.repository.Classifier)e);			
 	}
 
-	@Override
+	//@Override
 	public Property getPropertyById(String id) {
 		Element e = (NamedElement)delegate.getElementById(id);
 		if (e == null)			
@@ -254,7 +263,7 @@ public class FumlRepository implements Repository {
 	/* (non-Javadoc)
 	 * @see org.plasma.sdo.repository.fuml.Repository#findElementById(java.lang.String)
 	 */
-	@Override
+	//@Override
 	public org.plasma.sdo.repository.Element findElementById(String id) {
 		NamedElement e = (NamedElement)delegate.findElementById(id);
 		if (e != null)
@@ -265,7 +274,7 @@ public class FumlRepository implements Repository {
 	/* (non-Javadoc)
 	 * @see org.plasma.sdo.repository.fuml.Repository#findElementByName(java.lang.String)
 	 */
-	@Override
+	//@Override
 	public org.plasma.sdo.repository.Element findElementByName(String name) {
 		NamedElement e = (NamedElement)delegate.findElementByName(name);
 		if (e != null)
@@ -276,7 +285,7 @@ public class FumlRepository implements Repository {
 	/* (non-Javadoc)
 	 * @see org.plasma.sdo.repository.fuml.Repository#findElementByQualifiedName(java.lang.String)
 	 */
-	@Override
+	//@Override
 	public org.plasma.sdo.repository.Element findElementByQualifiedName(String qualifiedName) {
 		NamedElement e = (NamedElement)delegate.findElementByQualifiedName(qualifiedName);
 		if (e != null)
@@ -287,7 +296,7 @@ public class FumlRepository implements Repository {
 	/* (non-Javadoc)
 	 * @see org.plasma.sdo.repository.fuml.Repository#getClassifierByName(java.lang.String)
 	 */
-	@Override
+	//@Override
 	public org.plasma.sdo.repository.Classifier getClassifierByName(String name) {
 		Classifier result = delegate.getClassifierByName(name);
 		if (result == null)
@@ -302,7 +311,7 @@ public class FumlRepository implements Repository {
 	/* (non-Javadoc)
 	 * @see org.plasma.sdo.repository.fuml.Repository#getClassifierByQualifiedName(java.lang.String)
 	 */
-	@Override
+	//@Override
 	public org.plasma.sdo.repository.Classifier getClassifierByQualifiedName(String qualifiedName) {
 		Classifier result = delegate.getClassifierByQualifiedName(qualifiedName);
 		if (result == null)
@@ -317,7 +326,7 @@ public class FumlRepository implements Repository {
 	/* (non-Javadoc)
 	 * @see org.plasma.sdo.repository.fuml.Repository#getDefaultUMLNamespaceURI()
 	 */
-	@Override
+	//@Override
 	public String getDefaultUMLNamespaceURI() {
 		return delegate.getDefaultUMLNamespaceURI();
 	}
@@ -325,7 +334,7 @@ public class FumlRepository implements Repository {
 	/* (non-Javadoc)
 	 * @see org.plasma.sdo.repository.fuml.Repository#getElementByName(java.lang.String)
 	 */
-	@Override
+	//@Override
 	public org.plasma.sdo.repository.Element getElementByName(String name) {
 		NamedElement e = (NamedElement)delegate.getElementByName(name);
 		if (e == null)			
@@ -337,7 +346,7 @@ public class FumlRepository implements Repository {
 	/* (non-Javadoc)
 	 * @see org.plasma.sdo.repository.fuml.Repository#getElementByQualifiedName(java.lang.String)
 	 */
-	@Override
+	//@Override
 	public org.plasma.sdo.repository.Element getElementByQualifiedName(String qualifiedName) {
 		NamedElement e = (NamedElement)delegate.getElementByQualifiedName(qualifiedName);
 		if (e == null)			

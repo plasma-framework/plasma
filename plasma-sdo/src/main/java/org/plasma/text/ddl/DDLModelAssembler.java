@@ -29,7 +29,6 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.modeldriven.fuml.repository.OpaqueBehavior;
 import org.plasma.config.DataStoreType;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.sdo.DataType;
@@ -41,6 +40,7 @@ import org.plasma.sdo.repository.Class_;
 import org.plasma.sdo.repository.Enumeration;
 import org.plasma.sdo.repository.EnumerationLiteral;
 import org.plasma.sdo.repository.Namespace;
+import org.plasma.sdo.repository.OpaqueBehavior;
 import org.plasma.sdo.repository.PlasmaRepository;
 
 import commonj.sdo.Property;

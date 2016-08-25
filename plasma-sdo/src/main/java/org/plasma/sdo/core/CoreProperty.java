@@ -56,11 +56,11 @@ import org.plasma.sdo.profile.KeyType;
 import org.plasma.sdo.profile.XmlNodeType;
 import org.plasma.sdo.repository.Comment;
 import org.plasma.sdo.repository.Enumeration;
+import org.plasma.sdo.repository.Visibility;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
-import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 /**
  * A representation of a Property in the {@link Type type} of a
@@ -158,7 +158,7 @@ public class CoreProperty implements PlasmaProperty {
         }        
         
         // visibility
-        VisibilityKind visibility = VisibilityKind.public_;
+        Visibility visibility = Visibility.public_;
         if (this.property.getVisibility() != null)
         	visibility = this.property.getVisibility();
         instanceProperties.put(CoreProperty.INSTANCE_PROPERTY_OBJECT_VISIBILITY, 

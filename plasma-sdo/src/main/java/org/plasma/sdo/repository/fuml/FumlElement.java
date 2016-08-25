@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.modeldriven.fuml.repository.Package;
 import org.modeldriven.fuml.repository.Stereotype;
+import org.plasma.sdo.Alias;
 import org.plasma.sdo.profile.SDOAlias;
 import org.plasma.sdo.profile.SDONamespace;
 import org.plasma.sdo.repository.Comment;
@@ -85,7 +86,7 @@ class FumlElement<T extends org.modeldriven.fuml.repository.NamedElement> implem
     } 
     
     private SDONamespace findSDONamespace(Package pkg) {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(pkg);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(pkg);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDONamespace) {
@@ -101,7 +102,7 @@ class FumlElement<T extends org.modeldriven.fuml.repository.NamedElement> implem
     @Override
 	public String getPhysicalName() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(this.element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(this.element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOAlias) {
@@ -117,9 +118,9 @@ class FumlElement<T extends org.modeldriven.fuml.repository.NamedElement> implem
 	 * @see org.plasma.sdo.repository.fuml.Element#findAlias()
 	 */
     @Override
-	public SDOAlias findAlias() 
+	public Alias findAlias() 
     {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(this.element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(this.element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDOAlias) {

@@ -94,12 +94,12 @@ class FumlClass_ extends FumlClassifier<org.modeldriven.fuml.repository.Class_> 
 	 * @see org.plasma.sdo.repository.fuml.Class_#getOpaqueBehaviors(java.lang.String)
 	 */
 	@Override
-	public List<OpaqueBehavior> getOpaqueBehaviors(String language) {
+	public List<org.plasma.sdo.repository.OpaqueBehavior> getOpaqueBehaviors(String language) {
 		
-		List<OpaqueBehavior> result = new ArrayList<OpaqueBehavior>();
+		List<org.plasma.sdo.repository.OpaqueBehavior> result = new ArrayList<org.plasma.sdo.repository.OpaqueBehavior>();
 		for (OpaqueBehavior behavior : ((org.modeldriven.fuml.repository.Class_)this.element).getOpaqueBehaviors()) {
 			if (behavior.getLanguage().equalsIgnoreCase(language)) {
-				result.add(behavior);
+				result.add(new FumlOpaqueBehavior(behavior));
 			}				
 		}
 		return result;
@@ -110,7 +110,7 @@ class FumlClass_ extends FumlClassifier<org.modeldriven.fuml.repository.Class_> 
 	 */
 	@Override
 	public boolean isRelation(org.plasma.sdo.repository.Class_ other, AssociationPath relation) {
-		return FumlRepository.getInstance().getRelationCache().isRelation(
+		return FumlRepository.getFumlRepositoryInstance().getRelationCache().isRelation(
 				this, other, relation);
 	}
 

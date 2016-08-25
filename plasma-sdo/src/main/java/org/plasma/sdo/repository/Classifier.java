@@ -23,10 +23,8 @@ package org.plasma.sdo.repository;
 
 import java.util.List;
 
-import org.plasma.sdo.profile.SDOAlias;
-import org.plasma.sdo.profile.SDODerivation;
-
-import fUML.Syntax.Classes.Kernel.VisibilityKind;
+import org.plasma.sdo.Alias;
+import org.plasma.sdo.Derivation;
 
 /**
  * 
@@ -34,19 +32,25 @@ import fUML.Syntax.Classes.Kernel.VisibilityKind;
  * @since 1.2.4
  */public interface Classifier extends Element {
 
+	/**
+	 * Returns the (UML) artifact URI associated with the classifier, if available, or
+	 * null e.g. if the classifier was not loaded as part of an artifact.    
+	 * @return the (UML) artifact URI associated with the classifier, if available, or
+	 * null e.g. if the classifier was not loaded as part of an artifact.
+	 */
 	String getArtifactNamespaceURI();
 
 	String getPackageName();
 
 	String getPackagePhysicalName();
 
-	SDOAlias findPackageAlias();
+	Alias findPackageAlias();
 
-	SDODerivation findDerivation();
+	Derivation findDerivation();
 
 	List<Comment> getComments();
 
-	VisibilityKind getVisibility();
+	Visibility getVisibility();
 
 	boolean isAbstract();
 
@@ -71,7 +75,7 @@ import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 	String getBusinessName();
 
-	SDOAlias findAlias();
+	Alias findAlias();
 
 	Classifier getDerivationSupplier();
 

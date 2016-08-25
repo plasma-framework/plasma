@@ -48,32 +48,42 @@ public interface Repository {
 	 */
 	List<Classifier> getClassifiers(String uri);
 
-	Classifier getClassifier(String name);
+	/**
+	 * Fetches a classifier using the given artifact, package or namespace qualified name.  
+	 * @param qualifiedName the artifact, package or namespace qualified name
+	 * @return the classifier 
+	 * @throws RepositoryException if the classifier is not found
+	 */
+	Classifier getClassifier(String qualifiedName);
+	
+	/**
+	 * Searches for a classifier using the given artifact, package or namespace qualified name.  
+	 * @param qualifiedName the artifact, package or namespace qualified name
+	 * @return the classifier or null if not found 
+	 */
+	Classifier findClassifier(String qualifiedName);	
+	
+	//Classifier getClassifierById(String id);	
+	//Classifier getClassifierByName(String name);
+	//Classifier getClassifierByQualifiedName(String qualifiedName);
+	
+	//Element findElementById(String id);
 
-	Classifier findClassifier(String name);
+	//Element findElementByName(String name);
 
-	Element findElementById(String id);
-
-	Element findElementByName(String name);
-
-	Element findElementByQualifiedName(String qualifiedName);
+	//Element findElementByQualifiedName(String qualifiedName);
 
 	Class_ getClassById(String id);
-	Enumeration getEnumerationById(String id);
-	EnumerationLiteral getEnumerationLiteralById(String id);
-	Classifier getClassifierById(String id);
-	Property getPropertyById(String id);
-	Element getElementById(String id);
+	//Enumeration getEnumerationById(String id);
+	//EnumerationLiteral getEnumerationLiteralById(String id);
+	//Property getPropertyById(String id);
+	//Element getElementById(String id);
 
-	Element getElementByName(String name);
+	//Element getElementByName(String name);
 
-	Element getElementByQualifiedName(String qualifiedName);
+	//Element getElementByQualifiedName(String qualifiedName);
 
-	Classifier getClassifierByName(String name);
-
-	Classifier getClassifierByQualifiedName(String qualifiedName);
-
-	String getDefaultUMLNamespaceURI();
+	//String getDefaultUMLNamespaceURI();
 
 	RelationCache getRelationCache();
 

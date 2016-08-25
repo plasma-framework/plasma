@@ -23,13 +23,15 @@ package org.plasma.sdo.repository;
 
 import java.util.List;
 
+import org.plasma.sdo.Alias;
 import org.plasma.sdo.profile.SDOAlias;
 
 /**
  * 
  * @author Scott Cinnamond
  * @since 1.2.4
- */public interface Element {
+ */
+public interface Element {
 
 	String getName();
 
@@ -37,7 +39,7 @@ import org.plasma.sdo.profile.SDOAlias;
 
 	String getPhysicalName();
 
-	SDOAlias findAlias();
+	Alias findAlias();
 
 	List<Comment> getComments();
 

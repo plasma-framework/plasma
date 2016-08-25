@@ -15,7 +15,7 @@
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 
 		            </xsd:element>
-		            <xsd:element name="Repository" type="cfg:Repository"  minOccurs="1" maxOccurs="1">
+		            <xsd:element name="Repository" type="cfg:Repository"  minOccurs="1" maxOccurs="unbounded">
 		                <xsd:annotation>                                  
 		                    <xsd:documentation></xsd:documentation>       
 		                </xsd:annotation>                                 
@@ -623,6 +623,11 @@
 		                </xsd:annotation>                                 
 		            </xsd:element>
 		        </xsd:sequence>         
+                <xsd:attribute name="repositoryClassName" type="xsd:string" use="optional">
+                    <xsd:annotation>
+                        <xsd:documentation>The fully qualified class name for the repository implementation. The specified class must implement org.plasma.sdo.repository.Repository. </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
             </xsd:extension>
         </xsd:complexContent>
 

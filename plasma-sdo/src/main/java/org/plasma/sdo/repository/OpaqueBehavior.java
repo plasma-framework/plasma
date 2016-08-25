@@ -21,27 +21,13 @@
  */
 package org.plasma.sdo.repository;
 
-import java.util.List;
-
-import org.plasma.sdo.AssociationPath;
 
 /**
  * 
  * @author Scott Cinnamond
  * @since 1.2.4
  */
-public interface Class_ extends Classifier {
-
-	List<Property> getDeclaredProperties();
-
-	List<Property> getAllProperties();
-
-	String findOpaqueBehaviorBody(String name, String language);
-
-	String getOpaqueBehaviorBody(String name, String language);
-
-	List<OpaqueBehavior> getOpaqueBehaviors(String language);
-
-	boolean isRelation(Class_ other, AssociationPath relation);
-
+public interface OpaqueBehavior extends Element {
+    public String getLanguage();
+    public String getBody();
 }

@@ -41,7 +41,7 @@ class FumlNamespace extends FumlElement<org.modeldriven.fuml.repository.Package>
 	 */
 	@Override
 	public String getUri() {
-        List<Stereotype> stereotypes = FumlRepository.getInstance().getStereotypes(this.element);
+        List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(this.element);
         if (stereotypes != null) {
             for (Stereotype stereotype : stereotypes)
                 if (stereotype.getDelegate() instanceof SDONamespace) {

@@ -159,7 +159,7 @@ public class PlasmaConfig {
     	//	sdo.getNamespaces().add(ns);
     	
     	Repository repo = new Repository();
-    	config.setRepository(repo);
+    	config.getRepositories().add(repo);
     	
     	return config;
     }
@@ -189,8 +189,10 @@ public class PlasmaConfig {
     
     private void constructArtifactAndNamespaceMappings() throws ConfigurationException {
         // map declared artifacts
-        for (Artifact artifact : config.getRepository().getArtifacts()) {
-            this.artifactMap.put(artifact.getNamespaceUri(), artifact);
+        for (Repository repo : config.getRepositories()) {
+            for (Artifact artifact : repo.getArtifacts()) {
+                this.artifactMap.put(artifact.getNamespaceUri(), artifact);
+            }
         }
         
         // Default namespace now optional, load dynamically below if not found
@@ -269,48 +271,51 @@ public class PlasmaConfig {
     	
     	// Determine the profile version(s) required by the defined user artifacts 
     	Map<String, ProfileArtifactAdapter> versions = new HashMap<String, ProfileArtifactAdapter>();
-        for (Artifact artifact : config.getRepository().getArtifacts()) {
-        	
-        	if (ProfileConfig.getInstance().findArtifactByUri(artifact.getNamespaceUri()) != null)
-        		continue; // validated elsewhere
-        	
-            InputStream stream = PlasmaConfig.class.getResourceAsStream(artifact.getUrn());
-            if (stream == null)
-                stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(artifact.getUrn());
-            if (stream == null) {
-            	if (this.configURI == null) {
-                    throw new PlasmaRuntimeException("could not find artifact resource '" 
-                        + artifact.getUrn() 
-                        + "' on the current classpath");   
-            	}
-            	else { // look for artifact as relative URI
-            		URI artifactURI = null;
-            		try {
-            		    artifactURI = this.configURI.resolve(artifact.getUrn());
-						stream = artifactURI.toURL().openStream();
-            		}
-            		catch (IllegalArgumentException e) {
-            			throw new PlasmaRuntimeException(e);
-					} catch (MalformedURLException e) {
-						throw new PlasmaRuntimeException(e);
-					} catch (IOException e) {
-						throw new PlasmaRuntimeException(e);
-					}
-            		if (stream == null)
-                        throw new PlasmaRuntimeException("could not find artifact resource '" 
-                            + artifact.getUrn() 
-                            + "' on the current classpath or as a relative URI based on the configuration URI, "
-                            + this.configURI.toString());   
-           	    }
-            }            
-            
-            ProfileVersionFinder finder = new ProfileVersionFinder();
-            ProfileArtifactAdapter version = finder.getVersion(artifact.getUrn(), stream);
-            if (log.isDebugEnabled())
-                log.debug("artifact: (" + artifact.getUrn() + ") " + artifact.getNamespaceUri() 
-            	    + " - detected as Plasma SDO Profile version (" + version.getUrn() + ") " + version.getNamespaceUri());
-            versions.put(version.getNamespaceUri(), version);
-        }
+
+        for (Repository repo : config.getRepositories()) {
+	    	for (Artifact artifact : repo.getArtifacts()) {
+	        	
+	        	if (ProfileConfig.getInstance().findArtifactByUri(artifact.getNamespaceUri()) != null)
+	        		continue; // validated elsewhere
+	        	
+	            InputStream stream = PlasmaConfig.class.getResourceAsStream(artifact.getUrn());
+	            if (stream == null)
+	                stream = PlasmaConfig.class.getClassLoader().getResourceAsStream(artifact.getUrn());
+	            if (stream == null) {
+	            	if (this.configURI == null) {
+	                    throw new PlasmaRuntimeException("could not find artifact resource '" 
+	                        + artifact.getUrn() 
+	                        + "' on the current classpath");   
+	            	}
+	            	else { // look for artifact as relative URI
+	            		URI artifactURI = null;
+	            		try {
+	            		    artifactURI = this.configURI.resolve(artifact.getUrn());
+							stream = artifactURI.toURL().openStream();
+	            		}
+	            		catch (IllegalArgumentException e) {
+	            			throw new PlasmaRuntimeException(e);
+						} catch (MalformedURLException e) {
+							throw new PlasmaRuntimeException(e);
+						} catch (IOException e) {
+							throw new PlasmaRuntimeException(e);
+						}
+	            		if (stream == null)
+	                        throw new PlasmaRuntimeException("could not find artifact resource '" 
+	                            + artifact.getUrn() 
+	                            + "' on the current classpath or as a relative URI based on the configuration URI, "
+	                            + this.configURI.toString());   
+	           	    }
+	            }            
+	            ProfileVersionFinder finder = new ProfileVersionFinder();
+	            ProfileArtifactAdapter version = finder.getVersion(artifact.getUrn(), stream);
+	            if (log.isDebugEnabled())
+	                log.debug("artifact: (" + artifact.getUrn() + ") " + artifact.getNamespaceUri() 
+	            	    + " - detected as Plasma SDO Profile version (" + version.getUrn() + ") " + version.getNamespaceUri());
+	            versions.put(version.getNamespaceUri(), version);
+	        }
+    	}
+    	
         
         // throw an error if more than one profile used across artifacts
         if (versions.size() > 1) {
@@ -871,8 +876,11 @@ public class PlasmaConfig {
     }
     
     public Repository getRepository() {
-        
-        return config.getRepository();
+        return config.getRepositories().get(0);
+    }
+    
+    public List<Repository> getRepositories() {
+        return config.getRepositories();
     }
 
     public String getSDOInterfaceClassName(String uri, String name) {

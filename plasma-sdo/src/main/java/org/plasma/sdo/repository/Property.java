@@ -23,6 +23,17 @@ package org.plasma.sdo.repository;
 
 import java.util.List;
 
+import org.plasma.sdo.Alias;
+import org.plasma.sdo.Concurrent;
+import org.plasma.sdo.Derivation;
+import org.plasma.sdo.EnumerationConstraint;
+import org.plasma.sdo.Key;
+import org.plasma.sdo.Sort;
+import org.plasma.sdo.Temporal;
+import org.plasma.sdo.UniqueConstraint;
+import org.plasma.sdo.ValueConstraint;
+import org.plasma.sdo.ValueSetConstraint;
+import org.plasma.sdo.XmlProperty;
 import org.plasma.sdo.profile.SDOAlias;
 import org.plasma.sdo.profile.SDOConcurrent;
 import org.plasma.sdo.profile.SDODerivation;
@@ -35,7 +46,6 @@ import org.plasma.sdo.profile.SDOValueConstraint;
 import org.plasma.sdo.profile.SDOValueSetConstraint;
 import org.plasma.sdo.profile.SDOXmlProperty;
 
-import fUML.Syntax.Classes.Kernel.VisibilityKind;
 
 /**
  * 
@@ -64,7 +74,7 @@ public interface Property extends Element {
 	
 	Classifier getType();
 
-	VisibilityKind getVisibility();
+	Visibility getVisibility();
 
 	boolean getIsReadonly();
 
@@ -72,29 +82,29 @@ public interface Property extends Element {
 
 	String getLocalName();
 
-	SDOAlias findAlias();
+	Alias findAlias();
 
-	SDOKey findKey();
+	Key findKey();
 
 	Property findKeySupplier();
 
-	SDOConcurrent findConcurrent();
+	Concurrent findConcurrent();
 
-	SDOTemporal findTemporal();
+	Temporal findTemporal();
 
-	SDOEnumerationConstraint findEnumerationConstraint();
+	EnumerationConstraint findEnumerationConstraint();
 
-	SDOValueSetConstraint findValueSetConstraint();
+	ValueSetConstraint findValueSetConstraint();
 
-	SDOValueConstraint findValueConstraint();
+	ValueConstraint findValueConstraint();
 
-	SDOSort findSort();
+	Sort findSort();
 
-	SDOUniqueConstraint findUniqueConstraint();
+	UniqueConstraint findUniqueConstraint();
 
 	Property findDerivationSupplier();
 
-	SDODerivation findDerivation();
+	Derivation findDerivation();
 
 	boolean getIsPriKey();
 
@@ -102,7 +112,7 @@ public interface Property extends Element {
 
 	Enumeration getRestriction();
 
-	SDOXmlProperty findXmlProperty();
+	XmlProperty findXmlProperty();
 
 	boolean getIsConcurrencyUser();
 

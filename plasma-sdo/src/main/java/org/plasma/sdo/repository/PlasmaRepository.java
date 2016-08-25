@@ -21,20 +21,54 @@
  */
 package org.plasma.sdo.repository;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.modeldriven.fuml.repository.RepositorylException;
+import org.plasma.config.PlasmaConfig;
 import org.plasma.sdo.repository.fuml.FumlRepository;
 
+/**
+ * A repository implementation with a dynamic set of "delegate" repositories, which are searched
+ * in order for results. 
+ * FIXME: make all this configurable. 
+ */
 public class PlasmaRepository implements Repository {
     private static Log log = LogFactory.getLog(PlasmaRepository.class);
     private static volatile Repository instance;
-    private Repository delegate;
+    private List<Repository> delegates = new ArrayList<>();
     
     private PlasmaRepository() {
-        delegate = FumlRepository.getInstance();
+        for (org.plasma.config.Repository repoConfig : PlasmaConfig.getInstance().getRepositories()) {
+        	if (repoConfig.getRepositoryClassName() != null) {
+        		try {
+					Class<?> interfaceImplClass = Class.forName(repoConfig.getRepositoryClassName());
+					Method method = interfaceImplClass.getMethod("getInstance");
+					if (log.isDebugEnabled())
+						log.debug("initializing repository for class: " + repoConfig.getRepositoryClassName());
+					Repository repo = (Repository)method.invoke(null, new Object[] {});
+					this.delegates.add(repo);
+				} catch (ClassNotFoundException e) {
+					throw new RepositoryException(e);
+				} catch (NoSuchMethodException e) {
+					throw new RepositoryException(e);
+				} catch (SecurityException e) {
+					throw new RepositoryException(e);
+				} catch (IllegalAccessException e) {
+					throw new RepositoryException(e);
+				} catch (IllegalArgumentException e) {
+					throw new RepositoryException(e);
+				} catch (InvocationTargetException e) {
+					throw new RepositoryException(e);
+				}
+        	}
+        }
+        if (this.delegates.size() == 0)
+    	    this.delegates.add(FumlRepository.getInstance());
     }
     
     public static Repository getInstance() throws RepositoryException {
@@ -48,89 +82,85 @@ public class PlasmaRepository implements Repository {
             instance = new PlasmaRepository();
         }
     }
+    
+    //* FIXME: make all this configurable. 
+    public synchronized void addRepository(Repository repo) {
+    	this.delegates.add(repo);
+    }
 
 	public List<String> getAllNamespaceUris() {
-		return delegate.getAllNamespaceUris();
+		List<String> results = new ArrayList<String>();
+		for (Repository repo : this.delegates) {
+			results.addAll(repo.getAllNamespaceUris());
+		}
+		return results;
 	}
 
 	public List<Namespace> getAllNamespaces() {
-		return delegate.getAllNamespaces();
+		List<Namespace> results = new ArrayList<Namespace>();
+		for (Repository repo : this.delegates) {
+			results.addAll(repo.getAllNamespaces());
+		}
+		return results;
 	}
 
 	public Namespace getNamespaceForUri(String uri) {
-		return delegate.getNamespaceForUri(uri);
+		Namespace result = null;
+		for (Repository repo : this.delegates) {
+			result = repo.getNamespaceForUri(uri);
+			if (result != null)
+				return result;
+		}
+		return null;
 	}
 
 	public List<Classifier> getClassifiers(String uri) {
-		return delegate.getClassifiers(uri);
-	}
-
-	public Element getElementById(String id) {
-		return delegate.getElementById(id);
+		List<Classifier> results = new ArrayList<Classifier>();
+		for (Repository repo : this.delegates) {
+			results.addAll(repo.getClassifiers(uri));
+		}
+		return results;
 	}
 
 	public Classifier getClassifier(String name) {
-		return delegate.getClassifier(name);
+		Classifier result = null;
+		for (Repository repo : this.delegates) {
+			result = repo.findClassifier(name);
+			if (result != null)
+				return result;
+		}
+		throw new RepositorylException("no classifier found for name, " + name);
 	}
 
 	public Classifier findClassifier(String name) {
-		return delegate.findClassifier(name);
+		Classifier result = null;
+		for (Repository repo : this.delegates) {
+			result = repo.findClassifier(name);
+			if (result != null)
+				return result;
+		}
+		return null;
 	}
-
-	public Element findElementById(String id) {
-		return delegate.findElementById(id);
-	}
-
-	public Element findElementByName(String name) {
-		return delegate.findElementByName(name);
-	}
-
-	public Element findElementByQualifiedName(String qualifiedName) {
-		return delegate.findElementByQualifiedName(qualifiedName);
-	}
-
-	public Classifier getClassifierByName(String name) {
-		return delegate.getClassifierByName(name);
-	}
-
-	public Classifier getClassifierByQualifiedName(String qualifiedName) {
-		return delegate.getClassifierByQualifiedName(qualifiedName);
-	}
-
-	public String getDefaultUMLNamespaceURI() {
-		return delegate.getDefaultUMLNamespaceURI();
-	}
-
-	public Element getElementByName(String name) {
-		return delegate.getElementByName(name);
-	}
-
-	public Element getElementByQualifiedName(String qualifiedName) {
-		return delegate.getElementByQualifiedName(qualifiedName);
-	}
-
+	
 	public RelationCache getRelationCache() {
-		return delegate.getRelationCache();
+		RelationCache result = null;
+		for (Repository repo : this.delegates) {
+			result = repo.getRelationCache();
+			if (result != null)
+				return result;
+		}
+		return null;
 	}
 
 	public Class_ getClassById(String id) {
-		return delegate.getClassById(id);
+		Class_ result = null;
+		for (Repository repo : this.delegates) {
+			result = repo.getClassById(id);
+			if (result != null)
+				return result;
+		}
+		return null;
 	}
 
-	public Enumeration getEnumerationById(String id) {
-		return delegate.getEnumerationById(id);
-	}
-
-	public EnumerationLiteral getEnumerationLiteralById(String id) {
-		return delegate.getEnumerationLiteralById(id);
-	}
-
-	public Classifier getClassifierById(String id) {
-		return delegate.getClassifierById(id);
-	}
-
-	public Property getPropertyById(String id) {
-		return delegate.getPropertyById(id);
-	}
 
 }
