@@ -53,8 +53,8 @@ public class DDLStreamAssembler extends DDLAssembler
     public void start() {
         try {
         	// map tables
-	    	for (Schema schema : this.schemas.getSchema()) {
-	    		for (Table table : schema.getTable()) {
+	    	for (Schema schema : this.schemas.getSchemas()) {
+	    		for (Table table : schema.getTables()) {
 	    			tableMap.put(schema.getName() + "." + table.getName(), table);
 	    		}
 	    	}
@@ -90,8 +90,8 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void createTables() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
     			if (!hasBehavior(BehaviorType.CREATE, schema, table)) {
     			    String ddl = createTable(schema, table);
 				    this.stream.write(ddl.getBytes());
@@ -102,8 +102,8 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void dropTables() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
     			if (!hasBehavior(BehaviorType.CREATE, schema, table)) {
     			    String ddl = dropTable(schema, table);
 				    this.stream.write(ddl.getBytes());
@@ -114,8 +114,8 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void truncateTables() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
     			if (!hasBehavior(BehaviorType.CREATE, schema, table)) {
     			    String ddl = truncateTable(schema, table);
 				    this.stream.write(ddl.getBytes());
@@ -126,8 +126,8 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void createViews() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
     			if (!hasBehavior(BehaviorType.CREATE, schema, table))
     			    continue;
 				Behavior behavior = getBehavior(BehaviorType.CREATE, schema, table);
@@ -144,8 +144,8 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void dropViews() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
     			if (!hasBehavior(BehaviorType.DROP, schema, table))
     			    continue;
 				Behavior behavior = getBehavior(BehaviorType.DROP, schema, table);
@@ -161,9 +161,9 @@ public class DDLStreamAssembler extends DDLAssembler
  
     private void createForeignKeys() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Fk fk : table.getFk()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Fk fk : table.getFks()) {
     			    Table toTable = getTable(fk.getToTable(), schema);
     			    String ddl = createForeignKeyConstraint(schema, table, fk, toTable); 
     				this.stream.write(ddl.getBytes());
@@ -174,9 +174,9 @@ public class DDLStreamAssembler extends DDLAssembler
 
     private void dropForeignKeys() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Fk fk : table.getFk()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Fk fk : table.getFks()) {
     			    Table toTable = getTable(fk.getToTable(), schema);
     			    String ddl = dropForeignKeyConstraint(schema, table, fk, toTable); 
     				this.stream.write(ddl.getBytes());
@@ -187,9 +187,9 @@ public class DDLStreamAssembler extends DDLAssembler
  
     private void enableForeignKeys(boolean enable) throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Fk fk : table.getFk()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Fk fk : table.getFks()) {
     			    Table toTable = getTable(fk.getToTable(), schema);
     			    String ddl = enableForeignKeyConstraint(schema, table, fk, toTable, enable); 
     				this.stream.write(ddl.getBytes());
@@ -200,9 +200,9 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void createUniqueConstraints() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Unique unique : table.getUnique()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Unique unique : table.getUniques()) {
     			    String ddl = createUniqueConstraint(schema, table, unique); 
     				this.stream.write(ddl.getBytes());
                 }
@@ -212,9 +212,9 @@ public class DDLStreamAssembler extends DDLAssembler
 
     private void dropUniqueConstraints() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Unique unique : table.getUnique()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Unique unique : table.getUniques()) {
     			    String ddl = dropUniqueConstraint(schema, table, unique); 
     				this.stream.write(ddl.getBytes());
                 }
@@ -224,9 +224,9 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void enableUniqueConstraints(boolean enable) throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Unique unique : table.getUnique()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Unique unique : table.getUniques()) {
     			    String ddl = enableUniqueConstraint(schema, table, unique, enable); 
     				this.stream.write(ddl.getBytes());
                 }
@@ -236,9 +236,9 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void createCheckConstraints() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Check check : table.getCheck()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Check check : table.getChecks()) {
     			    String ddl = createCheckConstraint(schema, table, check); 
     				this.stream.write(ddl.getBytes());
                 }
@@ -248,9 +248,9 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void dropCheckConstraints() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Check check : table.getCheck()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Check check : table.getChecks()) {
     			    String ddl = dropCheckConstraint(schema, table, check); 
     				this.stream.write(ddl.getBytes());
                 }
@@ -260,9 +260,9 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void enableCheckConstraints(boolean enable) throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Check check : table.getCheck()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Check check : table.getChecks()) {
     			    String ddl = enableCheckConstraint(schema, table, check, enable); 
     				this.stream.write(ddl.getBytes());
                 }
@@ -272,9 +272,9 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void createIndexes() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Index index : table.getIndex()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Index index : table.getIndices()) {
     			    String ddl = createIndex(schema, table, index); 
     				this.stream.write(ddl.getBytes());
                 }
@@ -284,9 +284,9 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void dropIndexes() throws IOException 
     {
-    	for (Schema schema : this.schemas.getSchema()) {
-    		for (Table table : schema.getTable()) {
-                for (Index index : table.getIndex()) {
+    	for (Schema schema : this.schemas.getSchemas()) {
+    		for (Table table : schema.getTables()) {
+                for (Index index : table.getIndices()) {
     			    String ddl = dropIndex(schema, table, index); 
     				this.stream.write(ddl.getBytes());
                 }
@@ -296,8 +296,8 @@ public class DDLStreamAssembler extends DDLAssembler
     
     private void createSequences() throws IOException 
     {
-		for (Schema schema : this.schemas.getSchema()) {
-			for (Table table : schema.getTable()) {
+		for (Schema schema : this.schemas.getSchemas()) {
+			for (Table table : schema.getTables()) {
     			if (hasBehavior(BehaviorType.CREATE, schema, table))
     			    continue;
 				if (table.getPk() == null) {
@@ -311,8 +311,8 @@ public class DDLStreamAssembler extends DDLAssembler
 
     private void dropSequences() throws IOException 
     {
-		for (Schema schema : this.schemas.getSchema()) {
-			for (Table table : schema.getTable()) {
+		for (Schema schema : this.schemas.getSchemas()) {
+			for (Table table : schema.getTables()) {
     			if (hasBehavior(BehaviorType.CREATE, schema, table))
     			    continue;
 				if (table.getPk() == null) {
@@ -406,7 +406,7 @@ public class DDLStreamAssembler extends DDLAssembler
     }
     
     private boolean hasBehavior(BehaviorType type, Schema schema, Table table) {
-    	for (Behavior behavior : table.getBehavior()) {
+    	for (Behavior behavior : table.getBehaviors()) {
     	    if (behavior.getType().ordinal() == type.ordinal())
     	    	return true;
     	}
@@ -414,7 +414,7 @@ public class DDLStreamAssembler extends DDLAssembler
     }
     
     private Behavior getBehavior(BehaviorType type, Schema schema, Table table) {
-    	for (Behavior behavior : table.getBehavior()) {
+    	for (Behavior behavior : table.getBehaviors()) {
     	    if (behavior.getType().ordinal() == type.ordinal())
     	    	return behavior;
     	}

@@ -51,13 +51,13 @@ public class NamespaceAdapter {
 	}
 	
 	public List<Property> getProperties() {
-		return Collections.unmodifiableList(namespace.getProperty());
+		return Collections.unmodifiableList(namespace.getProperties());
 	}
 	public NamespaceProvisioning getProvisioning() {
 		return namespace.getProvisioning();
 	}
 	public List<TypeBinding> getTypeBindings() {
-		return Collections.unmodifiableList(namespace.getTypeBinding());
+		return Collections.unmodifiableList(namespace.getTypeBindings());
 	}
 	public String getUri() {
 		return namespace.getUri();

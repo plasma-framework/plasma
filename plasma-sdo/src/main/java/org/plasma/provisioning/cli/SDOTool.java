@@ -25,7 +25,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -157,7 +159,7 @@ public class SDOTool extends ProvisioningTool {
             modelAssembler = new MetamodelAssembler();
             MetamodelDataBinding binding = new MetamodelDataBinding(
         			new DefaultValidationEventHandler());
-        	String xml = binding.marshal(modelAssembler.getModel());
+        	String xml = binding.marshal( modelAssembler.getModel());
     		FileOutputStream stream = new FileOutputStream(destFile);
     		stream.write(xml.getBytes());
     		stream.flush();

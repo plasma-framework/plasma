@@ -149,7 +149,7 @@ public abstract class DefaultFactory {
 	@Deprecated
 	protected void collectProvisioningClasses(Package pkg, Class clss, Map<String, Class> classMap) {
 		
-		for (Property field : clss.getProperty())
+		for (Property field : clss.getProperties())
 		{
 			TypeRef type = field.getType();
 			if (type instanceof ClassRef) {
@@ -172,8 +172,8 @@ public abstract class DefaultFactory {
 		
 		collectProvisioningClasses(pkg, clss, classMap);
 
-		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0) {
-			for (ClassRef cref : clss.getSuperClass()) {
+		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0) {
+			for (ClassRef cref : clss.getSuperClasses()) {
 		        Class superClass = this.context.findClass(cref);
 				String qualifiedName = cref.getUri() + "#" + cref.getName(); 				
 				classMap.put(qualifiedName, superClass);
@@ -188,8 +188,8 @@ public abstract class DefaultFactory {
 	@Deprecated
 	protected void collectProvisioningSuperclasses(Package pkg, Class clss, Map<String, Class> classMap) {
 		
-		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0) {
-			for (ClassRef cref : clss.getSuperClass()) {
+		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0) {
+			for (ClassRef cref : clss.getSuperClasses()) {
 				Class superClass = this.context.findClass(cref);
 				classMap.put(superClass.getUri() + "#" + superClass.getName(), superClass);				
 		        Package superClassPackage = this.context.findPackage(cref);
@@ -202,13 +202,13 @@ public abstract class DefaultFactory {
 	//FIXME: move to provisioning tool/helper/whatever
 	@Deprecated
 	protected void collectProvisioningFields(Package targetPkg, Class targetClss, Package pkg, Class clss, Map<String, FieldAdapter> fields) {
-		if (clss.getSuperClass() != null)
-		    for (ClassRef cref : clss.getSuperClass()) {
+		if (clss.getSuperClasses() != null)
+		    for (ClassRef cref : clss.getSuperClasses()) {
 			   Class sclss = this.context.findClass(cref);
 			   Package spkg = this.context.findPackage(cref);
 			   collectProvisioningFields(targetPkg, targetClss, spkg, sclss, fields);
 		    }
-        for (Property field : clss.getProperty()) {
+        for (Property field : clss.getProperties()) {
         	FieldAdapter existing = fields.get(field.getName());
         	if (existing != null) {
         		if (existing.getFieldClass().getName().equals(clss.getName()) &&
@@ -366,8 +366,8 @@ public abstract class DefaultFactory {
 	}
 	
 	protected boolean hasOnlySingilarFields(Class clss) {
-		if (clss.getProperty() != null)
-		for (Property field : clss.getProperty())
+		if (clss.getProperties() != null)
+		for (Property field : clss.getProperties())
 			if (field.isMany())
 				return false;
 			
@@ -378,8 +378,8 @@ public abstract class DefaultFactory {
 		if (!hasOnlySingilarFields(clss))
 			return false;
 			
-		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0)
-			for (ClassRef cref : clss.getSuperClass()) {
+		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0)
+			for (ClassRef cref : clss.getSuperClasses()) {
 		        Class superClass = this.context.findClass(cref);
 		        return hasOnlySingilarFieldsDeep(superClass);
 			}
@@ -393,7 +393,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b> property.");	
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 			buf.appendln(1, " * <p></p>");
 			buf.appendln(1, " * <b>Property Definition: </b>");
@@ -421,7 +421,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b> property to the given value.");	
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 			buf.appendln(1, " * <p></p>");
 			buf.appendln(1, " * <b>Property Definition: </b>");
@@ -512,7 +512,7 @@ public abstract class DefaultFactory {
 		buf.append("The property will no longer be");
 		buf.appendln(1, " * considered set.");		
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 	    	addPropertyModelDocLinks(clss, field, 
 	    		typeClassName, buf);
@@ -561,7 +561,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b> property is set.");	
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 	    	addPropertyModelDocLinks(clss, field, 
 		    		typeClassName, buf);
@@ -590,7 +590,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b>.");	
 		
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 	    	addPropertyModelDocLinks(clss, field, 
 		    		typeClassName, buf);
@@ -624,7 +624,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b>.");	
 		
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 	    	addPropertyModelDocLinks(clss, field, 
 		    		typeClassName, buf);
@@ -659,7 +659,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b>.");	
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 			buf.appendln(1, " * <p></p>");
 			buf.appendln(1, " * <b>Property Definition: </b>");
@@ -692,7 +692,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b> based on the given index.");	
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 	    	addPropertyModelDocLinks(clss, field, 
 		    		typeClassName, buf);
@@ -725,7 +725,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b>.");	
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 	    	addPropertyModelDocLinks(clss, field, 
 		    		typeClassName, buf);
@@ -753,7 +753,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b>.");	
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 			buf.appendln(1, " * <p></p>");
 			buf.appendln(1, " * <b>Property Definition: </b>");
@@ -782,7 +782,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b>.");	
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 	    	addPropertyModelDocLinks(clss, field, 
 		    		typeClassName, buf);
@@ -810,7 +810,7 @@ public abstract class DefaultFactory {
 		buf.append(field.getName());
 		buf.append("</b>.");	
 	    
-		String definition = this.getWrappedDocmentations(field.getDocumentation(), 1);
+		String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
 	    if (definition != null && definition.length() > 0) {
 	    	addPropertyModelDocLinks(clss, field, 
 		    		typeClassName, buf);
@@ -845,7 +845,7 @@ public abstract class DefaultFactory {
 			Map<String, String> nameMap, ClassNameResolver resolver,
 			boolean collectAbstractClasses, int maxLevel) {
 		
-		for (Property field : clss.getProperty())
+		for (Property field : clss.getProperties())
 		{
 			TypeRef type = field.getType();
 			if (type instanceof DataTypeRef)
@@ -873,7 +873,7 @@ public abstract class DefaultFactory {
 			Map<String, String> nameMap, ClassNameResolver resolver,
 			boolean collectAbstractClasses, int maxLevel) {
 		
-		for (Property field : clss.getProperty())
+		for (Property field : clss.getProperties())
 		{
 			TypeRef type = field.getType();
 			if (type instanceof ClassRef)			    
@@ -905,8 +905,8 @@ public abstract class DefaultFactory {
 			Map<String, String> nameMap, ClassNameResolver resolver,
 			boolean collectAbstractClasses, int maxLevel) {
 		
-		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0) {
-			for (ClassRef cref : clss.getSuperClass()) {
+		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0) {
+			for (ClassRef cref : clss.getSuperClasses()) {
 		        Class superClass = this.context.findClass(cref);
 		        if (superClass.isAbstract() && !collectAbstractClasses)
 		        	continue;
@@ -933,8 +933,8 @@ public abstract class DefaultFactory {
 		
 		collectReferenceClassNames(pkg, clss, nameMap, resolver);
 
-		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0) {
-			for (ClassRef cref : clss.getSuperClass()) {
+		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0) {
+			for (ClassRef cref : clss.getSuperClasses()) {
 		        Class superClass = this.context.findClass(cref);
 		        if (superClass.isAbstract() && !collectAbstractClasses)
 		        	continue;
@@ -959,8 +959,8 @@ public abstract class DefaultFactory {
 		
 		collectDataClassNames(pkg, clss, nameMap, resolver);
 
-		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0) {
-			for (ClassRef cref : clss.getSuperClass()) {
+		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0) {
+			for (ClassRef cref : clss.getSuperClasses()) {
 		        Class superClass = this.context.findClass(cref);
 		        if (superClass.isAbstract() && !collectAbstractClasses)
 		        	continue;
@@ -983,8 +983,8 @@ public abstract class DefaultFactory {
 	protected void collectSuperclassNames(Package pkg, Class clss, 
 			Map<String, String> nameMap, ClassNameResolver resolver) {
 		
-		if (clss.getSuperClass() != null && clss.getSuperClass().size() > 0) {
-			for (ClassRef cref : clss.getSuperClass()) {
+		if (clss.getSuperClasses() != null && clss.getSuperClasses().size() > 0) {
+			for (ClassRef cref : clss.getSuperClasses()) {
 				String qualifiedName = resolver.getQualifiedName(cref); 				
 		        Class superClass = this.context.findClass(cref);
 				nameMap.put(qualifiedName, qualifiedName);

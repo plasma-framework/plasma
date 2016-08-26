@@ -15,10 +15,17 @@
          <xjc:simple />
     </jxb:globalBindings>
  
-	<jxb:bindings schemaLocation="profile-config.xsd" node="/xsd:schema">
+	<jxb:bindings schemaLocation="metamodel.xsd" node="/xsd:schema">
 	    <jxb:schemaBindings>
-	        <jxb:package name="org.plasma.profile">
-	            <jxb:javadoc><![CDATA[<body>Package level documentation for package org.plasma.profile.</body>]]></jxb:javadoc>
+	        <jxb:package name="org.plasma.metamodel">
+	            <jxb:javadoc><![CDATA[<body>Package level documentation for package org.plasma.metamodel.</body>]]></jxb:javadoc>
+            </jxb:package>
+	    </jxb:schemaBindings>
+	</jxb:bindings>
+	<jxb:bindings schemaLocation="ddl.xsd" node="/xsd:schema">
+	    <jxb:schemaBindings>
+	        <jxb:package name="org.plasma.text.ddl">
+	            <jxb:javadoc><![CDATA[<body>Package level documentation for package org.plasma.text.ddl.</body>]]></jxb:javadoc>
             </jxb:package>
 	    </jxb:schemaBindings>
 	</jxb:bindings>

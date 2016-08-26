@@ -67,7 +67,7 @@ public class ProfileConfig {
 	        
             config = unmarshalConfig(this.configFileName, configBinding);  
             
-            for (ProfileArtifact artifact : config.getArtifact()) {
+            for (ProfileArtifact artifact : config.getArtifacts()) {
             	artifactURNMap.put(artifact.getUrn(), new ProfileArtifactAdapter(artifact));   
             	artifactURIMap.put(artifact.getNamespaceUri(), new ProfileArtifactAdapter(artifact));
             }           
@@ -112,8 +112,7 @@ public class ProfileConfig {
 	                    + configFileName 
 	                    + "' on the current classpath");        
 	        
-    		javax.xml.bind.JAXBElement<?> element = (javax.xml.bind.JAXBElement<?>)binding.validate(stream);
-	        ProfileConfiguration result = (ProfileConfiguration)element.getValue();
+	        ProfileConfiguration result = (ProfileConfiguration)binding.validate(stream);
 
             URL url = ProfileConfig.class.getResource(configFileName);
             if (url == null)

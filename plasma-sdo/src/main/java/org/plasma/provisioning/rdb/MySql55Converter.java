@@ -104,8 +104,8 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
     	
     	// process referential constraints
     	for (Class clss : this.classQualifiedNameMap.values()) {
-    		Property[] props = new Property[clss.getProperty().size()];
-    		clss.getProperty().toArray(props);
+    		Property[] props = new Property[clss.getProperties().size()];
+    		clss.getProperties().toArray(props);
     		for (Property prop : props) {
     			ConstraintInfo[] infos = this.constraintMap.get(prop);
     			if (infos == null)
@@ -146,7 +146,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 				        
 				        // create derived opposite
 				        Property derived = createDerivedPropertyOpposite(clss, prop);
-				        targetClass.getProperty().add(derived);
+				        targetClass.getProperties().add(derived);
 				        
 						break; 
 					default:
@@ -161,7 +161,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 	
 	private int countPropertiesByLogicalNamePrefix(Class clss, String namePrefix) {
 		int result = 0;
-		for (Property prop : clss.getProperty())
+		for (Property prop : clss.getProperties())
 			if (prop.getName().endsWith(namePrefix))
 				result++;
 		return result;
@@ -178,7 +178,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
         documentation.setBody(docBody);
         docBody.setValue("private derived opposite for, "
         	+ clss.getUri() + "#" + clss.getName() + "." + sourceProperty.getName());
-		derived.getDocumentation().add(documentation);
+		derived.getDocumentations().add(documentation);
         derived.setVisibility(VisibilityType.PRIVATE); 
         
         derived.setNullable(true);
@@ -211,7 +211,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 			    }
 			
 			Class clss = buildClass(pkg, table);
-			pkg.getClazz().add(clss);
+			pkg.getClazzs().add(clss);
 			String key = pkg.getUri() + "#" + clss.getName();
 			this.classQualifiedNameMap.put(key, clss);
 			
@@ -220,7 +220,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 				ConstraintInfo[] constraints = findConstraints(column, table);
 				Property prop = buildProperty(pkg, clss, column, 
 					constraints);
-				clss.getProperty().add(prop);	
+				clss.getProperties().add(prop);	
 				if ( prop.getAlias() != null && prop.getAlias().getPhysicalName() != null)
 				    this.classQualifiedPropertyPhysicalNameMap.put(
 					    clss.getAlias().getPhysicalName() + "." + prop.getAlias().getPhysicalName(), 
@@ -240,7 +240,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
     		Alias alias = new Alias();
         	alias.setPhysicalName(schema);
         	pkg.setAlias(alias);
-        	this.model.getPackage().add(pkg);
+        	this.model.getPackages().add(pkg);
 	    }
 	    else
 	    	pkg = this.model;
@@ -363,7 +363,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 			Body body = new Body();
 			body.setValue(filter(table.getTableComment()));
 			documentation.setBody(body);
-			clss.getDocumentation().add(documentation);
+			clss.getDocumentations().add(documentation);
 		}
     	
 		String tableTypeStr = table.getTableType().replace(' ', '_');
@@ -380,7 +380,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 	        		String definition = filter(view.getViewDefinition());
 	        		create.setValue("CREATE OR REPLACE VIEW " + pkg.getAlias().getPhysicalName() 
 		    				+ "." + clss.getAlias().getPhysicalName() + " AS " + definition);
-	        		clss.getBehavior().add(create);
+	        		clss.getBehaviors().add(create);
 	        	}
 	        	
 	    		Behavior drop = new Behavior();
@@ -389,7 +389,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 	    		drop.setName(BehaviorType.DROP.name().toLowerCase());
 	    		drop.setValue("DROP VIEW " + pkg.getAlias().getPhysicalName() 
 	    				+ "." + clss.getAlias().getPhysicalName() + ";");
-	    		clss.getBehavior().add(drop);   
+	    		clss.getBehaviors().add(drop);   
     		}
     		else
     			log.warn("no view definition found for '" + table.getTableName() + "'");
@@ -438,7 +438,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 				if (literals != null) {
 					Enumeration enm = buildEnumeration(pkg, clss, property,
 				    	literals);
-					pkg.getEnumeration().add(enm);
+					pkg.getEnumerations().add(enm);
 					this.enumQualifiedNameMap.put(enm.getUri() + "#" + enm.getName(), enm);
 					EnumerationRef enumRef = new EnumerationRef();
 					enumRef.setName(enm.getName());
@@ -505,7 +505,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 			Body body = new Body();
 			body.setValue(filter(column.getColumnComment()));
 			documentation.setBody(body);
-			property.getDocumentation().add(documentation);
+			property.getDocumentations().add(documentation);
 		}
         
         return property;
@@ -542,11 +542,11 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
 			+ " property " + clss.getName() + "." + property.getName() 
 			+ ".");
 		documentation.setBody(body); 
-		enm.getDocumentation().add(documentation);
+		enm.getDocumentations().add(documentation);
 		
 		for (String literalStr : literals) {
 			EnumerationLiteral literal = new EnumerationLiteral();
-			enm.getEnumerationLiteral().add(literal);
+			enm.getEnumerationLiterals().add(literal);
 			literal.setName(NameUtils.toCamelCase(literalStr));
 			literal.setValue(NameUtils.toCamelCase(literalStr));
     		literal.setId(UUID.randomUUID().toString());
@@ -559,7 +559,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
     
     private int countExistingEnumsByName(Package pkg, String name) {
     	int i = 0;
-    	for (Enumeration enm : pkg.getEnumeration()) {
+    	for (Enumeration enm : pkg.getEnumerations()) {
     		if (enm.getName().startsWith(name))
     		  i++;
     	}

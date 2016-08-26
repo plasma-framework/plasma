@@ -96,7 +96,7 @@ public class PropertyAssembler extends AbstractAssembler {
         Documentation documentation = createDocumentation(
             	DocumentationType.DEFINITION,
             	getDocumentationContent(element));
-		property.getDocumentation().add(documentation);
+		property.getDocumentations().add(documentation);
 
         property.setVisibility(VisibilityType.PUBLIC); 
         
@@ -279,7 +279,7 @@ public class PropertyAssembler extends AbstractAssembler {
 		Body body = new Body();
 		body.setValue(getDocumentationContent(attribute));
 		documentation.setBody(body);
-		property.getDocumentation().add(documentation);
+		property.getDocumentations().add(documentation);
 
         property.setVisibility(VisibilityType.PUBLIC); // FIXME
         
@@ -354,7 +354,7 @@ public class PropertyAssembler extends AbstractAssembler {
 		body.setValue("A synthetic property to accommodate simple type, "
 				+ xsdTypeNameQName.toString());
 		documentation.setBody(body);
-		property.getDocumentation().add(documentation);
+		property.getDocumentations().add(documentation);
 
         property.setVisibility(VisibilityType.PUBLIC); // FIXME
         
@@ -381,7 +381,7 @@ public class PropertyAssembler extends AbstractAssembler {
         	DocumentationType.DEFINITION,
         	"private derived opposite for, "
         		+ clss.getUri() + "#" + clss.getName() + "." + sourceProperty.getName());
-		targetProperty.getDocumentation().add(documentation);
+		targetProperty.getDocumentations().add(documentation);
         targetProperty.setVisibility(VisibilityType.PRIVATE); 
         
         targetProperty.setNullable(true);

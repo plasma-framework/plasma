@@ -39,7 +39,7 @@ public abstract class DefaultDDLFactory {
 		buf.append(table.getName());
 		buf.append(" ( ");
 		int i = 0;
-		for (Column column : table.getColumn()) {
+		for (Column column : table.getColumns()) {
 			if (i > 0)
 				buf.append(", ");
 			buf.append(column.getName());
@@ -52,7 +52,7 @@ public abstract class DefaultDDLFactory {
 		if (table.getPk() != null) {
 			buf.append(", PRIMARY KEY (");
 			i = 0;
-			for (On on : table.getPk().getOn()) {
+			for (On on : table.getPk().getOns()) {
 				if (i > 0)
 					buf.append(", ");
 				buf.append(on.getColumn());
@@ -66,7 +66,7 @@ public abstract class DefaultDDLFactory {
 	
 	protected boolean isPk(Table table, Column column) {
 		if (table.getPk() != null) {
-			for (On on : table.getPk().getOn()) {
+			for (On on : table.getPk().getOns()) {
 				if (on.getColumn().equals(column.getName()))
 					return true;
 			}
@@ -75,8 +75,8 @@ public abstract class DefaultDDLFactory {
 	}
 	
 	protected boolean isFk(Table table, Column column) {
-		if (table.getFk() != null) {
-			for (Fk fk : table.getFk()) {				 
+		if (table.getFks() != null) {
+			for (Fk fk : table.getFks()) {				 
 				if (fk.getColumn().equals(column.getName()))
 					return true;
 			}
@@ -223,7 +223,7 @@ public abstract class DefaultDDLFactory {
 		buf.append(check.getColumn());
 		buf.append(" IN ( ");
 		int i = 0;
-		for (String value : check.getValue()) {
+		for (String value : check.getValues()) {
 			if (i > 0)
 				buf.append(", ");
 			buf.append("'");
@@ -276,7 +276,7 @@ public abstract class DefaultDDLFactory {
 		buf.append(unique.getName());
 		buf.append(" UNIQUE ( ");
 		int i = 0;
-		for (On on : unique.getOn()) {
+		for (On on : unique.getOns()) {
 			if (i > 0)
 				buf.append(", ");
 			buf.append(on.getColumn());
@@ -333,7 +333,7 @@ public abstract class DefaultDDLFactory {
 		buf.append(toTable.getName());
 		buf.append(" ( ");
 		int i = 0;
-		for (On on : toTable.getPk().getOn()) {
+		for (On on : toTable.getPk().getOns()) {
 			if (i > 0)
 				buf.append(", ");
 			buf.append(on.getColumn());
@@ -373,7 +373,7 @@ public abstract class DefaultDDLFactory {
 	}
 	
 	protected Column getColumn(Table table, String name) {
-		for (Column col : table.getColumn()) {
+		for (Column col : table.getColumns()) {
 			if (col.getName().equals(name))
 				return col;
 		}

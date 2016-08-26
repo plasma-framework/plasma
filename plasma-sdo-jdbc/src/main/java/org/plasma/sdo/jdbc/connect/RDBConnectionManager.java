@@ -187,7 +187,7 @@ public class RDBConnectionManager {
 	private RDBConnectionManager() {
 	    
 		Map<String, String> props = new HashMap<String, String>();
-	    for (Property property : PlasmaConfig.getInstance().getDataAccessProvider(DataAccessProviderName.JDBC).getProperty())
+	    for (Property property : PlasmaConfig.getInstance().getDataAccessProvider(DataAccessProviderName.JDBC).getProperties())
 	    	props.put(property.getName(), property.getValue());
 
 	    String driverName = props.get("org.plasma.sdo.access.provider.jdbc.ConnectionDriverName");

@@ -62,7 +62,7 @@ public class SDOAssembler extends DefaultStreamAssembler {
                         + dir.getAbsolutePath() + "' could not be created");  
     			log.debug("created package: " + dir.getAbsolutePath());
 			}
-    		for (Enumeration enumeration : pkg.getEnumeration()) {
+    		for (Enumeration enumeration : pkg.getEnumerations()) {
                 File file = new File(dir, factory.getEnumerationFactory().createFileName(enumeration));
     			log.debug("creating file: " + file.getAbsolutePath());
     			FileOutputStream stream = new FileOutputStream(file);
@@ -91,7 +91,7 @@ public class SDOAssembler extends DefaultStreamAssembler {
                         + dir.getAbsolutePath() + "' could not be created");  
     			log.debug("created package: " + dir.getAbsolutePath());
 			}
-    		for (Class clss : pkg.getClazz()) {
+    		for (Class clss : pkg.getClazzs()) {
                 File file = new File(dir, interfaceFactory.createFileName(clss, pkg));
     			log.debug("creating file: " + file.getAbsolutePath());
     			FileOutputStream stream = new FileOutputStream(file);
@@ -119,7 +119,7 @@ public class SDOAssembler extends DefaultStreamAssembler {
                         + dir.getAbsolutePath() + "' could not be created");  
     			log.debug("created package: " + dir.getAbsolutePath());
 			}
-    		for (Class clss : pkg.getClazz()) {
+    		for (Class clss : pkg.getClazzs()) {
                 File file = new File(dir, classFactory.createFileName(clss, pkg));
     			log.debug("creating file: " + file.getAbsolutePath());
     			FileOutputStream stream = new FileOutputStream(file);
@@ -152,8 +152,8 @@ public class SDOAssembler extends DefaultStreamAssembler {
 			StringBuilder buf = new StringBuilder();
 			buf.append("<html><head></head>");
 			buf.append("<body>");
-			if (pkg.getDocumentation() != null)
-			for (Documentation doc : pkg.getDocumentation()) {
+			if (pkg.getDocumentations() != null)
+			for (Documentation doc : pkg.getDocumentations()) {
 				buf.append(doc.getBody().getValue());
 			}
 			buf.append("</body>");

@@ -4,17 +4,10 @@
                xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
                xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <jxb:globalBindings
-         fixedAttributeAsConstantProperty="false"
-         collectionType="java.util.ArrayList"
-         choiceContentProperty="true"
-         typesafeEnumMemberName="generateError"
-         enableFailFastCheck="false"   
-         generateIsSetMethod="false"
-         underscoreBinding="asCharInWord">
+    <jxb:globalBindings>
          <xjc:simple />
     </jxb:globalBindings>
- 
+
 	<jxb:bindings schemaLocation="plasma-config.xsd" node="/xsd:schema">
 	    <jxb:schemaBindings>
 	        <jxb:package name="org.plasma.config">
@@ -22,4 +15,14 @@
             </jxb:package>
 	    </jxb:schemaBindings>
 	</jxb:bindings>
+	
+	
+	<jxb:bindings schemaLocation="profile-config.xsd" node="/xsd:schema">
+	    <jxb:schemaBindings>
+	        <jxb:package name="org.plasma.profile">
+	            <jxb:javadoc><![CDATA[<body>Package level documentation for package org.plasma.profile.</body>]]></jxb:javadoc>
+            </jxb:package>
+	    </jxb:schemaBindings>
+	</jxb:bindings>
+	
 </jxb:bindings>

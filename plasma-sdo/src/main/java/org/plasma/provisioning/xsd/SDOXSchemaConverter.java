@@ -155,7 +155,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
             	if (annot instanceof Attribute) {
             		Attribute attribute = (Attribute)annot;
             		Property property = buildDatatypeProperty(complexType, attribute);
-            		cls.getProperty().add(property);
+            		cls.getProperties().add(property);
             	}
             	else
             		throw new IllegalStateException("unexpected ComplexType child class, " 
@@ -178,7 +178,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
 	            		if (element.getValue() instanceof LocalElement) {
 	            		    LocalElement localElement = (LocalElement)element.getValue();
 	            		    Property property = buildProperty(complexType, localElement, i);
-	            		    cls.getProperty().add(property);
+	            		    cls.getProperties().add(property);
 	            		}
 	                	else
 	                		throw new IllegalStateException("unexpected JAXBElement value class, " 
@@ -193,8 +193,8 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
         // add derived target properties
         for (Class cls : this.classQualifiedNameMap.values())
         {
-        	Property[] props = new Property[cls.getProperty().size()];
-        	cls.getProperty().toArray(props); // avoid concurrent mods for recursive relationships
+        	Property[] props = new Property[cls.getProperties().size()];
+        	cls.getProperties().toArray(props); // avoid concurrent mods for recursive relationships
         	for (Property prop : props) {
         		if (prop.getType() instanceof DataTypeRef) 
         			continue;
@@ -206,8 +206,8 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
         			throw new IllegalStateException("no class definition found for qualified name '"
         					+ qualifiedName + "'");
         		Property targetProperty = null;
-        		Property[] pdefs2 = new Property[targetClass.getProperty().size()];
-        		targetClass.getProperty().toArray(pdefs2);
+        		Property[] pdefs2 = new Property[targetClass.getProperties().size()];
+        		targetClass.getProperties().toArray(pdefs2);
         		for (Property pdef2 : pdefs2) {
         			if (pdef2.getName().equals(prop.getOpposite())) {
         				targetProperty = pdef2;
@@ -217,7 +217,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
         		if (targetProperty == null) {
         			if (prop.getOpposite() != null) {
         			    targetProperty = createDerivedPropertyOpposite(cls, prop);
-        			    targetClass.getProperty().add(targetProperty);
+        			    targetClass.getProperties().add(targetProperty);
         			}
         		}
         	}
@@ -225,7 +225,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
         
         for (SimpleType simpleType : this.simpleTypeMap.values()) {
         	Enumeration enm = this.enumerationAssembler.buildEnumeration(simpleType);
-        	model.getEnumeration().add(enm);        
+        	model.getEnumerations().add(enm);        
         }
 
         return model;
@@ -234,7 +234,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
     private Class buildClass(Package pkg, ComplexType complexType)
     {
     	Class clss = new Class();
-    	pkg.getClazz().add(clss);
+    	pkg.getClazzs().add(clss);
         clss.setId(UUID.randomUUID().toString());
         clss.setUri(this.destNamespaceURI); // FIXME - what if we collect multiple URI's in the query
         Alias alias = new Alias();
@@ -250,7 +250,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
 		Documentation documentation = createDocumentation(
             	DocumentationType.DEFINITION,
             	getDocumentationContent(complexType));
-		clss.getDocumentation().add(documentation);
+		clss.getDocumentations().add(documentation);
 		
 		if (complexType.getComplexContent() != null) { // has a base type
 			ExtensionType baseType = complexType.getComplexContent().getExtension(); 
@@ -260,7 +260,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
 				ClassRef baseRef = new ClassRef();
 				baseRef.setName(base.getLocalPart());
 				baseRef.setUri(this.destNamespaceURI);
-				clss.getSuperClass().add(baseRef);
+				clss.getSuperClasses().add(baseRef);
     	    }
 		}
     	
@@ -287,7 +287,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
         Documentation documentation = createDocumentation(
             	DocumentationType.DEFINITION,
             	getDocumentationContent(element));
-		property.getDocumentation().add(documentation);
+		property.getDocumentations().add(documentation);
 
         property.setVisibility(VisibilityType.PUBLIC); 
         
@@ -394,7 +394,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
         	DocumentationType.DEFINITION,
         	"private derived opposite for, "
         		+ clss.getUri() + "#" + clss.getName() + "." + sourceProperty.getName());
-		targetProperty.getDocumentation().add(documentation);
+		targetProperty.getDocumentations().add(documentation);
         targetProperty.setVisibility(VisibilityType.PRIVATE); 
         
         targetProperty.setNullable(true);
@@ -447,7 +447,7 @@ public class SDOXSchemaConverter extends ConverterSupport implements SchemaConve
 		Body body = new Body();
 		body.setValue(getDocumentationContent(attribute));
 		documentation.setBody(body);
-		property.getDocumentation().add(documentation);
+		property.getDocumentations().add(documentation);
 
         property.setVisibility(VisibilityType.PUBLIC); // FIXME
         

@@ -66,7 +66,7 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 		buf.append(LINE_SEP);
 		buf.append(this.createOperations(pkg, enm));
 		
-		for (EnumerationLiteral lit : enm.getEnumerationLiteral()) {
+		for (EnumerationLiteral lit : enm.getEnumerationLiterals()) {
 			buf.append(LINE_SEP);
 			buf.append(this.createOperations(pkg, enm, lit));
 		}		
@@ -98,7 +98,7 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 		// add formatted doc from UML if exists		
 		// always put model definition first so it appears
 		// on package summary line for class
-		String docs = getWrappedDocmentations(enm.getDocumentation(), 0);
+		String docs = getWrappedDocmentations(enm.getDocumentations(), 0);
 		if (docs.trim().length() > 0) {
 		    buf.append(docs);	
 		    // if we have model docs, set up the next section w/a "header"
@@ -256,8 +256,8 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 	
 	protected String createStaticFieldDeclarations(Enumeration enumeration) {
 		TextBuilder buf = new TextBuilder(LINE_SEP, this.context.getIndentationToken());
-		for (int i = 0; i < enumeration.getEnumerationLiteral().size(); i++) {
-			EnumerationLiteral literal = enumeration.getEnumerationLiteral().get(i);
+		for (int i = 0; i < enumeration.getEnumerationLiterals().size(); i++) {
+			EnumerationLiteral literal = enumeration.getEnumerationLiterals().get(i);
 			if (i > 0)
     			buf.append(",");    					
 			buf.appendln(1, createEnumerationLiteralDeclarationJavadoc(enumeration, literal));
@@ -273,8 +273,8 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 			    buf.append("(null");
 			}
 			buf.append(",\"");
-			if (literal.getDocumentation() != null && literal.getDocumentation().size() > 0) {
-				String body = literal.getDocumentation().get(0).getBody().getValue();			    
+			if (literal.getDocumentations() != null && literal.getDocumentations().size() > 0) {
+				String body = literal.getDocumentations().get(0).getBody().getValue();			    
 				body = replaceQuot(body);
 				body = body.replace('\n', ' ');
 				buf.append(body);
@@ -294,7 +294,7 @@ public class SDOEnumerationFactory extends SDODefaultFactory
 		// add formatted doc from UML if exists		
 		// always put model definition first so it appears
 		// on package summary line for class
-		String docs = getWrappedDocmentations(literal.getDocumentation(), 1);
+		String docs = getWrappedDocmentations(literal.getDocumentations(), 1);
 		if (docs.trim().length() > 0) {
 		    buf.append(docs);	
 		    buf.appendln(1, " * <p></p>");

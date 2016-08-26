@@ -28,7 +28,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -197,7 +199,7 @@ public class UMLTool extends ProvisioningTool implements RDBConstants {
     	if (log.isDebugEnabled()) {
     		MetamodelDataBinding provBinding = new MetamodelDataBinding(
         			new DefaultValidationEventHandler());
-        	String xml = provBinding.marshal(model);
+         	String xml = provBinding.marshal(model);
     		File outFile = new File(dest.getParentFile(), "technical-model.xml");
     		OutputStream stream = new FileOutputStream(outFile);
     		stream.write(xml.getBytes());

@@ -32,9 +32,11 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventLocator;
+import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
 import org.apache.commons.logging.Log;
@@ -201,7 +203,7 @@ public class PlasmaQueryHelper {
         		   targetNamespaceURI, supplierUri);
        }
        
-       List<Class> entities = stagingAssembler.getModel().getClazz();
+       List<Class> entities = stagingAssembler.getModel().getClazzs();
 	   List<Type> result = new ArrayList<Type>(entities.size());
        for (Class cls : entities) {
     	   result.add(PlasmaTypeHelper.INSTANCE.getType(

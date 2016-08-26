@@ -124,7 +124,7 @@ public class ModelAdapter implements ProvisioningModel {
 	
 	private void findPackages(Package parent, List<Package> packages) {
 		packages.add(parent);
-    	for (Package childPkg : parent.getPackage()) {
+    	for (Package childPkg : parent.getPackages()) {
     		findPackages(childPkg, packages);
     	}
 	}
@@ -136,7 +136,7 @@ public class ModelAdapter implements ProvisioningModel {
 		findPackages(this.model, this.allPackages);
 		
     	for (Package pkg : this.allPackages)
-    		if (pkg.getPackage().size() == 0)
+    		if (pkg.getPackages().size() == 0)
     			this.leafPackages.add(pkg);		
 		
     	for (Package pkg : this.allPackages)
@@ -155,7 +155,7 @@ public class ModelAdapter implements ProvisioningModel {
     	
     	for (TypeAdapter adapter : typeMap.values()) {
     		if (adapter.getType() instanceof Class) { 
-    	    	for (ClassRef baseClassRef : ((Class)adapter.getType()).getSuperClass()) {
+    	    	for (ClassRef baseClassRef : ((Class)adapter.getType()).getSuperClasses()) {
     	    		String key = baseClassRef.getUri() + "#" + baseClassRef.getName();
     	    		TypeAdapter baseAdapter = typeMap.get(key);
     	    		if (baseAdapter == null)
@@ -172,7 +172,7 @@ public class ModelAdapter implements ProvisioningModel {
     private void mapEnumerations(Package pkg) {
 		if (log.isDebugEnabled())
 			log.debug("mapping enumerations for package " + pkg.getUri() + " (" + pkg.getName() + ")" );
-    	for (Enumeration enm : pkg.getEnumeration()) {
+    	for (Enumeration enm : pkg.getEnumerations()) {
     		String key = enm.getUri() + "#" + enm.getName();
     		if (log.isDebugEnabled())
     			log.debug("mapping enumeration: " + key);
@@ -187,7 +187,7 @@ public class ModelAdapter implements ProvisioningModel {
     }   
     
     private void mapClasses(Package pkg) {
-		for (Class cls : pkg.getClazz()) {
+		for (Class cls : pkg.getClazzs()) {
 			String key = cls.getUri() + "#" + cls.getName();
 			if (log.isDebugEnabled())
 				log.debug("mapping class: " + key);
@@ -206,7 +206,7 @@ public class ModelAdapter implements ProvisioningModel {
 
     private void construct(TypeAdapter adapter, TypeAdapter source)
     {    	
-    	for (Property prop: ((Class)adapter.getType()).getProperty()) {
+    	for (Property prop: ((Class)adapter.getType()).getProperties()) {
 		    if (adapter.getDeclaredProperty(prop.getName()) != null)
 		    	throw new PropertyNameCollisionException(
 	    			"detected multiple properties with the same logical name '"
@@ -244,7 +244,7 @@ public class ModelAdapter implements ProvisioningModel {
     private void constructDeep(TypeAdapter adapter, TypeAdapter baseAdapter)
     {
     	// copy base properties into subclass
-    	for (Property prop: ((Class)baseAdapter.getType()).getProperty()) {
+    	for (Property prop: ((Class)baseAdapter.getType()).getProperties()) {
 		    if (adapter.getProperty(prop.getName()) != null)
 		    	throw new PropertyNameCollisionException(
 	    			"detected multiple properties with the same logical name '"
@@ -267,7 +267,7 @@ public class ModelAdapter implements ProvisioningModel {
 		    }
 		}
 
-    	for (ClassRef baseClassRef : ((Class)baseAdapter.getType()).getSuperClass()) {
+    	for (ClassRef baseClassRef : ((Class)baseAdapter.getType()).getSuperClasses()) {
     		String key2 = baseClassRef.getUri() + "#" + baseClassRef.getName();
     		TypeAdapter baseTypeAdapter = typeMap.get(key2);
     		if (baseTypeAdapter == null)
@@ -310,7 +310,7 @@ public class ModelAdapter implements ProvisioningModel {
     }    
     
     private Property findPropertyByName(Class clss, String name) {
-        for (Property prop : clss.getProperty()) {
+        for (Property prop : clss.getProperties()) {
         	if (name.equals(prop.getName()))
         		return prop;
         }

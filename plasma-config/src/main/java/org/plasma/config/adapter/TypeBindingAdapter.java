@@ -43,7 +43,7 @@ public class TypeBindingAdapter {
 		super();
 		this.namespace = namespace;
 		this.binding = binding;
-        for (PropertyBinding propertyBinding : binding.getPropertyBinding()) {
+        for (PropertyBinding propertyBinding : binding.getPropertyBindings()) {
         	addPropertyBinding(propertyBinding);
         }
 	}
@@ -56,7 +56,7 @@ public class TypeBindingAdapter {
 		return binding.getLogicalName();
 	}
 	public List<PropertyBinding> getPropertyBindings() {
-		return binding.getPropertyBinding();
+		return binding.getPropertyBindings();
 	}
 	public String getPhysicalName() {
 		return binding.getPhysicalName();

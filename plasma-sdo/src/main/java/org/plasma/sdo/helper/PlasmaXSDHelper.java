@@ -34,9 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventLocator;
+import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
 import org.apache.commons.logging.Log;
@@ -203,7 +205,7 @@ public class PlasmaXSDHelper implements XSDHelper {
            PlasmaConfig.getInstance().addDynamicSDONamespace(
         		   schema.getTargetNamespace(), null);
        
-       List<Class> entities = stagingAssembler.getModel().getClazz();
+       List<Class> entities = stagingAssembler.getModel().getClazzs();
 	   List<Type> result = new ArrayList<Type>(entities.size());
        for (Class cls : entities) {
     	   result.add(PlasmaTypeHelper.INSTANCE.getType(

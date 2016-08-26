@@ -115,8 +115,8 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     	
     	// process referential constraints
     	for (Class clss : this.classQualifiedNameMap.values()) {
-    		Property[] props = new Property[clss.getProperty().size()];
-    		clss.getProperty().toArray(props);
+    		Property[] props = new Property[clss.getProperties().size()];
+    		clss.getProperties().toArray(props);
     		for (Property prop : props) {
     			ConstraintInfo[] infos = this.constraintMap.get(prop);
     			if (infos == null)
@@ -156,7 +156,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 				        
 				        // create derived opposite
 				        Property derived = createDerivedPropertyOpposite(clss, prop);
-				        targetClass.getProperty().add(derived);
+				        targetClass.getProperties().add(derived);
 				        
 						break; 
 					default:
@@ -171,7 +171,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 	
 	private int countPropertiesByLogicalNamePrefix(Class clss, String namePrefix) {
 		int result = 0;
-		for (Property prop : clss.getProperty())
+		for (Property prop : clss.getProperties())
 			if (prop.getName().endsWith(namePrefix))
 				result++;
 		return result;
@@ -188,7 +188,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
         documentation.setBody(docBody);
         docBody.setValue("private derived opposite for, "
         	+ clss.getUri() + "#" + clss.getName() + "." + sourceProperty.getName());
-		derived.getDocumentation().add(documentation);
+		derived.getDocumentations().add(documentation);
         derived.setVisibility(VisibilityType.PRIVATE); 
         
         derived.setNullable(true);
@@ -221,7 +221,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 			    }
 			
 			Class clss = buildClass(pkg, table);
-			pkg.getClazz().add(clss);
+			pkg.getClazzs().add(clss);
 			String key = pkg.getUri() + "#" + clss.getName();
 			this.classQualifiedNameMap.put(key, clss);
 			
@@ -231,7 +231,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 				TableColumnComment[] comments = findComments(column, table);
 				Property prop = buildProperty(pkg, clss, column, 
 					constraints, comments);
-				clss.getProperty().add(prop);					
+				clss.getProperties().add(prop);					
 				this.constraintMap.put(prop, constraints);
 			}
 		}		
@@ -251,7 +251,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 			    }
 			
 			Class clss = buildClass(pkg, view);
-			pkg.getClazz().add(clss);
+			pkg.getClazzs().add(clss);
 			String key = pkg.getUri() + "#" + clss.getName();
 			this.classQualifiedNameMap.put(key, clss);
 			
@@ -260,13 +260,13 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 			behavior.setLanguage("SQL");
 			behavior.setType(BehaviorType.CREATE);
 			behavior.setValue(view.getText());
-			clss.getBehavior().add(behavior);
+			clss.getBehaviors().add(behavior);
 			
 			for (ViewColumn column : view.getViewColumn()) {
 				log.debug("\tloading column '" + column.getColumnName() + "'");
 				ViewColumnComment[] comments = findComments(column, view);
 				Property prop = buildProperty(pkg, clss, column, comments);
-				clss.getProperty().add(prop);					
+				clss.getProperties().add(prop);					
 			}
 		}		
 	}
@@ -282,7 +282,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     		Alias alias = new Alias();
         	alias.setPhysicalName(schema);
         	pkg.setAlias(alias);
-        	this.model.getPackage().add(pkg);
+        	this.model.getPackages().add(pkg);
 	    }
 	    else
 	    	pkg = this.model;
@@ -449,7 +449,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     			Body body = new Body();
     			body.setValue(filter(comment.getComments()));
     			documentation.setBody(body);
-    			clss.getDocumentation().add(documentation);
+    			clss.getDocumentations().add(documentation);
     		}
     	
     	return clss;
@@ -474,7 +474,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     			Body body = new Body();
     			body.setValue(filter(comment.getComments()));
     			documentation.setBody(body);
-    			clss.getDocumentation().add(documentation);
+    			clss.getDocumentations().add(documentation);
     		}
     	
     	// add the view creation content
@@ -484,7 +484,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     		create.setType(BehaviorType.CREATE);
     		create.setName(BehaviorType.CREATE.name().toLowerCase());
    		    create.setValue(filter(view.getText()));
-    		clss.getBehavior().add(create);
+    		clss.getBehaviors().add(create);
     	}
     	
 		Behavior drop = new Behavior();
@@ -493,7 +493,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 		drop.setName(BehaviorType.DROP.name().toLowerCase());
 		drop.setValue("DROP VIEW " + pkg.getAlias().getPhysicalName() 
 				+ "." + clss.getAlias().getPhysicalName() + ";");
-		clss.getBehavior().add(drop);
+		clss.getBehaviors().add(drop);
     	
     	
     	return clss;
@@ -562,7 +562,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 					if (literals != null) {
 						Enumeration enm = buildEnumeration(pkg, clss, property,
 					    	literals);
-						pkg.getEnumeration().add(enm);
+						pkg.getEnumerations().add(enm);
 						this.enumQualifiedNameMap.put(enm.getUri() + "#" + enm.getName(), enm);
 						EnumerationRef enumRef = new EnumerationRef();
 						enumRef.setName(enm.getName());
@@ -586,7 +586,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 			Body body = new Body();
 			body.setValue(filter(comment.getComments()));
 			documentation.setBody(body);
-			property.getDocumentation().add(documentation);
+			property.getDocumentations().add(documentation);
 		}
         
         return property;
@@ -631,7 +631,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 			Body body = new Body();
 			body.setValue(filter(comment.getComments()));
 			documentation.setBody(body);
-			property.getDocumentation().add(documentation);
+			property.getDocumentations().add(documentation);
 		}
 
 		return property;
@@ -665,11 +665,11 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
 			+ " property " + clss.getName() + "." + property.getName() 
 			+ ".");
 		documentation.setBody(body); 
-		enm.getDocumentation().add(documentation);
+		enm.getDocumentations().add(documentation);
 		
 		for (String literalStr : literals) {
 			EnumerationLiteral literal = new EnumerationLiteral();
-			enm.getEnumerationLiteral().add(literal);
+			enm.getEnumerationLiterals().add(literal);
 			literal.setName(NameUtils.toCamelCase(literalStr));
 			literal.setValue(NameUtils.toCamelCase(literalStr));
     		literal.setId(UUID.randomUUID().toString());
@@ -682,7 +682,7 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
     
     private int countExistingEnumsByName(Package pkg, String name) {
     	int i = 0;
-    	for (Enumeration enm : pkg.getEnumeration()) {
+    	for (Enumeration enm : pkg.getEnumerations()) {
     		if (enm.getName().startsWith(name))
     		  i++;
     	}

@@ -94,7 +94,7 @@ public class CassandraFactory extends DefaultDDLFactory
 		buf.append(table.getName());
 		buf.append(" ( ");
 		int i = 0;
-		for (Column column : table.getColumn()) {
+		for (Column column : table.getColumns()) {
 			if (i > 0)
 				buf.append(", ");
 			buf.append(column.getName());
@@ -105,7 +105,7 @@ public class CassandraFactory extends DefaultDDLFactory
 		if (table.getPk() != null) {
 			buf.append(", PRIMARY KEY (");
 			i = 0;
-			for (On on : table.getPk().getOn()) {
+			for (On on : table.getPk().getOns()) {
 				if (i > 0)
 					buf.append(", ");
 				buf.append(on.getColumn());

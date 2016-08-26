@@ -134,10 +134,10 @@ public class TypeAdapter {
 	public List<Documentation> getDocumentation() {
 		List<Documentation> list = null;
     	if (this.type instanceof Class) {
-    		list = ((Class)this.type).getDocumentation();
+    		list = ((Class)this.type).getDocumentations();
     	}
     	else {
-    		list = ((Enumeration)this.type).getDocumentation();
+    		list = ((Enumeration)this.type).getDocumentations();
     	}
     	if (list != null)
     	    return list;
@@ -148,10 +148,10 @@ public class TypeAdapter {
 	public String getAllDocumentation() {
 		List<Documentation> list = null;
     	if (this.type instanceof Class) {
-    		list = ((Class)this.type).getDocumentation();
+    		list = ((Class)this.type).getDocumentations();
     	}
     	else {
-    		list = ((Enumeration)this.type).getDocumentation();
+    		list = ((Enumeration)this.type).getDocumentations();
     	}
     	StringBuilder buf = new StringBuilder();
     	if (list != null)

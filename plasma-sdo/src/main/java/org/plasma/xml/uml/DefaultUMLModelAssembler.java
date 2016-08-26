@@ -29,9 +29,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventLocator;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -399,7 +401,7 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
         	Element clssElem = buildClass(clss);        	
         	elementMap.put(clss.getId(), clssElem);
         	// build properties w/o any associations
-        	for (Property property : clss.getProperty()) {
+        	for (Property property : clss.getProperties()) {
         		
         		Element ownedAttribute = buildProperty(pkg, clss, property, clssElem);
             	elementMap.put(property.getId(), ownedAttribute);        		
@@ -408,7 +410,7 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     	
     	// create associations
 	    for (Class clss : this.classMap.values()) {
-        	for (Property prop : clss.getProperty()) {
+        	for (Property prop : clss.getProperties()) {
         		
         		if (prop.getType() instanceof DataTypeRef) 
         			continue;
@@ -456,19 +458,19 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
         if (pkg.getUri() != null) {
     	    packageMap.put(pkg.getUri() + "#" + pkg.getName(), pkg);    	
         }
-        for (Package child : pkg.getPackage())	{
+        for (Package child : pkg.getPackages())	{
         	collectPackages(child);
         }
 	}
 
 	private void collectClasses(Package pkg) {
 		mapClasses(pkg);
-        for (Package child : pkg.getPackage())	
+        for (Package child : pkg.getPackages())	
         	collectClasses(child);
 	}
 	
 	private void mapClasses(Package pkg) {
-	    for (Class clss : pkg.getClazz()) {
+	    for (Class clss : pkg.getClazzs()) {
 	        classMap.put(clss.getUri() + "#" + clss.getName(), clss); 
 	        classPackageMap.put(clss, pkg);
 	    } 
@@ -476,12 +478,12 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 	
 	private void collectEnumerations(Package pkg) {
 		mapEnumerations(pkg);
-        for (Package child : pkg.getPackage())	
+        for (Package child : pkg.getPackages())	
         	collectEnumerations(child);
 	}
 	
 	private void mapEnumerations(Package pkg) {
-	    for (Enumeration enm : pkg.getEnumeration()) {
+	    for (Enumeration enm : pkg.getEnumerations()) {
 	        enumMap.put(enm.getUri() + "#" + enm.getName(), enm);    	
 	        enumPackageMap.put(enm, pkg);
 	    } 
@@ -496,8 +498,8 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     	modelElem.setAttribute(new Attribute("name", model.getName()));
     	modelElem.setAttribute(new Attribute("visibility", "public"));
     	elementMap.put(model.getId(), modelElem);
-    	if (model.getDocumentation() != null)
-    	    for (Documentation doc : model.getDocumentation()) {
+    	if (model.getDocumentations() != null)
+    	    for (Documentation doc : model.getDocumentations()) {
         		addOwnedComment(modelElem, model.getId(), 
         				doc.getBody().getValue());
     	    }
@@ -505,7 +507,7 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     	// Only a root (model) package
     	// tag the model w/a SDO namespace stereotype, else tag the 
     	// last package descendant below
-    	if (model.getPackage().size() == 0) {
+    	if (model.getPackages().size() == 0) {
 	    	Element modelStereotype = new Element(SDONamespace.class.getSimpleName(), plasmaNs);
 	    	this.xmiElem.addContent(modelStereotype);
 	    	modelStereotype.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
@@ -515,7 +517,7 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 	    	    addAlias(model.getAlias(), model.getId());
     	}
     	else {
-    		for (Package child : model.getPackage())
+    		for (Package child : model.getPackages())
     	        addPackages(child, modelElem);
     	}
     	
@@ -542,12 +544,12 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 	    	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.URI, pkg.getUri()));  
     	}
     	
-    	if (pkg.getDocumentation() != null)
-    	    for (Documentation doc : pkg.getDocumentation()) {
+    	if (pkg.getDocumentations() != null)
+    	    for (Documentation doc : pkg.getDocumentations()) {
         		addOwnedComment(pkgElem, pkg.getId(), 
         				doc.getBody().getValue());
         	}
-    	for (Package child : pkg.getPackage())
+    	for (Package child : pkg.getPackages())
     		addPackages(child, pkgElem);
 		
 	}
@@ -568,8 +570,8 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     	elementMap.put(model.getId(), modelElem);
     	// FIXME: duplicating model level docs at package
     	// descendant level
-    	if (model.getDocumentation() != null)
-    	    for (Documentation doc : model.getDocumentation()) {
+    	if (model.getDocumentations() != null)
+    	    for (Documentation doc : model.getDocumentations()) {
         		addOwnedComment(modelElem, model.getId(), 
         				doc.getBody().getValue());
     	    }
@@ -605,8 +607,8 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 	        	pkgStereotypeElem.setAttribute(new Attribute(SDONamespace.URI, this.destNamespaceURI));               	
 	        	// FIXME: no packages or package-level docs in provisioning model
 	        	// use model-level docs here
-	        	if (model.getDocumentation() != null)
-	        	    for (Documentation doc : model.getDocumentation()) {
+	        	if (model.getDocumentations() != null)
+	        	    for (Documentation doc : model.getDocumentations()) {
 	            		addOwnedComment(pkgElem, id, 
 	            				doc.getBody().getValue());
 		        	}
@@ -639,8 +641,8 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
    	    clssElem.setAttribute(new Attribute("id", clss.getId(), xmiNs));
     	clssElem.setAttribute(new Attribute("name", clss.getName()));
     	clssElem.setAttribute(new Attribute("visibility", "public"));  
-    	if (clss.getDocumentation() != null)
-    	    for (Documentation doc : clss.getDocumentation()) {
+    	if (clss.getDocumentations() != null)
+    	    for (Documentation doc : clss.getDocumentations()) {
         		addOwnedComment(clssElem, clss.getId(), 
         				doc.getBody().getValue());
     	    }
@@ -649,7 +651,7 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     		addAlias(clss.getAlias(), clss.getId());
     	}
     	
-    	for (ClassRef baseRef : clss.getSuperClass()) {
+    	for (ClassRef baseRef : clss.getSuperClasses()) {
         	Element generalizationElem = new Element("generalization");
         	generalizationElem.setAttribute(new Attribute("type", "uml:Generalization", xmiNs));
         	generalizationElem.setAttribute(new Attribute("id", UUID.randomUUID().toString(), xmiNs));
@@ -674,8 +676,8 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 		</generalization>
 		
  */
-    	if (clss.getBehavior().size() > 0)
-    		addBehaviors(clss, clssElem, clss.getBehavior());
+    	if (clss.getBehaviors().size() > 0)
+    		addBehaviors(clss, clssElem, clss.getBehaviors());
     		
     	
     	return clssElem;
@@ -745,8 +747,8 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     	ownedAttribute.setAttribute(new Attribute("name", property.getName()));
     	if (property.getVisibility() != null)
     	    ownedAttribute.setAttribute(new Attribute("visibility", property.getVisibility().value())); 
-    	if (property.getDocumentation() != null)
-    	    for (Documentation doc : property.getDocumentation()) {
+    	if (property.getDocumentations() != null)
+    	    for (Documentation doc : property.getDocumentations()) {
     	    	if (doc.getBody() != null)
         		    addOwnedComment(ownedAttribute, property.getId(), 
         				doc.getBody().getValue());
@@ -982,13 +984,13 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
     	enumerationElem.setAttribute(new Attribute("name", enm.getName()));
     	enumerationElem.setAttribute(new Attribute("visibility", "public")); 
 
-    	if (enm.getDocumentation() != null)
-    	    for (Documentation doc : enm.getDocumentation()) {
+    	if (enm.getDocumentations() != null)
+    	    for (Documentation doc : enm.getDocumentations()) {
         		addOwnedComment(enumerationElem, enumId, 
         				doc.getBody().getValue());
     	    }
 
-	    for (EnumerationLiteral lit : enm.getEnumerationLiteral()) {
+	    for (EnumerationLiteral lit : enm.getEnumerationLiterals()) {
         	Element literal = new Element("ownedLiteral");
         	enumerationElem.addContent(literal);
         	literal.setAttribute(new Attribute("type", "uml:EnumerationLiteral", xmiNs));
@@ -996,8 +998,8 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
         	literal.setAttribute(new Attribute("id", literalId, xmiNs));
         	literal.setAttribute(new Attribute("name", lit.getValue()));
         	literal.setAttribute(new Attribute("visibility", "public")); 
-        	if (lit.getDocumentation() != null)
-        	    for (Documentation doc : lit.getDocumentation()) {
+        	if (lit.getDocumentations() != null)
+        	    for (Documentation doc : lit.getDocumentations()) {
             		addOwnedComment(literal, literalId, 
             				doc.getBody().getValue());
         	    }
@@ -1039,7 +1041,7 @@ public abstract class DefaultUMLModelAssembler implements UMLModelAssembler {
 	private Property getOppositeProperty(Class def, Property propertyDef) {
 		Class targetDef = classMap.get(propertyDef.getType().getUri() 
     			+ "#" + propertyDef.getType().getName());
-    	for (Property p : targetDef.getProperty()) {
+    	for (Property p : targetDef.getProperties()) {
     		if (p.getName().equals(propertyDef.getOpposite()))
     			return p;
     	}

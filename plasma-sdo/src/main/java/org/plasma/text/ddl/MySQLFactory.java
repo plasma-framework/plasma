@@ -92,7 +92,7 @@ public class MySQLFactory extends DefaultDDLFactory
 		buf.append(table.getName());
 		buf.append(" ( ");
 		int i = 0;
-		for (Column column : table.getColumn()) {
+		for (Column column : table.getColumns()) {
 			if (i > 0)
 				buf.append(", ");
 			buf.append(column.getName());
@@ -104,7 +104,7 @@ public class MySQLFactory extends DefaultDDLFactory
 				Check check = getEnumerativeCheck(table, column);
 				buf.append("ENUM(");
 				int j = 0;
-				for (String s : check.getValue()) {
+				for (String s : check.getValues()) {
 					if (j > 0)
 						buf.append(", ");
 					buf.append("'");
@@ -123,7 +123,7 @@ public class MySQLFactory extends DefaultDDLFactory
 		if (table.getPk() != null) {
 			buf.append(", PRIMARY KEY (");
 			i = 0;
-			for (On on : table.getPk().getOn()) {
+			for (On on : table.getPk().getOns()) {
 				if (i > 0)
 					buf.append(", ");
 				buf.append(on.getColumn());
@@ -146,7 +146,7 @@ public class MySQLFactory extends DefaultDDLFactory
 	}	
 	
 	private boolean isEnumerativeCheck(Table table, Column column) {
-		for (Check check : table.getCheck()) {
+		for (Check check : table.getChecks()) {
 			if (column.getName().equals(check.getColumn()))
 				return true;
 		}
@@ -154,7 +154,7 @@ public class MySQLFactory extends DefaultDDLFactory
 	}	
 	
 	private Check getEnumerativeCheck(Table table, Column column) {
-		for (Check check : table.getCheck()) {
+		for (Check check : table.getChecks()) {
 			if (column.getName().equals(check.getColumn()))
 				return check;
 		}
@@ -199,7 +199,7 @@ public class MySQLFactory extends DefaultDDLFactory
 		buf.append(toTable.getName());
 		buf.append(" ( ");
 		int i = 0;
-		for (On on : toTable.getPk().getOn()) {
+		for (On on : toTable.getPk().getOns()) {
 			if (i > 0)
 				buf.append(", ");
 			buf.append(on.getColumn());
@@ -248,7 +248,7 @@ public class MySQLFactory extends DefaultDDLFactory
 		buf.append(unique.getName());
 		buf.append(" UNIQUE ( ");
 		int i = 0;
-		for (On on : unique.getOn()) {
+		for (On on : unique.getOns()) {
 			if (i > 0)
 				buf.append(", ");
 			buf.append(on.getColumn());

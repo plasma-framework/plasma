@@ -33,7 +33,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -105,7 +107,7 @@ public abstract class ProvisioningTool {
 
 		if (!stale) {
 			// check repo artifacts
-			for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifact()) {
+			for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifacts()) {
 				URL url = PlasmaConfig.class.getResource(artifact.getUrn());
 				if (url == null)
 					url = PlasmaConfig.class.getClassLoader().getResource(artifact.getUrn());
@@ -143,7 +145,7 @@ public abstract class ProvisioningTool {
 
 		if (log.isDebugEnabled()) {
 			MetamodelDataBinding binding = new MetamodelDataBinding(new DefaultValidationEventHandler());
-			String xml = binding.marshal(annotationAssembler.getModel());
+ 			String xml = binding.marshal(annotationAssembler.getModel());
 			File outFile = new File(destDir, "derived-technical-model.xml");
 			FileOutputStream stream = new FileOutputStream(outFile);
 			stream.write(xml.getBytes());

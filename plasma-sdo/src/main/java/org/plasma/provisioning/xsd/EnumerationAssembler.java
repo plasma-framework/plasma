@@ -73,7 +73,7 @@ public class EnumerationAssembler extends AbstractAssembler {
         Documentation documentation = createDocumentation(
         		DocumentationType.DEFINITION,
         		getDocumentationContent(simpleType));
-		enm.getDocumentation().add(documentation);
+		enm.getDocumentations().add(documentation);
     	Map<String, EnumerationLiteral> literalMap = new HashMap<String, EnumerationLiteral>();
 		
     	Restriction restriction = simpleType.getRestriction();
@@ -84,7 +84,7 @@ public class EnumerationAssembler extends AbstractAssembler {
     			org.plasma.xml.schema.Enumeration schemaEnum = (org.plasma.xml.schema.Enumeration)obj;
     			
     			EnumerationLiteral literal = new EnumerationLiteral();
-    			enm.getEnumerationLiteral().add(literal);
+    			enm.getEnumerationLiterals().add(literal);
     			String literalName = schemaEnum.getValue();
     			literalName = support.buildLogicalEnumerationLiteralName(enm, literalName, literalMap);
     			literalMap.put(literalName, literal);    			
@@ -121,20 +121,20 @@ public class EnumerationAssembler extends AbstractAssembler {
 		    				Documentation documentation = createDocumentation(
 		            		DocumentationType.DEFINITION,
 		            		(String)content);
-    		    	        literal.getDocumentation().add(documentation);
+    		    	        literal.getDocumentations().add(documentation);
 		    			}
 					    else if (content instanceof ElementNSImpl) {
 						    ElementNSImpl nsElem = (ElementNSImpl) content;
 		    				Documentation documentation = createDocumentation(
 				            		DocumentationType.DEFINITION,
 				            		serializeElement(nsElem));
-		    		    	        literal.getDocumentation().add(documentation);
+		    		    	        literal.getDocumentations().add(documentation);
 					    } 
 		    			else {
 		    				Documentation documentation = createDocumentation(
 		            		DocumentationType.DEFINITION,
 		            		content.toString());
-    		    	        literal.getDocumentation().add(documentation);
+    		    	        literal.getDocumentations().add(documentation);
 		    			}
 		    		}
 	    		}
