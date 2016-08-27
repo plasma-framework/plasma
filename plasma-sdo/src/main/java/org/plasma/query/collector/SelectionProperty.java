@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import commonj.sdo.Property;
 
-public class SelectionProperty {
+public class SelectionProperty implements Comparable<SelectionProperty> {
     private commonj.sdo.Property property;
     private int sequence;
     
@@ -31,6 +31,12 @@ public class SelectionProperty {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public int compareTo(SelectionProperty o) {		 
+		return Integer.valueOf(this.getSequence()).compareTo(Integer.valueOf(o.getSequence()));
+	}
+
 	public SelectionProperty(Property property, int sequence) {
 		super();
 		this.property = property;

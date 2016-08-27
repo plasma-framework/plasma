@@ -219,7 +219,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	}
 	
 	private Set<commonj.sdo.Property> toPropertySet(SortedSet<SelectionProperty> set) {
-		Set<commonj.sdo.Property> result = new TreeSet<commonj.sdo.Property>();
+		Set<commonj.sdo.Property> result = new HashSet<commonj.sdo.Property>();
 		Iterator<SelectionProperty> iter = set.iterator();
 		while (iter.hasNext())
 			result.add(iter.next().getProperty());		
