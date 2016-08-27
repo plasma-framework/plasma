@@ -78,17 +78,20 @@ public class PropertySelectionCollector extends CollectorSupport
 	@Override
 	public void collect(Where predicate) {
         QueryVisitor visitor = new DefaultQueryVisitor() {
-        	@Override
+        	int sequence = 0;
+       	    @Override
             public void start(Property property)                                                                            
             {    
-                collect(property);  
-                super.start(property);                         
+                collect(property, sequence);  
+                super.start(property);  
+                sequence++;
             }   
         	@Override
             public void start(WildcardProperty wildcardProperty)                                                                            
             {     
-                collect(wildcardProperty);  
-                super.start(wildcardProperty);                         
+                collect(wildcardProperty, sequence);  
+                super.start(wildcardProperty);  
+                sequence++;
             }                                                                                                                                                                                                                                                                                                                                                               
         };
         predicate.accept(visitor);
@@ -102,17 +105,20 @@ public class PropertySelectionCollector extends CollectorSupport
 			this.inheritedPropertyMap = new HashMap<Type, List<String>>();
 	        this.predicateMap = new HashMap<commonj.sdo.Property, Where>();
 	        QueryVisitor visitor = new DefaultQueryVisitor() {
+	        	int sequence = 0;
 	        	@Override
 	            public void start(Property property)                                                                            
 	            {    
-	                collect(property);  
-	                super.start(property);                         
+	                collect(property, sequence);  
+	                super.start(property);
+	                sequence++;
 	            }   
 	        	@Override
 	            public void start(WildcardProperty wildcardProperty)                                                                            
 	            {     
-	                collect(wildcardProperty);  
-	                super.start(wildcardProperty);                         
+	                collect(wildcardProperty, sequence);  
+	                super.start(wildcardProperty); 
+	                sequence++;
 	            }                                                                                                                                                                                                                                                                                                                                                               
 	        };
 	        this.select.accept(visitor);
@@ -279,7 +285,7 @@ public class PropertySelectionCollector extends CollectorSupport
     	return false;
     }
     
-    private void collect(AbstractProperty abstractProperty) {
+    private void collect(AbstractProperty abstractProperty, int sequence) {
         Path path = null;
         if (abstractProperty instanceof Property) {
             path = ((Property)abstractProperty).getPath();
@@ -291,7 +297,7 @@ public class PropertySelectionCollector extends CollectorSupport
             throw new IllegalArgumentException("unknown property class, "
                     + abstractProperty.getClass().getName());
         if (path == null) {
-            String[] names = this.findPropertyNames(rootType, abstractProperty);
+            String[] names = this.findPropertyNames(rootType, abstractProperty, sequence);
             this.mapPropertyNames(this.rootType, names, this.propertyMap);
             this.mapInheritedPropertyNames(this.rootType, names, this.inheritedPropertyMap);
         }
@@ -299,13 +305,13 @@ public class PropertySelectionCollector extends CollectorSupport
         	if (!this.isOnlySingularProperties()) {
                 collect(path, rootType, 
                     path.getPathNodes().get(0), 0, 
-                    abstractProperty);
+                    abstractProperty, sequence);
         	}
         	else {
         		if (this.isSingularPath(path, rootType, abstractProperty)) 
                     collect(path, rootType, 
                             path.getPathNodes().get(0), 0, 
-                            abstractProperty);
+                            abstractProperty, sequence);
         	}
         }
     }    
@@ -323,7 +329,7 @@ public class PropertySelectionCollector extends CollectorSupport
      */
     private void collect(Path path, Type currType, 
             PathNode currPathode, 
-            int curPathElementIndex, AbstractProperty abstractProperty) {
+            int curPathElementIndex, AbstractProperty abstractProperty, int sequence) {
         
     	AbstractPathElement currPathElement = currPathode.getPathElement();
         if (currPathElement instanceof PathElement) {
@@ -355,12 +361,12 @@ public class PropertySelectionCollector extends CollectorSupport
 
                 int nextPathElementIndex = curPathElementIndex + 1;
                 PathNode nextPathNode = path.getPathNodes().get(nextPathElementIndex);
-                collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty);
+                collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty, sequence);
             }
             else {
             	this.mapProperty(currType, prop, this.propertyMap);                              
             	this.mapInheritedProperty(currType, prop, this.inheritedPropertyMap);                              
-                String[] names = this.findPropertyNames(nextType, abstractProperty);
+                String[] names = this.findPropertyNames(nextType, abstractProperty, sequence);
                 this.mapPropertyNames(nextType, names, this.propertyMap);
                 this.mapInheritedPropertyNames(nextType, names, this.inheritedPropertyMap);
             }
@@ -389,12 +395,12 @@ public class PropertySelectionCollector extends CollectorSupport
 
                     int nextPathElementIndex = curPathElementIndex + 1;
                     PathNode nextPathNode = path.getPathNodes().get(nextPathElementIndex);
-                    collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty);
+                    collect(path, nextType, nextPathNode, nextPathElementIndex, abstractProperty, sequence);
                 }
                 else {
                 	this.mapProperty(currType, prop, this.propertyMap);                              
                 	this.mapInheritedProperty(currType, prop, this.inheritedPropertyMap);                              
-                    String[] names = this.findPropertyNames(nextType, abstractProperty);
+                    String[] names = this.findPropertyNames(nextType, abstractProperty, sequence);
                 	this.mapPropertyNames(nextType, names, this.propertyMap);                              
                 	this.mapInheritedPropertyNames(nextType, names, this.inheritedPropertyMap);                              
                 }

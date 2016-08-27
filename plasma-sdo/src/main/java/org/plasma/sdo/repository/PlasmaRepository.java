@@ -28,7 +28,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.modeldriven.fuml.repository.RepositorylException;
+import org.plasma.sdo.repository.RepositoryException;
 import org.plasma.config.PlasmaConfig;
 import org.plasma.sdo.repository.fuml.FumlRepository;
 
@@ -77,7 +77,7 @@ public class PlasmaRepository implements Repository {
         return instance;
     }
 
-    private static synchronized void initializeInstance() throws RepositorylException {
+    private static synchronized void initializeInstance() throws RepositoryException {
         if (instance == null) {
             instance = new PlasmaRepository();
         }
@@ -129,7 +129,7 @@ public class PlasmaRepository implements Repository {
 			if (result != null)
 				return result;
 		}
-		throw new RepositorylException("no classifier found for name, " + name);
+		throw new RepositoryException("no classifier found for name, " + name);
 	}
 
 	public Classifier findClassifier(String name) {

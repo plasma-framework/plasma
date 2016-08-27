@@ -28,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.plasma.query.InvalidPathPredicateException;
 import org.plasma.query.QueryException;
@@ -65,22 +67,22 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	private OrderBy orderBy;
 	
 	// FIXME: what to do with repeated/multiple predicates
-	private Map<commonj.sdo.Property, Where> predicateMap;
-	private Map<commonj.sdo.Property, List<Function>> functionMap;
-	private Map<Type, Set<commonj.sdo.Property>> propertyMap;
-	private Map<Type, Set<commonj.sdo.Property>> singularPropertyMap;
-	private Map<Type, Set<commonj.sdo.Property>> inheritedPropertyMap;
+	private Map<SelectionProperty, Where> predicateMap;
+	private Map<SelectionProperty, List<Function>> functionMap;
+	private Map<Type, SortedSet<SelectionProperty>> propertyMap;
+	private Map<Type, SortedSet<SelectionProperty>> singularPropertyMap;
+	private Map<Type, SortedSet<SelectionProperty>> inheritedPropertyMap;
 
-	private Map<commonj.sdo.Property, Map<Integer, Where>> predicateLevelMap;
-	private Map<commonj.sdo.Property, Map<Integer, List<Function>>> functionLevelMap;
-	private Map<Type, Map<Integer, Set<commonj.sdo.Property>>> propertyLevelMap;
-	private Map<Type, Map<Integer, Set<commonj.sdo.Property>>> singularPropertyLevelMap;
-	private Map<Type, Map<Integer, Set<commonj.sdo.Property>>> inheritedPropertyLevelMap;
+	private Map<SelectionProperty, Map<Integer, Where>> predicateLevelMap;
+	private Map<SelectionProperty, Map<Integer, List<Function>>> functionLevelMap;
+	private Map<Type, Map<Integer, SortedSet<SelectionProperty>>> propertyLevelMap;
+	private Map<Type, Map<Integer, SortedSet<SelectionProperty>>> singularPropertyLevelMap;
+	private Map<Type, Map<Integer, SortedSet<SelectionProperty>>> inheritedPropertyLevelMap;
 
-	private Map<commonj.sdo.Property, Map<commonj.sdo.Property, Where>> predicateEdgeMap;
-	private Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> propertyEdgeMap;
-	private Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> singularPropertyEdgeMap;
-	private Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> inheritedPropertyEdgeMap;
+	private Map<SelectionProperty, Map<SelectionProperty, Where>> predicateEdgeMap;
+	private Map<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>> propertyEdgeMap;
+	private Map<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>> singularPropertyEdgeMap;
+	private Map<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>> inheritedPropertyEdgeMap;
 
 	public SelectionCollector(Select select, Type rootType) {
 		super(rootType);
@@ -138,67 +140,77 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 
 	private void init() {
 		if (!initialized()) {
-			this.propertyMap = new HashMap<Type, Set<commonj.sdo.Property>>();
-			this.singularPropertyMap = new HashMap<Type, Set<commonj.sdo.Property>>();
-			this.inheritedPropertyMap = new HashMap<Type, Set<commonj.sdo.Property>>();
-			this.predicateMap = new HashMap<commonj.sdo.Property, Where>();
-			this.functionMap = new HashMap<commonj.sdo.Property, List<Function>>();
+			this.propertyMap = new HashMap<Type, SortedSet<SelectionProperty>>();
+			this.singularPropertyMap = new HashMap<Type, SortedSet<SelectionProperty>>();
+			this.inheritedPropertyMap = new HashMap<Type, SortedSet<SelectionProperty>>();
+			this.predicateMap = new HashMap<SelectionProperty, Where>();
+			this.functionMap = new HashMap<SelectionProperty, List<Function>>();
 
-			this.propertyLevelMap = new HashMap<Type, Map<Integer, Set<commonj.sdo.Property>>>();
-			this.singularPropertyLevelMap = new HashMap<Type, Map<Integer, Set<commonj.sdo.Property>>>();
-			this.inheritedPropertyLevelMap = new HashMap<Type, Map<Integer, Set<commonj.sdo.Property>>>();
-			this.predicateLevelMap = new HashMap<commonj.sdo.Property, Map<Integer, Where>>();
-			this.functionLevelMap = new HashMap<commonj.sdo.Property, Map<Integer, List<Function>>>();
+			this.propertyLevelMap = new HashMap<Type, Map<Integer, SortedSet<SelectionProperty>>>();
+			this.singularPropertyLevelMap = new HashMap<Type, Map<Integer, SortedSet<SelectionProperty>>>();
+			this.inheritedPropertyLevelMap = new HashMap<Type, Map<Integer, SortedSet<SelectionProperty>>>();
+			this.predicateLevelMap = new HashMap<SelectionProperty, Map<Integer, Where>>();
+			this.functionLevelMap = new HashMap<SelectionProperty, Map<Integer, List<Function>>>();
 
-			this.propertyEdgeMap = new HashMap<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>>();
-			this.singularPropertyEdgeMap = new HashMap<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>>();
-			this.inheritedPropertyEdgeMap = new HashMap<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>>();
-			this.predicateEdgeMap = new HashMap<commonj.sdo.Property, Map<commonj.sdo.Property, Where>>();
+			this.propertyEdgeMap = new HashMap<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>>();
+			this.singularPropertyEdgeMap = new HashMap<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>>();
+			this.inheritedPropertyEdgeMap = new HashMap<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>>();
+			this.predicateEdgeMap = new HashMap<SelectionProperty, Map<SelectionProperty, Where>>();
 			
 			if (this.select != null) {
 				QueryVisitor visitor = new DefaultQueryVisitor() {
+					int sequence = 0;
+					
 					@Override
 					public void start(Property property) {
-						collect(property);
+						collect(property, sequence);
 						super.start(property);
+						sequence++;
 					}
 	
 					@Override
 					public void start(WildcardProperty wildcardProperty) {
-						collect(wildcardProperty);
+						collect(wildcardProperty, sequence);
 						super.start(wildcardProperty);
+						sequence++;
 					}
 				};
 				this.select.accept(visitor);
 			}
 			if (this.where != null) {
 				QueryVisitor visitor = new DefaultQueryVisitor() {
+					int sequence = 0;
 					@Override
 					public void start(Property property) {
-						collect(property);
+						collect(property, sequence);
 						super.start(property);
+						sequence++;
 					}
 	
 					@Override
 					public void start(WildcardProperty wildcardProperty) {
-						collect(wildcardProperty);
+						collect(wildcardProperty, sequence);
 						super.start(wildcardProperty);
+						sequence++;
 					}
 				};
 				this.where.accept(visitor);
 			}
 			if (this.orderBy != null) {
 				QueryVisitor visitor = new DefaultQueryVisitor() {
+					int sequence = 0;
 					@Override
 					public void start(Property property) {
-						collect(property);
+						collect(property, sequence);
 						super.start(property);
+						sequence++;
 					}
 	
 					@Override
 					public void start(WildcardProperty wildcardProperty) {
-						collect(wildcardProperty);
+						collect(wildcardProperty, sequence);
 						super.start(wildcardProperty);
+						sequence++;
 					}
 				};
 				this.orderBy.accept(visitor);
@@ -206,11 +218,27 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 		}
 	}
 	
+	private Set<commonj.sdo.Property> toPropertySet(SortedSet<SelectionProperty> set) {
+		Set<commonj.sdo.Property> result = new TreeSet<commonj.sdo.Property>();
+		Iterator<SelectionProperty> iter = set.iterator();
+		while (iter.hasNext())
+			result.add(iter.next().getProperty());		
+		return result;
+	}	
+	
 	@Deprecated
 	public Map<commonj.sdo.Property, Where> getPredicateMap() {
 		if (!initialized())
 		    init();
-		return predicateMap;
+		
+		Map<commonj.sdo.Property, Where> result = new HashMap<commonj.sdo.Property, Where>();
+		Iterator<SelectionProperty> iter = predicateMap.keySet().iterator();
+		while (iter.hasNext()) {
+			SelectionProperty prop = iter.next();
+			Where where = predicateMap.get(prop);
+			result.put(prop.getProperty(), where);		
+		}
+		return result;
 	}
 
 	/**
@@ -251,7 +279,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	public Set<commonj.sdo.Property> getSingularProperties(Type type) {
 		if (!initialized())
 			init();
-		Set<commonj.sdo.Property> result = this.singularPropertyMap.get(type);
+		Set<commonj.sdo.Property> result = toPropertySet(this.singularPropertyMap.get(type));
 		if (result != null)
 			return result;
 		return EMPTY_PROPERTY_SET;
@@ -265,7 +293,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	public Set<commonj.sdo.Property> getProperties(Type type) {
 		if (!initialized())
 			init();
-		Set<commonj.sdo.Property> result = propertyMap.get(type);
+		Set<commonj.sdo.Property> result = toPropertySet(propertyMap.get(type));
 		if (result != null)
 			return result;
 		return EMPTY_PROPERTY_SET;
@@ -281,9 +309,9 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	public Set<commonj.sdo.Property> getInheritedProperties(Type type) {
 		if (!initialized())
 			init();
-		Set<commonj.sdo.Property> result = inheritedPropertyMap.get(type);
+		SortedSet<SelectionProperty> result = inheritedPropertyMap.get(type);
 		if (result != null)
-			return result;
+			return toPropertySet(result);
 		return EMPTY_PROPERTY_SET;
 	}
 	
@@ -292,11 +320,11 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 			commonj.sdo.Property sourceProperty) {
 		if (!initialized())
 			init();
-		Map<commonj.sdo.Property, Set<commonj.sdo.Property>> edgeMap = this.inheritedPropertyEdgeMap.get(type);
+		Map<SelectionProperty, SortedSet<SelectionProperty>> edgeMap = this.inheritedPropertyEdgeMap.get(type);
 		if (edgeMap != null) {
-		    Set<commonj.sdo.Property> set = edgeMap.get(sourceProperty);
+		    SortedSet<SelectionProperty> set = edgeMap.get(sourceProperty);
 		    if (set != null)
-		    	return set;
+		    	return toPropertySet(set);
 		}				 
 		return EMPTY_PROPERTY_SET;
 	}
@@ -310,11 +338,11 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	public Set<commonj.sdo.Property> getInheritedProperties(Type type, int level) {
 		if (!initialized())
 			init();
-		Map<Integer, Set<commonj.sdo.Property>> levelMap = this.inheritedPropertyLevelMap.get(type);
+		Map<Integer, SortedSet<SelectionProperty>> levelMap = this.inheritedPropertyLevelMap.get(type);
 		if (levelMap != null) {
-		    Set<commonj.sdo.Property> set = levelMap.get(level);
+			SortedSet<SelectionProperty> set = levelMap.get(level);
 		    if (set != null)
-		    	return set;
+		    	return toPropertySet(set);
 		}				 
 		return EMPTY_PROPERTY_SET;
 	}
@@ -401,7 +429,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	public boolean hasProperty(Type type, commonj.sdo.Property property) {
 		if (!initialized())
 			init();
-		Set<commonj.sdo.Property> props = this.propertyMap.get(type);
+		SortedSet<SelectionProperty> props = this.propertyMap.get(type);
 		if (props != null && props.size() > 0) {
 			if (props.contains(property))
 				return true;
@@ -433,8 +461,9 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 			if (attr == 0)
 				token = token.substring(1);
 			commonj.sdo.Property prop = contextType.getProperty(token);
-			this.addProperty(contextType, prop, this.propertyMap);
-			this.addInheritedProperty(contextType, prop,
+			SelectionProperty selectionProp = new SelectionProperty(prop, Integer.MAX_VALUE);
+			this.addProperty(contextType, selectionProp, this.propertyMap);
+			this.addInheritedProperty(contextType, selectionProp,
 					this.inheritedPropertyMap);
 			if (!prop.getType().isDataType()) {
 				contextType = prop.getType(); // traverse
@@ -456,7 +485,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	public boolean hasInheritedProperty(Type type, commonj.sdo.Property property) {
 		if (!initialized())
 			init();
-		Set<commonj.sdo.Property> props = this.inheritedPropertyMap.get(type);
+		Set<SelectionProperty> props = this.inheritedPropertyMap.get(type);
 		if (props != null && props.size() > 0) {
 			if (props.contains(property))
 				return true;
@@ -469,11 +498,11 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	public Set<commonj.sdo.Property> getProperties(Type type, int level) {
 		if (!initialized())
 			init();
-		Map<Integer, Set<commonj.sdo.Property>> levelMap = this.propertyLevelMap.get(type);
+		Map<Integer, SortedSet<SelectionProperty>> levelMap = this.propertyLevelMap.get(type);
 		if (levelMap != null) {
-		    Set<commonj.sdo.Property> set = levelMap.get(level);
+		    SortedSet<SelectionProperty> set = levelMap.get(level);
 		    if (set != null)
-		    	return set;
+		    	return this.toPropertySet(set);
 		}				 
 		return EMPTY_PROPERTY_SET;
 	}
@@ -483,11 +512,11 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 			commonj.sdo.Property sourceProperty) {
 		if (!initialized())
 			init();
-		Map<commonj.sdo.Property, Set<commonj.sdo.Property>> edgeMap = this.propertyEdgeMap.get(type);
+		Map<SelectionProperty, SortedSet<SelectionProperty>> edgeMap = this.propertyEdgeMap.get(type);
 		if (edgeMap != null) {
-		    Set<commonj.sdo.Property> set = edgeMap.get(sourceProperty);
+			SortedSet<SelectionProperty> set = edgeMap.get(sourceProperty);
 		    if (set != null)
-		    	return set;
+		    	return this.toPropertySet(set);
 		}				 
 		return EMPTY_PROPERTY_SET;
 	}
@@ -506,7 +535,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 			commonj.sdo.Property sourceProperty) {
 		if (!initialized())
 			init();
-		Map<commonj.sdo.Property, Where> edgeMap = this.predicateEdgeMap.get(property);
+		Map<SelectionProperty, Where> edgeMap = this.predicateEdgeMap.get(property);
 		if (edgeMap != null) {
 			return edgeMap.get(sourceProperty);
 		}
@@ -548,7 +577,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 		return EMPTY_FUNCTION_LIST;
 	}
 	
-	private void collect(AbstractProperty abstractProperty) {
+	private void collect(AbstractProperty abstractProperty, int sequence) {
 		Path path = null;
 		if (abstractProperty instanceof Property) {
 			path = ((Property) abstractProperty).getPath();
@@ -558,8 +587,8 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 			throw new IllegalArgumentException("unknown property class, "
 					+ abstractProperty.getClass().getName());
 		if (path == null) {
-			commonj.sdo.Property[] props = this.findProperties(rootType,
-					abstractProperty);
+			SelectionProperty[] props = this.findProperties(rootType,
+					abstractProperty, sequence);
 			this.mapProperties(this.rootType, props, this.propertyMap);
 			this.mapInheritedProperties(this.rootType, props,
 					this.inheritedPropertyMap);
@@ -570,7 +599,8 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 					this.inheritedPropertyLevelMap);
 			if (abstractProperty instanceof Property) {
 				Property property = (Property)abstractProperty;
-				commonj.sdo.Property prop = this.rootType.getProperty(property.getName());
+				commonj.sdo.Property sdoProp = this.rootType.getProperty(property.getName());
+				SelectionProperty prop = new SelectionProperty(sdoProp, Integer.MAX_VALUE);
 				List<Function> functions = property.getFunctions();
 				if (functions != null && functions.size() > 0) {
 					this.mapFunctions(prop, functions, this.functionMap);
@@ -582,11 +612,11 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 		} else {
 			if (!this.isOnlySingularProperties()) {
 				collect(path, rootType, path.getPathNodes().get(0), 0,
-						abstractProperty, null, 0);
+						abstractProperty, sequence, null, 0);
 			} else {
 				if (this.isSingularPath(path, rootType, abstractProperty))
 					collect(path, rootType, path.getPathNodes().get(0), 0,
-							abstractProperty, null, 0);
+							abstractProperty, sequence, null, 0);
 			}
 		}
 	}
@@ -608,31 +638,31 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 	 *            the property map
 	 */
 	private void collect(Path path, Type currType, PathNode currPathode,
-			int curPathElementIndex, AbstractProperty abstractProperty,
-			commonj.sdo.Property edge, int level) {
+			int curPathElementIndex, AbstractProperty abstractProperty, int sequence, 
+			SelectionProperty edge, int level) {
 
 		AbstractPathElement currPathElement = currPathode.getPathElement();
 		if (currPathElement instanceof PathElement) {
 			PathElement pathElement = (PathElement) currPathElement;
-			commonj.sdo.Property prop = currType.getProperty(pathElement
-					.getValue());
+			SelectionProperty prop = new SelectionProperty(currType.getProperty(pathElement
+					.getValue()), sequence);
 
-			if (prop.getType().isDataType())
+			if (prop.getProperty().getType().isDataType())
 				if (abstractProperty instanceof Property)
 					throw new QueryException("traversal path for property '"
 							+ ((Property) abstractProperty).getName()
 							+ "' from root '" + rootType.getName()
 							+ "' contains a non-reference property '"
-							+ prop.getName() + "'");
+							+ prop.getProperty().getName() + "'");
 				else
 					throw new QueryException(
 							"traversal path for wildcard property "
 									+ "' from root '" + rootType.getName()
 									+ "' contains a non-reference property '"
-									+ prop.getName() + "'");
+									+ prop.getProperty().getName() + "'");
 
 
-			if (prop.isMany() && this.isOnlySingularProperties())
+			if (prop.getProperty().isMany() && this.isOnlySingularProperties())
 				return;
 			
 			this.addProperty(currType, prop, this.propertyMap);
@@ -646,7 +676,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 				this.addPredicate(prop, level, currPathode.getWhere(), this.predicateLevelMap);
 			}
 
-			Type nextType = prop.getType(); // traverse
+			Type nextType = prop.getProperty().getType(); // traverse
 
 			if (path.getPathNodes().size() > curPathElementIndex + 1) { // more
 																		// nodes
@@ -661,10 +691,10 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 				PathNode nextPathNode = path.getPathNodes().get(
 						nextPathElementIndex);
 				collect(path, nextType, nextPathNode, nextPathElementIndex,
-						abstractProperty, prop, level + 1);
+						abstractProperty, sequence, prop, level + 1);
 			} else { // reached the path endpoint
-				commonj.sdo.Property[] props = this.findProperties(nextType,
-						abstractProperty);
+				SelectionProperty[] props = this.findProperties(nextType,
+						abstractProperty, sequence);
 				this.mapProperties(nextType, props, this.propertyMap);
 				this.mapInheritedProperties(nextType, props,
 						this.inheritedPropertyMap);
@@ -698,10 +728,12 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 				throw new InvalidPathPredicateException(
 						"path predicate found on wildcard path element");
 
-			for (commonj.sdo.Property prop : properties) {
-				if (prop.getType().isDataType())
+			for (commonj.sdo.Property sdoProp : properties) {
+				
+			    SelectionProperty prop = new SelectionProperty(sdoProp, sequence);
+				if (prop.getProperty().getType().isDataType())
 					continue;
-				if (prop.isMany() && this.isOnlySingularProperties())
+				if (prop.getProperty().isMany() && this.isOnlySingularProperties())
 					return;
 
 				this.addProperty(currType, prop, this.propertyMap);
@@ -714,7 +746,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 							this.inheritedPropertyEdgeMap);
 				}
 				
-				Type nextType = prop.getType();
+				Type nextType = prop.getProperty().getType();
 
 				if (path.getPathNodes().size() > curPathElementIndex + 1) { // more path nodes
 					this.addProperty(currType, level, prop,
@@ -725,14 +757,14 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 					PathNode nextPathNode = path.getPathNodes().get(
 							nextPathElementIndex);
 					collect(path, nextType, nextPathNode, nextPathElementIndex,
-							abstractProperty, prop, level + 1);
+							abstractProperty, sequence, prop, level + 1);
 				} else {
 					this.addProperty(currType, level+1, prop,
 							this.propertyLevelMap);
 					this.addInheritedProperty(currType, level+1, prop,
 							this.inheritedPropertyLevelMap);
-					commonj.sdo.Property[] props = this.findProperties(
-							nextType, abstractProperty);
+					SelectionProperty[] props = this.findProperties(
+							nextType, abstractProperty, sequence);
 
 					this.mapProperties(nextType, props, this.propertyMap);
 					this.mapInheritedProperties(nextType, props,
@@ -769,9 +801,9 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 		while (typeIter.hasNext()) {
 			Type type = typeIter.next();
 			buf.append("\n" + type.getURI() + "#" + type.getName());
-			Set<commonj.sdo.Property> props = this.propertyMap.get(type);
-			for (commonj.sdo.Property prop : props) {
-				buf.append("\n\t" + prop.getName());
+			Set<SelectionProperty> props = this.propertyMap.get(type);
+			for (SelectionProperty prop : props) {
+				buf.append("\n\t" + prop.getProperty().getName());
 			}
 		}
 		return buf.toString();
@@ -783,10 +815,10 @@ public class SelectionCollector extends CollectorSupport implements Selection {
 		while (typeIter.hasNext()) {
 			Type type = typeIter.next();
 			buf.append("\n" + type.getURI() + "#" + type.getName());
-			Set<commonj.sdo.Property> props = this.inheritedPropertyMap
+			Set<SelectionProperty> props = this.inheritedPropertyMap
 					.get(type);
-			for (commonj.sdo.Property prop : props) {
-				buf.append("\n\t" + prop.getName());
+			for (SelectionProperty prop : props) {
+				buf.append("\n\t" + prop.getProperty().getName());
 			}
 		}
 		return buf.toString();

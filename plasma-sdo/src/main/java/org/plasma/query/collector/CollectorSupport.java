@@ -27,6 +27,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.plasma.query.QueryException;
 import org.plasma.query.model.AbstractPathElement;
@@ -121,12 +123,12 @@ abstract class CollectorSupport {
         }
     }
 	
-	protected void addProperty(Type type, commonj.sdo.Property property, 
-    		Map<Type, Set<commonj.sdo.Property>> map)
+	protected void addProperty(Type type, SelectionProperty property, 
+    		Map<Type, SortedSet<SelectionProperty>> map)
     {
-        Set<commonj.sdo.Property> set = map.get(type);
+		SortedSet<SelectionProperty> set = map.get(type);
         if (set == null) {
-        	set = new HashSet<commonj.sdo.Property>();
+        	set = new TreeSet<SelectionProperty>(SelectionProperty.getComparator());
             map.put(type, set);
             set.add(property); 
         }
@@ -136,18 +138,18 @@ abstract class CollectorSupport {
         }
     }
 	
-	protected void addProperty(Type type, Integer level, commonj.sdo.Property property, 
-    		Map<Type, Map<Integer, Set<commonj.sdo.Property>>> map)
+	protected void addProperty(Type type, Integer level, SelectionProperty property, 
+    		Map<Type, Map<Integer, SortedSet<SelectionProperty>>> map)
     {
-		Map<Integer, Set<commonj.sdo.Property>> levelMap = map.get(type);
+		Map<Integer, SortedSet<SelectionProperty>> levelMap = map.get(type);
 		if (levelMap == null) {
-			levelMap = new HashMap<Integer, Set<commonj.sdo.Property>>();
+			levelMap = new HashMap<Integer, SortedSet<SelectionProperty>>();
 			map.put(type, levelMap);
 		}
 		
-        Set<commonj.sdo.Property> set = levelMap.get(level);
+		SortedSet<SelectionProperty> set = levelMap.get(level);
         if (set == null) {
-        	set = new HashSet<commonj.sdo.Property>();
+        	set = new TreeSet<SelectionProperty>(SelectionProperty.getComparator());
         	levelMap.put(level, set);
             set.add(property); 
         }
@@ -157,8 +159,8 @@ abstract class CollectorSupport {
         }
     }
 	
-	protected void addPredicate(commonj.sdo.Property property, Integer level, Where predicate, 
-			Map<commonj.sdo.Property, Map<Integer, Where>> map)
+	protected void addPredicate(SelectionProperty property, Integer level, Where predicate, 
+			Map<SelectionProperty, Map<Integer, Where>> map)
     {
 		Map<Integer, Where> levelMap = map.get(property);
 		if (levelMap == null) {
@@ -168,18 +170,18 @@ abstract class CollectorSupport {
 		levelMap.put(level, predicate);
     }
 	
-	protected void addProperty(Type type, commonj.sdo.Property edge, commonj.sdo.Property property, 
-    		Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> map)
+	protected void addProperty(Type type, SelectionProperty edge, SelectionProperty property, 
+    		Map<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>> map)
     {
-		Map<commonj.sdo.Property, Set<commonj.sdo.Property>> edgeMap = map.get(type);
+		Map<SelectionProperty, SortedSet<SelectionProperty>> edgeMap = map.get(type);
 		if (edgeMap == null) {
-			edgeMap = new HashMap<commonj.sdo.Property, Set<commonj.sdo.Property>>();
+			edgeMap = new HashMap<SelectionProperty, SortedSet<SelectionProperty>>();
 			map.put(type, edgeMap);
 		}
 		
-        Set<commonj.sdo.Property> set = edgeMap.get(edge);
+        SortedSet<SelectionProperty> set = edgeMap.get(edge);
         if (set == null) {
-        	set = new HashSet<commonj.sdo.Property>();
+        	set = new TreeSet<SelectionProperty>(SelectionProperty.getComparator());
         	edgeMap.put(edge, set);
             set.add(property); 
         }
@@ -189,13 +191,13 @@ abstract class CollectorSupport {
         }
     }
 	
-	protected void addPredicate(commonj.sdo.Property property, commonj.sdo.Property edge,
+	protected void addPredicate(SelectionProperty property, SelectionProperty edge,
 			Where predicate,
-			Map<commonj.sdo.Property, Map<commonj.sdo.Property, Where>> map)
+			Map<SelectionProperty, Map<SelectionProperty, Where>> map)
     {
-		Map<commonj.sdo.Property, Where> edgeMap = map.get(property);
+		Map<SelectionProperty, Where> edgeMap = map.get(property);
 		if (edgeMap == null) {
-			edgeMap = new HashMap<commonj.sdo.Property, Where>();
+			edgeMap = new HashMap<SelectionProperty, Where>();
 			map.put(property, edgeMap);
 		}
 		edgeMap.put(edge, predicate);
@@ -210,8 +212,8 @@ abstract class CollectorSupport {
 			mapInheritedProperty(subType, property, map);
 	}	
 	
-	protected void addInheritedProperty(Type type, commonj.sdo.Property property, 
-    		Map<Type, Set<commonj.sdo.Property>> map) {
+	protected void addInheritedProperty(Type type, SelectionProperty property, 
+    		Map<Type, SortedSet<SelectionProperty>> map) {
 		addProperty(type, property, map);
 		
 		PlasmaType plasmaType = (PlasmaType)type; 
@@ -219,8 +221,8 @@ abstract class CollectorSupport {
 			addInheritedProperty(subType, property, map);
 	}	
     
-	protected void addInheritedProperty(Type type, Integer level, commonj.sdo.Property property, 
-			Map<Type, Map<Integer, Set<commonj.sdo.Property>>> map) {
+	protected void addInheritedProperty(Type type, Integer level, SelectionProperty property, 
+			Map<Type, Map<Integer, SortedSet<SelectionProperty>>> map) {
 		addProperty(type, level, property, map);
 		
 		PlasmaType plasmaType = (PlasmaType)type; 
@@ -228,8 +230,8 @@ abstract class CollectorSupport {
 			addInheritedProperty(subType, level, property, map);
 	}	
 
-	protected void addInheritedProperty(Type type, commonj.sdo.Property edge, commonj.sdo.Property property, 
-			Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> map) {
+	protected void addInheritedProperty(Type type, SelectionProperty edge, SelectionProperty property, 
+			Map<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>> map) {
 		addProperty(type, edge, property, map);
 		
 		PlasmaType plasmaType = (PlasmaType)type; 
@@ -256,27 +258,27 @@ abstract class CollectorSupport {
         }
     }
 	
-	protected void mapProperties(Type type, commonj.sdo.Property[] props,
-    		Map<Type, Set<commonj.sdo.Property>> map)
+	protected void mapProperties(Type type, SelectionProperty[] props,
+    		Map<Type, SortedSet<SelectionProperty>> map)
     {
-        Set<commonj.sdo.Property> set = map.get(type);
+		SortedSet<SelectionProperty> set = map.get(type);
         if (set == null) {
-        	set = new HashSet<commonj.sdo.Property>(props.length);
+        	set = new TreeSet<SelectionProperty>(SelectionProperty.getComparator());
             map.put(type, set);
-            for (commonj.sdo.Property prop : props) {
+            for (SelectionProperty prop : props) {
             	set.add(prop);        
             }
         }
         else {
-            for (commonj.sdo.Property prop : props)
+            for (SelectionProperty prop : props)
                 if (!set.contains(prop)) {
                 	set.add(prop); 
                 }
         }
     }
 	
-	protected void mapFunctions(commonj.sdo.Property prop, List<Function> functions,
-			Map<commonj.sdo.Property, List<Function>> map)
+	protected void mapFunctions(SelectionProperty prop, List<Function> functions,
+			Map<SelectionProperty, List<Function>> map)
     {
 		List<Function> list = map.get(prop);
         if (list == null) {
@@ -284,33 +286,33 @@ abstract class CollectorSupport {
         }
     }
 
-	protected void mapProperties(Type type, Integer level, commonj.sdo.Property[] props,
-    		Map<Type, Map<Integer, Set<commonj.sdo.Property>>> map)
+	protected void mapProperties(Type type, Integer level, SelectionProperty[] props,
+    		Map<Type, Map<Integer, SortedSet<SelectionProperty>>> map)
     {
-		Map<Integer, Set<commonj.sdo.Property>> levelMap = map.get(type);
+		Map<Integer, SortedSet<SelectionProperty>> levelMap = map.get(type);
 		if (levelMap == null) {
-			levelMap = new HashMap<Integer, Set<commonj.sdo.Property>>();
+			levelMap = new HashMap<Integer, SortedSet<SelectionProperty>>();
 			map.put(type, levelMap);
 		}
 		
-        Set<commonj.sdo.Property> set = levelMap.get(level);
+		SortedSet<SelectionProperty> set = levelMap.get(level);
         if (set == null) {
-        	set = new HashSet<commonj.sdo.Property>(props.length);
+        	set = new TreeSet<SelectionProperty>(SelectionProperty.getComparator());
         	levelMap.put(level, set);
-            for (commonj.sdo.Property prop : props) {
+            for (SelectionProperty prop : props) {
             	set.add(prop);        
             }
         }
         else {
-            for (commonj.sdo.Property prop : props)
+            for (SelectionProperty prop : props)
                 if (!set.contains(prop)) {
                 	set.add(prop); 
                 }
         }
     }
 	
-	protected void mapFunctions(commonj.sdo.Property prop, Integer level, List<Function> functions,
-    		Map<commonj.sdo.Property, Map<Integer, List<Function>>> map)
+	protected void mapFunctions(SelectionProperty prop, Integer level, List<Function> functions,
+    		Map<SelectionProperty, Map<Integer, List<Function>>> map)
     {
 		Map<Integer, List<Function>> levelMap = map.get(prop);
 		if (levelMap == null) {
@@ -324,25 +326,25 @@ abstract class CollectorSupport {
         }
     }
 	
-	protected void mapProperties(Type type, commonj.sdo.Property edge, commonj.sdo.Property[] props,
-    		Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> map)
+	protected void mapProperties(Type type, SelectionProperty edge, SelectionProperty[] props,
+    		Map<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>> map)
     {
-		Map<commonj.sdo.Property, Set<commonj.sdo.Property>> edgeMap = map.get(type);
+		Map<SelectionProperty, SortedSet<SelectionProperty>> edgeMap = map.get(type);
 		if (edgeMap == null) {
-			edgeMap = new HashMap<commonj.sdo.Property, Set<commonj.sdo.Property>>();
+			edgeMap = new HashMap<SelectionProperty, SortedSet<SelectionProperty>>();
 			map.put(type, edgeMap);
 		}
 		
-        Set<commonj.sdo.Property> set = edgeMap.get(edge);
+		SortedSet<SelectionProperty> set = edgeMap.get(edge);
         if (set == null) {
-        	set = new HashSet<commonj.sdo.Property>(props.length);
+        	set = new TreeSet<SelectionProperty>(SelectionProperty.getComparator());
         	edgeMap.put(edge, set);
-            for (commonj.sdo.Property prop : props) {
+            for (SelectionProperty prop : props) {
             	set.add(prop);        
             }
         }
         else {
-            for (commonj.sdo.Property prop : props)
+            for (SelectionProperty prop : props)
                 if (!set.contains(prop)) {
                 	set.add(prop); 
                 }
@@ -359,8 +361,8 @@ abstract class CollectorSupport {
 			mapInheritedPropertyNames(subType, names, map);
 	}	
 	
-	protected void mapInheritedProperties(Type type, commonj.sdo.Property[] props, 
-			Map<Type, Set<commonj.sdo.Property>> map) {
+	protected void mapInheritedProperties(Type type, SelectionProperty[] props, 
+			Map<Type, SortedSet<SelectionProperty>> map) {
 		mapProperties(type, props, map);
 		
 		PlasmaType plasmaType = (PlasmaType)type; 
@@ -368,8 +370,8 @@ abstract class CollectorSupport {
 			mapInheritedProperties(subType, props, map);
 	}	
 
-	protected void mapInheritedProperties(Type type, Integer level, commonj.sdo.Property[] props, 
-			Map<Type, Map<Integer, Set<commonj.sdo.Property>>> map) {
+	protected void mapInheritedProperties(Type type, Integer level, SelectionProperty[] props, 
+			Map<Type, Map<Integer, SortedSet<SelectionProperty>>> map) {
 		mapProperties(type, level, props, map);
 		
 		PlasmaType plasmaType = (PlasmaType)type; 
@@ -377,8 +379,8 @@ abstract class CollectorSupport {
 			mapInheritedProperties(subType, level, props, map);
 	}	
     
-	protected void mapInheritedProperties(Type type, commonj.sdo.Property edge, commonj.sdo.Property[] props, 
-			Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> map) {
+	protected void mapInheritedProperties(Type type, SelectionProperty edge, SelectionProperty[] props, 
+			Map<Type, Map<SelectionProperty, SortedSet<SelectionProperty>>> map) {
 		mapProperties(type, edge, props, map);
 		
 		PlasmaType plasmaType = (PlasmaType)type; 
@@ -395,7 +397,7 @@ abstract class CollectorSupport {
 	 * @param abstractProperty the property
 	 * @return the property names as an array
 	 */
-	protected String[] findPropertyNames(Type type, AbstractProperty abstractProperty)
+	protected String[] findPropertyNames(Type type, AbstractProperty abstractProperty, int sequence)
     {
         String[] result = null;       
         
@@ -457,14 +459,14 @@ abstract class CollectorSupport {
 	 * @param abstractProperty the property
 	 * @return the property names as an array
 	 */
-	protected commonj.sdo.Property[] findProperties(Type type, AbstractProperty abstractProperty)
+	protected SelectionProperty[] findProperties(Type type, AbstractProperty abstractProperty, int sequence)
     {
-		commonj.sdo.Property[] result = null;       
+		SelectionProperty[] result = null;       
         
         if (abstractProperty instanceof Property) {
             String name = ((Property)abstractProperty).getName();
-            result = new commonj.sdo.Property[1];
-            result[0] = type.getProperty(name);
+            result = new SelectionProperty[1];
+            result[0] = new SelectionProperty(type.getProperty(name), sequence);
         }
         else if (abstractProperty instanceof WildcardProperty) {
             WildcardProperty wildcardProperty = (WildcardProperty)abstractProperty;
@@ -498,8 +500,12 @@ abstract class CollectorSupport {
                             list.add(prop);
                     break;
             }
-            result = new commonj.sdo.Property[list.size()];
-            list.toArray(result);            
+            result = new SelectionProperty[list.size()];
+            int i = 0;
+            for (commonj.sdo.Property prop : list) {
+            	result[i] = new SelectionProperty(prop, sequence);
+            	i++;
+            }
         }
         else
             throw new IllegalArgumentException("unknown property class, "
