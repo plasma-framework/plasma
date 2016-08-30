@@ -41,13 +41,26 @@ import commonj.sdo.Type;
  */
 public interface PlasmaType extends Type {
     
-    
+    /**
+     * Returns the comments from the repository classifier for this {@link PlasmaType Type}.
+     * @return the comments from the repository classifier for this {@link PlasmaType Type}.
+     */
 	public List<Comment> getDescription(); 
+	
+	/**
+	 * Return the repository classifier underlying this {@link PlasmaType Type}
+	 * @return the repository classifier underlying this {@link PlasmaType Type}
+	 */
     public Classifier getClassifier();
+    
+    /**
+     * Returns the concatenated comments from the repository classifier for this {@link PlasmaType Type}.
+     * @return the concatenated comments from the repository classifier for this {@link PlasmaType Type}.
+     */
     public String getDescriptionText();
 	
     /**
-     * Returns the name of this Type as a byte array which may be cached
+     * Returns the URI of this {@link PlasmaType Type} as a byte array which may be cached
      * or lazily cached on demand. 
      * <p>
      * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
@@ -57,33 +70,18 @@ public interface PlasmaType extends Type {
      * unique composite keys based in part on qualified or unqualified logical or physical
      * type names. 
      * </p>
-     * @return the name of this Type as a byte array
-     */
-    public byte[] getNameBytes();
-
-    /**
-     * Returns the URI of this Type as a byte array which may be cached
-     * or lazily cached on demand. 
-     * <p>
-     * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
-     * distributed "cloud" data stores typically storing lexicographically 
-     * ordered row and column keys as uninterpreted arrays of bytes. Fast dynamic
-     * construction of such keys is important as such services may necessarily construct
-     * unique composite keys based in part on qualified or unqualified logical or physical
-     * type names. 
-     * </p>
-     * @return the URI of this Type as a byte array
+     * @return the URI of this {@link PlasmaType Type} as a byte array
      */    
     public byte[] getURIBytes();
     
     /**
-     * Returns the physical name alias of this Type as a string, or null if no physical alias name exists.
-     * @return the physical name alias of this Type as a string, or null if no physical alias name exists.. 
+     * Returns the physical name alias of the URI associated with this {@link PlasmaType Type} as a string, or null if no physical alias name exists.
+     * @return the physical name alias of this {@link PlasmaType Type} as a string, or null if no physical alias name exists.. 
      */    
-    public String getPhysicalName();   
+    public String getURIPhysicalName();   
 
     /**
-     * Returns the physical name alias of this Type as a byte array which may be cached
+     * Returns the physical name alias of the URI associated this {@link PlasmaType Type} as a byte array which may be cached
      * or lazily cached on demand, or null if no physical alias name exists. 
      * <p>
      * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
@@ -93,19 +91,12 @@ public interface PlasmaType extends Type {
      * unique composite keys based in part on qualified or unqualified logical or physical
      * type names. 
      * </p>
-     * @return the physical name alias of this Type as a byte array, or null if no physical alias name exists.
+     * @return the physical name alias of the URI associated this {@link PlasmaType Type} as a byte array, or null if no physical alias name exists.
      */
-    public byte[] getPhysicalNameBytes();
-    
+    public byte[] getURIPhysicalNameBytes();
+
     /**
-     * Returns the local name alias of this Type as a string.
-     * @return the local name alias of this Type as a string. 
-     */    
-    public String getLocalName(); 
-    
-    
-    /**
-     * Returns the local name of this Type as a byte array which may be cached
+     * Returns the name of this {@link PlasmaType Type} as a byte array which may be cached
      * or lazily cached on demand. 
      * <p>
      * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
@@ -115,7 +106,51 @@ public interface PlasmaType extends Type {
      * unique composite keys based in part on qualified or unqualified logical or physical
      * type names. 
      * </p>
-     * @return the local name of this Type as a byte array
+     * @return the name of this {@link PlasmaType Type} as a byte array
+     */
+    public byte[] getNameBytes();
+
+    
+    /**
+     * Returns the physical name alias of this {@link PlasmaType Type} as a string, or null if no physical alias name exists.
+     * @return the physical name alias of this {@link PlasmaType Type} as a string, or null if no physical alias name exists.. 
+     */    
+    public String getPhysicalName();   
+
+    /**
+     * Returns the physical name alias of this {@link PlasmaType Type} as a byte array which may be cached
+     * or lazily cached on demand, or null if no physical alias name exists. 
+     * <p>
+     * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
+     * distributed "cloud" data stores typically storing lexicographically 
+     * ordered row and column keys as uninterpreted arrays of bytes. Fast dynamic
+     * construction of such keys is important as such services may necessarily construct
+     * unique composite keys based in part on qualified or unqualified logical or physical
+     * type names. 
+     * </p>
+     * @return the physical name alias of this {@link PlasmaType Type} as a byte array, or null if no physical alias name exists.
+     */
+    public byte[] getPhysicalNameBytes();
+    
+    /**
+     * Returns the local name alias of this {@link PlasmaType Type} as a string.
+     * @return the local name alias of this {@link PlasmaType Type} as a string. 
+     */    
+    public String getLocalName(); 
+    
+    
+    /**
+     * Returns the local name of {@link PlasmaType Type} as a byte array which may be cached
+     * or lazily cached on demand. 
+     * <p>
+     * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
+     * distributed "cloud" data stores typically storing lexicographically 
+     * ordered row and column keys as uninterpreted arrays of bytes. Fast dynamic
+     * construction of such keys is important as such services may necessarily construct
+     * unique composite keys based in part on qualified or unqualified logical or physical
+     * type names. 
+     * </p>
+     * @return the local name of {@link PlasmaType Type} as a byte array
      */
     public byte[] getLocalNameBytes();
     
@@ -133,7 +168,7 @@ public interface PlasmaType extends Type {
     
     
     /**
-     * Returns the namespace qualified logical name of this Type as a byte array which may be cached
+     * Returns the namespace qualified logical name of {@link PlasmaType Type} as a byte array which may be cached
      * or lazily cached on demand. 
      * <p>
      * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
@@ -143,32 +178,32 @@ public interface PlasmaType extends Type {
      * unique composite keys based in part on qualified or unqualified logical or physical
      * type names. 
      * </p>
-     * @return the namespace qualified logical name of this Type as a byte array
+     * @return the namespace qualified logical name of {@link PlasmaType Type} as a byte array
      */
     public byte[] getQualifiedNameBytes();
     
     /**
      * Returns a qualified logical-name hash code 
-     * for this type. 
+     * for {@link PlasmaType Type}. 
      * @return a qualified logical-name hash code 
-     * for this type. 
+     * for {@link PlasmaType Type}. 
      */
     public int getQualifiedNameHashCode();
     
     /**
-     * Return the namespace qualified physical name for this
-     * type or null if no physical alias name exists. This method is provided as using a QName
+     * Return the (physical) namespace qualified physical name for this
+     * type or null if no physical namespace and physical name exists. This method is provided as using a QName
      * may be more efficient, depending on the client usage context, than performing
      * string concatenations, particularly
      * where hashing and hash lookups by qualified Type name are
      * required.      
-     * @return the namespace qualified logical name for this
+     * @return the (physical) namespace qualified logical name for this
      * type or null if no physical alias name exists. 
      */
     public QName getQualifiedPhysicalName();
     
     /**
-     * Returns the namespace qualified physical name of this Type as a byte array which may be cached
+     * Returns the namespace qualified physical name of {@link PlasmaType Type} as a byte array which may be cached
      * or lazily cached on demand. 
      * <p>
      * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
@@ -178,18 +213,18 @@ public interface PlasmaType extends Type {
      * unique composite keys based in part on qualified or unqualified logical or physical
      * type names. 
      * </p>
-     * @return the namespace qualified physical name of this Type as a byte array
+     * @return the namespace qualified physical name of {@link PlasmaType Type} as a byte array
      */
     public byte[] getQualifiedPhysicalNameBytes();
     
     /**
-     * Returns the alias for this type
+     * Returns the alias for {@link PlasmaType Type}
      * @return the alias
      */
     public Alias getAlias();
     
     /**
-     * Returns the derivation information for this type if exists, or null
+     * Returns the derivation information for {@link PlasmaType Type} if exists, or null
      * if not exists
      * @return the derivation information, or null
      * if not exists
@@ -197,30 +232,30 @@ public interface PlasmaType extends Type {
     public Derivation getDerivation();
     
     /**
-     * Returns the derivation supplier type for this type or null if not exists.
-     * @return the derivation supplier type for this type or null if not exists.
+     * Returns the derivation supplier type for {@link PlasmaType Type} or null if not exists.
+     * @return the derivation supplier type for {@link PlasmaType Type} or null if not exists.
      */
     public PlasmaType getDerivationSupplier();
 
     /**
      * Returns the logical name of the 
-     * model package (if any) associated with this Type 
+     * model package (if any) associated with {@link PlasmaType Type} 
      * as a string, or null if no package exists.
      * @return the logical name of the 
-     * model package (if any) associated with this Type 
+     * model package (if any) associated with {@link PlasmaType Type} 
      * as a string, or null if no package exists.
      */    
     public String getPackageName();   
 
     /**
      * Returns the physical name alias of the 
-     * model package (if any) associated with this Type 
+     * model package (if any) associated with {@link PlasmaType Type} 
      * as a string, or null if no physical 
      * name alias exists. The package physical name alias is
      * useful for various services, such as those
      * providing access to relational data stores. 
      * @return the physical name alias of the 
-     * model package (if any) associated with this Type 
+     * model package (if any) associated with {@link PlasmaType Type} 
      * as a string, or null if no physical 
      * name alias exists.
      */    
@@ -228,7 +263,7 @@ public interface PlasmaType extends Type {
 
     
     /**
-     * Returns the physical name alias of package containing this Type as a byte array 
+     * Returns the physical name alias of package containing {@link PlasmaType Type} as a byte array 
      * which may be cached or lazily cached on demand, or null if no physical alias name exists. 
      * <p>
      * Helps support {@link org.plasma.sdo.access.DataAccessService Data Access Services} for sparse, 
@@ -238,64 +273,64 @@ public interface PlasmaType extends Type {
      * unique composite keys based in part on qualified or unqualified logical or physical
      * type names. 
      * </p>
-     * @return the physical name alias of package containing this Type as a byte array, or null if no physical alias name exists.
+     * @return the physical name alias of package containing {@link PlasmaType Type} as a byte array, or null if no physical alias name exists.
      */
     public byte[] getPackagePhysicalNameBytes();
     
     /**
      * Returns an alphabetically sorted list of the Properties declared 
-     * in this Type as opposed to
+     * in {@link PlasmaType Type} as opposed to
      * those declared in base Types. Properties are alphabetically sorted by name. 
-     * @return the Properties declared in this Type.
+     * @return the Properties declared in {@link PlasmaType Type}.
      */
 	public List<Property> getDeclaredPropertiesSorted();
     	
     /**
-     * Collects and returns all values from this type and its base types 
+     * Collects and returns all values from {@link PlasmaType Type} and its base types 
      * mapped to the given instance property. 
      * @param property one of the properties returned by
      *            {@link #getInstanceProperties()}.
-     * @return all values from this type and its base types 
+     * @return all values from {@link PlasmaType Type} and its base types 
      * mapped to the given instance property 
      */ 
     public List<Object> search(Property property);
 
     /**
-     * Returns the declared property from this type and its base types with the
+     * Returns the declared property from {@link PlasmaType Type} and its base types with the
      * given property name, or null if not exists 
      * @param name the property name
-     * @return the declared property from this type and its base types with the
+     * @return the declared property from {@link PlasmaType Type} and its base types with the
      * given property name, or null if not exists 
      */
     public Property findProperty(String name);
 
     /**
-     * Returns the declared property from this type and its base types tagged with the
+     * Returns the declared property from {@link PlasmaType Type} and its base types tagged with the
      * given concurrency type and data flavor. 
      * @param concurrencyType the concurrency type
      * @param dataFlavor the concurrency data flavor
-     * @return the declared property from this type and its base types tagged with the
+     * @return the declared property from {@link PlasmaType Type} and its base types tagged with the
      * given concurrency type and data flavor, or null if not exists 
      */
     public Property findProperty(ConcurrencyType concurrencyType, ConcurrentDataFlavor dataFlavor);
     //public Property findProperty(TemporalType type, TemporalState state);    
     
     /**
-     * Returns the declared property from this type and its base types tagged with the
+     * Returns the declared property from {@link PlasmaType Type} and its base types tagged with the
      * given key type. If more than one property is found, a warning is logged
      * and the first property is returned. 
      * @param keyType the key type
-     * @return declared property from this type and its base types tagged with the
+     * @return declared property from {@link PlasmaType Type} and its base types tagged with the
      * given key type, or null if not exists. If more than one property is found, a warning is logged
      * and the first property is returned. 
      */
     public Property findProperty(KeyType keyType);
 
     /**
-     * Returns the declared property from this type and its base types tagged with the
+     * Returns the declared property from {@link PlasmaType Type} and its base types tagged with the
      * given key type.  
      * @param keyType the key type
-     * @return declared property from this type and its base types tagged with the
+     * @return declared property from {@link PlasmaType Type} and its base types tagged with the
      * given key type, or null if not exists. 
      */
     public List<Property> findProperties(KeyType keyType);
@@ -319,28 +354,28 @@ public interface PlasmaType extends Type {
     
     /**
      * Returns a list of types which specialize or inherit from
-     * this type. An empty list is returned if no sub types exist. 
+     * {@link PlasmaType Type}. An empty list is returned if no sub types exist. 
      * @return a list of types which specialize or inherit from
-     * this type. An empty list is returned if no sub types exist. 
+     * {@link PlasmaType Type}. An empty list is returned if no sub types exist. 
      */
     public List<Type> getSubTypes();
 
     /**
      * Returns true if the given type is a specialization or 
-     * inherits from this type. 
+     * inherits from {@link PlasmaType Type}. 
      * @param other the sub type candidate
      * @return true if the given type is a specialization or 
-     * inherits from this type.
+     * inherits from {@link PlasmaType Type}.
      */
     public boolean isSubType(PlasmaType other);
     
     /**
-     * Returns true if the given type is linked or related to this type 
+     * Returns true if the given type is linked or related to {@link PlasmaType Type} 
      * across any number of traversals or hops as qualified by the given
      * relation path type.  
      * @param other the other type
      * @param relationPath the relation path type
-     * @return true if the given type is linked or related to this type 
+     * @return true if the given type is linked or related to {@link PlasmaType Type} 
      * across any number of traversals or hops as qualified by the given
      * relation path type.
      */

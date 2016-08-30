@@ -337,6 +337,7 @@ public class CoreType implements PlasmaType {
      * 
      * @return the type name.
      */
+    @Override
     public String getName() {
     	if (this.name == null)
             return classifier.getName();
@@ -357,6 +358,7 @@ public class CoreType implements PlasmaType {
      * </p>
      * @return the name of this Type as a byte array
      */
+    @Override
     public byte[] getNameBytes() {
     	if (this.instancePropertiesMap == null)
     		this.lazyLoadProperties();
@@ -380,6 +382,7 @@ public class CoreType implements PlasmaType {
      * @return the namespace URI qualified name for this
      * type. 
      */
+    @Override
     public QName getQualifiedName() {
     	return this.qname;
     }
@@ -397,6 +400,7 @@ public class CoreType implements PlasmaType {
      * </p>
      * @return the namespace qualified logical name of this Type as a byte array
      */
+    @Override
     public byte[] getQualifiedNameBytes() {
     	if (this.instancePropertiesMap == null)
     		this.lazyLoadProperties();
@@ -411,19 +415,23 @@ public class CoreType implements PlasmaType {
     }
     
     /**
-     * Return the namespace qualified physical name for this
-     * type or null if no physical alias name exists. This method is provided as using a QName
+     * Return the (physical) namespace qualified physical name for this
+     * type or null if no physical namespace and physical name exists. This method is provided as using a QName
      * may be more efficient, depending on the client usage context, than performing
      * string concatenations, particularly
      * where hashing and hash lookups by qualified Type name are
      * required.      
-     * @return the namespace qualified logical name for this
+     * @return the (physical) namespace qualified logical name for this
      * type or null if no physical alias name exists. 
      */
+    @Override
     public QName getQualifiedPhysicalName() {
     	String physicalName = this.getPhysicalName();
-    	if (physicalName != null)
-    		return new QName(this.namespaceURI, physicalName);   	    	
+    	if (physicalName != null) {
+    		String urPhysicalName = this.getURIPhysicalName();
+    		if (urPhysicalName != null)
+    		    return new QName(urPhysicalName, physicalName);   
+    	}
     	return null;
     }
     
@@ -639,7 +647,17 @@ public class CoreType implements PlasmaType {
         }
         return result;
     }
-    
+
+	@Override
+	public String getURIPhysicalName() {
+		return getPackagePhysicalName();
+	}
+
+	@Override
+	public byte[] getURIPhysicalNameBytes() {
+		return getPackagePhysicalNameBytes();
+	}	
+	
 	@SuppressWarnings("unchecked")
 	public List<Comment> getDescription() {
 		return (List<Comment>)this.get(
@@ -1176,4 +1194,5 @@ public class CoreType implements PlasmaType {
         		repoTypeName);
         return repoType;
 	}
+
 }
