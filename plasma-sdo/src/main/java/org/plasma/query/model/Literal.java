@@ -66,6 +66,11 @@ public class Literal implements org.plasma.query.Term {
         setValue(DataConverter.INSTANCE.getDateTimeFormat().format(content));
     } 
     
+    public Literal(Boolean content) {
+        this();
+        setValue(String.valueOf(content));
+    } 
+
     public Literal(Short content) {
         this();
         setValue(String.valueOf(content));
@@ -110,6 +115,8 @@ public class Literal implements org.plasma.query.Term {
     	    return new Literal((String)content);
     	else if (content instanceof Date)
     	    return new Literal((Date)content);
+    	else if (content instanceof Boolean)
+    	    return new Literal((Boolean)content);
     	else if (content instanceof Short)
     	    return new Literal((Short)content);
     	else if (content instanceof Integer)

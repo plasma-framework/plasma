@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="all"/>
  *     &lt;enumeration value="reference"/>
  *     &lt;enumeration value="data"/>
+ *     &lt;enumeration value="subclass_data"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -51,7 +52,9 @@ public enum WildcardPropertyTypeValues {
     @XmlEnumValue("reference")
     REFERENCE("reference"),
     @XmlEnumValue("data")
-    DATA("data");
+    DATA("data"),
+    @XmlEnumValue("subclass_data")
+    SUBCLASS___DATA("subclass_data");
     private final String value;
 
     WildcardPropertyTypeValues(String v) {

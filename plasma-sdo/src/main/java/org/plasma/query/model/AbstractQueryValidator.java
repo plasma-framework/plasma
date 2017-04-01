@@ -50,6 +50,16 @@ public abstract class AbstractQueryValidator extends DefaultQueryVisitor
     {
         super.start(select); 
     }
+    
+    public void start(Update update)    
+    {
+        super.start(update); 
+    }
+    
+    public void start(Delete delete)    
+    {
+        super.start(delete); 
+    }
 
     public void start(From from)    
     {

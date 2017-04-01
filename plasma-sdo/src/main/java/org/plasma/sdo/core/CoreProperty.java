@@ -775,6 +775,11 @@ public class CoreProperty implements PlasmaProperty {
         }		
 	}
 
+	@Override
+	public String getId() {
+		return this.property.getId();
+	}
+
 	
 
 }

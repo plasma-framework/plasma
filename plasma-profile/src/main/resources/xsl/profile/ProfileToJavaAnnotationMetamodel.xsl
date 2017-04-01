@@ -408,7 +408,7 @@
             <xsl:value-of select="'double'"/>
         </xsl:when>
         <xsl:when test="$type = 'Integer'">
-            <xsl:value-of select="'integer'"/>
+            <xsl:value-of select="'int'"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="yes">unknown UML primitive type '<xsl:value-of select="$type"/>'</xsl:message>

@@ -1,0 +1,29 @@
+Release Notes
+
+Plasma 1.2.4 Release Notes
+Plasma 1.2.4 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/terrameta/plasma/issues.
+
+
+Major Changes
+[Issue #63] - Hide Fuml Specific Repo Classes Behind Interfaces enhancement
+[Issue #62] - Add External Reference Support for Generalizations in UML Models enhancement
+[Issue #59] - SDO Model Annotations enhancement
+[Issue #58] - SDO Code Generation With No UML Packages bug
+ 
+Bugs
+[Issue #65] - Get Rid of Oracle Driver in plasma-sdo-jdbc module bug
+[Issue #64] - Get Rid of jaxb2-maven-plugin bug
+ 
+Improvements
+[Issue #71] - Add Simple Class Cache in Data Factory enhancement
+[Issue #67] - Add "getters" for Namespace URI Physical Name to PlasmaType enhancement
+ 
+New Features
+Tasks
+Wish
+
+

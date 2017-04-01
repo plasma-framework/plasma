@@ -47,6 +47,7 @@
 		<groupId>org.apache.ant</groupId>
 		<artifactId>ant</artifactId>
 		<version>1.9.0</version>
+		<scope>provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>commons-logging</groupId>
@@ -123,7 +124,7 @@
 	<build>
 		<finalName>plasma-sdo</finalName>
 		<plugins>
- 		    <!-- 
+ 		    <!--       
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
@@ -150,7 +151,7 @@
 					<encoding>Cp1252</encoding>
 				</configuration>
 			</plugin>
-			 -->
+			  -->       
            <plugin>                                                         
               <artifactId>maven-antrun-plugin</artifactId>                   
               <version>1.7</version>  

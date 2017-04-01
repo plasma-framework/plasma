@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -152,19 +153,21 @@ public class CoreDataObject extends CoreNode
         super();
     }
     
-    protected CoreDataObject(Type type, CoreObject values) {
+    protected CoreDataObject(Type type, CoreObject values, UUID uuid) {
         super(values);        
         this.type = type;
-        this.uuid = UUID.randomUUID();
+        this.uuid = uuid;
         this.hashCode = uuid.hashCode();
     }
 
     public CoreDataObject(Type type) {
-        super(new CoreObject(type.getName()));       
-        this.type = type;
-        this.uuid = UUID.randomUUID();
+        this(type, new CoreObject(type.getName()), UUID.randomUUID());       
     }   
 
+    public CoreDataObject(Type type, UUID uuid) {
+    	this(type, new CoreObject(type.getName()), uuid);       
+    }   
+    
     public int hashCode() {
     	return this.hashCode;
     }
@@ -232,10 +235,14 @@ public class CoreDataObject extends CoreNode
     }
     
     public ChangeSummary getChangeSummary() {
+    	if (this.dataGraph == null)
+    		throw new IllegalStateException("orphaned data object, " + this);
         return this.dataGraph.getChangeSummary();
     }
     
     public DataObject getRootObject() {
+    	if (this.dataGraph == null)
+    		throw new IllegalStateException("orphaned data object, " + this);
         return this.dataGraph.getRootObject();
     }
     
@@ -414,28 +421,25 @@ public class CoreDataObject extends CoreNode
         PlasmaDataObject dataObject = (PlasmaDataObject)PlasmaDataFactory.INSTANCE.create(
                 type);
 
+        
         if (property.isMany())
             this.add(property, dataObject);
         else
-            this.set(property, dataObject);
-        
+            this.setValue(property, dataObject);
+                
         // make this the new object's container
         dataObject.setContainer(this);
         dataObject.setContainmentProperty(property);
-        
- 
-        if (this.getDataGraph() != null) {
-                        
-        	dataObject.setDataGraph(this.getDataGraph());           
-            
-            PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)this.getDataGraph().getChangeSummary();
-             
+
+        if (this.getDataGraph() != null) {           
+        	dataObject.setDataGraph(this.getDataGraph());                       
+            PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)this.getDataGraph().getChangeSummary();             
             changeSummary.created(dataObject);
             changeSummary.modified(this, property, dataObject);
         }   
         else
-            throw new IllegalStateException("source data-object has no data-graph");
-                
+            throw new IllegalStateException("orphaned data-object, " + this);
+                 
         return dataObject;
     }
 
@@ -448,6 +452,47 @@ public class CoreDataObject extends CoreNode
         this.containmentProperty = containmentProperty;
     }
 
+	@Override
+	public void reparent(PlasmaDataObject container, Property containmentProperty) {
+ 		        
+        if (container.getDataGraph() != null) {
+        	// get these before we set new ones
+            Object containerOldValue = container.get(containmentProperty);
+            if (containerOldValue == null)
+            	containerOldValue = new NullValue();
+            Object oppositeOldValue = this.get(containmentProperty.getOpposite());
+            if (oppositeOldValue == null)
+            	oppositeOldValue = new NullValue();
+       	
+            if (containmentProperty.isMany())
+            	container.add(containmentProperty, this);
+            else
+            	container.set(containmentProperty, this);
+            
+            this.setContainer(container);
+            this.setContainmentProperty(containmentProperty);
+       	
+    		this.dataGraph = container.getDataGraph();
+    		
+    		Object timestamp = ((CoreNode)container).getValue(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP);
+    		if (timestamp != null)
+    		    ((CoreNode)this).setValue(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, timestamp); 
+    		else
+    			((CoreNode)this).setValue(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, 
+    					new Timestamp((new Date()).getTime())); 
+           
+            PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)container.getDataGraph().getChangeSummary();
+            
+            changeSummary.modified(container, containmentProperty, containerOldValue);            
+            if (containmentProperty.getOpposite() != null) {
+                changeSummary.modified(this, containmentProperty.getOpposite(), oppositeOldValue);
+            }
+        }   
+        else
+            throw new IllegalStateException("given container data-object has no data-graph");
+		
+	}
+    
     
     /**
      * Remove this object from its container and then unset all its non-
@@ -541,14 +586,13 @@ public class CoreDataObject extends CoreNode
      * @param dataObject the data object
      * @return true if this data object is the container for the
      * given data object
+     * @throws IllegalArgumentException of the given data object has no container
      */
     public boolean contains(DataObject dataObject) {
     	CoreDataObject container = (CoreDataObject)dataObject.getContainer();
     	if (container == null)
-            throw new IllegalArgumentException("the given data-object (" 
-                    + ((CoreDataObject)dataObject).getUUIDAsString() + ") of type "
-                    + dataObject.getType().getURI() + "#" 
-                    + dataObject.getType().getName() + " has no container");            
+            throw new IllegalArgumentException("the given data-object, " 
+                    + dataObject + ", has no container");            
         return container.equals(this);
     }
     
@@ -560,15 +604,32 @@ public class CoreDataObject extends CoreNode
      */
     @Override
     public void detach() {
+ 
+    	// collect the containment graph in a flat list and just
+    	// remove data graph of entire containment hierarchy,
+    	// not the containment property etc... as this is
+    	// what composes the hierarchy
+    	ContainmentGraphCollector collector = 
+    		new ContainmentGraphCollector();
+    	this.accept(collector);
+    	List<ContainmentNode> nodes = collector.getResult();
+    	for (ContainmentNode node: nodes) {
+    		if (!node.getDataObject().equals(this))
+    		    node.getDataObject().setDataGraph(null);
+    	}
     	
+    	// finally remove ourself from container
     	if (this.containmentProperty != null) {
-    		if (this.getContainer() != null) // could be detached already
+    		if (this.container != null) { // could be detached already
 		    	if (this.containmentProperty.isMany()) {
 		    		this.getContainer().getList(this.containmentProperty).remove(this);
 		    	}
 		    	else {
 		    		this.getContainer().unset(this.containmentProperty);
 		    	}
+		    	this.container = null;
+    		}
+    		this.containmentProperty = null;
     	}
     	else {
     		if (!((CoreDataObject)this.getDataGraph().getRootObject()).equals(this))
@@ -577,7 +638,7 @@ public class CoreDataObject extends CoreNode
     		        +" with no container");
     	}
     	
-    	this.dataGraph = null;
+    	this.dataGraph = null; 
     }
 
     public Object get(int propertyIndex) {
@@ -718,7 +779,11 @@ dataObject.set(property, dataHelper.convert(property, value));
      * @see #get(Property)
      */
     public void set(Property property, Object value) {
-        
+    	Object propertyValue = setValue(property, value);
+    	setOppositeModified(property, propertyValue);
+    }    
+    
+    private Object setValue(Property property, Object value) {
         if (property.isReadOnly())
             throw new UnsupportedOperationException(this.getType().getURI() + "#"
                     + this.getType().getName() + "." + property.getName() + " is a read-only property");
@@ -733,8 +798,7 @@ dataObject.set(property, dataHelper.convert(property, value));
             if (!instanceClass.isAssignableFrom(value.getClass())) 
                 throw new ClassCastException("expected instance of " 
                         + property.getType().getInstanceClass().getName()
-                        + " as value for property "
-                        + this.type.getURI() + "#" + this.type.getName() + "." + property.getName()
+                        + " as value for property " + property 
                         + " - not class, " + value.getClass().getName()); 
             
             // add graph edge
@@ -748,9 +812,8 @@ dataObject.set(property, dataHelper.convert(property, value));
                         log.warn("detected 'set' operation with identical " 
                             + targetNode.getClass().getSimpleName() 
                             + " object (" + targetNode.getUUIDAsString() + ") for property "
-                            + this.type.getURI() + "#" + this.type.getName() + "." + property.getName() 
-                            + " - ignoring");
-                        return;
+                            + property + " - ignoring");
+                        return null;
                     }
                 }
                 PlasmaDataLink link = createLink(property, targetNode);
@@ -774,9 +837,8 @@ dataObject.set(property, dataHelper.convert(property, value));
                         log.debug("detected 'set' operation with identical " 
                                 + existingValue.getClass().getSimpleName() 
                                 + " object (" + String.valueOf(existingValue) + ") for property "
-                                + this.type.getURI() + "#" + this.type.getName() + "." + property.getName() 
-                                + " - ignoring");
-                    return;
+                                + property + " - ignoring");
+                    return null;
                 }
             }
         }
@@ -793,8 +855,7 @@ dataObject.set(property, dataHelper.convert(property, value));
                         if (!instanceClass.isAssignableFrom(listValue.getClass())) 
                             throw new ClassCastException("expected instance of " 
                                     + property.getType().getInstanceClass().getName()
-                                    + " as value for property "
-                                    + this.type.getURI() + "#" + this.type.getName() + "." + property.getName()
+                                    + " as value for property " + property
                                     + " - not class, " + listValue.getClass().getName());  
                     	PlasmaDataLink link = createLink(property, (PlasmaNode)listValue);
                         edgeList.add(link); 
@@ -807,8 +868,7 @@ dataObject.set(property, dataHelper.convert(property, value));
 	                        if (!instanceClass.isAssignableFrom(listValue.getClass())) 
 	                            throw new ClassCastException("expected instance of " 
 	                                    + property.getType().getInstanceClass().getName()
-	                                    + " as value for property "
-	                                    + this.type.getURI() + "#" + this.type.getName() + "." + property.getName()
+	                                    + " as value for property " + property
 	                                    + " - not class, " + listValue.getClass().getName());  
 	                    	// attempt a conversion as a validation check
 	                    	if (flavor.ordinal() == DataFlavor.temporal.ordinal()) 
@@ -822,8 +882,7 @@ dataObject.set(property, dataHelper.convert(property, value));
             }
             else
                 throw new ClassCastException("expected java.util.List Java Class for property "
-                        + this.type.getURI() + "#" + this.type.getName() + "." + property.getName()
-                        + " - not class, " + value.getClass().getName());
+                        + property + " - not class, " + value.getClass().getName());
         }
                
         if (this.getDataGraph() != null) {
@@ -836,19 +895,30 @@ dataObject.set(property, dataHelper.convert(property, value));
         
         super.setValue(property.getName(), propertyValue);
         
-        // register an opposite change after the link between objects is created
-        // as change summary creates a path between them
-        /*
-        if (!property.getType().isDataType()) {
-            if (!property.isMany()) {
-        	    this.oppositeModified(this, property, (PlasmaDataLink)propertyValue);        	
-            }
-            else {
-        	    this.oppositeModified(this, property, (List<PlasmaEdge>)propertyValue);        	
-            }
-        }
-        */
+        return propertyValue;
+         
     }   
+    
+    /**
+     * register an opposite change after the link between objects is created
+     * as change summary creates a path between them 
+     * @param property
+     * @param propertyValue the value of the property, may be a 
+     */
+    private void setOppositeModified(Property property, Object propertyValue) {
+        if (!property.getType().isDataType()) {
+    	    Property oppositeProperty = property.getOpposite();
+    	    if (oppositeProperty != null) {
+	            if (!property.isMany()) {
+	        	    this.oppositeModified(this, property, oppositeProperty, (PlasmaDataLink)propertyValue);        	
+	            }
+	            else {
+	        	    this.oppositeModified(this, property, oppositeProperty, (List<PlasmaEdge>)propertyValue);        	
+	            }
+            }
+        }         
+    }
+    
     
     /**
      * Adds the given value to the given multi=valued property. 
@@ -1024,8 +1094,24 @@ dataObject.set(property, dataHelper.convert(property, value));
     private PlasmaDataLink createLink(Property property, PlasmaNode node) {
         
         PlasmaDataObject target = node.getDataObject();
-        if (target.getDataGraph() == null)
+        if (this.getDataGraph() == null)
+        	throw new IllegalStateException("orphaned data object, " + this);
+        if (target.getDataGraph() == null) {
+        	if (target.getContainer() != null || target.getContainmentProperty() != null) 
+                throw new IllegalArgumentException("given data-object has a container but no data graph");           		
+            //re-parent the entire containment hierarchy of the target
+        	ContainmentGraphCollector collector = 
+            	new ContainmentGraphCollector();
+        	target.accept(collector);
+        	for (ContainmentNode containmentNode: collector.getResult()) {
+        		containmentNode.getDataObject().setDataGraph(this.getDataGraph());
+        	}
+        	
+        	target.setContainer(this); 
+        	target.setContainmentProperty(property);
             target.setDataGraph(this.getDataGraph());
+           
+        }
         else if (!target.getDataGraph().equals(this.getDataGraph()))
             throw new IllegalArgumentException("given data-object already belongs to a data-graph");   
 
@@ -1295,12 +1381,8 @@ dataObject.set(property, dataHelper.convert(property, value));
 		}
     }
 
-	private void oppositeModified(CoreDataObject dataObject, Property property, PlasmaDataLink link)
+	private void oppositeModified(CoreDataObject dataObject, Property property, Property oppositeProperty, PlasmaDataLink link)
     {
-	    Property oppositeProperty = property.getOpposite();
-	    if (oppositeProperty == null)
-	    	return;
-	    
 	    if (property.isMany()) {
 	    	log.warn("expected singular property not multi-property, " + property.toString());
 	    	return;
@@ -1332,11 +1414,8 @@ dataObject.set(property, dataHelper.convert(property, value));
         } 
 	}
 	    	    
-	private void oppositeModified(CoreDataObject dataObject, Property property, List<PlasmaEdge> links)
+	private void oppositeModified(CoreDataObject dataObject, Property property, Property oppositeProperty, List<PlasmaEdge> links)
     {
-	    Property oppositeProperty = property.getOpposite();
-	    if (oppositeProperty == null)
-	    	return;
 	    if (!property.isMany()) {
 	    	log.warn("expected multi property not sungular property, " + property.toString());
 	    	return;
@@ -2876,6 +2955,11 @@ dataObject.set(property, dataHelper.convert(property, value));
                 if (uuid != null)
                     buf.append("<" + "__UUID__"
                             + ":" + uuid + ">");
+                Timestamp snapshotDate = (Timestamp)((CoreDataObject)target).getValue(
+                		CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP);                                     
+                if (snapshotDate != null)
+                    buf.append("<" + CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP
+                            + ":" + snapshotDate + ">");
                 
                 List<Property> properties = target.getType().getProperties();
                 for (Property property : properties)
@@ -2915,4 +2999,5 @@ dataObject.set(property, dataHelper.convert(property, value));
         }
         
     }
+
 }

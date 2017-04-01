@@ -130,7 +130,7 @@ public class CoreDataGraph implements PlasmaDataGraph {
     public DataObject createRootObject(Type type) {
         if (this.rootObject != null)
             throw new IllegalStateException("a root data object already exists for this data graph");
-        this.rootObject = (PlasmaDataObject)PlasmaDataFactory.INSTANCE.create(type);
+        this.rootObject = (PlasmaDataObject)PlasmaDataFactory.instance().create(type);
         PlasmaDataObject root = ((PlasmaNode)this.rootObject).getDataObject();
         root.setDataGraph(this);
         // FIXME: why does change summary only want a plasma object ??

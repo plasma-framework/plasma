@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -55,6 +56,7 @@ public class PlasmaTypeHelper implements TypeHelper {
     
     private Map<String, Type> namespaceQualifiedNameToTypeMap = new HashMap<String, Type>();
     private Map<String, List<Type>> namespaceToTypesMap = new HashMap<String, List<Type>>();
+    private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 
     private PlasmaTypeHelper() {       
     }
@@ -127,30 +129,83 @@ public class PlasmaTypeHelper implements TypeHelper {
      */
     public Type getType(String uri, String typeName) {
         String qualifiedName = uri + "#" + typeName;
+        //rwl.readLock().lock();
         Type result = namespaceQualifiedNameToTypeMap.get(qualifiedName);
         if (result == null)
         {
-        	try {
-                result = new CoreType(uri, typeName);
-        	}
-        	catch (InvalidClassifierNameException e) {
-        		log.warn(e.getMessage(), e);
-        		return null;
-        	}
-            namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
-            // New type could have a name based on config type-binding
-            // also map by new logical name if exists
-            if (!result.getName().equals(typeName)) {
-            	qualifiedName = uri + "#" + result.getName();
-                namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
+            //if (log.isDebugEnabled())
+            //	log.debug("cache miss: " + qualifiedName);
+            //rwl.readLock().unlock();
+            rwl.writeLock().lock();
+            try {
+            	result = namespaceQualifiedNameToTypeMap.get(qualifiedName);
+            	if (result == null) {
+		        	try {
+		                result = new CoreType(uri, typeName);
+		        	}
+		        	catch (InvalidClassifierNameException e) {
+		        		log.warn(e.getMessage(), e);
+		        		return null;
+		        	}
+		        	 
+		            namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
+		            // New type could have a name based on config type-binding
+		            // also map by new logical name if exists
+		            if (!result.getName().equals(typeName)) {
+		            	qualifiedName = uri + "#" + result.getName();
+		                namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
+		            }
+		            
+		            List<Type> namespaceTypes = namespaceToTypesMap.get(uri);
+		            if (namespaceTypes == null)
+		            	namespaceTypes = new ArrayList<Type>();
+		            namespaceTypes.add(result);
+		             
+		            //rwl.readLock().lock(); // downgrade to read
+            	}
+            } finally {
+                rwl.writeLock().unlock(); // Unlock write, still hold read
             }
-            
-            List<Type> namespaceTypes = namespaceToTypesMap.get(uri);
-            if (namespaceTypes == null)
-            	namespaceTypes = new ArrayList<Type>();
-            namespaceTypes.add(result);
         }
         return result;
+    }
+    
+    /**
+     * Releases resources associated with the given type and removes it
+     * from cache. 
+     * @param type the type
+     */
+    public void releaseType(Type type) {
+    	releaseType(type.getURI(), type.getName());
+    }
+    
+    /**
+     * Releases resources associated with the given type and removes it
+     * from cache. 
+     * @param uri The uri of the Type - type.getURI();
+     * @param typeName The name of the Type - type.getName();
+     */
+    public void releaseType(String uri, String typeName) {
+        String qualifiedName = uri + "#" + typeName;
+        if (log.isDebugEnabled())
+        	log.debug("releasing type: " + qualifiedName);
+        rwl.writeLock().lock();
+        try {
+	        Type removed = namespaceQualifiedNameToTypeMap.remove(qualifiedName);
+	    	if (removed != null) {
+		        List<Type> namespaceTypes = namespaceToTypesMap.get(uri);
+		        if (namespaceTypes != null) {
+		        	if (!namespaceTypes.remove(removed))
+		        		log.warn("could not remove type from namespace mapping, " + qualifiedName);
+		        }
+		        else
+		    		log.warn("could not remove type from namespace mapping, " + qualifiedName);
+	    	}
+	    	else
+	    		log.warn("could not remove type, " + qualifiedName);
+        } finally {
+            rwl.writeLock().unlock();  
+        }
     }
     
     /**
@@ -177,27 +232,10 @@ public class PlasmaTypeHelper implements TypeHelper {
             throw new PlasmaDataObjectException(e);
         } catch (IllegalAccessException e) {
             throw new PlasmaDataObjectException(e);
-        }
-                
-        String qualifiedName = uri + "#" + interfaceClass.getSimpleName();
-        Type result = namespaceQualifiedNameToTypeMap.get(qualifiedName);
-        if (result == null)
-        {
-        	try {
-                result = new CoreType(uri, interfaceClass.getSimpleName());
-        	}
-        	catch (InvalidClassifierNameException e) {
-        		log.warn(e.getMessage(), e);
-        		return null;
-        	}
-            namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
-            List<Type> namespaceTypes = namespaceToTypesMap.get(uri);
-            if (namespaceTypes == null)
-            	namespaceTypes = new ArrayList<Type>();
-            namespaceTypes.add(result);
-        }
-        return result;
+        }         
+        return getType(uri, interfaceClass.getSimpleName());
     }
+        
     
     /**
      * Return the Type instances specified by the given uri.

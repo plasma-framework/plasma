@@ -63,20 +63,39 @@ import commonj.sdo.Property;
  */
 public interface PlasmaDataObject extends DataObject 
 {
+	@Deprecated
     public void setDataGraph(DataGraph dataGraph);
     
 
     /**
      * Sets the current container for this DataObject
      */
+	@Deprecated
     public void setContainer(DataObject container);
 
-    /** 
+     /**
      * Sets the declared reference Property within the Type for the 
      * container which is our current containment reference property 
+     * @param containmentProperty the containment property, which must be a declared property
+     * within the type for the current container {@link DataObject data object}.  
      */
+	@Deprecated
     public void setContainmentProperty(Property containmentProperty);
 
+
+    /**
+     * Transfers this {@link DataObject data object} to another data graph, makes this data object to 
+     * be contained by the given container
+     * data object using the given containment property. The property and
+     * its opposite if exists, are automatically set and flagged as modified
+     * in the {@link ChangeSummary change summary}. This data object automatically
+     * becomes part of the {@link DataGraph data graph} of the given container.  
+     * @param container the container {@link DataObject data object}.
+     * @param containmentProperty the containment property, which must be a declared property
+     * within the type for the given container data object.  
+     */
+	@Deprecated
+    public void reparent(PlasmaDataObject container, Property containmentProperty);
     
     /**
      * Adds the given value to the given multi=valued property. 

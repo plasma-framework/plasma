@@ -1,3 +1,4 @@
-The PlasmaSDO profile in this resource subdir is one version ahead
-of the one in the src/main/resources directory. Use the previous version
-in the src/main/resources directory to distribute.  
+The PlasmaSDO profile in this resource subdir is one version ahead and used for
+code generation only. 
+of the one in the src/main/resources directory of the plasma-sdo module. Use the previous version
+in the plasma-sdo src/main/resources directory to distribute.  

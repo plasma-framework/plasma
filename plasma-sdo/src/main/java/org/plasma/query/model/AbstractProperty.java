@@ -37,12 +37,30 @@ import org.plasma.query.visitor.QueryVisitor;
 @XmlType(name = "AbstractProperty", propOrder = {
     "path"
 })
-public abstract class AbstractProperty {
+public abstract class AbstractProperty implements Comparable<AbstractProperty> {
 
     @XmlElement(name = "Path", namespace = "")
     protected Path path;
 
     /**
+     * A qualified name used for identity
+     */
+    protected transient String qualifiedName;
+    public abstract String getQualifiedName();
+    
+    /**
+     * A unique id, such as a repository UUID as string or
+     * xmi-id from UML source. 
+     */
+    protected transient String uniqueId;
+    public String getUniqueId() {
+    	return this.uniqueId;
+    }
+    public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
+	}
+
+	/**
      * Gets the value of the path property.
      * 
      * @return

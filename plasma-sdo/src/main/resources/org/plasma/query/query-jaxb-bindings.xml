@@ -17,7 +17,7 @@
  
 	<jxb:bindings schemaLocation="query.xsd" node="/xsd:schema">
 	    <jxb:schemaBindings>
-	        <jxb:package name="org.plasma.queryxxx">
+	        <jxb:package name="org.plasma.query.model">
 	            <jxb:javadoc><![CDATA[<body>Package level documentation for package org.plasma.query.</body>]]></jxb:javadoc>
             </jxb:package>
 	    </jxb:schemaBindings>

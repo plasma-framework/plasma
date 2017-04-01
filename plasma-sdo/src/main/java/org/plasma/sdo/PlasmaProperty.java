@@ -346,4 +346,10 @@ public interface PlasmaProperty extends Property {
      */
     public PlasmaProperty getDerivationSupplier();
     
+    /**
+     * Returns the unique id for the element within its meta data repository. 
+     * @return the unique id for the element within its meta data repository.
+     */
+    public String getId();
+    
 }

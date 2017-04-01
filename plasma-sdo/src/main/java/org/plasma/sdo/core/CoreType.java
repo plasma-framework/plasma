@@ -1195,4 +1195,9 @@ public class CoreType implements PlasmaType {
         return repoType;
 	}
 
+	@Override
+	public String getId() {
+		return this.classifier.getId();
+	}
+
 }

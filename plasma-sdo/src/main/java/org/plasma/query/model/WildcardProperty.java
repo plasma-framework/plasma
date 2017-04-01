@@ -80,4 +80,26 @@ public class WildcardProperty
 	    visitor.end(this);
     }
 
+	@Override
+	public int compareTo(AbstractProperty o) {
+		return getQualifiedName().compareTo(o.getQualifiedName());
+	}
+
+	@Override
+	public String getQualifiedName() {
+    	if (qualifiedName == null) {
+    	    StringBuilder buf = new StringBuilder();
+    	    if (this.path != null) {
+    	    	for (PathNode node : this.path.getPathNodes()) {
+    	    		buf.append(node.getPathElement().getValue());
+	    			buf.append(".");
+    	    	}
+    	    }
+    	    buf.append("*:");
+    	    buf.append(this.type);
+    	    qualifiedName = buf.toString();
+    	}
+    	return qualifiedName;
+	}
+
 }

@@ -1232,7 +1232,7 @@ public class DataConverter {
     			result = String.valueOf(value);
     		}
     		else
-    			throwExpectedInstance(sourceDataType, Date.class, value.getClass());
+    			throwExpectedInstance(sourceDataType, typeClass, value.getClass());
     	}
     	else {
     		if (value instanceof List) {

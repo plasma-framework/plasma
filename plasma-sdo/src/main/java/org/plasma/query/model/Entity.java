@@ -54,12 +54,15 @@ import org.plasma.query.visitor.QueryVisitor;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Entity")
 @XmlRootElement(name = "Entity")
-public class Entity {
+public class Entity implements Comparable<Entity> {
 
     @XmlAttribute(required = true)
     protected String name;
     @XmlAttribute
     protected String namespaceURI;
+    @XmlAttribute(name = "alias")
+    protected String alias;
+
     /** 
      * Stores the physical name associated with this 
      * property. Can be used by service providers
@@ -76,6 +79,11 @@ public class Entity {
      * operations.  
      */
     protected transient byte[] physicalNameBytes;
+    
+    /**
+     * A qualified name user for identity
+     */
+    private transient String qualifiedName;
 
     public Entity() {
         super();
@@ -86,6 +94,18 @@ public class Entity {
         this.setName(name);
         this.setNamespaceURI(namespaceURI);
     } 
+    
+    /**
+     * A unique id, such as a repository UUID as string or
+     * xmi-id from UML source. 
+     */
+    protected transient String uniqueId;
+    public String getUniqueId() {
+    	return this.uniqueId;
+    }
+    public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
+	}
 
     /**
      * Gets the value of the name property.
@@ -122,6 +142,34 @@ public class Entity {
         return namespaceURI;
     }
     
+    /**
+     * Gets the value of the alias property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAlias() {
+        return alias;
+    }
+
+    /**
+     * Sets the value of the alias property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAlias(String value) {
+        this.alias = value;
+    }
+
+    public boolean hasAlias() {
+    	return this.alias != null;
+    }
+    
     public String getPhysicalName() {
         return physicalName;
     }
@@ -155,4 +203,67 @@ public class Entity {
         visitor.start(this);
     	visitor.end(this);
     }
+    
+    public static String qualifiedNameFor(String namespaceURI, String name) {
+	    StringBuilder buf = new StringBuilder();
+	    buf.append(namespaceURI);
+	    buf.append("#");
+	    buf.append(name);
+	    return buf.toString();
+    }
+
+    public static String qualifiedNameFor(String namespaceURI, String name, String alias) {
+	    StringBuilder buf = new StringBuilder();
+	    buf.append(namespaceURI);
+	    buf.append("#");
+	    buf.append(name);
+    	buf.append(" (");
+    	buf.append(alias);
+    	buf.append("}");
+	    return buf.toString();
+    }
+    
+    public String getQualifiedName() {
+    	if (qualifiedName == null) {
+    	    if (this.namespaceURI != null && this.alias != null) {
+    	    	qualifiedName = qualifiedNameFor(this.namespaceURI, this.name, this.alias);
+    	    }
+    	    else {
+    	    	qualifiedName = qualifiedNameFor(this.namespaceURI, this.name);
+    	    }
+    	}
+    	return qualifiedName;
+    }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getQualifiedName() == null) ? 0 : getQualifiedName().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Entity other = (Entity) obj;
+		if (getQualifiedName() == null) {
+			if (other.getQualifiedName() != null)
+				return false;
+		} else if (!getQualifiedName().equals(other.getQualifiedName()))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(Entity o) {
+		return getQualifiedName().compareTo(o.getQualifiedName());
+	}
+    
+    
 }

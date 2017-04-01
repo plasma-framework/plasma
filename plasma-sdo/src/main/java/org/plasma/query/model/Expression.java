@@ -82,6 +82,7 @@ import org.plasma.query.visitor.Traversal;
 public class Expression implements org.plasma.query.Expression {
 
 	private final static String SYNTHETIC_PARENT_ID = "synthetic";
+	public final static String NOOP_EXPR_ID = "NO_OP";
     private static transient Log log = LogFactory.getLog(Expression.class);
 	protected transient Expression parent;
 	@XmlAttribute
@@ -113,6 +114,19 @@ public class Expression implements org.plasma.query.Expression {
 		root.getTerms().add( 
 			new Term(new GroupOperator(GroupOperatorValues.LP_1)));
 	    return this;
+	}
+	
+	public boolean isGroup() {
+		if (this.getTerms().size() > 0) {
+			GroupOperator left = this.getTerms().get(0).getGroupOperator();
+			if (left != null && left.getValue().ordinal() == GroupOperatorValues.RP_1.ordinal()) {
+				GroupOperator right = this.getTerms().get(this.getTerms().size()-1).getGroupOperator();
+				if (right != null && right.getValue().ordinal() == GroupOperatorValues.LP_1.ordinal()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	private Expression cat(org.plasma.query.Expression other, LogicalOperatorValues oper) {
@@ -207,6 +221,13 @@ public class Expression implements org.plasma.query.Expression {
         this.getTerms().add(new Term(right));
     } 
     
+    public Expression(Expression left, LogicalOperator oper, Expression right) {
+        this();
+        this.getTerms().add(new Term(left));
+        this.getTerms().add(new Term(oper));
+        this.getTerms().add(new Term(right));
+    } 
+    
     public Expression(GroupOperator right, Property prop, RelationalOperator oper, Literal lit) {
         this();
         this.getTerms().add(new Term(right));
@@ -278,6 +299,13 @@ public class Expression implements org.plasma.query.Expression {
         this.getTerms().add(new Term(prop));
         this.getTerms().add(new Term(oper));
         this.getTerms().add(new Term(query));
+    } 
+    
+    public Expression(Property left, RelationalOperator oper, Property right) {
+        this();
+        this.getTerms().add(new Term(left));
+        this.getTerms().add(new Term(oper));
+        this.getTerms().add(new Term(right));
     } 
 
     public Expression(RelationalOperator oper) {
@@ -970,6 +998,16 @@ public class Expression implements org.plasma.query.Expression {
     	return booleanExprFor(expr);
     } 
     
+    public static Expression noOp() {
+    	Expression noOp = new Expression();
+    	noOp.id = Expression.NOOP_EXPR_ID;
+    	return noOp;
+    } 
+    
+    public boolean isNoOp() {
+    	return this.id != null && this.id.equals(Expression.NOOP_EXPR_ID);
+    }
+    
     private static Expression booleanExprFor(BinaryExpr expr) {
 		LocationPath left = (LocationPath)expr.getLHS();
 		NameStep name = (NameStep)left.getSteps().get(0);
@@ -1045,7 +1083,6 @@ public class Expression implements org.plasma.query.Expression {
 		public Expression getResult() {
 			return result;
 		}
-        
         
     	
     }

@@ -436,6 +436,18 @@ abstract class CollectorSupport {
                     	if (prop.getType().isDataType())
                             list.add(prop.getName());
                     break;
+                case SUBCLASS___DATA:
+                    for (commonj.sdo.Property prop : props)
+                    	if (prop.getType().isDataType())
+                            list.add(prop.getName());
+                    PlasmaType plasmaType = (PlasmaType)type;
+                    for (Type subType : plasmaType.getSubTypes()) {
+                        for (commonj.sdo.Property prop : subType.getDeclaredProperties())
+                        	if (prop.getType().isDataType())
+                                list.add(prop.getName());
+                    	
+                    }
+                    break;
             }
             result = new String[list.size()];
             list.toArray(result);            
@@ -496,6 +508,18 @@ abstract class CollectorSupport {
                     for (commonj.sdo.Property prop : props)
                     	if (prop.getType().isDataType())
                             list.add(prop);
+                    break;
+                case SUBCLASS___DATA:
+                    for (commonj.sdo.Property prop : props)
+                    	if (prop.getType().isDataType())
+                            list.add(prop);
+                    PlasmaType plasmaType = (PlasmaType)type;
+                    for (Type subType : plasmaType.getSubTypes()) {
+                        for (commonj.sdo.Property prop : subType.getDeclaredProperties())
+                        	if (prop.getType().isDataType())
+                                list.add(prop);
+                    	
+                    }
                     break;
             }
             result = new commonj.sdo.Property[list.size()];

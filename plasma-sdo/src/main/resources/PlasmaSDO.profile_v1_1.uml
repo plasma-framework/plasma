@@ -543,6 +543,23 @@
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320760018456_883564_1479" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320760018456_972957_1480" value="1"/>
     </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320780235175_515818_1869" name="group" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320780285360_110798_e4535" annotatedElement="_16_0_1_1707042b_1320780235175_515818_1869">
+        <body>The key set or constraint name</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320780251174_911264_1871"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320780251175_343706_1872" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_13207802345175_515818_23234" name="sequence" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320780285360_110798_234234" annotatedElement="_16_0_1_1707042b_13207802345175_515818_23234">
+        <body>The position or ordering of a key within a group</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320780251174_911264_34535"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320780251175_343706_234234" value="1"/>
+    </ownedAttribute>
+
   </packagedElement>
   <packagedElement xmi:type="uml:Extension" xmi:id="_h4pP8DSJEeS0BI8SXekDLw" name="E_SDOKey_Property1" memberEnd="_h4pP8TSJEeS0BI8SXekDLw _h4oo4DSJEeS0BI8SXekDLw">
     <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_h4pP8TSJEeS0BI8SXekDLw" name="extension_SDOKey" type="_Zrb98DSJEeS0BI8SXekDLw" aggregation="composite" association="_h4pP8DSJEeS0BI8SXekDLw"/>

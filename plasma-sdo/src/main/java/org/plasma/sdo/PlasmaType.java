@@ -382,4 +382,9 @@ public interface PlasmaType extends Type {
     public boolean isRelation(PlasmaType other, AssociationPath relationPath);
     
      
+    /**
+     * Returns the unique id for the element within its meta data repository. 
+     * @return the unique id for the element within its meta data repository.
+     */
+    public String getId();
 }

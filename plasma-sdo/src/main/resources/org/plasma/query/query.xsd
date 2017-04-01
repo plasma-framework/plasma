@@ -25,10 +25,13 @@
 		<xsd:sequence>
 			<xsd:choice>
 				<xsd:element ref="query:Select"/>
+				<xsd:element ref="query:Update"/>
+				<xsd:element ref="query:Delete"/>
 				<xsd:element ref="query:From"/>
 				<xsd:element ref="query:Where"/>
 				<xsd:element ref="query:OrderBy"/>
 				<xsd:element ref="query:GroupBy"/>
+				<xsd:element ref="query:Join"/>
 			</xsd:choice>
 		</xsd:sequence>
     </xsd:complexType>
@@ -41,6 +44,7 @@
         </xsd:annotation>
 		<xsd:sequence>
 			<xsd:element ref="query:Entity"/>
+			<xsd:element ref="query:Expression" minOccurs="1" maxOccurs="unbounded"/>
 		</xsd:sequence>
     </xsd:complexType>
 
@@ -76,9 +80,14 @@
         <xsd:annotation>
             <xsd:documentation></xsd:documentation>
         </xsd:annotation>
-		<xsd:sequence>
-			<xsd:element ref="query:Entity"/>
+        <xsd:sequence>
+			<xsd:element ref="query:Entity" minOccurs="1" maxOccurs="unbounded"/>
 		</xsd:sequence>
+	    <xsd:attribute name="randomSample" type="xsd:float" use="optional">
+            <xsd:annotation>                                  
+                <xsd:documentation>A floating point value between zero (result entity is never included) and 1 (result entity is always included) used to sample or filter results. Cannot be used with with (potentially) many types of predicates depending on the restrictions within the underlying data store.</xsd:documentation>       
+            </xsd:annotation>                                 
+        </xsd:attribute>
     </xsd:complexType>
 
     <xsd:element name="From" type="query:From"/>
@@ -99,6 +108,30 @@
     </xsd:complexType>
 
     <xsd:element name="Where" type="query:Where"/>
+
+    <xsd:complexType name="Join">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Entity" minOccurs="1" maxOccurs="1"/>
+			<xsd:element ref="query:On" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+ 	    <xsd:attribute name="type" type="query:JoinType" use="required"/>
+    </xsd:complexType>
+
+    <xsd:element name="Join" type="query:Join"/>
+
+    <xsd:complexType name="On">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Expression" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="On" type="query:On"/>
 	
     <xsd:complexType name="Parameter">
         <xsd:annotation>
@@ -290,7 +323,8 @@
             <xsd:documentation></xsd:documentation>
         </xsd:annotation>
 	    <xsd:attribute name="name" type="xsd:string" use="required"/>
-	    <xsd:attribute name="namespaceURI" type="xsd:string" use="optional"/>
+	    <xsd:attribute name="namespaceURI" type="xsd:string" use="required"/>
+	    <xsd:attribute name="alias" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <xsd:element name="Entity" type="query:Entity"/>
@@ -310,6 +344,7 @@
 				<xsd:attribute name="values" type="xsd:boolean" use="optional" default="false"/>
 				<xsd:attribute name="distinct" type="xsd:boolean" use="optional" default="false"/>
 				<xsd:attribute name="direction" type="query:SortDirectionValues" use="optional" default="ASC"/>
+ 				<xsd:attribute name="alias" type="xsd:string" use="optional"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -620,6 +655,7 @@
 			<xsd:enumeration value="all"/>
 			<xsd:enumeration value="reference"/>
 			<xsd:enumeration value="data"/>
+			<xsd:enumeration value="subclass_data"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="SortDirectionValues">
@@ -663,6 +699,14 @@
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="logical"/>
 			<xsd:enumeration value="local"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="JoinType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="inner"/>
+			<xsd:enumeration value="left_outer"/>
+			<xsd:enumeration value="right_outer"/>
+			<xsd:enumeration value="cross"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 </xsd:schema>

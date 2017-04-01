@@ -51,6 +51,7 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 	private PlasmaDataObject result;
 	private Map<String, PlasmaDataObject> resultMap = new HashMap<String, PlasmaDataObject>();
 	private HashSet<Type> referenceTypes;
+	private boolean copyUUIDs = false;
 	
 	public DataGraphCopyVisitor() {
 	}
@@ -61,6 +62,14 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 		   this.referenceTypes.add(t);
 	}
 	
+	public boolean isCopyUUIDs() {
+		return copyUUIDs;
+	}
+
+	public void setCopyUUIDs(boolean copyUUIDs) {
+		this.copyUUIDs = copyUUIDs;
+	}
+
 	public void visit(DataObject target, DataObject source,
 			String sourceKey, int level) {
 		
@@ -75,6 +84,8 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 					+ targetObject.getUUIDAsString());
 	    	Type rootType = target.getType();
 	    	result = (PlasmaDataObject)dataGraph.createRootObject(rootType);
+	        if (this.copyUUIDs)
+	        	result.resetUUID(((PlasmaDataObject)target).getUUID());
 	    	copyDataProperties(targetObject, result);
 	    	resultMap.put(targetObject.getUUIDAsString(), result);
 	    	return;
@@ -95,6 +106,8 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 					log.debug("creating contained object "
 						+ targetObject.toString());
     	        targetResult = (PlasmaDataObject)sourceResult.createDataObject(sourceProperty);
+    	        if (this.copyUUIDs)
+    	        	targetResult.resetUUID(sourceResult.getUUID());
     	        copyDataProperties(targetObject, targetResult);
     	        resultMap.put(targetObject.getUUIDAsString(), targetResult);
 			}
@@ -120,6 +133,8 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 						log.debug("copying/linking orphaned object "
 							+ targetObject.toString());
 				 targetResult = (PlasmaDataObject)PlasmaDataFactory.INSTANCE.create(targetObject.getType());
+	    	     if (this.copyUUIDs)
+	    	         targetResult.resetUUID(sourceResult.getUUID());
 	    	     copyDataProperties(targetObject, targetResult);
 			     sourceResult.set(sourceProperty, targetResult);
 			     resultMap.put(targetObject.getUUIDAsString(), targetResult);
@@ -148,7 +163,7 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 	private void copyDataProperties(PlasmaDataObject source, 
 			PlasmaDataObject copy) {        
 		Object value = null;
-        for (Property property : source.getType().getDeclaredProperties())
+        for (Property property : source.getType().getProperties())
         {
             value = source.get(property);
             if (value == null)

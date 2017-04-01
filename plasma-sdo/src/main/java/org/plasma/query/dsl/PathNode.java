@@ -29,6 +29,7 @@ import org.plasma.query.model.GroupOperator;
 import org.plasma.query.model.GroupOperatorValues;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.Term;
+import org.plasma.query.model.WildcardPropertyTypeValues;
 
 import commonj.sdo.Type;
 
@@ -73,9 +74,50 @@ public class PathNode extends DomainObject implements PathProperty {
 		return this.expr;
 	}
 
+	/**
+	 * Returns all data properties for current {@link Type}. The
+	 * current {@link Type} is the domain classifier or class for the current
+	 * query path step or segment.
+	 * @return all data properties for current {@link Type}.
+	 */
 	public Wildcard wildcard() {
-		return new WildcardDataNode(this, Wildcard.WILDCARD_CHAR);
+		return new WildcardNode(this, Wildcard.WILDCARD_CHAR, 
+			WildcardPropertyTypeValues.DATA);
 	}
+
+	/**
+	 * Returns all data properties for current {@link Type}. The
+	 * current {@link Type} is the domain classifier or class for the current
+	 * query path step or segment.
+	 * @return all data properties for current {@link Type}.
+	 */
+	public Wildcard dataWildcard() {
+		return new WildcardNode(this, Wildcard.WILDCARD_CHAR, 
+			WildcardPropertyTypeValues.DATA);
+	}
+
+	/**
+	 * Returns all reference properties for current {@link Type}. The
+	 * current {@link Type} is the domain classifier or class for the current
+	 * query path step or segment.
+	 * @return all reference properties for current {@link Type}.
+	 */
+	public Wildcard referenceWildcard() {
+		return new WildcardNode(this, Wildcard.WILDCARD_CHAR, 
+				WildcardPropertyTypeValues.REFERENCE);
+	}
+
+	/**
+	 * Returns all data properties for current {@link Type} and all of its sub types. The
+	 * current {@link Type} is the domain classifier or class for the current
+	 * query path step or segment.
+	 * @return all data properties for current {@link Type} and all of its sub types.
+	 */
+	public Wildcard subclassDataWildcard() {
+		return new WildcardNode(this, Wildcard.WILDCARD_CHAR, 
+			WildcardPropertyTypeValues.SUBCLASS___DATA);
+	}
+	
 	
 	public Expression group(Expression source) {
 		// we may have been re-parented

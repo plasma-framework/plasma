@@ -21,6 +21,9 @@
  */
 package org.plasma.query.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,6 +40,16 @@ import org.plasma.query.visitor.QueryVisitor;
 @XmlRootElement(name = "RelationalOperator")
 public class RelationalOperator implements org.plasma.query.Operator {
 
+	private static Map<String, RelationalOperatorValues> operMap = new HashMap<>();
+    static {
+		operMap.put("=", RelationalOperatorValues.EQUALS);
+		operMap.put("!=", RelationalOperatorValues.NOT_EQUALS);
+		operMap.put(">", RelationalOperatorValues.GREATER_THAN);
+		operMap.put(">=", RelationalOperatorValues.GREATER_THAN_EQUALS);
+		operMap.put("<", RelationalOperatorValues.LESS_THAN);
+		operMap.put("<=", RelationalOperatorValues.LESS_THAN_EQUALS);
+    }
+	
     @XmlValue
     protected RelationalOperatorValues value;
 
@@ -55,18 +68,9 @@ public class RelationalOperator implements org.plasma.query.Operator {
     } 
     
     public static RelationalOperator valueOf(String value) {
-    	if ("=".equals(value))
-    		return new RelationalOperator(RelationalOperatorValues.EQUALS);
-    	else if ("!=".equals(value))
-    		return new RelationalOperator(RelationalOperatorValues.NOT_EQUALS);
-    	else if (">".equals(value))
-    		return new RelationalOperator(RelationalOperatorValues.GREATER_THAN);
-    	else if (">=".equals(value))
-    		return new RelationalOperator(RelationalOperatorValues.GREATER_THAN_EQUALS);
-    	else if ("<".equals(value))
-    		return new RelationalOperator(RelationalOperatorValues.LESS_THAN);
-    	else if ("<=".equals(value))
-    		return new RelationalOperator(RelationalOperatorValues.LESS_THAN_EQUALS);
+    	RelationalOperatorValues oper = operMap.get(value);
+    	if (oper != null)
+    		return new RelationalOperator(oper);
     	else
     	    throw new QueryException("invalid operator '" 
     	    		+ value + "'");

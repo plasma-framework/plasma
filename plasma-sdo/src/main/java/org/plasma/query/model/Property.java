@@ -46,7 +46,7 @@ import org.plasma.query.visitor.QueryVisitor;
 })
 @XmlRootElement(name = "Property")
 public class Property extends AbstractProperty 
-    implements StringDataProperty, IntegralDataProperty, RealDataProperty, TemporalDataProperty 
+    implements StringDataProperty, IntegralDataProperty, RealDataProperty, TemporalDataProperty    
 {
 
     @XmlElement(name = "Query", namespace = "")
@@ -63,6 +63,8 @@ public class Property extends AbstractProperty
     protected Boolean distinct;
     @XmlAttribute
     protected SortDirectionValues direction;
+    @XmlAttribute(name = "alias")
+    protected String alias;
 
     /** 
      * Stores the physical name associated with this 
@@ -80,6 +82,7 @@ public class Property extends AbstractProperty
      * operations.  
      */
     protected transient byte[] physicalNameBytes;
+
     
       //----------------/
      //- Constructors -/
@@ -483,6 +486,30 @@ public class Property extends AbstractProperty
     }
     
     /**
+     * Gets the value of the alias property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAlias() {
+        return alias;
+    }
+
+    /**
+     * Sets the value of the alias property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAlias(String value) {
+        this.alias = value;
+    }
+    
+    /**
      * Returns the path qualified name for this property, i.e. 
      * as the final element within its associated path, if a path 
      * exists for this property. If no
@@ -508,4 +535,53 @@ public class Property extends AbstractProperty
 	    visitor.end(this);
     }
 
+    public String getQualifiedName() {
+    	if (qualifiedName == null) {
+    	    StringBuilder buf = new StringBuilder();
+    	    if (this.alias != null) {
+    	    	buf.append("(");
+    	    	buf.append(this.alias);
+    	    	buf.append("}");
+    	    }
+    	    if (this.path != null) {
+    	    	for (PathNode node : this.path.getPathNodes()) {
+    	    		buf.append(node.getPathElement().getValue());
+	    			buf.append(".");
+    	    	}
+    	    }
+    	    buf.append(this.name);
+    	    qualifiedName = buf.toString();
+    	}
+    	return qualifiedName;
+    }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getQualifiedName() == null) ? 0 : getQualifiedName().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Entity other = (Entity) obj;
+		if (getQualifiedName() == null) {
+			if (other.getQualifiedName() != null)
+				return false;
+		} else if (!getQualifiedName().equals(other.getQualifiedName()))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(AbstractProperty o) {
+		return getQualifiedName().compareTo(o.getQualifiedName());
+	}
 }

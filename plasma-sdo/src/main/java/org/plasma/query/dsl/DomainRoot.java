@@ -21,6 +21,8 @@
  */
 package org.plasma.query.dsl;
 
+import java.util.List;
+
 import org.plasma.query.DataProperty;
 import org.plasma.query.Expression;
 import org.plasma.query.From;
@@ -32,6 +34,7 @@ import org.plasma.query.Wildcard;
 import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.Clause;
 import org.plasma.query.model.Entity;
+import org.plasma.query.Join;
 import org.plasma.query.model.Path;
 
 import commonj.sdo.Type;
@@ -127,7 +130,7 @@ public class DomainRoot extends PathNode
 			this.query.getClauses().add(new Clause(select));
 		}
 		
-		WildcardDataNode domainProperty = (WildcardDataNode)property;
+		WildcardNode domainProperty = (WildcardNode)property;
 		AbstractProperty prop = domainProperty.getModel();
 		
 		select.addProperty(prop);
@@ -248,6 +251,11 @@ public class DomainRoot extends PathNode
 	@Override
     public String getConfigurationProperty(String name) {
 		return this.query.getConfigurationProperty(name);		
+	}
+
+	@Override
+	public List<Join> findJoinClauses() {
+		return this.query.findJoinClauses();
 	}
 
 }

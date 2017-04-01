@@ -22,7 +22,9 @@
 package org.plasma.sdo.helper;
 
 import org.plasma.sdo.PlasmaDataObject;
+import org.plasma.sdo.core.CoreConstants;
 import org.plasma.sdo.core.CoreDataObject;
+import org.plasma.sdo.core.CoreNode;
 
 import commonj.sdo.DataObject;
 import commonj.sdo.Property;
@@ -87,7 +89,7 @@ public class PlasmaCopyHelper implements CopyHelper {
      *   ready to be used for insert operations. 
      * 
 	 * <p>
-	 * Note that copied data objects 
+	 * Note that in general copied data objects 
 	 * have the same data properties as the source but have new  
 	 * (and therefore different) underlying <a target="#" href="http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html">UUID</a> 
 	 * and other management properties which are not defined within the
@@ -101,12 +103,40 @@ public class PlasmaCopyHelper implements CopyHelper {
      * @return copy of dataObject 
      */    
     public DataObject copyShallow(DataObject dataObject) {
-        
-    	CoreDataObject result = (CoreDataObject)PlasmaDataFactory.INSTANCE.create(dataObject.getType());
+    	CoreDataObject result = (CoreDataObject)PlasmaDataFactory.INSTANCE.create(
+    			dataObject.getType());
+		copy((CoreDataObject)dataObject, result);
+        return result;
+    }
+    
+    /**
+     * Create a shallow copy of the given dataObject but where 
+     * the <a target="#" href="http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html">UUID</a>
+     * and other instance properties are copied from the given data object copied as well. 
+     * <p></p>
+     * Note that data objects copied using this method should typically be used as "references" in
+     * <b>UPDATE</b> and <b>DELETE</b> operations, in order to avoid unnecessary queries. 
+     *   
+     * @param dataObject
+     * @return the copied data object
+     */
+    public DataObject copyShallowAsReference(DataObject dataObject) {
+    	CoreDataObject source = (CoreDataObject)dataObject;    	
+    	CoreDataObject result = (CoreDataObject)PlasmaDataFactory.INSTANCE.create(
+    			source.getType());
+		((CoreNode)result).setValue(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, 
+				((CoreNode)dataObject).getValue(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP)); 
+		result.resetUUID(source.getUUID());
+		copy(source, result);
+   	    return result;
+    }
+    
+    private void copy(CoreDataObject source, CoreDataObject result)
+    {
         Object value = null;
-        for (Property property : dataObject.getType().getProperties())
+        for (Property property : source.getType().getProperties())
         {
-            value = dataObject.get(property);
+            value = source.get(property);
             if (value == null)
                 continue;
             if (property.getType().isDataType()) {
@@ -115,10 +145,9 @@ public class PlasmaCopyHelper implements CopyHelper {
                 else
                     result.getValueObject().put(property.getName(), value);                    
             }
-        }
-        return result;
+        }    	
     }
-
+    
     /**
      * Create a deep copy of the DataObject tree.
      *   Copies the dataObject and all its {@link commonj.sdo.Property#isContainment() contained}
@@ -140,13 +169,13 @@ public class PlasmaCopyHelper implements CopyHelper {
      *   ready to be used for insert operations. 
      * 
 	 * <p>
-	 * Note that copied data objects 
+	 * Note that in general copied data objects 
 	 * have the same data properties as the source but have new  
 	 * (and therefore different) underlying <a target="#" href="http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html">UUID</a> 
 	 * and other management properties which are not defined within the
 	 * source Type. Use copied data objects to help automate and save
 	 * save effort when creating <b>NEW</b> data objects. To simply link/add 
-	 * and existing data object to a new data graph, first use {@link DataObject.detach()} to
+	 * an existing data object to a new data graph, first use {@link DataObject.detach()} to
 	 * remove it from its graph. Than add it to a another graph.     
 	 * </p>
 	 *      
@@ -157,6 +186,27 @@ public class PlasmaCopyHelper implements CopyHelper {
      */
     public DataObject copy(DataObject dataObject) {
     	DataGraphCopyVisitor visitor = new DataGraphCopyVisitor();
+    	((PlasmaDataObject)dataObject).accept(visitor); 
+        return visitor.getResult();
+    }
+
+    /**
+     * Create a deep copy of the given dataObject tree but where 
+     * the <a target="#" href="http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html">UUID</a>
+     * and other instance properties are copied from the given data object copied as well. 
+     * <p></p>
+     * Note that data graph and data objects copied using this method should typically be used in
+     * <b>UPDATE</b> and <b>DELETE</b> operations on the resulting data graph, in order to avoid 
+     * unnecessary queries. To simply link/add 
+	 * an existing data object to a new data graph, first use {@link DataObject.detach()} to
+	 * remove it from its graph. Than add it to a another graph.  
+     *   
+     * @param dataObject
+     * @return
+     */
+    public DataObject copyAsReference(DataObject dataObject) {
+    	DataGraphCopyVisitor visitor = new DataGraphCopyVisitor();
+    	visitor.setCopyUUIDs(true);
     	((PlasmaDataObject)dataObject).accept(visitor); 
         return visitor.getResult();
     }

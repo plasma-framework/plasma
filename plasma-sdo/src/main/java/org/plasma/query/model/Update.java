@@ -21,26 +21,46 @@
  */
 package org.plasma.query.model;
 
+
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.plasma.query.visitor.QueryVisitor;
+import org.plasma.query.visitor.Traversal;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Update", propOrder = {
-    "entity"
+    "entity",
+	"expressions"
 })
 @XmlRootElement(name = "Update")
 public class Update {
 
     @XmlElement(name = "Entity", required = true)
     protected Entity entity;
-
+    @XmlElement(name = "Expression", required = true)
+    protected List<Expression> expressions;
+    
     public Update() {
         super();
-    } //-- org.plasma.mda.query.Update()
+    } 
 
+    public Update(Expression expr) {
+        this();
+        getExpressions().add(expr);
+    } 
+
+    public Update(Expression[] exprs) {
+        this();
+        getExpressions().add(new Expression(exprs));
+    } 
 
     /**
      * Gets the value of the entity property.
@@ -65,5 +85,30 @@ public class Update {
     public void setEntity(Entity value) {
         this.entity = value;
     }
-
+    
+    public void addExpression(Expression e) {
+        getExpressions().add(e);
+    }
+    
+    public List<Expression> getExpressions() {
+        if (expressions == null) {
+            expressions = new ArrayList<Expression>();
+        }
+        return this.expressions;
+    }
+    
+    public int getExpressionCount() {
+    	return getExpressions().size();
+    }
+    
+    public void accept(QueryVisitor visitor)
+    {
+        visitor.start(this);
+        if (visitor.getContext().getTraversal().ordinal() == Traversal.CONTINUE.ordinal())
+        {
+            for (int i = 0; i < this.getExpressions().size(); i++)
+                ((Expression)this.getExpressions().get(i)).accept(visitor);  
+        }
+    	visitor.end(this);
+    }
 }

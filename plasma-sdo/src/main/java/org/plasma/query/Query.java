@@ -21,6 +21,7 @@
  */
 package org.plasma.query;
 
+import java.util.List;
 
 
 /**
@@ -134,6 +135,8 @@ public interface Query extends Term {
 	public OrderBy findOrderByClause();
 
 	public GroupBy findGroupByClause();
+
+	public List<Join> findJoinClauses();
 	
 	/**
 	 * Returns the underlying query model for this

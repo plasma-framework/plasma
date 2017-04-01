@@ -22,6 +22,7 @@
 package org.plasma.query.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -253,7 +254,29 @@ public class Query implements org.plasma.query.Query {
         }
         throw new QueryException("could not get Select clause");       
     }
-
+    
+    public Update getUpdateClause()
+    {
+        for (int i = 0; i < this.getClauses().size(); i++)
+        {   
+        	Update update = this.getClauses().get(i).getUpdate();
+            if (update != null)
+                return update;
+        }
+        throw new QueryException("could not get Update clause");       
+    }
+    
+    public Delete getDeleteClause()
+    {
+        for (int i = 0; i < this.getClauses().size(); i++)
+        {   
+        	Delete delete = this.getClauses().get(i).getDelete();
+            if (delete != null)
+                return delete;
+        }
+        throw new QueryException("could not get Delete clause");       
+    }
+   
     /* (non-Javadoc)
 	 * @see org.plasma.query.model.Query2#getFromClause()
 	 */
@@ -334,5 +357,23 @@ public class Query implements org.plasma.query.Query {
         }
         return null;       
     }
+	
+    @Override
+	public List<org.plasma.query.Join> findJoinClauses() {
+		List<org.plasma.query.Join> result = null;
+        for (int i = 0; i < this.getClauses().size(); i++)
+        {   
+        	Join join = this.getClauses().get(i).getJoin();
+            if (join != null) {
+            	if (result == null)
+            		result = new ArrayList<>();
+                result.add(join);
+            }
+        }
+        if (result != null)
+        	return result;
+        else
+		    return Collections.emptyList();
+	}
 
 }
