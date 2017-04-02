@@ -1,9 +1,13 @@
-<img src="media/image2.png" width="30" height="30" /> PlasmaSDO™
+![](images/media/image2.png)Plasma
 
 Plasma Design Team
-TerraMeta Software LLC
+TerraMeta Software, Inc.
 
 <span id="_Toc292440822" class="anchor"><span id="_Toc318020900" class="anchor"></span></span>Architecture Overview
+
+PlasmaSDO® and PlasmaQuery® are registered
+
+Trademarks of TerraMeta Software. All rights reserved.
 
 **Revision History**
 
@@ -11,6 +15,8 @@ TerraMeta Software LLC
 |--------------|------------------|-------------------------------------|--------------------|
 | **Revision** | **Date**         | **Description**                     | **Author**         |
 | 1.0          | January 05, 2012 | Plasma SDO architecture description | Plasma Design Team |
+| 1.1          | April 12, 2015   | Plasma SDO architecture description | Plasma Design Team |
+| 1.2          | January 3 2017   | Various additions                   | Plasma Design Team |
 
 <table>
 <tbody>
@@ -38,24 +44,24 @@ Table of Contents</td>
 <p><a href="#overview-1"><strong>3.1</strong> <strong>Overview</strong> 6</a></p>
 <p><a href="#core"><strong>3.2</strong> <strong>Core</strong> 6</a></p>
 <p><a href="#graph-manipulation">3.2.1 Graph Manipulation 6</a></p>
-<p><a href="#plasmasdo-uml-profile"><strong>3.3</strong> <strong>PlasmaSDO™ UML Profile</strong> 6</a></p>
+<p><a href="#plasma-sdo-uml-profile"><strong>3.3</strong> <strong>PlasmaSDO™ UML Profile</strong> 6</a></p>
 <p><a href="#repository"><strong>3.4</strong> <strong>Repository</strong> 6</a></p>
 <p><a href="#namespaces">3.4.1 Namespaces 7</a></p>
 <p><a href="#classifiers">3.4.2 Classifiers 7</a></p>
 <p><a href="#properties">3.4.3 Properties 7</a></p>
 <p><a href="#enumerations">3.4.4 Enumerations 7</a></p>
 <p><a href="#provisioning"><strong>3.5</strong> <strong>Provisioning</strong> 7</a></p>
-<p><a href="#plasmasdo-runtime-provisioning-model">3.5.1 PlasmaSDO™ Runtime Provisioning Model 8</a></p>
-<p><a href="#plasmaquery-api"><strong>3.6</strong> <strong>PlasmaQuery™ API</strong> 8</a></p>
+<p><a href="#plasma-sdo-runtime-provisioning-model">3.5.1 PlasmaSDO™ Runtime Provisioning Model 8</a></p>
+<p><a href="#plasma-query-api"><strong>3.6</strong> <strong>PlasmaQuery™ API</strong> 8</a></p>
 <p><a href="#physical-model-independence">3.6.1 Physical Model Independence 9</a></p>
 <p><a href="#class-model-independence">3.6.2 Class Model Independence 9</a></p>
 <p><a href="#persistence-framework-independence">3.6.3 Persistence Framework Independence 9</a></p>
 <p><a href="#no-free-text-ql-parsing">3.6.4 No Free Text QL Parsing 9</a></p>
 <p><a href="#projections">3.6.5 Projections 9</a></p>
-<p><a href="#plasmaquery-dsl">3.6.6 PlasmaQuery™ DSL 9</a></p>
-<p><a href="#plasmaquery-dsl-examples">3.6.7 PlasmaQuery™ DSL Examples 10</a></p>
-<p><a href="#plasmaquery-xpath">3.6.8 PlasmaQuery™ XPath 10</a></p>
-<p><a href="#plasmaquery-xpath-examples">3.6.9 PlasmaQuery™ XPath Examples 10</a></p>
+<p><a href="#plasma-query-dsl">3.6.6 PlasmaQuery™ DSL 9</a></p>
+<p><a href="#plasma-query-dsl-examples">3.6.7 PlasmaQuery™ DSL Examples 10</a></p>
+<p><a href="#plasma-query-xpath">3.6.8 PlasmaQuery™ XPath 10</a></p>
+<p><a href="#plasma-query-xpath-examples">3.6.9 PlasmaQuery™ XPath Examples 10</a></p>
 <p><a href="#query-object-model">3.6.10 Query Object Model 10</a></p>
 <p><a href="#serialized-query-xml">3.6.11 Serialized Query XML 10</a></p>
 <p><a href="#serialized-query-xml-examples">3.6.12 Serialized Query XML Examples 11</a></p>
@@ -113,7 +119,7 @@ First published in 2006, the SDO 1.2 specification has fostered several implemen
 
 Using a real production example of an enterprise Java™ web application from an unnamed government agency involving the processing of equipment and service solicitations from various commercial providers, we find the following standard software layers and associated lines-of-code.
 
-Table 1 - Example Enterprise Java™ Project Software Layers
+Table - Example Enterprise Java™ Project Software Layers
 
 | Software Layer               | Lines of Java™ Code | Lines of XML |
 |------------------------------|---------------------|--------------|
@@ -141,12 +147,12 @@ From the above table, the source code and XML dedicated primarily to data access
 **Mission Statement**
 ---------------------
 
-In its initial releases, the PlasmaSDO™ implementation seeks to address the need for metadata-driven automation and code generation under SDO for standard enterprise Java web applications while focusing on critical operational considerations these applications face, such as optimistic and pessimistic concurrency control. The PlasmaSDO™ implementation is not bound to any integrated development environment (IDE) and provides support for standard Java™ based build tools. *Note: Such operational considerations such as optimistic and pessimistic concurrency control are seen as a feature gap within various commercial and open-source SDO offerings, and are facilitated in PlasmaSDO™ by a custom UML profile and various associated SDO API extensions.*
+In its initial releases, the PlasmaSDO® implementation seeks to address the need for metadata-driven automation and code generation under SDO for standard enterprise Java web applications while focusing on critical operational considerations these applications face, such as optimistic and pessimistic concurrency control. The PlasmaSDO® implementation is not bound to any integrated development environment (IDE) and provides support for standard Java™ based build tools. *Note: Such operational considerations such as optimistic and pessimistic concurrency control are seen as a feature gap within various commercial and open-source SDO offerings, and are facilitated in PlasmaSDO*® *by a custom UML profile and various associated SDO API extensions.*
 
 **History**
 -----------
 
-The major concepts giving rise to the PlasmaSDO™ design evolved out of a medium-scale (10,000 concurrent, 1 million total users) web application for management of personal property shipping. This application was developed starting in 2004 for a large government agency and involved more than 1 million lines of generated data access related code. It is in successful production today, and though it pre-dates the advent of SDO in 2006, involves several of the core SDO concepts including 1.) Runtime-available metadata 2.) Directed graph structures as a fundamental processing unit, 3.) Change summaries and 4.) Generic service-oriented persistence. The PlasmaSDO™ implementation pays homage to this history through various shipment or shipping model related examples.
+The major concepts giving rise to the PlasmaSDO® design evolved out of a medium-scale (10,000 concurrent, 1 million total users) web application for management of personal property shipping. This application was developed starting in 2004 for a large government agency and involved more than 1 million lines of generated data access related code. It is in successful production today, and though it pre-dates the advent of SDO in 2006, involves several of the core SDO concepts including 1.) Runtime-available metadata 2.) Directed graph structures as a fundamental processing unit, 3.) Change summaries and 4.) Generic service-oriented persistence. The PlasmaSDO® implementation pays homage to this history through various shipment or shipping model related examples.
 
 **Project Charter**
 ===================
@@ -160,27 +166,27 @@ The major concepts giving rise to the PlasmaSDO™ design evolved out of a mediu
 **Core**
 --------
 
-At its core, the PlasmaSDO™ implementation contains a directed graph or digraph model and a set of metadata driven graph traversal algorithms. Data Objects under PlasmaSDO™ form a digraph transparently as a client manipulates the SDO API, graph edges or links being automatically created and used internally to manage associations between Data Object nodes.
+At its core, the PlasmaSDO® implementation contains a directed graph or digraph model and a set of metadata driven graph traversal algorithms. Data Objects under PlasmaSDO® form a digraph transparently as a client manipulates the SDO API, graph edges or links being automatically created and used internally to manage associations between Data Object nodes.
 
 ### Graph Manipulation
 
 Clients can assemble a Data Graph ad-hoc or query for a graph. Several API implementing the Visitor pattern[1] are then available to facilitate custom traversal operations on a graph.
 
-**PlasmaSDO™ UML Profile**
+**Plasma SDO UML Profile**
 --------------------------
 
-The Service Data Objects (SDO) 2.1 specification provides an extensible, lightweight runtime-available metadata API. It is through extensions to the SDO metadata API that the PlasmaSDO™ implementation provides more than just standard structural metadata elements, but numerous other context specific elements instructive at build-time as well as run-time to SDO Data Access Services and other consumers at various enterprise technology layers and various parts of a technology stack.
+The Service Data Objects (SDO) 2.1 specification provides an extensible, lightweight runtime-available metadata API. It is through extensions to the SDO metadata API that the PlasmaSDO® implementation provides more than just standard structural metadata elements, but numerous other context specific elements instructive at build-time as well as run-time to SDO Data Access Services and other consumers at various enterprise technology layers and various parts of a technology stack.
 
-The PlasmaSDO™ metadata extensions are described in a UML profile which contains UML stereotypes, enumerations and other elements used to enrich UML models for use within the PlasmaSDO™ core as well as third party Data Access Service (DAS) providers. Particular design consideration has been focused on leaving each stereotype granular with only a few tightly related attributes/tags, rather than more monolithic stereotype groupings. This approach lets each stereotype convey far more meaning and maps well to metadata oriented extensions in various target languages, such as Java™ annotations. This granular approach can however have the effect of making UML diagrams more cluttered depending on the presentation settings of the UML diagramming tool.
+The PlasmaSDO® metadata extensions are described in a UML profile which contains UML stereotypes, enumerations and other elements used to enrich UML models for use within the PlasmaSDO® core as well as third party Data Access Service (DAS) providers. Particular design consideration has been focused on leaving each stereotype granular with only a few tightly related attributes/tags, rather than more monolithic stereotype groupings. This approach lets each stereotype convey far more meaning and maps well to metadata oriented extensions in various target languages, such as Java™ annotations. This granular approach can however have the effect of making UML diagrams more cluttered depending on the presentation settings of the UML diagramming tool.
 
-A single UML logical model fully enriched or annotated with the PlasmaSDO™ UML profile provides enough context specific information to support various technology-specific runtime environments and the generation of numerous context or platform-specific models as well as many other related source-code and other artifacts. **\[add link reference\]**
+A single UML logical model fully enriched or annotated with the PlasmaSDO® UML profile provides enough context specific information to support various technology-specific runtime environments and the generation of numerous context or platform-specific models as well as many other related source-code and other artifacts. **\[add link reference\]**
 
 **Repository**
 --------------
 
-The Service Data Objects (SDO) 2.1 specification provides an extensible, lightweight runtime-available metadata API, and the SDO metadata API implementation under PlasmaSDO™ is supported by an in-memory UML repository. Application UML model artifacts in XMI format[2] annotated with the **PlasmaSDO™ UML Profile** are loaded at runtime and merged using the [**Foundational UML (FUML)**](http://portal.modeldriven.org/project/foundationalUML) reference implementation distributed by **[modeldriven.org](http://modeldriven.org)*. *** An intermediate repository layer provides cached association and generalization relation-path information spanning multiple classifiers or models useful for Data Access Services. In addition it provides convenient access to basic UML elements and associated stereotype instances. In general, the SDO metadata API (e.g. Type, Property and TypeHelper), implementation delegates to the intermediate repository layer, which then delegates to the [**FUML**](http://portal.modeldriven.org/project/foundationalUML) repository. Though multiple UML models may be loaded, SDO metadata is created only on demand as accessed.
+The Service Data Objects (SDO) 2.1 specification provides an extensible, lightweight runtime-available metadata API, and the SDO metadata API implementation under PlasmaSDO® is supported by an in-memory UML repository. Application UML model artifacts in XMI format[2] annotated with the **PlasmaSDO**® **UML Profile** are loaded at runtime and merged using the [**Foundational UML (FUML)**](http://portal.modeldriven.org/project/foundationalUML) reference implementation distributed by **[modeldriven.org](http://modeldriven.org)*. *** An intermediate repository layer provides cached association and generalization relation-path information spanning multiple classifiers or models useful for Data Access Services. In addition it provides convenient access to basic UML elements and associated stereotype instances. In general, the SDO metadata API (e.g. Type, Property and TypeHelper), implementation delegates to the intermediate repository layer, which then delegates to the [**FUML**](http://portal.modeldriven.org/project/foundationalUML) repository. Though multiple UML models may be loaded, SDO metadata is created only on demand as accessed.
 
-Figure 1 – Repository Layers
+Figure – Repository Layers
 
 ### Namespaces
 
@@ -195,30 +201,30 @@ The PlasmaSDO™ implementation provides “end-to-end” support for UML enumer
 **Provisioning **
 -----------------
 
-The code generation or provisioning under PlasmaSDO™ brings together several important architecture components for use at both build-time as well as run-time. The build-time provisioning tools are compatible-with but not dependent upon any Integrated Development Environment (IDE), but are rather are geared for larger scale enterprise projects needing support for [**Ant**](http://ant.apache.org/), [**Maven**](http://maven.apache.org/) and continuous integration build environments such as [**Hudson**](http://hudson-ci.org). Build files typically access a set of command-line provisioning tools using [**Ant**](http://ant.apache.org/) tasks triggering a variety of operations. In general, application UML model artifacts in XMI format[3] annotated with the **PlasmaSDO™ UML Profile** are first loaded and merged using the [**FUML**](http://portal.modeldriven.org/project/foundationalUML) runtime, then projected as a whole or in part onto an intermediate provisioning model, typically in-memory. The provisioning model is then merged with configuration information and transformed into one of several available target outputs, comprised of source code or models specific to a particular context or technology platform. Where a particular technology target is not provided, the intermediate provisioning model can be marshaled as XML, custom transformations using XSLT for instance converting the provisioning XML document into almost any target format.
+The code generation or provisioning under PlasmaSDO® brings together several important architecture components for use at both build-time as well as run-time. The build-time provisioning tools are compatible-with but not dependent upon any Integrated Development Environment (IDE), but are rather are geared for larger scale enterprise projects needing support for [**Ant**](http://ant.apache.org/), [**Maven**](http://maven.apache.org/) and continuous integration build environments such as [**Hudson**](http://hudson-ci.org). Build files typically access a set of command-line provisioning tools using [**Ant**](http://ant.apache.org/) tasks triggering a variety of operations. In general, application UML model artifacts in XMI format[3] annotated with the **PlasmaSDO**® **UML Profile** are first loaded and merged using the [**FUML**](http://portal.modeldriven.org/project/foundationalUML) runtime, then projected as a whole or in part onto an intermediate provisioning model, typically in-memory. The provisioning model is then merged with configuration information and transformed into one of several available target outputs, comprised of source code or models specific to a particular context or technology platform. Where a particular technology target is not provided, the intermediate provisioning model can be marshaled as XML, custom transformations using XSLT for instance converting the provisioning XML document into almost any target format.
 
-<img src="media/image3.png" alt="provisioning.png" width="641" height="469" />
+<img src="images/media/image4.png" alt="provisioning.png" width="641" height="469" />
 
-Figure 3 - PlasmaSDO™ Provisioning API
+Figure - PlasmaSDO® Provisioning API
 
-### PlasmaSDO™ Runtime Provisioning Model
+### Plasma SDO Runtime Provisioning Model
 
-The PlasmaSDO™ provisioning model is an intermediate staging or marshaling model which represents a simplified and “merged" view of any number of linked XMI/UML documents as XML. It accommodates basic UML structural and behavioral elements along with profile stereotype elements from the **PlasmaSDO™ UML Profile**. The goal is to provide an XML representation that more readily supports the use of “templating” languages such as XSLT. It resolves common problems associated with the XML representation of stereotyped UML models, such as representation of graph structures and linkage of stereotype instances to respective targets. Representation of graph structures is accommodated using reference or "ref" elements which are namespace qualified. And as a convenience, profile stereotypes are represented as child "delegate" objects directly under the target element being annotated, rather than placing the burden on processors to locate stereotypes at the root (XMI) level and link them.
+The PlasmaSDO® provisioning model is an intermediate staging or marshaling model which represents a simplified and “merged" view of any number of linked XMI/UML documents as XML. It accommodates basic UML structural and behavioral elements along with profile stereotype elements from the **PlasmaSDO**® **UML Profile**. The goal is to provide an XML representation that more readily supports the use of “templating” languages such as XSLT. It resolves common problems associated with the XML representation of stereotyped UML models, such as representation of graph structures and linkage of stereotype instances to respective targets. Representation of graph structures is accommodated using reference or "ref" elements which are namespace qualified. And as a convenience, profile stereotypes are represented as child "delegate" objects directly under the target element being annotated, rather than placing the burden on processors to locate stereotypes at the root (XMI) level and link them.
 
-**PlasmaQuery™ API**
+**Plasma Query API**
 --------------------
 
-The PlasmaQuery™ API provides a flexible mechanism to fully describe any arbitrary SDO results Data Graph, independent of any persistence framework or type of data store. PlasmaQuery™ supports XPath expressions as a free-text “surface language”, parsed by the API implementation and used to construct an underlying query object model representation. As an alternative to free-text, PlasmaQuery™ contains a query Domain Specific Language (DSL) generator and API facilitating (IDE) code-completion, 100% compile-time checking and resulting in code with an almost “fluent” English appearance based on your business model. At runtime the PlasmaQuery™ DSL implementation constructs an underlying query object model representation. The detailed query object model can also be manipulated directly and consists of various criteria entities such as expressions, properties, operators, parameters, etc… as well as convenient factory operations which allow precise user and system control over the various elements constituting a query. The object model can also be serialized as XML for wire transport, persistence, flat file or other usage. The below diagram illustrates the layering and various query representations supported under the PlasmaQuery™ API.
+The PlasmaQuery® API provides a flexible mechanism to fully describe any arbitrary SDO results Data Graph, independent of any persistence framework or type of data store. PlasmaQuery™ supports XPath expressions as a free-text “surface language”, parsed by the API implementation and used to construct an underlying query object model representation. As an alternative to free-text, PlasmaQuery™ contains a query Domain Specific Language (DSL) generator and API facilitating (IDE) code-completion, 100% compile-time checking and resulting in code with an almost “fluent” English appearance based on your business model. At runtime the PlasmaQuery™ DSL implementation constructs an underlying query object model representation. The detailed query object model can also be manipulated directly and consists of various criteria entities such as expressions, properties, operators, parameters, etc… as well as convenient factory operations which allow precise user and system control over the various elements constituting a query. The object model can also be serialized as XML for wire transport, persistence, flat file or other usage. The below diagram illustrates the layering and various query representations supported under the PlasmaQuery™ API.
 
-Figure 4 - PlasmaQuery™ API
+Figure - PlasmaQuery™ API
 
 ### Physical Model Independence
 
-The PlasmaQuery™ API uses logical model names for types, properties and other elements within a UML model and is not dependent on any physical data store or physical data store model names, such as RDBMS table or column names. This approach provides independence and isolation from name changes in physical data stores. *Note:* *the use of physical data store and compiled class names is however supported under PlasmaQuery™, as specified and in keeping with the SDO 2.1 alias API.*
+The PlasmaQuery® API uses logical model names for types, properties and other elements within a UML model and is not dependent on any physical data store or physical data store model names, such as RDBMS table or column names. This approach provides independence and isolation from name changes in physical data stores. *Note:* *the use of physical data store and compiled class names is however supported under PlasmaQuery*®*, as specified and in keeping with the SDO 2.1 alias API.*
 
 ### Class Model Independence
 
-The PlasmaQuery™ API uses logical model names for types, properties and other elements within a UML model and is not dependent on compiled Java class model names such as Java class, field or method names. This approach provides independence and isolation from name changes in generated or hand coded java class models used for SDO persistence. *Note:* *the use of physical data store and compiled class names is however supported under PlasmaQuery™, as specified and in keeping with the SDO 2.1 alias API.*
+The PlasmaQuery® API uses logical model names for types, properties and other elements within a UML model and is not dependent on compiled Java class model names such as Java class, field or method names. This approach provides independence and isolation from name changes in generated or hand coded java class models used for SDO persistence. *Note:* *the use of physical data store and compiled class names is however supported under PlasmaQuery™, as specified and in keeping with the SDO 2.1 alias API.*
 
 ### Persistence Framework Independence
 
@@ -232,23 +238,29 @@ Eliminating the need for free-text query language parsing, Data Access Service (
 
 PlasmaQuery™ serves as a mechanism to project from static SDO models to dynamic SDO models. A typical physical data model may consist of hundreds or even thousands of entities. A projection using PlasmaQuery™ projects from a primary, static model into a new dynamic model comprised of only the limited types and properties specified in the query. The new dynamic (logical) model still operates on the same underlying physical model. In addition to constraining the projected types and properties, a PlasmaQuery™ may project new name aliases or other attributes onto the projection model elements. Some of these are read-only, visibility, containment and other related attributes.
 
-### PlasmaQuery™ DSL
+### Plasma Query DSL
 
-As an alternative to free-text, PlasmaQuery™ contains a query Domain Specific Language (DSL) generator and API facilitating (IDE) code-completion, 100% compile-time checking and resulting in code with an almost “fluent” English appearance based on your business model(s). At runtime the PlasmaQuery™ DSL implementation builds the underlying query object model representation.
+As an alternative to free-text, PlasmaQuery® contains a query Domain Specific Language (DSL) generator and API facilitating (IDE) code-completion, 100% compile-time checking and resulting in code with an almost “fluent” English appearance based on your business model(s). At runtime the PlasmaQuery® DSL implementation builds the underlying query object model representation.
 
-### PlasmaQuery™ DSL Examples
+### Plasma Query DSL Examples
 
 The below Java™ language example shows a query using generated DSL class ‘QShipment’ which describes a results data graph linking shipments, persons, contacts and other information. The query contains a simple wildcard “where” predicate.
 
-### PlasmaQuery™ XPath 
+![](images/media/image5.png)
+
+### Plasma Query XPath 
 
 XPath can be thought of as the free-text “surface language” for PlasmaQuery™ which in its simplest form consists of a collection of XPath expressions.
 
-### PlasmaQuery™ XPath Examples
+### Plasma Query XPath Examples
 
 The below example query returns ‘Shipment’ Data Graphs, the graph including organization, person-role and person-contact information nodes. *Note: the ‘@’ character designating attributes/properties is optional but supported as per the SDO 2.1 Specification.*
 
+![](images/media/image6.png)
+
 Each step or node within an XPath expression can contain predicates. Predicates are be used by Data Access Services to limit not only results from the extent or root, but to limit collections within a result Data Graph for any collection or “many” property along a path. An XPath predicate is contained within square brackets \[\], and comes after the parent object of what will be tested. The below example describes a data graph consisting of shipments linked to organization “Ten Speed Press” with all person roles and only person home contact information.
+
+![](images/media/image7.png)
 
 ### Query Object Model
 
