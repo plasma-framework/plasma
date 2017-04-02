@@ -39,7 +39,7 @@ Table of Contents</td>
 <p><a href="#enterprise-game-changer">1.1.6 Enterprise Game Changer 4</a></p>
 <p><a href="#mission-statement"><strong>1.2</strong> <strong>Mission Statement</strong> 5</a></p>
 <p><a href="#history"><strong>1.3</strong> <strong>History</strong> 6</a></p>
-<p><a href="#project-charter">2 Project Charter 6</a></p>
+<p><a href="#_Toc318020911">2 Project Charter 6</a></p>
 <p><a href="#architecture">3 Architecture 6</a></p>
 <p><a href="#overview-1"><strong>3.1</strong> <strong>Overview</strong> 6</a></p>
 <p><a href="#core"><strong>3.2</strong> <strong>Core</strong> 6</a></p>
@@ -50,7 +50,7 @@ Table of Contents</td>
 <p><a href="#classifiers">3.4.2 Classifiers 7</a></p>
 <p><a href="#properties">3.4.3 Properties 7</a></p>
 <p><a href="#enumerations">3.4.4 Enumerations 7</a></p>
-<p><a href="#provisioning"><strong>3.5</strong> <strong>Provisioning</strong> 7</a></p>
+<p><a href="#_Toc318020922"><strong>3.5</strong> <strong>Provisioning</strong> 7</a></p>
 <p><a href="#plasma-sdo-runtime-provisioning-model">3.5.1 PlasmaSDO™ Runtime Provisioning Model 8</a></p>
 <p><a href="#plasma-query-api"><strong>3.6</strong> <strong>PlasmaQuery™ API</strong> 8</a></p>
 <p><a href="#physical-model-independence">3.6.1 Physical Model Independence 9</a></p>
@@ -149,9 +149,6 @@ In its initial releases, the PlasmaSDO® implementation seeks to address the nee
 
 The major concepts giving rise to the PlasmaSDO® design evolved out of a medium-scale (10,000 concurrent, 1 million total users) web application for management of personal property shipping. This application was developed starting in 2004 for a large government agency and involved more than 1 million lines of generated data access related code. It is in successful production today, and though it pre-dates the advent of SDO in 2006, involves several of the core SDO concepts including 1.) Runtime-available metadata 2.) Directed graph structures as a fundamental processing unit, 3.) Change summaries and 4.) Generic service-oriented persistence. The PlasmaSDO® implementation pays homage to this history through various shipment or shipping model related examples.
 
-**Project Charter**
-===================
-
 **Architecture**
 ================
 
@@ -193,8 +190,8 @@ Figure – Repository Layers
 
 The PlasmaSDO™ implementation provides “end-to-end” support for UML enumerations. Enumerations and enumeration literals, including physical name aliases and other stereotypes, are taken from UML definitions through not only to generated SDO and other source code, but also more data-store specific artifacts, such as DDL check constraints.
 
-**Provisioning **
------------------
+**Provisioning**
+----------------
 
 The code generation or provisioning under PlasmaSDO® brings together several important architecture components for use at both build-time as well as run-time. The build-time provisioning tools are compatible-with but not dependent upon any Integrated Development Environment (IDE), but are rather are geared for larger scale enterprise projects needing support for [**Ant**](http://ant.apache.org/), [**Maven**](http://maven.apache.org/) and continuous integration build environments such as [**Hudson**](http://hudson-ci.org). Build files typically access a set of command-line provisioning tools using [**Ant**](http://ant.apache.org/) tasks triggering a variety of operations. In general, application UML model artifacts in XMI format[3] annotated with the **PlasmaSDO**® **UML Profile** are first loaded and merged using the [**FUML**](http://portal.modeldriven.org/project/foundationalUML) runtime, then projected as a whole or in part onto an intermediate provisioning model, typically in-memory. The provisioning model is then merged with configuration information and transformed into one of several available target outputs, comprised of source code or models specific to a particular context or technology platform. Where a particular technology target is not provided, the intermediate provisioning model can be marshaled as XML, custom transformations using XSLT for instance converting the provisioning XML document into almost any target format.
 
