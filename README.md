@@ -76,11 +76,6 @@ Table of Contents</td>
 
 <span id="_Toc135028939" class="anchor"><span id="_Toc495460092" class="anchor"><span id="_Toc498843305" class="anchor"><span id="_Toc24906349" class="anchor"></span></span></span></span>
 
-|                                        |
-|----------------------------------------|
-| Table of Figures                       |
-| **No table of figures entries found.** |
-
 **Introduction**
 ================
 
@@ -203,7 +198,7 @@ The PlasmaSDO™ implementation provides “end-to-end” support for UML enumer
 
 The code generation or provisioning under PlasmaSDO® brings together several important architecture components for use at both build-time as well as run-time. The build-time provisioning tools are compatible-with but not dependent upon any Integrated Development Environment (IDE), but are rather are geared for larger scale enterprise projects needing support for [**Ant**](http://ant.apache.org/), [**Maven**](http://maven.apache.org/) and continuous integration build environments such as [**Hudson**](http://hudson-ci.org). Build files typically access a set of command-line provisioning tools using [**Ant**](http://ant.apache.org/) tasks triggering a variety of operations. In general, application UML model artifacts in XMI format[3] annotated with the **PlasmaSDO**® **UML Profile** are first loaded and merged using the [**FUML**](http://portal.modeldriven.org/project/foundationalUML) runtime, then projected as a whole or in part onto an intermediate provisioning model, typically in-memory. The provisioning model is then merged with configuration information and transformed into one of several available target outputs, comprised of source code or models specific to a particular context or technology platform. Where a particular technology target is not provided, the intermediate provisioning model can be marshaled as XML, custom transformations using XSLT for instance converting the provisioning XML document into almost any target format.
 
-<img src="images/media/image4.png" alt="provisioning.png" width="641" height="469" />
+![](images/media/image4.png)
 
 Figure - PlasmaSDO® Provisioning API
 
@@ -215,6 +210,8 @@ The PlasmaSDO® provisioning model is an intermediate staging or marshaling mode
 --------------------
 
 The PlasmaQuery® API provides a flexible mechanism to fully describe any arbitrary SDO results Data Graph, independent of any persistence framework or type of data store. PlasmaQuery™ supports XPath expressions as a free-text “surface language”, parsed by the API implementation and used to construct an underlying query object model representation. As an alternative to free-text, PlasmaQuery™ contains a query Domain Specific Language (DSL) generator and API facilitating (IDE) code-completion, 100% compile-time checking and resulting in code with an almost “fluent” English appearance based on your business model. At runtime the PlasmaQuery™ DSL implementation constructs an underlying query object model representation. The detailed query object model can also be manipulated directly and consists of various criteria entities such as expressions, properties, operators, parameters, etc… as well as convenient factory operations which allow precise user and system control over the various elements constituting a query. The object model can also be serialized as XML for wire transport, persistence, flat file or other usage. The below diagram illustrates the layering and various query representations supported under the PlasmaQuery™ API.
+
+![](images/media/image5.png)
 
 Figure - PlasmaQuery™ API
 
@@ -246,7 +243,7 @@ As an alternative to free-text, PlasmaQuery® contains a query Domain Specific L
 
 The below Java™ language example shows a query using generated DSL class ‘QShipment’ which describes a results data graph linking shipments, persons, contacts and other information. The query contains a simple wildcard “where” predicate.
 
-![](images/media/image5.png)
+![](images/media/image6.png)
 
 ### Plasma Query XPath 
 
@@ -256,11 +253,11 @@ XPath can be thought of as the free-text “surface language” for PlasmaQuery�
 
 The below example query returns ‘Shipment’ Data Graphs, the graph including organization, person-role and person-contact information nodes. *Note: the ‘@’ character designating attributes/properties is optional but supported as per the SDO 2.1 Specification.*
 
-![](images/media/image6.png)
+![](images/media/image7.png)
 
 Each step or node within an XPath expression can contain predicates. Predicates are be used by Data Access Services to limit not only results from the extent or root, but to limit collections within a result Data Graph for any collection or “many” property along a path. An XPath predicate is contained within square brackets \[\], and comes after the parent object of what will be tested. The below example describes a data graph consisting of shipments linked to organization “Ten Speed Press” with all person roles and only person home contact information.
 
-![](images/media/image7.png)
+![](images/media/image8.png)
 
 ### Query Object Model
 
