@@ -1,10 +1,12 @@
-![](images/media/image3.png)
+![](images/media/image3.jpeg)
 **Plasma**
 ==========
 
 TerraMeta Software, Inc.
 
-<span id="_Toc292440822" class="anchor"><span id="_Toc479017979" class="anchor"></span></span>Architecture Overview
+<span id="_Toc292440822" class="anchor"><span id="_Toc479017979" class="anchor"></span></span>
+**Architecture Overview**
+=========================
 
 Plasma and PlasmaQuery® are registered
 
