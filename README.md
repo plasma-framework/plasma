@@ -1,4 +1,7 @@
-![](images/media/image2.png)Plasma
+![](images/media/image2.png)
+**Plasma**
+==========
+
 
 Plasma Design Team
 TerraMeta Software, Inc.
