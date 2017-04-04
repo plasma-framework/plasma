@@ -8,7 +8,7 @@ TerraMeta Software, Inc.
 **Architecture Overview**
 =========================
 
-Plasma and PlasmaQuery® are registered
+PlasmaSDO® and PlasmaQuery® are registered
 
 Trademarks of TerraMeta Software
 
