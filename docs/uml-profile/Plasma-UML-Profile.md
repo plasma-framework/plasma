@@ -1,4 +1,5 @@
-<img src="images/media/image1.png" width="30" height="30" /> PlasmaSDO™ Platform
+
+<img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image1.png" width="30" height="30" /> PlasmaSDO™ Platform
 
 **UML Profile**
 
@@ -190,23 +191,23 @@ Particular design consideration has been focused on leaving each stereotype gran
 The PlasmaSDO™ Platform UML profile contains stereotypes used to enrich UML models for use within the PlasmaSDO™ Service Data Objects 2.1 implementation and associated platform. Particular design consideration has been focused towards leaving each stereotype granular with only a few tightly related attributes/tags. This approach lets each stereotype convey far more meaning, but can have the effect of making UML diagrams more cluttered depending on the presentation settings of the UML diagramming tool.
 A single UML logical model enriched or annotated with this UML profile provides enough context specific information to support various technology-specific runtime environments and the generation of numerous context or platform-specific models as well as many other related source-code and other artifacts. The Service Data Objects 2.1 specification provides an extensible, lightweight runtime-available metadata API. It is through the SDO metadata API that the PlasmaSDO™ implementation provides more than just standard structural metadata elements, but for models annotated with this UML profile, provides numerous other context specific metadata elements instructive at build-time as well as run-time to various enterprise technology layers and various parts of the platform technology stack.
 
-> <img src="images/media/image2.jpeg" width="465" height="175" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image2.jpeg" width="465" height="175" />
 
 1.  <span id="_Toc310066014" class="anchor"></span>UML Enumeration Extension Stereotypes Diagram
 
-> <img src="images/media/image3.jpeg" width="574" height="478" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image3.jpeg" width="574" height="478" />
 
 1.  <span id="_Toc310066015" class="anchor"></span>UML Property Extension Stereotypes Diagram
 
-> <img src="images/media/image4.jpeg" width="535" height="270" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image4.jpeg" width="535" height="270" />
 
 1.  <span id="_Toc310066016" class="anchor"></span>UML Comment Extension Stereotypes Diagram
 
-> <img src="images/media/image5.jpeg" width="447" height="305" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image5.jpeg" width="447" height="305" />
 
 1.  <span id="_Toc310066017" class="anchor"></span>UML Package Extension Stereotypes Diagram
 
-> <img src="images/media/image6.jpeg" width="475" height="273" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image6.jpeg" width="475" height="273" />
 
 1.  <span id="_Toc310066018" class="anchor"></span>UML NamedElement Extension Stereotypes Diagram
 
@@ -223,7 +224,7 @@ Table - Plasma SDO Profile Package Detail
 
 This stereotype provides modelling-context specific alternative names for UML named elements within a model. While a UML logical model often differs greatly from a physical model for example, the intent is to provide enough naming and other context specific information to make the physical model entirely reflective or derivitive of the UML logical model. In other words support the generation of multiple context-specific models from a single UML logical model. Modelling context specific names or aliases are particularly important as they often differ greatly between modelling contexts due to various standard naming conventions or technology limitations such as name length.
 
-> <img src="images/media/image7.jpeg" width="165" height="112" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image7.jpeg" width="165" height="112" />
 
 1.  <span id="_Toc310066019" class="anchor"></span>SDOAlias
 
@@ -268,7 +269,7 @@ Table – SDOAlias Relation Detail
 
 This stereotype annotates or tags UML properties for use within various operations involving concurrency control. Concurrency control deals with handling collisions and other issues which arise when allowing multiple users or processes simultaneous access to shared entities within a data store. UML properties tagged with this stereotype contain metadata instructive, for example to an SDO Data Access Service (DAS) during commit operations for modified data graphs.
 
-> <img src="images/media/image8.jpeg" width="237" height="100" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image8.jpeg" width="237" height="100" />
 
 1.  <span id="_Toc310066020" class="anchor"></span>SDOConcurrent
 
@@ -312,7 +313,7 @@ Table – SDOConcurrent Relation Detail
 
 This UML stereotype is applied to a consumer UML named-element that is computed from the supplier element.
 
-> <img src="images/media/image9.jpeg" width="172" height="89" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image9.jpeg" width="172" height="89" />
 
 1.  <span id="_Toc310066021" class="anchor"></span>SDODerivation
 
@@ -355,7 +356,7 @@ Table – SDODerivation Relation Detail
 
 This stereotype annotates or tags a UML owned comment for any UML element in a model providing hints as to the nature of the comment and how it might be presented.
 
-> <img src="images/media/image10.jpeg" width="169" height="89" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image10.jpeg" width="169" height="89" />
 
 1.  <span id="_Toc310066022" class="anchor"></span>SDODocumentation
 
@@ -398,7 +399,7 @@ Table – SDODocumentation Relation Detail
 
 This stereotype tags or annotates a UML enumeration for use within the PlasmaSDO™ implementation
 
-> <img src="images/media/image11.jpeg" width="209" height="83" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image11.jpeg" width="209" height="83" />
 
 1.  <span id="_Toc310066023" class="anchor"></span>SDOEnumeration
 
@@ -441,7 +442,7 @@ Table – SDOEnumeration Relation Detail
 
 This stereotype constrains a UML property by means of a given UML enumeration. It enables use of UML Enumerations which are &lt;b&gt;part&lt;/b&gt; of the UML model when specifying a constraint on class properties. UML Enumerations used with this stereotype must be tagged with the SDOEnumeration stereotype.
 
-> <img src="images/media/image12.jpeg" width="195" height="89" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image12.jpeg" width="195" height="89" />
 
 1.  <span id="_Toc310066024" class="anchor"></span>SDOEnumerationConstraint
 
@@ -484,7 +485,7 @@ Table – SDOEnumerationConstraint Relation Detail
 
 This stereotype tags or annotates a UML property as representing some type of key within a data store, data transfer or transient storage medium.
 
-> <img src="images/media/image13.jpeg" width="168" height="89" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image13.jpeg" width="168" height="89" />
 
 1.  <span id="_Toc310066025" class="anchor"></span>SDOKey
 
@@ -527,7 +528,7 @@ Table – SDOKey Relation Detail
 
 This stereotype tags or annotates a UML package as an SDO namespace.
 
-> <img src="images/media/image14.jpeg" width="160" height="100" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image14.jpeg" width="160" height="100" />
 
 1.  <span id="_Toc310066026" class="anchor"></span>SDONamespace
 
@@ -568,7 +569,7 @@ Table – SDONamespace Relation Detail
 
 **Description**
 
-> <img src="images/media/image15.jpeg" width="177" height="112" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image15.jpeg" width="177" height="112" />
 
 1.  <span id="_Toc310066027" class="anchor"></span>SDOSemanticConstraint
 
@@ -611,7 +612,7 @@ Table – SDOSemanticConstraint Relation Detail
 
 **Description**
 
-> <img src="images/media/image16.jpeg" width="187" height="100" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image16.jpeg" width="187" height="100" />
 
 1.  <span id="_Toc310066028" class="anchor"></span>SDOTemporal
 
@@ -655,7 +656,7 @@ Table – SDOTemporal Relation Detail
 
 This stereotype tags a UML property as unique within its UML class and resulting SDO Type. if the unique constraint 'name' is valued, the name is used all or in part as the final physical constraint id within a physical data store. Where multiple properties within a class are tagged with this stereotype, if the unique constraint 'name' is valued for more than one UML property, these properties will be used together in the resulting physical constraint.
 
-> <img src="images/media/image17.jpeg" width="163" height="89" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image17.jpeg" width="163" height="89" />
 
 1.  <span id="_Toc310066029" class="anchor"></span>SDOUniqueConstraint
 
@@ -696,7 +697,7 @@ Table – SDOUniqueConstraint Relation Detail
 
 **Description**
 
-> <img src="images/media/image18.jpeg" width="162" height="160" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image18.jpeg" width="162" height="160" />
 
 1.  <span id="_Toc310066030" class="anchor"></span>SDOValueConstraint
 
@@ -747,7 +748,7 @@ This stereotype allows a value set constraint to be specified for a class attrib
 have a coded type may be constrained such that the code value in an instance should be taken
 from the specified value set. The coding strength determines whether exceptions are allowed.
 
-> <img src="images/media/image19.jpeg" width="213" height="184" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image19.jpeg" width="213" height="184" />
 
 1.  <span id="_Toc310066031" class="anchor"></span>SDOValueSetConstraint
 
@@ -944,7 +945,7 @@ Table – ConcurrencyType Literal Detail
 
 **Description**
 
-> <img src="images/media/image20.jpeg" width="136" height="206" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image20.jpeg" width="136" height="206" />
 
 1.  <span id="_Toc310066032" class="anchor"></span>DocumentationType
 
@@ -1428,7 +1429,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="images/media/image4.jpeg" width="535" height="270" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image4.jpeg" width="535" height="270" />
 
 1.  <span id="_Toc310066033" class="anchor"></span>UML Comment Extension Stereotypes
 
@@ -1437,7 +1438,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="images/media/image2.jpeg" width="465" height="175" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image2.jpeg" width="465" height="175" />
 
 1.  <span id="_Toc310066034" class="anchor"></span>UML Enumeration Extension Stereotypes
 
@@ -1446,7 +1447,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="images/media/image6.jpeg" width="475" height="273" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image6.jpeg" width="475" height="273" />
 
 1.  <span id="_Toc310066035" class="anchor"></span>UML NamedElement Extension Stereotypes
 
@@ -1455,7 +1456,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="images/media/image5.jpeg" width="447" height="305" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image5.jpeg" width="447" height="305" />
 
 1.  <span id="_Toc310066036" class="anchor"></span>UML Package Extension Stereotypes
 
@@ -1464,7 +1465,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="images/media/image3.jpeg" width="574" height="478" />
+> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image3.jpeg" width="574" height="478" />
 
 1.  <span id="_Toc194895637" class="anchor"><span id="_Toc310066037" class="anchor"></span></span>UML Property Extension Stereotypes
 

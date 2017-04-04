@@ -1,8 +1,10 @@
-![](images/media/image2.png)**Plasma**
+![](images/media/image3.png)
+**Plasma**
+==========
 
 TerraMeta Software, Inc.
 
-<span id="_Toc292440822" class="anchor"><span id="_Toc479015450" class="anchor"></span></span>Architecture Overview
+<span id="_Toc292440822" class="anchor"><span id="_Toc479017979" class="anchor"></span></span>Architecture Overview
 
 Plasma and PlasmaQuery® are registered
 
@@ -18,9 +20,9 @@ Trademarks of TerraMeta Software
 Table of Contents</td>
 </tr>
 <tr class="even">
-<td><p><a href="#_Toc479015450">Architecture Overview i</a></p>
+<td><p><a href="#_Toc479017979">Architecture Overview i</a></p>
 <p><a href="#introduction">1 Introduction 4</a></p>
-<p><a href="#_Toc479015452"><strong>1.1</strong> <strong>Overview</strong> 4</a></p>
+<p><a href="#background"><strong>1.1</strong> <strong>Background</strong> 4</a></p>
 <p><a href="#data-graphs">1.1.1 Data Graphs 4</a></p>
 <p><a href="#change-summaries">1.1.2 Change Summaries 4</a></p>
 <p><a href="#runtime-available-metadata">1.1.3 Runtime Available Metadata 4</a></p>
@@ -33,14 +35,14 @@ Table of Contents</td>
 <p><a href="#overview"><strong>2.1</strong> <strong>Overview</strong> 6</a></p>
 <p><a href="#core"><strong>2.2</strong> <strong>Core</strong> 6</a></p>
 <p><a href="#graph-manipulation">2.2.1 Graph Manipulation 6</a></p>
-<p><a href="#plasma-uml-profile"><strong>2.3</strong> <strong>Plasma SDO UML Profile</strong> 6</a></p>
+<p><a href="#plasma-uml-profile"><strong>2.3</strong> <strong>Plasma UML Profile</strong> 6</a></p>
 <p><a href="#repository"><strong>2.4</strong> <strong>Repository</strong> 6</a></p>
 <p><a href="#namespaces">2.4.1 Namespaces 7</a></p>
 <p><a href="#classifiers">2.4.2 Classifiers 7</a></p>
 <p><a href="#properties">2.4.3 Properties 7</a></p>
 <p><a href="#enumerations">2.4.4 Enumerations 7</a></p>
 <p><a href="#provisioning"><strong>2.5</strong> <strong>Provisioning</strong> 7</a></p>
-<p><a href="#plasma-runtime-provisioning-model">2.5.1 Plasma SDO Runtime Provisioning Model 8</a></p>
+<p><a href="#plasma-runtime-provisioning-model">2.5.1 Plasma Runtime Provisioning Model 8</a></p>
 <p><a href="#plasma-query-api"><strong>2.6</strong> <strong>Plasma Query API</strong> 8</a></p>
 <p><a href="#physical-model-independence">2.6.1 Physical Model Independence 9</a></p>
 <p><a href="#class-model-independence">2.6.2 Class Model Independence 9</a></p>
@@ -186,7 +188,7 @@ The PlasmaSDO™ implementation provides “end-to-end” support for UML enumer
 
 The code generation or provisioning under Plasma brings together several important architecture components for use at both build-time as well as run-time. The build-time provisioning tools are compatible-with but not dependent upon any Integrated Development Environment (IDE), but are rather are geared for larger scale enterprise projects needing support for [**Maven**](http://maven.apache.org/) and continuous integration build environments such as [**Hudson**](http://hudson-ci.org). Build files typically access a set of command-line provisioning tools using **the Plasma Maven Plugin** triggering a variety of operations. In general, application UML model artifacts in XMI format[3] annotated with the **Plasma UML Profile** are first loaded and merged using the [**FUML**](http://portal.modeldriven.org/project/foundationalUML) runtime, then projected as a whole or in part onto an intermediate provisioning model, typically in-memory. The provisioning model is then merged with configuration information and transformed into one of several available target outputs, comprised of source code or models specific to a particular context or technology platform. Where a particular technology target is not provided, the intermediate provisioning model can be marshaled as XML, custom transformations using XSLT for instance converting the provisioning XML document into almost any target format.
 
-![](images/media/image4.png)
+![](images/media/image5.png)
 
 Figure - Plasma Provisioning API
 
@@ -199,7 +201,7 @@ The Plasma provisioning model is an intermediate staging or marshaling model whi
 
 The PlasmaQuery® API provides a flexible mechanism to fully describe any arbitrary SDO results Data Graph, independent of any persistence framework or type of data store. PlasmaQuery™ supports XPath expressions as a free-text “surface language”, parsed by the API implementation and used to construct an underlying query object model representation. As an alternative to free-text, PlasmaQuery™ contains a query Domain Specific Language (DSL) generator and API facilitating (IDE) code-completion, 100% compile-time checking and resulting in code with an almost “fluent” English appearance based on your business model. At runtime the PlasmaQuery™ DSL implementation constructs an underlying query object model representation. The detailed query object model can also be manipulated directly and consists of various criteria entities such as expressions, properties, operators, parameters, etc… as well as convenient factory operations which allow precise user and system control over the various elements constituting a query. The object model can also be serialized as XML for wire transport, persistence, flat file or other usage. The below diagram illustrates the layering and various query representations supported under the PlasmaQuery™ API.
 
-<img src="images/media/image5.png" alt="C:\Users\scinnamond\AppData\Local\Microsoft\Windows\INetCache\Content.Word\Picture6.png" width="246" height="152" />
+<img src="images/media/image6.png" alt="C:\Users\scinnamond\AppData\Local\Microsoft\Windows\INetCache\Content.Word\Picture6.png" width="246" height="152" />
 
 Figure - PlasmaQuery™ API
 
@@ -231,7 +233,7 @@ As an alternative to free-text, PlasmaQuery® contains a query Domain Specific L
 
 The below Java™ language example shows a query using generated DSL class ‘QShipment’ which describes a results data graph linking shipments, persons, contacts and other information. The query contains a simple wildcard “where” predicate.
 
-![](images/media/image6.png)
+![](images/media/image7.png)
 
 ### Plasma Query XPath 
 
@@ -241,11 +243,11 @@ XPath can be thought of as the free-text “surface language” for PlasmaQuery�
 
 The below example query returns ‘Shipment’ Data Graphs, the graph including organization, person-role and person-contact information nodes. *Note: the ‘@’ character designating attributes/properties is optional but supported as per the SDO 2.1 Specification.*
 
-![](images/media/image7.png)
+![](images/media/image8.png)
 
 Each step or node within an XPath expression can contain predicates. Predicates are be used by Data Access Services to limit not only results from the extent or root, but to limit collections within a result Data Graph for any collection or “many” property along a path. An XPath predicate is contained within square brackets \[\], and comes after the parent object of what will be tested. The below example describes a data graph consisting of shipments linked to organization “Ten Speed Press” with all person roles and only person home contact information.
 
-![](images/media/image8.png)
+![](images/media/image9.png)
 
 ### Query Object Model
 
