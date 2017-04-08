@@ -1,0 +1,66 @@
+08 Apr 2017 09:51:01,985 DEBUG [main] cli.SDOTool given destination dir 'java' does not exist
+08 Apr 2017 09:51:01,988 DEBUG [main] cli.SDOTool dest: java
+08 Apr 2017 09:51:02,732 INFO  [main] provisioning.MetamodelDataBinding loading schema chain...
+08 Apr 2017 09:51:03,099 INFO  [main] fuml.Fuml loading artifact, Plasma_SDO_Profile.mdxml
+08 Apr 2017 09:51:03,115 INFO  [main] config.FumlConfiguration initializing...
+08 Apr 2017 09:51:03,128 INFO  [main] config.FumlConfigDataBinding loading schema chain...
+08 Apr 2017 09:51:03,235 INFO  [main] config.FumlConfiguration loading configuration, fuml-config.xml
+08 Apr 2017 09:51:03,265 FATAL [main] bind.DefaultValidationEventHandler Line:Col:Offset[132:21:-1] - cvc-complex-type.2.4.b: The content of element 'cfg:Configuration' is not complete. One of '{LibraryConfiguration}' is expected.
+08 Apr 2017 09:51:03,444 INFO  [main] model.InMemoryRepository initializing...
+08 Apr 2017 09:51:03,447 INFO  [main] repository.RepositoryConfigDataBinding loading schema chain...
+08 Apr 2017 09:51:03,501 INFO  [main] model.PrimitiveTypesAssembler initializing...
+08 Apr 2017 09:51:03,527 INFO  [main] model.InfrastructureAssembler initializing...
+08 Apr 2017 09:51:03,608 INFO  [main] model.SuperstructureAssembler initializing...
+08 Apr 2017 09:51:03,645 INFO  [main] model.fUML_SyntaxAssembler initializing...
+08 Apr 2017 09:51:03,652 INFO  [main] model.InMemoryRepository performing package merge...
+08 Apr 2017 09:51:03,691 INFO  [main] model.InMemoryRepository cacheing classifier attributes and operations...
+08 Apr 2017 09:51:03,781 INFO  [main] library.Library initializing...
+08 Apr 2017 09:51:04,953 INFO  [main] fuml.Fuml loading artifact, plasma-platform-common.mdxml
+08 Apr 2017 09:51:05,302 INFO  [main] fuml.Fuml loading artifact, plasma-platform-personalization.mdxml
+08 Apr 2017 09:51:05,739 INFO  [main] fuml.Fuml loading artifact, plasma-platform-categorization.mdxml
+08 Apr 2017 09:51:05,933 INFO  [main] fuml.Fuml loading artifact, examples-categorization.mdxml
+08 Apr 2017 09:51:06,087 INFO  [main] fuml.Fuml loading artifact, plasma-platform-uml.mdxml
+08 Apr 2017 09:51:07,095 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.common (_16_0_1_1707042b_1306852862751_314490_803) linked to URI: http://plasma.org/platform/common
+08 Apr 2017 09:51:07,102 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.common (_16_0_1_1707042b_1306852862751_314490_803) linked to URI: http://plasma.org/platform/common
+08 Apr 2017 09:51:07,105 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.common (_16_0_1_1707042b_1306852862751_314490_803) linked to URI: http://plasma.org/platform/common
+08 Apr 2017 09:51:07,106 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.common (_16_0_1_1707042b_1306852862751_314490_803) linked to URI: http://plasma.org/platform/common
+08 Apr 2017 09:51:07,116 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.personalization (_16_0_1_1707042b_1306852076855_544703_367) linked to URI: http://plasma.org/platform/personalization
+08 Apr 2017 09:51:07,119 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.personalization (_16_0_1_1707042b_1306852076855_544703_367) linked to URI: http://plasma.org/platform/personalization
+08 Apr 2017 09:51:07,121 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.personalization (_16_0_1_1707042b_1306852076855_544703_367) linked to URI: http://plasma.org/platform/personalization
+08 Apr 2017 09:51:07,123 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.personalization (_16_0_1_1707042b_1306852076855_544703_367) linked to URI: http://plasma.org/platform/personalization
+08 Apr 2017 09:51:07,125 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.personalization (_16_0_1_1707042b_1306852076855_544703_367) linked to URI: http://plasma.org/platform/personalization
+08 Apr 2017 09:51:07,129 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.personalization (_16_0_1_1707042b_1306852076855_544703_367) linked to URI: http://plasma.org/platform/personalization
+08 Apr 2017 09:51:07,130 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.personalization (_16_0_1_1707042b_1306852076855_544703_367) linked to URI: http://plasma.org/platform/personalization
+08 Apr 2017 09:51:07,133 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.personalization (_16_0_1_1707042b_1306852076855_544703_367) linked to URI: http://plasma.org/platform/personalization
+08 Apr 2017 09:51:07,136 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.personalization (_16_0_1_1707042b_1306852076855_544703_367) linked to URI: http://plasma.org/platform/personalization
+08 Apr 2017 09:51:07,145 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.categorization (_16_0_1_1707042b_1307727034736_121858_767) linked to URI: http://plasma.org/platform/categorization
+08 Apr 2017 09:51:07,145 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.categorization (_16_0_1_1707042b_1307727034736_121858_767) linked to URI: http://plasma.org/platform/categorization
+08 Apr 2017 09:51:07,146 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.categorization (_16_0_1_1707042b_1307727034736_121858_767) linked to URI: http://plasma.org/platform/categorization
+08 Apr 2017 09:51:07,147 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.categorization (_16_0_1_1707042b_1307727034736_121858_767) linked to URI: http://plasma.org/platform/categorization
+08 Apr 2017 09:51:07,147 DEBUG [main] core.CoreType found repo namespace/package model.org.servicelabs.plasma.platform.categorization (_16_0_1_1707042b_1307727034736_121858_767) linked to URI: http://plasma.org/platform/categorization
+08 Apr 2017 09:51:07,163 DEBUG [main] core.CoreType found repo namespace/package examples.categorization2 (_17_0_6_1707042b_1399744152404_632698_1900) linked to URI: http://examples.com/sdo/categorization2
+08 Apr 2017 09:51:07,164 DEBUG [main] core.CoreType found repo namespace/package examples.categorization (_16_0_1_1707042b_1319633761359_34578_506) linked to URI: http://examples.com/sdo/categorization
+08 Apr 2017 09:51:07,165 WARN  [main] core.CoreType found xmi-id mismatch for result (_17_0_6_1707042b_1399744194003_513873_1906) and lookup (_16_0_1_1707042b_1319633801359_47593_529) classifier - ignoring
+08 Apr 2017 09:51:07,165 DEBUG [main] core.CoreType found repo namespace/package examples.categorization (_16_0_1_1707042b_1319633761359_34578_506) linked to URI: http://examples.com/sdo/categorization
+08 Apr 2017 09:51:07,166 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,167 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,168 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,169 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,169 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,174 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,175 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,183 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,184 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,185 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,185 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,186 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,186 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,187 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,188 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,188 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,189 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,189 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,190 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,190 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,191 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml
+08 Apr 2017 09:51:07,192 DEBUG [main] core.CoreType found repo namespace/package model.org.plasma.platform.uml (_17_0_2_1707042b_1330462616671_801279_3240) linked to URI: http://plasma.org/platform/uml

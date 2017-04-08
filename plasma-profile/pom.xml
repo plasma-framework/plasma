@@ -11,24 +11,24 @@
 	<version>1.2.4</version>
 	<packaging>jar</packaging>
 	<name>Plasma Profile</name>
+	<description>The Plasma Profile Module</description>
+	<licenses>
+		<license>
+			<name>Plasma License</name>
+			<url>https://github.com/terrameta/plasma/LICENSE</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://github.com/terrameta/plasma</url>
+		<connection></connection>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<repositories>
-		<repository>
-			<id>lib</id>
-			<name>lib</name>
-			<releases>
-				<enabled>true</enabled>
-				<checksumPolicy>ignore</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<url>file://${project.basedir}/lib</url>
-		</repository>
 	</repositories>
 	<pluginRepositories>
 	</pluginRepositories>
@@ -93,8 +93,9 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
+				<version>1.8</version>
 				<dependencies>
+				    <!-- 
 					<dependency>
 						<groupId>com.sun</groupId>
 						<artifactId>tools</artifactId>
@@ -102,6 +103,7 @@
 						<scope>system</scope>
 						<systemPath>${java.home}/../lib/tools.jar</systemPath>
 					</dependency>
+					 -->
 				</dependencies>
 
 				<executions>

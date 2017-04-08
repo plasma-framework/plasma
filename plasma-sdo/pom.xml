@@ -12,7 +12,18 @@
   <packaging>jar</packaging>
 
   <name>Plasma SDO</name>
-  <description>In its initial releases, the PlasmaSDO™ implementation seeks to address the need for automation and code generation under SDO for standard enterprise Java web applications while focusing on critical operational considerations these applications face, such as optimistic and pessimistic concurrency control. The PlasmaSDO™ implementation is not bound to any integrated development environment (IDE) and provides support for standard Java™ based build tools. Note: Such operational considerations such as optimistic and pessimistic concurrency control are seen as a feature gap within various commercial and open-source SDO offerings, and are facilitated in PlasmaSDO™ by a custom UML profile and various associated SDO API extensions.</description>  
+	<description>The Plasma SDO Module</description>
+	<licenses>
+		<license>
+			<name>Plasma License</name>
+			<url>https://github.com/terrameta/plasma/LICENSE</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://github.com/terrameta/plasma</url>
+		<connection></connection>
+	</scm>
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -156,13 +167,15 @@
               <artifactId>maven-antrun-plugin</artifactId>                   
               <version>1.7</version>  
               <dependencies>
+                <!-- 
                 <dependency>
                   <groupId>com.sun</groupId>
                   <artifactId>tools</artifactId>
-                  <version>1.5.0</version>
-                  <scope>system</scope>
+				  <version>1.5.0</version>
+				  <scope>system</scope>
                   <systemPath>${java.home}/../lib/tools.jar</systemPath>
                 </dependency>
+                 -->
               </dependencies>              
               <executions>                                                  
                                                      
