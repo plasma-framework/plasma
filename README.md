@@ -2,7 +2,7 @@
 
 TerraMeta Software, Inc.
 
-PlasmaSDO® and PlasmaQuery® are registered
+PlasmaSDO<sup>®</sup> and PlasmaQuery<sup>®</sup> are registered
 
 Trademarks of TerraMeta Software
 
@@ -60,10 +60,10 @@ For the Plasma SDO library use the following artifact.
 **Detailed Documentation**
 ==========================
 
-| **Plasma Architecture Overview**                                                                                    |
-|---------------------------------------------------------------------------------------------------------------------|
-| [**Plasma UML Profile Specification**](http://terrameta.github.io/cplasma/uml-profile/Plasma-Architecture-Overview) |
-| [**Plasma API DOCS**](http://terrameta.github.io/plasma/apidocs/index.html)                                         |
+| [**Plasma Architecture Overview**](http://terrameta.github.io/plasma/arch_overview/Plasma-Architecture-Overview) |
+|------------------------------------------------------------------------------------------------------------------|
+| [**Plasma UML Profile Specification**](http://terrameta.github.io/plasma/uml-profile/Plasma-UML-Profile)         |
+| [**Plasma API DOCS**](http://terrameta.github.io/plasma/apidocs/index.html)                                      |
 
 [1] http://www.oodesign.com/visitor-pattern.html
 
