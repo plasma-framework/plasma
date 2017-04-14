@@ -1,30 +1,29 @@
+<img src="images/media/image1.jpeg" alt="big-icon" width="57" height="57" />**Plasma UML Profile**
+==================================================================================================
 
-<img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image1.png" width="30" height="30" /> PlasmaSDO™ Platform
+**TerraMeta Software, Inc.**
 
-**UML Profile**
+PlasmaSDO<sup>®</sup> and PlasmaQuery<sup>®</sup> are registered
 
-***Revision: 1.1.7***
-
-***November 26, 2011***
+Trademarks of TerraMeta Software
 
 **Revision History**
 
-| **Revision** | **Date**          | **Description** | **Author**          |
+|              |                   |                 |                     |
 |--------------|-------------------|-----------------|---------------------|
+| **Revision** | **Date**          | **Description** | **Author**          |
 | 1.1.7        | November 26, 2011 |                 | Plasma Team Members |
 
 <table>
-<thead>
-<tr class="header">
-<th><span id="_Toc495460090" class="anchor"><span id="_Toc496321528" class="anchor"></span></span><br />
-<br />
-<br />
-<br />
-Table of Contents</th>
-</tr>
-</thead>
 <tbody>
 <tr class="odd">
+<td><span id="_Toc495460090" class="anchor"><span id="_Toc496321528" class="anchor"></span></span><br />
+<br />
+<br />
+<br />
+Table of Contents</td>
+</tr>
+<tr class="even">
 <td><p><a href="#introduction">1 Introduction 1</a></p>
 <p><a href="#_Toc310065925"><strong>1.1</strong> <strong>Purpose</strong> 1</a></p>
 <p><a href="#_Toc310065926"><strong>1.2</strong> <strong>Scope</strong> 1</a></p>
@@ -121,8 +120,9 @@ Table of Contents</th>
 
 <span id="_Toc135028939" class="anchor"><span id="_Toc495460092" class="anchor"><span id="_Toc498843305" class="anchor"><span id="_Toc24906349" class="anchor"></span></span></span></span>
 
-| Table of Figures                                                             |
+|                                                                              |
 |------------------------------------------------------------------------------|
+| Table of Figures                                                             |
 | [Figure 1. UML Enumeration Extension Stereotypes Diagram 2](#_Toc310066014)  
                                                                                
  [Figure 2. UML Property Extension Stereotypes Diagram 3](#_Toc310066015)      
@@ -191,30 +191,31 @@ Particular design consideration has been focused on leaving each stereotype gran
 The PlasmaSDO™ Platform UML profile contains stereotypes used to enrich UML models for use within the PlasmaSDO™ Service Data Objects 2.1 implementation and associated platform. Particular design consideration has been focused towards leaving each stereotype granular with only a few tightly related attributes/tags. This approach lets each stereotype convey far more meaning, but can have the effect of making UML diagrams more cluttered depending on the presentation settings of the UML diagramming tool.
 A single UML logical model enriched or annotated with this UML profile provides enough context specific information to support various technology-specific runtime environments and the generation of numerous context or platform-specific models as well as many other related source-code and other artifacts. The Service Data Objects 2.1 specification provides an extensible, lightweight runtime-available metadata API. It is through the SDO metadata API that the PlasmaSDO™ implementation provides more than just standard structural metadata elements, but for models annotated with this UML profile, provides numerous other context specific metadata elements instructive at build-time as well as run-time to various enterprise technology layers and various parts of the platform technology stack.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image2.jpeg" width="465" height="175" />
+> <img src="images/media/image2.jpeg" width="465" height="175" />
 
 1.  <span id="_Toc310066014" class="anchor"></span>UML Enumeration Extension Stereotypes Diagram
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image3.jpeg" width="574" height="478" />
+> <img src="images/media/image3.jpeg" width="574" height="478" />
 
 1.  <span id="_Toc310066015" class="anchor"></span>UML Property Extension Stereotypes Diagram
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image4.jpeg" width="535" height="270" />
+> <img src="images/media/image4.jpeg" width="535" height="270" />
 
 1.  <span id="_Toc310066016" class="anchor"></span>UML Comment Extension Stereotypes Diagram
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image5.jpeg" width="447" height="305" />
+> <img src="images/media/image5.jpeg" width="447" height="305" />
 
 1.  <span id="_Toc310066017" class="anchor"></span>UML Package Extension Stereotypes Diagram
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image6.jpeg" width="475" height="273" />
+> <img src="images/media/image6.jpeg" width="475" height="273" />
 
 1.  <span id="_Toc310066018" class="anchor"></span>UML NamedElement Extension Stereotypes Diagram
 
-Table - Plasma SDO Profile Package Detail
+Table 1 - Plasma SDO Profile Package Detail
 
-| **Name**           | Plasma SDO Profile |
+|                    |                    |
 |--------------------|--------------------|
+| **Name**           | Plasma SDO Profile |
 | **Qualified Name** | Plasma SDO Profile |
 
 **Stereotype** **SDOAlias**
@@ -224,14 +225,15 @@ Table - Plasma SDO Profile Package Detail
 
 This stereotype provides modelling-context specific alternative names for UML named elements within a model. While a UML logical model often differs greatly from a physical model for example, the intent is to provide enough naming and other context specific information to make the physical model entirely reflective or derivitive of the UML logical model. In other words support the generation of multiple context-specific models from a single UML logical model. Modelling context specific names or aliases are particularly important as they often differ greatly between modelling contexts due to various standard naming conventions or technology limitations such as name length.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image7.jpeg" width="165" height="112" />
+> <img src="images/media/image7.jpeg" width="165" height="112" />
 
 1.  <span id="_Toc310066019" class="anchor"></span>SDOAlias
 
-Table - SDOAlias Stereotype Detail
+Table 2 - SDOAlias Stereotype Detail
 
-| **Name**             | SDOAlias                                                            |
+|                      |                                                                     |
 |----------------------|---------------------------------------------------------------------|
+| **Name**             | SDOAlias                                                            |
 | **Qualified Name**   | Plasma SDO Profile::SDOAlias                                        |
 | **Visibility**       | public                                                              |
 | **Abstract**         | false                                                               |
@@ -242,10 +244,11 @@ Table - SDOAlias Stereotype Detail
 
 Following are the attributes for stereotype, SDOAlias.
 
-Table – SDOAlias Attribute Detail
+Table 3 – SDOAlias Attribute Detail
 
-| Attribute Name   | Description                                                                                                                                                                                                                                | Type   | Cardinality | Visibility |
+|                  |                                                                                                                                                                                                                                            |        |             |            |
 |------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|-------------|------------|
+| Attribute Name   | Description                                                                                                                                                                                                                                | Type   | Cardinality | Visibility |
 | **businessName** | Associates a given UML element with a business specific, human readable name.                                                                                                                                                              | String | 1:0         | private    |
 | **localName**    | Associates a given UML element with a data transfer or transient storage element. Where the transfer medium is XML, this tag contains the name of an XML element or attribute.                                                             | String | 1:0         | private    |
 | **physicalName** | Associates a given UML element with a physical data store element. Where the physical data store is a relational database, this tag contains the name of a relational database table, schema, column or other relational database element. | String | 1:0         | private    |
@@ -254,10 +257,11 @@ Table – SDOAlias Attribute Detail
 
 Following are the relations for class, SDOAlias.
 
-Table – SDOAlias Relation Detail
+Table 5 – SDOAlias Relation Detail
 
-| Relation Type | Related Elements |
+|               |                  |
 |---------------|------------------|
+| Relation Type | Related Elements |
 | **Extension** | -   NamedElement 
                     
   -   SDOAlias      |
@@ -269,14 +273,15 @@ Table – SDOAlias Relation Detail
 
 This stereotype annotates or tags UML properties for use within various operations involving concurrency control. Concurrency control deals with handling collisions and other issues which arise when allowing multiple users or processes simultaneous access to shared entities within a data store. UML properties tagged with this stereotype contain metadata instructive, for example to an SDO Data Access Service (DAS) during commit operations for modified data graphs.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image8.jpeg" width="237" height="100" />
+> <img src="images/media/image8.jpeg" width="237" height="100" />
 
 1.  <span id="_Toc310066020" class="anchor"></span>SDOConcurrent
 
-Table - SDOConcurrent Stereotype Detail
+Table 2 - SDOConcurrent Stereotype Detail
 
-| **Name**             | SDOConcurrent                                                   |
+|                      |                                                                 |
 |----------------------|-----------------------------------------------------------------|
+| **Name**             | SDOConcurrent                                                   |
 | **Qualified Name**   | Plasma SDO Profile::SDOConcurrent                               |
 | **Visibility**       | public                                                          |
 | **Abstract**         | false                                                           |
@@ -287,10 +292,11 @@ Table - SDOConcurrent Stereotype Detail
 
 Following are the attributes for stereotype, SDOConcurrent.
 
-Table – SDOConcurrent Attribute Detail
+Table 3 – SDOConcurrent Attribute Detail
 
-| Attribute Name | Description                                                                                                                 | Type                | Cardinality | Visibility |
+|                |                                                                                                                             |                     |             |            |
 |----------------|-----------------------------------------------------------------------------------------------------------------------------|---------------------|-------------|------------|
+| Attribute Name | Description                                                                                                                 | Type                | Cardinality | Visibility |
 | **dataFlavor** | For a UML property, denotes or provides a hint as to the nature of the data with respect concurrency or concurrency control | ConcurentDataFlavor | 1:1         | private    |
 | **type**       | Specifies the general category of concurrency or concurrency control under which a UML property participates                | ConcurrencyType     | 1:1         | private    |
 
@@ -298,10 +304,11 @@ Table – SDOConcurrent Attribute Detail
 
 Following are the relations for class, SDOConcurrent.
 
-Table – SDOConcurrent Relation Detail
+Table 5 – SDOConcurrent Relation Detail
 
-| Relation Type | Related Elements  |
+|               |                   |
 |---------------|-------------------|
+| Relation Type | Related Elements  |
 | **Extension** | -   Property      
                      
   -   SDOConcurrent  |
@@ -313,14 +320,15 @@ Table – SDOConcurrent Relation Detail
 
 This UML stereotype is applied to a consumer UML named-element that is computed from the supplier element.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image9.jpeg" width="172" height="89" />
+> <img src="images/media/image9.jpeg" width="172" height="89" />
 
 1.  <span id="_Toc310066021" class="anchor"></span>SDODerivation
 
-Table - SDODerivation Stereotype Detail
+Table 2 - SDODerivation Stereotype Detail
 
-| **Name**             | SDODerivation                                                       |
+|                      |                                                                     |
 |----------------------|---------------------------------------------------------------------|
+| **Name**             | SDODerivation                                                       |
 | **Qualified Name**   | Plasma SDO Profile::SDODerivation                                   |
 | **Visibility**       | public                                                              |
 | **Abstract**         | false                                                               |
@@ -331,20 +339,22 @@ Table - SDODerivation Stereotype Detail
 
 Following are the attributes for stereotype, SDODerivation.
 
-Table – SDODerivation Attribute Detail
+Table 3 – SDODerivation Attribute Detail
 
-| Attribute Name | Description                                                                             | Type         | Cardinality | Visibility |
+|                |                                                                                         |              |             |            |
 |----------------|-----------------------------------------------------------------------------------------|--------------|-------------|------------|
+| Attribute Name | Description                                                                             | Type         | Cardinality | Visibility |
 | **supplier**   | The supplier element or set of supplier elements which represent the derivation source. | NamedElement | 1:1         | private    |
 
 ### **Relation Detail**
 
 Following are the relations for class, SDODerivation.
 
-Table – SDODerivation Relation Detail
+Table 5 – SDODerivation Relation Detail
 
-| Relation Type | Related Elements  |
+|               |                   |
 |---------------|-------------------|
+| Relation Type | Related Elements  |
 | **Extension** | -   NamedElement  
                      
   -   SDODerivation  |
@@ -356,14 +366,15 @@ Table – SDODerivation Relation Detail
 
 This stereotype annotates or tags a UML owned comment for any UML element in a model providing hints as to the nature of the comment and how it might be presented.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image10.jpeg" width="169" height="89" />
+> <img src="images/media/image10.jpeg" width="169" height="89" />
 
 1.  <span id="_Toc310066022" class="anchor"></span>SDODocumentation
 
-Table - SDODocumentation Stereotype Detail
+Table 2 - SDODocumentation Stereotype Detail
 
-| **Name**             | SDODocumentation                                               |
+|                      |                                                                |
 |----------------------|----------------------------------------------------------------|
+| **Name**             | SDODocumentation                                               |
 | **Qualified Name**   | Plasma SDO Profile::SDODocumentation                           |
 | **Visibility**       | public                                                         |
 | **Abstract**         | false                                                          |
@@ -374,20 +385,22 @@ Table - SDODocumentation Stereotype Detail
 
 Following are the attributes for stereotype, SDODocumentation.
 
-Table – SDODocumentation Attribute Detail
+Table 3 – SDODocumentation Attribute Detail
 
-| Attribute Name | Description | Type              | Cardinality | Visibility |
+|                |             |                   |             |            |
 |----------------|-------------|-------------------|-------------|------------|
+| Attribute Name | Description | Type              | Cardinality | Visibility |
 | **type**       |             | DocumentationType | 1:1         | private    |
 
 ### **Relation Detail**
 
 Following are the relations for class, SDODocumentation.
 
-Table – SDODocumentation Relation Detail
+Table 5 – SDODocumentation Relation Detail
 
-| Relation Type | Related Elements     |
+|               |                      |
 |---------------|----------------------|
+| Relation Type | Related Elements     |
 | **Extension** | -   Comment          
                         
   -   SDODocumentation  |
@@ -399,14 +412,15 @@ Table – SDODocumentation Relation Detail
 
 This stereotype tags or annotates a UML enumeration for use within the PlasmaSDO™ implementation
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image11.jpeg" width="209" height="83" />
+> <img src="images/media/image11.jpeg" width="209" height="83" />
 
 1.  <span id="_Toc310066023" class="anchor"></span>SDOEnumeration
 
-Table - SDOEnumeration Stereotype Detail
+Table 2 - SDOEnumeration Stereotype Detail
 
-| **Name**             | SDOEnumeration                                                     |
+|                      |                                                                    |
 |----------------------|--------------------------------------------------------------------|
+| **Name**             | SDOEnumeration                                                     |
 | **Qualified Name**   | Plasma SDO Profile::SDOEnumeration                                 |
 | **Visibility**       | public                                                             |
 | **Abstract**         | false                                                              |
@@ -417,7 +431,7 @@ Table - SDOEnumeration Stereotype Detail
 
 Following are the attributes for stereotype, SDOEnumeration.
 
-Table – SDOEnumeration Attribute Detail
+Table 3 – SDOEnumeration Attribute Detail
 
 |                |             |      |             |            |
 |----------------|-------------|------|-------------|------------|
@@ -427,10 +441,11 @@ Table – SDOEnumeration Attribute Detail
 
 Following are the relations for class, SDOEnumeration.
 
-Table – SDOEnumeration Relation Detail
+Table 5 – SDOEnumeration Relation Detail
 
-| Relation Type | Related Elements   |
+|               |                    |
 |---------------|--------------------|
+| Relation Type | Related Elements   |
 | **Extension** | -   Enumeration    
                       
   -   SDOEnumeration  |
@@ -442,14 +457,15 @@ Table – SDOEnumeration Relation Detail
 
 This stereotype constrains a UML property by means of a given UML enumeration. It enables use of UML Enumerations which are &lt;b&gt;part&lt;/b&gt; of the UML model when specifying a constraint on class properties. UML Enumerations used with this stereotype must be tagged with the SDOEnumeration stereotype.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image12.jpeg" width="195" height="89" />
+> <img src="images/media/image12.jpeg" width="195" height="89" />
 
 1.  <span id="_Toc310066024" class="anchor"></span>SDOEnumerationConstraint
 
-Table - SDOEnumerationConstraint Stereotype Detail
+Table 2 - SDOEnumerationConstraint Stereotype Detail
 
-| **Name**             | SDOEnumerationConstraint                                        |
+|                      |                                                                 |
 |----------------------|-----------------------------------------------------------------|
+| **Name**             | SDOEnumerationConstraint                                        |
 | **Qualified Name**   | Plasma SDO Profile::SDOEnumerationConstraint                    |
 | **Visibility**       | public                                                          |
 | **Abstract**         | false                                                           |
@@ -460,20 +476,22 @@ Table - SDOEnumerationConstraint Stereotype Detail
 
 Following are the attributes for stereotype, SDOEnumerationConstraint.
 
-Table – SDOEnumerationConstraint Attribute Detail
+Table 3 – SDOEnumerationConstraint Attribute Detail
 
-| Attribute Name | Description                                                                                                                                                    | Type        | Cardinality | Visibility |
+|                |                                                                                                                                                                |             |             |            |
 |----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|------------|
+| Attribute Name | Description                                                                                                                                                    | Type        | Cardinality | Visibility |
 | **value**      | The UML enumeration class with which to restrict a UML property. UML Enumerations used with this stereotype must be tagged with the SDOEnumeration stereotype. | Enumeration | 1:1         | private    |
 
 ### **Relation Detail**
 
 Following are the relations for class, SDOEnumerationConstraint.
 
-Table – SDOEnumerationConstraint Relation Detail
+Table 5 – SDOEnumerationConstraint Relation Detail
 
-| Relation Type | Related Elements             |
+|               |                              |
 |---------------|------------------------------|
+| Relation Type | Related Elements             |
 | **Extension** | -   Property                 
                                 
   -   SDOEnumerationConstraint  |
@@ -485,14 +503,15 @@ Table – SDOEnumerationConstraint Relation Detail
 
 This stereotype tags or annotates a UML property as representing some type of key within a data store, data transfer or transient storage medium.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image13.jpeg" width="168" height="89" />
+> <img src="images/media/image13.jpeg" width="168" height="89" />
 
 1.  <span id="_Toc310066025" class="anchor"></span>SDOKey
 
-Table - SDOKey Stereotype Detail
+Table 2 - SDOKey Stereotype Detail
 
-| **Name**             | SDOKey                                                          |
+|                      |                                                                 |
 |----------------------|-----------------------------------------------------------------|
+| **Name**             | SDOKey                                                          |
 | **Qualified Name**   | Plasma SDO Profile::SDOKey                                      |
 | **Visibility**       | public                                                          |
 | **Abstract**         | false                                                           |
@@ -503,20 +522,22 @@ Table - SDOKey Stereotype Detail
 
 Following are the attributes for stereotype, SDOKey.
 
-Table – SDOKey Attribute Detail
+Table 3 – SDOKey Attribute Detail
 
-| Attribute Name | Description               | Type    | Cardinality | Visibility |
+|                |                           |         |             |            |
 |----------------|---------------------------|---------|-------------|------------|
+| Attribute Name | Description               | Type    | Cardinality | Visibility |
 | **type**       | Specifies the type of key | KeyType | 1:1         | private    |
 
 ### **Relation Detail**
 
 Following are the relations for class, SDOKey.
 
-Table – SDOKey Relation Detail
+Table 5 – SDOKey Relation Detail
 
-| Relation Type | Related Elements |
+|               |                  |
 |---------------|------------------|
+| Relation Type | Related Elements |
 | **Extension** | -   Property     
                     
   -   SDOKey        |
@@ -528,14 +549,15 @@ Table – SDOKey Relation Detail
 
 This stereotype tags or annotates a UML package as an SDO namespace.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image14.jpeg" width="160" height="100" />
+> <img src="images/media/image14.jpeg" width="160" height="100" />
 
 1.  <span id="_Toc310066026" class="anchor"></span>SDONamespace
 
-Table - SDONamespace Stereotype Detail
+Table 2 - SDONamespace Stereotype Detail
 
-| **Name**             | SDONamespace                                                   |
+|                      |                                                                |
 |----------------------|----------------------------------------------------------------|
+| **Name**             | SDONamespace                                                   |
 | **Qualified Name**   | Plasma SDO Profile::SDONamespace                               |
 | **Visibility**       | public                                                         |
 | **Abstract**         | false                                                          |
@@ -546,20 +568,22 @@ Table - SDONamespace Stereotype Detail
 
 Following are the attributes for stereotype, SDONamespace.
 
-Table – SDONamespace Attribute Detail
+Table 3 – SDONamespace Attribute Detail
 
-| Attribute Name | Description                                                                                                                                                                                      | Type   | Cardinality | Visibility |
+|                |                                                                                                                                                                                                  |        |             |            |
 |----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|-------------|------------|
+| Attribute Name | Description                                                                                                                                                                                      | Type   | Cardinality | Visibility |
 | **uri**        | The namespace URI used to reference all SDO Types contained within the UML package, and the namespace URI used link or map this UML package to SDO namespace specific configuration information. | String | 1:1         | private    |
 
 ### **Relation Detail**
 
 Following are the relations for class, SDONamespace.
 
-Table – SDONamespace Relation Detail
+Table 5 – SDONamespace Relation Detail
 
-| Relation Type | Related Elements |
+|               |                  |
 |---------------|------------------|
+| Relation Type | Related Elements |
 | **Extension** | -   Package      
                     
   -   SDONamespace  |
@@ -569,14 +593,15 @@ Table – SDONamespace Relation Detail
 
 **Description**
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image15.jpeg" width="177" height="112" />
+> <img src="images/media/image15.jpeg" width="177" height="112" />
 
 1.  <span id="_Toc310066027" class="anchor"></span>SDOSemanticConstraint
 
-Table - SDOSemanticConstraint Stereotype Detail
+Table 2 - SDOSemanticConstraint Stereotype Detail
 
-| **Name**             | SDOSemanticConstraint                                           |
+|                      |                                                                 |
 |----------------------|-----------------------------------------------------------------|
+| **Name**             | SDOSemanticConstraint                                           |
 | **Qualified Name**   | Plasma SDO Profile::SDOSemanticConstraint                       |
 | **Visibility**       | public                                                          |
 | **Abstract**         | false                                                           |
@@ -587,10 +612,11 @@ Table - SDOSemanticConstraint Stereotype Detail
 
 Following are the attributes for stereotype, SDOSemanticConstraint.
 
-Table – SDOSemanticConstraint Attribute Detail
+Table 3 – SDOSemanticConstraint Attribute Detail
 
-| Attribute Name    | Description | Type   | Cardinality | Visibility |
+|                   |             |        |             |            |
 |-------------------|-------------|--------|-------------|------------|
+| Attribute Name    | Description | Type   | Cardinality | Visibility |
 | **conceptDomain** |             | String | 1:0         | private    |
 | **conceptId**     |             | String | 1:0         | private    |
 | **conceptName**   |             | String | 1:0         | private    |
@@ -599,10 +625,11 @@ Table – SDOSemanticConstraint Attribute Detail
 
 Following are the relations for class, SDOSemanticConstraint.
 
-Table – SDOSemanticConstraint Relation Detail
+Table 5 – SDOSemanticConstraint Relation Detail
 
-| Relation Type | Related Elements          |
+|               |                           |
 |---------------|---------------------------|
+| Relation Type | Related Elements          |
 | **Extension** | -   Property              
                              
   -   SDOSemanticConstraint  |
@@ -612,14 +639,15 @@ Table – SDOSemanticConstraint Relation Detail
 
 **Description**
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image16.jpeg" width="187" height="100" />
+> <img src="images/media/image16.jpeg" width="187" height="100" />
 
 1.  <span id="_Toc310066028" class="anchor"></span>SDOTemporal
 
-Table - SDOTemporal Stereotype Detail
+Table 2 - SDOTemporal Stereotype Detail
 
-| **Name**             | SDOTemporal                                                     |
+|                      |                                                                 |
 |----------------------|-----------------------------------------------------------------|
+| **Name**             | SDOTemporal                                                     |
 | **Qualified Name**   | Plasma SDO Profile::SDOTemporal                                 |
 | **Visibility**       | public                                                          |
 | **Abstract**         | false                                                           |
@@ -630,10 +658,11 @@ Table - SDOTemporal Stereotype Detail
 
 Following are the attributes for stereotype, SDOTemporal.
 
-Table – SDOTemporal Attribute Detail
+Table 3 – SDOTemporal Attribute Detail
 
-| Attribute Name | Description | Type          | Cardinality | Visibility |
+|                |             |               |             |            |
 |----------------|-------------|---------------|-------------|------------|
+| Attribute Name | Description | Type          | Cardinality | Visibility |
 | **state**      |             | TemporalState | 1:1         | private    |
 | **type**       |             | TemporalType  | 1:1         | private    |
 
@@ -641,10 +670,11 @@ Table – SDOTemporal Attribute Detail
 
 Following are the relations for class, SDOTemporal.
 
-Table – SDOTemporal Relation Detail
+Table 5 – SDOTemporal Relation Detail
 
-| Relation Type | Related Elements |
+|               |                  |
 |---------------|------------------|
+| Relation Type | Related Elements |
 | **Extension** | -   Property     
                     
   -   SDOTemporal   |
@@ -656,14 +686,15 @@ Table – SDOTemporal Relation Detail
 
 This stereotype tags a UML property as unique within its UML class and resulting SDO Type. if the unique constraint 'name' is valued, the name is used all or in part as the final physical constraint id within a physical data store. Where multiple properties within a class are tagged with this stereotype, if the unique constraint 'name' is valued for more than one UML property, these properties will be used together in the resulting physical constraint.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image17.jpeg" width="163" height="89" />
+> <img src="images/media/image17.jpeg" width="163" height="89" />
 
 1.  <span id="_Toc310066029" class="anchor"></span>SDOUniqueConstraint
 
-Table - SDOUniqueConstraint Stereotype Detail
+Table 2 - SDOUniqueConstraint Stereotype Detail
 
-| **Name**             | SDOUniqueConstraint                                             |
+|                      |                                                                 |
 |----------------------|-----------------------------------------------------------------|
+| **Name**             | SDOUniqueConstraint                                             |
 | **Qualified Name**   | Plasma SDO Profile::SDOUniqueConstraint                         |
 | **Visibility**       | public                                                          |
 | **Abstract**         | false                                                           |
@@ -674,20 +705,22 @@ Table - SDOUniqueConstraint Stereotype Detail
 
 Following are the attributes for stereotype, SDOUniqueConstraint.
 
-Table – SDOUniqueConstraint Attribute Detail
+Table 3 – SDOUniqueConstraint Attribute Detail
 
-| Attribute Name | Description                                                                                      | Type   | Cardinality | Visibility |
+|                |                                                                                                  |        |             |            |
 |----------------|--------------------------------------------------------------------------------------------------|--------|-------------|------------|
+| Attribute Name | Description                                                                                      | Type   | Cardinality | Visibility |
 | **group**      | Used to associate one or more UML properties within a class with a single constraint definition. | String | 1:0         | private    |
 
 ### **Relation Detail**
 
 Following are the relations for class, SDOUniqueConstraint.
 
-Table – SDOUniqueConstraint Relation Detail
+Table 5 – SDOUniqueConstraint Relation Detail
 
-| Relation Type | Related Elements        |
+|               |                         |
 |---------------|-------------------------|
+| Relation Type | Related Elements        |
 | **Extension** | -   Property            
                            
   -   SDOUniqueConstraint  |
@@ -697,14 +730,15 @@ Table – SDOUniqueConstraint Relation Detail
 
 **Description**
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image18.jpeg" width="162" height="160" />
+> <img src="images/media/image18.jpeg" width="162" height="160" />
 
 1.  <span id="_Toc310066030" class="anchor"></span>SDOValueConstraint
 
-Table - SDOValueConstraint Stereotype Detail
+Table 2 - SDOValueConstraint Stereotype Detail
 
-| **Name**             | SDOValueConstraint                                              |
+|                      |                                                                 |
 |----------------------|-----------------------------------------------------------------|
+| **Name**             | SDOValueConstraint                                              |
 | **Qualified Name**   | Plasma SDO Profile::SDOValueConstraint                          |
 | **Visibility**       | public                                                          |
 | **Abstract**         | false                                                           |
@@ -715,10 +749,11 @@ Table - SDOValueConstraint Stereotype Detail
 
 Following are the attributes for stereotype, SDOValueConstraint.
 
-Table – SDOValueConstraint Attribute Detail
+Table 3 – SDOValueConstraint Attribute Detail
 
-| Attribute Name     | Description                                                                                                                             | Type    | Cardinality | Visibility |
+|                    |                                                                                                                                         |         |             |            |
 |--------------------|-----------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|------------|
+| Attribute Name     | Description                                                                                                                             | Type    | Cardinality | Visibility |
 | **fractionDigits** | The number of fraction digits for the Property value must be below or equal to the specified total                                      | Integer | 1:0         | private    |
 | **maxInclusive**   | Property value must be a number whose value must be lower or equal to the specified maximum                                             | Integer | 1:0         | private    |
 | **maxLength**      | Property value must be below or equal to the specified maximum boundary                                                                 | Integer | 1:0         | private    |
@@ -731,10 +766,11 @@ Table – SDOValueConstraint Attribute Detail
 
 Following are the relations for class, SDOValueConstraint.
 
-Table – SDOValueConstraint Relation Detail
+Table 5 – SDOValueConstraint Relation Detail
 
-| Relation Type | Related Elements       |
+|               |                        |
 |---------------|------------------------|
+| Relation Type | Related Elements       |
 | **Extension** | -   Property           
                           
   -   SDOValueConstraint  |
@@ -748,14 +784,15 @@ This stereotype allows a value set constraint to be specified for a class attrib
 have a coded type may be constrained such that the code value in an instance should be taken
 from the specified value set. The coding strength determines whether exceptions are allowed.
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image19.jpeg" width="213" height="184" />
+> <img src="images/media/image19.jpeg" width="213" height="184" />
 
 1.  <span id="_Toc310066031" class="anchor"></span>SDOValueSetConstraint
 
-Table - SDOValueSetConstraint Stereotype Detail
+Table 2 - SDOValueSetConstraint Stereotype Detail
 
-| **Name**             | SDOValueSetConstraint                                           |
+|                      |                                                                 |
 |----------------------|-----------------------------------------------------------------|
+| **Name**             | SDOValueSetConstraint                                           |
 | **Qualified Name**   | Plasma SDO Profile::SDOValueSetConstraint                       |
 | **Visibility**       | public                                                          |
 | **Abstract**         | false                                                           |
@@ -766,62 +803,60 @@ Table - SDOValueSetConstraint Stereotype Detail
 
 Following are the attributes for stereotype, SDOValueSetConstraint.
 
-Table – SDOValueSetConstraint Attribute Detail
+Table 3 – SDOValueSetConstraint Attribute Detail
 
 <table>
-<thead>
-<tr class="header">
-<th>Attribute Name</th>
-<th>Description</th>
-<th>Type</th>
-<th>Cardinality</th>
-<th>Visibility</th>
-</tr>
-</thead>
 <tbody>
 <tr class="odd">
+<td>Attribute Name</td>
+<td>Description</td>
+<td>Type</td>
+<td>Cardinality</td>
+<td>Visibility</td>
+</tr>
+<tr class="even">
 <td><strong>codingStrength</strong></td>
 <td>Indicates whether or not codes are restricted to those expressed in the value set</td>
 <td>CodingStrength</td>
 <td>1:0</td>
 <td>private</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>id</strong></td>
 <td>The globally unique identifier for the value set</td>
 <td>String</td>
 <td>1:0</td>
 <td>private</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>ignoredValueSetId</strong></td>
 <td>Defines the set of codes within the overall value set that the implementer is willing to accept without raising an error, but whose content will be ignored and not processed in any useful manner</td>
 <td>String</td>
 <td>1:0</td>
 <td>private</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>minimumValueSetId</strong></td>
 <td>Defines the set of codes within the overall value set that must be supported by an implementer to be considered compliant</td>
 <td>String</td>
 <td>1:0</td>
 <td>private</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>name</strong></td>
 <td>The descriptive name associated with the value set</td>
 <td>String</td>
 <td>1:0</td>
 <td>private</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>rootCode</strong></td>
 <td>Allows conveying the root code of the value set. Only usable for key structural attributes.</td>
 <td>String</td>
 <td>1:0</td>
 <td>private</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>versionDate</strong></td>
 <td>The date on which a specific version of the value set was created. Used when<br />
 performing static references to a value set</td>
@@ -829,7 +864,7 @@ performing static references to a value set</td>
 <td></td>
 <td>private</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><strong>versionIdentifier</strong></td>
 <td>The value which identifies a specific version of the value set. Used when<br />
 performing static references to a value set</td>
@@ -837,7 +872,7 @@ performing static references to a value set</td>
 <td></td>
 <td>private</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>versionTime</strong></td>
 <td>The time when a specific version of the value set was created. Used when<br />
 performing static references to a value set</td>
@@ -852,10 +887,11 @@ performing static references to a value set</td>
 
 Following are the relations for class, SDOValueSetConstraint.
 
-Table – SDOValueSetConstraint Relation Detail
+Table 5 – SDOValueSetConstraint Relation Detail
 
-| Relation Type | Related Elements          |
+|               |                           |
 |---------------|---------------------------|
+| Relation Type | Related Elements          |
 | **Extension** | -   Property              
                              
   -   SDOValueSetConstraint  |
@@ -867,10 +903,11 @@ Table – SDOValueSetConstraint Relation Detail
 
 Defines whether the specified element is restricted to only using the identified coding system for the element
 
-Table - CodingStrength Detail
+Table 9 - CodingStrength Detail
 
-| **Name**            | CodingStrength                     |
+|                     |                                    |
 |---------------------|------------------------------------|
+| **Name**            | CodingStrength                     |
 | **Qualified Name**  | Plasma SDO Profile::CodingStrength |
 | **Visibility**      | public                             |
 | **Base Classifier** |                                    |
@@ -879,10 +916,11 @@ Table - CodingStrength Detail
 
 Following are the literals for enumeration, CodingStrength.
 
-Table – CodingStrength Literal Detail
+Table 10 – CodingStrength Literal Detail
 
-| Literal Name | Description                                                                                                                                                                                                                              |
+|              |                                                                                                                                                                                                                                          |
 |--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Literal Name | Description                                                                                                                                                                                                                              |
 | **CNE**      | If not null, the element must be coded and must be drawn from the value set specified in the binding                                                                                                                                     |
 | **CWE**      | If not null, the element must be coded if there is an appropriate value in the value set specified in the binding. If no appropriate code is available, a local code may be used, or the value may be populated with only original text. |
 
@@ -893,10 +931,11 @@ Table – CodingStrength Literal Detail
 
 Specifies the nature of the data with respect to concurrency for a UML Property
 
-Table - ConcurentDataFlavor Detail
+Table 9 - ConcurentDataFlavor Detail
 
-| **Name**            | ConcurentDataFlavor                     |
+|                     |                                         |
 |---------------------|-----------------------------------------|
+| **Name**            | ConcurentDataFlavor                     |
 | **Qualified Name**  | Plasma SDO Profile::ConcurentDataFlavor |
 | **Visibility**      | public                                  |
 | **Base Classifier** |                                         |
@@ -905,10 +944,11 @@ Table - ConcurentDataFlavor Detail
 
 Following are the literals for enumeration, ConcurentDataFlavor.
 
-Table – ConcurentDataFlavor Literal Detail
+Table 10 – ConcurentDataFlavor Literal Detail
 
-| Literal Name | Description                                                                                                                            |
+|              |                                                                                                                                        |
 |--------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| Literal Name | Description                                                                                                                            |
 | **time**     | Indicates the data is temporal in nature typically reset to the system data or time for every successful update of the owning entity.  |
 | **user**     | Indicates the data represents a system username, typically reset to the current system user on successful update of the owning entity. |
 | **version**  | Indicates the data is an integral version number, typically incremented for every successful update of the owning entity.              |
@@ -920,10 +960,11 @@ Table – ConcurentDataFlavor Literal Detail
 
 Indicates the category of concurrency or concurrency control strategy under which a UML Property participates.
 
-Table - ConcurrencyType Detail
+Table 9 - ConcurrencyType Detail
 
-| **Name**            | ConcurrencyType                     |
+|                     |                                     |
 |---------------------|-------------------------------------|
+| **Name**            | ConcurrencyType                     |
 | **Qualified Name**  | Plasma SDO Profile::ConcurrencyType |
 | **Visibility**      | public                              |
 | **Base Classifier** |                                     |
@@ -932,10 +973,11 @@ Table - ConcurrencyType Detail
 
 Following are the literals for enumeration, ConcurrencyType.
 
-Table – ConcurrencyType Literal Detail
+Table 10 – ConcurrencyType Literal Detail
 
-| Literal Name    | Description                                                                                                                                                                                                                                                                                 |
+|                 |                                                                                                                                                                                                                                                                                             |
 |-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Literal Name    | Description                                                                                                                                                                                                                                                                                 |
 | **optimistic**  | Indicates a UML Property stores information related optimistic concurrency for its containing UML Class and participates in optimistic concurrency control operations and strategies. Informs SDO Data Access Services performing optimistic concurrency control checks and operations.     |
 | **origination** | Indicates a UML Property stores origination information for its containing UML Class. Informs Data Access Services (DAS) performing concurrent operations involving origination.                                                                                                            |
 | **pessimistic** | Indicates a UML Property stores information related to a pessimistic concurrency control strategy (often termed locking) and participates in pessimistic concurrency control operations. Informs SDO Data Access Services performing pessimistic concurrency control checks and operations. |
@@ -945,14 +987,15 @@ Table – ConcurrencyType Literal Detail
 
 **Description**
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image20.jpeg" width="136" height="206" />
+> <img src="images/media/image20.jpeg" width="136" height="206" />
 
 1.  <span id="_Toc310066032" class="anchor"></span>DocumentationType
 
-Table - DocumentationType Detail
+Table 9 - DocumentationType Detail
 
-| **Name**            | DocumentationType                     |
+|                     |                                       |
 |---------------------|---------------------------------------|
+| **Name**            | DocumentationType                     |
 | **Qualified Name**  | Plasma SDO Profile::DocumentationType |
 | **Visibility**      | public                                |
 | **Base Classifier** |                                       |
@@ -961,10 +1004,11 @@ Table - DocumentationType Detail
 
 Following are the literals for enumeration, DocumentationType.
 
-Table – DocumentationType Literal Detail
+Table 10 – DocumentationType Literal Detail
 
-| Literal Name       | Description |
+|                    |             |
 |--------------------|-------------|
+| Literal Name       | Description |
 | **appendix**       |             |
 | **appInfo**        |             |
 | **definition**     |             |
@@ -985,10 +1029,11 @@ Table – DocumentationType Literal Detail
 
 This enumeration specifies the set of key types possible for any UML Property tagged with the SDOKey stereotype.
 
-Table - KeyType Detail
+Table 9 - KeyType Detail
 
-| **Name**            | KeyType                     |
+|                     |                             |
 |---------------------|-----------------------------|
+| **Name**            | KeyType                     |
 | **Qualified Name**  | Plasma SDO Profile::KeyType |
 | **Visibility**      | public                      |
 | **Base Classifier** |                             |
@@ -997,10 +1042,11 @@ Table - KeyType Detail
 
 Following are the literals for enumeration, KeyType.
 
-Table – KeyType Literal Detail
+Table 10 – KeyType Literal Detail
 
-| Literal Name | Description                                                                                                   |
+|              |                                                                                                               |
 |--------------|---------------------------------------------------------------------------------------------------------------|
+| Literal Name | Description                                                                                                   |
 | **embedded** | A key used as an internal identifier for the UML Class of the UML Property tagged with the SDOKey stereotype. |
 | **primary**  | A key used as a primary identifier for the UML Class of the UML Property tagged with the SDOKey stereotype.   |
 
@@ -1009,10 +1055,11 @@ Table – KeyType Literal Detail
 
 **Description**
 
-Table - TemporalState Detail
+Table 9 - TemporalState Detail
 
-| **Name**            | TemporalState                     |
+|                     |                                   |
 |---------------------|-----------------------------------|
+| **Name**            | TemporalState                     |
 | **Qualified Name**  | Plasma SDO Profile::TemporalState |
 | **Visibility**      | public                            |
 | **Base Classifier** |                                   |
@@ -1021,10 +1068,11 @@ Table - TemporalState Detail
 
 Following are the literals for enumeration, TemporalState.
 
-Table – TemporalState Literal Detail
+Table 10 – TemporalState Literal Detail
 
-| Literal Name | Description |
+|              |             |
 |--------------|-------------|
+| Literal Name | Description |
 | **actual**   |             |
 | **plan**     |             |
 | **proposal** |             |
@@ -1036,10 +1084,11 @@ Table – TemporalState Literal Detail
 
 Specifies the various notions of time which are relevant for temporal databases
 
-Table - TemporalType Detail
+Table 9 - TemporalType Detail
 
-| **Name**            | TemporalType                     |
+|                     |                                  |
 |---------------------|----------------------------------|
+| **Name**            | TemporalType                     |
 | **Qualified Name**  | Plasma SDO Profile::TemporalType |
 | **Visibility**      | public                           |
 | **Base Classifier** |                                  |
@@ -1048,10 +1097,11 @@ Table - TemporalType Detail
 
 Following are the literals for enumeration, TemporalType.
 
-Table – TemporalType Literal Detail
+Table 10 – TemporalType Literal Detail
 
-| Literal Name    | Description                                                                                                        |
+|                 |                                                                                                                    |
 |-----------------|--------------------------------------------------------------------------------------------------------------------|
+| Literal Name    | Description                                                                                                        |
 | **transaction** | Transaction time is the time period during which a fact is stored in the database                                  |
 | **validEnd**    | Valid end time denotes the ending of a time period during which a fact is true with respect to the real world      |
 | **validStart**  | Valid start time denotes the beginning of a time period during which a fact is true with respect to the real world |
@@ -1065,10 +1115,11 @@ This UML package contains UML data type definitions. The name of each UML data t
 The SDO Types are applicable across all languages mapped into SDO. For example the SDO Java Types are additional types specifically used in Java representing the object wrappers for primitive Java types. When an SDO Type is used in a mapping from another technology to SDO, implementations in Java specify one of the corresponding Java types.
 Each DataType has a String representation and may be converted to and from the String representation to its instance class, if that instance class is different from String. Numeric DataTypes have a precision in terms of a number of bits. For example, 32 bits signed indicates 1 sign bit and 31 value bits, with a range of -2^31 to 2^31-1. The String representation of DateTime, Duration, Time, Day, Month, MonthDay, Year, YearMonth, and YearMonthDay follows the lexical representation defined in XML Schema for the corresponding data types: dateTime, duration, time, gDay, gMonth, gMonthDay, gYear, gYearMonth, and Date respectively.
 
-Table - Plasma SDO Profile::datatypes Package Detail
+Table 1 - Plasma SDO Profile::datatypes Package Detail
 
-| **Name**           | datatypes                     |
+|                    |                               |
 |--------------------|-------------------------------|
+| **Name**           | datatypes                     |
 | **Qualified Name** | Plasma SDO Profile::datatypes |
 
 **Datatype** **Boolean**
@@ -1078,10 +1129,11 @@ Table - Plasma SDO Profile::datatypes Package Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Boolean data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Boolean Detail
+Table 12 - Boolean Detail
 
-| **Name**           | Boolean                                |
+|                    |                                        |
 |--------------------|----------------------------------------|
+| **Name**           | Boolean                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Boolean |
 | **Visibility**     | public                                 |
 
@@ -1092,10 +1144,11 @@ Table - Boolean Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Byte data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Byte Detail
+Table 12 - Byte Detail
 
-| **Name**           | Byte                                |
+|                    |                                     |
 |--------------------|-------------------------------------|
+| **Name**           | Byte                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Byte |
 | **Visibility**     | public                              |
 
@@ -1106,10 +1159,11 @@ Table - Byte Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Bytes data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Bytes Detail
+Table 12 - Bytes Detail
 
-| **Name**           | Bytes                                |
+|                    |                                      |
 |--------------------|--------------------------------------|
+| **Name**           | Bytes                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Bytes |
 | **Visibility**     | public                               |
 
@@ -1120,10 +1174,11 @@ Table - Bytes Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Character data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Character Detail
+Table 12 - Character Detail
 
-| **Name**           | Character                                |
+|                    |                                          |
 |--------------------|------------------------------------------|
+| **Name**           | Character                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Character |
 | **Visibility**     | public                                   |
 
@@ -1134,10 +1189,11 @@ Table - Character Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Date data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Date Detail
+Table 12 - Date Detail
 
-| **Name**           | Date                                |
+|                    |                                     |
 |--------------------|-------------------------------------|
+| **Name**           | Date                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Date |
 | **Visibility**     | public                              |
 
@@ -1148,10 +1204,11 @@ Table - Date Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 DateTime data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - DateTime Detail
+Table 12 - DateTime Detail
 
-| **Name**           | DateTime                                |
+|                    |                                         |
 |--------------------|-----------------------------------------|
+| **Name**           | DateTime                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::DateTime |
 | **Visibility**     | public                                  |
 
@@ -1162,10 +1219,11 @@ Table - DateTime Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Day data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Day Detail
+Table 12 - Day Detail
 
-| **Name**           | Day                                |
+|                    |                                    |
 |--------------------|------------------------------------|
+| **Name**           | Day                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Day |
 | **Visibility**     | public                             |
 
@@ -1176,10 +1234,11 @@ Table - Day Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Decimal data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Decimal Detail
+Table 12 - Decimal Detail
 
-| **Name**           | Decimal                                |
+|                    |                                        |
 |--------------------|----------------------------------------|
+| **Name**           | Decimal                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Decimal |
 | **Visibility**     | public                                 |
 
@@ -1190,10 +1249,11 @@ Table - Decimal Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Decimal data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Double Detail
+Table 12 - Double Detail
 
-| **Name**           | Double                                |
+|                    |                                       |
 |--------------------|---------------------------------------|
+| **Name**           | Double                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Double |
 | **Visibility**     | public                                |
 
@@ -1204,10 +1264,11 @@ Table - Double Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Duration data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Duration Detail
+Table 12 - Duration Detail
 
-| **Name**           | Duration                                |
+|                    |                                         |
 |--------------------|-----------------------------------------|
+| **Name**           | Duration                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Duration |
 | **Visibility**     | public                                  |
 
@@ -1218,10 +1279,11 @@ Table - Duration Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Float data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Float Detail
+Table 12 - Float Detail
 
-| **Name**           | Float                                |
+|                    |                                      |
 |--------------------|--------------------------------------|
+| **Name**           | Float                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Float |
 | **Visibility**     | public                               |
 
@@ -1232,10 +1294,11 @@ Table - Float Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Int data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Int Detail
+Table 12 - Int Detail
 
-| **Name**           | Int                                |
+|                    |                                    |
 |--------------------|------------------------------------|
+| **Name**           | Int                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Int |
 | **Visibility**     | public                             |
 
@@ -1246,10 +1309,11 @@ Table - Int Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Integer data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Integer Detail
+Table 12 - Integer Detail
 
-| **Name**           | Integer                                |
+|                    |                                        |
 |--------------------|----------------------------------------|
+| **Name**           | Integer                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Integer |
 | **Visibility**     | public                                 |
 
@@ -1260,10 +1324,11 @@ Table - Integer Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Long data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Long Detail
+Table 12 - Long Detail
 
-| **Name**           | Long                                |
+|                    |                                     |
 |--------------------|-------------------------------------|
+| **Name**           | Long                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Long |
 | **Visibility**     | public                              |
 
@@ -1274,10 +1339,11 @@ Table - Long Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Month data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Month Detail
+Table 12 - Month Detail
 
-| **Name**           | Month                                |
+|                    |                                      |
 |--------------------|--------------------------------------|
+| **Name**           | Month                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Month |
 | **Visibility**     | public                               |
 
@@ -1288,10 +1354,11 @@ Table - Month Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 MonthDay data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - MonthDay Detail
+Table 12 - MonthDay Detail
 
-| **Name**           | MonthDay                                |
+|                    |                                         |
 |--------------------|-----------------------------------------|
+| **Name**           | MonthDay                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::MonthDay |
 | **Visibility**     | public                                  |
 
@@ -1302,10 +1369,11 @@ Table - MonthDay Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Object data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Object Detail
+Table 12 - Object Detail
 
-| **Name**           | Object                                |
+|                    |                                       |
 |--------------------|---------------------------------------|
+| **Name**           | Object                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Object |
 | **Visibility**     | public                                |
 
@@ -1316,10 +1384,11 @@ Table - Object Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Short data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Short Detail
+Table 12 - Short Detail
 
-| **Name**           | Short                                |
+|                    |                                      |
 |--------------------|--------------------------------------|
+| **Name**           | Short                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Short |
 | **Visibility**     | public                               |
 
@@ -1330,10 +1399,11 @@ Table - Short Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 String data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - String Detail
+Table 12 - String Detail
 
-| **Name**           | String                                |
+|                    |                                       |
 |--------------------|---------------------------------------|
+| **Name**           | String                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::String |
 | **Visibility**     | public                                |
 
@@ -1344,10 +1414,11 @@ Table - String Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Strings data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Strings Detail
+Table 12 - Strings Detail
 
-| **Name**           | Strings                                |
+|                    |                                        |
 |--------------------|----------------------------------------|
+| **Name**           | Strings                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Strings |
 | **Visibility**     | public                                 |
 
@@ -1358,10 +1429,11 @@ Table - Strings Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Time data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Time Detail
+Table 12 - Time Detail
 
-| **Name**           | Time                                |
+|                    |                                     |
 |--------------------|-------------------------------------|
+| **Name**           | Time                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Time |
 | **Visibility**     | public                              |
 
@@ -1372,10 +1444,11 @@ Table - Time Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 URI data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - URI Detail
+Table 12 - URI Detail
 
-| **Name**           | URI                                |
+|                    |                                    |
 |--------------------|------------------------------------|
+| **Name**           | URI                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::URI |
 | **Visibility**     | public                             |
 
@@ -1386,10 +1459,11 @@ Table - URI Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 Year data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - Year Detail
+Table 12 - Year Detail
 
-| **Name**           | Year                                |
+|                    |                                     |
 |--------------------|-------------------------------------|
+| **Name**           | Year                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::Year |
 | **Visibility**     | public                              |
 
@@ -1400,10 +1474,11 @@ Table - Year Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 YearMonth data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - YearMonth Detail
+Table 12 - YearMonth Detail
 
-| **Name**           | YearMonth                                |
+|                    |                                          |
 |--------------------|------------------------------------------|
+| **Name**           | YearMonth                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::YearMonth |
 | **Visibility**     | public                                   |
 
@@ -1414,10 +1489,11 @@ Table - YearMonth Detail
 
 This UML data type maps directly to the Service Data Objects (SDO) 2.1 YearMonthDay data type. For language specific mappings for this data type, see the language-specific SDO 2.1.0 Specification.
 
-Table - YearMonthDay Detail
+Table 12 - YearMonthDay Detail
 
-| **Name**           | YearMonthDay                                |
+|                    |                                             |
 |--------------------|---------------------------------------------|
+| **Name**           | YearMonthDay                                |
 | **Qualified Name** | Plasma SDO Profile::datatypes::YearMonthDay |
 | **Visibility**     | public                                      |
 
@@ -1429,7 +1505,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image4.jpeg" width="535" height="270" />
+> <img src="images/media/image4.jpeg" width="535" height="270" />
 
 1.  <span id="_Toc310066033" class="anchor"></span>UML Comment Extension Stereotypes
 
@@ -1438,7 +1514,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image2.jpeg" width="465" height="175" />
+> <img src="images/media/image2.jpeg" width="465" height="175" />
 
 1.  <span id="_Toc310066034" class="anchor"></span>UML Enumeration Extension Stereotypes
 
@@ -1447,7 +1523,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image6.jpeg" width="475" height="273" />
+> <img src="images/media/image6.jpeg" width="475" height="273" />
 
 1.  <span id="_Toc310066035" class="anchor"></span>UML NamedElement Extension Stereotypes
 
@@ -1456,7 +1532,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image5.jpeg" width="447" height="305" />
+> <img src="images/media/image5.jpeg" width="447" height="305" />
 
 1.  <span id="_Toc310066036" class="anchor"></span>UML Package Extension Stereotypes
 
@@ -1465,7 +1541,7 @@ Table - YearMonthDay Detail
 
 **Description**
 
-> <img src="ihttps://github.com/terrameta/plasma/tree/master/docs/uml-profile/images/media/image3.jpeg" width="574" height="478" />
+> <img src="images/media/image3.jpeg" width="574" height="478" />
 
 1.  <span id="_Toc194895637" class="anchor"><span id="_Toc310066037" class="anchor"></span></span>UML Property Extension Stereotypes
 
