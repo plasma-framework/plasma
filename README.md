@@ -1,6 +1,7 @@
-<img src="images/media/image2.jpeg" alt="big-icon" width="64" height="64" />Plasma
+<img src="images/media/image2.jpeg" alt="big-icon" width="64" height="64" />**Plasma**
+======================================================================================
 
-TerraMeta Software, Inc.
+**TerraMeta Software, Inc.**
 
 PlasmaSDO<sup>®</sup> and PlasmaQuery<sup>®</sup> are registered
 
