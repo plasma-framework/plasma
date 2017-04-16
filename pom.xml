@@ -88,8 +88,10 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
-						<configuration>
+						<configuration> 
+						     
 							<additionalparam>-Xdoclint:none</additionalparam>
+							  
 						</configuration>
 					</execution>
 					<execution>
@@ -99,7 +101,9 @@
 						</goals>
 						<phase>site</phase>
 						<configuration>
+						 
 							<additionalparam>-Xdoclint:none</additionalparam>
+						 
 							<!-- does not work with java 1.8 and javadoc plugin  -->
 							<!-- 
 							<doclet>ydoc.doclets.YStandard</doclet>
@@ -140,7 +144,9 @@
 					<reportSet>
 						<id>non-aggregate</id>
 						<configuration>
+						 
 							<additionalparam>-Xdoclint:none</additionalparam>
+							 
 						</configuration>
 						<reports>
 							<report>javadoc</report>
@@ -149,7 +155,9 @@
 					<reportSet>
 						<id>aggregate</id>
 						<configuration>
+						     
 							<additionalparam>-Xdoclint:none</additionalparam>
+							 
 							<!-- does not work with java 1.8 and javadoc plugin  -->
 							<!-- 
 							<doclet>ydoc.doclets.YStandard</doclet>
