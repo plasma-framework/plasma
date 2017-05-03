@@ -541,7 +541,7 @@ public class CoreDataObject extends CoreNode
                 	PlasmaProperty prop = (PlasmaProperty)property;
                 	// services need PK's to be left set such that they can construct 
                 	// queries to find entities to delete
-                	if (!prop.isKey(KeyType.primary)) {
+                	if (!prop.isReadOnly() && !prop.isKey(KeyType.primary)) {
                         if (toDelete.isSet(property))
                     	    toDelete.unset(property);  
                 	}
@@ -562,7 +562,7 @@ public class CoreDataObject extends CoreNode
                     if (dataObject == null)
                         continue; 
                 	PlasmaProperty prop = (PlasmaProperty)property;
-                	if (!prop.isKey(KeyType.primary)) {
+                	if (!prop.isReadOnly() && !prop.isKey(KeyType.primary)) {
                         //FIXME: currently unset() is not removing opposites. See comments in unset()
                         toDelete.unset(property);   
                 	}
@@ -779,14 +779,18 @@ dataObject.set(property, dataHelper.convert(property, value));
      * @see #get(Property)
      */
     public void set(Property property, Object value) {
+    	if (this.getDataGraph() != null) {
+    		PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)this.getDataGraph().getChangeSummary();
+    	    if (!changeSummary.isCreated(this) && property.isReadOnly())
+                throw new UnsupportedOperationException(this.getType().getURI() + "#"
+                        + this.getType().getName() + "." + property.getName() + " is a read-only property");
+    	}
     	Object propertyValue = setValue(property, value);
-    	setOppositeModified(property, propertyValue);
+    	if (propertyValue != null) //null in the event the opposite value already set (see below)
+    	    setOppositeModified(property, propertyValue);
     }    
     
     private Object setValue(Property property, Object value) {
-        if (property.isReadOnly())
-            throw new UnsupportedOperationException(this.getType().getURI() + "#"
-                    + this.getType().getName() + "." + property.getName() + " is a read-only property");
         if (value == null)
             throw new IllegalArgumentException("unexpected null value - use DataObject.unset() to clear a property");
         

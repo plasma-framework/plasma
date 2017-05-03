@@ -1,0 +1,22 @@
+Release Notes
+
+Plasma 1.2.5 Release Notes
+Plasma 1.2.5 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/terrameta/plasma/issues.
+
+
+Major Changes
+ 
+Bugs
+ 
+Improvements
+[Issue #72] - ReadOnly Property Check Only After Create
+ 
+New Features
+Tasks
+Wish
+
+
