@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-docs</artifactId>
-  <version>1.2.5</version>
+  <version>1.2.6</version>
   <packaging>jar</packaging>
 
   <name>Plasma Docs</name>
@@ -57,17 +57,17 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-sdo</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-sdo-jdbc</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-maven-plugin</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
     </dependency>
 	<dependency>
 		<groupId>org.apache.ant</groupId>
@@ -90,7 +90,7 @@
                   <configuration>                                            
                     <target>                                                 
                       <property name="compile_classpath" refid="maven.compile.classpath"/>
-                      <property name="release_suffix" value="1.2.5"/>
+                      <property name="release_suffix" value="1.2.6"/>
                       <path id="cp">                                                                                                                                                                                                                             
                          <pathelement path="${compile_classpath}"/>                                                                                                                                                                                                  
                       </path>	                                                                                                                                                                                                                                       
