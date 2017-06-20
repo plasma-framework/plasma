@@ -32,6 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.sdo.PlasmaDataObjectConstants;
 import org.plasma.sdo.PlasmaDataObjectException;
+import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.core.CoreType;
 import org.plasma.sdo.repository.Classifier;
 import org.plasma.sdo.repository.InvalidClassifierNameException;
@@ -54,8 +55,8 @@ public class PlasmaTypeHelper implements TypeHelper {
     private static Log log = LogFactory.getLog(PlasmaTypeHelper.class);
     static public volatile PlasmaTypeHelper INSTANCE = initializeInstance();
     
-    private Map<String, Type> namespaceQualifiedNameToTypeMap = new HashMap<String, Type>();
-    private Map<String, List<Type>> namespaceToTypesMap = new HashMap<String, List<Type>>();
+    private Map<String, PlasmaType> namespaceQualifiedNameToTypeMap = new HashMap<String, PlasmaType>();
+    private Map<String, List<PlasmaType>> namespaceToTypesMap = new HashMap<String, List<PlasmaType>>();
     private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 
     private PlasmaTypeHelper() {       
@@ -121,16 +122,16 @@ public class PlasmaTypeHelper implements TypeHelper {
 
     /**
      * Return the Type specified by typeName with the given uri,
-     *   or null if not found.
-     * @param uri The uri of the Type - type.getURI();
-     * @param typeName The name of the Type - type.getName();
+     * or null if the underlying classifier is not found.
+     * @param uri the logical uri of the Type - See Type.getURI() or PlasmaType.getURIPhysicalName();
+     * @param typeName The logical name of the Type - Type.getName() or PlasmaType.getPhysicalName();
      * @return the Type specified by typeName with the given uri,
      *   or null if not found.
      */
     public Type getType(String uri, String typeName) {
         String qualifiedName = uri + "#" + typeName;
         //rwl.readLock().lock();
-        Type result = namespaceQualifiedNameToTypeMap.get(qualifiedName);
+        PlasmaType result = namespaceQualifiedNameToTypeMap.get(qualifiedName);
         if (result == null)
         {
             //if (log.isDebugEnabled())
@@ -156,9 +157,13 @@ public class PlasmaTypeHelper implements TypeHelper {
 		                namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
 		            }
 		            
-		            List<Type> namespaceTypes = namespaceToTypesMap.get(uri);
+		            String qualifiedPhysicalName = getQualifiedPhysicalName(result);
+		            if (qualifiedPhysicalName != null)
+		                namespaceQualifiedNameToTypeMap.put(qualifiedPhysicalName, result);
+		            
+		            List<PlasmaType> namespaceTypes = namespaceToTypesMap.get(uri);
 		            if (namespaceTypes == null)
-		            	namespaceTypes = new ArrayList<Type>();
+		            	namespaceTypes = new ArrayList<PlasmaType>();
 		            namespaceTypes.add(result);
 		             
 		            //rwl.readLock().lock(); // downgrade to read
@@ -171,6 +176,24 @@ public class PlasmaTypeHelper implements TypeHelper {
     }
     
     /**
+     * Return the Type specified by physical typeName with the given physical uri,
+     * or null if not found.
+     * @param uriPhisicalName the physical uri of the Type - See Type.getURI() or PlasmaType.getURIPhysicalName();
+     * @param typeName The logical or physical name of the Type - Type.getName() or PlasmaType.getPhysicalName();
+     * @return the Type specified by typeName with the given uri,
+     *   or null if not found.
+     */
+    public Type findTypeByPhysicalName(String uriPhisicalName, String typePhysicalName) {
+        String qualifiedPhysicalName = uriPhisicalName + "#" + typePhysicalName;
+        rwl.readLock().lock();
+        try {
+            return namespaceQualifiedNameToTypeMap.get(qualifiedPhysicalName);
+        } finally {
+            rwl.readLock().unlock(); // Unlock read
+        }
+    }
+   
+    /**
      * Releases resources associated with the given type and removes it
      * from cache. 
      * @param type the type
@@ -182,8 +205,8 @@ public class PlasmaTypeHelper implements TypeHelper {
     /**
      * Releases resources associated with the given type and removes it
      * from cache. 
-     * @param uri The uri of the Type - type.getURI();
-     * @param typeName The name of the Type - type.getName();
+     * @param uri The logical uri of the Type - type.getURI();
+     * @param typeName The logical name of the Type - type.getName();
      */
     public void releaseType(String uri, String typeName) {
         String qualifiedName = uri + "#" + typeName;
@@ -191,9 +214,12 @@ public class PlasmaTypeHelper implements TypeHelper {
         	log.debug("releasing type: " + qualifiedName);
         rwl.writeLock().lock();
         try {
-	        Type removed = namespaceQualifiedNameToTypeMap.remove(qualifiedName);
+	        PlasmaType removed = namespaceQualifiedNameToTypeMap.remove(qualifiedName);
 	    	if (removed != null) {
-		        List<Type> namespaceTypes = namespaceToTypesMap.get(uri);
+	    		String physicalName = getQualifiedPhysicalName(removed);
+	    		if (physicalName != null)
+	    		    namespaceQualifiedNameToTypeMap.remove(physicalName);
+		        List<PlasmaType> namespaceTypes = namespaceToTypesMap.get(uri);
 		        if (namespaceTypes != null) {
 		        	if (!namespaceTypes.remove(removed))
 		        		log.warn("could not remove type from namespace mapping, " + qualifiedName);
@@ -255,6 +281,30 @@ public class PlasmaTypeHelper implements TypeHelper {
     		result.add(type);
     	}
     	return result;
+    }
+    
+    private String getQualifiedName(PlasmaType type) {
+        return type.getURI() + "#" + type.getName() ;
+    }
+
+    /**
+     * Returns the qualified physical name for the given type or null
+     * if either the namespace physical name OR type physical name
+     * are not found. 
+     * @param type the type. 
+     * @return the qualified physical name for the given type or null
+     * if either the namespace physical name OR type physical name
+     * are not found.  
+     */
+    private String getQualifiedPhysicalName(PlasmaType type) {
+        String uriPhysicalName = type.getURIPhysicalName();
+        if (uriPhysicalName == null)
+        	return null;
+        	 
+        String physicalName = type.getPhysicalName();
+        if (physicalName == null)
+        	return null;
+        return uriPhysicalName + "#" + physicalName ;
     }
 
 }

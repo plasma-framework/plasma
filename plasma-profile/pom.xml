@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>org.terrameta</groupId>
 		<artifactId>plasma</artifactId>
-		<version>1.2.6</version>
+		<version>1.2.8</version>
 	</parent>
 	<groupId>org.terrameta</groupId>
 	<artifactId>plasma-profile</artifactId>
-	<version>1.2.6</version>
+	<version>1.2.8</version>
 	<packaging>jar</packaging>
 	<name>Plasma Profile</name>
 	<description>The Plasma Profile Module</description>
@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>org.terrameta</groupId>
 			<artifactId>plasma-common</artifactId>
-			<version>1.2.6</version>
+			<version>1.2.8</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -115,7 +115,7 @@
 							<target>
 								<echo message="####Generate profile annotations####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="1.2.6" />
+								<property name="release_suffix" value="1.2.8" />
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
 								</path>
@@ -144,7 +144,7 @@
 							<target>
 								<echo message="####Generate profile classes####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="1.2.6" />
+								<property name="release_suffix" value="1.2.8" />
 
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
@@ -174,7 +174,7 @@
 							<target>
 								<echo message="####Generate profile interfaces####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="1.2.6" />
+								<property name="release_suffix" value="1.2.8" />
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
 								</path>

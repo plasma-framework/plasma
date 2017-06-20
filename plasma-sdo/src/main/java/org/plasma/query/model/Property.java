@@ -571,7 +571,7 @@ public class Property extends AbstractProperty
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Entity other = (Entity) obj;
+		Property other = (Property) obj;
 		if (getQualifiedName() == null) {
 			if (other.getQualifiedName() != null)
 				return false;

@@ -100,6 +100,12 @@ public class CoreType implements PlasmaType {
      * map which could have duplicate values.  
      */
     private List<Property> declaredPropertiesList;
+    
+    /** 
+     * Cache for declared and derived properties
+     */
+    private List<Property> allPropertiesList;
+    
 
     private String artifactURI; 
     private String namespaceURI; 
@@ -878,9 +884,16 @@ public class CoreType implements PlasmaType {
      * @see Property#getContainingType
      */
     public List<Property> getProperties() {
-    	List<Property> result = new ArrayList<Property>();
-    	collectDeclaredProperties(this, result);
-        return result; 
+    	if (this.allPropertiesList == null) {
+    		synchronized (this) {
+    			if (this.allPropertiesList == null) {
+    			    this.allPropertiesList = new ArrayList<>();
+    			    collectDeclaredProperties(this, this.allPropertiesList);
+    			}
+    		}
+    	}
+    	 
+    	return this.allPropertiesList;
     }
 
     /**

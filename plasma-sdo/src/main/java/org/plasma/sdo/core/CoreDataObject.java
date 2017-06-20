@@ -186,12 +186,10 @@ public class CoreDataObject extends CoreNode
     		throws IOException {
     	this.typeName = this.type.getName();
     	this.typeUri = this.type.getURI();
-    	//this.type = null; 
     	if (this.containmentProperty != null) {
     	    this.containmentPropertyName = this.containmentProperty.getName();
     	    this.containmentPropertyTypeName = this.containmentProperty.getContainingType().getName();
     	    this.containmentPropertyTypeUri = this.containmentProperty.getContainingType().getURI();
-    	    //this.containmentProperty = null;
     	}
     	out.defaultWriteObject();
     }

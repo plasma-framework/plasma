@@ -1,0 +1,23 @@
+Release Notes
+
+Plasma 1.2.8 Release Notes
+Plasma 1.2.8 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/terrameta/plasma/issues.
+
+
+Major Changes
+ 
+Bugs
+[Issue #76]  - Error in Query Property Equals 
+[Issue #75]  - Concurrent Mod Exception on Some Properties Access Methods for CoreType 
+
+Improvements
+ 
+New Features
+Tasks
+Wish
+
+
