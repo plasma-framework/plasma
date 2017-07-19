@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.sdo.PlasmaDataGraphVisitor;
 import org.plasma.sdo.PlasmaDataObject;
+import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.core.CoreChangeSummary;
 import org.plasma.sdo.core.CoreConstants;
 import org.plasma.sdo.core.CoreDataObject;
@@ -162,22 +163,32 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 	 */
 	private void copyDataProperties(PlasmaDataObject source, 
 			PlasmaDataObject copy) {        
-		Object value = null;
-        for (Property property : source.getType().getProperties())
-        {
-            value = source.get(property);
-            if (value == null)
-                continue;
-            if (property.getType().isDataType()) {
-                if (!property.isReadOnly())
-                	copy.set(property, value); 
-                else
-                	((CoreNode)copy).getValueObject().put(property.getName(), value); // FIXME: what about change summary
-            }
-        }
-        Object timestamp = ((CoreDataObject)source).getValueObject().get(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP);
-        if (timestamp != null)
-            ((CoreDataObject)copy).getValueObject().put(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, timestamp);
+    	PlasmaType type = (PlasmaType)source.getType();   	
+    	CoreDataObject sourceObject = (CoreDataObject)source;
+    	CoreDataObject result = (CoreDataObject)copy;
+        Object value = null;
+        for (String key : sourceObject.getValueObject().getKeys()) {
+        	Property property = type.findProperty(key);
+        	if (property != null) {
+        		value = source.get(property);
+        		if (value == null)
+        			continue;
+        		if (property.getType().isDataType()) {
+        			if (!property.isReadOnly()) {
+        				result.set(property, value);
+        			}
+        			else {
+        				result.getValueObject().put(property.getName(), value);
+        			}
+        		}
+        	}
+        	else { // assume instance property
+        		value = sourceObject.getValueObject().get(key);
+        		if (value == null)
+        			continue;
+        		result.getValueObject().put(key, value);
+        	}
+        }        
 	}
 	
 	public DataObject getResult() {

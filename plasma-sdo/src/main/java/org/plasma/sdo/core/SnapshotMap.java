@@ -25,6 +25,7 @@ package org.plasma.sdo.core;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,18 +51,26 @@ public class SnapshotMap
 	private static final long serialVersionUID = 1L;
 	private Map<UUID, List<PropertyPair>> values = new HashMap<UUID, List<PropertyPair>>();
     private Timestamp snapshotDate;
+    private Long snapshotNannoTime;
 
-    @SuppressWarnings("unused")
-	private SnapshotMap() {}
+    public SnapshotMap() {
+    	this.snapshotDate = new Timestamp((new Date()).getTime());
+    	this.snapshotNannoTime = System.nanoTime();
+    }
     
     public SnapshotMap(Timestamp snapshotDate)
     {
         this.snapshotDate = snapshotDate;
+    	this.snapshotNannoTime = System.nanoTime();
     }
     
     public Timestamp getSnapshotDate() { return snapshotDate; }
 
-    public UUID[] getKeys() 
+    public Long getSnapshotNannoTime() {
+		return snapshotNannoTime;
+	}
+
+	public UUID[] getKeys() 
     {
         Set<UUID> keys = values.keySet();
         UUID[] result = new UUID[keys.size()];

@@ -22,6 +22,7 @@
 package org.plasma.sdo.helper;
 
 import org.plasma.sdo.PlasmaDataObject;
+import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.core.CoreConstants;
 import org.plasma.sdo.core.CoreDataObject;
 import org.plasma.sdo.core.CoreNode;
@@ -133,19 +134,30 @@ public class PlasmaCopyHelper implements CopyHelper {
     
     private void copy(CoreDataObject source, CoreDataObject result)
     {
+    	PlasmaType type = (PlasmaType)source.getType();   	    	
         Object value = null;
-        for (Property property : source.getType().getProperties())
-        {
-            value = source.get(property);
-            if (value == null)
-                continue;
-            if (property.getType().isDataType()) {
-                if (!property.isReadOnly())
-                    result.set(property, value);
-                else
-                    result.getValueObject().put(property.getName(), value);                    
-            }
-        }    	
+        for (String key : source.getValueObject().getKeys()) {
+        	Property property = type.findProperty(key);
+        	if (property != null) {
+        		value = source.get(property);
+        		if (value == null)
+        			continue;
+        		if (property.getType().isDataType()) {
+        			if (!property.isReadOnly()) {
+        				result.set(property, value);
+        			}
+        			else {
+        				result.getValueObject().put(property.getName(), value);
+        			}
+        		}
+        	}
+        	else { // assume instance property
+        		value = source.getValueObject().get(key);
+        		if (value == null)
+        			continue;
+        		result.getValueObject().put(key, value);
+        	}
+        }        
     }
     
     /**

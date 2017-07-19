@@ -38,6 +38,7 @@ import org.plasma.metamodel.EnumerationRef;
 import org.plasma.metamodel.Model;
 import org.plasma.metamodel.Package;
 import org.plasma.metamodel.Property;
+import org.plasma.provisioning.PackageNameCollisionException;
 import org.plasma.provisioning.PropertyNameCollisionException;
 import org.plasma.provisioning.ProvisioningException;
 import org.plasma.provisioning.TypeNameCollisionException;
@@ -48,6 +49,7 @@ public class ModelAdapter implements ProvisioningModel {
 
     private Model model;
     private Map<String, TypeAdapter> typeMap = new HashMap<String, TypeAdapter>();
+    private Map<String, TypeAdapter> physicalNameTypeMap = new HashMap<String, TypeAdapter>();
     private List<Package> leafPackages = new ArrayList<Package>();
     private List<Package> allPackages = new ArrayList<Package>();
     private Map<TypeAdapter, Package> packageTypeMap = new HashMap<TypeAdapter, Package>();
@@ -137,7 +139,24 @@ public class ModelAdapter implements ProvisioningModel {
 		
     	for (Package pkg : this.allPackages)
     		if (pkg.getPackages().size() == 0)
-    			this.leafPackages.add(pkg);		
+    			this.leafPackages.add(pkg);	
+    	
+    	Map<String, Package> packageMap = new HashMap<>();
+    	for (Package pkg : this.leafPackages) {
+    		String key = pkg.getName();
+    		if (packageMap.containsKey(key))
+    			throw new PackageNameCollisionException(
+    				"detected multiple (leaf) packages named '"+key+"' withing the same provisioning context");
+    		packageMap.put(key, pkg);
+    		if (pkg.getAlias() != null && pkg.getAlias().getPhysicalName() != null) {
+				String physicalName = pkg.getAlias().getPhysicalName();
+				key = physicalName;
+	    		if (packageMap.containsKey(key))
+	    			throw new PackageNameCollisionException(
+	    				"detected multiple (leaf) packages with physical name '"+key+"' withing the same provisioning context");
+	    		packageMap.put(key, pkg);
+			}
+    	}
 		
     	for (Package pkg : this.allPackages)
     		mapEnumerations(pkg);
@@ -183,7 +202,19 @@ public class ModelAdapter implements ProvisioningModel {
     		TypeAdapter adapter = new TypeAdapter(enm);
     		this.typeMap.put(key, adapter);
     		this.packageTypeMap.put(adapter, pkg);
-    	}
+			if (enm.getAlias() != null && enm.getAlias().getPhysicalName() != null) {
+				String physicalName = enm.getAlias().getPhysicalName();
+				key = enm.getUri() + "#" + physicalName;
+				TypeAdapter existing = physicalNameTypeMap.get(key);
+				if (existing != null)
+					throw new TypeNameCollisionException(
+						"detected multiple types ["
+					    +existing.getName() + "," + enm.getName()
+					    +"] with the same types name '"+physicalName+"' under the same URI '"
+						+ enm.getUri() + "'");
+				this.physicalNameTypeMap.put(key, adapter);
+			}
+   	    }
     }   
     
     private void mapClasses(Package pkg) {
@@ -201,6 +232,19 @@ public class ModelAdapter implements ProvisioningModel {
     		this.packageTypeMap.put(adapter, pkg);
 			if (log.isDebugEnabled())
 				log.debug("map: " + adapter.getKey());
+			
+			if (cls.getAlias() != null && cls.getAlias().getPhysicalName() != null) {
+				String physicalName = cls.getAlias().getPhysicalName();
+				key = cls.getUri() + "#" + physicalName;
+				TypeAdapter existing = physicalNameTypeMap.get(key);
+				if (existing != null)
+					throw new TypeNameCollisionException(
+						"detected multiple types ["
+					    +existing.getName() + "," + cls.getName()
+					    +"] with the same physical name '"+physicalName+"' under the same URI '"
+						+ cls.getUri() + "'");
+				this.physicalNameTypeMap.put(key, adapter);
+			}
 		}
     }
 

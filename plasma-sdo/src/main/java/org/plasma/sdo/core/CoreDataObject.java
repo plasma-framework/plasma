@@ -30,11 +30,14 @@ import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
@@ -54,6 +57,9 @@ import org.plasma.sdo.PlasmaNode;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.provider.common.PropertyPair;
+import org.plasma.sdo.core.collector.ContainmentGraphCollector;
+import org.plasma.sdo.core.collector.LinkedNode;
+import org.plasma.sdo.core.collector.SourceNodeCollector;
 import org.plasma.sdo.helper.DataConverter;
 import org.plasma.sdo.helper.InvalidDataFormatException;
 import org.plasma.sdo.helper.PlasmaDataFactory;
@@ -419,7 +425,10 @@ public class CoreDataObject extends CoreNode
         PlasmaDataObject dataObject = (PlasmaDataObject)PlasmaDataFactory.INSTANCE.create(
                 type);
 
-        
+        Object oldValue = this.get(property);
+        if (oldValue == null)
+            oldValue = new NullValue();
+       
         if (property.isMany())
             this.add(property, dataObject);
         else
@@ -433,7 +442,7 @@ public class CoreDataObject extends CoreNode
         	dataObject.setDataGraph(this.getDataGraph());                       
             PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)this.getDataGraph().getChangeSummary();             
             changeSummary.created(dataObject);
-            changeSummary.modified(this, property, dataObject);
+            changeSummary.modified(this, property, oldValue);
         }   
         else
             throw new IllegalStateException("orphaned data-object, " + this);
@@ -509,32 +518,29 @@ public class CoreDataObject extends CoreNode
     	ContainmentGraphCollector collector = 
     		new ContainmentGraphCollector();
     	this.accept(collector);
-    	List<ContainmentNode> nodes = collector.getResult();
+    	List<LinkedNode> nodes = collector.getResult();
 
-    	// For each node, update the change summary.
+        // For each node, update the change summary.
         // Capture delete before removing properties, as the current state
         // is required in the change-summary
-        for (ContainmentNode node : nodes) {
-        	
+        for (LinkedNode node : nodes) {        	
         	PlasmaDataObject toDelete = node.getDataObject();
             if (toDelete.getContainer() == null) {
                 String rootKey = ((PlasmaNode)this.getDataGraph().getRootObject()).getUUIDAsString();
                 if (!toDelete.getUUIDAsString().equals(rootKey))
                     throw new IllegalStateException("non-root data-object (" 
-                            + toDelete.getUUIDAsString() + ") of type "
-                            + toDelete.getType().getURI() + "#" 
-                            + toDelete.getType().getName() + " has no container");
+                            + toDelete + " has no container");
             }
             if (toDelete.getDataGraph() != null) {
                 PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)toDelete.getDataGraph().getChangeSummary();
                 changeSummary.deleted(toDelete);
             }  
-        }  
+        }     
         
     	// unset non-readonly datatype properties
-        for (ContainmentNode node : nodes) {
+        for (LinkedNode node : nodes) {
         	PlasmaDataObject toDelete = node.getDataObject();
-            for (Property property : toDelete.getType().getDeclaredProperties()) {
+            for (Property property : toDelete.getType().getProperties()) {
                 if (property.getType().isDataType() && !property.isReadOnly()) {
                 	PlasmaProperty prop = (PlasmaProperty)property;
                 	// services need PK's to be left set such that they can construct 
@@ -545,21 +551,22 @@ public class CoreDataObject extends CoreNode
                 	}
                 }
             }
-        }  
+        }         
         
-        // process linked objects
-        for (ContainmentNode node : nodes) {
+        // Finally process linked objects. This will change the graph
+        // disconnecting the entire delete tree
+        for (LinkedNode node : nodes) {
         	// FIXME: detect readonly containment property
         	// and abort removal. 
         	PlasmaDataObject toDelete = node.getDataObject();
-            for (Property property : toDelete.getType().getDeclaredProperties()) {
+            for (Property property : toDelete.getType().getProperties()) {
                 if (property.getType().isDataType()) 
                     continue;
+            	PlasmaProperty prop = (PlasmaProperty)property;
                 if (!property.isMany()) {
                     DataObject dataObject = toDelete.getDataObject(property);
                     if (dataObject == null)
-                        continue; 
-                	PlasmaProperty prop = (PlasmaProperty)property;
+                        continue;                 	
                 	if (!prop.isReadOnly() && !prop.isKey(KeyType.primary)) {
                         //FIXME: currently unset() is not removing opposites. See comments in unset()
                         toDelete.unset(property);   
@@ -574,9 +581,26 @@ public class CoreDataObject extends CoreNode
                     	toDelete.remove(property, dataObject);                     	              	
                 }
             } // next property
-        }
-    }
-    
+        }  
+        
+        // Finally, finally see if any other data object in the graph STILL points to us,
+        // such as for properties when no opposite property exists and there's no
+        // way to find these "parent" objects. The parent(s) in this case
+        // could be the actual container object or any other object in the
+        // entire graph which points to this object. 
+    	SourceNodeCollector sourceCollector = new SourceNodeCollector(this);
+    	((PlasmaDataObject)this.getDataGraph().getRootObject()).accept(sourceCollector);
+    	for (LinkedNode sourceNode : sourceCollector.getResult()) {
+    		PlasmaDataObject parent = sourceNode.getDataObject();
+	    	if (sourceNode.getTargetProperty().isMany()) {    	    		
+	    		parent.remove(sourceNode.getTargetProperty(), this);  
+	    	}
+	    	else {
+	    		parent.unset(sourceNode.getTargetProperty());  
+	    	}
+    	}
+
+    }    
 
     /**
      * Returns true if this data object is the container for the
@@ -610,8 +634,8 @@ public class CoreDataObject extends CoreNode
     	ContainmentGraphCollector collector = 
     		new ContainmentGraphCollector();
     	this.accept(collector);
-    	List<ContainmentNode> nodes = collector.getResult();
-    	for (ContainmentNode node: nodes) {
+    	List<LinkedNode> nodes = collector.getResult();
+    	for (LinkedNode node: nodes) {
     		if (!node.getDataObject().equals(this))
     		    node.getDataObject().setDataGraph(null);
     	}
@@ -783,11 +807,27 @@ dataObject.set(property, dataHelper.convert(property, value));
                 throw new UnsupportedOperationException(this.getType().getURI() + "#"
                         + this.getType().getName() + "." + property.getName() + " is a read-only property");
     	}
+    	
+    	// get old values
+    	Map<DataObject, Object> oldValueMap = null;
+    	if (!property.getType().isDataType())
+    		oldValueMap = getOppositeValues(property, value);    	
+    	
+    	//set the value
     	Object propertyValue = setValue(property, value);
+    	
     	if (propertyValue != null) //null in the event the opposite value already set (see below)
-    	    setOppositeModified(property, propertyValue);
+    	    setOppositeModified(property, oldValueMap);
     }    
     
+    /**
+     * Sets the value, creating and returning {@link PlasmaDataLink links} as needed and returning
+     * a single or list of links. 
+     * @param property the property
+     * @param value the value to set 
+     * @return returning {@link PlasmaDataLink links} as needed and returning
+     * a single or list of links. 
+     */
     private Object setValue(Property property, Object value) {
         if (value == null)
             throw new IllegalArgumentException("unexpected null value - use DataObject.unset() to clear a property");
@@ -901,26 +941,67 @@ dataObject.set(property, dataHelper.convert(property, value));
          
     }   
     
+    private Map<DataObject, Object> getOppositeValues(Property property, Object value) {
+    	if (!property.getType().isDataType()) {
+    		Property opposite = property.getOpposite();
+    		if (opposite != null) {
+    			if (!property.isMany()) {
+    				return this.getOppositeValues(this, property, opposite, (DataObject)value);
+    			}
+    			else {
+    				return this.getOppositeValues(this, property, opposite, (List<DataObject>)value);    				
+    			}
+    		}
+    	}
+    	return Collections.emptyMap();
+    }
+    
+    private Map<DataObject, Object> getOppositeValues(CoreDataObject dataObject, Property property, Property oppositeProperty, DataObject opposite) {
+    	Map<DataObject, Object> result = new HashMap<>(1);
+    	Object oldValue = opposite.get(oppositeProperty);
+    	if (oldValue == null)
+    		oldValue = new NullValue();
+    	result.put(opposite, oldValue);
+    	return result;
+    }    
+    
+    private Map<DataObject, Object> getOppositeValues(CoreDataObject dataObject, Property property, Property oppositeProperty, List<DataObject> opposites) {
+    	Map<DataObject, Object> result = new HashMap<>();
+    	for (DataObject opposite : opposites) {
+    	   	Object oldValue = opposite.get(oppositeProperty);
+         	if (oldValue == null)
+        		oldValue = new NullValue();
+        	result.put(opposite, oldValue); 		
+    	}
+    	return result;
+    }   
+    
     /**
      * register an opposite change after the link between objects is created
      * as change summary creates a path between them 
      * @param property
      * @param propertyValue the value of the property, may be a 
      */
-    private void setOppositeModified(Property property, Object propertyValue) {
+    private void setOppositeModified(Property property, Map<DataObject, Object> opposites) {
         if (!property.getType().isDataType()) {
-    	    Property oppositeProperty = property.getOpposite();
-    	    if (oppositeProperty != null) {
-	            if (!property.isMany()) {
-	        	    this.oppositeModified(this, property, oppositeProperty, (PlasmaDataLink)propertyValue);        	
-	            }
-	            else {
-	        	    this.oppositeModified(this, property, oppositeProperty, (List<PlasmaEdge>)propertyValue);        	
-	            }
-            }
-        }         
+    		Property oppositeProperty = property.getOpposite();
+    		if (oppositeProperty != null) {
+    			PlasmaChangeSummary changeSummary = null;
+    			Iterator<DataObject> iter = opposites.keySet().iterator();
+    			while (iter.hasNext()) {
+    				DataObject opposite = iter.next();
+    				if (opposite.getDataGraph() == null)
+    					continue;
+    				if (changeSummary == null)
+    				    changeSummary = (PlasmaChangeSummary)opposite.getDataGraph().getChangeSummary();
+    				if (!changeSummary.isCreated(opposite) && !changeSummary.isDeleted(opposite)) {
+    					Object oldValue = opposites.get(opposite);
+    					changeSummary.modified(opposite, oppositeProperty, oldValue);
+    				}
+    			}
+    		}
+        }    	
     }
-    
     
     /**
      * Adds the given value to the given multi=valued property. 
@@ -1105,7 +1186,7 @@ dataObject.set(property, dataHelper.convert(property, value));
         	ContainmentGraphCollector collector = 
             	new ContainmentGraphCollector();
         	target.accept(collector);
-        	for (ContainmentNode containmentNode: collector.getResult()) {
+        	for (LinkedNode containmentNode: collector.getResult()) {
         		containmentNode.getDataObject().setDataGraph(this.getDataGraph());
         	}
         	
@@ -1383,74 +1464,6 @@ dataObject.set(property, dataHelper.convert(property, value));
 		}
     }
 
-	private void oppositeModified(CoreDataObject dataObject, Property property, Property oppositeProperty, PlasmaDataLink link)
-    {
-	    if (property.isMany()) {
-	    	log.warn("expected singular property not multi-property, " + property.toString());
-	    	return;
-	    }
-        PlasmaNode oppositeNode = link.getOpposite(dataObject);
-        PlasmaDataObject oppositeDataObject = oppositeNode.getDataObject();
-        
-        if (!oppositeProperty.isMany()) { // one-to-one
-            PlasmaDataLink oppositeLink = (PlasmaDataLink)((CoreDataObject)oppositeDataObject).getValue(oppositeProperty.getName());
-            if (oppositeLink == null || !oppositeLink.equals(link))
-                throw new IllegalStateException("expected equivalent link for property, "
-                    + this.getType().getURI() + "#" + this.getType().getName() 
-                    + "." + property.getName());
-            // register change on opposite
-            if (oppositeDataObject.getDataGraph() != null) {
-                PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
-                if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
-                    changeSummary.modified(oppositeDataObject, oppositeProperty, this);
-            }               
-        }
-        else {
-            // register change on opposite
-            List<DataObject> oppositeDataObjectList = oppositeDataObject.getList(oppositeProperty);
-            if (oppositeDataObject.getDataGraph() != null) {
-                PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
-                if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
-                    changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeDataObjectList);
-            }               
-        } 
-	}
-	    	    
-	private void oppositeModified(CoreDataObject dataObject, Property property, Property oppositeProperty, List<PlasmaEdge> links)
-    {
-	    if (!property.isMany()) {
-	    	log.warn("expected multi property not sungular property, " + property.toString());
-	    	return;
-	    }
-	    
-        for (PlasmaEdge link : links) {
-            PlasmaNode oppositeNode = link.getOpposite(dataObject);
-            PlasmaDataObject oppositeDataObject = oppositeNode.getDataObject();
-            if (!oppositeProperty.isMany()) { // one-to-one
-                PlasmaDataLink oppositeLink = (PlasmaDataLink)((CoreDataObject)oppositeDataObject).getValue(oppositeProperty.getName());
-                if (oppositeLink == null || !oppositeLink.equals(link))
-                    throw new IllegalStateException("expected equivalent link for property, "
-                        + this.getType().getURI() + "#" + this.getType().getName() 
-                        + "." + property.getName());
-                // register change on opposite
-                if (oppositeDataObject.getDataGraph() != null) {
-                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
-                    if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
-                        changeSummary.modified(oppositeDataObject, oppositeProperty, this);
-                }               
-            }
-            else {
-                // register change on opposite
-                List<DataObject> oppositeDataObjectList = oppositeDataObject.getList(oppositeProperty);
-                if (oppositeDataObject.getDataGraph() != null) {
-                    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)oppositeDataObject.getDataGraph().getChangeSummary();
-                    if (!changeSummary.isCreated(oppositeDataObject) && !changeSummary.isDeleted(oppositeDataObject))
-                        changeSummary.modified(oppositeDataObject, oppositeProperty, oppositeDataObjectList);
-                }               
-            }   
-        }
-    }
-	
     /**
      * Looks at the opposite property, if exists, for the given data object
      * and reference property, makes the structural the change appropriate

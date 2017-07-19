@@ -49,6 +49,9 @@ public interface CoreConstants
     public static final String PROPERTY_NAME_ENTITY_NAME        = "entityName";
     public static final String PROPERTY_NAME_ENTITY_LOCKED      = "entityLocked";
     public static final String PROPERTY_NAME_ENTITY_UNLOCKED      = "entityUnlocked";
+    public static final String PROPERTY_NAME_SEQUENCE      = "__SEQ__";
+    public static final String PROPERTY_NAME_ROWKEY      = "__ROWKEY__";
+    
     
     //@Deprecated
     //public static final String PROPERTY_NAME_UUID               = "__UUID__";
