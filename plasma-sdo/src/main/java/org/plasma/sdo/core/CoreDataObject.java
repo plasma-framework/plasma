@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
@@ -56,6 +57,7 @@ import org.plasma.sdo.PlasmaEdge;
 import org.plasma.sdo.PlasmaNode;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaType;
+import org.plasma.sdo.PlasmaValue;
 import org.plasma.sdo.access.provider.common.PropertyPair;
 import org.plasma.sdo.core.collector.ContainmentGraphCollector;
 import org.plasma.sdo.core.collector.LinkedNode;
@@ -3000,7 +3002,8 @@ dataObject.set(property, dataHelper.convert(property, value));
 
         private DataObject result;
         private String key;
-        private Finder() {}
+        @SuppressWarnings("unused")
+		private Finder() {}
         public Finder(String key) {
             this.key = key;  
         } 
@@ -3011,8 +3014,23 @@ dataObject.set(property, dataHelper.convert(property, value));
 
         public DataObject getResult() {
             return result;
-        }
-        
+        }       
     }
+
+	@Override
+	public PlasmaValue[] values() {
+		String[] keys = this.valueObject.getKeys();
+		PlasmaType type = (PlasmaType)this.getType();
+		// FIXME: need a way to screen out instance properties and avoid creating a list
+		List<CoreValue> list = new ArrayList<>(); 
+		for (int i = 0; i < keys.length; i++) {
+			PlasmaProperty property = (PlasmaProperty)type.findProperty(keys[i]);
+			if (property != null) // its not an instance property
+				list.add(new CoreValue(property, this.valueObject.get(keys[i])));
+		}		 
+		PlasmaValue[] result = new PlasmaValue[list.size()];
+		list.toArray(result);
+		return result;
+	}
 
 }

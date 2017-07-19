@@ -23,6 +23,8 @@ package org.plasma.sdo;
 
 // java imports
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.plasma.sdo.core.SnapshotMap;
@@ -219,11 +221,38 @@ public interface PlasmaDataObject extends DataObject
 	public void accept(PlasmaDataGraphEventVisitor visitor);
 
 
+	/**
+	 * Searches this data object graph returning the
+	 * data object with a UUID string matching the given key. 
+	 * @param key the UUID string key
+	 * @return the data object or null if not found. 
+	 */
     public DataObject find(String key);
+    
+    /**
+     * Returns the current set of values for the data object
+     * including all defined and inherited properties, both singular and
+     * multi-valued data and reference properties. Useful for large classes/types
+     * where data values may be sparse, and checking every defined property could
+     * potentially be costly. 
+     * <p></p>
+     * This method does not return values for instance properties, only defined and inherited
+     * properties. 
+     * 
+     * @return the value set as an array
+     */
+    public PlasmaValue[] values();
      
-
+    /**
+     * Produces a raw dump format
+     * @return the string dump
+     */
     public String dump();
 
+    /**
+     * Produces a raw dump format using a depth first graph traversal
+     * @return the string dump
+     */
     public String dumpDepthFirst();
     
 }
