@@ -40,11 +40,10 @@ import org.plasma.query.model.NullLiteral;
 import org.plasma.query.model.Property;
 import org.plasma.query.model.RelationalOperator;
 import org.plasma.query.model.Select;
-import org.plasma.query.model.SubqueryOperator;
 import org.plasma.query.model.Term;
 import org.plasma.query.model.Update;
 import org.plasma.query.model.Variable;
-import org.plasma.query.model.WildcardOperator;
+import org.plasma.query.model.PredicateOperator;
 import org.plasma.query.model.WildcardProperty;
 
 
@@ -83,8 +82,7 @@ public abstract class DefaultQueryVisitor
     public void start(RelationalOperator operator) { }
     public void start(LogicalOperator operator) { }
     public void start(ArithmeticOperator operator) { }
-    public void start(WildcardOperator operator) { }
-    public void start(SubqueryOperator operator) { }
+    public void start(PredicateOperator operator) { }
     public void start(Literal literal) { }
     public void start(NullLiteral nullLiteral) { }
     public void start(Variable variable) { }
@@ -109,8 +107,7 @@ public abstract class DefaultQueryVisitor
     public void end(RelationalOperator operator) { }
     public void end(LogicalOperator operator) { }
     public void end(ArithmeticOperator operator) { }
-    public void end(WildcardOperator operator) { }
-    public void end(SubqueryOperator operator) { }
+    public void end(PredicateOperator operator) { }
     public void end(Literal literal) { }
     public void end(NullLiteral nullLiteral) { }
     public void end(Variable variable) { }

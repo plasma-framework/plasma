@@ -32,8 +32,7 @@ import org.plasma.query.model.NullLiteral;
 import org.plasma.query.model.Property;
 import org.plasma.query.model.Query;
 import org.plasma.query.model.QueryConstants;
-import org.plasma.query.model.SubqueryOperator;
-import org.plasma.query.model.WildcardOperator;
+import org.plasma.query.model.PredicateOperator;
 import org.plasma.query.visitor.DefaultQueryVisitor;
 import org.plasma.query.visitor.Traversal;
 
@@ -68,7 +67,7 @@ public abstract class TextQueryFilterAssembler extends DefaultQueryVisitor
 	}
 	protected boolean hasWildcard(Expression expression) {
 		for (int i = 0; i < expression.getTerms().size(); i++) {
-			if (expression.getTerms().get(i).getWildcardOperator() != null)
+			if (expression.getTerms().get(i).getPredicateOperator() != null)
 			{
 			    Literal literal = expression.getTerms().get(i + 1).getLiteral();
 			    if (literal.getValue().indexOf(WILDCARD) >= 0) // otherwise we can treat the expr like any other
@@ -83,8 +82,8 @@ public abstract class TextQueryFilterAssembler extends DefaultQueryVisitor
 		if (hasWildcard(expression)) {
 			int i = 0;
 			while (i < expression.getTerms().size()) {
-				WildcardOperator wildcardOper = expression.getTerms().get(i)
-						.getWildcardOperator();
+				PredicateOperator wildcardOper = expression.getTerms().get(i)
+						.getPredicateOperator();
 				if (wildcardOper != null) {
 					// log.info("found wildcard expression");
 					Property property = expression.getTerms().get(i - 1).getProperty();
@@ -97,7 +96,7 @@ public abstract class TextQueryFilterAssembler extends DefaultQueryVisitor
 					// process everything but leave the
 					// property, wildcard op, literal alone for above special case.
 					if (expression.getTerms().get(i).getProperty() == null
-							&& expression.getTerms().get(i).getWildcardOperator() == null
+							&& expression.getTerms().get(i).getPredicateOperator() == null
 							&& expression.getTerms().get(i).getLiteral() == null)
 						expression.getTerms().get(i).accept(this);
 				}
@@ -110,9 +109,9 @@ public abstract class TextQueryFilterAssembler extends DefaultQueryVisitor
 	}
 
 	protected abstract void processWildcardExpression(Property property,
-			WildcardOperator oper, Literal literal);                                                              
+			PredicateOperator oper, Literal literal);                                                              
     protected abstract void assembleSubquery(Property property, 
-    		SubqueryOperator oper, Query query);
+    		PredicateOperator oper, Query query);
 
     
 	// String.split() can cause empty tokens under some circumstances

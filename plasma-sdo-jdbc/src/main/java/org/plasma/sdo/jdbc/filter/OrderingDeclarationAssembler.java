@@ -97,7 +97,7 @@ public class OrderingDeclarationAssembler extends DefaultQueryVisitor
         	orderingDeclaration.append(Functions.wrap(endpoint, functions, targetAlias));
         }                       
         
-        if (property.getDirection() == null || property.getDirection().ordinal() == org.plasma.query.model.SortDirectionValues.ASC.ordinal())
+        if (property.getDirection() == null || property.getDirection().ordinal() == org.plasma.query.model.SortDirection.ASC.ordinal())
             orderingDeclaration.append(" ASC");
         else  
             orderingDeclaration.append(" DESC");

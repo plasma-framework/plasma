@@ -34,8 +34,7 @@ import org.plasma.query.visitor.Traversal;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Term", propOrder = {
     "wildcardProperty",
-    "subqueryOperator",
-    "wildcardOperator",
+    "predicateOperator",
     "entity",
     "expression",
     "variable",
@@ -53,10 +52,8 @@ public class Term implements org.plasma.query.Term {
 
     @XmlElement(name = "WildcardProperty")
     protected WildcardProperty wildcardProperty;
-    @XmlElement(name = "SubqueryOperator")
-    protected SubqueryOperator subqueryOperator;
-    @XmlElement(name = "WildcardOperator")
-    protected WildcardOperator wildcardOperator;
+    @XmlElement(name = "PredicateOperator")
+    protected PredicateOperator predicateOperator;
     @XmlElement(name = "Entity")
     protected Entity entity;
     @XmlElement(name = "Expression")
@@ -127,14 +124,9 @@ public class Term implements org.plasma.query.Term {
         this.setGroupOperator(oper);
     }
 
-    public Term(WildcardOperator oper) {
+    public Term(PredicateOperator oper) {
         this();
-        this.setWildcardOperator(oper);
-    } 
-
-    public Term(SubqueryOperator oper) {
-        this();
-        this.setSubqueryOperator(oper);
+        this.setPredicateOperator(oper);
     } 
 
     public Term(Literal literal) {
@@ -187,39 +179,15 @@ public class Term implements org.plasma.query.Term {
     }
 
     /**
-     * Gets the value of the subqueryOperator property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SubqueryOperator }
-     *     
-     */
-    public SubqueryOperator getSubqueryOperator() {
-        return subqueryOperator;
-    }
-
-    /**
-     * Sets the value of the subqueryOperator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SubqueryOperator }
-     *     
-     */
-    public void setSubqueryOperator(SubqueryOperator value) {
-        this.subqueryOperator = value;
-    }
-
-    /**
      * Gets the value of the wildcardOperator property.
      * 
      * @return
      *     possible object is
-     *     {@link WildcardOperator }
+     *     {@link PredicateOperator }
      *     
      */
-    public WildcardOperator getWildcardOperator() {
-        return wildcardOperator;
+    public PredicateOperator getPredicateOperator() {
+        return predicateOperator;
     }
 
     /**
@@ -227,11 +195,11 @@ public class Term implements org.plasma.query.Term {
      * 
      * @param value
      *     allowed object is
-     *     {@link WildcardOperator }
+     *     {@link PredicateOperator }
      *     
      */
-    public void setWildcardOperator(WildcardOperator value) {
-        this.wildcardOperator = value;
+    public void setPredicateOperator(PredicateOperator value) {
+        this.predicateOperator = value;
     }
 
     /**
@@ -517,10 +485,10 @@ public class Term implements org.plasma.query.Term {
             	arithmeticOperator.accept(visitor);               
             if (groupOperator != null)                    
                 groupOperator.accept(visitor);            
-            if (wildcardOperator != null)                      
-                wildcardOperator.accept(visitor);              
-            if (subqueryOperator != null)                      
-                subqueryOperator.accept(visitor);              
+            if (predicateOperator != null)                      
+            	predicateOperator.accept(visitor);              
+            if (predicateOperator != null)                      
+            	predicateOperator.accept(visitor);              
             if (literal != null)                               
                 literal.accept(visitor);                       
             if (nullLiteral != null)                               

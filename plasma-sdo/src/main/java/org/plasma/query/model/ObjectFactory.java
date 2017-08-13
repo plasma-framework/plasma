@@ -108,11 +108,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WildcardOperator }
+     * Create an instance of {@link PredicateOperator }
      * 
      */
-    public WildcardOperator createWildcardOperator() {
-        return new WildcardOperator();
+    public PredicateOperator createPredicateOperator() {
+        return new PredicateOperator();
     }
 
     /**
@@ -241,14 +241,6 @@ public class ObjectFactory {
      */
     public Variable createVariable() {
         return new Variable();
-    }
-
-    /**
-     * Create an instance of {@link SubqueryOperator }
-     * 
-     */
-    public SubqueryOperator createSubqueryOperator() {
-        return new SubqueryOperator();
     }
 
     /**

@@ -62,14 +62,14 @@ public class Function {
 	public Function() {
 	}
 
-	public Function(FunctionValues name) {
+	public Function(FunctionName name) {
 		this.name = name;
 	}
 	
     @XmlElement(name = "FunctionArg")
     protected List<FunctionArg> functionArgs;
     @XmlAttribute(name = "name", required = true)
-    protected FunctionValues name;
+    protected FunctionName name;
 
     /**
      * Gets the value of the functionArgs property.
@@ -105,10 +105,10 @@ public class Function {
      * 
      * @return
      *     possible object is
-     *     {@link FunctionValues }
+     *     {@link FunctionName }
      *     
      */
-    public FunctionValues getName() {
+    public FunctionName getName() {
         return name;
     }
 
@@ -117,10 +117,10 @@ public class Function {
      * 
      * @param value
      *     allowed object is
-     *     {@link FunctionValues }
+     *     {@link FunctionName }
      *     
      */
-    public void setName(FunctionValues value) {
+    public void setName(FunctionName value) {
         this.name = value;
     }
 

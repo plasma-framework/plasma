@@ -25,7 +25,7 @@ import org.plasma.query.Wildcard;
 import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.WildcardProperty;
-import org.plasma.query.model.WildcardPropertyTypeValues;
+import org.plasma.query.model.WildcardPropertyType;
 
 /**
  * A domain query node which is a wild card end point within
@@ -35,7 +35,7 @@ class WildcardNode extends DomainEndpoint
     implements Wildcard 
 {
 	
-	public WildcardNode(PathNode source, String name, WildcardPropertyTypeValues wildcardType) {
+	public WildcardNode(PathNode source, String name, WildcardPropertyType wildcardType) {
 		super (source, name);  
 		if (this.source != null) {
 			Path path = createPath();

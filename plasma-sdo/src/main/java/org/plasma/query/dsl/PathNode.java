@@ -26,10 +26,10 @@ import org.plasma.query.PathProperty;
 import org.plasma.query.QueryException;
 import org.plasma.query.Wildcard;
 import org.plasma.query.model.GroupOperator;
-import org.plasma.query.model.GroupOperatorValues;
+import org.plasma.query.model.GroupOperatorName;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.Term;
-import org.plasma.query.model.WildcardPropertyTypeValues;
+import org.plasma.query.model.WildcardPropertyType;
 
 import commonj.sdo.Type;
 
@@ -82,7 +82,7 @@ public class PathNode extends DomainObject implements PathProperty {
 	 */
 	public Wildcard wildcard() {
 		return new WildcardNode(this, Wildcard.WILDCARD_CHAR, 
-			WildcardPropertyTypeValues.DATA);
+			WildcardPropertyType.DATA);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class PathNode extends DomainObject implements PathProperty {
 	 */
 	public Wildcard dataWildcard() {
 		return new WildcardNode(this, Wildcard.WILDCARD_CHAR, 
-			WildcardPropertyTypeValues.DATA);
+			WildcardPropertyType.DATA);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class PathNode extends DomainObject implements PathProperty {
 	 */
 	public Wildcard referenceWildcard() {
 		return new WildcardNode(this, Wildcard.WILDCARD_CHAR, 
-				WildcardPropertyTypeValues.REFERENCE);
+				WildcardPropertyType.REFERENCE);
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class PathNode extends DomainObject implements PathProperty {
 	 */
 	public Wildcard subclassDataWildcard() {
 		return new WildcardNode(this, Wildcard.WILDCARD_CHAR, 
-			WildcardPropertyTypeValues.SUBCLASS___DATA);
+			WildcardPropertyType.SUBCLASS___DATA);
 	}
 	
 	
@@ -126,9 +126,9 @@ public class PathNode extends DomainObject implements PathProperty {
 			root = root.getParent();
 		}
 		root.getTerms().add(0, 
-			new Term(new GroupOperator(GroupOperatorValues.RP_1)));
+			new Term(new GroupOperator(GroupOperatorName.RP_1)));
 		root.getTerms().add( 
-				new Term(new GroupOperator(GroupOperatorValues.LP_1)));
+				new Term(new GroupOperator(GroupOperatorName.LP_1)));
 		return root;
 	}
 

@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "FunctionValues")
 @XmlEnum
-public enum FunctionValues {
+public enum FunctionName {
 
     @XmlEnumValue("min")
     MIN("min"),
@@ -70,7 +70,7 @@ public enum FunctionValues {
     DAY_FROM_DATE("dayFromDate");
     private final String value;
 
-    FunctionValues(String v) {
+    FunctionName(String v) {
         value = v;
     }
 
@@ -78,8 +78,8 @@ public enum FunctionValues {
         return value;
     }
 
-    public static FunctionValues fromValue(String v) {
-        for (FunctionValues c: FunctionValues.values()) {
+    public static FunctionName fromValue(String v) {
+        for (FunctionName c: FunctionName.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

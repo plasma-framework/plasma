@@ -86,7 +86,7 @@ public class QueryValidator extends AbstractQueryValidator
     {
         for (int i = 0; i < expression.getTerms().size(); i++)
         {
-            WildcardOperator oper = expression.getTerms().get(i).getWildcardOperator();
+            PredicateOperator oper = expression.getTerms().get(i).getPredicateOperator();
             if (oper != null)
             {
                 if (i == 0)

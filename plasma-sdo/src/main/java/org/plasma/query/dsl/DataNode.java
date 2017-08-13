@@ -31,7 +31,7 @@ import org.plasma.query.TemporalDataProperty;
 import org.plasma.query.Wildcard;
 import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.Path;
-import org.plasma.query.model.SortDirectionValues;
+import org.plasma.query.model.SortDirection;
 import org.plasma.query.model.WildcardProperty;
 
 /**
@@ -204,13 +204,13 @@ public class DataNode extends DomainEndpoint
 
 	public DataProperty asc() {
 		((org.plasma.query.model.Property) this.property)
-				.setDirection(SortDirectionValues.ASC);
+				.setDirection(SortDirection.ASC);
 		return this;
 	}
 
 	public DataProperty desc() {
 		((org.plasma.query.model.Property) this.property)
-				.setDirection(SortDirectionValues.DESC);
+				.setDirection(SortDirection.DESC);
 		return this;
 	}
 

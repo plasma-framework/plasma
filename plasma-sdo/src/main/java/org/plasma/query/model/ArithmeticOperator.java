@@ -54,17 +54,17 @@ import org.plasma.query.visitor.QueryVisitor;
 public class ArithmeticOperator implements org.plasma.query.Operator {
 
     @XmlValue
-    protected ArithmeticOperatorValues value;
+    protected ArithmeticOperatorName value;
 
     public ArithmeticOperator() {
         super();
     } 
     public ArithmeticOperator(String content) {
         this();
-        setValue(ArithmeticOperatorValues.valueOf(content));
+        setValue(ArithmeticOperatorName.valueOf(content));
     } 
 
-    public ArithmeticOperator(ArithmeticOperatorValues content) {
+    public ArithmeticOperator(ArithmeticOperatorName content) {
         this();
         setValue(content);
     } 
@@ -73,10 +73,10 @@ public class ArithmeticOperator implements org.plasma.query.Operator {
      * 
      * @return
      *     possible object is
-     *     {@link ArithmeticOperatorValues }
+     *     {@link ArithmeticOperatorName }
      *     
      */
-    public ArithmeticOperatorValues getValue() {
+    public ArithmeticOperatorName getValue() {
         return value;
     }
 
@@ -85,10 +85,10 @@ public class ArithmeticOperator implements org.plasma.query.Operator {
      * 
      * @param value
      *     allowed object is
-     *     {@link ArithmeticOperatorValues }
+     *     {@link ArithmeticOperatorName }
      *     
      */
-    public void setValue(ArithmeticOperatorValues value) {
+    public void setValue(ArithmeticOperatorName value) {
         this.value = value;
     }
 

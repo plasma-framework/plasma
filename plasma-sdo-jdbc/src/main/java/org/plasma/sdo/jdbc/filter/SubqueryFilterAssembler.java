@@ -35,9 +35,8 @@ import org.plasma.query.model.PathElement;
 import org.plasma.query.model.Property;
 import org.plasma.query.model.Query;
 import org.plasma.query.model.Select;
-import org.plasma.query.model.SubqueryOperator;
 import org.plasma.query.model.Where;
-import org.plasma.query.model.WildcardOperator;
+import org.plasma.query.model.PredicateOperator;
 import org.plasma.query.model.WildcardPathElement;
 import org.plasma.query.visitor.Traversal;
 import org.plasma.sdo.access.DataAccessException;
@@ -150,7 +149,7 @@ public class SubqueryFilterAssembler extends SQLQueryFilterAssembler
     }
 
 	@Override
-	protected void assembleSubquery(Property property, SubqueryOperator oper,
+	protected void assembleSubquery(Property property, PredicateOperator oper,
 			Query query) {
 		// TODO Auto-generated method stub
 		
@@ -158,7 +157,7 @@ public class SubqueryFilterAssembler extends SQLQueryFilterAssembler
 
 	@Override
 	protected void processWildcardExpression(Property property,
-			WildcardOperator oper, Literal literal) {
+			PredicateOperator oper, Literal literal) {
 		// TODO Auto-generated method stub
 		
 	} 

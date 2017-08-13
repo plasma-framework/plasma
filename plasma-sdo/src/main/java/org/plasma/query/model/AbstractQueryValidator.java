@@ -111,7 +111,7 @@ public abstract class AbstractQueryValidator extends DefaultQueryVisitor
         super.start(operator); 
     }
 
-    public void start(WildcardOperator operator)    
+    public void start(PredicateOperator operator)    
     {
         super.start(operator); 
     }

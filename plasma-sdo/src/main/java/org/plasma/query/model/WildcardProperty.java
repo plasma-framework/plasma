@@ -37,11 +37,11 @@ public class WildcardProperty
     extends AbstractProperty implements org.plasma.query.Term
 {
     @XmlAttribute(required = true)
-    protected WildcardPropertyTypeValues type;
+    protected WildcardPropertyType type;
 
     public WildcardProperty() {
         super();
-        type = WildcardPropertyTypeValues.DATA;
+        type = WildcardPropertyType.DATA;
     } //-- org.plasma.mda.query.WildcardProperty()
 
     public WildcardProperty(Path path) {
@@ -55,10 +55,10 @@ public class WildcardProperty
      * 
      * @return
      *     possible object is
-     *     {@link WildcardPropertyTypeValues }
+     *     {@link WildcardPropertyType }
      *     
      */
-    public WildcardPropertyTypeValues getType() {
+    public WildcardPropertyType getType() {
         return type;
     }
 
@@ -67,10 +67,10 @@ public class WildcardProperty
      * 
      * @param value
      *     allowed object is
-     *     {@link WildcardPropertyTypeValues }
+     *     {@link WildcardPropertyType }
      *     
      */
-    public void setType(WildcardPropertyTypeValues value) {
+    public void setType(WildcardPropertyType value) {
         this.type = value;
     }
 

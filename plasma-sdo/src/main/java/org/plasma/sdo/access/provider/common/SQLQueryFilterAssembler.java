@@ -33,7 +33,7 @@ import org.plasma.query.model.LogicalOperator;
 import org.plasma.query.model.NullLiteral;
 import org.plasma.query.model.QueryConstants;
 import org.plasma.query.model.RelationalOperator;
-import org.plasma.query.model.WildcardOperator;
+import org.plasma.query.model.PredicateOperator;
 import org.plasma.sdo.access.DataAccessException;
 import org.plasma.sdo.helper.DataConverter;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
@@ -51,7 +51,7 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 
 	protected Type stringType;
 	protected RelationalOperator contextRelationalOperator;
-	protected WildcardOperator contextWildcardOperator;
+	protected PredicateOperator contextWildcardOperator;
 
 	@SuppressWarnings("unused")
 	private SQLQueryFilterAssembler() {
@@ -112,7 +112,7 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
 		super.start(operator);
 	}
 	
-	public void start(WildcardOperator operator) {
+	public void start(PredicateOperator operator) {
 		this.contextWildcardOperator = operator;
 		this.contextRelationalOperator = null;
 		super.start(operator);
@@ -188,7 +188,7 @@ public abstract class SQLQueryFilterAssembler extends TextQueryFilterAssembler
         return result;
 	}
 	
-	protected String toString(WildcardOperator operator) {
+	protected String toString(PredicateOperator operator) {
 		String result = null;
 		switch (operator.getValue()) {
 		case LIKE:

@@ -38,7 +38,7 @@ import org.plasma.query.visitor.QueryVisitor;
 public class LogicalOperator implements org.plasma.query.Operator {
 
     @XmlValue
-    protected LogicalOperatorValues value;
+    protected LogicalOperatorName value;
 
     public LogicalOperator() {
         super();
@@ -46,19 +46,19 @@ public class LogicalOperator implements org.plasma.query.Operator {
 
     public LogicalOperator(String content) {
         this();
-        setValue(LogicalOperatorValues.valueOf(content));
+        setValue(LogicalOperatorName.valueOf(content));
     } 
 
-    public LogicalOperator(LogicalOperatorValues content) {
+    public LogicalOperator(LogicalOperatorName content) {
         this();
         setValue(content);
     } 
     
     public static LogicalOperator valueOf(String value) {
     	if ("=".equals(value))
-    		return new LogicalOperator(LogicalOperatorValues.AND);
+    		return new LogicalOperator(LogicalOperatorName.AND);
     	else if ("!=".equals(value))
-    		return new LogicalOperator(LogicalOperatorValues.OR);
+    		return new LogicalOperator(LogicalOperatorName.OR);
     	else
     	    throw new QueryException("invalid operator '" 
     	    		+ value + "'");
@@ -69,10 +69,10 @@ public class LogicalOperator implements org.plasma.query.Operator {
      * 
      * @return
      *     possible object is
-     *     {@link LogicalOperatorValues }
+     *     {@link LogicalOperatorName }
      *     
      */
-    public LogicalOperatorValues getValue() {
+    public LogicalOperatorName getValue() {
         return value;
     }
 
@@ -81,10 +81,10 @@ public class LogicalOperator implements org.plasma.query.Operator {
      * 
      * @param value
      *     allowed object is
-     *     {@link LogicalOperatorValues }
+     *     {@link LogicalOperatorName }
      *     
      */
-    public void setValue(LogicalOperatorValues value) {
+    public void setValue(LogicalOperatorName value) {
         this.value = value;
     }
 

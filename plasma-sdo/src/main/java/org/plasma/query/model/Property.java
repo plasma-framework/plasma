@@ -62,7 +62,7 @@ public class Property extends AbstractProperty
     @XmlAttribute
     protected Boolean distinct;
     @XmlAttribute
-    protected SortDirectionValues direction;
+    protected SortDirection direction;
     @XmlAttribute(name = "alias")
     protected String alias;
 
@@ -103,20 +103,20 @@ public class Property extends AbstractProperty
         this.setPath(path);
     } 
 
-    public Property(String name, org.plasma.query.model.SortDirectionValues direction) {
+    public Property(String name, org.plasma.query.model.SortDirection direction) {
         this();
         this.setName(name);
         this.setDirection(direction);
     } 
 
-    public Property(String name, Path path, org.plasma.query.model.SortDirectionValues direction) {
+    public Property(String name, Path path, org.plasma.query.model.SortDirection direction) {
         this();
         this.setName(name);
         this.setPath(path);
         this.setDirection(direction);
     } 
 
-    public Property(String name, org.plasma.query.model.FunctionValues function) {
+    public Property(String name, org.plasma.query.model.FunctionName function) {
         this();
         this.setName(name);
 		Function func = new Function(function);
@@ -282,63 +282,63 @@ public class Property extends AbstractProperty
     
     @Override
 	public DataProperty min() {
-		Function func = new Function(FunctionValues.MIN);
+		Function func = new Function(FunctionName.MIN);
 		this.getFunctions().add(func);
 		return this;
 	}
 	
     @Override
 	public DataProperty max() {
-		Function func = new Function(FunctionValues.MAX);
+		Function func = new Function(FunctionName.MAX);
 		this.getFunctions().add(func);
 		return this;
 	}
 	
     @Override
 	public DataProperty sum() {
-		Function func = new Function(FunctionValues.SUM);
+		Function func = new Function(FunctionName.SUM);
 		this.getFunctions().add(func);
 		return this;
 	}
 	
     @Override
 	public DataProperty avg() {
-		Function func = new Function(FunctionValues.AVG);
+		Function func = new Function(FunctionName.AVG);
 		this.getFunctions().add(func);
 		return this;
 	}
 
     @Override
 	public IntegralDataProperty abs() {
-		Function func = new Function(FunctionValues.ABS);
+		Function func = new Function(FunctionName.ABS);
 		this.getFunctions().add(func);
 		return this;
 	}
 	
     @Override
 	public RealDataProperty ceiling() {
-		Function func = new Function(FunctionValues.CEILING);
+		Function func = new Function(FunctionName.CEILING);
 		this.getFunctions().add(func);
 		return this;
 	}
 	
     @Override
 	public RealDataProperty floor() {
-		Function func = new Function(FunctionValues.FLOOR);
+		Function func = new Function(FunctionName.FLOOR);
 		this.getFunctions().add(func);
 		return this;
 	}
 	
     @Override
 	public RealDataProperty round() {
-		Function func = new Function(FunctionValues.ROUND);
+		Function func = new Function(FunctionName.ROUND);
 		this.getFunctions().add(func);
 		return this;
 	}
 	
     @Override
 	public StringDataProperty substringBefore(String value) {
-		Function func = new Function(FunctionValues.SUBSTRING_BEFORE);
+		Function func = new Function(FunctionName.SUBSTRING_BEFORE);
 		FunctionArg arg1 = new FunctionArg();
 		func.getFunctionArgs().add(arg1);
 		arg1.setName("arg1");
@@ -349,7 +349,7 @@ public class Property extends AbstractProperty
 	
     @Override
 	public StringDataProperty substringAfter(String value) {
-		Function func = new Function(FunctionValues.SUBSTRING_AFTER);
+		Function func = new Function(FunctionName.SUBSTRING_AFTER);
 		FunctionArg arg1 = new FunctionArg();
 		func.getFunctionArgs().add(arg1);
 		arg1.setName("arg1");
@@ -360,32 +360,32 @@ public class Property extends AbstractProperty
 	
     @Override
 	public StringDataProperty normalizeSpace() {
-		Function func = new Function(FunctionValues.NORMALIZE_SPACE);
+		Function func = new Function(FunctionName.NORMALIZE_SPACE);
 		this.getFunctions().add(func);
 		return this;
 	}
 
     @Override
 	public StringDataProperty upperCase() {
-		Function func = new Function(FunctionValues.UPPER_CASE);
+		Function func = new Function(FunctionName.UPPER_CASE);
 		this.getFunctions().add(func);
 		return this;
 	}
 	
     @Override
 	public StringDataProperty lowerCase() {
-		Function func = new Function(FunctionValues.LOWER_CASE);
+		Function func = new Function(FunctionName.LOWER_CASE);
 		this.getFunctions().add(func);
 		return this;
 	}
 		
 	public DataProperty asc() {
-		this.setDirection(SortDirectionValues.ASC);
+		this.setDirection(SortDirection.ASC);
 		return this;
 	}
 	
 	public DataProperty desc() {
-		this.setDirection(SortDirectionValues.DESC);
+		this.setDirection(SortDirection.DESC);
 		return this;
 	}
    
@@ -470,9 +470,9 @@ public class Property extends AbstractProperty
     /* (non-Javadoc)
 	 * @see org.plasma.query.model.Property2#getDirection()
 	 */
-    public SortDirectionValues getDirection() {
+    public SortDirection getDirection() {
         if (direction == null) {
-            return SortDirectionValues.ASC;
+            return SortDirection.ASC;
         } else {
             return direction;
         }
@@ -481,7 +481,7 @@ public class Property extends AbstractProperty
     /* (non-Javadoc)
 	 * @see org.plasma.query.model.Property2#setDirection(org.plasma.query.model.SortDirectionValues)
 	 */
-    public void setDirection(SortDirectionValues value) {
+    public void setDirection(SortDirection value) {
         this.direction = value;
     }
     

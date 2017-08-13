@@ -22,56 +22,37 @@
 package org.plasma.query.model;
 
 import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for WildcardPropertyTypeValues.
+ * <p>Java class for SortDirectionValues.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="WildcardPropertyTypeValues">
+ * &lt;simpleType name="SortDirectionValues">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="all"/>
- *     &lt;enumeration value="reference"/>
- *     &lt;enumeration value="data"/>
- *     &lt;enumeration value="subclass_data"/>
+ *     &lt;enumeration value="ASC"/>
+ *     &lt;enumeration value="DESC"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "WildcardPropertyTypeValues")
+@XmlType(name = "SortDirectionValues")
 @XmlEnum
-public enum WildcardPropertyTypeValues {
+public enum SortDirection {
 
-    @XmlEnumValue("all")
-    ALL("all"),
-    @XmlEnumValue("reference")
-    REFERENCE("reference"),
-    @XmlEnumValue("data")
-    DATA("data"),
-    @XmlEnumValue("subclass_data")
-    SUBCLASS___DATA("subclass_data");
-    private final String value;
-
-    WildcardPropertyTypeValues(String v) {
-        value = v;
-    }
+    ASC,
+    DESC;
 
     public String value() {
-        return value;
+        return name();
     }
 
-    public static WildcardPropertyTypeValues fromValue(String v) {
-        for (WildcardPropertyTypeValues c: WildcardPropertyTypeValues.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
+    public static SortDirection fromValue(String v) {
+        return valueOf(v);
     }
 
 }

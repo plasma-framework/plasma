@@ -343,7 +343,7 @@
 				<xsd:attribute name="name" type="xsd:string" use="required"/>
 				<xsd:attribute name="values" type="xsd:boolean" use="optional" default="false"/>
 				<xsd:attribute name="distinct" type="xsd:boolean" use="optional" default="false"/>
-				<xsd:attribute name="direction" type="query:SortDirectionValues" use="optional" default="ASC"/>
+				<xsd:attribute name="direction" type="query:SortDirection" use="optional" default="ASC"/>
  				<xsd:attribute name="alias" type="xsd:string" use="optional"/>
             </xsd:extension>
         </xsd:complexContent>
@@ -367,7 +367,7 @@
         </xsd:annotation>
         <xsd:complexContent>
             <xsd:extension base="query:AbstractProperty">
-				<xsd:attribute name="type" type="query:WildcardPropertyTypeValues" use="required"/>
+				<xsd:attribute name="type" type="query:WildcardPropertyType" use="required"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -442,8 +442,7 @@
 			<xsd:element ref="query:Variable"/>
 			<xsd:element ref="query:Expression"/>
 			<xsd:element ref="query:Entity"/>
-			<xsd:element ref="query:WildcardOperator"/>
-			<xsd:element ref="query:SubqueryOperator"/>
+			<xsd:element ref="query:PredicateOperator"/>
 			<xsd:element ref="query:WildcardProperty"/>
 		</xsd:choice>
     </xsd:complexType>
@@ -455,7 +454,7 @@
             <xsd:documentation></xsd:documentation>
         </xsd:annotation>
 		<xsd:simpleContent>
-			<xsd:extension base="query:RelationalOperatorValues"/>
+			<xsd:extension base="query:RelationalOperatorName"/>
 		</xsd:simpleContent>
     </xsd:complexType>
 
@@ -466,7 +465,7 @@
             <xsd:documentation></xsd:documentation>
         </xsd:annotation>
 		<xsd:simpleContent>
-			<xsd:extension base="query:ArithmeticOperatorValues"/>
+			<xsd:extension base="query:ArithmeticOperatorName"/>
 		</xsd:simpleContent>
     </xsd:complexType>
 
@@ -477,7 +476,7 @@
             <xsd:documentation></xsd:documentation>
         </xsd:annotation>
 		<xsd:simpleContent>
-			<xsd:extension base="query:LogicalOperatorValues"/>
+			<xsd:extension base="query:LogicalOperatorName"/>
 		</xsd:simpleContent>
     </xsd:complexType>
 
@@ -488,34 +487,23 @@
             <xsd:documentation></xsd:documentation>
         </xsd:annotation>
 		<xsd:simpleContent>
-			<xsd:extension base="query:GroupOperatorValues"/>
+			<xsd:extension base="query:GroupOperatorName"/>
 		</xsd:simpleContent>
     </xsd:complexType>
 
     <xsd:element name="GroupOperator" type="query:GroupOperator"/>
     
-    <xsd:complexType name="WildcardOperator">
+    <xsd:complexType name="PredicateOperator">
         <xsd:annotation>
             <xsd:documentation></xsd:documentation>
         </xsd:annotation>
 		<xsd:simpleContent>
-			<xsd:extension base="query:WildcardOperatorValues"/>
+			<xsd:extension base="query:PredicateOperatorName"/>
 		</xsd:simpleContent>
     </xsd:complexType>
 
-    <xsd:element name="WildcardOperator" type="query:WildcardOperator"/>
+    <xsd:element name="PredicateOperator" type="query:PredicateOperator"/>
 
-    <xsd:complexType name="SubqueryOperator">
-        <xsd:annotation>
-            <xsd:documentation></xsd:documentation>
-        </xsd:annotation>
-		<xsd:simpleContent>
-			<xsd:extension base="query:SubqueryOperatorValues"/>
-		</xsd:simpleContent>
-    </xsd:complexType>
-    
-    <xsd:element name="SubqueryOperator" type="query:SubqueryOperator"/>
-	
     <xsd:complexType name="Literal">
         <xsd:annotation>
             <xsd:documentation></xsd:documentation>
@@ -542,7 +530,7 @@
         <xsd:sequence>
             <xsd:element ref="query:FunctionArg" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-        <xsd:attribute name="name" type="query:FunctionValues" use="required" />
+        <xsd:attribute name="name" type="query:FunctionName" use="required" />
     </xsd:complexType>
 
     <xsd:element name="Function" type="query:Function"/>
@@ -604,7 +592,7 @@
     </xsd:element>
 
     <!-- simple types -->
-	<xsd:simpleType name="RelationalOperatorValues">
+	<xsd:simpleType name="RelationalOperatorName">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="equals"/>
 			<xsd:enumeration value="notEquals"/>
@@ -614,14 +602,14 @@
 			<xsd:enumeration value="lessThanEquals"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:simpleType name="LogicalOperatorValues">
+	<xsd:simpleType name="LogicalOperatorName">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="and"/>
 			<xsd:enumeration value="or"/>
             <xsd:enumeration value="not"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:simpleType name="ArithmeticOperatorValues">
+	<xsd:simpleType name="ArithmeticOperatorName">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="minus"/>
 			<xsd:enumeration value="plus"/>
@@ -630,7 +618,7 @@
 			<xsd:enumeration value="mult"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:simpleType name="GroupOperatorValues">
+	<xsd:simpleType name="GroupOperatorName">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="LP1"/>
 			<xsd:enumeration value="LP2"/>
@@ -640,17 +628,23 @@
 			<xsd:enumeration value="RP3"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:simpleType name="WildcardOperatorValues">
+	<xsd:simpleType name="PredicateOperatorName">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="LIKE"/>
-		</xsd:restriction>
-	</xsd:simpleType>
-	<xsd:simpleType name="SubqueryOperatorValues">
-		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="IN"/>
+			<xsd:enumeration value="NOT_IN"/>
+			<xsd:enumeration value="EXISTS"/>
+			<xsd:enumeration value="NOT_EXISTS"/>
+			<xsd:enumeration value="BETWEEN"/>
+			<xsd:enumeration value="SIMILAR"/>
+			<xsd:enumeration value="NULL"/>
+			<xsd:enumeration value="UNIQUE"/>
+			<xsd:enumeration value="MATCH"/>
+			<xsd:enumeration value="DISTINCT"/>
+			<xsd:enumeration value="CONTAINS"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:simpleType name="WildcardPropertyTypeValues">
+	<xsd:simpleType name="WildcardPropertyType">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="all"/>
 			<xsd:enumeration value="reference"/>
@@ -658,13 +652,13 @@
 			<xsd:enumeration value="subclass_data"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:simpleType name="SortDirectionValues">
+	<xsd:simpleType name="SortDirection">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="ASC"/>
 			<xsd:enumeration value="DESC"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:simpleType name="FunctionValues">
+	<xsd:simpleType name="FunctionName">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="min"/>
 			<xsd:enumeration value="max"/>

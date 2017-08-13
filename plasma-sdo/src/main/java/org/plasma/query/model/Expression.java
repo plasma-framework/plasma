@@ -94,12 +94,12 @@ public class Expression implements org.plasma.query.Expression {
 	
 	@Override
 	public org.plasma.query.Expression and(org.plasma.query.Expression other) {
-		return this.cat(other, LogicalOperatorValues.AND);
+		return this.cat(other, LogicalOperatorName.AND);
 	}
 	
 	@Override
 	public org.plasma.query.Expression or(org.plasma.query.Expression other) {
-		return this.cat(other, LogicalOperatorValues.OR);
+		return this.cat(other, LogicalOperatorName.OR);
 	}
 	
 	@Override
@@ -110,18 +110,18 @@ public class Expression implements org.plasma.query.Expression {
 			root = root.getParent();
 		}
 		root.getTerms().add(0, 
-			new Term(new GroupOperator(GroupOperatorValues.RP_1)));
+			new Term(new GroupOperator(GroupOperatorName.RP_1)));
 		root.getTerms().add( 
-			new Term(new GroupOperator(GroupOperatorValues.LP_1)));
+			new Term(new GroupOperator(GroupOperatorName.LP_1)));
 	    return this;
 	}
 	
 	public boolean isGroup() {
 		if (this.getTerms().size() > 0) {
 			GroupOperator left = this.getTerms().get(0).getGroupOperator();
-			if (left != null && left.getValue().ordinal() == GroupOperatorValues.RP_1.ordinal()) {
+			if (left != null && left.getValue().ordinal() == GroupOperatorName.RP_1.ordinal()) {
 				GroupOperator right = this.getTerms().get(this.getTerms().size()-1).getGroupOperator();
-				if (right != null && right.getValue().ordinal() == GroupOperatorValues.LP_1.ordinal()) {
+				if (right != null && right.getValue().ordinal() == GroupOperatorName.LP_1.ordinal()) {
 					return true;
 				}
 			}
@@ -129,7 +129,7 @@ public class Expression implements org.plasma.query.Expression {
 		return false;
 	}
 	
-	private Expression cat(org.plasma.query.Expression other, LogicalOperatorValues oper) {
+	private Expression cat(org.plasma.query.Expression other, LogicalOperatorName oper) {
 		Expression result = null;
 		if (this.parent == null) {
 			Expression parent = findParent();
@@ -267,7 +267,7 @@ public class Expression implements org.plasma.query.Expression {
         this.getTerms().add(new Term(lit));
     } 
 
-    public Expression(Property prop, WildcardOperator oper, Literal lit) {
+    public Expression(Property prop, PredicateOperator oper, Literal lit) {
         this();
         this.getTerms().add(new Term(prop));
         this.getTerms().add(new Term(oper));
@@ -277,13 +277,13 @@ public class Expression implements org.plasma.query.Expression {
     public Expression(Property prop, Literal min, Literal max) {
         this();
         Expression left = new Expression(prop, 
-        		new RelationalOperator(RelationalOperatorValues.GREATER_THAN_EQUALS),
+        		new RelationalOperator(RelationalOperatorName.GREATER_THAN_EQUALS),
         		min);      
         Expression right = new Expression(prop, 
-        		new RelationalOperator(RelationalOperatorValues.LESS_THAN_EQUALS),
+        		new RelationalOperator(RelationalOperatorName.LESS_THAN_EQUALS),
         		max);
         this.getTerms().add(new Term(left));
-        this.getTerms().add(new Term(new LogicalOperator(LogicalOperatorValues.AND)));
+        this.getTerms().add(new Term(new LogicalOperator(LogicalOperatorName.AND)));
         this.getTerms().add(new Term(right));
     } 
     
@@ -294,7 +294,7 @@ public class Expression implements org.plasma.query.Expression {
         this.getTerms().add(new Term(lit));
     } 
 
-    public Expression(Property prop, SubqueryOperator oper, Query query) {
+    public Expression(Property prop, PredicateOperator oper, Query query) {
         this();
         this.getTerms().add(new Term(prop));
         this.getTerms().add(new Term(oper));
@@ -318,7 +318,7 @@ public class Expression implements org.plasma.query.Expression {
         this.getTerms().add(new Term(oper));
     }
     
-    public Expression(LogicalOperatorValues oper) {
+    public Expression(LogicalOperatorName oper) {
         this();
         this.getTerms().add(new Term(new LogicalOperator(oper)));
     }  
@@ -391,7 +391,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression eq(Property prop, Literal literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.EQUALS), literal);
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.EQUALS), literal);
     }
 
     /**
@@ -403,7 +403,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression eq(Property prop, Object literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.EQUALS), Literal.valueOf(literal));
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.EQUALS), Literal.valueOf(literal));
     }
 
     /**
@@ -415,7 +415,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression eq(Property prop, NullLiteral literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.EQUALS), literal);
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.EQUALS), literal);
     }
 
     /**
@@ -477,7 +477,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression ne(Property prop, Literal literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.NOT_EQUALS), literal);
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.NOT_EQUALS), literal);
     }
 
     /**
@@ -489,7 +489,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression ne(Property prop, NullLiteral literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.NOT_EQUALS), literal);
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.NOT_EQUALS), literal);
     }
     
     /**
@@ -551,7 +551,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression gt(Property prop, Literal literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.GREATER_THAN), literal);
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.GREATER_THAN), literal);
     }
 
     /**
@@ -602,7 +602,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression ge(Property prop, Literal literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.GREATER_THAN_EQUALS), literal);
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.GREATER_THAN_EQUALS), literal);
     }
     
     /**
@@ -615,7 +615,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression ge(Property prop, Object literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.GREATER_THAN_EQUALS), Literal.valueOf(literal));
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.GREATER_THAN_EQUALS), Literal.valueOf(literal));
     }  
     
     /**
@@ -676,7 +676,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression lt(Property prop, Literal literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.LESS_THAN), literal);
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.LESS_THAN), literal);
     }
     
     /**
@@ -738,7 +738,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression le(Property prop, Literal literal)
     {
-        return new Expression(prop, new RelationalOperator(RelationalOperatorValues.LESS_THAN_EQUALS), literal);
+        return new Expression(prop, new RelationalOperator(RelationalOperatorName.LESS_THAN_EQUALS), literal);
     }
 
     /**
@@ -805,7 +805,7 @@ public class Expression implements org.plasma.query.Expression {
     */
     public static Expression like(Property prop, Literal literal)
     {
-        return new Expression(prop, new WildcardOperator(), literal);
+        return new Expression(prop, new PredicateOperator(), literal);
     }
 
     /**
@@ -874,7 +874,8 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression in(Property prop, Query subquery)
     {
-        return new Expression(prop, new SubqueryOperator(SubqueryOperatorValues.IN), subquery);
+        return new Expression(prop, 
+        	new PredicateOperator(PredicateOperatorName.IN), subquery);
     }
 
     /**
@@ -886,7 +887,8 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression in(String prop, Query subquery)
     {
-        return new Expression(new Property(prop), new SubqueryOperator(SubqueryOperatorValues.IN), subquery);
+        return new Expression(new Property(prop), 
+        		new PredicateOperator(PredicateOperatorName.IN), subquery);
     }
     
     /**
@@ -899,7 +901,8 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression in(String prop, String[] path, Query subquery)
     {
-        return new Expression(new Property(prop, new Path(path)), new SubqueryOperator(SubqueryOperatorValues.IN), subquery);
+        return new Expression(new Property(prop, new Path(path)), 
+        		new PredicateOperator(PredicateOperatorName.IN), subquery);
     }    
     /**
      * Returns a subquery expression, where
@@ -910,12 +913,14 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression notIn(Property prop, Query subquery)
     {
-        return new Expression(prop, new SubqueryOperator(SubqueryOperatorValues.NOT_IN), subquery);
+        return new Expression(prop, 
+        		new PredicateOperator(PredicateOperatorName.NOT_IN), subquery);
     }
 
     public static Expression exists(Property prop, Query subquery)
     {
-        return new Expression(prop, new SubqueryOperator(SubqueryOperatorValues.EXISTS), subquery);
+        return new Expression(prop, 
+        		new PredicateOperator(PredicateOperatorName.EXISTS), subquery);
     }
 
     /**
@@ -925,7 +930,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression and()
     {
-        return new Expression(LogicalOperatorValues.AND);
+        return new Expression(LogicalOperatorName.AND);
     }
 
     /**
@@ -935,7 +940,7 @@ public class Expression implements org.plasma.query.Expression {
      */
     public static Expression or()
     {
-        return new Expression(LogicalOperatorValues.OR);
+        return new Expression(LogicalOperatorName.OR);
     }
 
     /**

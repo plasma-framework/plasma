@@ -37,7 +37,7 @@ import org.plasma.query.visitor.QueryVisitor;
 public class GroupOperator implements org.plasma.query.Operator {
 
     @XmlValue
-    protected GroupOperatorValues value;
+    protected GroupOperatorName value;
 
 
       //----------------/
@@ -50,10 +50,10 @@ public class GroupOperator implements org.plasma.query.Operator {
 
     public GroupOperator(String oper) {
         super();
-        value = GroupOperatorValues.valueOf(oper);
+        value = GroupOperatorName.valueOf(oper);
     } 
 
-    public GroupOperator(GroupOperatorValues oper) {
+    public GroupOperator(GroupOperatorName oper) {
         super();
         value = oper;
     } 
@@ -63,10 +63,10 @@ public class GroupOperator implements org.plasma.query.Operator {
      * 
      * @return
      *     possible object is
-     *     {@link GroupOperatorValues }
+     *     {@link GroupOperatorName }
      *     
      */
-    public GroupOperatorValues getValue() {
+    public GroupOperatorName getValue() {
         return value;
     }
 
@@ -75,10 +75,10 @@ public class GroupOperator implements org.plasma.query.Operator {
      * 
      * @param value
      *     allowed object is
-     *     {@link GroupOperatorValues }
+     *     {@link GroupOperatorName }
      *     
      */
-    public void setValue(GroupOperatorValues value) {
+    public void setValue(GroupOperatorName value) {
         this.value = value;
     }
 

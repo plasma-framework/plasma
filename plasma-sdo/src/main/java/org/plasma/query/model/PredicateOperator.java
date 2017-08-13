@@ -21,70 +21,42 @@
  */
 package org.plasma.query.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
-import org.plasma.query.QueryException;
 import org.plasma.query.visitor.QueryVisitor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RelationalOperator", propOrder = {
+@XmlType(name = "PredicateOperator", propOrder = {
     "value"
 })
-@XmlRootElement(name = "RelationalOperator")
-public class RelationalOperator implements org.plasma.query.Operator {
+@XmlRootElement(name = "PredicateOperator")
+public class PredicateOperator implements org.plasma.query.Operator {
 
-	private static Map<String, RelationalOperatorName> operMap = new HashMap<>();
-    static {
-		operMap.put("=", RelationalOperatorName.EQUALS);
-		operMap.put("!=", RelationalOperatorName.NOT_EQUALS);
-		operMap.put(">", RelationalOperatorName.GREATER_THAN);
-		operMap.put(">=", RelationalOperatorName.GREATER_THAN_EQUALS);
-		operMap.put("<", RelationalOperatorName.LESS_THAN);
-		operMap.put("<=", RelationalOperatorName.LESS_THAN_EQUALS);
-    }
-	
     @XmlValue
-    protected RelationalOperatorName value;
+    protected PredicateOperatorName value;
 
-    public RelationalOperator() {
+    public PredicateOperator() {
         super();
-    } 
+    }  
 
-    public RelationalOperator(String content) {
-        this();
-        setValue(RelationalOperatorName.valueOf(content));
-    } 
+    public PredicateOperator(PredicateOperatorName operatorName) {
+        super();
+        value = operatorName;
+    }  
 
-    public RelationalOperator(RelationalOperatorName content) {
-        this();
-        setValue(content);
-    } 
-    
-    public static RelationalOperator valueOf(String value) {
-    	RelationalOperatorName oper = operMap.get(value);
-    	if (oper != null)
-    		return new RelationalOperator(oper);
-    	else
-    	    throw new QueryException("invalid operator '" 
-    	    		+ value + "'");
-    }
-    
-    /**
+     /**
      * Gets the value of the value property.
      * 
      * @return
      *     possible object is
-     *     {@link RelationalOperatorName }
+     *     {@link PredicateOperatorName }
      *     
      */
-    public RelationalOperatorName getValue() {
+    public PredicateOperatorName getValue() {
         return value;
     }
 
@@ -93,10 +65,10 @@ public class RelationalOperator implements org.plasma.query.Operator {
      * 
      * @param value
      *     allowed object is
-     *     {@link RelationalOperatorName }
+     *     {@link PredicateOperatorName }
      *     
      */
-    public void setValue(RelationalOperatorName value) {
+    public void setValue(PredicateOperatorName value) {
         this.value = value;
     }
 
@@ -105,4 +77,5 @@ public class RelationalOperator implements org.plasma.query.Operator {
         visitor.start(this);
     	visitor.end(this);
     }
+
 }

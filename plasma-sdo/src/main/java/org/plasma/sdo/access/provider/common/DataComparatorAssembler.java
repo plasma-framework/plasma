@@ -23,7 +23,7 @@ package org.plasma.sdo.access.provider.common;
 
 import org.plasma.query.model.OrderBy;
 import org.plasma.query.model.Property;
-import org.plasma.query.model.SortDirectionValues;
+import org.plasma.query.model.SortDirection;
 import org.plasma.query.visitor.DefaultQueryVisitor;
 import org.plasma.query.visitor.Traversal;
 
@@ -44,7 +44,7 @@ public abstract class DataComparatorAssembler extends DefaultQueryVisitor {
 	
     public void start(Property property)                                                                            
     {                   
-        if (property.getDirection() == null || property.getDirection().ordinal() == SortDirectionValues.ASC.ordinal())
+        if (property.getDirection() == null || property.getDirection().ordinal() == SortDirection.ASC.ordinal())
         	dataComparator.addAscending(property);
         else  
         	dataComparator.addDescending(property);

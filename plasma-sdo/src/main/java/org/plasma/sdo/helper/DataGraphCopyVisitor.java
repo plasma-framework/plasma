@@ -106,7 +106,8 @@ public class DataGraphCopyVisitor implements PlasmaDataGraphVisitor {
 				if (log.isDebugEnabled())
 					log.debug("creating contained object "
 						+ targetObject.toString());
-    	        targetResult = (PlasmaDataObject)sourceResult.createDataObject(sourceProperty);
+    	        targetResult = (PlasmaDataObject)sourceResult.createDataObject(sourceProperty, 
+    	        		target.getType());
     	        if (this.copyUUIDs)
     	        	targetResult.resetUUID(sourceResult.getUUID());
     	        copyDataProperties(targetObject, targetResult);
