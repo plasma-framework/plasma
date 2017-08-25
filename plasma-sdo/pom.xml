@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>1.3.0</version>
+      <version>1.3.1</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-sdo</artifactId>
-  <version>1.3.0</version>
+  <version>1.3.1</version>
   <packaging>jar</packaging>
 
   <name>Plasma SDO</name>
@@ -108,12 +108,12 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>
-      <version>1.3.0</version>
+      <version>1.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-config</artifactId>
-      <version>1.3.0</version>
+      <version>1.3.1</version>
       <exclusions>
       	<exclusion>
       		<artifactId>stax-api</artifactId>
@@ -124,43 +124,39 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-metamodel</artifactId>
-      <version>1.3.0</version>
+      <version>1.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-profile</artifactId>
-      <version>1.3.0</version>
+      <version>1.3.1</version>
     </dependency>
   </dependencies>
 	<build>
 		<finalName>plasma-sdo</finalName>
 		<plugins>
- 		    <!--       
+ 		    <!--         
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.12.3</version>
 				<executions>
 					<execution>
 					    <id>query-model</id>
 						<phase>generate-sources</phase>
 						<goals>
-							<goal>xjc</goal>
+							<goal>generate</goal>
 						</goals>
 				        <configuration>
-					        <schemaDirectory>${basedir}/src/main/resources/org/plasma/query</schemaDirectory>
-					        <schemaFiles>query.xsd</schemaFiles>
-					        <bindingDirectory>${basedir}/src/main/resources/org/plasma/query</bindingDirectory>
-					        <bindingFiles>query-jaxb-bindings.xml</bindingFiles>
+				            <generateDirectory>${basedir}/target/generated-sources/java</generateDirectory>
+							<clearOutputDir>false</clearOutputDir>
+							<extensions>true</extensions>
+							<bindingDirectory>${basedir}/src/main/resources</bindingDirectory>
+							<target>2.0</target>
+							<encoding>cp1252</encoding>
 				        </configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<outputDirectory>${basedir}/target/generated-sources/java</outputDirectory>
-					<clearOutputDir>false</clearOutputDir>
-					<extension>true</extension>
-					<target>2.0</target>
-					<encoding>Cp1252</encoding>
-				</configuration>
 			</plugin>
 			  -->       
            <plugin>                                                         

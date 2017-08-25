@@ -31,11 +31,23 @@ import javax.xml.bind.annotation.XmlType;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="PredicateOperatorName">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="LIKE"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
+ * &lt;simpleType name="PredicateOperatorName"&gt;
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
+ *     &lt;enumeration value="LIKE"/&gt;
+ *     &lt;enumeration value="IN"/&gt;
+ *     &lt;enumeration value="NOT_IN"/&gt;
+ *     &lt;enumeration value="EXISTS"/&gt;
+ *     &lt;enumeration value="NOT_EXISTS"/&gt;
+ *     &lt;enumeration value="BETWEEN"/&gt;
+ *     &lt;enumeration value="SIMILAR"/&gt;
+ *     &lt;enumeration value="NULL"/&gt;
+ *     &lt;enumeration value="UNIQUE"/&gt;
+ *     &lt;enumeration value="MATCH"/&gt;
+ *     &lt;enumeration value="DISTINCT"/&gt;
+ *     &lt;enumeration value="CONTAINS"/&gt;
+ *     &lt;enumeration value="APP_OTHER_NAME"/&gt;
+ *   &lt;/restriction&gt;
+ * &lt;/simpleType&gt;
  * </pre>
  * 
  */
@@ -54,8 +66,8 @@ public enum PredicateOperatorName {
     UNIQUE,
     MATCH,
     DISTINCT,
-    CONTAINS;
-     
+    CONTAINS,
+    APP_OTHER_NAME;
 
     public String value() {
         return name();

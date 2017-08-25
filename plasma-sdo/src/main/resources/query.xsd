@@ -642,6 +642,7 @@
 			<xsd:enumeration value="MATCH"/>
 			<xsd:enumeration value="DISTINCT"/>
 			<xsd:enumeration value="CONTAINS"/>
+			<xsd:enumeration value="APP_OTHER_NAME"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="WildcardPropertyType">
@@ -660,26 +661,74 @@
 	</xsd:simpleType>
 	<xsd:simpleType name="FunctionName">
 		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="min"/>
-			<xsd:enumeration value="max"/>
-			<xsd:enumeration value="avg"/>
-			<xsd:enumeration value="sum"/>
+            <!-- aggregates -->
+			<xsd:enumeration value="avg"><xsd:annotation><xsd:documentation>returns the average of the values in a group. Null values are ignored</xsd:documentation></xsd:annotation></xsd:enumeration>
+			<xsd:enumeration value="count"><xsd:annotation><xsd:documentation>returns the number of items in a group</xsd:documentation></xsd:annotation></xsd:enumeration>
+			<xsd:enumeration value="max"><xsd:annotation><xsd:documentation>returns the maximum value in the expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+			<xsd:enumeration value="min"><xsd:annotation><xsd:documentation>returns the minimum value in the expression</xsd:documentation></xsd:annotation></xsd:enumeration>
 			
-            <xsd:enumeration value="abs"/>
-            <xsd:enumeration value="ceiling"/>
-            <xsd:enumeration value="floor"/>
-            <xsd:enumeration value="round"/>
+            <!-- stats -->
+			<xsd:enumeration value="sdtdev"><xsd:annotation><xsd:documentation>returns the statistical standard deviation of all values in the specified expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+			<xsd:enumeration value="sum"><xsd:annotation><xsd:documentation>returns the sum of all the values</xsd:documentation></xsd:annotation></xsd:enumeration>
+			<xsd:enumeration value="var"><xsd:annotation><xsd:documentation>returns the statistical variance of all values in the specified expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+
+            <!-- conversion -->
+			<xsd:enumeration value="cast"><xsd:annotation><xsd:documentation>returns an expression of one data type to another</xsd:documentation></xsd:annotation></xsd:enumeration>
+			<xsd:enumeration value="convert"><xsd:annotation><xsd:documentation>returns an expression of one data type to another</xsd:documentation></xsd:annotation></xsd:enumeration>
+			
+             <!-- mathmatical -->
+            <xsd:enumeration value="abs"><xsd:annotation><xsd:documentation>returns mathematical function that returns the absolute (positive) value of the specified numeric expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="acos"><xsd:annotation><xsd:documentation>returns mathematical function that returns the angle, in radians, whose cosine is the specified float expression</xsd:documentation></xsd:annotation></xsd:enumeration>         
+            <xsd:enumeration value="asin"><xsd:annotation><xsd:documentation>returns the angle, in radians, whose sine is the specified float expression. This is also called arcsine</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="atan"><xsd:annotation><xsd:documentation>returns the angle in radians whose tangent is a specified float expression. This is also called arctangent</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="ceiling"><xsd:annotation><xsd:documentation>returns the smallest integer greater than, or equal to, the specified numeric expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="cos"><xsd:annotation><xsd:documentation>returns a mathematical function that returns the trigonometric cosine of the specified angle, in radians, in the specified expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="cot"><xsd:annotation><xsd:documentation>returns mathematical function that returns the trigonometric cotangent of the specified angle, in radians, in the specified float expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="exp"><xsd:annotation><xsd:documentation>returns the exponential value of the specified float expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="floor"><xsd:annotation><xsd:documentation>returns the largest integer less than or equal to the specified numeric expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="log"><xsd:annotation><xsd:documentation>returns the natural logarithm of the specified float expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="log10"><xsd:annotation><xsd:documentation>returns the base-10 logarithm of the specified float expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="pi"><xsd:annotation><xsd:documentation>returns the constant value of PI</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="pow"><xsd:annotation><xsd:documentation>returns the value of the specified expression to the specified power</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="round"><xsd:annotation><xsd:documentation>returns a numeric value, rounded to the specified length or precision</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="sin"><xsd:annotation><xsd:documentation>returns the trigonometric sine of the specified angle, in radians, and in an approximate numeric, float, expression</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="sqrt"><xsd:annotation><xsd:documentation>returns the square root of the specified float value</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="square"><xsd:annotation><xsd:documentation>returns the square of the specified float value</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="tan"><xsd:annotation><xsd:documentation>returns the tangent of the input expression</xsd:documentation></xsd:annotation></xsd:enumeration>
             
-            <xsd:enumeration value="substringBefore"/>
-            <xsd:enumeration value="substringAfter"/>
-            <xsd:enumeration value="normalizeSpace"/>
-            <xsd:enumeration value="upperCase"/>
-            <xsd:enumeration value="lowerCase"/>
+            <!-- metadata -->
+            <xsd:enumeration value="meta_col_precision"><xsd:annotation><xsd:documentation>returns the column precision</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="meta_col_scale"><xsd:annotation><xsd:documentation>returns the column scale</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="meta_name"><xsd:annotation><xsd:documentation>returns the column, table, schema or database name</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="meta_physical_name"><xsd:annotation><xsd:documentation>returns the column, table, schema or database physical name alias</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="meta_business_name"><xsd:annotation><xsd:documentation>returns the column, table, schema or database business name alias</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="meta_local_name"><xsd:annotation><xsd:documentation>returns the column, table, schema or database business name alias</xsd:documentation></xsd:annotation></xsd:enumeration>
+
+            <!-- ranking -->
+            <xsd:enumeration value="rank"><xsd:annotation><xsd:documentation>returns the rank of each row within the partition of a result set</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="row_number"><xsd:annotation><xsd:documentation>numbers the output of a result set. More specifically, returns the sequential number of a row within a partition of a result set, starting at 1 for the first row in each partition</xsd:documentation></xsd:annotation></xsd:enumeration>
             
-            <xsd:enumeration value="yearFromDate"/>
-            <xsd:enumeration value="monthFromDate"/>
-            <xsd:enumeration value="dayFromDate"/>
-            <xsd:enumeration value="timezoneFromDate"/>
+            <!-- security -->
+            <xsd:enumeration value="user"><xsd:annotation><xsd:documentation>returns the system-supplied value for the database user name of the current user</xsd:documentation></xsd:annotation></xsd:enumeration>
+            
+            <!-- string -->
+            <xsd:enumeration value="substringBefore"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="substringAfter"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="normalizeSpace"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="upperCase"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="lowerCase"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            
+            <!-- datatime -->
+            <xsd:enumeration value="yearFromDate"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="monthFromDate"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="dayFromDate"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="timezoneFromDate"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            
+            <!-- full text -->
+            <xsd:enumeration value="offsets"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="relevance"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="score"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            
             
 		</xsd:restriction>
 	</xsd:simpleType>

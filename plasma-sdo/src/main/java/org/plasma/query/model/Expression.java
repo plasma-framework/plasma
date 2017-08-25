@@ -805,7 +805,7 @@ public class Expression implements org.plasma.query.Expression {
     */
     public static Expression like(Property prop, Literal literal)
     {
-        return new Expression(prop, new PredicateOperator(), literal);
+        return new Expression(prop, new PredicateOperator(PredicateOperatorName.LIKE), literal);
     }
 
     /**

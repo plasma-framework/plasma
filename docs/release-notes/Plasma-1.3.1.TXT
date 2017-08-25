@@ -1,0 +1,23 @@
+Release Notes
+
+Plasma 1.3.1 Release Notes
+Plasma 1.3.1 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/terrameta/plasma/issues.
+
+
+Major Changes
+ 
+Bugs
+[Issue #81] - Remove Uses of Default Constructor in PredicateOperator
+
+Improvements
+[Issue #82] - Add Scalar Function Names 
+ 
+New Features
+Tasks
+Wish
+
+

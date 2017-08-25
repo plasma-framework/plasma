@@ -39,6 +39,9 @@ public class PredicateOperator implements org.plasma.query.Operator {
     @XmlValue
     protected PredicateOperatorName value;
 
+    /** 
+     * Default constructor for marshalling only !!
+     */
     public PredicateOperator() {
         super();
     }  
