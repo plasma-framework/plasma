@@ -1,0 +1,22 @@
+Release Notes
+
+Plasma 1.3.2 Release Notes
+Plasma 1.3.2 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/terrameta/plasma/issues.
+
+
+Major Changes
+ 
+Bugs
+[Issue #83] - Add Function Names to Qualified Name for Query Property 
+
+Improvements
+ 
+New Features
+Tasks
+Wish
+
+

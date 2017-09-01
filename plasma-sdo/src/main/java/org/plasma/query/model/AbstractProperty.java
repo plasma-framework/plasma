@@ -59,6 +59,18 @@ public abstract class AbstractProperty implements Comparable<AbstractProperty> {
     public void setUniqueId(String uniqueId) {
 		this.uniqueId = uniqueId;
 	}
+    
+    /**
+     * A type unique id, such as a repository UUID as string or
+     * xmi-id from UML source. 
+     */
+    protected transient String typeUniqueId;
+    public String getTypeUniqueId() {
+    	return this.typeUniqueId;
+    }
+    public void setTypeUniqueId(String uniqueId) {
+		this.typeUniqueId = uniqueId;
+	}
 
 	/**
      * Gets the value of the path property.

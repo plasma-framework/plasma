@@ -538,10 +538,27 @@ public class Property extends AbstractProperty
     public String getQualifiedName() {
     	if (qualifiedName == null) {
     	    StringBuilder buf = new StringBuilder();
+    	    if (this.getFunctions().size() > 0) {
+    	    	for (Function func : this.getFunctions()) {
+    	    		buf.append(func.getName());
+    	    		buf.append("(");
+    	    		int i = 0;
+    	    		for (FunctionArg arg : func.getFunctionArgs()) {
+    	    			if (i > 0)
+    	    				buf.append(",");
+    	    			buf.append("[");
+    	    			buf.append(arg.getName());
+    	    			buf.append("=");
+    	    			buf.append(arg.getValue());
+    	    			buf.append("]");
+    	    			i++;
+    	    		}
+    	    	}
+    	    }
     	    if (this.alias != null) {
     	    	buf.append("(");
     	    	buf.append(this.alias);
-    	    	buf.append("}");
+    	    	buf.append(")");
     	    }
     	    if (this.path != null) {
     	    	for (PathNode node : this.path.getPathNodes()) {
@@ -550,6 +567,15 @@ public class Property extends AbstractProperty
     	    	}
     	    }
     	    buf.append(this.name);
+    	    if (this.getFunctions().size() > 0) {
+    	    	for (Function func : this.getFunctions()) {
+    	    		buf.append(")");
+    	    	}
+    	    }
+    	    if (this.getAs() != null) {
+    	    	buf.append(" ");
+    	    	buf.append(this.getAs().getName());
+    	    }
     	    qualifiedName = buf.toString();
     	}
     	return qualifiedName;
@@ -583,5 +609,9 @@ public class Property extends AbstractProperty
 	@Override
 	public int compareTo(AbstractProperty o) {
 		return getQualifiedName().compareTo(o.getQualifiedName());
+	}
+	
+	public String toString() {
+		return this.getQualifiedName();
 	}
 }
