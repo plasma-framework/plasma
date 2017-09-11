@@ -35,7 +35,7 @@
                  
     <NamespaceMapping pathmap="pathmap://PLASMA_PROFILES/PlasmaSDO.profile_v1_1.uml" 
         domain="ecore" uri="http:///schemas/PlasmaSDOProfile" 
-        target="http:///schemas/PlasmaSDOProfile/_SyDpAJZEEeeUmordTzBftA/3" /> 
+        target="http:///schemas/PlasmaSDOProfile/_1OeaAJctEee5huZM-G1W5Q" /> 
 
     <NamespaceMapping pathmap="pathmap://PLASMA_LIBRARIES/PlasmaSDODataTypes.uml" 
         domain="ecore" uri="http:///schemas/PlasmaSDODataTypes" 
@@ -79,7 +79,9 @@
     <Exemption type="requiredProperty" domain="uml" classifierName="Extension" propertyName="relatedElement"/>    
     <Exemption type="requiredProperty" domain="uml" classifierName="Association" propertyName="endType"/> 
     <!-- For eCore Profile documents, this value is not used -->   
-    <Exemption type="requiredProperty" domain="uml" classifierName="ElementImport" propertyName="importingNamespace"/>    
+    <Exemption type="requiredProperty" domain="uml" classifierName="ElementImport" propertyName="importingNamespace"/>  
+    <Exemption type="requiredProperty" domain="uml" classifierName="ElementImport" propertyName="visibility"/>  
+    
 
     <!-- fUML Property (superclass of ExtensionEnd) does not support aggregation attribute -->
     <Exemption type="undefinedProperty" domain="uml" classifierName="ExtensionEnd" propertyName="aggregation"/>    

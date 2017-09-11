@@ -20,8 +20,8 @@
          ( !!! be careful !!!, Papyrus appends another entire contents block for every profile change) 
     -->
     <Artifact urn="PlasmaSDO.profile_v1_1.uml" 
-        id="_NlmngCJUEeSXvPZh3aumVA" ecoreId="_SyE3IJZEEeeUmordTzBftA" version="1.1"
-        namespaceUri="http:///schemas/PlasmaSDOProfile/_SyDpAJZEEeeUmordTzBftA/3"
+        id="_NlmngCJUEeSXvPZh3aumVA" ecoreId="_1OeaAJctEee5huZM-G1W5Q" version="1.1"
+        namespaceUri="http:///schemas/PlasmaSDOProfile/_1OavoJctEee5huZM-G1W5Q/4"
         umlNamespaceUri="http://www.eclipse.org/uml2/5.0.0/UML" umlVersion="5.0.0" 
         xmiNamespaceUri="http://www.omg.org/spec/XMI/20131001" xmiVersion="20131001"
         ecoreNamespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
