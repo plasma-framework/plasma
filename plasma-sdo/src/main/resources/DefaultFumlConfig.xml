@@ -32,14 +32,10 @@
     <NamespaceMapping pathmap="pathmap://UML_METAMODELS/UML.metamodel.uml" 
         domain="uml" uri="http://www.omg.org/spec/UML/20110701" 
         target="http://www.omg.org/spec/UML/20110701/UML.xmi" /> 
-         
-    <NamespaceMapping pathmap="pathmap://PLASMA_PROFILES/PlasmaSDO.profile.uml" 
-        domain="ecore" uri="http:///schemas/PlasmaSDOProfile" 
-        target="http:///schemas/PlasmaSDOProfile/_Ta1lIMTtEeSkYpwPkZ5I3w/0" /> 
-        
+                 
     <NamespaceMapping pathmap="pathmap://PLASMA_PROFILES/PlasmaSDO.profile_v1_1.uml" 
         domain="ecore" uri="http:///schemas/PlasmaSDOProfile" 
-        target="http:///schemas/PlasmaSDOProfile/_Ta1lIMTtEeSkYpwPkZ5I3w/0" /> 
+        target="http:///schemas/PlasmaSDOProfile/_SyDpAJZEEeeUmordTzBftA/3" /> 
 
     <NamespaceMapping pathmap="pathmap://PLASMA_LIBRARIES/PlasmaSDODataTypes.uml" 
         domain="ecore" uri="http:///schemas/PlasmaSDODataTypes" 
