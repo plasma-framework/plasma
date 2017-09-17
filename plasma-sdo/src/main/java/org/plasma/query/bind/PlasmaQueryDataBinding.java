@@ -41,75 +41,74 @@ import org.xml.sax.SAXException;
 
 public class PlasmaQueryDataBinding implements DataBinding {
 
-    private static Log log = LogFactory.getLog(PlasmaQueryDataBinding.class);
-    public static String FILENAME_SCHEMA_CHAIN_ROOT = "query.xsd";
+  private static Log log = LogFactory.getLog(PlasmaQueryDataBinding.class);
+  public static String FILENAME_SCHEMA_CHAIN_ROOT = "query.xsd";
 
-    // just classes in the same package where can find the above respective
-    // schema files via Class.getResource*
-    public static Class<?> RESOURCE_CLASS = Query.class;
+  // just classes in the same package where can find the above respective
+  // schema files via Class.getResource*
+  public static Class<?> RESOURCE_CLASS = Query.class;
 
-    private static ValidatingUnmarshaler validatingUnmarshaler;
+  private static ValidatingUnmarshaler validatingUnmarshaler;
 
-    public static Class<?>[] FACTORIES = { org.plasma.query.model.ObjectFactory.class, };
+  public static Class<?>[] FACTORIES = { org.plasma.query.model.ObjectFactory.class, };
 
-    @SuppressWarnings("unused")
-    private PlasmaQueryDataBinding() {
-    }
+  @SuppressWarnings("unused")
+  private PlasmaQueryDataBinding() {
+  }
 
-    public PlasmaQueryDataBinding(BindingValidationEventHandler validationEventHandler)
-            throws JAXBException, SAXException {
-    	if (validatingUnmarshaler == null) {
-	        log.info("loading schema chain...");
-	        URL url = RESOURCE_CLASS.getResource(FILENAME_SCHEMA_CHAIN_ROOT);
-	        if (url == null)
-	        	url = RESOURCE_CLASS.getClassLoader().getResource(FILENAME_SCHEMA_CHAIN_ROOT);
-	        if (url == null)
-	        	throw new IllegalArgumentException("could not find schema root file '"
-	        		+ FILENAME_SCHEMA_CHAIN_ROOT + "' on classpath");
-	        validatingUnmarshaler = new ValidatingUnmarshaler(url, 
-	        		JAXBContext.newInstance(FACTORIES),
-	                validationEventHandler);
-    	}
+  public PlasmaQueryDataBinding(BindingValidationEventHandler validationEventHandler)
+      throws JAXBException, SAXException {
+    if (validatingUnmarshaler == null) {
+      log.info("loading schema chain...");
+      URL url = RESOURCE_CLASS.getResource(FILENAME_SCHEMA_CHAIN_ROOT);
+      if (url == null)
+        url = RESOURCE_CLASS.getClassLoader().getResource(FILENAME_SCHEMA_CHAIN_ROOT);
+      if (url == null)
+        throw new IllegalArgumentException("could not find schema root file '"
+            + FILENAME_SCHEMA_CHAIN_ROOT + "' on classpath");
+      validatingUnmarshaler = new ValidatingUnmarshaler(url, JAXBContext.newInstance(FACTORIES),
+          validationEventHandler);
     }
+  }
 
-    public Class<?>[] getObjectFactories() {
-        return FACTORIES;
-    }
+  public Class<?>[] getObjectFactories() {
+    return FACTORIES;
+  }
 
-    public String marshal(Object root) throws JAXBException {
-        return validatingUnmarshaler.marshal(root);
-    }
+  public String marshal(Object root) throws JAXBException {
+    return validatingUnmarshaler.marshal(root);
+  }
 
-    public void marshal(Object root, OutputStream stream) throws JAXBException {
-        validatingUnmarshaler.marshal(root, stream);
-    }
-    
-    public Object unmarshal(String xml) throws JAXBException {
-        return validatingUnmarshaler.unmarshal(xml);
-    }
+  public void marshal(Object root, OutputStream stream) throws JAXBException {
+    validatingUnmarshaler.marshal(root, stream);
+  }
 
-    public Object unmarshal(InputStream stream) throws JAXBException {
-        return validatingUnmarshaler.unmarshal(stream);
-    }
-    
-    public Object unmarshal(Reader reader) throws JAXBException {
-        return validatingUnmarshaler.unmarshal(reader);
-    }
-    
-    public Object unmarshal(Source source) throws JAXBException {
-        return validatingUnmarshaler.unmarshal(source);
-    }
+  public Object unmarshal(String xml) throws JAXBException {
+    return validatingUnmarshaler.unmarshal(xml);
+  }
 
-    public Object validate(String xml) throws JAXBException {
-        return validatingUnmarshaler.validate(xml);
-    }
+  public Object unmarshal(InputStream stream) throws JAXBException {
+    return validatingUnmarshaler.unmarshal(stream);
+  }
 
-    public Object validate(InputStream xml) throws JAXBException, UnmarshalException {
-        return validatingUnmarshaler.validate(xml);
-    }
+  public Object unmarshal(Reader reader) throws JAXBException {
+    return validatingUnmarshaler.unmarshal(reader);
+  }
 
-    public BindingValidationEventHandler getValidationEventHandler() throws JAXBException {
-        return validatingUnmarshaler.getValidationEventHandler();
-    }
+  public Object unmarshal(Source source) throws JAXBException {
+    return validatingUnmarshaler.unmarshal(source);
+  }
+
+  public Object validate(String xml) throws JAXBException {
+    return validatingUnmarshaler.validate(xml);
+  }
+
+  public Object validate(InputStream xml) throws JAXBException, UnmarshalException {
+    return validatingUnmarshaler.validate(xml);
+  }
+
+  public BindingValidationEventHandler getValidationEventHandler() throws JAXBException {
+    return validatingUnmarshaler.getValidationEventHandler();
+  }
 
 }

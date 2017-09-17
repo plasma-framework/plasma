@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.helper;
 
 import java.io.ByteArrayInputStream;
@@ -62,276 +57,280 @@ import org.xml.sax.SAXException;
 import commonj.sdo.Type;
 
 public class PlasmaQueryHelper {
-    private static Log log = LogFactory.getLog(
-    		PlasmaQueryHelper.class); 
+  private static Log log = LogFactory.getLog(PlasmaQueryHelper.class);
 
-    static public volatile PlasmaQueryHelper INSTANCE = initializeInstance();
+  static public volatile PlasmaQueryHelper INSTANCE = initializeInstance();
 
-    private PlasmaQueryHelper() {       
-    }
-     
-    private static synchronized PlasmaQueryHelper initializeInstance()
-    {
-        if (INSTANCE == null)
-            INSTANCE = new PlasmaQueryHelper();
-        return INSTANCE;
-    }
-    
-    /**
-     * Define a Query as Types.
-     * The Types are available through TypeHelper and DataGraph getType() methods.
-     * Same as define(new StringReader(xsd), null)
-     * @param queryXML the XML Query.
-     * @param supplierUri the URI for the SDO namespace which supplied the types used in the given query 
-     * @return the defined Types.
-     * @throws IllegalArgumentException if the Types could not be defined.
-     */
-    public List<Type> define(String queryXML, String supplierUri) {
- 	   if (log.isDebugEnabled())
-		   log.debug("unmarshaling Query");
- 	   Query query = unmarshalQuery(queryXML);
-	   
-       return define(query, null, "tns", supplierUri);
-    }
+  private PlasmaQueryHelper() {
+  }
 
-    /**
-     * Define a Query as Types.
-     * The Types are available through TypeHelper and DataGraph getType() methods.
-     * @param xsdReader reader to an XML Schema.
-     * @param targetNamespaceURI the URI of the types to be defined
-     * @param supplierUri the URI for the SDO namespace which supplied the types used in the given query 
-     * @return the defined Types.
-     * @throws IllegalArgumentException if the Types could not be defined.
-     */
-    public List<Type> define(Reader queryReader, 
-    		String targetNamespaceURI, String supplierUri) {
-  	   if (log.isDebugEnabled())
-		   log.debug("unmarshaling Query");
-  	   Query query = unmarshalQuery(queryReader);
-	   
-       return define(query, targetNamespaceURI, "tns", supplierUri);
-    }
+  private static synchronized PlasmaQueryHelper initializeInstance() {
+    if (INSTANCE == null)
+      INSTANCE = new PlasmaQueryHelper();
+    return INSTANCE;
+  }
 
-    /**
-     * Define a Query as Types.
-     * The Types are available through TypeHelper and DataGraph getType() methods.
-     * @param queryInputStream input stream to a Query.
-     * @param targetNamespaceURI the URI of the types to be defined
-     * @param supplierUri the URI for the SDO namespace which supplied the types used in the given query 
-     * @return the defined Types.
-     * @throws IllegalArgumentException if the Types could not be defined.
-     */
-    public List<Type> define(InputStream queryInputStream,
-    		String targetNamespaceURI, String supplierUri) {
-	   
-	   if (log.isDebugEnabled())
-		   log.debug("unmarshaling schema");
-	   Query query = unmarshalQuery(queryInputStream);
-	   
-       return define(query, targetNamespaceURI, "tns",supplierUri);
-    }
+  /**
+   * Define a Query as Types. The Types are available through TypeHelper and
+   * DataGraph getType() methods. Same as define(new StringReader(xsd), null)
+   * 
+   * @param queryXML
+   *          the XML Query.
+   * @param supplierUri
+   *          the URI for the SDO namespace which supplied the types used in the
+   *          given query
+   * @return the defined Types.
+   * @throws IllegalArgumentException
+   *           if the Types could not be defined.
+   */
+  public List<Type> define(String queryXML, String supplierUri) {
+    if (log.isDebugEnabled())
+      log.debug("unmarshaling Query");
+    Query query = unmarshalQuery(queryXML);
 
-    /**
-     * Define a Query as Types.
-     * The Types are available through TypeHelper and DataGraph getType() methods.
-     * @param query the input Query.
-     * @param targetNamespaceURI the URI of the types to be defined
-     * @param supplierUri the URI for the SDO namespace which supplied the types used in the given query 
-     * @return the defined Types.
-     * @throws IllegalArgumentException if the Types could not be defined.
-     */
-    public List<Type> define(Query query, 
-    		String targetNamespaceURI, String targetNamespacePrefix,
-    		String supplierUri) {
+    return define(query, null, "tns", supplierUri);
+  }
 
-    	String outputLocation = "."; // FIXME
-    	
-        MetamodelAssembler stagingAssembler = 
-    		new MetamodelAssembler(query, targetNamespaceURI,
-        	    targetNamespacePrefix);       
- 	    Model stagingModel = stagingAssembler.getModel();
-        if (log.isDebugEnabled())
-		   log.debug("provisioning UML/XMI model");
- 	    if (log.isDebugEnabled())
-		   writeStagingModel(stagingModel,  
-				   outputLocation, this.getClass().getSimpleName()
-	    			+ "-" + query.getName() + "-model.xml");
- 	    ProvisioningModel helper = 
-		   new ModelAdapter(stagingModel);
-	   
-	    UMLModelAssembler assembler = new MDModelAssembler(stagingModel, 
-			   targetNamespaceURI, targetNamespacePrefix);
-	    String xmi = assembler.getContent();
-	    if (log.isDebugEnabled()) {
-		   File xmiDebugFile = null;
-		   try {
-			     if (outputLocation != null)
-			    	 xmiDebugFile = new File(".", 
-			    			 this.getClass().getSimpleName()+"-" + query.getName() + "-model.mdxml");
-			     else
-			    	 xmiDebugFile =File.createTempFile(query.getName(), "mdxml");
-		   } catch (IOException e1) {
-		   }			   
-		   log.debug("Writing UML/XMI to: " + xmiDebugFile.getAbsolutePath());
-		   try {
-			    FileOutputStream os = new FileOutputStream(xmiDebugFile);
-			    assembler.getContent(os);
-		   } catch (FileNotFoundException e) {
-		   }
-	   }
-	   
-	   ByteArrayInputStream stream = new ByteArrayInputStream(
-			   xmi.getBytes());
-	   
-	   if (log.isDebugEnabled())
-		   log.debug("loading UML/XMI model");
-       Fuml.load(new ResourceArtifact(
-    		   targetNamespaceURI, 
-    		   targetNamespaceURI, 
-               stream)); 
-   	
-       // ok we dynamically create a new SDO namespace
-       // but now what about linkages to DAS specific
-       // namespace configs. Can/should these go away
-       // somehow ??
-       if (supplierUri == null) {
-           PlasmaConfig.getInstance().addDynamicSDONamespace(
-    		   targetNamespaceURI, null);
-       }
-       else {
-           PlasmaConfig.getInstance().addDynamicSDONamespace(
-        		   targetNamespaceURI, supplierUri);
-       }
-       
-       List<Class> entities = stagingAssembler.getModel().getClazzs();
-	   List<Type> result = new ArrayList<Type>(entities.size());
-       for (Class cls : entities) {
-    	   result.add(PlasmaTypeHelper.INSTANCE.getType(
-    			   cls.getUri(), cls.getName()));
-       }
-       
-       return result;
-    	
+  /**
+   * Define a Query as Types. The Types are available through TypeHelper and
+   * DataGraph getType() methods.
+   * 
+   * @param xsdReader
+   *          reader to an XML Schema.
+   * @param targetNamespaceURI
+   *          the URI of the types to be defined
+   * @param supplierUri
+   *          the URI for the SDO namespace which supplied the types used in the
+   *          given query
+   * @return the defined Types.
+   * @throws IllegalArgumentException
+   *           if the Types could not be defined.
+   */
+  public List<Type> define(Reader queryReader, String targetNamespaceURI, String supplierUri) {
+    if (log.isDebugEnabled())
+      log.debug("unmarshaling Query");
+    Query query = unmarshalQuery(queryReader);
+
+    return define(query, targetNamespaceURI, "tns", supplierUri);
+  }
+
+  /**
+   * Define a Query as Types. The Types are available through TypeHelper and
+   * DataGraph getType() methods.
+   * 
+   * @param queryInputStream
+   *          input stream to a Query.
+   * @param targetNamespaceURI
+   *          the URI of the types to be defined
+   * @param supplierUri
+   *          the URI for the SDO namespace which supplied the types used in the
+   *          given query
+   * @return the defined Types.
+   * @throws IllegalArgumentException
+   *           if the Types could not be defined.
+   */
+  public List<Type> define(InputStream queryInputStream, String targetNamespaceURI,
+      String supplierUri) {
+
+    if (log.isDebugEnabled())
+      log.debug("unmarshaling schema");
+    Query query = unmarshalQuery(queryInputStream);
+
+    return define(query, targetNamespaceURI, "tns", supplierUri);
+  }
+
+  /**
+   * Define a Query as Types. The Types are available through TypeHelper and
+   * DataGraph getType() methods.
+   * 
+   * @param query
+   *          the input Query.
+   * @param targetNamespaceURI
+   *          the URI of the types to be defined
+   * @param supplierUri
+   *          the URI for the SDO namespace which supplied the types used in the
+   *          given query
+   * @return the defined Types.
+   * @throws IllegalArgumentException
+   *           if the Types could not be defined.
+   */
+  public List<Type> define(Query query, String targetNamespaceURI, String targetNamespacePrefix,
+      String supplierUri) {
+
+    String outputLocation = "."; // FIXME
+
+    MetamodelAssembler stagingAssembler = new MetamodelAssembler(query, targetNamespaceURI,
+        targetNamespacePrefix);
+    Model stagingModel = stagingAssembler.getModel();
+    if (log.isDebugEnabled())
+      log.debug("provisioning UML/XMI model");
+    if (log.isDebugEnabled())
+      writeStagingModel(stagingModel, outputLocation,
+          this.getClass().getSimpleName() + "-" + query.getName() + "-model.xml");
+    ProvisioningModel helper = new ModelAdapter(stagingModel);
+
+    UMLModelAssembler assembler = new MDModelAssembler(stagingModel, targetNamespaceURI,
+        targetNamespacePrefix);
+    String xmi = assembler.getContent();
+    if (log.isDebugEnabled()) {
+      File xmiDebugFile = null;
+      try {
+        if (outputLocation != null)
+          xmiDebugFile = new File(".", this.getClass().getSimpleName() + "-" + query.getName()
+              + "-model.mdxml");
+        else
+          xmiDebugFile = File.createTempFile(query.getName(), "mdxml");
+      } catch (IOException e1) {
+      }
+      log.debug("Writing UML/XMI to: " + xmiDebugFile.getAbsolutePath());
+      try {
+        FileOutputStream os = new FileOutputStream(xmiDebugFile);
+        assembler.getContent(os);
+      } catch (FileNotFoundException e) {
+      }
     }
 
-    private void writeStagingModel(Model stagingModel, 
-    		String location, String fileName) {
-		   try {
-			    BindingValidationEventHandler debugHandler = new BindingValidationEventHandler() {
-					public int getErrorCount() {
-						return 0;
-					}
-					public boolean handleEvent(ValidationEvent ve) {
-				        ValidationEventLocator vel = ve.getLocator();
-				        
-				        String message = "Line:Col:Offset[" + vel.getLineNumber() + ":" + vel.getColumnNumber() + ":" 
-				            + String.valueOf(vel.getOffset())
-				            + "] - " + ve.getMessage();
-				        
-				        switch (ve.getSeverity()) {
-				        default:
-				            log.debug(message);
-				        }
-				        return true;
-					}			    	
-			    };
-			    MetamodelDataBinding binding = 
-				   new MetamodelDataBinding(debugHandler);
-			    String xml = binding.marshal(stagingModel);
-			    binding.validate(xml);
-			    
-			    File provDebugFile = null;
-			    if (location != null)
-			    	provDebugFile = new File(location, 
-			    			fileName);
-			    else
-			    	provDebugFile = File.createTempFile(fileName, "");
-			    FileOutputStream provDebugos = new FileOutputStream(provDebugFile);
-				log.debug("Writing provisioning model to: " + provDebugFile.getAbsolutePath());
-			    binding.marshal(stagingModel, provDebugos);
-			} catch (JAXBException e) {
-				log.debug(e.getMessage(), e);
-			} catch (SAXException e) {
-				log.debug(e.getMessage(), e);
-			} catch (IOException e) {
-				log.debug(e.getMessage(), e);
-			}
-   	
+    ByteArrayInputStream stream = new ByteArrayInputStream(xmi.getBytes());
+
+    if (log.isDebugEnabled())
+      log.debug("loading UML/XMI model");
+    Fuml.load(new ResourceArtifact(targetNamespaceURI, targetNamespaceURI, stream));
+
+    // ok we dynamically create a new SDO namespace
+    // but now what about linkages to DAS specific
+    // namespace configs. Can/should these go away
+    // somehow ??
+    if (supplierUri == null) {
+      PlasmaConfig.getInstance().addDynamicSDONamespace(targetNamespaceURI, null);
+    } else {
+      PlasmaConfig.getInstance().addDynamicSDONamespace(targetNamespaceURI, supplierUri);
     }
 
-    private void marshalQuery(Query schema, OutputStream stream) {
-        try {
-        	PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
-                    new DefaultValidationEventHandler());
-            
-            binding.marshal(schema, stream);
-        } catch (JAXBException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        } catch (SAXException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        }                     	
+    List<Class> entities = stagingAssembler.getModel().getClazzs();
+    List<Type> result = new ArrayList<Type>(entities.size());
+    for (Class cls : entities) {
+      result.add(PlasmaTypeHelper.INSTANCE.getType(cls.getUri(), cls.getName()));
     }
- 
-    private Query unmarshalQuery(InputStream stream) {
-        try {
-        	PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
-                    new DefaultValidationEventHandler());
-            return (Query)binding.unmarshal(stream);
-                        
-        } catch (JAXBException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        } catch (SAXException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        }                     	
+
+    return result;
+
+  }
+
+  private void writeStagingModel(Model stagingModel, String location, String fileName) {
+    try {
+      BindingValidationEventHandler debugHandler = new BindingValidationEventHandler() {
+        public int getErrorCount() {
+          return 0;
+        }
+
+        public boolean handleEvent(ValidationEvent ve) {
+          ValidationEventLocator vel = ve.getLocator();
+
+          String message = "Line:Col:Offset[" + vel.getLineNumber() + ":" + vel.getColumnNumber()
+              + ":" + String.valueOf(vel.getOffset()) + "] - " + ve.getMessage();
+
+          switch (ve.getSeverity()) {
+          default:
+            log.debug(message);
+          }
+          return true;
+        }
+      };
+      MetamodelDataBinding binding = new MetamodelDataBinding(debugHandler);
+      String xml = binding.marshal(stagingModel);
+      binding.validate(xml);
+
+      File provDebugFile = null;
+      if (location != null)
+        provDebugFile = new File(location, fileName);
+      else
+        provDebugFile = File.createTempFile(fileName, "");
+      FileOutputStream provDebugos = new FileOutputStream(provDebugFile);
+      log.debug("Writing provisioning model to: " + provDebugFile.getAbsolutePath());
+      binding.marshal(stagingModel, provDebugos);
+    } catch (JAXBException e) {
+      log.debug(e.getMessage(), e);
+    } catch (SAXException e) {
+      log.debug(e.getMessage(), e);
+    } catch (IOException e) {
+      log.debug(e.getMessage(), e);
     }
-    
-    private Query unmarshalQuery(String xml) {
-        try {
-        	PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
-                    new DefaultValidationEventHandler());
-            return (Query)binding.unmarshal(xml);
-                        
-        } catch (JAXBException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        } catch (SAXException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        }                     	
+
+  }
+
+  private void marshalQuery(Query schema, OutputStream stream) {
+    try {
+      PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
+          new DefaultValidationEventHandler());
+
+      binding.marshal(schema, stream);
+    } catch (JAXBException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
+    } catch (SAXException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
     }
-    
-    private Query unmarshalQuery(Reader reader) {
-        try {
-        	PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
-                    new DefaultValidationEventHandler());
-            return (Query)binding.unmarshal(reader);
-                        
-        } catch (JAXBException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        } catch (SAXException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        }                     	
+  }
+
+  private Query unmarshalQuery(InputStream stream) {
+    try {
+      PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
+          new DefaultValidationEventHandler());
+      return (Query) binding.unmarshal(stream);
+
+    } catch (JAXBException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
+    } catch (SAXException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
     }
-    
-    private Query unmarshalQuery(Source source) {
-        try {
-        	PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
-                    new DefaultValidationEventHandler());
-            return (Query)binding.unmarshal(source);
-                        
-        } catch (JAXBException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        } catch (SAXException e) {
-            log.error(e.getMessage(), e);
-            throw new PlasmaRuntimeException(e);
-        }                     	
+  }
+
+  private Query unmarshalQuery(String xml) {
+    try {
+      PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
+          new DefaultValidationEventHandler());
+      return (Query) binding.unmarshal(xml);
+
+    } catch (JAXBException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
+    } catch (SAXException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
     }
+  }
+
+  private Query unmarshalQuery(Reader reader) {
+    try {
+      PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
+          new DefaultValidationEventHandler());
+      return (Query) binding.unmarshal(reader);
+
+    } catch (JAXBException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
+    } catch (SAXException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
+    }
+  }
+
+  private Query unmarshalQuery(Source source) {
+    try {
+      PlasmaQueryDataBinding binding = new PlasmaQueryDataBinding(
+          new DefaultValidationEventHandler());
+      return (Query) binding.unmarshal(source);
+
+    } catch (JAXBException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
+    } catch (SAXException e) {
+      log.error(e.getMessage(), e);
+      throw new PlasmaRuntimeException(e);
+    }
+  }
 
 }

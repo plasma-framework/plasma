@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.query.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,77 +23,75 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.plasma.query.visitor.QueryVisitor;
 
-
 /**
- * <p>Java class for AbstractProperty complex type.
+ * <p>
+ * Java class for AbstractProperty complex type.
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "AbstractProperty", propOrder = {
-    "path"
-})
+@XmlType(name = "AbstractProperty", propOrder = { "path" })
 public abstract class AbstractProperty implements Comparable<AbstractProperty> {
 
-    @XmlElement(name = "Path", namespace = "")
-    protected Path path;
+  @XmlElement(name = "Path", namespace = "")
+  protected Path path;
 
-    /**
-     * A qualified name used for identity
-     */
-    protected transient String qualifiedName;
-    public abstract String getQualifiedName();
-    
-    /**
-     * A unique id, such as a repository UUID as string or
-     * xmi-id from UML source. 
-     */
-    protected transient String uniqueId;
-    public String getUniqueId() {
-    	return this.uniqueId;
-    }
-    public void setUniqueId(String uniqueId) {
-		this.uniqueId = uniqueId;
-	}
-    
-    /**
-     * A type unique id, such as a repository UUID as string or
-     * xmi-id from UML source. 
-     */
-    protected transient String typeUniqueId;
-    public String getTypeUniqueId() {
-    	return this.typeUniqueId;
-    }
-    public void setTypeUniqueId(String uniqueId) {
-		this.typeUniqueId = uniqueId;
-	}
+  /**
+   * A qualified name used for identity
+   */
+  protected transient String qualifiedName;
 
-	/**
-     * Gets the value of the path property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Path }
-     *     
-     */
-    public Path getPath() {
-        return path;
-    }
+  public abstract String getQualifiedName();
 
-    /**
-     * Sets the value of the path property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Path }
-     *     
-     */
-    public void setPath(Path value) {
-        this.path = value;
-    }
-    
-    public void accept(QueryVisitor visitor)
-    {
-        visitor.start(this);
-	    visitor.end(this);
-    }
+  /**
+   * A unique id, such as a repository UUID as string or xmi-id from UML source.
+   */
+  protected transient String uniqueId;
+
+  public String getUniqueId() {
+    return this.uniqueId;
+  }
+
+  public void setUniqueId(String uniqueId) {
+    this.uniqueId = uniqueId;
+  }
+
+  /**
+   * A type unique id, such as a repository UUID as string or xmi-id from UML
+   * source.
+   */
+  protected transient String typeUniqueId;
+
+  public String getTypeUniqueId() {
+    return this.typeUniqueId;
+  }
+
+  public void setTypeUniqueId(String uniqueId) {
+    this.typeUniqueId = uniqueId;
+  }
+
+  /**
+   * Gets the value of the path property.
+   * 
+   * @return possible object is {@link Path }
+   * 
+   */
+  public Path getPath() {
+    return path;
+  }
+
+  /**
+   * Sets the value of the path property.
+   * 
+   * @param value
+   *          allowed object is {@link Path }
+   * 
+   */
+  public void setPath(Path value) {
+    this.path = value;
+  }
+
+  public void accept(QueryVisitor visitor) {
+    visitor.start(this);
+    visitor.end(this);
+  }
 }

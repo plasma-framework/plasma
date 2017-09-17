@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo;
 
 import java.util.UUID;
@@ -29,107 +24,114 @@ import commonj.sdo.DataObject;
 /**
  * Implementation specific extensions to SDO {@link DataGraph data graph} API.
  * <p>
- * A data graph is used to package a graph of {@link DataObject data objects} along with their
- * metadata, that is, data describing the data.
- * A data graph also contains a {@link #getChangeSummary change summary} 
- * which is used to record changes made to the objects in the graph.
+ * A data graph is used to package a graph of {@link DataObject data objects}
+ * along with their metadata, that is, data describing the data. A data graph
+ * also contains a {@link #getChangeSummary change summary} which is used to
+ * record changes made to the objects in the graph.
  * </p>
  */
 public interface PlasmaDataGraph extends DataGraph {
 
-    /**
-     * Returns the UUID for this data graph, which is the same
-     * UUID used for the root Data Object.
-     * @return the UUID for this data graph, which is the same
-     * UUID used for the root Data Object.
-     */
-    public UUID getUUID();
-    
-    /**
-     * Returns the UUID for this data graph, which is the same
-     * UUID used for the root Data Object, as a 
-     * character string.
-     * @return the UUID for this data graph, which is the same
-     * UUID used for the root Data Object, as a 
-     * character string.
-     */
-    public String getUUIDAsString();
-    
-    /**
-     * Sets an object to be used and managed by client 
-     * {@link org.plasma.sdo.access.DataAccessService Data Access Services}
-     * as an identifier for a Data Graph. 
-     * @param id the identifier
-     */
-    public void setId(Object id);    
-    
-    /**
-     * Returns an object to be used and managed by client 
-     * {@link org.plasma.sdo.access.DataAccessService Data Access Services}
-     * as an identifier for a Data Graph. 
-     * @return the identifier
-     */
-    public Object getId();
+  /**
+   * Returns the UUID for this data graph, which is the same UUID used for the
+   * root Data Object.
+   * 
+   * @return the UUID for this data graph, which is the same UUID used for the
+   *         root Data Object.
+   */
+  public UUID getUUID();
 
-	
-    /**
-     * Detaches and returns the root {@link DataObject data object} of this data graph.
-     * @return the root data object.
-     * @see DataObject#getDataGraph
-     */
-    public DataObject removeRootObject();
+  /**
+   * Returns the UUID for this data graph, which is the same UUID used for the
+   * root Data Object, as a character string.
+   * 
+   * @return the UUID for this data graph, which is the same UUID used for the
+   *         root Data Object, as a character string.
+   */
+  public String getUUIDAsString();
 
-    
-    /**
-     * Calculates and returns the path to the given Data Object 
-     * relative to the Data Graph root. 
-     * @param dataObject the target Data Object
-     * @return the path to the given Data Object 
-     * relative to the Data Graph root.
-     */
-    public String getPath(DataObject dataObject);
-    
-    /**
-     * Begin breadth-first traversal of this DataGraph, the given
-     * visitor receiving "visit" events for each graph node traversed.  
-     * @param visitor the graph visitor receiving traversal events
-     * @see commonj.sdo.DataGraph
-     * @see commonj.sdo.DataObject
-     * @see PlasmaDataGraph 
-     * @see PlasmaDataObject 
-     * @see PlasmaDataGraphVisitor.visit()
-     */
-    public void accept(PlasmaDataGraphVisitor visitor);
+  /**
+   * Sets an object to be used and managed by client
+   * {@link org.plasma.sdo.access.DataAccessService Data Access Services} as an
+   * identifier for a Data Graph.
+   * 
+   * @param id
+   *          the identifier
+   */
+  public void setId(Object id);
 
-    /**
-     * Begin depth-first traversal of this DataGraph, the given
-     * visitor receiving "visit" events for each graph node traversed.  
-     * @param visitor the graph visitor receiving traversal events
-     * @see commonj.sdo.DataGraph
-     * @see commonj.sdo.DataObject
-     * @see PlasmaDataGraph 
-     * @see PlasmaDataObject 
-     * @see PlasmaDataGraphVisitor.visit()
-     */
-    public void acceptDepthFirst(PlasmaDataGraphVisitor visitor);
-    
-	/**
-	 * Begin breadth-first traversal of this DataGraph, the given 
-	 * visitor receiving various events for each graph
-	 * node traversed.
-	 * 
-	 * @param visitor
-	 *            the graph visitor receiving traversal events
-	 * @see commonj.sdo.DataGraph
-	 * @see commonj.sdo.DataObject
-	 * @see PlasmaDataGraph
-	 * @see PlasmaDataObject
-	 * @see PlasmaDataGraphEventVisitor.start()
-	 * @see PlasmaDataGraphEventVisitor.end()
-	 */
-	public void accept(PlasmaDataGraphEventVisitor visitor);
-	
-    public String dump();
+  /**
+   * Returns an object to be used and managed by client
+   * {@link org.plasma.sdo.access.DataAccessService Data Access Services} as an
+   * identifier for a Data Graph.
+   * 
+   * @return the identifier
+   */
+  public Object getId();
 
-    public String dumpDepthFirst();
+  /**
+   * Detaches and returns the root {@link DataObject data object} of this data
+   * graph.
+   * 
+   * @return the root data object.
+   * @see DataObject#getDataGraph
+   */
+  public DataObject removeRootObject();
+
+  /**
+   * Calculates and returns the path to the given Data Object relative to the
+   * Data Graph root.
+   * 
+   * @param dataObject
+   *          the target Data Object
+   * @return the path to the given Data Object relative to the Data Graph root.
+   */
+  public String getPath(DataObject dataObject);
+
+  /**
+   * Begin breadth-first traversal of this DataGraph, the given visitor
+   * receiving "visit" events for each graph node traversed.
+   * 
+   * @param visitor
+   *          the graph visitor receiving traversal events
+   * @see commonj.sdo.DataGraph
+   * @see commonj.sdo.DataObject
+   * @see PlasmaDataGraph
+   * @see PlasmaDataObject
+   * @see PlasmaDataGraphVisitor.visit()
+   */
+  public void accept(PlasmaDataGraphVisitor visitor);
+
+  /**
+   * Begin depth-first traversal of this DataGraph, the given visitor receiving
+   * "visit" events for each graph node traversed.
+   * 
+   * @param visitor
+   *          the graph visitor receiving traversal events
+   * @see commonj.sdo.DataGraph
+   * @see commonj.sdo.DataObject
+   * @see PlasmaDataGraph
+   * @see PlasmaDataObject
+   * @see PlasmaDataGraphVisitor.visit()
+   */
+  public void acceptDepthFirst(PlasmaDataGraphVisitor visitor);
+
+  /**
+   * Begin breadth-first traversal of this DataGraph, the given visitor
+   * receiving various events for each graph node traversed.
+   * 
+   * @param visitor
+   *          the graph visitor receiving traversal events
+   * @see commonj.sdo.DataGraph
+   * @see commonj.sdo.DataObject
+   * @see PlasmaDataGraph
+   * @see PlasmaDataObject
+   * @see PlasmaDataGraphEventVisitor.start()
+   * @see PlasmaDataGraphEventVisitor.end()
+   */
+  public void accept(PlasmaDataGraphEventVisitor visitor);
+
+  public String dump();
+
+  public String dumpDepthFirst();
 }

@@ -21,9 +21,6 @@
  */
 package org.plasma.sdo.provisioning.cli;
 
-
-
-
 import joptsimple.OptionException;
 import junit.framework.Test;
 
@@ -38,49 +35,40 @@ import org.plasma.provisioning.cli.SDOTool;
  * Tests for SDO tool
  */
 public class SDOToolTest extends PlasmaTest {
-    private static Log log = LogFactory.getLog(SDOToolTest.class);
-        
-    public static Test suite() {
-        return PlasmaTestSetup.newTestSetup(SDOToolTest.class);
-    }
-    
-    public void setUp() throws Exception {        
-        super.setUp();
-    }
-    
-    public void testNoOptions() throws Exception {
-    	String[] args = {
-	    	"-" + ProvisioningToolOption.silent.name(),
-    	};
-    	try { 
-    		SDOTool.main(args);
-    	    assertFalse(true);
-    	}
-    	catch (IllegalArgumentException e) {
-    	}
-    }
-    
-    public void testHelpOption() throws Exception {
-    	String[] args = {
-	    	"-" + ProvisioningToolOption.silent.name(),
-    		"-" + ProvisioningToolOption.help.name()
-    	};
- 	
-    	SDOTool.main(args);
-    }
-    
-    public void testUnknownOption() throws Exception {
-    	try {
-	    	String[] args = {
-	    		"-" + ProvisioningToolOption.silent.name(),
-	    		"-FOO" 
-	    	};
-	 	
-	    	SDOTool.main(args);
-		    assertFalse(true);
-    	}
-    	catch (OptionException e) {
-    	}
-    }
-     
+  private static Log log = LogFactory.getLog(SDOToolTest.class);
+
+  public static Test suite() {
+    return PlasmaTestSetup.newTestSetup(SDOToolTest.class);
   }
+
+  public void setUp() throws Exception {
+    super.setUp();
+  }
+
+  public void testNoOptions() throws Exception {
+    String[] args = { "-" + ProvisioningToolOption.silent.name(), };
+    try {
+      SDOTool.main(args);
+      assertFalse(true);
+    } catch (IllegalArgumentException e) {
+    }
+  }
+
+  public void testHelpOption() throws Exception {
+    String[] args = { "-" + ProvisioningToolOption.silent.name(),
+        "-" + ProvisioningToolOption.help.name() };
+
+    SDOTool.main(args);
+  }
+
+  public void testUnknownOption() throws Exception {
+    try {
+      String[] args = { "-" + ProvisioningToolOption.silent.name(), "-FOO" };
+
+      SDOTool.main(args);
+      assertFalse(true);
+    } catch (OptionException e) {
+    }
+  }
+
+}

@@ -1,3 +1,19 @@
+/**
+ * Copyright 2017 TerraMeta Software, Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.plasma.provisioning.rdb.mysql.any.query;
 
 import org.plasma.provisioning.rdb.mysql.any.GlobalVariable;
@@ -9,68 +25,84 @@ import org.plasma.query.dsl.PathNode;
 import org.plasma.sdo.helper.PlasmaTypeHelper;
 
 /**
- * Generated Domain Specific Language (DSL) implementation class representing the domain model entity <b>GlobalVariable</b>.
+ * Generated Domain Specific Language (DSL) implementation class representing
+ * the domain model entity <b>GlobalVariable</b>.
  *
- * <p></p>
- * <b>Data Store Mapping:</b>
- * Corresponds to the physical data store entity <b>GLOBAL_VARIABLES</b>.
+ * <p>
+ * </p>
+ * <b>Data Store Mapping:</b> Corresponds to the physical data store entity
+ * <b>GLOBAL_VARIABLES</b>.
  *
  */
-public class QGlobalVariable extends DomainRoot
-{
+public class QGlobalVariable extends DomainRoot {
 
+  private QGlobalVariable() {
+    super(PlasmaTypeHelper.INSTANCE.getType(GlobalVariable.class));
+  }
 
-	private QGlobalVariable() {
-		super(PlasmaTypeHelper.INSTANCE.getType(GlobalVariable.class));
-	}
-	
-	/**
-	 * Constructor which instantiates a domain query path node. A path may
-	 * span multiple namespaces and therefore Java inplementation packages
-	 * based on the <a href="http://docs.plasma-sdo.org/api/org/plasma/config/PlasmaConfiguration.html">Condiguration</a>.
-	 * Note: while this constructor is public, it is not for application use!
-	 * @param source the source path node
-	 * @param sourceProperty the source property logical name
-	 */
-	public QGlobalVariable(PathNode source, String sourceProperty) {
-		super(source, sourceProperty);
-	}
-	
-	/**
-	 * Constructor which instantiates a domain query path node. A path may
-	 * span multiple namespaces and therefore Java inplementation packages
-	 * based on the <a href="http://docs.plasma-sdo.org/api/org/plasma/config/PlasmaConfiguration.html">Condiguration</a>.
-	 * Note: while this constructor is public, it is not for application use!
-	 * @param source the source path node
-	 * @param sourceProperty the source property logical name
-	 * @param expr the path predicate expression
-	 */
-	public QGlobalVariable(PathNode source, String sourceProperty, Expression expr) {
-		super(source, sourceProperty, expr);
-	}
+  /**
+   * Constructor which instantiates a domain query path node. A path may span
+   * multiple namespaces and therefore Java inplementation packages based on the
+   * <a href=
+   * "http://docs.plasma-sdo.org/api/org/plasma/config/PlasmaConfiguration.html"
+   * >Condiguration</a>. Note: while this constructor is public, it is not for
+   * application use!
+   * 
+   * @param source
+   *          the source path node
+   * @param sourceProperty
+   *          the source property logical name
+   */
+  public QGlobalVariable(PathNode source, String sourceProperty) {
+    super(source, sourceProperty);
+  }
 
-	/**
-	 * Returns a new DSL query for <a href="http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html">Type</a> <b>GlobalVariable</b> which can be used either as a query root or
-	 * as the start (entry point) for a new path predicate expression.
-	 * @return a new DSL query
-	 */
-	public static QGlobalVariable newQuery() {
-		return new QGlobalVariable();
-	}
+  /**
+   * Constructor which instantiates a domain query path node. A path may span
+   * multiple namespaces and therefore Java inplementation packages based on the
+   * <a href=
+   * "http://docs.plasma-sdo.org/api/org/plasma/config/PlasmaConfiguration.html"
+   * >Condiguration</a>. Note: while this constructor is public, it is not for
+   * application use!
+   * 
+   * @param source
+   *          the source path node
+   * @param sourceProperty
+   *          the source property logical name
+   * @param expr
+   *          the path predicate expression
+   */
+  public QGlobalVariable(PathNode source, String sourceProperty, Expression expr) {
+    super(source, sourceProperty, expr);
+  }
 
-	/**
-	 * Returns a DSL data element for property, <b>name</b>.
-	 * @return a DSL data element for property, <b>name</b>.
-	 */
-	public DataProperty name() {
-		return new DataNode(this, GlobalVariable.PROPERTY.name.name());
-	}
+  /**
+   * Returns a new DSL query for <a
+   * href="http://docs.plasma-sdo.org/api/org/plasma/sdo/PlasmaType.html"
+   * >Type</a> <b>GlobalVariable</b> which can be used either as a query root or
+   * as the start (entry point) for a new path predicate expression.
+   * 
+   * @return a new DSL query
+   */
+  public static QGlobalVariable newQuery() {
+    return new QGlobalVariable();
+  }
 
-	/**
-	 * Returns a DSL data element for property, <b>value</b>.
-	 * @return a DSL data element for property, <b>value</b>.
-	 */
-	public DataProperty value() {
-		return new DataNode(this, GlobalVariable.PROPERTY.value.name());
-	}
+  /**
+   * Returns a DSL data element for property, <b>name</b>.
+   * 
+   * @return a DSL data element for property, <b>name</b>.
+   */
+  public DataProperty name() {
+    return new DataNode(this, GlobalVariable.PROPERTY.name.name());
+  }
+
+  /**
+   * Returns a DSL data element for property, <b>value</b>.
+   * 
+   * @return a DSL data element for property, <b>value</b>.
+   */
+  public DataProperty value() {
+    return new DataNode(this, GlobalVariable.PROPERTY.value.name());
+  }
 }

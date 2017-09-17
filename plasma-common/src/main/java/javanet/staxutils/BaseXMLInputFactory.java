@@ -56,249 +56,242 @@ import javax.xml.transform.Source;
  */
 public abstract class BaseXMLInputFactory extends XMLInputFactory {
 
-    protected XMLEventAllocator eventAllocator;
+  protected XMLEventAllocator eventAllocator;
 
-    protected XMLReporter xmlReporter;
+  protected XMLReporter xmlReporter;
 
-    protected XMLResolver xmlResolver;
+  protected XMLResolver xmlResolver;
 
-    public Object getProperty(String name) throws IllegalArgumentException {
+  public Object getProperty(String name) throws IllegalArgumentException {
 
-        // TODO provide base support for well-known properties?
-        throw new IllegalArgumentException(name + " property not supported");
+    // TODO provide base support for well-known properties?
+    throw new IllegalArgumentException(name + " property not supported");
 
-    }
+  }
 
-    public boolean isPropertySupported(String name) {
+  public boolean isPropertySupported(String name) {
 
-        return false;
+    return false;
 
-    }
+  }
 
-    public void setProperty(String name, Object value)
-            throws IllegalArgumentException {
+  public void setProperty(String name, Object value) throws IllegalArgumentException {
 
-        throw new IllegalArgumentException(name + " property not supported");
+    throw new IllegalArgumentException(name + " property not supported");
 
-    }
+  }
 
-    public XMLEventAllocator getEventAllocator() {
+  public XMLEventAllocator getEventAllocator() {
 
-        return this.eventAllocator;
+    return this.eventAllocator;
 
-    }
+  }
 
-    public void setEventAllocator(XMLEventAllocator eventAllocator) {
+  public void setEventAllocator(XMLEventAllocator eventAllocator) {
 
-        this.eventAllocator = eventAllocator;
+    this.eventAllocator = eventAllocator;
 
-    }
+  }
 
-    public XMLReporter getXMLReporter() {
+  public XMLReporter getXMLReporter() {
 
-        return this.xmlReporter;
+    return this.xmlReporter;
 
-    }
+  }
 
-    public void setXMLReporter(XMLReporter xmlReporter) {
+  public void setXMLReporter(XMLReporter xmlReporter) {
 
-        this.xmlReporter = xmlReporter;
+    this.xmlReporter = xmlReporter;
 
-    }
+  }
 
-    public XMLResolver getXMLResolver() {
+  public XMLResolver getXMLResolver() {
 
-        return this.xmlResolver;
+    return this.xmlResolver;
 
-    }
+  }
 
-    public void setXMLResolver(XMLResolver xmlResolver) {
+  public void setXMLResolver(XMLResolver xmlResolver) {
 
-        this.xmlResolver = xmlResolver;
+    this.xmlResolver = xmlResolver;
 
-    }
+  }
 
-    public XMLEventReader createXMLEventReader(InputStream stream,
-            String encoding) throws XMLStreamException {
+  public XMLEventReader createXMLEventReader(InputStream stream, String encoding)
+      throws XMLStreamException {
 
-        try {
+    try {
 
-            if (encoding != null) {
+      if (encoding != null) {
 
-                return createXMLEventReader(new InputStreamReader(stream,
-                        encoding), encoding);
+        return createXMLEventReader(new InputStreamReader(stream, encoding), encoding);
 
-            } else {
-
-                return createXMLEventReader(new InputStreamReader(stream));
-
-            }
-
-        } catch (UnsupportedEncodingException e) {
-
-            throw new XMLStreamException(e);
-
-        }
-
-    }
-
-    public XMLEventReader createXMLEventReader(InputStream stream)
-            throws XMLStreamException {
+      } else {
 
         return createXMLEventReader(new InputStreamReader(stream));
 
-    }
+      }
 
-    public XMLEventReader createXMLEventReader(String systemId,
-            InputStream stream) throws XMLStreamException {
+    } catch (UnsupportedEncodingException e) {
 
-        return createXMLEventReader(systemId, new InputStreamReader(stream));
-
-    }
-
-    public XMLEventReader createXMLEventReader(XMLStreamReader reader)
-            throws XMLStreamException {
-
-        return new XMLStreamEventReader(reader);
+      throw new XMLStreamException(e);
 
     }
 
-    public XMLStreamReader createXMLStreamReader(InputStream stream,
-            String encoding) throws XMLStreamException {
+  }
 
-        try {
+  public XMLEventReader createXMLEventReader(InputStream stream) throws XMLStreamException {
 
-            if (encoding != null) {
+    return createXMLEventReader(new InputStreamReader(stream));
 
-                return createXMLStreamReader(new InputStreamReader(stream,
-                        encoding), encoding);
+  }
 
-            } else {
+  public XMLEventReader createXMLEventReader(String systemId, InputStream stream)
+      throws XMLStreamException {
 
-                return createXMLStreamReader(new InputStreamReader(stream));
+    return createXMLEventReader(systemId, new InputStreamReader(stream));
 
-            }
+  }
 
-        } catch (UnsupportedEncodingException e) {
+  public XMLEventReader createXMLEventReader(XMLStreamReader reader) throws XMLStreamException {
 
-            throw new XMLStreamException(e);
+    return new XMLStreamEventReader(reader);
 
-        }
+  }
 
-    }
+  public XMLStreamReader createXMLStreamReader(InputStream stream, String encoding)
+      throws XMLStreamException {
 
-    public XMLStreamReader createXMLStreamReader(InputStream stream)
-            throws XMLStreamException {
+    try {
+
+      if (encoding != null) {
+
+        return createXMLStreamReader(new InputStreamReader(stream, encoding), encoding);
+
+      } else {
 
         return createXMLStreamReader(new InputStreamReader(stream));
 
-    }
+      }
 
-    public XMLStreamReader createXMLStreamReader(String systemId,
-            InputStream stream) throws XMLStreamException {
+    } catch (UnsupportedEncodingException e) {
 
-        return createXMLStreamReader(systemId, new InputStreamReader(stream));
-
-    }
-
-    public XMLEventReader createXMLEventReader(Reader reader)
-            throws XMLStreamException {
-
-        return createXMLEventReader(createXMLStreamReader(reader));
+      throw new XMLStreamException(e);
 
     }
 
-    public XMLEventReader createXMLEventReader(Reader reader, String encoding)
-            throws XMLStreamException {
+  }
 
-        return createXMLEventReader(createXMLStreamReader(reader, encoding));
+  public XMLStreamReader createXMLStreamReader(InputStream stream) throws XMLStreamException {
 
-    }
+    return createXMLStreamReader(new InputStreamReader(stream));
 
-    public XMLEventReader createXMLEventReader(Source source)
-            throws XMLStreamException {
+  }
 
-        return createXMLEventReader(createXMLStreamReader(source));
+  public XMLStreamReader createXMLStreamReader(String systemId, InputStream stream)
+      throws XMLStreamException {
 
-    }
+    return createXMLStreamReader(systemId, new InputStreamReader(stream));
 
-    public XMLEventReader createXMLEventReader(String systemId, Reader reader)
-            throws XMLStreamException {
+  }
 
-        return createXMLEventReader(createXMLStreamReader(systemId, reader));
+  public XMLEventReader createXMLEventReader(Reader reader) throws XMLStreamException {
 
-    }
+    return createXMLEventReader(createXMLStreamReader(reader));
 
-    public XMLEventReader createXMLEventReader(String systemId, Reader reader,
-            String encoding) throws XMLStreamException {
+  }
 
-        return createXMLEventReader(createXMLStreamReader(systemId, reader,
-                encoding));
+  public XMLEventReader createXMLEventReader(Reader reader, String encoding)
+      throws XMLStreamException {
 
-    }
+    return createXMLEventReader(createXMLStreamReader(reader, encoding));
 
-    public XMLStreamReader createXMLStreamReader(Source source)
-            throws XMLStreamException {
+  }
 
-        // TODO implement TrAX support
-        throw new UnsupportedOperationException();
+  public XMLEventReader createXMLEventReader(Source source) throws XMLStreamException {
 
-    }
+    return createXMLEventReader(createXMLStreamReader(source));
 
-    public XMLStreamReader createXMLStreamReader(Reader reader)
-            throws XMLStreamException {
+  }
 
-        return createXMLStreamReader(null, reader, null);
+  public XMLEventReader createXMLEventReader(String systemId, Reader reader)
+      throws XMLStreamException {
 
-    }
+    return createXMLEventReader(createXMLStreamReader(systemId, reader));
 
-    public XMLStreamReader createXMLStreamReader(Reader reader, String encoding)
-            throws XMLStreamException {
+  }
 
-        return createXMLStreamReader(null, reader, encoding);
+  public XMLEventReader createXMLEventReader(String systemId, Reader reader, String encoding)
+      throws XMLStreamException {
 
-    }
+    return createXMLEventReader(createXMLStreamReader(systemId, reader, encoding));
 
-    public XMLStreamReader createXMLStreamReader(String systemId, Reader reader)
-            throws XMLStreamException {
+  }
 
-        String encoding = null;
-        if (reader instanceof InputStreamReader) {
+  public XMLStreamReader createXMLStreamReader(Source source) throws XMLStreamException {
 
-            encoding = ((InputStreamReader) reader).getEncoding();
+    // TODO implement TrAX support
+    throw new UnsupportedOperationException();
 
-        }
+  }
 
-        return createXMLStreamReader(systemId, reader, encoding);
+  public XMLStreamReader createXMLStreamReader(Reader reader) throws XMLStreamException {
 
-    }
+    return createXMLStreamReader(null, reader, null);
 
-    public XMLEventReader createFilteredReader(XMLEventReader reader,
-            EventFilter filter) throws XMLStreamException {
+  }
 
-        // TODO implement filter support
-        throw new UnsupportedOperationException();
+  public XMLStreamReader createXMLStreamReader(Reader reader, String encoding)
+      throws XMLStreamException {
 
-    }
+    return createXMLStreamReader(null, reader, encoding);
 
-    public XMLStreamReader createFilteredReader(XMLStreamReader reader,
-            StreamFilter filter) throws XMLStreamException {
+  }
 
-        // TODO implement filter support
-        throw new UnsupportedOperationException();
+  public XMLStreamReader createXMLStreamReader(String systemId, Reader reader)
+      throws XMLStreamException {
+
+    String encoding = null;
+    if (reader instanceof InputStreamReader) {
+
+      encoding = ((InputStreamReader) reader).getEncoding();
 
     }
 
-    /**
-     * Called by all other methods to construct an {@link XMLStreamReader}.
-     * 
-     * @param systemId The system ID of the provided reader, or <code>null</code>
-     * @param reader The character stream from which to construct the StAX stream.
-     * @param encoding The underlying encoding of the reader, or <code>null</code>.
-     * @return The newly constructed {@link XMLStreamReader}.
-     * @throws XMLStreamException If an error occurs constructing the reader.
-     */
-    public abstract XMLStreamReader createXMLStreamReader(String systemId,
-            Reader reader, String encoding) throws XMLStreamException;
+    return createXMLStreamReader(systemId, reader, encoding);
+
+  }
+
+  public XMLEventReader createFilteredReader(XMLEventReader reader, EventFilter filter)
+      throws XMLStreamException {
+
+    // TODO implement filter support
+    throw new UnsupportedOperationException();
+
+  }
+
+  public XMLStreamReader createFilteredReader(XMLStreamReader reader, StreamFilter filter)
+      throws XMLStreamException {
+
+    // TODO implement filter support
+    throw new UnsupportedOperationException();
+
+  }
+
+  /**
+   * Called by all other methods to construct an {@link XMLStreamReader}.
+   * 
+   * @param systemId
+   *          The system ID of the provided reader, or <code>null</code>
+   * @param reader
+   *          The character stream from which to construct the StAX stream.
+   * @param encoding
+   *          The underlying encoding of the reader, or <code>null</code>.
+   * @return The newly constructed {@link XMLStreamReader}.
+   * @throws XMLStreamException
+   *           If an error occurs constructing the reader.
+   */
+  public abstract XMLStreamReader createXMLStreamReader(String systemId, Reader reader,
+      String encoding) throws XMLStreamException;
 
 }

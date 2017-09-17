@@ -1,26 +1,20 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package org.plasma.provisioning.ant;
 
+package org.plasma.provisioning.ant;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,42 +22,38 @@ import org.apache.tools.ant.BuildException;
 import org.plasma.provisioning.cli.DSLTool;
 
 public class DSLTask extends ProvisioningTask {
-    private static Log log =LogFactory.getLog(
-            DSLTask.class); 
-   
-    private String dialect;
-    private String dest;
+  private static Log log = LogFactory.getLog(DSLTask.class);
 
-    public void execute() throws BuildException {
-        getCommandLine().setClassname(DSLTool.class.getName()); 
-        if (this.dialect != null)
-	        getCommandLine().getJavaCommand().addArguments(new String[] {
-	            COMMAND_PREFIX + command, 
-	            dialect,
-	            dest});
-        else
-	        getCommandLine().getJavaCommand().addArguments(new String[] {
-		            COMMAND_PREFIX + command, 
-		            dest});
-        //setFork(true);  
-        //setNewenvironment(true);            
-        super.execute();
-    }
+  private String dialect;
+  private String dest;
 
-    public String getDialect() {
-		return dialect;
-	}
+  public void execute() throws BuildException {
+    getCommandLine().setClassname(DSLTool.class.getName());
+    if (this.dialect != null)
+      getCommandLine().getJavaCommand().addArguments(
+          new String[] { COMMAND_PREFIX + command, dialect, dest });
+    else
+      getCommandLine().getJavaCommand().addArguments(
+          new String[] { COMMAND_PREFIX + command, dest });
+    // setFork(true);
+    // setNewenvironment(true);
+    super.execute();
+  }
 
-	public String getDest() {
-		return dest;
-	}
+  public String getDialect() {
+    return dialect;
+  }
 
-	public void setDest(String dest) {
-        this.dest = dest;
-    }
+  public String getDest() {
+    return dest;
+  }
 
-	public void setDialect(String dialect) {
-		this.dialect = dialect;
-	}
+  public void setDest(String dest) {
+    this.dest = dest;
+  }
+
+  public void setDialect(String dialect) {
+    this.dialect = dialect;
+  }
 
 }

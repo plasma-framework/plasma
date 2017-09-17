@@ -46,514 +46,544 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 
 /**
- * Encapsulates access to contextual element information, such as the element name,
- * attributes, and namespaces. This class is useful for recording element information
- * in a stack to keep track of the current element c[position in a document.
+ * Encapsulates access to contextual element information, such as the element
+ * name, attributes, and namespaces. This class is useful for recording element
+ * information in a stack to keep track of the current element c[position in a
+ * document.
  * 
  * @author Christian Niles
  * @version $Revision: 1.1 $
  */
 public class ElementContext extends SimpleNamespaceContext {
 
-    /** The element name. */
-    private QName name;
+  /** The element name. */
+  private QName name;
 
-    /** The encapsulating context. */
-    private ElementContext parent;
+  /** The encapsulating context. */
+  private ElementContext parent;
 
-    /** Ordered list of attributes. */
-    private List attributeNames;
+  /** Ordered list of attributes. */
+  private List attributeNames;
 
-    /** Attribute values, keyed by their names. */
-    private Map attributes;
+  /** Attribute values, keyed by their names. */
+  private Map attributes;
 
-    /** Ordered list of namespace prefixes. */
-    private List namespacePrefixes;
+  /** Ordered list of namespace prefixes. */
+  private List namespacePrefixes;
 
-    /** Whether the element is an empty element or not. */
-    private boolean isEmpty;
+  /** Whether the element is an empty element or not. */
+  private boolean isEmpty;
 
-    /** Whether the context has been closed for further edits. */
-    private boolean readOnly;
+  /** Whether the context has been closed for further edits. */
+  private boolean readOnly;
 
-    /**
-     * Constructs a new <code>ElementContext</code> with the provided name and no
-     * enclosing context.
-     * 
-     * @param name The element name.
-     */
-    public ElementContext(QName name) {
+  /**
+   * Constructs a new <code>ElementContext</code> with the provided name and no
+   * enclosing context.
+   * 
+   * @param name
+   *          The element name.
+   */
+  public ElementContext(QName name) {
 
-        this.name = name;
+    this.name = name;
+
+  }
+
+  /**
+   * Constructs a new <code>ElementContext</code> with the provided name and
+   * empty value, and no enclosing context.
+   * 
+   * @param name
+   *          The element name.
+   * @param isEmpty
+   *          Whether the element is an empty element or not.
+   */
+  public ElementContext(QName name, boolean isEmpty) {
+
+    this.name = name;
+    this.isEmpty = isEmpty;
+
+  }
+
+  /**
+   * Constructs a new <code>ElementContext</code> with the provided name and
+   * namespace context.
+   * 
+   * @param name
+   *          The element name.
+   * @param context
+   *          The enclosing namespace context.
+   */
+  public ElementContext(QName name, NamespaceContext context) {
+
+    super(context);
+    this.name = name;
+
+  }
+
+  /**
+   * Constructs a new <code>ElementContext</code> with the provided name and
+   * enclosing context.
+   * 
+   * @param name
+   *          The element name.
+   * @param parent
+   *          The enclosing element context.
+   */
+  public ElementContext(QName name, ElementContext parent) {
+
+    super(parent);
+    this.name = name;
+    this.parent = parent;
+
+  }
+
+  /**
+   * Constructs a new <code>ElementContext</code> with the provided name and
+   * enclosing context.
+   * 
+   * @param name
+   *          The element name.
+   * @param parent
+   *          The enclosing element context.
+   * @param isEmpty
+   *          Whether the element is an empty element or not.
+   */
+  public ElementContext(QName name, ElementContext parent, boolean isEmpty) {
+
+    super(parent);
+    this.name = name;
+    this.parent = parent;
+    this.isEmpty = isEmpty;
+
+  }
+
+  /**
+   * Returns a reference to the enclosing <code>ElementContext</code>.
+   * 
+   * @return The enclosing context, or <code>null</code>.
+   */
+  public ElementContext getParentContext() {
+
+    return parent;
+
+  }
+
+  /**
+   * Determines if this context has an enclosing context or not.
+   * 
+   * @return <code>true</code> if this context is the root context and has no
+   *         enclosing context, <code>false</code> otherwise.
+   */
+  public boolean isRoot() {
+
+    return parent == null;
+
+  }
+
+  /**
+   * Returns the qualified name associated with the context.
+   * 
+   * @return The qualified name of the context.
+   */
+  public QName getName() {
+
+    return name;
+
+  }
+
+  /**
+   * Returns the current context path.
+   * 
+   * @return A string representing the context path.
+   */
+  public String getPath() {
+
+    return appendPath(new StringBuffer()).toString();
+
+  }
+
+  /**
+   * @see #getPath()
+   */
+  public String toString() {
+
+    return getPath();
+
+  }
+
+  /**
+   * Appends the current context path to a {@link StringBuffer}.
+   * 
+   * @param buffer
+   *          The buffer to which to append the context path.
+   * @return The provided buffer.
+   */
+  public StringBuffer appendPath(StringBuffer buffer) {
+
+    if (parent != null) {
+
+      parent.appendPath(buffer);
+
+    }
+    return buffer.append('/').append(name);
+
+  }
+
+  /**
+   * Determines the number of enclosing contexts.
+   * 
+   * @return The number of enclosing contexts.
+   */
+  public int getDepth() {
+
+    if (parent == null) {
+
+      return 0;
+
+    } else {
+
+      return parent.getDepth() + 1;
 
     }
 
-    /**
-     * Constructs a new <code>ElementContext</code> with the provided name and empty
-     * value, and no enclosing context.
-     * 
-     * @param name The element name.
-     * @param isEmpty Whether the element is an empty element or not.
-     */
-    public ElementContext(QName name, boolean isEmpty) {
+  }
 
-        this.name = name;
-        this.isEmpty = isEmpty;
+  /**
+   * Constructs a new child <code>ElementContext</code> with the specified name.
+   * 
+   * @param name
+   *          The name associated with the child context.
+   * @return The newly constructed child context.
+   * @throws IllegalStateException
+   *           If this context is empty.
+   */
+  public ElementContext newSubContext(QName name) {
 
-    }
+    if (!isEmpty()) {
 
-    /**
-     * Constructs a new <code>ElementContext</code> with the provided name and
-     * namespace context.
-     * 
-     * @param name The element name.
-     * @param context The enclosing namespace context.
-     */
-    public ElementContext(QName name, NamespaceContext context) {
+      return new ElementContext(name, this);
 
-        super(context);
-        this.name = name;
+    } else {
+
+      throw new IllegalStateException("ElementContext is empty");
 
     }
 
-    /**
-     * Constructs a new <code>ElementContext</code> with the provided name and
-     * enclosing context.
-     * 
-     * @param name The element name.
-     * @param parent The enclosing element context.
-     */
-    public ElementContext(QName name, ElementContext parent) {
+  }
 
-        super(parent);
-        this.name = name;
-        this.parent = parent;
+  /**
+   * Constructs a new child <code>ElementContext</code> with the specified name
+   * and empty value.
+   * 
+   * @param name
+   *          The name associated with the child context.
+   * @param isEmpty
+   *          Whether the child context represents an empty element.
+   * @return The newly constructed child context.
+   * @throws IllegalStateException
+   *           If this context is empty.
+   */
+  public ElementContext newSubContext(QName name, boolean isEmpty) {
 
-    }
+    if (!isEmpty()) {
 
-    /**
-     * Constructs a new <code>ElementContext</code> with the provided name and
-     * enclosing context.
-     * 
-     * @param name The element name.
-     * @param parent The enclosing element context.
-     * @param isEmpty Whether the element is an empty element or not.
-     */
-    public ElementContext(QName name, ElementContext parent, boolean isEmpty) {
+      return new ElementContext(name, this, isEmpty);
 
-        super(parent);
-        this.name = name;
-        this.parent = parent;
-        this.isEmpty = isEmpty;
+    } else {
+
+      throw new IllegalStateException("ElementContext is empty");
 
     }
 
-    /**
-     * Returns a reference to the enclosing <code>ElementContext</code>.
-     * 
-     * @return The enclosing context, or <code>null</code>.
-     */
-    public ElementContext getParentContext() {
+  }
 
-        return parent;
+  /**
+   * Adds an attribute to the context with the specified name and value.
+   * 
+   * @param name
+   *          The attribute name.
+   * @param value
+   *          The attribute value.
+   * @throws IllegalStateException
+   *           If the context is read-only.
+   */
+  public void putAttribute(QName name, String value) {
 
-    }
+    if (isReadOnly()) {
 
-    /**
-     * Determines if this context has an enclosing context or not.
-     * 
-     * @return <code>true</code> if this context is the root context and has no
-     * 		enclosing context, <code>false</code> otherwise.
-     */
-    public boolean isRoot() {
+      throw new IllegalStateException("ElementContext is readOnly");
 
-        return parent == null;
+    } else if (attributes == null) {
 
-    }
-
-    /**
-     * Returns the qualified name associated with the context.
-     * 
-     * @return The qualified name of the context.
-     */
-    public QName getName() {
-
-        return name;
+      attributes = new HashMap();
+      attributeNames = new ArrayList();
 
     }
 
-    /**
-     * Returns the current context path.
-     * 
-     * @return A string representing the context path.
-     */
-    public String getPath() {
+    attributeNames.add(name);
+    attributes.put(name, value);
 
-        return appendPath(new StringBuffer()).toString();
+  }
 
-    }
+  /**
+   * Adds a namespace declaration to this context with the specified prefix and
+   * namespace uri.
+   * 
+   * @param prefix
+   *          The namespace prefix.
+   * @param nsURI
+   *          The namespace uri.
+   */
+  public void putNamespace(String prefix, String nsURI) {
 
-    /**
-     * @see #getPath()
-     */
-    public String toString() {
+    if (isReadOnly()) {
 
-        return getPath();
-
-    }
-
-    /**
-     * Appends the current context path to a {@link StringBuffer}.
-     * 
-     * @param buffer The buffer to which to append the context path.
-     * @return The provided buffer.
-     */
-    public StringBuffer appendPath(StringBuffer buffer) {
-
-        if (parent != null) {
-
-            parent.appendPath(buffer);
-
-        }
-        return buffer.append('/').append(name);
+      throw new IllegalStateException("ElementContext is readOnly");
 
     }
 
-    /**
-     * Determines the number of enclosing contexts.
-     * 
-     * @return The number of enclosing contexts.
-     */
-    public int getDepth() {
+    if (namespacePrefixes == null) {
 
-        if (parent == null) {
-
-            return 0;
-
-        } else {
-
-            return parent.getDepth() + 1;
-
-        }
+      namespacePrefixes = new ArrayList();
 
     }
 
-    /**
-     * Constructs a new child <code>ElementContext</code> with the specified name.
-     * 
-     * @param name The name associated with the child context.
-     * @return The newly constructed child context.
-     * @throws IllegalStateException If this context is empty.
-     */
-    public ElementContext newSubContext(QName name) {
+    if (prefix.length() == 0) {
 
-        if (!isEmpty()) {
+      // default namespace
+      namespacePrefixes.add(prefix);
+      super.setDefaultNamespace(nsURI);
 
-            return new ElementContext(name, this);
+    } else {
 
-        } else {
-            
-            throw new IllegalStateException("ElementContext is empty");
-            
-        }
-        
-    }
-
-    /**
-     * Constructs a new child <code>ElementContext</code> with the specified name
-     * and empty value.
-     * 
-     * @param name The name associated with the child context.
-     * @param isEmpty Whether the child context represents an empty element.
-     * @return The newly constructed child context.
-     * @throws IllegalStateException If this context is empty.
-     */
-    public ElementContext newSubContext(QName name, boolean isEmpty) {
-
-        if (!isEmpty()) {
-
-            return new ElementContext(name, this, isEmpty);
-
-        } else {
-            
-            throw new IllegalStateException("ElementContext is empty");
-            
-        }
+      namespacePrefixes.add(prefix);
+      super.setPrefix(prefix, nsURI);
 
     }
 
-    /**
-     * Adds an attribute to the context with the specified name and value.
-     * 
-     * @param name The attribute name.
-     * @param value The attribute value.
-     * @throws IllegalStateException If the context is read-only.
-     */
-    public void putAttribute(QName name, String value) {
+  }
 
-        if (isReadOnly()) {
+  /**
+   * Returns the number of attributes defined in this context.
+   * 
+   * @return The number of attributes defined in the context.
+   */
+  public int attributeCount() {
 
-            throw new IllegalStateException("ElementContext is readOnly");
+    if (attributes != null) {
 
-        } else if (attributes == null) {
+      return attributes.size();
 
-            attributes = new HashMap();
-            attributeNames = new ArrayList();
+    } else {
 
-        }
-
-        attributeNames.add(name);
-        attributes.put(name, value);
+      return 0;
 
     }
 
-    /**
-     * Adds a namespace declaration to this context with the specified prefix and
-     * namespace uri.
-     * 
-     * @param prefix The namespace prefix.
-     * @param nsURI The namespace uri.
-     */
-    public void putNamespace(String prefix, String nsURI) {
+  }
 
-        if (isReadOnly()) {
+  /**
+   * Returns the value of the <code>idx</code><sup>th</sup> attribute defined on
+   * the context.
+   * 
+   * @param idx
+   *          The zero-based index of the attribute value to retrieve.
+   * @return The value of the <code>idx</code><sup>th</sup> attribute defined on
+   *         the context.
+   * @throws IndexOutOfBoundsException
+   *           If the index is out of bounds.
+   */
+  public String getAttribute(int idx) {
 
-            throw new IllegalStateException("ElementContext is readOnly");
+    return getAttribute(getAttributeName(idx));
 
-        }
+  }
 
-        if (namespacePrefixes == null) {
+  /**
+   * Returns the name of the <code>idx</code><sup>th</sup> attribute defined on
+   * the context.
+   * 
+   * @param idx
+   *          The zero-based index of the attribute name to retrieve.
+   * @return The name of the <code>idx</code><sup>th</sup> attribute defined on
+   *         the context.
+   * @throws IndexOutOfBoundsException
+   *           If the index is out of bounds.
+   */
+  public QName getAttributeName(int idx) {
 
-            namespacePrefixes = new ArrayList();
+    if (attributeNames != null) {
 
-        }
+      return (QName) attributeNames.get(idx);
 
-        if (prefix.length() == 0) {
+    } else {
 
-            // default namespace
-            namespacePrefixes.add(prefix);
-            super.setDefaultNamespace(nsURI);
-
-        } else {
-
-            namespacePrefixes.add(prefix);
-            super.setPrefix(prefix, nsURI);
-
-        }
-
-    }
-
-    /**
-     * Returns the number of attributes defined in this context.
-     * 
-     * @return The number of attributes defined in the context.
-     */
-    public int attributeCount() {
-
-        if (attributes != null) {
-
-            return attributes.size();
-
-        } else {
-
-            return 0;
-
-        }
+      throw new IndexOutOfBoundsException("Attribute index " + idx + " doesn't exist");
 
     }
 
-    /**
-     * Returns the value of the <code>idx</code><sup>th</sup> attribute defined on
-     * the context.
-     * 
-     * @param idx The zero-based index of the attribute value to retrieve.
-     * @return The value of the <code>idx</code><sup>th</sup> attribute defined on
-     * 		the context.
-     * @throws IndexOutOfBoundsException If the index is out of bounds.
-     */
-    public String getAttribute(int idx) {
+  }
 
-        return getAttribute(getAttributeName(idx));
+  /**
+   * Returns the value of a named attribute.
+   * 
+   * @param name
+   *          The name of the attribute value to retrieve.
+   * @return The value of the named attribute, or <code>null</code>.
+   */
+  public String getAttribute(QName name) {
 
-    }
+    if (attributes != null) {
 
-    /**
-     * Returns the name of the <code>idx</code><sup>th</sup> attribute defined on
-     * the context.
-     * 
-     * @param idx The zero-based index of the attribute name to retrieve.
-     * @return The name of the <code>idx</code><sup>th</sup> attribute defined on
-     * 		the context.
-     * @throws IndexOutOfBoundsException If the index is out of bounds.
-     */
-    public QName getAttributeName(int idx) {
+      return (String) attributes.get(name);
 
-        if (attributeNames != null) {
+    } else {
 
-            return (QName) attributeNames.get(idx);
-
-        } else {
-
-            throw new IndexOutOfBoundsException("Attribute index " + idx
-                    + " doesn't exist");
-
-        }
+      return null;
 
     }
 
-    /**
-     * Returns the value of a named attribute.
-     * 
-     * @param name The name of the attribute value to retrieve.
-     * @return The value of the named attribute, or <code>null</code>.
-     */
-    public String getAttribute(QName name) {
+  }
 
-        if (attributes != null) {
+  /**
+   * Determines if an attribute with the specified name exists in this context.
+   * 
+   * @param name
+   *          The name of the attribute.
+   * @return <code>true</code> if an attribute with the specified name has been
+   *         defined in this context, <code>false</code> otherwise.
+   */
+  public boolean attributeExists(QName name) {
 
-            return (String) attributes.get(name);
+    if (attributes != null) {
 
-        } else {
+      return attributes.containsKey(name);
 
-            return null;
+    } else {
 
-        }
-
-    }
-
-    /**
-     * Determines if an attribute with the specified name exists in this context.
-     * 
-     * @param name The name of the attribute.
-     * @return <code>true</code> if an attribute with the specified name has been
-     * 		defined in this context, <code>false</code> otherwise.
-     */
-    public boolean attributeExists(QName name) {
-
-        if (attributes != null) {
-
-            return attributes.containsKey(name);
-
-        } else {
-
-            return false;
-
-        }
+      return false;
 
     }
 
-    /**
-     * Returns an {@link Iterator} over the names of all attributes defined in this
-     * context. The returned iterator will not support the {@link Iterator#remove()}
-     * operation.
-     * 
-     * @return An {@link Iterator} over the names of all attributes defined in this
-     *     context.
-     */
-    public Iterator attributeNames() {
+  }
 
-        if (attributeNames != null) {
+  /**
+   * Returns an {@link Iterator} over the names of all attributes defined in
+   * this context. The returned iterator will not support the
+   * {@link Iterator#remove()} operation.
+   * 
+   * @return An {@link Iterator} over the names of all attributes defined in
+   *         this context.
+   */
+  public Iterator attributeNames() {
 
-            return Collections.unmodifiableList(attributeNames).iterator();
+    if (attributeNames != null) {
 
-        } else {
+      return Collections.unmodifiableList(attributeNames).iterator();
 
-            return Collections.EMPTY_LIST.iterator();
+    } else {
 
-        }
-
-    }
-
-    /**
-     * Determines the number of namespaces declared in this context.
-     * 
-     * @return The number of namespaces declared in this context.
-     */
-    public int namespaceCount() {
-
-        if (namespacePrefixes != null) {
-
-            return namespacePrefixes.size();
-
-        } else {
-
-            return 0;
-
-        }
+      return Collections.EMPTY_LIST.iterator();
 
     }
 
-    /**
-     * Returns the URI of the <code>idx</code><sup>th</sup> namespace declaration
-     * defined in this context.
-     * 
-     * @param idx The index of the namespace URI to return.
-     * @return The URI of the <code>idx</code><sup>th</sup> namespace declaration
-     * 		defined in this context.
-     * @throws IndexOutOfBoundsException If the index is out of bounds.
-     */
-    public String getNamespaceURI(int idx) {
+  }
 
-        return this.getNamespaceURI(getNamespacePrefix(idx));
+  /**
+   * Determines the number of namespaces declared in this context.
+   * 
+   * @return The number of namespaces declared in this context.
+   */
+  public int namespaceCount() {
 
-    }
+    if (namespacePrefixes != null) {
 
-    /**
-     * Returns the prefix of the <code>idx</code><sup>th</sup> namespace declaration
-     * defined in this context.
-     * 
-     * @param idx The index of the namespace prefix to return.
-     * @return The prefix of the <code>idx</code><sup>th</sup> namespace declaration
-     * 		defined in this context.
-     * @throws IndexOutOfBoundsException If the index is out of bounds.
-     */
-    public String getNamespacePrefix(int idx) {
+      return namespacePrefixes.size();
 
-        if (namespacePrefixes != null) {
+    } else {
 
-            return (String) namespacePrefixes.get(idx);
-
-        } else {
-
-            throw new IndexOutOfBoundsException("Namespace index " + idx
-                    + " doesn't exist");
-
-        }
+      return 0;
 
     }
 
-    /**
-     * Whether this context may be edited or not.
-     * 
-     * @return <code>true</code> if no additional modifications may be made to this
-     * 		context, <code>false</code> otherwise.
-     */
-    public boolean isReadOnly() {
+  }
 
-        return readOnly;
+  /**
+   * Returns the URI of the <code>idx</code><sup>th</sup> namespace declaration
+   * defined in this context.
+   * 
+   * @param idx
+   *          The index of the namespace URI to return.
+   * @return The URI of the <code>idx</code><sup>th</sup> namespace declaration
+   *         defined in this context.
+   * @throws IndexOutOfBoundsException
+   *           If the index is out of bounds.
+   */
+  public String getNamespaceURI(int idx) {
+
+    return this.getNamespaceURI(getNamespacePrefix(idx));
+
+  }
+
+  /**
+   * Returns the prefix of the <code>idx</code><sup>th</sup> namespace
+   * declaration defined in this context.
+   * 
+   * @param idx
+   *          The index of the namespace prefix to return.
+   * @return The prefix of the <code>idx</code><sup>th</sup> namespace
+   *         declaration defined in this context.
+   * @throws IndexOutOfBoundsException
+   *           If the index is out of bounds.
+   */
+  public String getNamespacePrefix(int idx) {
+
+    if (namespacePrefixes != null) {
+
+      return (String) namespacePrefixes.get(idx);
+
+    } else {
+
+      throw new IndexOutOfBoundsException("Namespace index " + idx + " doesn't exist");
 
     }
 
-    /**
-     * Prevents any further additions to this context.
-     */
-    public void setReadOnly() {
+  }
 
-        this.readOnly = true;
+  /**
+   * Whether this context may be edited or not.
+   * 
+   * @return <code>true</code> if no additional modifications may be made to
+   *         this context, <code>false</code> otherwise.
+   */
+  public boolean isReadOnly() {
 
-    }
+    return readOnly;
 
-    /**
-     * Whether this context represents an emtpy element. Empty contexts may not
-     * enclose any other contexts.
-     * 
-     * @return <code>true</code> if this context represents an emtpy element,
-     * 		<code>false</code> otherwise.
-     */
-    public boolean isEmpty() {
+  }
 
-        return isEmpty;
+  /**
+   * Prevents any further additions to this context.
+   */
+  public void setReadOnly() {
 
-    }
+    this.readOnly = true;
+
+  }
+
+  /**
+   * Whether this context represents an emtpy element. Empty contexts may not
+   * enclose any other contexts.
+   * 
+   * @return <code>true</code> if this context represents an emtpy element,
+   *         <code>false</code> otherwise.
+   */
+  public boolean isEmpty() {
+
+    return isEmpty;
+
+  }
 
 }

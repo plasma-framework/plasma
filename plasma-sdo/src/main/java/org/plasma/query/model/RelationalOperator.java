@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.query.model;
 
 import java.util.HashMap;
@@ -34,75 +29,68 @@ import org.plasma.query.QueryException;
 import org.plasma.query.visitor.QueryVisitor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RelationalOperator", propOrder = {
-    "value"
-})
+@XmlType(name = "RelationalOperator", propOrder = { "value" })
 @XmlRootElement(name = "RelationalOperator")
 public class RelationalOperator implements org.plasma.query.Operator {
 
-	private static Map<String, RelationalOperatorName> operMap = new HashMap<>();
-    static {
-		operMap.put("=", RelationalOperatorName.EQUALS);
-		operMap.put("!=", RelationalOperatorName.NOT_EQUALS);
-		operMap.put(">", RelationalOperatorName.GREATER_THAN);
-		operMap.put(">=", RelationalOperatorName.GREATER_THAN_EQUALS);
-		operMap.put("<", RelationalOperatorName.LESS_THAN);
-		operMap.put("<=", RelationalOperatorName.LESS_THAN_EQUALS);
-    }
-	
-    @XmlValue
-    protected RelationalOperatorName value;
+  private static Map<String, RelationalOperatorName> operMap = new HashMap<>();
+  static {
+    operMap.put("=", RelationalOperatorName.EQUALS);
+    operMap.put("!=", RelationalOperatorName.NOT_EQUALS);
+    operMap.put(">", RelationalOperatorName.GREATER_THAN);
+    operMap.put(">=", RelationalOperatorName.GREATER_THAN_EQUALS);
+    operMap.put("<", RelationalOperatorName.LESS_THAN);
+    operMap.put("<=", RelationalOperatorName.LESS_THAN_EQUALS);
+  }
 
-    public RelationalOperator() {
-        super();
-    } 
+  @XmlValue
+  protected RelationalOperatorName value;
 
-    public RelationalOperator(String content) {
-        this();
-        setValue(RelationalOperatorName.valueOf(content));
-    } 
+  public RelationalOperator() {
+    super();
+  }
 
-    public RelationalOperator(RelationalOperatorName content) {
-        this();
-        setValue(content);
-    } 
-    
-    public static RelationalOperator valueOf(String value) {
-    	RelationalOperatorName oper = operMap.get(value);
-    	if (oper != null)
-    		return new RelationalOperator(oper);
-    	else
-    	    throw new QueryException("invalid operator '" 
-    	    		+ value + "'");
-    }
-    
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RelationalOperatorName }
-     *     
-     */
-    public RelationalOperatorName getValue() {
-        return value;
-    }
+  public RelationalOperator(String content) {
+    this();
+    setValue(RelationalOperatorName.valueOf(content));
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RelationalOperatorName }
-     *     
-     */
-    public void setValue(RelationalOperatorName value) {
-        this.value = value;
-    }
+  public RelationalOperator(RelationalOperatorName content) {
+    this();
+    setValue(content);
+  }
 
-    public void accept(QueryVisitor visitor)
-    {
-        visitor.start(this);
-    	visitor.end(this);
-    }
+  public static RelationalOperator valueOf(String value) {
+    RelationalOperatorName oper = operMap.get(value);
+    if (oper != null)
+      return new RelationalOperator(oper);
+    else
+      throw new QueryException("invalid operator '" + value + "'");
+  }
+
+  /**
+   * Gets the value of the value property.
+   * 
+   * @return possible object is {@link RelationalOperatorName }
+   * 
+   */
+  public RelationalOperatorName getValue() {
+    return value;
+  }
+
+  /**
+   * Sets the value of the value property.
+   * 
+   * @param value
+   *          allowed object is {@link RelationalOperatorName }
+   * 
+   */
+  public void setValue(RelationalOperatorName value) {
+    this.value = value;
+  }
+
+  public void accept(QueryVisitor visitor) {
+    visitor.start(this);
+    visitor.end(this);
+  }
 }

@@ -45,321 +45,316 @@ import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * Base class for SAX-to-STAX bridge classes that provides common
- * functionality.
+ * Base class for SAX-to-STAX bridge classes that provides common functionality.
  * 
  * @author Christian Niles
  * @version $Revision: 1.3 $
  */
-public abstract class StAXContentHandler extends DefaultHandler
-		implements
-			LexicalHandler {
+public abstract class StAXContentHandler extends DefaultHandler implements LexicalHandler {
 
-	/**
-	 * Whether the parser is currently within a CDATA section.
-	 */
-	protected boolean isCDATA;
+  /**
+   * Whether the parser is currently within a CDATA section.
+   */
+  protected boolean isCDATA;
 
-	/**
-	 * Buffer containing text read within the current CDATA section.
-	 */
-	protected StringBuffer CDATABuffer;
+  /**
+   * Buffer containing text read within the current CDATA section.
+   */
+  protected StringBuffer CDATABuffer;
 
-	/**
-	 * Stack used to store declared namespaces.
-	 */
-	protected SimpleNamespaceContext namespaces;
+  /**
+   * Stack used to store declared namespaces.
+   */
+  protected SimpleNamespaceContext namespaces;
 
-	/**
-	 * The SAX {@link Locator}provided to the handler.
-	 */
-	protected Locator docLocator;
+  /**
+   * The SAX {@link Locator}provided to the handler.
+   */
+  protected Locator docLocator;
 
-	/**
-	 * The STAX {@link XMLReporter}registered to receive notifications.
-	 */
-	protected XMLReporter reporter;
+  /**
+   * The STAX {@link XMLReporter}registered to receive notifications.
+   */
+  protected XMLReporter reporter;
 
-	public StAXContentHandler() {
+  public StAXContentHandler() {
 
-	}
+  }
 
-	public StAXContentHandler(XMLReporter reporter) {
+  public StAXContentHandler(XMLReporter reporter) {
 
-		this.reporter = reporter;
+    this.reporter = reporter;
 
-	}
+  }
 
-	/**
-	 * Sets the {@link XMLReporter}to which warning and error messages will be
-	 * sent.
-	 * 
-	 * @param reporter The {@link XMLReporter}to notify of errors.
-	 */
-	public void setXMLReporter(XMLReporter reporter) {
+  /**
+   * Sets the {@link XMLReporter}to which warning and error messages will be
+   * sent.
+   * 
+   * @param reporter
+   *          The {@link XMLReporter}to notify of errors.
+   */
+  public void setXMLReporter(XMLReporter reporter) {
 
-		this.reporter = reporter;
+    this.reporter = reporter;
 
-	}
+  }
 
-	public void setDocumentLocator(Locator locator) {
+  public void setDocumentLocator(Locator locator) {
 
-		this.docLocator = locator;
+    this.docLocator = locator;
 
-	}
+  }
 
-	/**
-	 * Calculates the STAX {@link Location}from the SAX {@link Locator}
-	 * registered with this handler. If no {@link Locator}was provided, then
-	 * this method will return <code>null</code>.
-	 */
-	public Location getCurrentLocation() {
+  /**
+   * Calculates the STAX {@link Location}from the SAX {@link Locator} registered
+   * with this handler. If no {@link Locator}was provided, then this method will
+   * return <code>null</code>.
+   */
+  public Location getCurrentLocation() {
 
-		if (docLocator != null) {
+    if (docLocator != null) {
 
-			return new SAXLocation(docLocator);
+      return new SAXLocation(docLocator);
 
-		} else {
+    } else {
 
-			return null;
+      return null;
 
-		}
+    }
 
-	}
+  }
 
-	public void error(SAXParseException e) throws SAXException {
+  public void error(SAXParseException e) throws SAXException {
 
-		reportException("ERROR", e);
+    reportException("ERROR", e);
 
-	}
+  }
 
-	public void fatalError(SAXParseException e) throws SAXException {
+  public void fatalError(SAXParseException e) throws SAXException {
 
-		reportException("FATAL", e);
+    reportException("FATAL", e);
 
-	}
+  }
 
-	public void warning(SAXParseException e) throws SAXException {
+  public void warning(SAXParseException e) throws SAXException {
 
-		reportException("WARNING", e);
+    reportException("WARNING", e);
 
-	}
+  }
 
-	public void startDocument() throws SAXException {
+  public void startDocument() throws SAXException {
 
-		namespaces = new SimpleNamespaceContext();
+    namespaces = new SimpleNamespaceContext();
 
-	}
+  }
 
-	public void endDocument() throws SAXException {
+  public void endDocument() throws SAXException {
 
-		namespaces = null;
+    namespaces = null;
 
-	}
+  }
 
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+  public void startElement(String uri, String localName, String qName, Attributes attributes)
+      throws SAXException {
 
-		namespaces = null;
+    namespaces = null;
 
-	}
+  }
 
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
+  public void endElement(String uri, String localName, String qName) throws SAXException {
 
-		namespaces = null;
+    namespaces = null;
 
-	}
+  }
 
-	public void startPrefixMapping(String prefix, String uri)
-			throws SAXException {
+  public void startPrefixMapping(String prefix, String uri) throws SAXException {
 
-		if (prefix == null) {
+    if (prefix == null) {
 
-			prefix = "";
+      prefix = "";
 
-		} else if (prefix.equals("xml")) {
+    } else if (prefix.equals("xml")) {
 
-			return;
+      return;
 
-		}
+    }
 
-		if (namespaces == null) {
+    if (namespaces == null) {
 
-			namespaces = new SimpleNamespaceContext();
+      namespaces = new SimpleNamespaceContext();
 
-		}
-		namespaces.setPrefix(prefix, uri);
+    }
+    namespaces.setPrefix(prefix, uri);
 
-	}
+  }
 
-	public void endPrefixMapping(String prefix) throws SAXException {
+  public void endPrefixMapping(String prefix) throws SAXException {
 
-	}
+  }
 
-	public void startCDATA() throws SAXException {
+  public void startCDATA() throws SAXException {
 
-		isCDATA = true;
-		if (CDATABuffer == null) {
+    isCDATA = true;
+    if (CDATABuffer == null) {
 
-			CDATABuffer = new StringBuffer();
+      CDATABuffer = new StringBuffer();
 
-		} else {
+    } else {
 
-			CDATABuffer.setLength(0);
+      CDATABuffer.setLength(0);
 
-		}
+    }
 
-	}
+  }
 
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+  public void characters(char[] ch, int start, int length) throws SAXException {
 
-		if (isCDATA) {
+    if (isCDATA) {
 
-			CDATABuffer.append(ch, start, length);
+      CDATABuffer.append(ch, start, length);
 
-		}
+    }
 
-	}
+  }
 
-	public void endCDATA() throws SAXException {
+  public void endCDATA() throws SAXException {
 
-		isCDATA = false;
-		CDATABuffer.setLength(0);
+    isCDATA = false;
+    CDATABuffer.setLength(0);
 
-	}
+  }
 
-	public void comment(char[] ch, int start, int length) throws SAXException {
+  public void comment(char[] ch, int start, int length) throws SAXException {
 
-	}
+  }
 
-	public void endDTD() throws SAXException {
+  public void endDTD() throws SAXException {
 
-	}
+  }
 
-	public void endEntity(String name) throws SAXException {
+  public void endEntity(String name) throws SAXException {
 
-	}
+  }
 
-	public void startDTD(String name, String publicId, String systemId)
-			throws SAXException {
+  public void startDTD(String name, String publicId, String systemId) throws SAXException {
 
-	}
+  }
 
-	public void startEntity(String name) throws SAXException {
+  public void startEntity(String name) throws SAXException {
 
-	}
+  }
 
-	/**
-	 * Used to report a {@link SAXException}to the {@link XMLReporter}
-	 * registered with this handler.
-	 */
-	protected void reportException(String type, SAXException e)
-			throws SAXException {
+  /**
+   * Used to report a {@link SAXException}to the {@link XMLReporter} registered
+   * with this handler.
+   */
+  protected void reportException(String type, SAXException e) throws SAXException {
 
-		if (reporter != null) {
+    if (reporter != null) {
 
-			try {
+      try {
 
-				reporter.report(e.getMessage(), type, e, getCurrentLocation());
+        reporter.report(e.getMessage(), type, e, getCurrentLocation());
 
-			} catch (XMLStreamException e1) {
+      } catch (XMLStreamException e1) {
 
-				throw new SAXException(e1);
+        throw new SAXException(e1);
 
-			}
+      }
 
-		}
+    }
 
-	}
+  }
 
-	/**
-	 * Parses an XML qualified name, and places the resulting prefix and local
-	 * name in the provided String array.
-	 * 
-	 * @param qName The qualified name to parse.
-	 * @param results An array where parse results will be placed. The prefix
-	 *            will be placed at <code>results[0]</code>, and the local
-	 *            part at <code>results[1]</code>
-	 */
-	public static final void parseQName(String qName, String[] results) {
+  /**
+   * Parses an XML qualified name, and places the resulting prefix and local
+   * name in the provided String array.
+   * 
+   * @param qName
+   *          The qualified name to parse.
+   * @param results
+   *          An array where parse results will be placed. The prefix will be
+   *          placed at <code>results[0]</code>, and the local part at
+   *          <code>results[1]</code>
+   */
+  public static final void parseQName(String qName, String[] results) {
 
-		String prefix, local;
-		int idx = qName.indexOf(':');
-		if (idx >= 0) {
+    String prefix, local;
+    int idx = qName.indexOf(':');
+    if (idx >= 0) {
 
-			prefix = qName.substring(0, idx);
-			local = qName.substring(idx + 1);
+      prefix = qName.substring(0, idx);
+      local = qName.substring(idx + 1);
 
-		} else {
+    } else {
 
-			prefix = "";
-			local = qName;
+      prefix = "";
+      local = qName;
 
-		}
+    }
 
-		results[0] = prefix;
-		results[1] = local;
+    results[0] = prefix;
+    results[1] = local;
 
-	}
+  }
 
-	/**
-	 * {@Link Location}implementation used to expose details from a SAX
-	 * {@link Locator}.
-	 * 
-	 * @author christian
-	 * @version $Revision: 1.3 $
-	 */
-	private static final class SAXLocation implements Location {
+  /**
+   * {@Link Location}implementation used to expose details from a SAX
+   * {@link Locator}.
+   * 
+   * @author christian
+   * @version $Revision: 1.3 $
+   */
+  private static final class SAXLocation implements Location {
 
-		private int lineNumber;
+    private int lineNumber;
 
-		private int columnNumber;
+    private int columnNumber;
 
-		private String publicId;
+    private String publicId;
 
-		private String systemId;
+    private String systemId;
 
-		private SAXLocation(Locator locator) {
+    private SAXLocation(Locator locator) {
 
-			lineNumber = locator.getLineNumber();
-			columnNumber = locator.getColumnNumber();
-			publicId = locator.getPublicId();
-			systemId = locator.getSystemId();
+      lineNumber = locator.getLineNumber();
+      columnNumber = locator.getColumnNumber();
+      publicId = locator.getPublicId();
+      systemId = locator.getSystemId();
 
-		}
+    }
 
-		public int getLineNumber() {
+    public int getLineNumber() {
 
-			return lineNumber;
+      return lineNumber;
 
-		}
+    }
 
-		public int getColumnNumber() {
+    public int getColumnNumber() {
 
-			return columnNumber;
+      return columnNumber;
 
-		}
+    }
 
-		public int getCharacterOffset() {
+    public int getCharacterOffset() {
 
-			return -1;
+      return -1;
 
-		}
+    }
 
-		public String getPublicId() {
+    public String getPublicId() {
 
-			return publicId;
+      return publicId;
 
-		}
+    }
 
-		public String getSystemId() {
+    public String getSystemId() {
 
-			return systemId;
+      return systemId;
 
-		}
+    }
 
-	}
+  }
 
 }

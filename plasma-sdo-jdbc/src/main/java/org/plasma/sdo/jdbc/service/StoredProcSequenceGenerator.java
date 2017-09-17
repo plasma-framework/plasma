@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.jdbc.service;
 
 import java.sql.CallableStatement;
@@ -40,83 +35,75 @@ import org.plasma.sdo.jdbc.connect.RDBConnectionManager;
 import commonj.sdo.DataObject;
 import commonj.sdo.Type;
 
-public class StoredProcSequenceGenerator 
-   implements SequenceGenerator 
-{
-    private static Log log = LogFactory.getLog(StoredProcSequenceGenerator.class);
-	private Connection conn;
-	
-    public StoredProcSequenceGenerator() {       
-    }
+public class StoredProcSequenceGenerator implements SequenceGenerator {
+  private static Log log = LogFactory.getLog(StoredProcSequenceGenerator.class);
+  private Connection conn;
 
-    public Long get(DataObject dataObject) {
-        return getSeqNum(getSeqName(dataObject.getType()));
-    }   
-    
-    private Long getSeqNum(String seqName)
-    {
-        CallableStatement cstmt1 = null;
-        try { 
-            if (conn == null)                                          
-            	initialize();
-            
-            cstmt1 =(CallableStatement)                                
-                    conn.prepareCall ("{ call GET_SQNC_NMBR (?, ?) }");  
-            cstmt1.registerOutParameter (2, Types.NUMERIC);            
-            cstmt1.setString (1, seqName);
-            cstmt1.execute (); 
-            long id = cstmt1.getLong (2);
-            return new Long(id);    
+  public StoredProcSequenceGenerator() {
+  }
+
+  public Long get(DataObject dataObject) {
+    return getSeqNum(getSeqName(dataObject.getType()));
+  }
+
+  private Long getSeqNum(String seqName) {
+    CallableStatement cstmt1 = null;
+    try {
+      if (conn == null)
+        initialize();
+
+      cstmt1 = (CallableStatement) conn.prepareCall("{ call GET_SQNC_NMBR (?, ?) }");
+      cstmt1.registerOutParameter(2, Types.NUMERIC);
+      cstmt1.setString(1, seqName);
+      cstmt1.execute();
+      long id = cstmt1.getLong(2);
+      return new Long(id);
+    } catch (Throwable t) {
+      throw new RuntimeException(t);
+    } finally {
+      if (cstmt1 != null)
+        try {
+          cstmt1.close();
+        } catch (Throwable t2) {
         }
-        catch (Throwable t) {
-            throw new RuntimeException(t);
-        }        
-        finally {
-            if (cstmt1 != null)
-                try {
-                    cstmt1.close();    
-                }  
-                catch (Throwable t2) {
-                }           
-        }       
     }
-    
-    private String getSeqName(Type type)
-    {
-		SequenceConfiguration config = PlasmaConfig.getInstance().getDataAccessProvider(DataAccessProviderName.JDBC).getSequenceConfiguration();
+  }
 
-        Alias alias = ((PlasmaType)type).getAlias();
-        if (alias == null)
-        	throw new RuntimeException("type has no alias, " 
-        			+ type.getURI() + "#" + type.getName());
-	    StringBuilder buf = new StringBuilder();
-		if (config.getPrefix() != null && config.getPrefix().trim().length() > 0) {
-	        buf.append(config.getPrefix());
-	    }
-	    buf.append(alias.getPhysicalName());
-	    if (config.getSuffix() != null && config.getSuffix().trim().length() > 0) {
-	        buf.append(config.getSuffix());
-	    }
-        
-        return buf.toString();
+  private String getSeqName(Type type) {
+    SequenceConfiguration config = PlasmaConfig.getInstance()
+        .getDataAccessProvider(DataAccessProviderName.JDBC).getSequenceConfiguration();
+
+    Alias alias = ((PlasmaType) type).getAlias();
+    if (alias == null)
+      throw new RuntimeException("type has no alias, " + type.getURI() + "#" + type.getName());
+    StringBuilder buf = new StringBuilder();
+    if (config.getPrefix() != null && config.getPrefix().trim().length() > 0) {
+      buf.append(config.getPrefix());
+    }
+    buf.append(alias.getPhysicalName());
+    if (config.getSuffix() != null && config.getSuffix().trim().length() > 0) {
+      buf.append(config.getSuffix());
     }
 
-	public void initialize() {
-		try {
-			this.conn = RDBConnectionManager.instance().getConnection();
-		} catch (SQLException e2) {
-            throw new DataAccessException(e2);
-		}
-	}
+    return buf.toString();
+  }
 
-	public void close() {
-		try {
-			if (this.conn != null) {
-			    this.conn.close(); // return to pool
-			    this.conn = null;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage());
-		}
-	}
+  public void initialize() {
+    try {
+      this.conn = RDBConnectionManager.instance().getConnection();
+    } catch (SQLException e2) {
+      throw new DataAccessException(e2);
+    }
+  }
+
+  public void close() {
+    try {
+      if (this.conn != null) {
+        this.conn.close(); // return to pool
+        this.conn = null;
+      }
+    } catch (SQLException e) {
+      log.error(e.getMessage());
+    }
+  }
 }

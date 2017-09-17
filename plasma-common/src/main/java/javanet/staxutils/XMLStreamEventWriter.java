@@ -50,97 +50,96 @@ import javax.xml.stream.events.XMLEvent;
  */
 public class XMLStreamEventWriter extends BaseXMLEventWriter {
 
-    /** The underlying stream. */
-    private XMLStreamWriter writer;
+  /** The underlying stream. */
+  private XMLStreamWriter writer;
 
-    /**
-     * Constructs a <code>XMLEventStreamWriter</code> that writes events to the
-     * given stream.
-     * 
-     * @param writer The {@link XMLStreamWriter} to which the events will be
-     * 		written.
-     */
-    public XMLStreamEventWriter(XMLStreamWriter writer) {
+  /**
+   * Constructs a <code>XMLEventStreamWriter</code> that writes events to the
+   * given stream.
+   * 
+   * @param writer
+   *          The {@link XMLStreamWriter} to which the events will be written.
+   */
+  public XMLStreamEventWriter(XMLStreamWriter writer) {
 
-        super(null, writer.getNamespaceContext());
-        this.writer = writer;
+    super(null, writer.getNamespaceContext());
+    this.writer = writer;
 
-    }
+  }
 
-    public synchronized void flush() throws XMLStreamException {
+  public synchronized void flush() throws XMLStreamException {
 
-        super.flush();
+    super.flush();
 
-        // send any cached start element
-        if (savedStart != null) {
+    // send any cached start element
+    if (savedStart != null) {
 
-            XMLWriterUtils.writeStartElement(savedStart, false, writer);
-
-        }
-
-        writer.flush();
+      XMLWriterUtils.writeStartElement(savedStart, false, writer);
 
     }
 
-    public synchronized void close() throws XMLStreamException {
+    writer.flush();
 
-        super.close();
-        writer.close();
+  }
+
+  public synchronized void close() throws XMLStreamException {
+
+    super.close();
+    writer.close();
+
+  }
+
+  /**
+   * Saved reference to most recent start element. This is used to properly
+   * write empty elements. Each startElement event is saved here until the next
+   * event is received, at which point it will be written as a start or empty
+   * element if it is followed directly by an EndElement.
+   */
+  private StartElement savedStart;
+
+  protected synchronized void sendEvent(XMLEvent event) throws XMLStreamException {
+
+    // Check if we have a cached start tag. If we do, then we should
+    // check if this event is actually an end tag, so we can properly
+    // write an empty element.
+    if (savedStart != null) {
+
+      StartElement start = savedStart;
+      savedStart = null;
+
+      if (event.getEventType() == XMLEvent.END_ELEMENT) {
+
+        // this end tag directly followed a start tag, so send
+        // the underlying writer an empty start element
+        XMLWriterUtils.writeStartElement(start, true, writer);
+        return;
+
+      } else {
+
+        // element has content, so send a regular start tag
+        XMLWriterUtils.writeStartElement(start, false, writer);
+
+      }
+
+    }
+
+    if (event.isStartElement()) {
+
+      // cache the event
+      savedStart = event.asStartElement();
+
+    } else if (event instanceof ExtendedXMLEvent) {
+
+      // let the event handle itself
+      ((ExtendedXMLEvent) event).writeEvent(writer);
+
+    } else {
+
+      // write the event to the stream
+      XMLWriterUtils.writeEvent(event, writer);
 
     }
 
-    /**
-     * Saved reference to most recent start element. This is used to properly
-     * write empty elements. Each startElement event is saved here until the
-     * next event is received, at which point it will be written as a start or
-     * empty element if it is followed directly by an EndElement.
-     */
-    private StartElement savedStart;
-
-    protected synchronized void sendEvent(XMLEvent event)
-            throws XMLStreamException {
-
-        // Check if we have a cached start tag. If we do, then we should
-        // check if this event is actually an end tag, so we can properly
-        // write an empty element.
-        if (savedStart != null) {
-
-            StartElement start = savedStart;
-            savedStart = null;
-
-            if (event.getEventType() == XMLEvent.END_ELEMENT) {
-
-                // this end tag directly followed a start tag, so send
-                // the underlying writer an empty start element
-                XMLWriterUtils.writeStartElement(start, true, writer);
-                return;
-
-            } else {
-
-                // element has content, so send a regular start tag
-                XMLWriterUtils.writeStartElement(start, false, writer);
-
-            }
-
-        }
-
-        if (event.isStartElement()) {
-
-            // cache the event
-            savedStart = event.asStartElement();
-
-        } else if (event instanceof ExtendedXMLEvent) {
-
-            // let the event handle itself
-            ((ExtendedXMLEvent) event).writeEvent(writer);
-
-        } else {
-
-            // write the event to the stream
-            XMLWriterUtils.writeEvent(event, writer);
-
-        }
-
-    }
+  }
 
 }

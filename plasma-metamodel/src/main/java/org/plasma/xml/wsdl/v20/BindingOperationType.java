@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.xml.wsdl.v20;
 
 import java.util.ArrayList;
@@ -36,11 +31,13 @@ import javax.xml.namespace.QName;
 
 import org.w3c.dom.Element;
 
-
 /**
- * <p>Java class for BindingOperationType complex type.
+ * <p>
+ * Java class for BindingOperationType complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="BindingOperationType">
@@ -62,79 +59,72 @@ import org.w3c.dom.Element;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "BindingOperationType", propOrder = {
-    "inputsAndOutputsAndInfaults"
-})
-public class BindingOperationType
-    extends ExtensibleDocumentedType
-{
+@XmlType(name = "BindingOperationType", propOrder = { "inputsAndOutputsAndInfaults" })
+public class BindingOperationType extends ExtensibleDocumentedType {
 
-    @XmlElementRefs({
-        @XmlElementRef(name = "outfault", namespace = "http://www.w3.org/ns/wsdl", type = JAXBElement.class),
-        @XmlElementRef(name = "input", namespace = "http://www.w3.org/ns/wsdl", type = JAXBElement.class),
-        @XmlElementRef(name = "infault", namespace = "http://www.w3.org/ns/wsdl", type = JAXBElement.class),
-        @XmlElementRef(name = "output", namespace = "http://www.w3.org/ns/wsdl", type = JAXBElement.class)
-    })
-    @XmlAnyElement
-    protected List<Object> inputsAndOutputsAndInfaults;
-    @XmlAttribute(required = true)
-    protected QName ref;
+  @XmlElementRefs({
+      @XmlElementRef(name = "outfault", namespace = "http://www.w3.org/ns/wsdl", type = JAXBElement.class),
+      @XmlElementRef(name = "input", namespace = "http://www.w3.org/ns/wsdl", type = JAXBElement.class),
+      @XmlElementRef(name = "infault", namespace = "http://www.w3.org/ns/wsdl", type = JAXBElement.class),
+      @XmlElementRef(name = "output", namespace = "http://www.w3.org/ns/wsdl", type = JAXBElement.class) })
+  @XmlAnyElement
+  protected List<Object> inputsAndOutputsAndInfaults;
+  @XmlAttribute(required = true)
+  protected QName ref;
 
-    /**
-     * Gets the value of the inputsAndOutputsAndInfaults property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the inputsAndOutputsAndInfaults property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getInputsAndOutputsAndInfaults().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link BindingOperationFaultType }{@code >}
-     * {@link JAXBElement }{@code <}{@link BindingOperationMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link BindingOperationMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link BindingOperationFaultType }{@code >}
-     * {@link Element }
-     * 
-     * 
-     */
-    public List<Object> getInputsAndOutputsAndInfaults() {
-        if (inputsAndOutputsAndInfaults == null) {
-            inputsAndOutputsAndInfaults = new ArrayList<Object>();
-        }
-        return this.inputsAndOutputsAndInfaults;
+  /**
+   * Gets the value of the inputsAndOutputsAndInfaults property.
+   * 
+   * <p>
+   * This accessor method returns a reference to the live list, not a snapshot.
+   * Therefore any modification you make to the returned list will be present
+   * inside the JAXB object. This is why there is not a <CODE>set</CODE> method
+   * for the inputsAndOutputsAndInfaults property.
+   * 
+   * <p>
+   * For example, to add a new item, do as follows:
+   * 
+   * <pre>
+   * getInputsAndOutputsAndInfaults().add(newItem);
+   * </pre>
+   * 
+   * 
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link JAXBElement }{@code <}{@link BindingOperationFaultType }{@code >}
+   * {@link JAXBElement }{@code <}{@link BindingOperationMessageType }{@code >}
+   * {@link JAXBElement }{@code <}{@link BindingOperationMessageType }{@code >}
+   * {@link JAXBElement }{@code <}{@link BindingOperationFaultType }{@code >}
+   * {@link Element }
+   * 
+   * 
+   */
+  public List<Object> getInputsAndOutputsAndInfaults() {
+    if (inputsAndOutputsAndInfaults == null) {
+      inputsAndOutputsAndInfaults = new ArrayList<Object>();
     }
+    return this.inputsAndOutputsAndInfaults;
+  }
 
-    /**
-     * Gets the value of the ref property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getRef() {
-        return ref;
-    }
+  /**
+   * Gets the value of the ref property.
+   * 
+   * @return possible object is {@link QName }
+   * 
+   */
+  public QName getRef() {
+    return ref;
+  }
 
-    /**
-     * Sets the value of the ref property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setRef(QName value) {
-        this.ref = value;
-    }
+  /**
+   * Sets the value of the ref property.
+   * 
+   * @param value
+   *          allowed object is {@link QName }
+   * 
+   */
+  public void setRef(QName value) {
+    this.ref = value;
+  }
 
 }

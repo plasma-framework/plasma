@@ -47,82 +47,79 @@ import javax.xml.stream.events.DTD;
  */
 public class DTDEvent extends AbstractXMLEvent implements DTD {
 
-    /**
-     * The full DTD declaration.
-     */
-    protected String declaration;
+  /**
+   * The full DTD declaration.
+   */
+  protected String declaration;
 
-    /**
-     * The list of {@link javax.xml.stream.events.EntityDeclaration}s.
-     */
-    protected List entities;
+  /**
+   * The list of {@link javax.xml.stream.events.EntityDeclaration}s.
+   */
+  protected List entities;
 
-    /**
-     * The list of {@link javax.xml.stream.events.NotationDeclaration}s.
-     */
-    protected List notations;
+  /**
+   * The list of {@link javax.xml.stream.events.NotationDeclaration}s.
+   */
+  protected List notations;
 
-    public DTDEvent(String declaration, Location location) {
+  public DTDEvent(String declaration, Location location) {
 
-        super(location);
-        this.declaration = declaration;
-        // TODO Parse declaration?
+    super(location);
+    this.declaration = declaration;
+    // TODO Parse declaration?
 
-    }
+  }
 
-    public DTDEvent(String declaration, List entities, List notations,
-            Location location) {
+  public DTDEvent(String declaration, List entities, List notations, Location location) {
 
-        super(location);
-        this.declaration = declaration;
-        this.entities = (entities == null ? Collections.EMPTY_LIST : entities);
-        this.notations = (notations == null
-                ? Collections.EMPTY_LIST
-                : notations);
+    super(location);
+    this.declaration = declaration;
+    this.entities = (entities == null ? Collections.EMPTY_LIST : entities);
+    this.notations = (notations == null ? Collections.EMPTY_LIST : notations);
 
-    }
+  }
 
-    /** Copy constructor. */
-    public DTDEvent(DTD that) {
+  /** Copy constructor. */
+  public DTDEvent(DTD that) {
 
-        super(that);
-        this.declaration = that.getDocumentTypeDeclaration();
-        this.entities = that.getEntities();
-        this.notations = that.getNotations();
+    super(that);
+    this.declaration = that.getDocumentTypeDeclaration();
+    this.entities = that.getEntities();
+    this.notations = that.getNotations();
 
-    }
+  }
 
-    /**
-     * Returns {@link #DTD}.
-     */
-    public int getEventType() {
+  /**
+   * Returns {@link #DTD}.
+   */
+  public int getEventType() {
 
-        return DTD;
+    return DTD;
 
-    }
+  }
 
-    public String getDocumentTypeDeclaration() {
+  public String getDocumentTypeDeclaration() {
 
-        return declaration;
+    return declaration;
 
-    }
+  }
 
-    public List getEntities() {
+  public List getEntities() {
 
-        return entities;
+    return entities;
 
-    }
+  }
 
-    public List getNotations() {
+  public List getNotations() {
 
-        return notations;
+    return notations;
 
-    }
+  }
 
-    public Object getProcessedDTD() {
+  public Object getProcessedDTD() {
 
-        return null;
+    return null;
 
-    }
+  }
 
 }

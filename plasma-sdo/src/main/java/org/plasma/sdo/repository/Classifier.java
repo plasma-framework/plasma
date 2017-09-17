@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.repository;
 
 import java.util.List;
@@ -30,54 +25,60 @@ import org.plasma.sdo.Derivation;
  * 
  * @author Scott Cinnamond
  * @since 1.2.4
- */public interface Classifier extends Element {
+ */
+public interface Classifier extends Element {
 
-	/**
-	 * Returns the (UML) artifact URI associated with the classifier, if available, or
-	 * null e.g. if the classifier was not loaded as part of an artifact.    
-	 * @return the (UML) artifact URI associated with the classifier, if available, or
-	 * null e.g. if the classifier was not loaded as part of an artifact.
-	 */
-	String getArtifactNamespaceURI();
+  /**
+   * Returns the (UML) artifact URI associated with the classifier, if
+   * available, or null e.g. if the classifier was not loaded as part of an
+   * artifact.
+   * 
+   * @return the (UML) artifact URI associated with the classifier, if
+   *         available, or null e.g. if the classifier was not loaded as part of
+   *         an artifact.
+   */
+  String getArtifactNamespaceURI();
 
-	String getPackageName();
+  String getPackageName();
 
-	String getPackagePhysicalName();
+  String getPackagePhysicalName();
 
-	Alias findPackageAlias();
+  Alias findPackageAlias();
 
-	Derivation findDerivation();
+  Derivation findDerivation();
 
-	List<Comment> getComments();
+  List<Comment> getComments();
 
-	Visibility getVisibility();
+  Visibility getVisibility();
 
-	boolean isAbstract();
+  boolean isAbstract();
 
-	boolean isDataType();
+  boolean isDataType();
 
-	List<Classifier> getGeneralization();
+  List<Classifier> getGeneralization();
 
-	List<Classifier> getSpecializations();
+  List<Classifier> getSpecializations();
 
-	/**
-	 * Traverses the given classifier's package ancestry looking for
-	 * an SDO namespace stereotype, and if found, returns the URI.
-	 * @param classifier the classifier
-	 * @return the SDO namespace URI or null if not found.
-	 * @throws RepositoryException if the URI is not found
-	 */
-	String getNamespaceURI();
+  /**
+   * Traverses the given classifier's package ancestry looking for an SDO
+   * namespace stereotype, and if found, returns the URI.
+   * 
+   * @param classifier
+   *          the classifier
+   * @return the SDO namespace URI or null if not found.
+   * @throws RepositoryException
+   *           if the URI is not found
+   */
+  String getNamespaceURI();
 
-	String getPhysicalName();
+  String getPhysicalName();
 
-	String getLocalName();
+  String getLocalName();
 
-	String getBusinessName();
+  String getBusinessName();
 
-	Alias findAlias();
+  Alias findAlias();
 
-	Classifier getDerivationSupplier();
-
+  Classifier getDerivationSupplier();
 
 }

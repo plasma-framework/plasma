@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.provisioning.common;
 
 import java.net.MalformedURLException;
@@ -28,52 +23,53 @@ import java.util.List;
 
 public class NamespaceUtils {
 
-	/**
-	 * Tokenizes the given URI as an array of names suitable
-	 * to be used as a UML package hierarchy. 
-	 * @param uri
-	 * @return the name array
-	 */
-	public static String[] toPackageTokens(String uri)
-	{
-		List<String> list = new ArrayList<String>();
-		
-		try {
-			URL url = new URL(uri);
-			String[] authority = url.getAuthority().split("\\.");
-			for (int i = authority.length -1; i >= 0; i--)
-				if (authority[i] != null && authority[i].trim().length() > 0)
-				    list.add(authority[i]);
-			if (url.getPath() != null) {
-			    String[] path = url.getPath().split("\\/");
-			    for (int i = 0; i < path.length; i++)
-					if (path[i] != null && path[i].trim().length() > 0)
-				        list.add(path[i]);
-			}
-		} catch (MalformedURLException e) {
-			throw new IllegalArgumentException(e); 
-		}
-		
-		String[] result = new String[list.size()];
-		list.toArray(result);		
-		
-		return result;		
-	}
+  /**
+   * Tokenizes the given URI as an array of names suitable to be used as a UML
+   * package hierarchy.
+   * 
+   * @param uri
+   * @return the name array
+   */
+  public static String[] toPackageTokens(String uri) {
+    List<String> list = new ArrayList<String>();
 
-	/**
-	 * Tokenizes the given URI and assembles a qualified java package name. 
-	 * @param uri
-	 * @return the qualified package name  
-	 */
-	public static String toPackageName(String uri) {
-		String[] tokens = toPackageTokens(uri);
-		StringBuilder buf = new StringBuilder();
-		for (int i = tokens.length-1; i >= 0; i--) {
-			if (i < tokens.length-1)
-				buf.append(".");
-			buf.append(tokens[i]);
-		}
-		return buf.toString();
-	}
+    try {
+      URL url = new URL(uri);
+      String[] authority = url.getAuthority().split("\\.");
+      for (int i = authority.length - 1; i >= 0; i--)
+        if (authority[i] != null && authority[i].trim().length() > 0)
+          list.add(authority[i]);
+      if (url.getPath() != null) {
+        String[] path = url.getPath().split("\\/");
+        for (int i = 0; i < path.length; i++)
+          if (path[i] != null && path[i].trim().length() > 0)
+            list.add(path[i]);
+      }
+    } catch (MalformedURLException e) {
+      throw new IllegalArgumentException(e);
+    }
+
+    String[] result = new String[list.size()];
+    list.toArray(result);
+
+    return result;
+  }
+
+  /**
+   * Tokenizes the given URI and assembles a qualified java package name.
+   * 
+   * @param uri
+   * @return the qualified package name
+   */
+  public static String toPackageName(String uri) {
+    String[] tokens = toPackageTokens(uri);
+    StringBuilder buf = new StringBuilder();
+    for (int i = tokens.length - 1; i >= 0; i--) {
+      if (i < tokens.length - 1)
+        buf.append(".");
+      buf.append(tokens[i]);
+    }
+    return buf.toString();
+  }
 
 }

@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.provisioning.cli;
 
 import java.io.ByteArrayInputStream;
@@ -70,205 +65,217 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpecBuilder;
 
 public abstract class ProvisioningTool {
-	private static Log log = LogFactory.getLog(ProvisioningTool.class);
+  private static Log log = LogFactory.getLog(ProvisioningTool.class);
 
-	protected static void printUsage(OptionParser parser, Log theLog) throws IOException {
-		HelpFormatter helpFormat = new BuiltinHelpFormatter(640, 1);
-		parser.formatHelpWith(helpFormat);
-		ByteArrayOutputStream helpOs = new ByteArrayOutputStream();
-		parser.printHelpOn(helpOs);
-		theLog.info("\n" + new String(helpOs.toByteArray()));
-	}
+  protected static void printUsage(OptionParser parser, Log theLog) throws IOException {
+    HelpFormatter helpFormat = new BuiltinHelpFormatter(640, 1);
+    parser.formatHelpWith(helpFormat);
+    ByteArrayOutputStream helpOs = new ByteArrayOutputStream();
+    parser.printHelpOn(helpOs);
+    theLog.info("\n" + new String(helpOs.toByteArray()));
+  }
 
-	protected static Model validateStagingModel(File source) throws JAXBException, SAXException, IOException {
-		FileInputStream is = new FileInputStream(source);
-		MetamodelDataBinding binding = new MetamodelDataBinding(new DefaultValidationEventHandler());
-		Model model = null;
-		try {
-			model = (Model) binding.validate(is);
-		} finally {
-			is.close();
-		}
+  protected static Model validateStagingModel(File source) throws JAXBException, SAXException,
+      IOException {
+    FileInputStream is = new FileInputStream(source);
+    MetamodelDataBinding binding = new MetamodelDataBinding(new DefaultValidationEventHandler());
+    Model model = null;
+    try {
+      model = (Model) binding.validate(is);
+    } finally {
+      is.close();
+    }
 
-		ProvisioningModel validator = new ModelAdapter(model);
+    ProvisioningModel validator = new ModelAdapter(model);
 
-		return model;
-	}
+    return model;
+  }
 
-	protected static boolean regenerate(long lastExecution) {
-		boolean stale = false;
+  protected static boolean regenerate(long lastExecution) {
+    boolean stale = false;
 
-		// check config file
-		if (PlasmaConfig.getInstance().getConfigFileLastModifiedDate() > lastExecution) {
-			stale = true;
-			log.debug("detected stale configuration file '" + PlasmaConfig.getInstance().getConfigFileName()
-					+ "' against time: " + String.valueOf(lastExecution));
-		}
+    // check config file
+    if (PlasmaConfig.getInstance().getConfigFileLastModifiedDate() > lastExecution) {
+      stale = true;
+      log.debug("detected stale configuration file '"
+          + PlasmaConfig.getInstance().getConfigFileName() + "' against time: "
+          + String.valueOf(lastExecution));
+    }
 
-		if (!stale) {
-			// check repo artifacts
-			for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifacts()) {
-				URL url = PlasmaConfig.class.getResource(artifact.getUrn());
-				if (url == null)
-					url = PlasmaConfig.class.getClassLoader().getResource(artifact.getUrn());
-				log.debug("checking modified state of repository artifact '" + url.getFile() + "' against time: "
-						+ String.valueOf(lastExecution));
-				File urlFile = new File(url.getFile());
-				if (urlFile.exists()) {
-					if (urlFile.lastModified() > lastExecution) {
-						stale = true;
-						log.debug("detected stale repository artifact '" + url.getFile() + "' against time: "
-								+ String.valueOf(lastExecution));
-						break;
-					}
-				}
-			}
-		}
+    if (!stale) {
+      // check repo artifacts
+      for (Artifact artifact : PlasmaConfig.getInstance().getRepository().getArtifacts()) {
+        URL url = PlasmaConfig.class.getResource(artifact.getUrn());
+        if (url == null)
+          url = PlasmaConfig.class.getClassLoader().getResource(artifact.getUrn());
+        log.debug("checking modified state of repository artifact '" + url.getFile()
+            + "' against time: " + String.valueOf(lastExecution));
+        File urlFile = new File(url.getFile());
+        if (urlFile.exists()) {
+          if (urlFile.lastModified() > lastExecution) {
+            stale = true;
+            log.debug("detected stale repository artifact '" + url.getFile() + "' against time: "
+                + String.valueOf(lastExecution));
+            break;
+          }
+        }
+      }
+    }
 
-		// FIXME - how to determine if annotated classes have changed
-		if (!stale) {
-		}
+    // FIXME - how to determine if annotated classes have changed
+    if (!stale) {
+    }
 
-		return stale;
-	}
+    return stale;
+  }
 
-	/**
-	 * Assembles provisioning meta model from annotated classes found using a class indexing utility, then loads
-	 * convert the assembled model to UML, loading it into the FUML runtime.  
-	 * @param annotationAssembler the meta model assembler
-	 * @param destDir the destination dir
-	 * @param options the provisioning options
-	 * @param silentOpt the silent option  
-	 */
-	protected static void loadAnnotationModel(AnnotationMetamodelAssembler annotationAssembler, File destDir,
-			OptionSet options, OptionSpecBuilder silentOpt) throws JAXBException, SAXException, IOException {
+  /**
+   * Assembles provisioning meta model from annotated classes found using a
+   * class indexing utility, then loads convert the assembled model to UML,
+   * loading it into the FUML runtime.
+   * 
+   * @param annotationAssembler
+   *          the meta model assembler
+   * @param destDir
+   *          the destination dir
+   * @param options
+   *          the provisioning options
+   * @param silentOpt
+   *          the silent option
+   */
+  protected static void loadAnnotationModel(AnnotationMetamodelAssembler annotationAssembler,
+      File destDir, OptionSet options, OptionSpecBuilder silentOpt) throws JAXBException,
+      SAXException, IOException {
 
-		if (log.isDebugEnabled()) {
-			MetamodelDataBinding binding = new MetamodelDataBinding(new DefaultValidationEventHandler());
- 			String xml = binding.marshal(annotationAssembler.getModel());
-			File outFile = new File(destDir, "derived-technical-model.xml");
-			FileOutputStream stream = new FileOutputStream(outFile);
-			stream.write(xml.getBytes());
-			stream.flush();
-			stream.close();
-			if (!options.has(silentOpt))
-				log.debug("wrote derived model file to: " + outFile.getAbsoluteFile());
-			// log.debug(xml);
-		}
-		ProvisioningModel annotationModelAdapter = 
-				new ModelAdapter(annotationAssembler.getModel());
-		
-		if (configHasAllNamespaces(annotationModelAdapter.getLeafPackages()))
-			return;
+    if (log.isDebugEnabled()) {
+      MetamodelDataBinding binding = new MetamodelDataBinding(new DefaultValidationEventHandler());
+      String xml = binding.marshal(annotationAssembler.getModel());
+      File outFile = new File(destDir, "derived-technical-model.xml");
+      FileOutputStream stream = new FileOutputStream(outFile);
+      stream.write(xml.getBytes());
+      stream.flush();
+      stream.close();
+      if (!options.has(silentOpt))
+        log.debug("wrote derived model file to: " + outFile.getAbsoluteFile());
+      // log.debug(xml);
+    }
+    ProvisioningModel annotationModelAdapter = new ModelAdapter(annotationAssembler.getModel());
 
-		String targetNamespaceUri = annotationModelAdapter.getModel().getUri();
-		for (Package pkg : annotationModelAdapter.getLeafPackages()) {
-			configureNamespace(pkg, targetNamespaceUri);
-		}
+    if (configHasAllNamespaces(annotationModelAdapter.getLeafPackages()))
+      return;
 
-		UMLModelAssembler umlAssembler = null;
-		UMLPlatform platform = UMLPlatform.magicdraw;
-		switch (platform) {
-		case papyrus:
-			umlAssembler = new PapyrusModelAssembler(annotationModelAdapter.getModel(), targetNamespaceUri, "tns");
-			break;
-		case magicdraw:
-			umlAssembler = new MDModelAssembler(annotationModelAdapter.getModel(), targetNamespaceUri, "tns");
-			break;
-		}
-		umlAssembler.setDerivePackageNamesFromURIs(false);
-		String xmi = umlAssembler.getContent(Format.getPrettyFormat());
-		if (log.isDebugEnabled()) {
-			File xmiDebugFile = new File(destDir, annotationModelAdapter.getModel().getId() + ".uml");
-			if (!options.has(silentOpt))
-				log.debug("Writing UML/XMI to: " + xmiDebugFile.getAbsolutePath());
-			try {
-				FileOutputStream os = new FileOutputStream(xmiDebugFile);
-				umlAssembler.getContent(os, Format.getPrettyFormat());
-			} catch (FileNotFoundException e) {
-			}
-		}
-		ByteArrayInputStream fumlStream = new ByteArrayInputStream(xmi.getBytes());
+    String targetNamespaceUri = annotationModelAdapter.getModel().getUri();
+    for (Package pkg : annotationModelAdapter.getLeafPackages()) {
+      configureNamespace(pkg, targetNamespaceUri);
+    }
 
-		if (log.isDebugEnabled())
-			if (!options.has(silentOpt))
-				log.debug("loading UML/XMI model");
-		Fuml.load(new ResourceArtifact(targetNamespaceUri, targetNamespaceUri, fumlStream));
+    UMLModelAssembler umlAssembler = null;
+    UMLPlatform platform = UMLPlatform.magicdraw;
+    switch (platform) {
+    case papyrus:
+      umlAssembler = new PapyrusModelAssembler(annotationModelAdapter.getModel(),
+          targetNamespaceUri, "tns");
+      break;
+    case magicdraw:
+      umlAssembler = new MDModelAssembler(annotationModelAdapter.getModel(), targetNamespaceUri,
+          "tns");
+      break;
+    }
+    umlAssembler.setDerivePackageNamesFromURIs(false);
+    String xmi = umlAssembler.getContent(Format.getPrettyFormat());
+    if (log.isDebugEnabled()) {
+      File xmiDebugFile = new File(destDir, annotationModelAdapter.getModel().getId() + ".uml");
+      if (!options.has(silentOpt))
+        log.debug("Writing UML/XMI to: " + xmiDebugFile.getAbsolutePath());
+      try {
+        FileOutputStream os = new FileOutputStream(xmiDebugFile);
+        umlAssembler.getContent(os, Format.getPrettyFormat());
+      } catch (FileNotFoundException e) {
+      }
+    }
+    ByteArrayInputStream fumlStream = new ByteArrayInputStream(xmi.getBytes());
 
-	}
+    if (log.isDebugEnabled())
+      if (!options.has(silentOpt))
+        log.debug("loading UML/XMI model");
+    Fuml.load(new ResourceArtifact(targetNamespaceUri, targetNamespaceUri, fumlStream));
 
-	private static boolean configHasAllNamespaces(List<Package> packages) {
-		boolean result = true;
-		for (Package pkg : packages)
-			if (!PlasmaConfig.getInstance().hasSDONamespace(pkg.getUri())) {
-				result = false;
-				break;
-			}
-		return result;
-	}
+  }
 
-	private static void configureNamespace(Package pkg, String targetNamespaceUri) {
-		if (PlasmaConfig.getInstance().hasSDONamespace(pkg.getUri()))
-			return; // skip if URI manually configured
+  private static boolean configHasAllNamespaces(List<Package> packages) {
+    boolean result = true;
+    for (Package pkg : packages)
+      if (!PlasmaConfig.getInstance().hasSDONamespace(pkg.getUri())) {
+        result = false;
+        break;
+      }
+    return result;
+  }
 
-		String pkgName = null;
-		if (pkg.getNamespaceProvisioning() != null && pkg.getNamespaceProvisioning().getPackageName() != null
-				&& pkg.getNamespaceProvisioning().getPackageName().trim().length() > 0) {
-			pkgName = pkg.getNamespaceProvisioning().getPackageName().trim();
-		} else {
-			// derive a java package name from the namespace URI
-			pkgName = NamespaceUtils.toPackageName(pkg.getUri());
-		}
+  private static void configureNamespace(Package pkg, String targetNamespaceUri) {
+    if (PlasmaConfig.getInstance().hasSDONamespace(pkg.getUri()))
+      return; // skip if URI manually configured
 
-		// FIXME: while we may have class or even property level provisioning
-		// info to store
-		// based on annotated classes, there is nowhere to store it
-		// in the config.
-		NamespaceProvisioning nsProvConfig = new NamespaceProvisioning();
-		nsProvConfig.setPackageName(pkgName);
+    String pkgName = null;
+    if (pkg.getNamespaceProvisioning() != null
+        && pkg.getNamespaceProvisioning().getPackageName() != null
+        && pkg.getNamespaceProvisioning().getPackageName().trim().length() > 0) {
+      pkgName = pkg.getNamespaceProvisioning().getPackageName().trim();
+    } else {
+      // derive a java package name from the namespace URI
+      pkgName = NamespaceUtils.toPackageName(pkg.getUri());
+    }
 
-		InterfaceProvisioning itfProv = new InterfaceProvisioning();
-		nsProvConfig.setInterface(itfProv);
-		// FIXME: collapse these elements into property name/value pairs
-		itfProv.setPropertyNameStyle(PropertyNameStyle.ENUMS);
-		itfProv.setEnumSource(EnumSource.EXTERNAL);
+    // FIXME: while we may have class or even property level provisioning
+    // info to store
+    // based on annotated classes, there is nowhere to store it
+    // in the config.
+    NamespaceProvisioning nsProvConfig = new NamespaceProvisioning();
+    nsProvConfig.setPackageName(pkgName);
 
-		ImplementationProvisioning implProv = new ImplementationProvisioning();
-		nsProvConfig.setImplementation(implProv);
+    InterfaceProvisioning itfProv = new InterfaceProvisioning();
+    nsProvConfig.setInterface(itfProv);
+    // FIXME: collapse these elements into property name/value pairs
+    itfProv.setPropertyNameStyle(PropertyNameStyle.ENUMS);
+    itfProv.setEnumSource(EnumSource.EXTERNAL);
 
-		QueryDSLProvisioning queryDSL = new QueryDSLProvisioning();
-		nsProvConfig.setQueryDSL(queryDSL);
-		queryDSL.setGenerate(true);
+    ImplementationProvisioning implProv = new ImplementationProvisioning();
+    nsProvConfig.setImplementation(implProv);
 
-		PlasmaConfig.getInstance().addDynamicSDONamespace(pkg.getUri(), targetNamespaceUri, nsProvConfig);
-	}
+    QueryDSLProvisioning queryDSL = new QueryDSLProvisioning();
+    nsProvConfig.setQueryDSL(queryDSL);
+    queryDSL.setGenerate(true);
 
-	protected static void writeContent(InputStream is, OutputStream os) throws IOException {
-		byte[] buf = new byte[4000];
-		int len = -1;
-		try {
-			while ((len = is.read(buf)) != -1)
-				os.write(buf, 0, len);
-		} finally {
-			is.close();
-			os.flush();
-		}
-	}
+    PlasmaConfig.getInstance().addDynamicSDONamespace(pkg.getUri(), targetNamespaceUri,
+        nsProvConfig);
+  }
 
-	public static byte[] readContent(InputStream is) throws IOException {
-		byte[] result;
-		byte[] buf = new byte[4000];
-		ByteArrayOutputStream os = new ByteArrayOutputStream(buf.length);
-		int len = -1;
-		try {
-			while ((len = is.read(buf, 0, buf.length)) != -1)
-				os.write(buf, 0, len);
-			result = os.toByteArray();
-		} finally {
-			is.close();
-			os.flush();
-			os.close();
-		}
-		return result;
-	}
+  protected static void writeContent(InputStream is, OutputStream os) throws IOException {
+    byte[] buf = new byte[4000];
+    int len = -1;
+    try {
+      while ((len = is.read(buf)) != -1)
+        os.write(buf, 0, len);
+    } finally {
+      is.close();
+      os.flush();
+    }
+  }
+
+  public static byte[] readContent(InputStream is) throws IOException {
+    byte[] result;
+    byte[] buf = new byte[4000];
+    ByteArrayOutputStream os = new ByteArrayOutputStream(buf.length);
+    int len = -1;
+    try {
+      while ((len = is.read(buf, 0, buf.length)) != -1)
+        os.write(buf, 0, len);
+      result = os.toByteArray();
+    } finally {
+      is.close();
+      os.flush();
+      os.close();
+    }
+    return result;
+  }
 }

@@ -40,67 +40,67 @@ import javax.xml.namespace.NamespaceContext;
 
 /**
  * {@link NamespaceContext} that wraps another context. This class is useful for
- * hiding the underlying implementation, or adding additional functionality on top of
- * another context.
+ * hiding the underlying implementation, or adding additional functionality on
+ * top of another context.
  * 
  * @author Christian Niles
  * @version $Revision: 1.1 $
  */
 public class NamespaceContextAdapter implements NamespaceContext {
 
-    /** The wrapped context. */
-    protected NamespaceContext namespaceCtx;
+  /** The wrapped context. */
+  protected NamespaceContext namespaceCtx;
 
-    public NamespaceContextAdapter() {
+  public NamespaceContextAdapter() {
 
-    }
+  }
 
-    public NamespaceContextAdapter(NamespaceContext namespaceCtx) {
+  public NamespaceContextAdapter(NamespaceContext namespaceCtx) {
 
-        this.namespaceCtx = namespaceCtx;
+    this.namespaceCtx = namespaceCtx;
 
-    }
+  }
 
-    public String getNamespaceURI(String prefix) {
+  public String getNamespaceURI(String prefix) {
 
-        if (namespaceCtx != null) {
+    if (namespaceCtx != null) {
 
-            return this.namespaceCtx.getNamespaceURI(prefix);
+      return this.namespaceCtx.getNamespaceURI(prefix);
 
-        } else {
+    } else {
 
-            return null;
-
-        }
+      return null;
 
     }
 
-    public String getPrefix(String nsURI) {
+  }
 
-        if (this.namespaceCtx != null) {
+  public String getPrefix(String nsURI) {
 
-            return this.namespaceCtx.getPrefix(nsURI);
+    if (this.namespaceCtx != null) {
 
-        } else {
+      return this.namespaceCtx.getPrefix(nsURI);
 
-            return null;
+    } else {
 
-        }
+      return null;
+
+    }
+
+  }
+
+  public Iterator getPrefixes(String nsURI) {
+
+    if (this.namespaceCtx != null) {
+
+      return this.namespaceCtx.getPrefixes(nsURI);
+
+    } else {
+
+      return Collections.EMPTY_LIST.iterator();
 
     }
 
-    public Iterator getPrefixes(String nsURI) {
-
-        if (this.namespaceCtx != null) {
-
-            return this.namespaceCtx.getPrefixes(nsURI);
-
-        } else {
-
-            return Collections.EMPTY_LIST.iterator();
-
-        }
-
-    }
+  }
 
 }

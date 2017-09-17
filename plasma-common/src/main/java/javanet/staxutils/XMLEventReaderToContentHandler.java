@@ -59,348 +59,331 @@ import org.xml.sax.helpers.AttributesImpl;
 /**
  * This is a simple utility class that adapts StAX events from an
  * {@link javax.xml.stream.XMLEventReader} to SAX events on a
- * {@link org.xml.sax.ContentHandler}, bridging between the two
- * parser technologies.
+ * {@link org.xml.sax.ContentHandler}, bridging between the two parser
+ * technologies.
  *
  * @author Ryan.Shoemaker@Sun.COM
  * @version 1.0
  */
 public class XMLEventReaderToContentHandler implements StAXReaderToContentHandler {
 
-    // StAX event source
-    private final XMLEventReader staxEventReader;
+  // StAX event source
+  private final XMLEventReader staxEventReader;
 
-    // SAX event sinks
-    private XMLFilterImplEx filter;
-        
-    /**
-     * Construct a new StAX to SAX adapter that will convert a StAX event
-     * stream into a SAX event stream.
-     * 
-     * @param staxCore
-     *                StAX event source
-     * @param filter
-     *                SAX event sink
-     */
-    public XMLEventReaderToContentHandler(XMLEventReader staxCore, 
-            XMLFilterImplEx filter) {
-        staxEventReader = staxCore;
-        
-        this.filter = filter;
-    }
-    
-    /*
-     * @see StAXReaderToContentHandler#bridge()
-     */
-    public void bridge() throws XMLStreamException {
+  // SAX event sinks
+  private XMLFilterImplEx filter;
 
-        try {
-            // remembers the nest level of elements to know when we are done.
-            int depth=0;
+  /**
+   * Construct a new StAX to SAX adapter that will convert a StAX event stream
+   * into a SAX event stream.
+   * 
+   * @param staxCore
+   *          StAX event source
+   * @param filter
+   *          SAX event sink
+   */
+  public XMLEventReaderToContentHandler(XMLEventReader staxCore, XMLFilterImplEx filter) {
+    staxEventReader = staxCore;
 
-            XMLEvent event = staxEventReader.peek();
+    this.filter = filter;
+  }
 
-            boolean readWhole = false;
+  /*
+   * @see StAXReaderToContentHandler#bridge()
+   */
+  public void bridge() throws XMLStreamException {
 
-            if(event.isStartDocument()) {
-                readWhole = true;
-            } else
-            if(!event.isStartElement())
-                throw new IllegalStateException();
+    try {
+      // remembers the nest level of elements to know when we are done.
+      int depth = 0;
 
-            // if the parser is on START_DOCUMENT, skip ahead to the first element
-            do {
-                event = staxEventReader.nextEvent();
-            } while( !event.isStartElement() );
+      XMLEvent event = staxEventReader.peek();
 
-            handleStartDocument(event);
+      boolean readWhole = false;
 
-            OUTER:
-            while(true) {
-                // These are all of the events listed in the javadoc for
-                // XMLEvent.
-                // The spec only really describes 11 of them.
-                switch (event.getEventType()) {
-                    case XMLStreamConstants.START_ELEMENT :
-                        depth++;
-                        handleStartElement(event.asStartElement());
-                        break;
-                    case XMLStreamConstants.END_ELEMENT :
-                        handleEndElement(event.asEndElement());
-                        depth--;
-                        if(depth==0)
-                            break OUTER;
-                        break;
-                    case XMLStreamConstants.CHARACTERS :
-                        handleCharacters(event.asCharacters());
-                        break;
-                    case XMLStreamConstants.ENTITY_REFERENCE :
-                        handleEntityReference();
-                        break;
-                    case XMLStreamConstants.PROCESSING_INSTRUCTION :
-                        handlePI((ProcessingInstruction)event);
-                        break;
-                    case XMLStreamConstants.COMMENT :
-                        handleComment((Comment)event);
-                        break;
-                    case XMLStreamConstants.DTD :
-                        handleDTD();
-                        break;
-                    case XMLStreamConstants.ATTRIBUTE :
-                        handleAttribute();
-                        break;
-                    case XMLStreamConstants.NAMESPACE :
-                        handleNamespace();
-                        break;
-                    case XMLStreamConstants.CDATA :
-                        handleCDATA();
-                        break;
-                    case XMLStreamConstants.ENTITY_DECLARATION :
-                        handleEntityDecl();
-                        break;
-                    case XMLStreamConstants.NOTATION_DECLARATION :
-                        handleNotationDecl();
-                        break;
-                    case XMLStreamConstants.SPACE :
-                        handleSpace();
-                        break;
-                    default :
-                        throw new InternalError("processing event: " + event);
-                }
+      if (event.isStartDocument()) {
+        readWhole = true;
+      } else if (!event.isStartElement())
+        throw new IllegalStateException();
 
-                event=staxEventReader.nextEvent();
-            }
+      // if the parser is on START_DOCUMENT, skip ahead to the first
+      // element
+      do {
+        event = staxEventReader.nextEvent();
+      } while (!event.isStartElement());
 
-            handleEndDocument();
+      handleStartDocument(event);
 
-            if(readWhole) {
-                // if we started from START_DOCUMENT, read the whole document
-                while(staxEventReader.hasNext())
-                    staxEventReader.nextEvent();
-            }
-        } catch (SAXException e) {
-            throw new XMLStreamException(e);
+      OUTER: while (true) {
+        // These are all of the events listed in the javadoc for
+        // XMLEvent.
+        // The spec only really describes 11 of them.
+        switch (event.getEventType()) {
+        case XMLStreamConstants.START_ELEMENT:
+          depth++;
+          handleStartElement(event.asStartElement());
+          break;
+        case XMLStreamConstants.END_ELEMENT:
+          handleEndElement(event.asEndElement());
+          depth--;
+          if (depth == 0)
+            break OUTER;
+          break;
+        case XMLStreamConstants.CHARACTERS:
+          handleCharacters(event.asCharacters());
+          break;
+        case XMLStreamConstants.ENTITY_REFERENCE:
+          handleEntityReference();
+          break;
+        case XMLStreamConstants.PROCESSING_INSTRUCTION:
+          handlePI((ProcessingInstruction) event);
+          break;
+        case XMLStreamConstants.COMMENT:
+          handleComment((Comment) event);
+          break;
+        case XMLStreamConstants.DTD:
+          handleDTD();
+          break;
+        case XMLStreamConstants.ATTRIBUTE:
+          handleAttribute();
+          break;
+        case XMLStreamConstants.NAMESPACE:
+          handleNamespace();
+          break;
+        case XMLStreamConstants.CDATA:
+          handleCDATA();
+          break;
+        case XMLStreamConstants.ENTITY_DECLARATION:
+          handleEntityDecl();
+          break;
+        case XMLStreamConstants.NOTATION_DECLARATION:
+          handleNotationDecl();
+          break;
+        case XMLStreamConstants.SPACE:
+          handleSpace();
+          break;
+        default:
+          throw new InternalError("processing event: " + event);
         }
+
+        event = staxEventReader.nextEvent();
+      }
+
+      handleEndDocument();
+
+      if (readWhole) {
+        // if we started from START_DOCUMENT, read the whole document
+        while (staxEventReader.hasNext())
+          staxEventReader.nextEvent();
+      }
+    } catch (SAXException e) {
+      throw new XMLStreamException(e);
+    }
+  }
+
+  private void handleEndDocument() throws SAXException {
+    filter.endDocument();
+  }
+
+  private void handleStartDocument(final XMLEvent event) throws SAXException {
+    final Location location = event.getLocation();
+    if (location != null) {
+      filter.setDocumentLocator(new Locator() {
+        public int getColumnNumber() {
+          return location.getColumnNumber();
+        }
+
+        public int getLineNumber() {
+          return location.getLineNumber();
+        }
+
+        public String getPublicId() {
+          return location.getPublicId();
+        }
+
+        public String getSystemId() {
+          return location.getSystemId();
+        }
+      });
+    } else {
+      filter.setDocumentLocator(new DummyLocator());
+    }
+    filter.startDocument();
+  }
+
+  private void handlePI(ProcessingInstruction event) throws XMLStreamException {
+    try {
+      filter.processingInstruction(event.getTarget(), event.getData());
+    } catch (SAXException e) {
+      throw new XMLStreamException(e);
+    }
+  }
+
+  private void handleCharacters(Characters event) throws XMLStreamException {
+    try {
+      filter.characters(event.getData().toCharArray(), 0, event.getData().length());
+    } catch (SAXException e) {
+      throw new XMLStreamException(e);
+    }
+  }
+
+  private void handleEndElement(EndElement event) throws XMLStreamException {
+    QName qName = event.getName();
+
+    try {
+      // fire endElement
+      String prefix = qName.getPrefix();
+      String rawname;
+      if (prefix == null || prefix.length() == 0)
+        rawname = qName.getLocalPart();
+      else
+        rawname = prefix + ':' + qName.getLocalPart();
+
+      filter.endElement(qName.getNamespaceURI(), qName.getLocalPart(), rawname);
+
+      // end namespace bindings
+      for (Iterator i = event.getNamespaces(); i.hasNext();) {
+        String nsprefix = ((Namespace) i.next()).getPrefix();
+        if (nsprefix == null) { // true for default namespace
+          nsprefix = "";
+        }
+        filter.endPrefixMapping(nsprefix);
+      }
+    } catch (SAXException e) {
+      throw new XMLStreamException(e);
+    }
+  }
+
+  private void handleStartElement(StartElement event) throws XMLStreamException {
+    try {
+      // start namespace bindings
+      for (Iterator i = event.getNamespaces(); i.hasNext();) {
+        String prefix = ((Namespace) i.next()).getPrefix();
+        if (prefix == null) { // true for default namespace
+          prefix = "";
+        }
+        filter.startPrefixMapping(prefix, event.getNamespaceURI(prefix));
+      }
+
+      // fire startElement
+      QName qName = event.getName();
+      String prefix = qName.getPrefix();
+      String rawname;
+      if (prefix == null || prefix.length() == 0)
+        rawname = qName.getLocalPart();
+      else
+        rawname = prefix + ':' + qName.getLocalPart();
+      Attributes saxAttrs = getAttributes(event);
+      filter.startElement(qName.getNamespaceURI(), qName.getLocalPart(), rawname, saxAttrs);
+    } catch (SAXException e) {
+      throw new XMLStreamException(e);
+    }
+  }
+
+  /**
+   * Get the attributes associated with the given START_ELEMENT StAXevent.
+   *
+   * @return the StAX attributes converted to an org.xml.sax.Attributes
+   */
+  private Attributes getAttributes(StartElement event) {
+    AttributesImpl attrs = new AttributesImpl();
+
+    if (!event.isStartElement()) {
+      throw new InternalError("getAttributes() attempting to process: " + event);
     }
 
-    private void handleEndDocument() throws SAXException {
-        filter.endDocument();
-    }
+    // Add namspace declarations if required
+    if (filter.getNamespacePrefixes()) {
+      for (Iterator i = event.getNamespaces(); i.hasNext();) {
+        Namespace staxNamespace = (javax.xml.stream.events.Namespace) i.next();
+        String uri = staxNamespace.getNamespaceURI();
+        if (uri == null)
+          uri = "";
 
-    private void handleStartDocument(final XMLEvent event) throws SAXException {
-        final Location location = event.getLocation();
-        if (location != null) {
-            filter.setDocumentLocator(new Locator() {
-                public int getColumnNumber() {
-                    return location.getColumnNumber();
-                }
-                public int getLineNumber() {
-                    return location.getLineNumber();
-                }
-                public String getPublicId() {
-                    return location.getPublicId();
-                }
-                public String getSystemId() {
-                    return location.getSystemId();
-                }
-            });
+        String prefix = staxNamespace.getPrefix();
+        if (prefix == null)
+          prefix = "";
+
+        String qName = "xmlns";
+        if (prefix.length() == 0) {
+          prefix = qName;
         } else {
-            filter.setDocumentLocator(new DummyLocator());
+          qName = qName + ':' + prefix;
         }
-        filter.startDocument();
+        attrs.addAttribute("http://www.w3.org/2000/xmlns/", prefix, qName, "CDATA", uri);
+      }
     }
 
-    private void handlePI(ProcessingInstruction event)
-        throws XMLStreamException {
-        try {
-            filter.processingInstruction(
-                event.getTarget(),
-                event.getData());
-        } catch (SAXException e) {
-            throw new XMLStreamException(e);
-        }
+    // gather non-namespace attrs
+    for (Iterator i = event.getAttributes(); i.hasNext();) {
+      Attribute staxAttr = (javax.xml.stream.events.Attribute) i.next();
+
+      String uri = staxAttr.getName().getNamespaceURI();
+      if (uri == null)
+        uri = "";
+      String localName = staxAttr.getName().getLocalPart();
+      String prefix = staxAttr.getName().getPrefix();
+      String qName;
+      if (prefix == null || prefix.length() == 0)
+        qName = localName;
+      else
+        qName = prefix + ':' + localName;
+      String type = staxAttr.getDTDType();
+      String value = staxAttr.getValue();
+
+      attrs.addAttribute(uri, localName, qName, type, value);
     }
 
-    private void handleCharacters(Characters event) throws XMLStreamException {
-        try {
-            filter.characters(
-                event.getData().toCharArray(),
-                0,
-                event.getData().length());
-        } catch (SAXException e) {
-            throw new XMLStreamException(e);
-        }
+    return attrs;
+  }
+
+  private void handleNamespace() {
+    // no-op ???
+    // namespace events don't normally occur outside of a startElement
+    // or endElement
+  }
+
+  private void handleAttribute() {
+    // no-op ???
+    // attribute events don't normally occur outside of a startElement
+    // or endElement
+  }
+
+  private void handleDTD() {
+    // no-op ???
+    // it seems like we need to pass this info along, but how?
+  }
+
+  private void handleComment(Comment comment) throws XMLStreamException {
+    try {
+      String text = comment.getText();
+      filter.comment(text.toCharArray(), 0, text.length());
+    } catch (SAXException e) {
+      throw new XMLStreamException(e);
     }
+  }
 
-    private void handleEndElement(EndElement event) throws XMLStreamException {
-        QName qName = event.getName();
+  private void handleEntityReference() {
+    // no-op ???
+  }
 
-        try {
-            // fire endElement
-            String prefix = qName.getPrefix();
-            String rawname;
-            if(prefix==null || prefix.length()==0)
-                rawname = qName.getLocalPart();
-            else
-                rawname = prefix + ':' + qName.getLocalPart();
+  private void handleSpace() {
+    // no-op ???
+    // this event is listed in the javadoc, but not in the spec.
+  }
 
-            filter.endElement(
-                qName.getNamespaceURI(),
-                qName.getLocalPart(),
-                rawname);
+  private void handleNotationDecl() {
+    // no-op ???
+    // this event is listed in the javadoc, but not in the spec.
+  }
 
-            // end namespace bindings
-            for( Iterator i = event.getNamespaces(); i.hasNext();) {
-                String nsprefix = ((Namespace)i.next()).getPrefix();
-                if( nsprefix == null ) { // true for default namespace
-                    nsprefix = "";
-                }
-                filter.endPrefixMapping(nsprefix);
-            }
-        } catch (SAXException e) {
-            throw new XMLStreamException(e);
-        }
-    }
+  private void handleEntityDecl() {
+    // no-op ???
+    // this event is listed in the javadoc, but not in the spec.
+  }
 
-    private void handleStartElement(StartElement event)
-        throws XMLStreamException {
-        try {
-            // start namespace bindings
-            for (Iterator i = event.getNamespaces(); i.hasNext();) {
-                String prefix = ((Namespace)i.next()).getPrefix();
-                if (prefix == null) { // true for default namespace
-                    prefix = "";
-                }
-                filter.startPrefixMapping(
-                    prefix,
-                    event.getNamespaceURI(prefix));
-            }
-
-            // fire startElement
-            QName qName = event.getName();
-            String prefix = qName.getPrefix();
-            String rawname;
-            if (prefix == null || prefix.length() == 0)
-                rawname = qName.getLocalPart();
-            else
-                rawname = prefix + ':' + qName.getLocalPart();
-            Attributes saxAttrs = getAttributes(event);
-            filter.startElement(
-                qName.getNamespaceURI(),
-                qName.getLocalPart(),
-                rawname,
-                saxAttrs);
-        } catch (SAXException e) {
-            throw new XMLStreamException(e);
-        }
-    }
-
-    /**
-     * Get the attributes associated with the given START_ELEMENT StAXevent.
-     *
-     * @return the StAX attributes converted to an org.xml.sax.Attributes
-     */
-    private Attributes getAttributes(StartElement event) {
-        AttributesImpl attrs = new AttributesImpl();
-
-        if ( !event.isStartElement() ) {
-            throw new InternalError(
-                "getAttributes() attempting to process: " + event);
-        }
-        
-        // Add namspace declarations if required
-        if (filter.getNamespacePrefixes()) {
-            for (Iterator i = event.getNamespaces(); i.hasNext();) {
-                Namespace staxNamespace = (javax.xml.stream.events.Namespace)i.next();
-                String uri = staxNamespace.getNamespaceURI();
-                if (uri==null) uri="";
-                
-                String prefix = staxNamespace.getPrefix();
-                if (prefix==null) prefix="";
-                
-                String qName = "xmlns";
-                if (prefix.length() == 0) {
-                    prefix = qName;
-                } else {
-                    qName = qName + ':' + prefix;
-                }
-                attrs.addAttribute("http://www.w3.org/2000/xmlns/", prefix, qName, "CDATA", uri);                
-            }
-        }
-        
-        // gather non-namespace attrs
-        for (Iterator i = event.getAttributes(); i.hasNext();) {
-            Attribute staxAttr = (javax.xml.stream.events.Attribute)i.next();
-            
-            String uri = staxAttr.getName().getNamespaceURI();
-            if (uri == null)
-                uri = "";
-            String localName = staxAttr.getName().getLocalPart();
-            String prefix = staxAttr.getName().getPrefix();
-            String qName;
-            if (prefix == null || prefix.length() == 0)
-                qName = localName;
-            else
-                qName = prefix + ':' + localName;
-            String type = staxAttr.getDTDType();
-            String value = staxAttr.getValue();
-            
-            attrs.addAttribute(uri, localName, qName, type, value);
-        }
-
-        return attrs;
-    }
-
-    private void handleNamespace() {
-        // no-op ???
-        // namespace events don't normally occur outside of a startElement
-        // or endElement
-    }
-
-    private void handleAttribute() {
-        // no-op ???
-        // attribute events don't normally occur outside of a startElement
-        // or endElement
-    }
-
-    private void handleDTD() {
-        // no-op ???
-        // it seems like we need to pass this info along, but how?
-    }
-
-    private void handleComment(Comment comment) throws XMLStreamException {
-        try {
-            String text = comment.getText();
-            filter.comment(
-                text.toCharArray(),
-                0,
-                text.length());
-        } catch (SAXException e) {
-            throw new XMLStreamException(e);
-        }
-    }
-
-    private void handleEntityReference() {
-        // no-op ???
-    }
-
-    private void handleSpace() {
-        // no-op ???
-        // this event is listed in the javadoc, but not in the spec.
-    }
-
-    private void handleNotationDecl() {
-        // no-op ???
-        // this event is listed in the javadoc, but not in the spec.
-    }
-
-    private void handleEntityDecl() {
-        // no-op ???
-        // this event is listed in the javadoc, but not in the spec.
-    }
-
-    private void handleCDATA() {
-        // no-op ???
-        // this event is listed in the javadoc, but not in the spec.
-    }
+  private void handleCDATA() {
+    // no-op ???
+    // this event is listed in the javadoc, but not in the spec.
+  }
 }

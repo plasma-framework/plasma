@@ -43,74 +43,71 @@ import javax.xml.stream.events.Characters;
  * @author Christian Niles
  * @version $Revision: 1.3 $
  */
-public abstract class AbstractCharactersEvent extends AbstractXMLEvent
-        implements
-            Characters {
+public abstract class AbstractCharactersEvent extends AbstractXMLEvent implements Characters {
 
-    /** Character content. */
-    protected String data;
+  /** Character content. */
+  protected String data;
 
-    public AbstractCharactersEvent(String data) {
+  public AbstractCharactersEvent(String data) {
 
-        this.data = data;
+    this.data = data;
 
-    }
+  }
 
-    public AbstractCharactersEvent(String data, Location location) {
+  public AbstractCharactersEvent(String data, Location location) {
 
-        super(location);
-        this.data = data;
+    super(location);
+    this.data = data;
 
-    }
+  }
 
-    public AbstractCharactersEvent(String data, Location location,
-            QName schemaType) {
+  public AbstractCharactersEvent(String data, Location location, QName schemaType) {
 
-        super(location, schemaType);
-        this.data = data;
+    super(location, schemaType);
+    this.data = data;
 
-    }
+  }
 
-    public AbstractCharactersEvent(Characters that) {
+  public AbstractCharactersEvent(Characters that) {
 
-        super(that);
-        this.data = that.getData();
+    super(that);
+    this.data = that.getData();
 
-    }
+  }
 
-    public String getData() {
+  public String getData() {
 
-        return data;
+    return data;
 
-    }
-    
-    public boolean isCharacters() {
-        
-        return true;
-        
-    }
+  }
 
-    public boolean isWhiteSpace() {
+  public boolean isCharacters() {
 
-        String data = getData();
-        for (int i = 0, s = data.length(); i < s; i++) {
+    return true;
 
-            switch (data.charAt(i)) {
-                
-                case ' ':
-                case '\n':
-                case '\t':
-                case '\r':
-                    continue;
-                default:
-                    return false;
-                
-            }
+  }
 
-        }
+  public boolean isWhiteSpace() {
 
-        return true;
+    String data = getData();
+    for (int i = 0, s = data.length(); i < s; i++) {
+
+      switch (data.charAt(i)) {
+
+      case ' ':
+      case '\n':
+      case '\t':
+      case '\r':
+        continue;
+      default:
+        return false;
+
+      }
 
     }
+
+    return true;
+
+  }
 
 }

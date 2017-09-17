@@ -45,47 +45,47 @@ import javax.xml.stream.events.Characters;
  */
 public class CharactersEvent extends AbstractCharactersEvent {
 
-    public CharactersEvent(String data) {
+  public CharactersEvent(String data) {
 
-        super(data);
+    super(data);
 
-    }
+  }
 
-    public CharactersEvent(String data, Location location) {
+  public CharactersEvent(String data, Location location) {
 
-        super(data, location);
+    super(data, location);
 
-    }
+  }
 
-    public CharactersEvent(String data, Location location, QName schemaType) {
+  public CharactersEvent(String data, Location location, QName schemaType) {
 
-        super(data, location, schemaType);
+    super(data, location, schemaType);
 
-    }
+  }
 
-    public CharactersEvent(Characters that) {
+  public CharactersEvent(Characters that) {
 
-        super(that);
+    super(that);
 
-    }
+  }
 
-    public boolean isCData() {
+  public boolean isCData() {
 
-        return false;
+    return false;
 
-    }
+  }
 
-    public boolean isIgnorableWhiteSpace() {
+  public boolean isIgnorableWhiteSpace() {
 
-        return false;
+    return false;
 
-    }
+  }
 
-    /** Returns {@link #CHARACTERS}. */
-    public int getEventType() {
+  /** Returns {@link #CHARACTERS}. */
+  public int getEventType() {
 
-        return CHARACTERS;
+    return CHARACTERS;
 
-    }
+  }
 
 }

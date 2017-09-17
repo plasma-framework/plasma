@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.provisioning.xsd;
 
 import java.util.ArrayList;
@@ -34,50 +29,47 @@ import org.plasma.xml.schema.SimpleType;
 import org.plasma.xml.schema.SimpleTypeVisitor;
 
 /**
- * Provisioning enumeration collector (simple type visitor) which
- * receives visitor events and and calls a delegate
- * assembler/builder for enumerations, storing the
- * enumeration for clients.  
+ * Provisioning enumeration collector (simple type visitor) which receives
+ * visitor events and and calls a delegate assembler/builder for enumerations,
+ * storing the enumeration for clients.
+ * 
  * @see SimpleTypeVisitor
  */
-public class EnumerationCollector extends AbstractCollector 
-    implements SimpleTypeVisitor {
+public class EnumerationCollector extends AbstractCollector implements SimpleTypeVisitor {
 
-	private Schema schema;
-	private Map<String, SimpleType> simpleTypeMap;
-	private EnumerationAssembler assembler;
-	private List<Enumeration> result = new ArrayList<Enumeration>();	
-	
-	public EnumerationCollector(Schema schema,
-			Map<String, SimpleType> simpleTypeMap,
-			EnumerationAssembler enumerationAssembler) {
-		super();
-		this.schema = schema;
-		this.simpleTypeMap = simpleTypeMap;
-		this.assembler = enumerationAssembler;
-	}
+  private Schema schema;
+  private Map<String, SimpleType> simpleTypeMap;
+  private EnumerationAssembler assembler;
+  private List<Enumeration> result = new ArrayList<Enumeration>();
 
-	public List<Enumeration> getResult() {
-		return result;
-	}
+  public EnumerationCollector(Schema schema, Map<String, SimpleType> simpleTypeMap,
+      EnumerationAssembler enumerationAssembler) {
+    super();
+    this.schema = schema;
+    this.simpleTypeMap = simpleTypeMap;
+    this.assembler = enumerationAssembler;
+  }
 
-	@Override
-	public void visit(AbstractSimpleType target,
-			AbstractSimpleType source, int level) {
-    	if (target.getRestriction() != null && SimpleTypeUtils.isEnumeration(target)) {
-    		Enumeration enumeration = this.assembler.buildEnumeration(target, source);
-    		result.add(enumeration);
-    	}
-	}
+  public List<Enumeration> getResult() {
+    return result;
+  }
 
-	@Override
-	public SimpleType getTopLevelSimpleType(QName name) {
-		return simpleTypeMap.get(name.getLocalPart());
-	}
+  @Override
+  public void visit(AbstractSimpleType target, AbstractSimpleType source, int level) {
+    if (target.getRestriction() != null && SimpleTypeUtils.isEnumeration(target)) {
+      Enumeration enumeration = this.assembler.buildEnumeration(target, source);
+      result.add(enumeration);
+    }
+  }
 
-	@Override
-	public String getTargetNamespace() {
-		return schema.getTargetNamespace();
-	}
+  @Override
+  public SimpleType getTopLevelSimpleType(QName name) {
+    return simpleTypeMap.get(name.getLocalPart());
+  }
+
+  @Override
+  public String getTargetNamespace() {
+    return schema.getTargetNamespace();
+  }
 
 }

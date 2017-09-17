@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.xml.wsdl.v11.soap;
 
 import java.util.ArrayList;
@@ -32,11 +27,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.plasma.xml.wsdl.v11.TExtensibilityElement;
 
-
 /**
- * <p>Java class for tBody complex type.
+ * <p>
+ * Java class for tBody complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="tBody">
@@ -53,125 +50,117 @@ import org.plasma.xml.wsdl.v11.TExtensibilityElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "tBody")
-public class TBody
-    extends TExtensibilityElement
-{
+public class TBody extends TExtensibilityElement {
 
-    @XmlAttribute
-    @XmlSchemaType(name = "NMTOKENS")
-    protected List<String> parts;
-    @XmlAttribute(name = "encodingStyle")
-    protected List<String> encodingStyles;
-    @XmlAttribute
-    protected UseChoice use;
-    @XmlAttribute
-    @XmlSchemaType(name = "anyURI")
-    protected String namespace;
+  @XmlAttribute
+  @XmlSchemaType(name = "NMTOKENS")
+  protected List<String> parts;
+  @XmlAttribute(name = "encodingStyle")
+  protected List<String> encodingStyles;
+  @XmlAttribute
+  protected UseChoice use;
+  @XmlAttribute
+  @XmlSchemaType(name = "anyURI")
+  protected String namespace;
 
-    /**
-     * Gets the value of the parts property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the parts property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getParts().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getParts() {
-        if (parts == null) {
-            parts = new ArrayList<String>();
-        }
-        return this.parts;
+  /**
+   * Gets the value of the parts property.
+   * 
+   * <p>
+   * This accessor method returns a reference to the live list, not a snapshot.
+   * Therefore any modification you make to the returned list will be present
+   * inside the JAXB object. This is why there is not a <CODE>set</CODE> method
+   * for the parts property.
+   * 
+   * <p>
+   * For example, to add a new item, do as follows:
+   * 
+   * <pre>
+   * getParts().add(newItem);
+   * </pre>
+   * 
+   * 
+   * <p>
+   * Objects of the following type(s) are allowed in the list {@link String }
+   * 
+   * 
+   */
+  public List<String> getParts() {
+    if (parts == null) {
+      parts = new ArrayList<String>();
     }
+    return this.parts;
+  }
 
-    /**
-     * Gets the value of the encodingStyles property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the encodingStyles property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getEncodingStyles().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getEncodingStyles() {
-        if (encodingStyles == null) {
-            encodingStyles = new ArrayList<String>();
-        }
-        return this.encodingStyles;
+  /**
+   * Gets the value of the encodingStyles property.
+   * 
+   * <p>
+   * This accessor method returns a reference to the live list, not a snapshot.
+   * Therefore any modification you make to the returned list will be present
+   * inside the JAXB object. This is why there is not a <CODE>set</CODE> method
+   * for the encodingStyles property.
+   * 
+   * <p>
+   * For example, to add a new item, do as follows:
+   * 
+   * <pre>
+   * getEncodingStyles().add(newItem);
+   * </pre>
+   * 
+   * 
+   * <p>
+   * Objects of the following type(s) are allowed in the list {@link String }
+   * 
+   * 
+   */
+  public List<String> getEncodingStyles() {
+    if (encodingStyles == null) {
+      encodingStyles = new ArrayList<String>();
     }
+    return this.encodingStyles;
+  }
 
-    /**
-     * Gets the value of the use property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UseChoice }
-     *     
-     */
-    public UseChoice getUse() {
-        return use;
-    }
+  /**
+   * Gets the value of the use property.
+   * 
+   * @return possible object is {@link UseChoice }
+   * 
+   */
+  public UseChoice getUse() {
+    return use;
+  }
 
-    /**
-     * Sets the value of the use property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UseChoice }
-     *     
-     */
-    public void setUse(UseChoice value) {
-        this.use = value;
-    }
+  /**
+   * Sets the value of the use property.
+   * 
+   * @param value
+   *          allowed object is {@link UseChoice }
+   * 
+   */
+  public void setUse(UseChoice value) {
+    this.use = value;
+  }
 
-    /**
-     * Gets the value of the namespace property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getNamespace() {
-        return namespace;
-    }
+  /**
+   * Gets the value of the namespace property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getNamespace() {
+    return namespace;
+  }
 
-    /**
-     * Sets the value of the namespace property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setNamespace(String value) {
-        this.namespace = value;
-    }
+  /**
+   * Sets the value of the namespace property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setNamespace(String value) {
+    this.namespace = value;
+  }
 
 }

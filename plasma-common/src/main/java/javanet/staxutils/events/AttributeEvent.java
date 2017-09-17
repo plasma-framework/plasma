@@ -45,169 +45,194 @@ import javax.xml.stream.events.Attribute;
  */
 public class AttributeEvent extends AbstractXMLEvent implements Attribute {
 
-    /** 
-     * Whether the attribute was specified in the document. Defaults to
-     * <code>true</code>. 
-     */
-    private boolean specified = true;
+  /**
+   * Whether the attribute was specified in the document. Defaults to
+   * <code>true</code>.
+   */
+  private boolean specified = true;
 
-    /** The qualified attribute name. */
-    private QName name;
+  /** The qualified attribute name. */
+  private QName name;
 
-    /** The normalized attribute value. */
-    private String value;
+  /** The normalized attribute value. */
+  private String value;
 
-    /** Type of attribute as specified in the DTD. Defaults to <code>CDATA</code>. */
-    private String dtdType = "CDATA";
+  /**
+   * Type of attribute as specified in the DTD. Defaults to <code>CDATA</code> .
+   */
+  private String dtdType = "CDATA";
 
-    /**
-     * Constructs an <code>AttributeEvent</code> with the specified name and value.
-     * 
-     * @param name The qualified attribute name.
-     * @param value The attribute value.
-     */
-    public AttributeEvent(QName name, String value) {
+  /**
+   * Constructs an <code>AttributeEvent</code> with the specified name and
+   * value.
+   * 
+   * @param name
+   *          The qualified attribute name.
+   * @param value
+   *          The attribute value.
+   */
+  public AttributeEvent(QName name, String value) {
 
-        this.name = name;
-        this.value = value;
+    this.name = name;
+    this.value = value;
 
-    }
+  }
 
-    /**
-     * Constructs a new <code>AttributeEvent</code>.
-     * 
-     * @param name The qualified attribute name.
-     * @param value The attribute value.
-     * @param specified Whether the attribute was specified in the document
-     *     (<code>true</code), or inherited from a DTD or schema
-     *     (<code>false</code>).
-     */
-    public AttributeEvent(QName name, String value, boolean specified) {
+  /**
+   * Constructs a new <code>AttributeEvent</code>.
+   * 
+   * @param name
+   *          The qualified attribute name.
+   * @param value
+   *          The attribute value.
+   * @param specified
+   *          Whether the attribute was specified in the document (
+   *          <code>true</code), or inherited from a DTD or schema (
+   *          <code>false</code>).
+   */
+  public AttributeEvent(QName name, String value, boolean specified) {
 
-        this.name = name;
-        this.value = value;
-        this.specified = specified;
+    this.name = name;
+    this.value = value;
+    this.specified = specified;
 
-    }
+  }
 
-    /**
-     * Constructs a new <code>AttributeEvent</code>.
-     * 
-     * @param name The qualified attribute name.
-     * @param value The attribute value.
-     * @param location The {@link Location} of the attribute.
-     */
-    public AttributeEvent(QName name, String value, Location location) {
+  /**
+   * Constructs a new <code>AttributeEvent</code>.
+   * 
+   * @param name
+   *          The qualified attribute name.
+   * @param value
+   *          The attribute value.
+   * @param location
+   *          The {@link Location} of the attribute.
+   */
+  public AttributeEvent(QName name, String value, Location location) {
 
-        super(location);
-        this.name = name;
-        this.value = value;
+    super(location);
+    this.name = name;
+    this.value = value;
 
-    }
+  }
 
-    /**
-     * Constructs a new <code>AttributeEvent</code>.
-     * 
-     * @param name The qualified attribute name.
-     * @param value The attribute value.
-     * @param location The {@link Location} of the attribute.
-     * @param schemaType The attribute type as specified in the schema.
-     */
-    public AttributeEvent(QName name, String value, Location location,
-            QName schemaType) {
+  /**
+   * Constructs a new <code>AttributeEvent</code>.
+   * 
+   * @param name
+   *          The qualified attribute name.
+   * @param value
+   *          The attribute value.
+   * @param location
+   *          The {@link Location} of the attribute.
+   * @param schemaType
+   *          The attribute type as specified in the schema.
+   */
+  public AttributeEvent(QName name, String value, Location location, QName schemaType) {
 
-        super(location, schemaType);
-        this.name = name;
-        this.value = value;
+    super(location, schemaType);
+    this.name = name;
+    this.value = value;
 
-    }
+  }
 
-    /**
-     * Constructs a new <code>AttributeEvent</code>.
-     * 
-     * @param name The qualified attribute name.
-     * @param value The attribute value.
-     * @param specified Whether the attribute was specified in the document
-     *     (<code>true</code), or inherited from a DTD or schema
-     *     (<code>false</code>).
-     * @param location The {@link Location} of the attribute.
-     * @param dtdType The attribute type as specified in the DTD.
-     * @param schemaType The attribute type as specified in the schema.
-     */
-    public AttributeEvent(QName name, String value, boolean specified,
-            String dtdType, Location location, QName schemaType) {
+  /**
+   * Constructs a new <code>AttributeEvent</code>.
+   * 
+   * @param name
+   *          The qualified attribute name.
+   * @param value
+   *          The attribute value.
+   * @param specified
+   *          Whether the attribute was specified in the document (
+   *          <code>true</code), or inherited from a DTD or schema (
+   *          <code>false</code>).
+   * @param location
+   *          The {@link Location} of the attribute.
+   * @param dtdType
+   *          The attribute type as specified in the DTD.
+   * @param schemaType
+   *          The attribute type as specified in the schema.
+   */
+  public AttributeEvent(QName name, String value, boolean specified, String dtdType,
+      Location location, QName schemaType) {
 
-        super(location, schemaType);
-        this.name = name;
-        this.value = value;
-        this.specified = specified;
-        this.dtdType = dtdType;
+    super(location, schemaType);
+    this.name = name;
+    this.value = value;
+    this.specified = specified;
+    this.dtdType = dtdType;
 
-    }
+  }
 
-    /**
-     * Copy constructor that optionally allows the name and/or value to be changed.
-     * 
-     * @param name The new attribute name, or <code>null</code> to use the name from
-     * 		the provided attribute.
-     * @param value The new attribute value, or <code>null</code> to use the value
-     * 		from the provided attribute.
-     * @param that The {@link Attribute} event to copy.
-     */
-    public AttributeEvent(QName name, String value, Attribute that) {
+  /**
+   * Copy constructor that optionally allows the name and/or value to be
+   * changed.
+   * 
+   * @param name
+   *          The new attribute name, or <code>null</code> to use the name from
+   *          the provided attribute.
+   * @param value
+   *          The new attribute value, or <code>null</code> to use the value
+   *          from the provided attribute.
+   * @param that
+   *          The {@link Attribute} event to copy.
+   */
+  public AttributeEvent(QName name, String value, Attribute that) {
 
-        super(that);
-        this.specified = that.isSpecified();
-        this.name = (name == null ? that.getName() : name);
-        this.value = (value == null ? that.getValue() : value);
-        this.dtdType = that.getDTDType();
+    super(that);
+    this.specified = that.isSpecified();
+    this.name = (name == null ? that.getName() : name);
+    this.value = (value == null ? that.getValue() : value);
+    this.dtdType = that.getDTDType();
 
-    }
+  }
 
-    /**
-     * Copy constructor.
-     * 
-     * @param that The {@link Attribute} event to copy.
-     */
-    public AttributeEvent(Attribute that) {
+  /**
+   * Copy constructor.
+   * 
+   * @param that
+   *          The {@link Attribute} event to copy.
+   */
+  public AttributeEvent(Attribute that) {
 
-        super(that);
-        this.specified = that.isSpecified();
-        this.name = that.getName();
-        this.value = that.getValue();
-        this.dtdType = that.getDTDType();
+    super(that);
+    this.specified = that.isSpecified();
+    this.name = that.getName();
+    this.value = that.getValue();
+    this.dtdType = that.getDTDType();
 
-    }
+  }
 
-    /** Returns {@link #ATTRIBUTE}. */
-    public int getEventType() {
+  /** Returns {@link #ATTRIBUTE}. */
+  public int getEventType() {
 
-        return ATTRIBUTE;
+    return ATTRIBUTE;
 
-    }
+  }
 
-    public QName getName() {
+  public QName getName() {
 
-        return name;
+    return name;
 
-    }
+  }
 
-    public String getValue() {
+  public String getValue() {
 
-        return value;
+    return value;
 
-    }
+  }
 
-    public boolean isSpecified() {
+  public boolean isSpecified() {
 
-        return specified;
+    return specified;
 
-    }
+  }
 
-    public String getDTDType() {
+  public String getDTDType() {
 
-        return dtdType;
+    return dtdType;
 
-    }
+  }
 
 }

@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.access.service;
 
 import java.lang.reflect.Constructor;
@@ -48,170 +43,139 @@ import commonj.sdo.DataGraph;
 
 @Stateless
 @Local
-@TransactionManagement (TransactionManagementType.BEAN)
+@TransactionManagement(TransactionManagementType.BEAN)
 @TransactionAttribute(TransactionAttributeType.NEVER)
-public class DataAccessServiceEJB implements DataAccessService 
-{ 
-    private static Log log = LogFactory.getLog(DataAccessServiceEJB.class);
+public class DataAccessServiceEJB implements DataAccessService {
+  private static Log log = LogFactory.getLog(DataAccessServiceEJB.class);
 
-    private org.plasma.sdo.access.PlasmaDataAccessService service;
-  
-    
-    @PostConstruct
-    public void initialize()
-    {
-        try {
-            if (service == null)
-            {
-            	service = createProvider(
-            			PlasmaConfig.getInstance().getDataAccessProvider(
-            					DataAccessProviderName.JDBC).getClassName());
-                service.initialize(); 
-            }
-        }
-        catch (RuntimeException e) {
-            log.error(e.getMessage(), e); // 
-            throw e;
-        }
-    } 
+  private org.plasma.sdo.access.PlasmaDataAccessService service;
 
-    public void close() {
-        if (service != null)
-        {
-            service.close();
-            service = null;
-        }
+  @PostConstruct
+  public void initialize() {
+    try {
+      if (service == null) {
+        service = createProvider(PlasmaConfig.getInstance()
+            .getDataAccessProvider(DataAccessProviderName.JDBC).getClassName());
+        service.initialize();
+      }
+    } catch (RuntimeException e) {
+      log.error(e.getMessage(), e); //
+      throw e;
     }
-    
-    @PreDestroy 
-    public void preDestroy() { 
-        log.debug("preDestroy()");
-        close();
-    }   
+  }
 
-    public DataGraph[] find(Query query) 
-    {
-        if (log.isDebugEnabled()) {
-            log.debug("find(Query query) - (" + this.toString() + ")"); 
-        }
-        if (service == null)
-        {
-        	service = createProvider(
-        			PlasmaConfig.getInstance().getDataAccessProvider(
-        					DataAccessProviderName.JDBC).getClassName());
-            service.initialize(); 
-        }
-        return service.find(query);
+  public void close() {
+    if (service != null) {
+      service.close();
+      service = null;
     }
+  }
 
-    public DataGraph[] find(Query query, int maxResults) 
-    {
-        if (log.isDebugEnabled()) {
-            log.debug("find(Query query) - (" + this.toString() + ")"); 
-        }
-        if (service == null)
-        {
-        	service = createProvider(
-        			PlasmaConfig.getInstance().getDataAccessProvider(
-        					DataAccessProviderName.JDBC).getClassName());
-            service.initialize(); 
-        }
-        return service.find(query, maxResults);
+  @PreDestroy
+  public void preDestroy() {
+    log.debug("preDestroy()");
+    close();
+  }
+
+  public DataGraph[] find(Query query) {
+    if (log.isDebugEnabled()) {
+      log.debug("find(Query query) - (" + this.toString() + ")");
+    }
+    if (service == null) {
+      service = createProvider(PlasmaConfig.getInstance()
+          .getDataAccessProvider(DataAccessProviderName.JDBC).getClassName());
+      service.initialize();
+    }
+    return service.find(query);
+  }
+
+  public DataGraph[] find(Query query, int maxResults) {
+    if (log.isDebugEnabled()) {
+      log.debug("find(Query query) - (" + this.toString() + ")");
+    }
+    if (service == null) {
+      service = createProvider(PlasmaConfig.getInstance()
+          .getDataAccessProvider(DataAccessProviderName.JDBC).getClassName());
+      service.initialize();
+    }
+    return service.find(query, maxResults);
+  }
+
+  public List find(Query[] queries) {
+    if (log.isDebugEnabled()) {
+      log.debug("find(Query[] queries) - (" + this.toString() + ")");
     }
 
-    public List find(Query[] queries) 
-    {
-        if (log.isDebugEnabled()) {
-            log.debug("find(Query[] queries) - (" + this.toString() + ")"); 
-        }
-        
-        if (service == null)
-        {
-        	service = createProvider(
-        			PlasmaConfig.getInstance().getDataAccessProvider(
-        					DataAccessProviderName.JDBC).getClassName());
-            service.initialize(); 
-        }
-        return service.find(queries);
+    if (service == null) {
+      service = createProvider(PlasmaConfig.getInstance()
+          .getDataAccessProvider(DataAccessProviderName.JDBC).getClassName());
+      service.initialize();
     }
-    
-    public int[] count(Query[] queries) 
-    {
-        if (log.isDebugEnabled()) {
-            log.debug("count(Query[] queries) - (" + this.toString() + ")"); 
-        }
-        
-        if (service == null)
-        {
-        	service = createProvider(
-        			PlasmaConfig.getInstance().getDataAccessProvider(
-        					DataAccessProviderName.JDBC).getClassName());
-            service.initialize(); 
-        }
-        return service.count(queries);
+    return service.find(queries);
+  }
+
+  public int[] count(Query[] queries) {
+    if (log.isDebugEnabled()) {
+      log.debug("count(Query[] queries) - (" + this.toString() + ")");
     }
 
-    public int count(Query query) 
-    {
-        if (log.isDebugEnabled()) {
-            log.debug("count(Query query) - (" + this.toString() + ")"); 
-        }
-        if (service == null)
-        {
-        	service = createProvider(
-        			PlasmaConfig.getInstance().getDataAccessProvider(
-        					DataAccessProviderName.JDBC).getClassName());
-            service.initialize(); 
-        }
-        return service.count(query);
+    if (service == null) {
+      service = createProvider(PlasmaConfig.getInstance()
+          .getDataAccessProvider(DataAccessProviderName.JDBC).getClassName());
+      service.initialize();
     }
+    return service.count(queries);
+  }
 
-    @Override
-    public SnapshotMap commit(DataGraph dataGraph, String username) {
-        if (service == null)
-        {
-        	service = createProvider(
-        			PlasmaConfig.getInstance().getDataAccessProvider(
-        					DataAccessProviderName.JDBC).getClassName());
-            service.initialize(); 
-        }
-        return service.commit(dataGraph, username);
+  public int count(Query query) {
+    if (log.isDebugEnabled()) {
+      log.debug("count(Query query) - (" + this.toString() + ")");
     }
+    if (service == null) {
+      service = createProvider(PlasmaConfig.getInstance()
+          .getDataAccessProvider(DataAccessProviderName.JDBC).getClassName());
+      service.initialize();
+    }
+    return service.count(query);
+  }
 
-    @Override
-    public SnapshotMap commit(DataGraph[] dataGraphs, String username) {
-        if (service == null)
-        {
-        	service = createProvider(
-        			PlasmaConfig.getInstance().getDataAccessProvider(
-        					DataAccessProviderName.JDBC).getClassName());
-            service.initialize(); 
-        }
-        return service.commit(dataGraphs, username);
+  @Override
+  public SnapshotMap commit(DataGraph dataGraph, String username) {
+    if (service == null) {
+      service = createProvider(PlasmaConfig.getInstance()
+          .getDataAccessProvider(DataAccessProviderName.JDBC).getClassName());
+      service.initialize();
     }
+    return service.commit(dataGraph, username);
+  }
 
-    protected PlasmaDataAccessService createProvider(String qualifiedName) {
-	    try {
-	        Class<?> providerClass = Class.forName(qualifiedName); 
-	        Class<?>[] argClasses = {};
-	        Object[] args = {};
-	        Constructor<?> constructor = providerClass.getConstructor(argClasses);
-	        return (PlasmaDataAccessService)constructor.newInstance(args);   
-	    } 
-	    catch (ClassNotFoundException e) {
-	        throw new DataAccessException(e);
-	    }    
-	    catch (NoSuchMethodException e) {
-	        throw new DataAccessException(e);
-	    }    
-	    catch (InstantiationException e) {
-	        throw new DataAccessException(e);
-	    }    
-	    catch (IllegalAccessException e) {
-	        throw new DataAccessException(e);
-	    }    
-	    catch (InvocationTargetException e) {
-	        throw new DataAccessException(e);
-	    }    
+  @Override
+  public SnapshotMap commit(DataGraph[] dataGraphs, String username) {
+    if (service == null) {
+      service = createProvider(PlasmaConfig.getInstance()
+          .getDataAccessProvider(DataAccessProviderName.JDBC).getClassName());
+      service.initialize();
     }
-} 
+    return service.commit(dataGraphs, username);
+  }
+
+  protected PlasmaDataAccessService createProvider(String qualifiedName) {
+    try {
+      Class<?> providerClass = Class.forName(qualifiedName);
+      Class<?>[] argClasses = {};
+      Object[] args = {};
+      Constructor<?> constructor = providerClass.getConstructor(argClasses);
+      return (PlasmaDataAccessService) constructor.newInstance(args);
+    } catch (ClassNotFoundException e) {
+      throw new DataAccessException(e);
+    } catch (NoSuchMethodException e) {
+      throw new DataAccessException(e);
+    } catch (InstantiationException e) {
+      throw new DataAccessException(e);
+    } catch (IllegalAccessException e) {
+      throw new DataAccessException(e);
+    } catch (InvocationTargetException e) {
+      throw new DataAccessException(e);
+    }
+  }
+}

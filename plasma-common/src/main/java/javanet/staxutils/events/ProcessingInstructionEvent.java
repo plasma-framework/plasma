@@ -42,59 +42,56 @@ import javax.xml.stream.events.ProcessingInstruction;
  * @author Christian Niles
  * @version $Revision: 1.2 $
  */
-public class ProcessingInstructionEvent extends AbstractXMLEvent
-        implements
-            ProcessingInstruction {
+public class ProcessingInstructionEvent extends AbstractXMLEvent implements ProcessingInstruction {
 
-    /** The PI target. */
-    protected String target;
+  /** The PI target. */
+  protected String target;
 
-    /** The instruction data. */
-    protected String data;
+  /** The instruction data. */
+  protected String data;
 
-    public ProcessingInstructionEvent(String target, String data) {
+  public ProcessingInstructionEvent(String target, String data) {
 
-        this.target = target;
-        this.data = data;
+    this.target = target;
+    this.data = data;
 
-    }
+  }
 
-    public ProcessingInstructionEvent(String target, String data,
-            Location location) {
+  public ProcessingInstructionEvent(String target, String data, Location location) {
 
-        super(location);
-        this.target = target;
-        this.data = data;
+    super(location);
+    this.target = target;
+    this.data = data;
 
-    }
+  }
 
-    public ProcessingInstructionEvent(ProcessingInstruction that) {
+  public ProcessingInstructionEvent(ProcessingInstruction that) {
 
-        super(that);
-        this.target = that.getTarget();
-        this.data = that.getData();
+    super(that);
+    this.target = that.getTarget();
+    this.data = that.getData();
 
-    }
+  }
 
-    /**
-     * Returns {@link #PROCESSING_INSTRUCTION}.
-     */
-    public int getEventType() {
+  /**
+   * Returns {@link #PROCESSING_INSTRUCTION}.
+   */
+  public int getEventType() {
 
-        return PROCESSING_INSTRUCTION;
+    return PROCESSING_INSTRUCTION;
 
-    }
+  }
 
-    public String getTarget() {
+  public String getTarget() {
 
-        return this.target;
+    return this.target;
 
-    }
+  }
 
-    public String getData() {
+  public String getData() {
 
-        return this.data;
+    return this.data;
 
-    }
-    
+  }
+
 }

@@ -43,57 +43,54 @@ import javax.xml.stream.events.EntityReference;
  * @author Christian Niles
  * @version $Revision: 1.2 $
  */
-public class EntityReferenceEvent extends AbstractXMLEvent
-        implements
-            EntityReference {
+public class EntityReferenceEvent extends AbstractXMLEvent implements EntityReference {
 
-    /** The referenced entity name. */
-    protected String name;
+  /** The referenced entity name. */
+  protected String name;
 
-    /** The referenced entity declaration. */ 
-    protected EntityDeclaration declaration;
+  /** The referenced entity declaration. */
+  protected EntityDeclaration declaration;
 
-    public EntityReferenceEvent(String name, EntityDeclaration declaration) {
+  public EntityReferenceEvent(String name, EntityDeclaration declaration) {
 
-        this.name = name;
-        this.declaration = declaration;
+    this.name = name;
+    this.declaration = declaration;
 
-    }
+  }
 
-    public EntityReferenceEvent(String name, EntityDeclaration declaration,
-            Location location) {
+  public EntityReferenceEvent(String name, EntityDeclaration declaration, Location location) {
 
-        super(location);
-        this.name = name;
-        this.declaration = declaration;
+    super(location);
+    this.name = name;
+    this.declaration = declaration;
 
-    }
+  }
 
-    public EntityReferenceEvent(EntityReference that) {
+  public EntityReferenceEvent(EntityReference that) {
 
-        super(that);
-        this.name = that.getName();
-        this.declaration = that.getDeclaration();
+    super(that);
+    this.name = that.getName();
+    this.declaration = that.getDeclaration();
 
-    }
+  }
 
-    public EntityDeclaration getDeclaration() {
+  public EntityDeclaration getDeclaration() {
 
-        return declaration;
+    return declaration;
 
-    }
+  }
 
-    public String getName() {
+  public String getName() {
 
-        return name;
+    return name;
 
-    }
+  }
 
-    /** Returns {@link #ENTITY_REFERENCE}. */
-    public int getEventType() {
+  /** Returns {@link #ENTITY_REFERENCE}. */
+  public int getEventType() {
 
-        return ENTITY_REFERENCE;
+    return ENTITY_REFERENCE;
 
-    }
-    
+  }
+
 }

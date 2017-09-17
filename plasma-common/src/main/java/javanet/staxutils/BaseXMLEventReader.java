@@ -48,133 +48,129 @@ import javax.xml.stream.events.XMLEvent;
  */
 public abstract class BaseXMLEventReader implements XMLEventReader {
 
-    /** Whether we've been closed or not. */
-    protected boolean closed;
+  /** Whether we've been closed or not. */
+  protected boolean closed;
 
-    public synchronized String getElementText() throws XMLStreamException {
+  public synchronized String getElementText() throws XMLStreamException {
 
-        if (closed) {
+    if (closed) {
 
-            throw new XMLStreamException("Stream has been closed");
+      throw new XMLStreamException("Stream has been closed");
+
+    }
+
+    // TODO At the moment, this simply coalesces all Characters events up to
+    // a
+    // terminal EndElement event.
+    StringBuffer buffer = new StringBuffer();
+    while (true) {
+
+      XMLEvent event = nextEvent();
+      if (event.isCharacters()) {
+
+        // don't return ignorable whitespace
+        if (event.getEventType() != XMLEvent.SPACE) {
+
+          buffer.append(event.asCharacters().getData());
 
         }
 
-        // TODO At the moment, this simply coalesces all Characters events up to a
-        // terminal EndElement event.
-        StringBuffer buffer = new StringBuffer();
-        while (true) {
+      } else if (event.isEndElement()) {
 
-            XMLEvent event = nextEvent();
-            if (event.isCharacters()) {
+        break;
 
-                // don't return ignorable whitespace
-                if (event.getEventType() != XMLEvent.SPACE) {
+      } else {
 
-                    buffer.append(event.asCharacters().getData());
+        throw new XMLStreamException("Non-text event encountered in getElementText(): " + event);
 
-                }
+      }
 
-            } else if (event.isEndElement()) {
+    }
 
-                break;
+    return buffer.toString();
 
-            } else {
+  }
 
-                throw new XMLStreamException(
-                        "Non-text event encountered in getElementText(): "
-                                + event);
+  public XMLEvent nextTag() throws XMLStreamException {
 
-            }
+    if (closed) {
+
+      throw new XMLStreamException("Stream has been closed");
+
+    }
+
+    XMLEvent event;
+    do {
+
+      if (hasNext()) {
+
+        event = nextEvent();
+        if (event.isStartElement() || event.isEndElement()) {
+
+          return event;
+
+        } else if (event.isCharacters()) {
+
+          if (!event.asCharacters().isWhiteSpace()) {
+
+            throw new XMLStreamException("Non-ignorable space encountered");
+
+          }
+
+        } else if (!(event instanceof Comment)) {
+
+          throw new XMLStreamException("Non-ignorable event encountered: " + event);
 
         }
 
-        return buffer.toString();
+      } else {
+
+        throw new XMLStreamException("Ran out of events in nextTag()");
+
+      }
+
+    } while (!event.isStartElement() && !event.isEndElement());
+
+    return event;
+
+  }
+
+  public Object getProperty(String name) throws IllegalArgumentException {
+
+    throw new IllegalArgumentException("Property not supported: " + name);
+
+  }
+
+  public synchronized void close() throws XMLStreamException {
+
+    if (!closed) {
+
+      closed = true;
 
     }
 
-    public XMLEvent nextTag() throws XMLStreamException {
+  }
 
-        if (closed) {
+  public Object next() {
 
-            throw new XMLStreamException("Stream has been closed");
+    try {
 
-        }
+      return nextEvent();
 
-        XMLEvent event;
-        do {
+    } catch (XMLStreamException e) {
 
-            if (hasNext()) {
-
-                event = nextEvent();
-                if (event.isStartElement() || event.isEndElement()) {
-
-                    return event;
-
-                } else if (event.isCharacters()) {
-
-                    if (!event.asCharacters().isWhiteSpace()) {
-
-                        throw new XMLStreamException(
-                                "Non-ignorable space encountered");
-
-                    }
-
-                } else if (!(event instanceof Comment)) {
-
-                    throw new XMLStreamException(
-                            "Non-ignorable event encountered: " + event);
-
-                }
-
-            } else {
-
-                throw new XMLStreamException("Ran out of events in nextTag()");
-
-            }
-
-        } while (!event.isStartElement() && !event.isEndElement());
-
-        return event;
+      NoSuchElementException ex = new NoSuchElementException("Error getting next event");
+      ex.initCause(e);
+      throw ex;
 
     }
 
-    public Object getProperty(String name) throws IllegalArgumentException {
+  }
 
-        throw new IllegalArgumentException("Property not supported: " + name);
+  public void remove() {
 
-    }
+    throw new UnsupportedOperationException();
 
-    public synchronized void close() throws XMLStreamException {
-
-        if (!closed) {
-
-            closed = true;
-
-        }
-
-    }
-
-    public Object next() {
-
-        try {
-
-            return nextEvent();
-
-        } catch (XMLStreamException e) {
-
-            NoSuchElementException ex = new NoSuchElementException(
-                    "Error getting next event");
-            ex.initCause(e);
-            throw ex;
-
-        }
-
-    }
-
-    public void remove() {
-
-        throw new UnsupportedOperationException();
-
-    }
+  }
 
 }

@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.xml.xslt;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,11 +23,13 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
- * <p>Java class for anonymous complex type.
+ * <p>
+ * Java class for anonymous complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType>
@@ -64,252 +61,223 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class Number
-    extends AnyType
-{
+public class Number extends AnyType {
 
-    @XmlAttribute
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String level;
-    @XmlAttribute
-    protected String count;
-    @XmlAttribute
-    protected String from;
-    @XmlAttribute
-    protected String value;
-    @XmlAttribute
-    protected String format;
-    @XmlAttribute
-    protected String lang;
-    @XmlAttribute(name = "letter-value")
-    protected String letterValue;
-    @XmlAttribute(name = "grouping-separator")
-    protected String groupingSeparator;
-    @XmlAttribute(name = "grouping-size")
-    protected String groupingSize;
+  @XmlAttribute
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String level;
+  @XmlAttribute
+  protected String count;
+  @XmlAttribute
+  protected String from;
+  @XmlAttribute
+  protected String value;
+  @XmlAttribute
+  protected String format;
+  @XmlAttribute
+  protected String lang;
+  @XmlAttribute(name = "letter-value")
+  protected String letterValue;
+  @XmlAttribute(name = "grouping-separator")
+  protected String groupingSeparator;
+  @XmlAttribute(name = "grouping-size")
+  protected String groupingSize;
 
-    /**
-     * Gets the value of the level property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLevel() {
-        if (level == null) {
-            return "single";
-        } else {
-            return level;
-        }
+  /**
+   * Gets the value of the level property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getLevel() {
+    if (level == null) {
+      return "single";
+    } else {
+      return level;
     }
+  }
 
-    /**
-     * Sets the value of the level property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLevel(String value) {
-        this.level = value;
-    }
+  /**
+   * Sets the value of the level property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setLevel(String value) {
+    this.level = value;
+  }
 
-    /**
-     * Gets the value of the count property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCount() {
-        return count;
-    }
+  /**
+   * Gets the value of the count property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getCount() {
+    return count;
+  }
 
-    /**
-     * Sets the value of the count property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCount(String value) {
-        this.count = value;
-    }
+  /**
+   * Sets the value of the count property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setCount(String value) {
+    this.count = value;
+  }
 
-    /**
-     * Gets the value of the from property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFrom() {
-        return from;
-    }
+  /**
+   * Gets the value of the from property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getFrom() {
+    return from;
+  }
 
-    /**
-     * Sets the value of the from property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFrom(String value) {
-        this.from = value;
-    }
+  /**
+   * Sets the value of the from property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setFrom(String value) {
+    this.from = value;
+  }
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * Gets the value of the value property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   * Sets the value of the value property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * Gets the value of the format property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFormat() {
-        if (format == null) {
-            return "1";
-        } else {
-            return format;
-        }
+  /**
+   * Gets the value of the format property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getFormat() {
+    if (format == null) {
+      return "1";
+    } else {
+      return format;
     }
+  }
 
-    /**
-     * Sets the value of the format property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFormat(String value) {
-        this.format = value;
-    }
+  /**
+   * Sets the value of the format property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setFormat(String value) {
+    this.format = value;
+  }
 
-    /**
-     * Gets the value of the lang property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLang() {
-        return lang;
-    }
+  /**
+   * Gets the value of the lang property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getLang() {
+    return lang;
+  }
 
-    /**
-     * Sets the value of the lang property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLang(String value) {
-        this.lang = value;
-    }
+  /**
+   * Sets the value of the lang property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setLang(String value) {
+    this.lang = value;
+  }
 
-    /**
-     * Gets the value of the letterValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLetterValue() {
-        return letterValue;
-    }
+  /**
+   * Gets the value of the letterValue property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getLetterValue() {
+    return letterValue;
+  }
 
-    /**
-     * Sets the value of the letterValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLetterValue(String value) {
-        this.letterValue = value;
-    }
+  /**
+   * Sets the value of the letterValue property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setLetterValue(String value) {
+    this.letterValue = value;
+  }
 
-    /**
-     * Gets the value of the groupingSeparator property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getGroupingSeparator() {
-        return groupingSeparator;
-    }
+  /**
+   * Gets the value of the groupingSeparator property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getGroupingSeparator() {
+    return groupingSeparator;
+  }
 
-    /**
-     * Sets the value of the groupingSeparator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setGroupingSeparator(String value) {
-        this.groupingSeparator = value;
-    }
+  /**
+   * Sets the value of the groupingSeparator property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setGroupingSeparator(String value) {
+    this.groupingSeparator = value;
+  }
 
-    /**
-     * Gets the value of the groupingSize property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getGroupingSize() {
-        return groupingSize;
-    }
+  /**
+   * Gets the value of the groupingSize property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getGroupingSize() {
+    return groupingSize;
+  }
 
-    /**
-     * Sets the value of the groupingSize property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setGroupingSize(String value) {
-        this.groupingSize = value;
-    }
+  /**
+   * Sets the value of the groupingSize property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setGroupingSize(String value) {
+    this.groupingSize = value;
+  }
 
 }

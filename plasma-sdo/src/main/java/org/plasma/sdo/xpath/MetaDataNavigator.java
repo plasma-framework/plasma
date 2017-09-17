@@ -1,26 +1,20 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package org.plasma.sdo.xpath;
 
+package org.plasma.sdo.xpath;
 
 import java.util.Iterator;
 
@@ -38,350 +32,305 @@ import org.plasma.sdo.PlasmaType;
 import commonj.sdo.Property;
 import commonj.sdo.Type;
 
-/** 
+/**
  * Supports navigation of SDO {@link commonj.sdo.Type} and
- * {@link commonj.sdo.Property} instances by the
- * Jaxen XPATH engine. 
+ * {@link commonj.sdo.Property} instances by the Jaxen XPATH engine.
  *
  * <p>
- * This class is not intended for direct usage, but is
- * used by the Jaxen engine during evaluation. Use {@link MetaDataXPath}
- * to parse an XPath against a {@link commonj.sdo.Type} graph.
+ * This class is not intended for direct usage, but is used by the Jaxen engine
+ * during evaluation. Use {@link MetaDataXPath} to parse an XPath against a
+ * {@link commonj.sdo.Type} graph.
  * </p>
  *
  * @see XPath
  * @see commonj.sdo.Type
  * @see commonj.sdo.Property
  */
-public class MetaDataNavigator extends DefaultNavigator implements NamedAccessNavigator
-{
-    private static final long serialVersionUID = -1636727587303584165L;
-    private static Log log = LogFactory.getFactory().getInstance(MetaDataNavigator.class);
-    
-    public MetaDataNavigator() {   	
-    }
+public class MetaDataNavigator extends DefaultNavigator implements NamedAccessNavigator {
+  private static final long serialVersionUID = -1636727587303584165L;
+  private static Log log = LogFactory.getFactory().getInstance(MetaDataNavigator.class);
 
-    public boolean isElement(Object obj)
-    {
-        return obj instanceof XPathType;
-    }
+  public MetaDataNavigator() {
+  }
 
-    public boolean isComment(Object obj)
-    {
-        return false;
-    }
+  public boolean isElement(Object obj) {
+    return obj instanceof XPathType;
+  }
 
-    public boolean isText(Object obj)
-    {
-        return false;
-    }
+  public boolean isComment(Object obj) {
+    return false;
+  }
 
-    public boolean isAttribute(Object obj)
-    {
-        return obj instanceof XPathProperty; 
-    }
+  public boolean isText(Object obj) {
+    return false;
+  }
 
-    public boolean isProcessingInstruction(Object obj)
-    {
-        return false;
-    }
+  public boolean isAttribute(Object obj) {
+    return obj instanceof XPathProperty;
+  }
 
-    public boolean isDocument(Object obj)
-    {
-        return false;
-    }
+  public boolean isProcessingInstruction(Object obj) {
+    return false;
+  }
 
-    public boolean isNamespace(Object obj)
-    {
-        return false;
-    }
+  public boolean isDocument(Object obj) {
+    return false;
+  }
 
-    public String getElementName(Object obj)
-    {
-    	XPathType elem = (XPathType) obj;
+  public boolean isNamespace(Object obj) {
+    return false;
+  }
 
-        return elem.getType().getName();
-    }
+  public String getElementName(Object obj) {
+    XPathType elem = (XPathType) obj;
 
-    public String getElementNamespaceUri(Object obj)
-    {
-    	XPathType elem = (XPathType) obj;
-        
-        String uri = elem.getType().getURI();
-        if ( uri != null && uri.length() == 0 ) 
-            return null;
-        else
-            return uri;
-    }
+    return elem.getType().getName();
+  }
 
-    public String getAttributeName(Object obj)
-    {
-    	XPathProperty attr = (XPathProperty) obj;
-        return attr.getProperty().getName();
-    }
+  public String getElementNamespaceUri(Object obj) {
+    XPathType elem = (XPathType) obj;
 
-    public String getAttributeNamespaceUri(Object obj)
-    {
-    	XPathProperty attr = (XPathProperty) obj;
+    String uri = elem.getType().getURI();
+    if (uri != null && uri.length() == 0)
+      return null;
+    else
+      return uri;
+  }
 
-        String uri = attr.getProperty().getType().getURI();
-        if ( uri != null && uri.length() == 0 ) 
-            return null;
-        else
-            return uri;
-    }
+  public String getAttributeName(Object obj) {
+    XPathProperty attr = (XPathProperty) obj;
+    return attr.getProperty().getName();
+  }
 
-    /**
-     * @param contextNode the context node
-     * @see org.jaxen.DefaultNavigator#getChildAxisIterator(java.lang.Object)
+  public String getAttributeNamespaceUri(Object obj) {
+    XPathProperty attr = (XPathProperty) obj;
+
+    String uri = attr.getProperty().getType().getURI();
+    if (uri != null && uri.length() == 0)
+      return null;
+    else
+      return uri;
+  }
+
+  /**
+   * @param contextNode
+   *          the context node
+   * @see org.jaxen.DefaultNavigator#getChildAxisIterator(java.lang.Object)
+   */
+  @SuppressWarnings("unchecked")
+  public Iterator getChildAxisIterator(Object contextNode) {
+
+    throw new IllegalArgumentException("unexpected instance, " + contextNode.getClass().getName());
+    /*
+     * if ( contextNode instanceof XPathProperty ) { XPathProperty
+     * contextProperty = (XPathProperty)contextNode; Property property =
+     * (Property)contextProperty.getProperty();
+     * 
+     * Object target = contextProperty.getSource().get(property); if (target !=
+     * null) { if (target instanceof List) { return ((List)target).iterator(); }
+     * else return new SingleObjectIterator( new XPathDataValue(target,
+     * contextProperty.getSource(), property)); } else { return new
+     * SingleObjectIterator( new XPathDataValue(null,
+     * contextProperty.getSource(), property)); } }
      */
-    @SuppressWarnings("unchecked")
-	public Iterator getChildAxisIterator(Object contextNode)
+  }
+
+  /**
+   * Retrieves an <code>Iterator</code> over the child elements that match the
+   * supplied local name and namespace URI.
+   *
+   * @param contextNode
+   *          the origin context node
+   * @param localName
+   *          the local name of the children to return, always present
+   * @param namespacePrefix
+   *          ignored; prefixes are not used when matching in XPath
+   * @param namespaceURI
+   *          the URI of the namespace of the children to return
+   * @return an Iterator that traverses the named children, or null if none
+   */
+  @SuppressWarnings("unchecked")
+  public Iterator getChildAxisIterator(Object contextNode, String localName,
+      String namespacePrefix, String namespaceURI) {
+
+    if (contextNode instanceof Type) // its the root
     {
+      Type source = (Type) contextNode;
+      return getChildResult(source, localName);
+    } else if (contextNode instanceof XPathType) {
+      XPathType contextAdapter = (XPathType) contextNode;
+      Type source = contextAdapter.getType();
+      return getChildResult(source, localName);
+    } else
+      throw new IllegalArgumentException("unexpected instance, " + contextNode.getClass().getName());
+  }
 
-        throw new IllegalArgumentException("unexpected instance, " 
-        			+ contextNode.getClass().getName());
-        /*
-        if ( contextNode instanceof XPathProperty )
-        {
-        	XPathProperty contextProperty = (XPathProperty)contextNode;
-        	Property property = (Property)contextProperty.getProperty();
-        	
-        	Object target = contextProperty.getSource().get(property);
-        	if (target != null) {
-        		if (target instanceof List) {
-        			return ((List)target).iterator();
-        		}
-        		else
-        			return new SingleObjectIterator(
-        				new XPathDataValue(target, 
-        						contextProperty.getSource(), property)); 
-        	}
-        	else {
-        		return new SingleObjectIterator(
-        				new XPathDataValue(null, 
-        						contextProperty.getSource(), property));
-        	}
-        }
-        */
+  @SuppressWarnings("unchecked")
+  private Iterator getChildResult(Type source, String localName) {
+
+    String propertyName = localName;
+
+    int indexPosition = localName.indexOf(".");
+    int index = 0;
+    if (indexPosition >= 0) {
+      propertyName = localName.substring(0, indexPosition);
+      try {
+        index = Integer.parseInt(localName.substring(indexPosition + 1));
+      } catch (NumberFormatException e) {
+        throw new IllegalArgumentException(localName, e);
+      }
     }
 
-    /**
-     * Retrieves an <code>Iterator</code> over the child elements that
-     * match the supplied local name and namespace URI.
-     *
-     * @param contextNode      the origin context node
-     * @param localName        the local name of the children to return, always present
-     * @param namespacePrefix  ignored; prefixes are not used when matching in XPath
-     * @param namespaceURI     the URI of the namespace of the children to return
-     * @return an Iterator     that traverses the named children, or null if none
-     */
-    @SuppressWarnings("unchecked")
-	public Iterator getChildAxisIterator(
-            Object contextNode, String localName, String namespacePrefix, String namespaceURI) {
+    // Note: must use 'findProperty' rather than getProperty here to support
+    // descendant search
+    // for any data object (element in XPATH XML land) with the
+    // desired property. E.g. for "Data Graph" bookstore/catalog/book
+    // for query bookstore.get("//book") where book is not a property of
+    // bookstore
+    // but of catalog, yet we want to search for it anywhere under the root.
+    Property sourceProp = ((PlasmaType) source).findProperty(propertyName);
+    if (sourceProp == null)
+      return JaxenConstants.EMPTY_ITERATOR;
 
-        if ( contextNode instanceof Type ) // its the root
-        {
-        	Type source = (Type)contextNode;
-        	return getChildResult(source, localName);
-        }
-        else if (contextNode instanceof XPathType) {
-        	XPathType contextAdapter = (XPathType)contextNode;
-        	Type source = contextAdapter.getType();
-        	return getChildResult(source, localName);
-        }
-        else
-        	throw new IllegalArgumentException("unexpected instance, " 
-        			+ contextNode.getClass().getName());
-    }
-    
-    @SuppressWarnings("unchecked")
-	private Iterator getChildResult(Type source, String localName) {
-    	
-    	String propertyName = localName;
-    	
-    	int indexPosition = localName.indexOf(".");
-    	int index = 0;
-    	if (indexPosition >= 0) {
-    		propertyName = localName.substring(0, indexPosition);
-    		try {
-    		    index = Integer.parseInt(localName.substring(indexPosition+1));
-    		}
-    		catch (NumberFormatException e) {
-    			throw new IllegalArgumentException(localName, e);
-    		}
-    	}	    		
-    		
-    	// Note: must use 'findProperty' rather than getProperty here to support descendant search
-    	// for any data object (element in XPATH XML land) with the
-    	// desired property. E.g. for "Data Graph" bookstore/catalog/book
-    	// for query bookstore.get("//book") where book is not a property of bookstore
-    	// but of catalog, yet we want to search for it anywhere under the root. 
-    	Property sourceProp = ((PlasmaType)source).findProperty(propertyName);
-    	if (sourceProp == null)
-    		return JaxenConstants.EMPTY_ITERATOR;       	
-    	
-    	if (!sourceProp.isMany() && indexPosition >= 0)
-    		throw new IllegalArgumentException("index specified for singular property, "
-    			+ source.getURI() + "#" + source.getName()
-    			+ "." + propertyName);
+    if (!sourceProp.isMany() && indexPosition >= 0)
+      throw new IllegalArgumentException("index specified for singular property, "
+          + source.getURI() + "#" + source.getName() + "." + propertyName);
 
-    	if (sourceProp.getType().isDataType()) { // abort traversal       		
-    		return new SingleObjectIterator(
-    			new XPathProperty(sourceProp, source, sourceProp)); 
-    	}
-    	else {
-    		Type targetType = sourceProp.getType();
-    		return new SingleObjectIterator(
-        		new XPathType(targetType, source, sourceProp)); 
-    	}    	
+    if (sourceProp.getType().isDataType()) { // abort traversal
+      return new SingleObjectIterator(new XPathProperty(sourceProp, source, sourceProp));
+    } else {
+      Type targetType = sourceProp.getType();
+      return new SingleObjectIterator(new XPathType(targetType, source, sourceProp));
     }
-    
-    @SuppressWarnings("unchecked")
-	public Iterator getNamespaceAxisIterator(Object contextNode)
+  }
+
+  @SuppressWarnings("unchecked")
+  public Iterator getNamespaceAxisIterator(Object contextNode) {
+    return JaxenConstants.EMPTY_ITERATOR;
+  }
+
+  @SuppressWarnings("unchecked")
+  public Iterator getParentAxisIterator(Object contextNode) {
+    return JaxenConstants.EMPTY_ITERATOR;
+  }
+
+  @SuppressWarnings("unchecked")
+  public Iterator getAttributeAxisIterator(Object contextNode) {
+    if (!(contextNode instanceof XPathType)) {
+      return JaxenConstants.EMPTY_ITERATOR;
+    }
+
+    XPathType elem = (XPathType) contextNode;
+
+    return elem.getType().getProperties().iterator();
+  }
+
+  /**
+   * Retrieves an <code>Iterator</code> over the attribute elements that match
+   * the supplied name.
+   *
+   * @param contextNode
+   *          the origin context node
+   * @param localName
+   *          the local name of the attributes to return, always present
+   * @param namespacePrefix
+   *          the prefix of the namespace of the attributes to return
+   * @param namespaceURI
+   *          the URI of the namespace of the attributes to return
+   * @return an Iterator that traverses the named attributes, not null
+   */
+  @SuppressWarnings("unchecked")
+  public Iterator getAttributeAxisIterator(Object contextNode, String localName,
+      String namespacePrefix, String namespaceURI) {
+
+    if (contextNode instanceof XPathType) {
+      XPathType adapter = (XPathType) contextNode;
+      Property prop = adapter.getType().getProperty(localName);
+      if (prop.getType().isDataType()) {
+        return new SingleObjectIterator(new XPathProperty(prop, adapter.getSource(),
+            adapter.getSourceProperty()));
+      } else {
+        Type targetType = prop.getType();
+        return new SingleObjectIterator(new XPathType(targetType, adapter.getSource(), prop));
+      }
+    }
+    return JaxenConstants.EMPTY_ITERATOR;
+  }
+
+  /**
+   * Returns a parsed form of the given XPath string, which will be suitable for
+   * queries on Data Graph documents.
+   */
+  public XPath parseXPath(String xpath) throws SAXPathException {
+    return new MetaDataXPath(xpath);
+  }
+
+  public Object getDocumentNode(Object contextNode) {
+    XPathType type = null;
+    if (contextNode instanceof XPathType) // its the root
     {
-        return JaxenConstants.EMPTY_ITERATOR;
+      type = (XPathType) contextNode;
     }
 
-    @SuppressWarnings("unchecked")
-	public Iterator getParentAxisIterator(Object contextNode)
-    {
-        return JaxenConstants.EMPTY_ITERATOR;
+    return type;
+  }
+
+  public String getElementQName(Object obj) {
+    XPathType elem = (XPathType) obj;
+
+    // String prefix = elem.getNamespacePrefix();
+    return elem.getType().getURI() + "#" + elem.getType().getName();
+  }
+
+  public String getAttributeQName(Object obj) {
+    XPathProperty adapter = (XPathProperty) obj;
+    return adapter.getProperty().getName();
+  }
+
+  public String getNamespaceStringValue(Object obj) {
+    return obj.toString();
+  }
+
+  public String getNamespacePrefix(Object obj) {
+    return obj.toString();
+  }
+
+  public String getTextStringValue(Object obj) {
+    return obj.toString();
+  }
+
+  public String getAttributeStringValue(Object obj) {
+    XPathProperty adapter = (XPathProperty) obj;
+    return adapter.getProperty().getName();
+  }
+
+  public String getElementStringValue(Object obj) {
+    return obj.toString();
+  }
+
+  public String getProcessingInstructionTarget(Object obj) {
+    return null;
+  }
+
+  public String getProcessingInstructionData(Object obj) {
+    return null;
+  }
+
+  public String getCommentStringValue(Object obj) {
+    return null;
+  }
+
+  public String translateNamespacePrefixToUri(String prefix, Object context) {
+    XPathType element = null;
+    if (context instanceof XPathType) {
+      element = (XPathType) context;
+      return element.getType().getURI();
     }
 
-    @SuppressWarnings("unchecked")
-	public Iterator getAttributeAxisIterator(Object contextNode)
-    {
-        if ( ! ( contextNode instanceof XPathType ) )
-        {
-            return JaxenConstants.EMPTY_ITERATOR;
-        }
+    return null;
+  }
 
-        XPathType elem = (XPathType) contextNode;
-
-        return elem.getType().getProperties().iterator();
-    }
-
-    /**
-     * Retrieves an <code>Iterator</code> over the attribute elements that
-     * match the supplied name.
-     *
-     * @param contextNode      the origin context node
-     * @param localName        the local name of the attributes to return, always present
-     * @param namespacePrefix  the prefix of the namespace of the attributes to return
-     * @param namespaceURI     the URI of the namespace of the attributes to return
-     * @return an Iterator     that traverses the named attributes, not null
-     */
-    @SuppressWarnings("unchecked")
-	public Iterator getAttributeAxisIterator(
-            Object contextNode, String localName, String namespacePrefix, String namespaceURI) {
-
-        if ( contextNode instanceof XPathType ) {
-        	XPathType adapter = (XPathType)contextNode;
-        	Property prop = adapter.getType().getProperty(localName);
-        	if (prop.getType().isDataType()) {
-        		return new SingleObjectIterator(
-            		new XPathProperty(prop, adapter.getSource(), 
-            			adapter.getSourceProperty()));         		
-        	}
-        	else {
-           		Type targetType = prop.getType();
-        		return new SingleObjectIterator(
-            		new XPathType(targetType, adapter.getSource(), prop)); 
-        	}
-        }
-        return JaxenConstants.EMPTY_ITERATOR;
-    }
-
-    /** Returns a parsed form of the given XPath string, which will be suitable
-     *  for queries on Data Graph documents.
-     */
-    public XPath parseXPath (String xpath) throws SAXPathException
-    {
-        return new MetaDataXPath(xpath);
-    }
-
-    public Object getDocumentNode(Object contextNode)
-    {
-    	XPathType type = null;
-        if ( contextNode instanceof XPathType ) // its the root
-        {
-        	type = (XPathType)contextNode;
-        }
-        
-        return type;
-    }
-
-    public String getElementQName(Object obj)
-    {
-    	XPathType elem = (XPathType) obj;
-
-        //String prefix = elem.getNamespacePrefix();
-        return elem.getType().getURI() + "#" + elem.getType().getName();
-    }
-
-    public String getAttributeQName(Object obj)
-    {
-    	XPathProperty adapter = (XPathProperty)obj;
-        return adapter.getProperty().getName();
-    }
-
-    public String getNamespaceStringValue(Object obj)
-    {
-    	return obj.toString();
-    }
-
-    public String getNamespacePrefix(Object obj)
-    {
-    	return obj.toString();
-    }
-
-    public String getTextStringValue(Object obj)
-    {
-        return obj.toString();
-    }
-
-    public String getAttributeStringValue(Object obj)
-    {
-    	XPathProperty adapter = (XPathProperty)obj;
-        return adapter.getProperty().getName();
-    }
-
-    public String getElementStringValue(Object obj)
-    {
-        return obj.toString(); 
-    }
-
-    public String getProcessingInstructionTarget(Object obj)
-    {
-        return null;
-    }
-
-    public String getProcessingInstructionData(Object obj)
-    {
-        return null;
-    }
-
-    public String getCommentStringValue(Object obj)
-    {
-        return null;
-    }
-
-    public String translateNamespacePrefixToUri(String prefix, Object context)
-    {
-    	XPathType element = null;
-        if ( context instanceof XPathType ) 
-        {
-            element = (XPathType) context;
-            return element.getType().getURI();
-        }
-
-        return null;
-    }
-
-    public Object getDocument(String url) throws FunctionCallException
-    {
-    	throw new UnsupportedOperationException();
-    }
+  public Object getDocument(String url) throws FunctionCallException {
+    throw new UnsupportedOperationException();
+  }
 }
-

@@ -59,99 +59,92 @@ import javax.xml.stream.events.StartElement;
  */
 public class EventFactory extends BaseXMLEventFactory {
 
-    public Attribute createAttribute(QName name, String value,
-            Location location, QName schemaType) {
+  public Attribute createAttribute(QName name, String value, Location location, QName schemaType) {
 
-        return new AttributeEvent(name, value, location, schemaType);
+    return new AttributeEvent(name, value, location, schemaType);
 
-    }
+  }
 
-    public Characters createCData(String content, Location location,
-            QName schemaType) {
+  public Characters createCData(String content, Location location, QName schemaType) {
 
-        return new CDataEvent(content, location, schemaType);
+    return new CDataEvent(content, location, schemaType);
 
-    }
+  }
 
-    public Characters createCharacters(String content, Location location,
-            QName schemaType) {
+  public Characters createCharacters(String content, Location location, QName schemaType) {
 
-        return new CharactersEvent(content, location, schemaType);
+    return new CharactersEvent(content, location, schemaType);
 
-    }
+  }
 
-    public Comment createComment(String text, Location location) {
+  public Comment createComment(String text, Location location) {
 
-        return new CommentEvent(text, location);
+    return new CommentEvent(text, location);
 
-    }
+  }
 
-    public DTD createDTD(String dtd, Location location) {
+  public DTD createDTD(String dtd, Location location) {
 
-        return new DTDEvent(dtd, location);
+    return new DTDEvent(dtd, location);
 
-    }
+  }
 
-    public EndDocument createEndDocument(Location location) {
+  public EndDocument createEndDocument(Location location) {
 
-        return new EndDocumentEvent(location);
+    return new EndDocumentEvent(location);
 
-    }
+  }
 
-    public EndElement createEndElement(QName name, Iterator namespaces,
-            Location location, QName schemaType) {
+  public EndElement createEndElement(QName name, Iterator namespaces, Location location,
+      QName schemaType) {
 
-        return new EndElementEvent(name, namespaces, location, schemaType);
+    return new EndElementEvent(name, namespaces, location, schemaType);
 
-    }
+  }
 
-    public EntityReference createEntityReference(String name,
-            EntityDeclaration declaration, Location location) {
+  public EntityReference createEntityReference(String name, EntityDeclaration declaration,
+      Location location) {
 
-        return new EntityReferenceEvent(name, declaration, location);
+    return new EntityReferenceEvent(name, declaration, location);
 
-    }
+  }
 
-    public Characters createIgnorableSpace(String content, Location location) {
+  public Characters createIgnorableSpace(String content, Location location) {
 
-        return new IgnorableSpaceEvent(content, location);
+    return new IgnorableSpaceEvent(content, location);
 
-    }
+  }
 
-    public Namespace createNamespace(String prefix, String namespaceUri,
-            Location location) {
+  public Namespace createNamespace(String prefix, String namespaceUri, Location location) {
 
-        return new NamespaceEvent(prefix, namespaceUri, location);
+    return new NamespaceEvent(prefix, namespaceUri, location);
 
-    }
+  }
 
-    public ProcessingInstruction createProcessingInstruction(String target,
-            String data, Location location) {
+  public ProcessingInstruction createProcessingInstruction(String target, String data,
+      Location location) {
 
-        return new ProcessingInstructionEvent(target, data, location);
+    return new ProcessingInstructionEvent(target, data, location);
 
-    }
+  }
 
-    public Characters createSpace(String content, Location location) {
+  public Characters createSpace(String content, Location location) {
 
-        return new IgnorableSpaceEvent(content, location);
+    return new IgnorableSpaceEvent(content, location);
 
-    }
+  }
 
-    public StartDocument createStartDocument(String encoding, String version,
-            Boolean standalone, Location location, QName schemaType) {
+  public StartDocument createStartDocument(String encoding, String version, Boolean standalone,
+      Location location, QName schemaType) {
 
-        return new StartDocumentEvent(encoding, standalone, version, location,
-                schemaType);
+    return new StartDocumentEvent(encoding, standalone, version, location, schemaType);
 
-    }
+  }
 
-    public StartElement createStartElement(QName name, Iterator attributes,
-            Iterator namespaces, NamespaceContext namespaceCtx,
-            Location location, QName schemaType) {
+  public StartElement createStartElement(QName name, Iterator attributes, Iterator namespaces,
+      NamespaceContext namespaceCtx, Location location, QName schemaType) {
 
-        return new StartElementEvent(name, attributes, namespaces,
-                namespaceCtx, location, schemaType);
+    return new StartElementEvent(name, attributes, namespaces, namespaceCtx, location, schemaType);
 
-    }
+  }
 }

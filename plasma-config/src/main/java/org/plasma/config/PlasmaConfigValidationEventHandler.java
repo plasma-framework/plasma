@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.config;
 
 import javax.xml.bind.ValidationEvent;
@@ -29,46 +24,46 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.BindingValidationEventHandler;
 
 public class PlasmaConfigValidationEventHandler implements BindingValidationEventHandler {
-	
-    private static Log log = LogFactory.getLog(PlasmaConfigValidationEventHandler.class);
-    private int errorCount;
-    private boolean cumulative = true;
-	
-	public int getErrorCount() {
-		return errorCount;
-	}
 
-	public PlasmaConfigValidationEventHandler() {}	
-	public PlasmaConfigValidationEventHandler(boolean cumulative) {
-		this.cumulative = cumulative;
-	}	
-	
-    public boolean handleEvent(ValidationEvent ve) {
-        boolean result = this.cumulative;
-        this.errorCount++;        
-        ValidationEventLocator vel = ve.getLocator();
-        
-        String message = "Line:Col:Offset[" + vel.getLineNumber() + ":" + vel.getColumnNumber() + ":" 
-            + String.valueOf(vel.getOffset())
-            + "] - " + ve.getMessage();
-        
-        switch (ve.getSeverity()) {
-        case ValidationEvent.WARNING:
-            log.warn(message);
-            break;
-        case ValidationEvent.ERROR:
-        case ValidationEvent.FATAL_ERROR:
-            log.fatal(message);
-            throw new ConfigurationException(message);
-        default:
-            log.error(message);
-        }
-        return result;
+  private static Log log = LogFactory.getLog(PlasmaConfigValidationEventHandler.class);
+  private int errorCount;
+  private boolean cumulative = true;
+
+  public int getErrorCount() {
+    return errorCount;
+  }
+
+  public PlasmaConfigValidationEventHandler() {
+  }
+
+  public PlasmaConfigValidationEventHandler(boolean cumulative) {
+    this.cumulative = cumulative;
+  }
+
+  public boolean handleEvent(ValidationEvent ve) {
+    boolean result = this.cumulative;
+    this.errorCount++;
+    ValidationEventLocator vel = ve.getLocator();
+
+    String message = "Line:Col:Offset[" + vel.getLineNumber() + ":" + vel.getColumnNumber() + ":"
+        + String.valueOf(vel.getOffset()) + "] - " + ve.getMessage();
+
+    switch (ve.getSeverity()) {
+    case ValidationEvent.WARNING:
+      log.warn(message);
+      break;
+    case ValidationEvent.ERROR:
+    case ValidationEvent.FATAL_ERROR:
+      log.fatal(message);
+      throw new ConfigurationException(message);
+    default:
+      log.error(message);
     }
-    
-    public void reset()
-    {
-    	this.errorCount = 0;
-    }
+    return result;
+  }
+
+  public void reset() {
+    this.errorCount = 0;
+  }
 
 }

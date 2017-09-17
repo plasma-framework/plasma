@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.mojo;
 
 import java.util.Properties;
@@ -27,12 +22,10 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
-
 /**
- * Common superclass for Plasma mojo's which uses the configurator
- * javadoc annotation and a custom Plexus conponent configurator
- * add the project's runtime classpath elements
- * to the mojo classpath.   
+ * Common superclass for Plasma mojo's which uses the configurator javadoc
+ * annotation and a custom Plexus conponent configurator add the project's
+ * runtime classpath elements to the mojo classpath.
  * 
  * @author Scott Cinnamond
  * @since 1.1.3
@@ -43,20 +36,17 @@ import org.apache.maven.project.MavenProject;
  * @see org.plasma.sdo.maven.IncludeProjectDependenciesComponentConfigurator
  *
  */
-public abstract class ConfiguratorMojo extends AbstractMojo
-{
-	
-    /** @parameter expression="${project}" */
-    protected MavenProject project;
-    
-    
-    public void execute() throws MojoExecutionException
-    {
-        getLog().info( "Goal: create" );
-        getLog().info( "GroupId: " + this.project.getGroupId());
-                
-        Properties props = this.project.getProperties();
-        
-        props.put("message", "Plasma: Hello, My World.");        
-    }
+public abstract class ConfiguratorMojo extends AbstractMojo {
+
+  /** @parameter expression="${project}" */
+  protected MavenProject project;
+
+  public void execute() throws MojoExecutionException {
+    getLog().info("Goal: create");
+    getLog().info("GroupId: " + this.project.getGroupId());
+
+    Properties props = this.project.getProperties();
+
+    props.put("message", "Plasma: Hello, My World.");
+  }
 }

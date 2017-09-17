@@ -52,91 +52,90 @@ import javax.xml.stream.events.Namespace;
  */
 public class EndElementEvent extends AbstractXMLEvent implements EndElement {
 
-    /** The element name. */
-    protected QName name;
+  /** The element name. */
+  protected QName name;
 
-    /** A collection of {@link Namespace}s going out of scope. */
-    protected Collection namespaces;
+  /** A collection of {@link Namespace}s going out of scope. */
+  protected Collection namespaces;
 
-    public EndElementEvent(QName name, Iterator namespaces) {
+  public EndElementEvent(QName name, Iterator namespaces) {
 
-        this(name, namespaces, null, null);
+    this(name, namespaces, null, null);
 
-    }
+  }
 
-    public EndElementEvent(QName name, Iterator namespaces, Location location) {
+  public EndElementEvent(QName name, Iterator namespaces, Location location) {
 
-        this(name, namespaces, location, null);
+    this(name, namespaces, location, null);
 
-    }
+  }
 
-    public EndElementEvent(QName name, Iterator namespaces, Location location,
-            QName schemaType) {
+  public EndElementEvent(QName name, Iterator namespaces, Location location, QName schemaType) {
 
-        super(location, schemaType);
+    super(location, schemaType);
 
-        this.name = name;
-        if (namespaces != null && namespaces.hasNext()) {
+    this.name = name;
+    if (namespaces != null && namespaces.hasNext()) {
 
-            List nsList = new ArrayList();
-            do {
+      List nsList = new ArrayList();
+      do {
 
-                Namespace ns = (Namespace) namespaces.next();
-                nsList.add(ns);
+        Namespace ns = (Namespace) namespaces.next();
+        nsList.add(ns);
 
-            } while (namespaces.hasNext());
-
-        }
+      } while (namespaces.hasNext());
 
     }
 
-    public EndElementEvent(EndElement that) {
+  }
 
-        super(that);
-        this.name = that.getName();
+  public EndElementEvent(EndElement that) {
 
-        Iterator namespaces = that.getNamespaces();
-        if (namespaces != null && namespaces.hasNext()) {
+    super(that);
+    this.name = that.getName();
 
-            List nsList = new ArrayList();
-            do {
+    Iterator namespaces = that.getNamespaces();
+    if (namespaces != null && namespaces.hasNext()) {
 
-                Namespace ns = (Namespace) namespaces.next();
-                nsList.add(ns);
+      List nsList = new ArrayList();
+      do {
 
-            } while (namespaces.hasNext());
+        Namespace ns = (Namespace) namespaces.next();
+        nsList.add(ns);
 
-        }
-
-    }
-
-    /**
-     * Returns {@link #END_ELEMENT}.
-     */
-    public int getEventType() {
-
-        return END_ELEMENT;
+      } while (namespaces.hasNext());
 
     }
 
-    public QName getName() {
+  }
 
-        return name;
+  /**
+   * Returns {@link #END_ELEMENT}.
+   */
+  public int getEventType() {
+
+    return END_ELEMENT;
+
+  }
+
+  public QName getName() {
+
+    return name;
+
+  }
+
+  public Iterator getNamespaces() {
+
+    if (namespaces != null) {
+
+      return namespaces.iterator();
+
+    } else {
+
+      return Collections.EMPTY_LIST.iterator();
 
     }
 
-    public Iterator getNamespaces() {
-
-        if (namespaces != null) {
-
-            return namespaces.iterator();
-
-        } else {
-
-            return Collections.EMPTY_LIST.iterator();
-
-        }
-
-    }
+  }
 
 }

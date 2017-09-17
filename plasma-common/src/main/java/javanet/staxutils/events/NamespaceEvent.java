@@ -46,56 +46,54 @@ import javax.xml.stream.events.Namespace;
  */
 public class NamespaceEvent extends AttributeEvent implements Namespace {
 
-    public static final QName DEFAULT_NS_DECL = new QName(
-            XMLConstants.XMLNS_ATTRIBUTE_NS_URI, XMLConstants.XMLNS_ATTRIBUTE);
+  public static final QName DEFAULT_NS_DECL = new QName(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
+      XMLConstants.XMLNS_ATTRIBUTE);
 
-    public NamespaceEvent(String prefix, String nsURI) {
+  public NamespaceEvent(String prefix, String nsURI) {
 
-        this(prefix, nsURI, null);
+    this(prefix, nsURI, null);
 
-    }
+  }
 
-    public NamespaceEvent(String prefix, String nsURI, Location location) {
+  public NamespaceEvent(String prefix, String nsURI, Location location) {
 
-        super(prefix != null ? new QName(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-                prefix, XMLConstants.XMLNS_ATTRIBUTE) : DEFAULT_NS_DECL,
-                nsURI,
-                location);
+    super(prefix != null ? new QName(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, prefix,
+        XMLConstants.XMLNS_ATTRIBUTE) : DEFAULT_NS_DECL, nsURI, location);
 
-    }
+  }
 
-    /** Returns {@link #NAMESPACE}. */
-    public int getEventType() {
+  /** Returns {@link #NAMESPACE}. */
+  public int getEventType() {
 
-        return NAMESPACE;
+    return NAMESPACE;
 
-    }
+  }
 
-    public String getNamespaceURI() {
+  public String getNamespaceURI() {
 
-        return getValue();
+    return getValue();
 
-    }
+  }
 
-    public String getPrefix() {
+  public String getPrefix() {
 
-        String prefix = getName().getLocalPart();
-        if (!"xmlns".equals(prefix)) {
+    String prefix = getName().getLocalPart();
+    if (!"xmlns".equals(prefix)) {
 
-            return prefix;
+      return prefix;
 
-        } else {
+    } else {
 
-            return "";
-
-        }
+      return "";
 
     }
 
-    public boolean isDefaultNamespaceDeclaration() {
+  }
 
-        return "".equals(getPrefix());
+  public boolean isDefaultNamespaceDeclaration() {
 
-    }
-    
+    return "".equals(getPrefix());
+
+  }
+
 }

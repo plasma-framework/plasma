@@ -52,104 +52,98 @@ import javax.xml.transform.Result;
  */
 public abstract class BaseXMLOutputFactory extends XMLOutputFactory {
 
-    public XMLEventWriter createXMLEventWriter(OutputStream stream,
-            String encoding) throws XMLStreamException {
+  public XMLEventWriter createXMLEventWriter(OutputStream stream, String encoding)
+      throws XMLStreamException {
 
-        try {
+    try {
 
-            return createXMLEventWriter(new OutputStreamWriter(stream, encoding));
+      return createXMLEventWriter(new OutputStreamWriter(stream, encoding));
 
-        } catch (UnsupportedEncodingException e) {
+    } catch (UnsupportedEncodingException e) {
 
-            throw new XMLStreamException(e);
-
-        }
+      throw new XMLStreamException(e);
 
     }
 
-    public XMLEventWriter createXMLEventWriter(OutputStream stream)
-            throws XMLStreamException {
+  }
 
-        return createXMLEventWriter(new OutputStreamWriter(stream));
+  public XMLEventWriter createXMLEventWriter(OutputStream stream) throws XMLStreamException {
 
-    }
+    return createXMLEventWriter(new OutputStreamWriter(stream));
 
-    public XMLStreamWriter createXMLStreamWriter(OutputStream stream,
-            String encoding) throws XMLStreamException {
+  }
 
-        try {
+  public XMLStreamWriter createXMLStreamWriter(OutputStream stream, String encoding)
+      throws XMLStreamException {
 
-            return createXMLStreamWriter(new OutputStreamWriter(stream,
-                    encoding));
+    try {
 
-        } catch (UnsupportedEncodingException e) {
+      return createXMLStreamWriter(new OutputStreamWriter(stream, encoding));
 
-            throw new XMLStreamException(e);
+    } catch (UnsupportedEncodingException e) {
 
-        }
+      throw new XMLStreamException(e);
 
     }
 
-    public XMLStreamWriter createXMLStreamWriter(OutputStream stream)
-            throws XMLStreamException {
+  }
 
-        return createXMLStreamWriter(new OutputStreamWriter(stream));
+  public XMLStreamWriter createXMLStreamWriter(OutputStream stream) throws XMLStreamException {
 
-    }
+    return createXMLStreamWriter(new OutputStreamWriter(stream));
 
-    public XMLEventWriter createXMLEventWriter(Result result)
-            throws XMLStreamException {
+  }
 
-        return createXMLEventWriter(createXMLStreamWriter(result));
+  public XMLEventWriter createXMLEventWriter(Result result) throws XMLStreamException {
 
-    }
+    return createXMLEventWriter(createXMLStreamWriter(result));
 
-    /**
-     * Creates an {@link XMLEventWriter} that writes to the provided
-     * {@link XMLStreamWriter}.
-     * 
-     * @param writer The destination stream.
-     * @return An {@link XMLEventWriter} that writes to the provided
-     * 		{@link XMLStreamWriter}.
-     */
-    public XMLEventWriter createXMLEventWriter(XMLStreamWriter writer) {
+  }
 
-        return new XMLStreamEventWriter(writer);
+  /**
+   * Creates an {@link XMLEventWriter} that writes to the provided
+   * {@link XMLStreamWriter}.
+   * 
+   * @param writer
+   *          The destination stream.
+   * @return An {@link XMLEventWriter} that writes to the provided
+   *         {@link XMLStreamWriter}.
+   */
+  public XMLEventWriter createXMLEventWriter(XMLStreamWriter writer) {
 
-    }
+    return new XMLStreamEventWriter(writer);
 
-    public XMLEventWriter createXMLEventWriter(Writer stream)
-            throws XMLStreamException {
+  }
 
-        return createXMLEventWriter(createXMLStreamWriter(stream));
+  public XMLEventWriter createXMLEventWriter(Writer stream) throws XMLStreamException {
 
-    }
+    return createXMLEventWriter(createXMLStreamWriter(stream));
 
-    public XMLStreamWriter createXMLStreamWriter(Result result)
-            throws XMLStreamException {
+  }
 
-        // FIXME Support TrAX
-        throw new UnsupportedOperationException("TrAX result not supported");
+  public XMLStreamWriter createXMLStreamWriter(Result result) throws XMLStreamException {
 
-    }
+    // FIXME Support TrAX
+    throw new UnsupportedOperationException("TrAX result not supported");
 
-    public Object getProperty(String name) throws IllegalArgumentException {
+  }
 
-        throw new IllegalArgumentException(name + " property isn't supported");
+  public Object getProperty(String name) throws IllegalArgumentException {
 
-    }
+    throw new IllegalArgumentException(name + " property isn't supported");
 
-    public boolean isPropertySupported(String name) {
+  }
 
-        return false;
+  public boolean isPropertySupported(String name) {
 
-    }
+    return false;
 
-    public void setProperty(String name, Object value)
-            throws IllegalArgumentException {
+  }
 
-        throw new IllegalArgumentException(name + " property isn't supported");
+  public void setProperty(String name, Object value) throws IllegalArgumentException {
 
-    }
+    throw new IllegalArgumentException(name + " property isn't supported");
+
+  }
 
 }

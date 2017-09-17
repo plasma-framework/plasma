@@ -5,8 +5,7 @@ import org.plasma.sdo.annotation.Enumeration;
 
 @Enumeration(name = "OrgType")
 public enum OrgType {
-	@Alias(physicalName = "R")
-    retail,
-	@Alias(physicalName = "W")
-    wholesale
+  @Alias(physicalName = "R")
+  retail, @Alias(physicalName = "W")
+  wholesale
 }

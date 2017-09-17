@@ -1,25 +1,21 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.xml.xslt;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -35,65 +31,62 @@ import org.plasma.common.bind.ValidatingUnmarshaler;
 import org.xml.sax.SAXException;
 
 public class XSLTDataBinding implements DataBinding {
-    private static Log log = LogFactory.getLog(XSLTDataBinding.class);
-    public static String FILENAME_SCHEMA_CHAIN_ROOT = "XSLT.xsd";
+  private static Log log = LogFactory.getLog(XSLTDataBinding.class);
+  public static String FILENAME_SCHEMA_CHAIN_ROOT = "XSLT.xsd";
 
-    // just classes in the same package where can find the above respective
-    // schema files via Class.getResource*
-    public static Class<?> RESOURCE_CLASS = XSLTDataBinding.class;
+  // just classes in the same package where can find the above respective
+  // schema files via Class.getResource*
+  public static Class<?> RESOURCE_CLASS = XSLTDataBinding.class;
 
-    private static ValidatingUnmarshaler validatingUnmarshaler;
+  private static ValidatingUnmarshaler validatingUnmarshaler;
 
-    public static Class<?>[] FACTORIES = { 
-    	org.plasma.xml.xslt.ObjectFactory.class
-    };
+  public static Class<?>[] FACTORIES = { org.plasma.xml.xslt.ObjectFactory.class };
 
-    @SuppressWarnings("unused")
-    private XSLTDataBinding() {
+  @SuppressWarnings("unused")
+  private XSLTDataBinding() {
+  }
+
+  public XSLTDataBinding(BindingValidationEventHandler validationEventHandler)
+      throws JAXBException, SAXException {
+
+    if (validatingUnmarshaler == null) {
+      log.info("loading schema chain...");
+      validatingUnmarshaler = new ValidatingUnmarshaler(
+          RESOURCE_CLASS.getResource(FILENAME_SCHEMA_CHAIN_ROOT),
+          JAXBContext.newInstance(FACTORIES), validationEventHandler);
     }
+  }
 
-    public XSLTDataBinding(BindingValidationEventHandler validationEventHandler)
-            throws JAXBException, SAXException {
-    	
-    	if (validatingUnmarshaler == null) {
-            log.info("loading schema chain...");
-            validatingUnmarshaler = new ValidatingUnmarshaler(RESOURCE_CLASS
-                .getResource(FILENAME_SCHEMA_CHAIN_ROOT), JAXBContext.newInstance(FACTORIES),
-                validationEventHandler);
-    	}
-    }
+  public Class<?>[] getObjectFactories() {
+    return FACTORIES;
+  }
 
-    public Class<?>[] getObjectFactories() {
-        return FACTORIES;
-    }
+  public String marshal(Object root) throws JAXBException {
+    return validatingUnmarshaler.marshal(root);
+  }
 
-    public String marshal(Object root) throws JAXBException {
-        return validatingUnmarshaler.marshal(root);
-    }
+  public void marshal(Object root, OutputStream stream) throws JAXBException {
+    validatingUnmarshaler.marshal(root, stream);
+  }
 
-    public void marshal(Object root, OutputStream stream) throws JAXBException {
-        validatingUnmarshaler.marshal(root, stream);
-    }
-    
-    public Object unmarshal(String xml) throws JAXBException {
-        return validatingUnmarshaler.unmarshal(xml);
-    }
+  public Object unmarshal(String xml) throws JAXBException {
+    return validatingUnmarshaler.unmarshal(xml);
+  }
 
-    public Object unmarshal(InputStream stream) throws JAXBException {
-        return validatingUnmarshaler.unmarshal(stream);
-    }
+  public Object unmarshal(InputStream stream) throws JAXBException {
+    return validatingUnmarshaler.unmarshal(stream);
+  }
 
-    public Object validate(String xml) throws JAXBException {
-        return validatingUnmarshaler.validate(xml);
-    }
+  public Object validate(String xml) throws JAXBException {
+    return validatingUnmarshaler.validate(xml);
+  }
 
-    public Object validate(InputStream xml) throws JAXBException, UnmarshalException {
-        return validatingUnmarshaler.validate(xml);
-    }
+  public Object validate(InputStream xml) throws JAXBException, UnmarshalException {
+    return validatingUnmarshaler.validate(xml);
+  }
 
-    public BindingValidationEventHandler getValidationEventHandler() throws JAXBException {
-        return this.validatingUnmarshaler.getValidationEventHandler();
-    }
-
+  public BindingValidationEventHandler getValidationEventHandler() throws JAXBException {
+    return this.validatingUnmarshaler.getValidationEventHandler();
+  }
 
 }

@@ -44,45 +44,46 @@ import javax.xml.stream.events.Comment;
  */
 public class CommentEvent extends AbstractXMLEvent implements Comment {
 
-    /** Comment text. */
-    protected String text;
+  /** Comment text. */
+  protected String text;
 
-    public CommentEvent(String text) {
+  public CommentEvent(String text) {
 
-        this.text = text;
+    this.text = text;
 
-    }
+  }
 
-    public CommentEvent(String text, Location location) {
+  public CommentEvent(String text, Location location) {
 
-        super(location);
-        this.text = text;
+    super(location);
+    this.text = text;
 
-    }
+  }
 
-    /**
-     * Copy constructor.
-     * 
-     * @param that The comment to copy.
-     */
-    public CommentEvent(Comment that) {
+  /**
+   * Copy constructor.
+   * 
+   * @param that
+   *          The comment to copy.
+   */
+  public CommentEvent(Comment that) {
 
-        super(that);
-        this.text = that.getText();
+    super(that);
+    this.text = that.getText();
 
-    }
+  }
 
-    public String getText() {
+  public String getText() {
 
-        return text;
+    return text;
 
-    }
+  }
 
-    /** Returns {@link #COMMENT}. */
-    public int getEventType() {
+  /** Returns {@link #COMMENT}. */
+  public int getEventType() {
 
-        return COMMENT;
+    return COMMENT;
 
-    }
+  }
 
 }

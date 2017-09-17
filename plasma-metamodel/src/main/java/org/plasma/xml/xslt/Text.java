@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.xml.xslt;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,11 +23,13 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
- * <p>Java class for anonymous complex type.
+ * <p>
+ * Java class for anonymous complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType>
@@ -50,92 +47,81 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class Text
-    extends AnyType
-{
+public class Text extends AnyType {
 
-    @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
-    protected String lang;
-    @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String space;
-    @XmlAttribute(name = "disable-output-escaping")
-    protected YesOrNo disableOutputEscaping;
+  @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
+  protected String lang;
+  @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String space;
+  @XmlAttribute(name = "disable-output-escaping")
+  protected YesOrNo disableOutputEscaping;
 
-    /**
-     * Gets the value of the lang property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLang() {
-        return lang;
+  /**
+   * Gets the value of the lang property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getLang() {
+    return lang;
+  }
+
+  /**
+   * Sets the value of the lang property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setLang(String value) {
+    this.lang = value;
+  }
+
+  /**
+   * Gets the value of the space property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getSpace() {
+    return space;
+  }
+
+  /**
+   * Sets the value of the space property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setSpace(String value) {
+    this.space = value;
+  }
+
+  /**
+   * Gets the value of the disableOutputEscaping property.
+   * 
+   * @return possible object is {@link YesOrNo }
+   * 
+   */
+  public YesOrNo getDisableOutputEscaping() {
+    if (disableOutputEscaping == null) {
+      return YesOrNo.NO;
+    } else {
+      return disableOutputEscaping;
     }
+  }
 
-    /**
-     * Sets the value of the lang property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLang(String value) {
-        this.lang = value;
-    }
-
-    /**
-     * Gets the value of the space property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSpace() {
-        return space;
-    }
-
-    /**
-     * Sets the value of the space property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSpace(String value) {
-        this.space = value;
-    }
-
-    /**
-     * Gets the value of the disableOutputEscaping property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link YesOrNo }
-     *     
-     */
-    public YesOrNo getDisableOutputEscaping() {
-        if (disableOutputEscaping == null) {
-            return YesOrNo.NO;
-        } else {
-            return disableOutputEscaping;
-        }
-    }
-
-    /**
-     * Sets the value of the disableOutputEscaping property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link YesOrNo }
-     *     
-     */
-    public void setDisableOutputEscaping(YesOrNo value) {
-        this.disableOutputEscaping = value;
-    }
+  /**
+   * Sets the value of the disableOutputEscaping property.
+   * 
+   * @param value
+   *          allowed object is {@link YesOrNo }
+   * 
+   */
+  public void setDisableOutputEscaping(YesOrNo value) {
+    this.disableOutputEscaping = value;
+  }
 
 }

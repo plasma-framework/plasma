@@ -18,56 +18,56 @@ import commonj.sdo.helper.XSDHelper;
 import commonj.sdo.impl.ExternalizableDelegator.Resolvable;
 
 public class HelperProviderImpl extends HelperProvider {
-    
-    public HelperProviderImpl() {
-        
-    }
 
-    @Override
-    public CopyHelper copyHelper() {
-        return PlasmaCopyHelper.INSTANCE;
-    }
+  public HelperProviderImpl() {
 
-    @Override
-    public DataFactory dataFactory() {
-        return PlasmaDataFactory.INSTANCE;
-    }
+  }
 
-    @Override
-    public DataHelper dataHelper() {
-        return PlasmaDataHelper.INSTANCE;
-    }
+  @Override
+  public CopyHelper copyHelper() {
+    return PlasmaCopyHelper.INSTANCE;
+  }
 
-    @Override
-    public EqualityHelper equalityHelper() {
-        return PlasmaEqualityHelper.INSTANCE;
-    }
+  @Override
+  public DataFactory dataFactory() {
+    return PlasmaDataFactory.INSTANCE;
+  }
 
-    @Override
-    public Resolvable resolvable() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+  @Override
+  public DataHelper dataHelper() {
+    return PlasmaDataHelper.INSTANCE;
+  }
 
-    @Override
-    public Resolvable resolvable(Object target) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+  @Override
+  public EqualityHelper equalityHelper() {
+    return PlasmaEqualityHelper.INSTANCE;
+  }
 
-    @Override
-    public TypeHelper typeHelper() {
-        return PlasmaTypeHelper.INSTANCE;
-    }
+  @Override
+  public Resolvable resolvable() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-    @Override
-    public XMLHelper xmlHelper() {
-        return PlasmaXMLHelper.INSTANCE;
-    }
+  @Override
+  public Resolvable resolvable(Object target) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-    @Override
-    public XSDHelper xsdHelper() {
-        return PlasmaXSDHelper.INSTANCE;
-    }
+  @Override
+  public TypeHelper typeHelper() {
+    return PlasmaTypeHelper.INSTANCE;
+  }
+
+  @Override
+  public XMLHelper xmlHelper() {
+    return PlasmaXMLHelper.INSTANCE;
+  }
+
+  @Override
+  public XSDHelper xsdHelper() {
+    return PlasmaXSDHelper.INSTANCE;
+  }
 
 }

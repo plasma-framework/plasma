@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.jdbc.filter;
 
 // java imports
@@ -38,69 +33,66 @@ import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.provider.common.EntityConstants;
 import org.plasma.sdo.access.provider.jdbc.AliasMap;
 
-public class OrderingDeclarationAssembler extends DefaultQueryVisitor
-    implements QueryConstants, EntityConstants
-{
-    private static Log log = LogFactory.getLog(OrderingDeclarationAssembler.class);
+public class OrderingDeclarationAssembler extends DefaultQueryVisitor implements QueryConstants,
+    EntityConstants {
+  private static Log log = LogFactory.getLog(OrderingDeclarationAssembler.class);
 
-    private PlasmaType contextType;
-    private commonj.sdo.Property contextProp;
-    private StringBuilder orderingDeclaration = new StringBuilder();
-    private AliasMap aliasMap;
+  private PlasmaType contextType;
+  private commonj.sdo.Property contextProp;
+  private StringBuilder orderingDeclaration = new StringBuilder();
+  private AliasMap aliasMap;
 
-    @SuppressWarnings("unused")
-	private OrderingDeclarationAssembler() {}
+  @SuppressWarnings("unused")
+  private OrderingDeclarationAssembler() {
+  }
 
-    public OrderingDeclarationAssembler(OrderBy orderby,
-    		PlasmaType contextType, AliasMap aliasMap)
-    {
-        this.contextType = contextType;
-        this.aliasMap = aliasMap;
-        
-        if (orderby.getTextContent() == null)
-            orderby.accept(this); // traverse
-        else
-            orderingDeclaration.append(orderby.getTextContent().getValue());            
+  public OrderingDeclarationAssembler(OrderBy orderby, PlasmaType contextType, AliasMap aliasMap) {
+    this.contextType = contextType;
+    this.aliasMap = aliasMap;
+
+    if (orderby.getTextContent() == null)
+      orderby.accept(this); // traverse
+    else
+      orderingDeclaration.append(orderby.getTextContent().getValue());
+  }
+
+  public String getOrderingDeclaration() {
+    return orderingDeclaration.toString();
+  }
+
+  public void start(Property property) {
+    if (orderingDeclaration.length() == 0)
+      orderingDeclaration.append("ORDER BY ");
+
+    if (orderingDeclaration.length() > "ORDER BY ".length())
+      orderingDeclaration.append(", ");
+    PlasmaType targetType = contextType;
+    if (property.getPath() != null) {
+      Path path = property.getPath();
+      for (int i = 0; i < path.getPathNodes().size(); i++) {
+        PlasmaProperty prop = (PlasmaProperty) targetType.getProperty(path.getPathNodes().get(i)
+            .getPathElement().getValue());
+        targetType = (PlasmaType) prop.getType();
+      }
     }
-    
-	public String getOrderingDeclaration() { return orderingDeclaration.toString(); }
+    PlasmaProperty endpoint = (PlasmaProperty) targetType.getProperty(property.getName());
+    contextProp = endpoint;
+    String targetAlias = this.aliasMap.getAlias(targetType);
+    if (targetAlias == null)
+      targetAlias = this.aliasMap.addAlias(targetType);
 
-    public void start(Property property)                  
-    {                
-        if (orderingDeclaration.length() == 0)
-        	orderingDeclaration.append("ORDER BY ");
-        	
-    	if (orderingDeclaration.length() > "ORDER BY ".length())
-            orderingDeclaration.append(", ");
-    	PlasmaType targetType = contextType;
-        if (property.getPath() != null)
-        {
-            Path path = property.getPath();
-            for (int i = 0 ; i < path.getPathNodes().size(); i++)
-            {
-                PlasmaProperty prop = (PlasmaProperty)targetType.getProperty(
-                	path.getPathNodes().get(i).getPathElement().getValue());
-                targetType = (PlasmaType)prop.getType();
-            }
-        }
-        PlasmaProperty endpoint = (PlasmaProperty)targetType.getProperty(property.getName());        
-        contextProp = endpoint;
-        String targetAlias = this.aliasMap.getAlias(targetType);
-        if (targetAlias == null)
-        	targetAlias = this.aliasMap.addAlias(targetType);
+    List<Function> functions = property.getFunctions();
+    if (functions == null || functions.size() == 0) {
+      orderingDeclaration.append(targetAlias + "." + endpoint.getPhysicalName());
+    } else {
+      orderingDeclaration.append(Functions.wrap(endpoint, functions, targetAlias));
+    }
 
-        List<Function> functions = property.getFunctions();
-        if (functions == null || functions.size() == 0) {
-        	orderingDeclaration.append(targetAlias + "." + endpoint.getPhysicalName());
-        }
-        else {
-        	orderingDeclaration.append(Functions.wrap(endpoint, functions, targetAlias));
-        }                       
-        
-        if (property.getDirection() == null || property.getDirection().ordinal() == org.plasma.query.model.SortDirection.ASC.ordinal())
-            orderingDeclaration.append(" ASC");
-        else  
-            orderingDeclaration.append(" DESC");
-        this.getContext().setTraversal(Traversal.ABORT);
-    } 
+    if (property.getDirection() == null
+        || property.getDirection().ordinal() == org.plasma.query.model.SortDirection.ASC.ordinal())
+      orderingDeclaration.append(" ASC");
+    else
+      orderingDeclaration.append(" DESC");
+    this.getContext().setTraversal(Traversal.ABORT);
+  }
 }

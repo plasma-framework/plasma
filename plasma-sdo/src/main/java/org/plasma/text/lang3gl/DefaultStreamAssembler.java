@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.text.lang3gl;
 
 import java.io.File;
@@ -30,86 +25,84 @@ import org.plasma.common.io.StreamAssembler;
 import org.plasma.provisioning.adapter.ProvisioningModel;
 import org.plasma.text.TextProvisioningException;
 
-public abstract class DefaultStreamAssembler extends DefaultLang3GLAssembler 
-    implements StreamAssembler, Lang3GLAssembler {
-    private static Log log =LogFactory.getLog(
-    		DefaultStreamAssembler.class); 
+public abstract class DefaultStreamAssembler extends DefaultLang3GLAssembler implements
+    StreamAssembler, Lang3GLAssembler {
+  private static Log log = LogFactory.getLog(DefaultStreamAssembler.class);
 
-    protected File dest;
-    protected boolean indent = false;
-	protected static final String LINE_SEP = System.getProperty("line.separator");
-	protected static final String FILE_SEP = System.getProperty("file.separator");
-	
-	protected int resultInterfacesCount;
-	protected int resultClassesCount;
-	protected int resultEnumerationsCount;
-    
-	public DefaultStreamAssembler(ProvisioningModel provisioningModel, 
-			Lang3GLFactory factory, 
-			Lang3GLOperation operation,
-			File dest) {
-		super(provisioningModel, factory, operation);
-    	if (this.provisioningModel == null)
-    		throw new IllegalArgumentException("expected 'provisioningModel' argument");
-    	if (this.factory == null)
-    		throw new IllegalArgumentException("expected 'factory' argument");		
-    	if (this.operation == null)
-    		throw new IllegalArgumentException("expected 'operation' argument");
-    	this.dest = dest;
-    	if (this.dest == null)
-    		throw new IllegalArgumentException("expected 'dest' argument");		
-	}
-	
-	public abstract void createEnumerationClasses() throws IOException;
-	public abstract void createInterfaceClasses() throws IOException;
-	public abstract void createInterfacePackageDocs() throws IOException;
-	public abstract void createImplementationClasses() throws IOException;
-	
-    public void start() {
-        try {
-			switch (this.operation) {
-			case create:
-		    	createEnumerationClasses();
-				createInterfaceClasses();
-				createInterfacePackageDocs();
-		    	createImplementationClasses();
-			    break;
-			}
-		} catch (IOException e) {
-			throw new TextProvisioningException(e);
-		}
+  protected File dest;
+  protected boolean indent = false;
+  protected static final String LINE_SEP = System.getProperty("line.separator");
+  protected static final String FILE_SEP = System.getProperty("file.separator");
+
+  protected int resultInterfacesCount;
+  protected int resultClassesCount;
+  protected int resultEnumerationsCount;
+
+  public DefaultStreamAssembler(ProvisioningModel provisioningModel, Lang3GLFactory factory,
+      Lang3GLOperation operation, File dest) {
+    super(provisioningModel, factory, operation);
+    if (this.provisioningModel == null)
+      throw new IllegalArgumentException("expected 'provisioningModel' argument");
+    if (this.factory == null)
+      throw new IllegalArgumentException("expected 'factory' argument");
+    if (this.operation == null)
+      throw new IllegalArgumentException("expected 'operation' argument");
+    this.dest = dest;
+    if (this.dest == null)
+      throw new IllegalArgumentException("expected 'dest' argument");
+  }
+
+  public abstract void createEnumerationClasses() throws IOException;
+
+  public abstract void createInterfaceClasses() throws IOException;
+
+  public abstract void createInterfacePackageDocs() throws IOException;
+
+  public abstract void createImplementationClasses() throws IOException;
+
+  public void start() {
+    try {
+      switch (this.operation) {
+      case create:
+        createEnumerationClasses();
+        createInterfaceClasses();
+        createInterfacePackageDocs();
+        createImplementationClasses();
+        break;
+      }
+    } catch (IOException e) {
+      throw new TextProvisioningException(e);
     }
-    	
-	public boolean isIndent() {
-		return indent;
-	}
+  }
 
-	public void setIndent(boolean indent) {
-		this.indent = indent;
-	}
+  public boolean isIndent() {
+    return indent;
+  }
 
-	public String getIndentationToken() {
-		return "\t";
-	}
+  public void setIndent(boolean indent) {
+    this.indent = indent;
+  }
 
-	@Override
-	public void setIndentationToken(String indentationToken) {
-		// TODO Auto-generated method stub
-		
-	}
+  public String getIndentationToken() {
+    return "\t";
+  }
 
-	public int getResultInterfacesCount() {
-		return resultInterfacesCount;
-	}
+  @Override
+  public void setIndentationToken(String indentationToken) {
+    // TODO Auto-generated method stub
 
-	public int getResultClassesCount() {
-		return resultClassesCount;
-	}
+  }
 
-	public int getResultEnumerationsCount() {
-		return resultEnumerationsCount;
-	}
-	
-	
+  public int getResultInterfacesCount() {
+    return resultInterfacesCount;
+  }
+
+  public int getResultClassesCount() {
+    return resultClassesCount;
+  }
+
+  public int getResultEnumerationsCount() {
+    return resultEnumerationsCount;
+  }
+
 }
-	

@@ -21,9 +21,6 @@
  */
 package org.plasma.sdo.provisioning.cli;
 
-
-
-
 import joptsimple.OptionException;
 import junit.framework.Test;
 
@@ -38,49 +35,40 @@ import org.plasma.provisioning.cli.ProvisioningToolOption;
  * Tests for Cassandra tool
  */
 public class CassandraToolTest extends PlasmaTest {
-    private static Log log = LogFactory.getLog(CassandraToolTest.class);
-        
-    public static Test suite() {
-        return PlasmaTestSetup.newTestSetup(CassandraToolTest.class);
-    }
-    
-    public void setUp() throws Exception {        
-        super.setUp();
-    }
-    
-    public void testNoOptions() throws Exception {
-    	String[] args = {
-	    		"-" + ProvisioningToolOption.silent.name(),
-    	};
-    	try { 
-    		CassandraTool.main(args);
-    	    assertFalse(true);
-    	}
-    	catch (IllegalArgumentException e) {
-    	}
-    }
-    
-    public void testHelpOption() throws Exception {
-    	String[] args = {
-	    	"-" + ProvisioningToolOption.silent.name(),
-    		"-" + ProvisioningToolOption.help.name()
-    	};
- 	
-    	CassandraTool.main(args);
-    }
-    
-    public void testUnknownOption() throws Exception {
-    	try {
-	    	String[] args = {
-	    		"-" + ProvisioningToolOption.silent.name(),
-	    		"-FOO" 
-	    	};
-	 	
-	    	CassandraTool.main(args);
-		    assertFalse(true);
-    	}
-    	catch (OptionException e) {
-    	}
-    }
-     
+  private static Log log = LogFactory.getLog(CassandraToolTest.class);
+
+  public static Test suite() {
+    return PlasmaTestSetup.newTestSetup(CassandraToolTest.class);
   }
+
+  public void setUp() throws Exception {
+    super.setUp();
+  }
+
+  public void testNoOptions() throws Exception {
+    String[] args = { "-" + ProvisioningToolOption.silent.name(), };
+    try {
+      CassandraTool.main(args);
+      assertFalse(true);
+    } catch (IllegalArgumentException e) {
+    }
+  }
+
+  public void testHelpOption() throws Exception {
+    String[] args = { "-" + ProvisioningToolOption.silent.name(),
+        "-" + ProvisioningToolOption.help.name() };
+
+    CassandraTool.main(args);
+  }
+
+  public void testUnknownOption() throws Exception {
+    try {
+      String[] args = { "-" + ProvisioningToolOption.silent.name(), "-FOO" };
+
+      CassandraTool.main(args);
+      assertFalse(true);
+    } catch (OptionException e) {
+    }
+  }
+
+}

@@ -44,59 +44,57 @@ import javax.xml.namespace.NamespaceContext;
  * @author Christian Niles
  * @version $Revision: 1.2 $
  */
-public final class EmptyNamespaceContext
-        implements
-            ExtendedNamespaceContext,
-            StaticNamespaceContext {
+public final class EmptyNamespaceContext implements ExtendedNamespaceContext,
+    StaticNamespaceContext {
 
-    public static final EmptyNamespaceContext INSTANCE = new EmptyNamespaceContext();
+  public static final EmptyNamespaceContext INSTANCE = new EmptyNamespaceContext();
 
-    public static final NamespaceContext getInstance() {
+  public static final NamespaceContext getInstance() {
 
-        return INSTANCE;
+    return INSTANCE;
 
-    }
+  }
 
-    public String getNamespaceURI(String prefix) {
+  public String getNamespaceURI(String prefix) {
 
-        return null;
+    return null;
 
-    }
+  }
 
-    public String getPrefix(String nsURI) {
+  public String getPrefix(String nsURI) {
 
-        return null;
+    return null;
 
-    }
+  }
 
-    public Iterator getPrefixes(String nsURI) {
+  public Iterator getPrefixes(String nsURI) {
 
-        return Collections.EMPTY_SET.iterator();
+    return Collections.EMPTY_SET.iterator();
 
-    }
+  }
 
-    public NamespaceContext getParent() {
+  public NamespaceContext getParent() {
 
-        return null;
+    return null;
 
-    }
+  }
 
-    public boolean isPrefixDeclared(String prefix) {
+  public boolean isPrefixDeclared(String prefix) {
 
-        return false;
+    return false;
 
-    }
+  }
 
-    public Iterator getPrefixes() {
+  public Iterator getPrefixes() {
 
-        return Collections.EMPTY_LIST.iterator();
+    return Collections.EMPTY_LIST.iterator();
 
-    }
+  }
 
-    public Iterator getDeclaredPrefixes() {
+  public Iterator getDeclaredPrefixes() {
 
-        return Collections.EMPTY_LIST.iterator();
+    return Collections.EMPTY_LIST.iterator();
 
-    }
+  }
 
 }

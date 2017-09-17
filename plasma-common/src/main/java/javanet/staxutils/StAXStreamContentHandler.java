@@ -49,275 +49,270 @@ import org.xml.sax.SAXException;
  */
 public class StAXStreamContentHandler extends StAXContentHandler {
 
-	/** The StAX stream to which SAX events will be written. */
-	private XMLStreamWriter writer;
+  /** The StAX stream to which SAX events will be written. */
+  private XMLStreamWriter writer;
 
-	public StAXStreamContentHandler() {
+  public StAXStreamContentHandler() {
 
-	}
+  }
 
-	/**
-	 * Constructs an instance that writes SAX events to the specified StAX
-	 * stream.
-	 * 
-	 * @param writer The StAX stream to which events will be written.
-	 */
-	public StAXStreamContentHandler(XMLStreamWriter writer) {
+  /**
+   * Constructs an instance that writes SAX events to the specified StAX stream.
+   * 
+   * @param writer
+   *          The StAX stream to which events will be written.
+   */
+  public StAXStreamContentHandler(XMLStreamWriter writer) {
 
-		this.writer = writer;
+    this.writer = writer;
 
-	}
+  }
 
-	/**
-	 * Returns a reference to the {@link XMLStreamWriter}to which SAX events
-	 * are written.
-	 * 
-	 * @return The {@link XMLStreamWriter}to which SAX events are written.
-	 */
-	public XMLStreamWriter getStreamWriter() {
+  /**
+   * Returns a reference to the {@link XMLStreamWriter}to which SAX events are
+   * written.
+   * 
+   * @return The {@link XMLStreamWriter}to which SAX events are written.
+   */
+  public XMLStreamWriter getStreamWriter() {
 
-		return writer;
+    return writer;
 
-	}
+  }
 
-	/**
-	 * Sets the {@link XMLStreamWriter}to which SAX events will be written.
-	 * 
-	 * @param writer The {@link XMLStreamWriter}to which SAX events will be
-	 *            written.
-	 */
-	public void setStreamWriter(XMLStreamWriter writer) {
+  /**
+   * Sets the {@link XMLStreamWriter}to which SAX events will be written.
+   * 
+   * @param writer
+   *          The {@link XMLStreamWriter}to which SAX events will be written.
+   */
+  public void setStreamWriter(XMLStreamWriter writer) {
 
-		this.writer = writer;
+    this.writer = writer;
 
-	}
+  }
 
-	public void startDocument() throws SAXException {
+  public void startDocument() throws SAXException {
 
-		super.startDocument();
-		try {
+    super.startDocument();
+    try {
 
-			writer.writeStartDocument();
+      writer.writeStartDocument();
 
-		} catch (XMLStreamException e) {
+    } catch (XMLStreamException e) {
 
-			throw new SAXException(e);
+      throw new SAXException(e);
 
-		}
+    }
 
-	}
+  }
 
-	public void endDocument() throws SAXException {
+  public void endDocument() throws SAXException {
 
-		try {
+    try {
 
-			writer.writeEndDocument();
+      writer.writeEndDocument();
 
-		} catch (XMLStreamException e) {
+    } catch (XMLStreamException e) {
 
-			throw new SAXException(e);
+      throw new SAXException(e);
 
-		}
+    }
 
-		super.endDocument();
+    super.endDocument();
 
-	}
+  }
 
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
+  public void startElement(String uri, String localName, String qName, Attributes attributes)
+      throws SAXException {
 
-		try {
+    try {
 
-			String[] qname = {null, null};
-			parseQName(qName, qname);
+      String[] qname = { null, null };
+      parseQName(qName, qname);
 
-			writer.writeStartElement(qname[0], qname[1], uri);
+      writer.writeStartElement(qname[0], qname[1], uri);
 
-			// copy namespaces
-			if (namespaces != null) {
+      // copy namespaces
+      if (namespaces != null) {
 
-				Iterator prefixes = namespaces.getDeclaredPrefixes();
-				while (prefixes.hasNext()) {
+        Iterator prefixes = namespaces.getDeclaredPrefixes();
+        while (prefixes.hasNext()) {
 
-					String prefix = (String) prefixes.next();
-					String nsURI = namespaces.getNamespaceURI(prefix);
+          String prefix = (String) prefixes.next();
+          String nsURI = namespaces.getNamespaceURI(prefix);
 
-					if (prefix.length() == 0) {
+          if (prefix.length() == 0) {
 
-						writer.setDefaultNamespace(nsURI);
+            writer.setDefaultNamespace(nsURI);
 
-					} else {
+          } else {
 
-						writer.setPrefix(prefix, nsURI);
+            writer.setPrefix(prefix, nsURI);
 
-					}
+          }
 
-					writer.writeNamespace(prefix, nsURI);
+          writer.writeNamespace(prefix, nsURI);
 
-				}
+        }
 
-			}
+      }
 
-			// write attributes
-			for (int i = 0, s = attributes.getLength(); i < s; i++) {
+      // write attributes
+      for (int i = 0, s = attributes.getLength(); i < s; i++) {
 
-				parseQName(attributes.getQName(i), qname);
+        parseQName(attributes.getQName(i), qname);
 
-				String attrPrefix = qname[0];
-				String attrLocal = qname[1];
+        String attrPrefix = qname[0];
+        String attrLocal = qname[1];
 
-				String attrQName = attributes.getQName(i);
-				String attrValue = attributes.getValue(i);
-				String attrURI = attributes.getURI(i);
+        String attrQName = attributes.getQName(i);
+        String attrValue = attributes.getValue(i);
+        String attrURI = attributes.getURI(i);
 
-				if ("xmlns".equals(attrQName) || "xmlns".equals(attrPrefix)) {
+        if ("xmlns".equals(attrQName) || "xmlns".equals(attrPrefix)) {
 
-					// namespace declaration disguised as an attribute. If the
-					// namespace has already been declared, skip it, otherwise
-					// write it as an namespace
+          // namespace declaration disguised as an attribute. If the
+          // namespace has already been declared, skip it, otherwise
+          // write it as an namespace
 
-					String nsURI = namespaces.getNamespaceURI(attrPrefix);
-					if (nsURI == null) {
+          String nsURI = namespaces.getNamespaceURI(attrPrefix);
+          if (nsURI == null) {
 
-						if (attrPrefix.length() == 0) {
+            if (attrPrefix.length() == 0) {
 
-							writer.setDefaultNamespace(attrValue);
+              writer.setDefaultNamespace(attrValue);
 
-						} else {
+            } else {
 
-							writer.setPrefix(attrPrefix, attrValue);
+              writer.setPrefix(attrPrefix, attrValue);
 
-						}
+            }
 
-						writer.writeNamespace(attrPrefix, attrValue);
+            writer.writeNamespace(attrPrefix, attrValue);
 
-					}
+          }
 
-				} else if (attrPrefix.length() > 0) {
+        } else if (attrPrefix.length() > 0) {
 
-					writer.writeAttribute(attrPrefix, attrURI, attrLocal,
-							attrValue);
+          writer.writeAttribute(attrPrefix, attrURI, attrLocal, attrValue);
 
-				} else {
+        } else {
 
-					writer.writeAttribute(attrQName, attrValue);
+          writer.writeAttribute(attrQName, attrValue);
 
-				}
+        }
 
-			}
+      }
 
-		} catch (XMLStreamException e) {
+    } catch (XMLStreamException e) {
 
-			throw new SAXException(e);
+      throw new SAXException(e);
 
-		} finally {
+    } finally {
 
-			super.startElement(uri, localName, qName, attributes);
+      super.startElement(uri, localName, qName, attributes);
 
-		}
+    }
 
-	}
+  }
 
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
+  public void endElement(String uri, String localName, String qName) throws SAXException {
 
-		try {
+    try {
 
-			writer.writeEndElement();
+      writer.writeEndElement();
 
-		} catch (XMLStreamException e) {
+    } catch (XMLStreamException e) {
 
-			throw new SAXException(e);
+      throw new SAXException(e);
 
-		} finally {
+    } finally {
 
-			super.endElement(uri, localName, qName);
+      super.endElement(uri, localName, qName);
 
-		}
+    }
 
-	}
+  }
 
-	public void comment(char[] ch, int start, int length) throws SAXException {
+  public void comment(char[] ch, int start, int length) throws SAXException {
 
-		super.comment(ch, start, length);
-		try {
+    super.comment(ch, start, length);
+    try {
 
-			writer.writeComment(new String(ch, start, length));
+      writer.writeComment(new String(ch, start, length));
 
-		} catch (XMLStreamException e) {
+    } catch (XMLStreamException e) {
 
-			throw new SAXException(e);
+      throw new SAXException(e);
 
-		}
+    }
 
-	}
+  }
 
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+  public void characters(char[] ch, int start, int length) throws SAXException {
 
-		super.characters(ch, start, length);
-		try {
+    super.characters(ch, start, length);
+    try {
 
-			if (!isCDATA) {
+      if (!isCDATA) {
 
-				writer.writeCharacters(ch, start, length);
+        writer.writeCharacters(ch, start, length);
 
-			}
+      }
 
-		} catch (XMLStreamException e) {
+    } catch (XMLStreamException e) {
 
-			throw new SAXException(e);
+      throw new SAXException(e);
 
-		}
+    }
 
-	}
+  }
 
-	public void endCDATA() throws SAXException {
+  public void endCDATA() throws SAXException {
 
-		try {
+    try {
 
-			writer.writeCData(CDATABuffer.toString());
+      writer.writeCData(CDATABuffer.toString());
 
-		} catch (XMLStreamException e) {
+    } catch (XMLStreamException e) {
 
-			throw new SAXException(e);
+      throw new SAXException(e);
 
-		}
+    }
 
-		super.endCDATA();
+    super.endCDATA();
 
-	}
+  }
 
-	public void ignorableWhitespace(char[] ch, int start, int length)
-			throws SAXException {
+  public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
 
-		super.ignorableWhitespace(ch, start, length);
-		try {
+    super.ignorableWhitespace(ch, start, length);
+    try {
 
-			writer.writeCharacters(ch, start, length);
+      writer.writeCharacters(ch, start, length);
 
-		} catch (XMLStreamException e) {
+    } catch (XMLStreamException e) {
 
-			throw new SAXException(e);
+      throw new SAXException(e);
 
-		}
+    }
 
-	}
+  }
 
-	public void processingInstruction(String target, String data)
-			throws SAXException {
+  public void processingInstruction(String target, String data) throws SAXException {
 
-		super.processingInstruction(target, data);
-		try {
+    super.processingInstruction(target, data);
+    try {
 
-			writer.writeProcessingInstruction(target, data);
+      writer.writeProcessingInstruction(target, data);
 
-		} catch (XMLStreamException e) {
+    } catch (XMLStreamException e) {
 
-			throw new SAXException(e);
+      throw new SAXException(e);
 
-		}
+    }
 
-	}
+  }
 
 }

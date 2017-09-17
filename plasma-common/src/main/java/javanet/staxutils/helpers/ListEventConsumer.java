@@ -48,72 +48,74 @@ import javax.xml.stream.util.XMLEventConsumer;
  */
 public class ListEventConsumer implements XMLEventConsumer {
 
-    /** The list in which to store events. */
-    private List events;
+  /** The list in which to store events. */
+  private List events;
 
-    public ListEventConsumer() {
+  public ListEventConsumer() {
 
-    }
+  }
 
-    /**
-     * Constructs an instance that adds events to the provided list.
-     * 
-     * @param events The list to which events will be added, or <code>null</code>.
-     */
-    public ListEventConsumer(List events) {
+  /**
+   * Constructs an instance that adds events to the provided list.
+   * 
+   * @param events
+   *          The list to which events will be added, or <code>null</code>.
+   */
+  public ListEventConsumer(List events) {
 
-        this.events = events;
+    this.events = events;
 
-    }
+  }
 
-    /**
-     * Adds the event to the internal list.
-     */
-    public void add(XMLEvent event) throws XMLStreamException {
+  /**
+   * Adds the event to the internal list.
+   */
+  public void add(XMLEvent event) throws XMLStreamException {
 
-        if (events == null) {
+    if (events == null) {
 
-            events = new ArrayList();
-
-        }
-
-        events.add(event);
+      events = new ArrayList();
 
     }
 
-    /**
-     * Returns the {@link List} of events added to this consumer.
-     * 
-     * @return The {@link List} of events added to this consumer.
-     */
-    public List getEvents() {
+    events.add(event);
 
-        return events;
+  }
+
+  /**
+   * Returns the {@link List} of events added to this consumer.
+   * 
+   * @return The {@link List} of events added to this consumer.
+   */
+  public List getEvents() {
+
+    return events;
+
+  }
+
+  /**
+   * Sets the {@link List} to which events will be written.
+   * 
+   * @param events
+   *          The {@link List} to which events will be written.
+   */
+  public void setEvents(List events) {
+
+    this.events = events;
+
+  }
+
+  /**
+   * Removes all events from the internal list, making it available for reuse.
+   */
+  public void reset() {
+
+    if (events != null) {
+
+      events.clear();
 
     }
 
-    /**
-     * Sets the {@link List} to which events will be written.
-     * 
-     * @param events The {@link List} to which events will be written.
-     */
-    public void setEvents(List events) {
-
-        this.events = events;
-
-    }
-
-    /**
-     * Removes all events from the internal list, making it available for reuse.
-     */
-    public void reset() {
-
-        if (events != null) {
-
-            events.clear();
-
-        }
-
-    }
+  }
 
 }

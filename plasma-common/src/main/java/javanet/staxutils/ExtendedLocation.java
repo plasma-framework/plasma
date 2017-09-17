@@ -36,20 +36,21 @@ package javanet.staxutils;
 import javax.xml.stream.Location;
 
 /**
- * Extended the {@link Location} interface that exposes nested {@link Location}s.
+ * Extended the {@link Location} interface that exposes nested {@link Location}
+ * s.
  * 
  * @author Christian Niles
  * @version $Revision: 1.1 $
  */
 public interface ExtendedLocation extends Location {
 
-    /**
-     * Returns a nested {@link Location}. Nested locations can be used to locate
-     * errors in linked files. This is useful when working with external entities,
-     * included files, and so forth.
-     * 
-     * @return The nested {@link Location}, or <code>null</code>.
-     */
-    public Location getNestedLocation();
+  /**
+   * Returns a nested {@link Location}. Nested locations can be used to locate
+   * errors in linked files. This is useful when working with external entities,
+   * included files, and so forth.
+   * 
+   * @return The nested {@link Location}, or <code>null</code>.
+   */
+  public Location getNestedLocation();
 
 }

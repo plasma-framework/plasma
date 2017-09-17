@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.repository;
 
 import java.util.List;
@@ -46,7 +41,6 @@ import org.plasma.sdo.profile.SDOValueConstraint;
 import org.plasma.sdo.profile.SDOValueSetConstraint;
 import org.plasma.sdo.profile.SDOXmlProperty;
 
-
 /**
  * 
  * @author Scott Cinnamond
@@ -54,78 +48,79 @@ import org.plasma.sdo.profile.SDOXmlProperty;
  */
 public interface Property extends Element {
 
-	Class_ getClass_();
+  Class_ getClass_();
 
-	Object findPropertyDefault();
+  Object findPropertyDefault();
 
-	boolean isMany();
+  boolean isMany();
 
-	boolean isNullable();
+  boolean isNullable();
 
-	/**
-	 * Return the associated opposite for this property, or null if non exists. 
-	 * @return the associated opposite for this property, or null if non exists.
-	 */
-	Property getOpposite();
+  /**
+   * Return the associated opposite for this property, or null if non exists.
+   * 
+   * @return the associated opposite for this property, or null if non exists.
+   */
+  Property getOpposite();
 
-	List<Comment> getComments();
+  List<Comment> getComments();
 
-	boolean isDataType();
-	
-	Classifier getType();
+  boolean isDataType();
 
-	Visibility getVisibility();
+  Classifier getType();
 
-	boolean getIsReadonly();
+  Visibility getVisibility();
 
-	String findPhysicalName();
+  boolean getIsReadonly();
 
-	String getLocalName();
+  String findPhysicalName();
 
-	Alias findAlias();
+  String getLocalName();
 
-	Key findKey();
+  Alias findAlias();
 
-	Property findKeySupplier();
+  Key findKey();
 
-	Concurrent findConcurrent();
+  Property findKeySupplier();
 
-	Temporal findTemporal();
+  Concurrent findConcurrent();
 
-	EnumerationConstraint findEnumerationConstraint();
+  Temporal findTemporal();
 
-	ValueSetConstraint findValueSetConstraint();
+  EnumerationConstraint findEnumerationConstraint();
 
-	ValueConstraint findValueConstraint();
+  ValueSetConstraint findValueSetConstraint();
 
-	Sort findSort();
+  ValueConstraint findValueConstraint();
 
-	UniqueConstraint findUniqueConstraint();
+  Sort findSort();
 
-	Property findDerivationSupplier();
+  UniqueConstraint findUniqueConstraint();
 
-	Derivation findDerivation();
+  Property findDerivationSupplier();
 
-	boolean getIsPriKey();
+  Derivation findDerivation();
 
-	Long getMaxLength();
+  boolean getIsPriKey();
 
-	Enumeration getRestriction();
+  Long getMaxLength();
 
-	XmlProperty findXmlProperty();
+  Enumeration getRestriction();
 
-	boolean getIsConcurrencyUser();
+  XmlProperty findXmlProperty();
 
-	boolean getIsConcurrencyVersion();
+  boolean getIsConcurrencyUser();
 
-	boolean getIsLockingUser();
+  boolean getIsConcurrencyVersion();
 
-	boolean getIsLockingTimestamp();
+  boolean getIsLockingUser();
 
-	boolean getIsOriginationUser();
+  boolean getIsLockingTimestamp();
 
-	boolean getIsOriginationTimestamp();
+  boolean getIsOriginationUser();
 
-	boolean getIsUnique();
+  boolean getIsOriginationTimestamp();
+
+  boolean getIsUnique();
 
 }

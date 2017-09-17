@@ -43,144 +43,143 @@ import javax.xml.stream.Location;
  */
 public class SimpleLocation implements ExtendedLocation, StaticLocation {
 
-    /** The nested location. */
-    private Location nestedLocation;
+  /** The nested location. */
+  private Location nestedLocation;
 
-    /** The line number; defaults to <code>-1</code>. */
-    private int lineNumber = -1;
+  /** The line number; defaults to <code>-1</code>. */
+  private int lineNumber = -1;
 
-    /** The character offset; defaults to <code>-1</code>. */
-    private int characterOffset = -1;
+  /** The character offset; defaults to <code>-1</code>. */
+  private int characterOffset = -1;
 
-    /** The column number; defaults to <code>-1</code>. */
-    private int columnNumber = -1;
+  /** The column number; defaults to <code>-1</code>. */
+  private int columnNumber = -1;
 
-    /** The system ID; defaults to <code>null</code>. */
-    private String publicId;
+  /** The system ID; defaults to <code>null</code>. */
+  private String publicId;
 
-    /** The public ID; defaults to <code>null</code>. */
-    private String systemId;
+  /** The public ID; defaults to <code>null</code>. */
+  private String systemId;
 
-    public SimpleLocation(String publicId, String systemId, int lineNumber,
-            Location nestedLocation) {
+  public SimpleLocation(String publicId, String systemId, int lineNumber, Location nestedLocation) {
 
-        this.publicId = publicId;
-        this.systemId = systemId;
-        this.lineNumber = lineNumber;
-        this.nestedLocation = nestedLocation;
+    this.publicId = publicId;
+    this.systemId = systemId;
+    this.lineNumber = lineNumber;
+    this.nestedLocation = nestedLocation;
 
-    }
+  }
 
-    public SimpleLocation(String publicId, String systemId, int lineNumber,
-            int columnNumber, Location nestedLocation) {
+  public SimpleLocation(String publicId, String systemId, int lineNumber, int columnNumber,
+      Location nestedLocation) {
 
-        this.publicId = publicId;
-        this.systemId = systemId;
-        this.lineNumber = lineNumber;
-        this.columnNumber = columnNumber;
-        this.nestedLocation = nestedLocation;
+    this.publicId = publicId;
+    this.systemId = systemId;
+    this.lineNumber = lineNumber;
+    this.columnNumber = columnNumber;
+    this.nestedLocation = nestedLocation;
 
-    }
+  }
 
-    public SimpleLocation(String publicId, String systemId, int lineNumber,
-            int columnNumber, int characterOffset, Location nestedLocation) {
+  public SimpleLocation(String publicId, String systemId, int lineNumber, int columnNumber,
+      int characterOffset, Location nestedLocation) {
 
-        this.publicId = publicId;
-        this.systemId = systemId;
-        this.lineNumber = lineNumber;
-        this.columnNumber = columnNumber;
-        this.characterOffset = characterOffset;
-        this.nestedLocation = nestedLocation;
+    this.publicId = publicId;
+    this.systemId = systemId;
+    this.lineNumber = lineNumber;
+    this.columnNumber = columnNumber;
+    this.characterOffset = characterOffset;
+    this.nestedLocation = nestedLocation;
 
-    }
+  }
 
-    public SimpleLocation(Location loc) {
+  public SimpleLocation(Location loc) {
 
-        this.publicId = loc.getPublicId();
-        this.systemId = loc.getSystemId();
-        this.lineNumber = loc.getLineNumber();
-        this.columnNumber = loc.getColumnNumber();
-        this.characterOffset = loc.getCharacterOffset();
-        if (loc instanceof ExtendedLocation) {
+    this.publicId = loc.getPublicId();
+    this.systemId = loc.getSystemId();
+    this.lineNumber = loc.getLineNumber();
+    this.columnNumber = loc.getColumnNumber();
+    this.characterOffset = loc.getCharacterOffset();
+    if (loc instanceof ExtendedLocation) {
 
-            this.nestedLocation = ((ExtendedLocation) loc).getNestedLocation();
-
-        }
+      this.nestedLocation = ((ExtendedLocation) loc).getNestedLocation();
 
     }
 
-    public int getCharacterOffset() {
+  }
 
-        return this.characterOffset;
+  public int getCharacterOffset() {
+
+    return this.characterOffset;
+
+  }
+
+  public int getColumnNumber() {
+
+    return this.columnNumber;
+
+  }
+
+  public int getLineNumber() {
+
+    return this.lineNumber;
+
+  }
+
+  public String getPublicId() {
+
+    return this.publicId;
+
+  }
+
+  public String getSystemId() {
+
+    return this.systemId;
+
+  }
+
+  public Location getNestedLocation() {
+
+    return nestedLocation;
+
+  }
+
+  public String toString() {
+
+    StringBuffer buffer = new StringBuffer();
+
+    String publicId = getPublicId();
+    String systemId = getSystemId();
+    if (publicId != null) {
+
+      buffer.append(publicId);
+      if (systemId != null) {
+
+        buffer.append("#").append(systemId);
+
+      }
+
+    } else if (systemId != null) {
+
+      buffer.append(publicId);
+
+    }
+
+    buffer.append('[');
+    buffer.append("line=").append(getLineNumber());
+    buffer.append("column=").append(getColumnNumber());
+    buffer.append(']');
+
+    Location nested = getNestedLocation();
+    if (nested != null) {
+
+      buffer.append("->");
+      buffer.append(nested);
 
     }
 
-    public int getColumnNumber() {
+    return buffer.toString();
 
-        return this.columnNumber;
-
-    }
-
-    public int getLineNumber() {
-
-        return this.lineNumber;
-
-    }
-
-    public String getPublicId() {
-
-        return this.publicId;
-
-    }
-
-    public String getSystemId() {
-
-        return this.systemId;
-
-    }
-
-    public Location getNestedLocation() {
-
-        return nestedLocation;
-
-    }
-
-    public String toString() {
-
-        StringBuffer buffer = new StringBuffer();
-
-        String publicId = getPublicId();
-        String systemId = getSystemId();
-        if (publicId != null) {
-
-            buffer.append(publicId);
-            if (systemId != null) {
-
-                buffer.append("#").append(systemId);
-
-            }
-
-        } else if (systemId != null) {
-
-            buffer.append(publicId);
-
-        }
-
-        buffer.append('[');
-        buffer.append("line=").append(getLineNumber());
-        buffer.append("column=").append(getColumnNumber());
-        buffer.append(']');
-
-        Location nested = getNestedLocation();
-        if (nested != null) {
-
-            buffer.append("->");
-            buffer.append(nested);
-
-        }
-
-        return buffer.toString();
-
-    }
+  }
 
 }

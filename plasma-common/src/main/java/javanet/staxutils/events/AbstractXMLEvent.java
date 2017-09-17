@@ -57,191 +57,186 @@ import javax.xml.stream.events.XMLEvent;
  * @author Christian Niles
  * @version $Revision: 1.3 $
  */
-public abstract class AbstractXMLEvent
-        implements
-            ExtendedXMLEvent,
-            Serializable,
-            Cloneable {
+public abstract class AbstractXMLEvent implements ExtendedXMLEvent, Serializable, Cloneable {
 
-    /** The event location. */
-    protected Location location;
+  /** The event location. */
+  protected Location location;
 
-    /** The schema type. */
-    protected QName schemaType;
+  /** The schema type. */
+  protected QName schemaType;
 
-    public AbstractXMLEvent() {
+  public AbstractXMLEvent() {
 
-    }
+  }
 
-    public AbstractXMLEvent(Location location) {
+  public AbstractXMLEvent(Location location) {
 
-        this.location = location;
+    this.location = location;
 
-    }
+  }
 
-    public AbstractXMLEvent(Location location, QName schemaType) {
+  public AbstractXMLEvent(Location location, QName schemaType) {
 
-        this.location = location;
-        this.schemaType = schemaType;
+    this.location = location;
+    this.schemaType = schemaType;
 
-    }
+  }
 
-    public AbstractXMLEvent(XMLEvent that) {
+  public AbstractXMLEvent(XMLEvent that) {
 
-        this.location = that.getLocation();
-        this.schemaType = that.getSchemaType();
+    this.location = that.getLocation();
+    this.schemaType = that.getSchemaType();
 
-    }
+  }
 
-    public Location getLocation() {
+  public Location getLocation() {
 
-        return (location == null ? UnknownLocation.INSTANCE : location);
+    return (location == null ? UnknownLocation.INSTANCE : location);
 
-    }
+  }
 
-    public QName getSchemaType() {
+  public QName getSchemaType() {
 
-        return schemaType;
+    return schemaType;
 
-    }
+  }
 
-    public Characters asCharacters() {
+  public Characters asCharacters() {
 
-        return (Characters) this;
+    return (Characters) this;
 
-    }
+  }
 
-    public EndElement asEndElement() {
+  public EndElement asEndElement() {
 
-        return (EndElement) this;
+    return (EndElement) this;
 
-    }
+  }
 
-    public StartElement asStartElement() {
+  public StartElement asStartElement() {
 
-        return (StartElement) this;
+    return (StartElement) this;
 
-    }
+  }
 
-    public boolean isAttribute() {
+  public boolean isAttribute() {
 
-        return getEventType() == ATTRIBUTE;
+    return getEventType() == ATTRIBUTE;
 
-    }
+  }
 
-    public boolean isCharacters() {
+  public boolean isCharacters() {
 
-        switch (getEventType()) {
+    switch (getEventType()) {
 
-            case CHARACTERS :
-            case SPACE :
-            case CDATA :
-                return true;
+    case CHARACTERS:
+    case SPACE:
+    case CDATA:
+      return true;
 
-            default :
-                return false;
-
-        }
+    default:
+      return false;
 
     }
 
-    public boolean isEndDocument() {
+  }
 
-        return getEventType() == END_DOCUMENT;
+  public boolean isEndDocument() {
 
-    }
+    return getEventType() == END_DOCUMENT;
 
-    public boolean isEndElement() {
+  }
 
-        return getEventType() == END_ELEMENT;
+  public boolean isEndElement() {
 
-    }
+    return getEventType() == END_ELEMENT;
 
-    public boolean isEntityReference() {
+  }
 
-        return getEventType() == ENTITY_REFERENCE;
+  public boolean isEntityReference() {
 
-    }
+    return getEventType() == ENTITY_REFERENCE;
 
-    public boolean isNamespace() {
+  }
 
-        return getEventType() == NAMESPACE;
+  public boolean isNamespace() {
 
-    }
+    return getEventType() == NAMESPACE;
 
-    public boolean isProcessingInstruction() {
+  }
 
-        return getEventType() == PROCESSING_INSTRUCTION;
+  public boolean isProcessingInstruction() {
 
-    }
+    return getEventType() == PROCESSING_INSTRUCTION;
 
-    public boolean isStartDocument() {
+  }
 
-        return getEventType() == START_DOCUMENT;
+  public boolean isStartDocument() {
 
-    }
+    return getEventType() == START_DOCUMENT;
 
-    public boolean isStartElement() {
+  }
 
-        return getEventType() == START_ELEMENT;
+  public boolean isStartElement() {
 
-    }
+    return getEventType() == START_ELEMENT;
 
-    public Object clone() {
+  }
 
-        try {
+  public Object clone() {
 
-            return super.clone();
+    try {
 
-        } catch (CloneNotSupportedException e) {
+      return super.clone();
 
-            // should never happen since we implement Cloneable
-            throw new RuntimeException("Unexpected exception cloning XMLEvent",
-                    e);
+    } catch (CloneNotSupportedException e) {
 
-        }
-
-    }
-
-    public boolean matches(XMLEvent event) {
-
-        return EventMatcher.eventsMatch(this, event);
+      // should never happen since we implement Cloneable
+      throw new RuntimeException("Unexpected exception cloning XMLEvent", e);
 
     }
 
-    public void writeEvent(XMLStreamWriter writer) throws XMLStreamException {
+  }
 
-        XMLWriterUtils.writeEvent(this, writer);
+  public boolean matches(XMLEvent event) {
 
-    }
+    return EventMatcher.eventsMatch(this, event);
 
-    public void writeAsEncodedUnicode(Writer writer) throws XMLStreamException {
+  }
 
-        try {
-        
-            XMLWriterUtils.writeEvent(this, writer);
-        
-        } catch (IOException e) {
-        
-            throw new XMLStreamException(e);
-        
-        }
+  public void writeEvent(XMLStreamWriter writer) throws XMLStreamException {
 
-    }
+    XMLWriterUtils.writeEvent(this, writer);
 
-    public String toString() {
+  }
 
-        StringWriter writer = new StringWriter();
-        try {
+  public void writeAsEncodedUnicode(Writer writer) throws XMLStreamException {
 
-            this.writeAsEncodedUnicode(writer);
+    try {
 
-        } catch (XMLStreamException e) {
-            // shouldn't happen?
-        }
+      XMLWriterUtils.writeEvent(this, writer);
 
-        return writer.toString();
+    } catch (IOException e) {
+
+      throw new XMLStreamException(e);
 
     }
+
+  }
+
+  public String toString() {
+
+    StringWriter writer = new StringWriter();
+    try {
+
+      this.writeAsEncodedUnicode(writer);
+
+    } catch (XMLStreamException e) {
+      // shouldn't happen?
+    }
+
+    return writer.toString();
+
+  }
 
 }

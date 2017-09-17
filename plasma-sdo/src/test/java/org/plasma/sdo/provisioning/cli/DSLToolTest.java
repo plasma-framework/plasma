@@ -21,9 +21,6 @@
  */
 package org.plasma.sdo.provisioning.cli;
 
-
-
-
 import joptsimple.OptionException;
 import junit.framework.Test;
 
@@ -38,49 +35,40 @@ import org.plasma.provisioning.cli.ProvisioningToolOption;
  * Tests for DSL tool
  */
 public class DSLToolTest extends PlasmaTest {
-    private static Log log = LogFactory.getLog(DSLToolTest.class);
-        
-    public static Test suite() {
-        return PlasmaTestSetup.newTestSetup(DSLToolTest.class);
-    }
-    
-    public void setUp() throws Exception {        
-        super.setUp();
-    }
-    
-    public void testNoOptions() throws Exception {
-    	String[] args = {
-	    	"-" + ProvisioningToolOption.silent.name(),
-    	};
-    	try { 
-    		DSLTool.main(args);
-    	    assertFalse(true);
-    	}
-    	catch (IllegalArgumentException e) {
-    	}
-    }
-    
-    public void testHelpOption() throws Exception {
-    	String[] args = {
-	    	"-" + ProvisioningToolOption.silent.name(),
-    		"-" + ProvisioningToolOption.help.name()
-    	};
- 	
-    	DSLTool.main(args);
-    }
-    
-    public void testUnknownOption() throws Exception {
-    	try {
-	    	String[] args = {
-	    		"-" + ProvisioningToolOption.silent.name(),
-	    		"-FOO" 
-	    	};
-	 	
-	    	DSLTool.main(args);
-		    assertFalse(true);
-    	}
-    	catch (OptionException e) {
-    	}
-    }
-     
+  private static Log log = LogFactory.getLog(DSLToolTest.class);
+
+  public static Test suite() {
+    return PlasmaTestSetup.newTestSetup(DSLToolTest.class);
   }
+
+  public void setUp() throws Exception {
+    super.setUp();
+  }
+
+  public void testNoOptions() throws Exception {
+    String[] args = { "-" + ProvisioningToolOption.silent.name(), };
+    try {
+      DSLTool.main(args);
+      assertFalse(true);
+    } catch (IllegalArgumentException e) {
+    }
+  }
+
+  public void testHelpOption() throws Exception {
+    String[] args = { "-" + ProvisioningToolOption.silent.name(),
+        "-" + ProvisioningToolOption.help.name() };
+
+    DSLTool.main(args);
+  }
+
+  public void testUnknownOption() throws Exception {
+    try {
+      String[] args = { "-" + ProvisioningToolOption.silent.name(), "-FOO" };
+
+      DSLTool.main(args);
+      assertFalse(true);
+    } catch (OptionException e) {
+    }
+  }
+
+}

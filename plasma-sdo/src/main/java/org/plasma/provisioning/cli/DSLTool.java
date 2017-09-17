@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.provisioning.cli;
 
 import java.io.File;
@@ -49,134 +44,130 @@ import joptsimple.OptionSpec;
 import joptsimple.OptionSpecBuilder;
 
 /**
- * The DSL Tool is used to provision Query DSL code artifacts.  
- * <p></p> 
- * <b>Usage:</b> java <@link org.plasma.provisioning.cli.DSLTool>  
- * Option                    Description
- * ------                    -----------
- * --command <DSLToolAction> the primary action or command performed by this tool - one of [create] is expected
- * --dest [File]             the fully qualified tool output destination file or directory name
- * --help                    prints help on this tool
- * --lastExecution <Long>    a long integer representing the last time the tool was executed
- * --silent                  whether to log or print no messages at all (typically for testing)
- * --verbose                 whether to log or print detailed messages     *     
+ * The DSL Tool is used to provision Query DSL code artifacts.
+ * <p>
+ * </p>
+ * <b>Usage:</b> java <@link org.plasma.provisioning.cli.DSLTool> Option
+ * Description ------ ----------- --command <DSLToolAction> the primary action
+ * or command performed by this tool - one of [create] is expected --dest [File]
+ * the fully qualified tool output destination file or directory name --help
+ * prints help on this tool --lastExecution <Long> a long integer representing
+ * the last time the tool was executed --silent whether to log or print no
+ * messages at all (typically for testing) --verbose whether to log or print
+ * detailed messages *
  */
 public class DSLTool extends ProvisioningTool {
-    
-    private static Log log =LogFactory.getLog(
-            DSLTool.class); 
 
-    /**
-     * Command line entry point. 
-     * Option                    Description
-     * ------                    -----------
-     * --command <DSLToolAction> the primary action or command performed by this tool - one of [create] is expected
-     * --dest [File]             the fully qualified tool output destination file or directory name
-     * --help                    prints help on this tool
-     * --lastExecution <Long>    a long integer representing the last time the tool was executed
-     * --silent                  whether to log or print no messages at all (typically for testing)
-     * --verbose                 whether to log or print detailed messages     *     
-     * @param args
-     * @throws JAXBException
-     * @throws SAXException
-     * @throws IOException
-     */
-    public static void main(String[] args) throws JAXBException, SAXException, IOException {
-    	OptionParser parser = new OptionParser();    	  
-    	OptionSpecBuilder verboseOpt = parser.accepts( ProvisioningToolOption.verbose.name(), ProvisioningToolOption.verbose.getDescription() );    	 
-    	OptionSpecBuilder silentOpt = parser.accepts( ProvisioningToolOption.silent.name(), ProvisioningToolOption.silent.getDescription() );    	 
-    	
-    	OptionSpecBuilder helpOpt = parser.accepts( ProvisioningToolOption.help.name(), ProvisioningToolOption.help.getDescription() );    	 
-    	OptionSpecBuilder commandOpt = parser.accepts( ProvisioningToolOption.command.name(), 
-    			ProvisioningToolOption.command.getDescription() + " - one of [" + DSLToolAction.asString() + "] is expected");    	 
-    	commandOpt.withRequiredArg().ofType( DSLToolAction.class );    	 
-    	
-    	OptionSpec<Long> lastExecutionOpt = parser.accepts( ProvisioningToolOption.lastExecution.name(),
-    			ProvisioningToolOption.lastExecution.getDescription() ).withRequiredArg().ofType( Long.class );
-    	OptionSpec<File> destOpt = parser.accepts( ProvisioningToolOption.dest.name(), 
-    			ProvisioningToolOption.dest.getDescription()).withOptionalArg().ofType( File.class );
+  private static Log log = LogFactory.getLog(DSLTool.class);
 
-    	OptionSet options = parser.parse(args);  
+  /**
+   * Command line entry point. Option Description ------ ----------- --command
+   * <DSLToolAction> the primary action or command performed by this tool - one
+   * of [create] is expected --dest [File] the fully qualified tool output
+   * destination file or directory name --help prints help on this tool
+   * --lastExecution <Long> a long integer representing the last time the tool
+   * was executed --silent whether to log or print no messages at all (typically
+   * for testing) --verbose whether to log or print detailed messages *
+   * 
+   * @param args
+   * @throws JAXBException
+   * @throws SAXException
+   * @throws IOException
+   */
+  public static void main(String[] args) throws JAXBException, SAXException, IOException {
+    OptionParser parser = new OptionParser();
+    OptionSpecBuilder verboseOpt = parser.accepts(ProvisioningToolOption.verbose.name(),
+        ProvisioningToolOption.verbose.getDescription());
+    OptionSpecBuilder silentOpt = parser.accepts(ProvisioningToolOption.silent.name(),
+        ProvisioningToolOption.silent.getDescription());
 
-    	if (options.has(helpOpt)) {
-    		printUsage(parser, log);
-    		return;
-    	}
-    	
-    	if (!options.has(ProvisioningToolOption.command.name())) {
-    		if (!options.has(silentOpt))
-    		    printUsage(parser, log);
-    		throw new IllegalArgumentException("expected option '" + ProvisioningToolOption.command.name() + "'");
-    	}
-    	DSLToolAction command = (DSLToolAction)options.valueOf(ProvisioningToolOption.command.name());
-    	
-    	Lang3GLDialect dialect = Lang3GLDialect.java;
+    OptionSpecBuilder helpOpt = parser.accepts(ProvisioningToolOption.help.name(),
+        ProvisioningToolOption.help.getDescription());
+    OptionSpecBuilder commandOpt = parser.accepts(ProvisioningToolOption.command.name(),
+        ProvisioningToolOption.command.getDescription() + " - one of [" + DSLToolAction.asString()
+            + "] is expected");
+    commandOpt.withRequiredArg().ofType(DSLToolAction.class);
 
-        File destDir = new File("./target/");
-        if (options.has(destOpt)) {
-        	destDir = destOpt.value(options);
-    	}
-        if (!destDir.exists()) {
-        	if (!options.has(silentOpt))
-                log.debug("given destination dir '"
-                    + destDir.getName() + "' does not exist");
-            if (!destDir.mkdirs())
-        		throw new IllegalArgumentException("given destination dir '"
-                        + destDir.getName() + "' could not be created");                	
-        }
-    	
-        switch (command) {
-        case create:
-        	Lang3GLOperation operation = Lang3GLOperation.valueOf(command.name());
+    OptionSpec<Long> lastExecutionOpt = parser
+        .accepts(ProvisioningToolOption.lastExecution.name(),
+            ProvisioningToolOption.lastExecution.getDescription()).withRequiredArg()
+        .ofType(Long.class);
+    OptionSpec<File> destOpt = parser
+        .accepts(ProvisioningToolOption.dest.name(), ProvisioningToolOption.dest.getDescription())
+        .withOptionalArg().ofType(File.class);
 
-        	long lastExecution = 0L;
-        	
-        	if (options.has(lastExecutionOpt)) {
-        		lastExecution = lastExecutionOpt.value(options).longValue();
-            }
-    	    
-            if (!regenerate(lastExecution)) {
-            	if (!options.has(silentOpt))
-                    log.info("skipping DSL creation - no stale artifacts detected");	
-                return;
-            }            	
-            AnnotationMetamodelAssembler annotationAssembler = new AnnotationMetamodelAssembler();
-            if (annotationAssembler.hasAnnotatedClasses())
-            	loadAnnotationModel(annotationAssembler, destDir,
-            			options, silentOpt);
-            
-            MetamodelAssembler modelAssembler = new MetamodelAssembler();
-            ProvisioningModel validator = 
-    				new ModelAdapter(modelAssembler.getModel());
-            
-            Lang3GLContext factoryContext = new DefaultLang3GLContext(validator);
-            
-            Lang3GLFactory factory = null;
-        	switch (dialect) {
-        	case java: factory = new DSLFactory(factoryContext);
-        	    break;
-        	default:
-        		throw new ProvisioningException("unknown 3GL language dialect, '"
-        				+ dialect.name() + "'");
-        	}           
-       	
-        	DefaultStreamAssembler assembler = new DSLAssembler(
-        		validator,
-        		factory, 
-        		operation,
-        		destDir);
-        	assembler.start();
-        	if (!options.has(silentOpt))
-                log.info("generated "
-            	    + assembler.getResultClassesCount()
-            	    +" classes to output to directory: " 
-            	    + destDir.getAbsolutePath());
-            
-            break;
-        default:
-            throw new ProvisioningException("unknown command '"
-                    + command.toString() + "'");
-        } 
-       
+    OptionSet options = parser.parse(args);
+
+    if (options.has(helpOpt)) {
+      printUsage(parser, log);
+      return;
     }
+
+    if (!options.has(ProvisioningToolOption.command.name())) {
+      if (!options.has(silentOpt))
+        printUsage(parser, log);
+      throw new IllegalArgumentException("expected option '"
+          + ProvisioningToolOption.command.name() + "'");
+    }
+    DSLToolAction command = (DSLToolAction) options.valueOf(ProvisioningToolOption.command.name());
+
+    Lang3GLDialect dialect = Lang3GLDialect.java;
+
+    File destDir = new File("./target/");
+    if (options.has(destOpt)) {
+      destDir = destOpt.value(options);
+    }
+    if (!destDir.exists()) {
+      if (!options.has(silentOpt))
+        log.debug("given destination dir '" + destDir.getName() + "' does not exist");
+      if (!destDir.mkdirs())
+        throw new IllegalArgumentException("given destination dir '" + destDir.getName()
+            + "' could not be created");
+    }
+
+    switch (command) {
+    case create:
+      Lang3GLOperation operation = Lang3GLOperation.valueOf(command.name());
+
+      long lastExecution = 0L;
+
+      if (options.has(lastExecutionOpt)) {
+        lastExecution = lastExecutionOpt.value(options).longValue();
+      }
+
+      if (!regenerate(lastExecution)) {
+        if (!options.has(silentOpt))
+          log.info("skipping DSL creation - no stale artifacts detected");
+        return;
+      }
+      AnnotationMetamodelAssembler annotationAssembler = new AnnotationMetamodelAssembler();
+      if (annotationAssembler.hasAnnotatedClasses())
+        loadAnnotationModel(annotationAssembler, destDir, options, silentOpt);
+
+      MetamodelAssembler modelAssembler = new MetamodelAssembler();
+      ProvisioningModel validator = new ModelAdapter(modelAssembler.getModel());
+
+      Lang3GLContext factoryContext = new DefaultLang3GLContext(validator);
+
+      Lang3GLFactory factory = null;
+      switch (dialect) {
+      case java:
+        factory = new DSLFactory(factoryContext);
+        break;
+      default:
+        throw new ProvisioningException("unknown 3GL language dialect, '" + dialect.name() + "'");
+      }
+
+      DefaultStreamAssembler assembler = new DSLAssembler(validator, factory, operation, destDir);
+      assembler.start();
+      if (!options.has(silentOpt))
+        log.info("generated " + assembler.getResultClassesCount()
+            + " classes to output to directory: " + destDir.getAbsolutePath());
+
+      break;
+    default:
+      throw new ProvisioningException("unknown command '" + command.toString() + "'");
+    }
+
+  }
 }

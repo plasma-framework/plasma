@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.query.xpath;
 
 import java.util.HashMap;
@@ -37,63 +32,56 @@ import org.plasma.query.model.Where;
 import org.plasma.sdo.xpath.XPathExprVisitor;
 
 /**
- * Receives Jaxen XPATH expression events as
- * the expression parse tree is traversed.  
+ * Receives Jaxen XPATH expression events as the expression parse tree is
+ * traversed.
  */
 public class QueryPredicateVisitor implements XPathExprVisitor {
 
-    private static Log log = LogFactory.getFactory().getInstance(QueryPredicateVisitor.class);
-	private Where result;
-	private Map<Expr, Expression> map = new HashMap<Expr, Expression>();
-	
-	public void visit(Expr target, Expr source, int level) {
-		//log.info(target.getClass().getSimpleName() 
-		//		+ " expr: " + target.toString());
-		
-		if (target instanceof BinaryExpr) {
-			BinaryExpr binExpr = (BinaryExpr)target;
-			Expression left = map.get(binExpr.getLHS());
-			Expression right = map.get(binExpr.getRHS());
-			if (left == null && right == null) {
-				if (binExpr instanceof RelationalExpr) {
-					RelationalExpr expr = (RelationalExpr)target;
-					Expression qexpr = Expression.valueOf(expr);
-					map.put(expr, qexpr);
-				}
-				else if (binExpr instanceof LogicalExpr) {
-					LogicalExpr expr = (LogicalExpr)target;
-					Expression qexpr = Expression.valueOf(expr);
-					map.put(expr, qexpr);
-				}
-				else if (binExpr instanceof EqualityExpr) {
-					EqualityExpr expr = (EqualityExpr)target;
-					Expression qexpr = Expression.valueOf(expr);
-					map.put(expr, qexpr);
-				}
-			}
-			else {
-				Expression qexpr = new Expression(
-					left, 
-					RelationalOperator.valueOf(binExpr.getOperator()), 
-					right);
-				map.put(binExpr, qexpr);				
-			}
-		}
-		//else
-		//	log.warn("could not process expression of type, "
-		//			+ target.getClass().getSimpleName());
-		
-		if (source == null) { // root
-			result = new Where();
-			Expression qexpr = map.get(target);
-			result.addExpression(qexpr);
-		}
-	}
+  private static Log log = LogFactory.getFactory().getInstance(QueryPredicateVisitor.class);
+  private Where result;
+  private Map<Expr, Expression> map = new HashMap<Expr, Expression>();
 
-	public Where getResult() {
-		return result;
-	}						
-	
-	
-	
+  public void visit(Expr target, Expr source, int level) {
+    // log.info(target.getClass().getSimpleName()
+    // + " expr: " + target.toString());
+
+    if (target instanceof BinaryExpr) {
+      BinaryExpr binExpr = (BinaryExpr) target;
+      Expression left = map.get(binExpr.getLHS());
+      Expression right = map.get(binExpr.getRHS());
+      if (left == null && right == null) {
+        if (binExpr instanceof RelationalExpr) {
+          RelationalExpr expr = (RelationalExpr) target;
+          Expression qexpr = Expression.valueOf(expr);
+          map.put(expr, qexpr);
+        } else if (binExpr instanceof LogicalExpr) {
+          LogicalExpr expr = (LogicalExpr) target;
+          Expression qexpr = Expression.valueOf(expr);
+          map.put(expr, qexpr);
+        } else if (binExpr instanceof EqualityExpr) {
+          EqualityExpr expr = (EqualityExpr) target;
+          Expression qexpr = Expression.valueOf(expr);
+          map.put(expr, qexpr);
+        }
+      } else {
+        Expression qexpr = new Expression(left, RelationalOperator.valueOf(binExpr.getOperator()),
+            right);
+        map.put(binExpr, qexpr);
+      }
+    }
+    // else
+    // log.warn("could not process expression of type, "
+    // + target.getClass().getSimpleName());
+
+    if (source == null) { // root
+      result = new Where();
+      Expression qexpr = map.get(target);
+      result.addExpression(qexpr);
+    }
+  }
+
+  public Where getResult() {
+    return result;
+  }
+
 }

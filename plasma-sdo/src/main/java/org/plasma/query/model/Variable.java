@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.query.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,64 +27,54 @@ import org.plasma.query.visitor.QueryVisitor;
 import org.plasma.query.visitor.Traversal;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Variable", propOrder = {
-    "property"
-})
+@XmlType(name = "Variable", propOrder = { "property" })
 @XmlRootElement(name = "Variable")
 public class Variable {
 
-    @XmlElement(name = "Property", required = true)
-    protected Property property;
+  @XmlElement(name = "Property", required = true)
+  protected Property property;
 
+  // ----------------/
+  // - Constructors -/
+  // ----------------/
 
-      //----------------/
-     //- Constructors -/
-    //----------------/
+  public Variable() {
+    super();
+  } // -- org.plasma.mda.query.Variable()
 
-    public Variable() {
-        super();
-    } //-- org.plasma.mda.query.Variable()
+  public Variable(Property property) {
+    this();
+    this.property = property;
+  }
 
-    public Variable(Property property) {
-        this();
-        this.property = property;
-    } 
+  /**
+   * Gets the value of the property property.
+   * 
+   * @return possible object is {@link Property }
+   * 
+   */
+  public DataProperty getProperty() {
+    return property;
+  }
 
+  /**
+   * Sets the value of the property property.
+   * 
+   * @param value
+   *          allowed object is {@link Property }
+   * 
+   */
+  public void setProperty(Property value) {
+    this.property = value;
+  }
 
-    /**
-     * Gets the value of the property property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Property }
-     *     
-     */
-    public DataProperty getProperty() {
-        return property;
+  public void accept(QueryVisitor visitor) {
+    visitor.start(this);
+    if (visitor.getContext().getTraversal().ordinal() == Traversal.CONTINUE.ordinal()) {
+      if (property != null)
+        property.accept(visitor);
     }
-
-    /**
-     * Sets the value of the property property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Property }
-     *     
-     */
-    public void setProperty(Property value) {
-        this.property = value;
-    }
-
-
-    public void accept(QueryVisitor visitor)
-    {
-        visitor.start(this);
-        if (visitor.getContext().getTraversal().ordinal() == Traversal.CONTINUE.ordinal())
-        {
-            if (property != null)                              
-                property.accept(visitor);       
-        }               
-    	visitor.end(this);
-    }
+    visitor.end(this);
+  }
 
 }

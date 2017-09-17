@@ -49,285 +49,279 @@ import javax.xml.stream.XMLStreamReader;
  */
 public abstract class BaseXMLStreamReader implements XMLStreamReader {
 
-    /** The stream system ID. */
-    protected String systemId;
+  /** The stream system ID. */
+  protected String systemId;
 
-    /** The stream encoding. */
-    protected String encoding;
+  /** The stream encoding. */
+  protected String encoding;
 
-    public BaseXMLStreamReader() {
+  public BaseXMLStreamReader() {
+
+  }
+
+  public BaseXMLStreamReader(String systemId, String encoding) {
+
+    this.systemId = systemId;
+    this.encoding = encoding;
+
+  }
+
+  public String getSystemId() {
+
+    return systemId;
+
+  }
+
+  public String getEncoding() {
+
+    return encoding;
+
+  }
+
+  /**
+   * Returns the name of the current event type.
+   * 
+   * @return The name of the current event type.
+   */
+  public String getEventTypeName() {
+
+    return XMLStreamUtils.getEventTypeName(getEventType());
+
+  }
+
+  public int nextTag() throws XMLStreamException {
+
+    for (int eventType = next(); hasNext(); eventType = next()) {
+
+      switch (eventType) {
+
+      case START_ELEMENT:
+      case END_ELEMENT:
+        return eventType;
+
+      case CHARACTERS:
+      case CDATA:
+        if (!isWhiteSpace()) {
+          // throw an error
+          break;
+        } else {
+          // fall through
+        }
+
+      case SPACE:
+      case PROCESSING_INSTRUCTION:
+      case COMMENT:
+        // skip it
+        continue;
+
+      default:
+        // stop and throw an error
+        break;
+
+      }
 
     }
 
-    public BaseXMLStreamReader(String systemId, String encoding) {
+    throw new XMLStreamException("Encountered " + getEventTypeName()
+        + " when expecting START_ELEMENT or END_ELEMENT", getStableLocation());
 
-        this.systemId = systemId;
-        this.encoding = encoding;
+  }
+
+  public boolean isCharacters() {
+
+    return getEventType() == XMLStreamConstants.CHARACTERS;
+
+  }
+
+  public boolean isEndElement() {
+
+    return getEventType() == XMLStreamConstants.END_ELEMENT;
+
+  }
+
+  public boolean isStartElement() {
+
+    return getEventType() == XMLStreamConstants.START_ELEMENT;
+
+  }
+
+  public boolean isWhiteSpace() {
+
+    return getEventType() == XMLStreamConstants.SPACE;
+
+  }
+
+  public boolean hasName() {
+
+    switch (getEventType()) {
+
+    case XMLStreamConstants.START_ELEMENT:
+    case XMLStreamConstants.END_ELEMENT:
+      return true;
+
+    default:
+      return false;
 
     }
 
-    public String getSystemId() {
+  }
 
-        return systemId;
+  public String getPrefix() {
 
-    }
+    switch (getEventType()) {
 
-    public String getEncoding() {
+    case XMLStreamConstants.START_ELEMENT:
+    case XMLStreamConstants.END_ELEMENT:
+      return getName().getPrefix();
 
-        return encoding;
-
-    }
-
-    /**
-     * Returns the name of the current event type.
-     * 
-     * @return The name of the current event type.
-     */
-    public String getEventTypeName() {
-
-        return XMLStreamUtils.getEventTypeName(getEventType());
+    default:
+      throw new IllegalStreamStateException("Expected START_ELEMENT or END_ELEMENT but was "
+          + getEventTypeName(), getStableLocation());
 
     }
 
-    public int nextTag() throws XMLStreamException {
+  }
 
-        for (int eventType = next(); hasNext(); eventType = next()) {
+  public boolean hasText() {
 
-            switch (eventType) {
+    switch (getEventType()) {
 
-                case START_ELEMENT :
-                case END_ELEMENT :
-                    return eventType;
+    case XMLStreamConstants.SPACE:
+    case XMLStreamConstants.CHARACTERS:
+    case XMLStreamConstants.COMMENT:
+    case XMLStreamConstants.CDATA:
+    case XMLStreamConstants.ENTITY_REFERENCE:
+      return true;
 
-                case CHARACTERS :
-                case CDATA :
-                    if (!isWhiteSpace()) {
-                        // throw an error
-                        break;
-                    } else {
-                        // fall through
-                    }
+    default:
+      return false;
 
-                case SPACE :
-                case PROCESSING_INSTRUCTION :
-                case COMMENT :
-                    // skip it
-                    continue;
+    }
 
-                default :
-                    // stop and throw an error
-                    break;
+  }
 
-            }
+  public String getNamespaceURI(String prefix) {
+
+    if (prefix == null) {
+
+      throw new IllegalArgumentException("Namespace prefix was null");
+
+    }
+
+    return getNamespaceContext().getNamespaceURI(prefix);
+
+  }
+
+  public String getNamespaceURI() {
+
+    switch (getEventType()) {
+
+    case XMLStreamConstants.START_ELEMENT:
+    case XMLStreamConstants.END_ELEMENT:
+      return getName().getNamespaceURI();
+
+    default:
+      throw new IllegalStreamStateException(
+          "Expected START_ELEMENT or END_ELEMENT state, but found " + getEventTypeName(),
+          getStableLocation());
+
+    }
+
+  }
+
+  public String getAttributeLocalName(int index) {
+
+    return getAttributeName(index).getLocalPart();
+
+  }
+
+  public String getAttributeNamespace(int index) {
+
+    return getAttributeName(index).getNamespaceURI();
+
+  }
+
+  public String getAttributePrefix(int index) {
+
+    return getAttributeName(index).getPrefix();
+
+  }
+
+  public void require(int type, String namespaceURI, String localName) throws XMLStreamException {
+
+    int currType = getEventType();
+    if (currType != type) {
+
+      throw new XMLStreamException("Expected " + XMLStreamUtils.getEventTypeName(type)
+          + " but found " + XMLStreamUtils.getEventTypeName(currType), getStableLocation());
+
+    }
+
+  }
+
+  public String getElementText() throws XMLStreamException {
+
+    if (getEventType() != XMLStreamConstants.START_ELEMENT) {
+
+      throw new XMLStreamException("Expected START_ELEMENT but found " + getEventTypeName(),
+          getStableLocation());
+
+    }
+
+    // save the element name and location so we can use it in the error
+    // message
+    // as needed.
+    QName elemName = getName();
+    Location elemLocation = getStableLocation();
+
+    // read text events until the end tag is reached
+    StringBuffer content = null;
+    for (int eventType = next(); eventType != END_ELEMENT; eventType = next()) {
+
+      if (hasText()) {
+
+        if (content == null) {
+
+          content = new StringBuffer();
 
         }
+        content.append(getText());
+
+      } else {
 
         throw new XMLStreamException("Encountered " + getEventTypeName()
-                + " when expecting START_ELEMENT or END_ELEMENT",
-                getStableLocation());
+            + " event within text-only element " + elemName, elemLocation);
+
+      }
 
     }
 
-    public boolean isCharacters() {
+    // return content
+    return (content == null ? "" : content.toString());
 
-        return getEventType() == XMLStreamConstants.CHARACTERS;
+  }
 
-    }
+  /**
+   * Constructs a new, stable {@link Location} from the current stream location.
+   * If the stream location implements {@link StaticLocation}, then the stream
+   * location will be returned directly.
+   * 
+   * @return Constructs a new, stable {@link Location} from the current stream
+   *         location, or the current {@link Location} itself if it is already
+   *         stable.
+   */
+  public Location getStableLocation() {
 
-    public boolean isEndElement() {
+    Location location = getLocation();
+    if (!(location instanceof StaticLocation)) {
 
-        return getEventType() == XMLStreamConstants.END_ELEMENT;
-
-    }
-
-    public boolean isStartElement() {
-
-        return getEventType() == XMLStreamConstants.START_ELEMENT;
-
-    }
-
-    public boolean isWhiteSpace() {
-
-        return getEventType() == XMLStreamConstants.SPACE;
-
-    }
-
-    public boolean hasName() {
-
-        switch (getEventType()) {
-
-            case XMLStreamConstants.START_ELEMENT :
-            case XMLStreamConstants.END_ELEMENT :
-                return true;
-
-            default :
-                return false;
-
-        }
+      // create copy
+      location = new SimpleLocation(location);
 
     }
 
-    public String getPrefix() {
+    return location;
 
-        switch (getEventType()) {
-
-            case XMLStreamConstants.START_ELEMENT :
-            case XMLStreamConstants.END_ELEMENT :
-                return getName().getPrefix();
-
-            default :
-                throw new IllegalStreamStateException(
-                        "Expected START_ELEMENT or END_ELEMENT but was "
-                                + getEventTypeName(), getStableLocation());
-
-        }
-
-    }
-
-    public boolean hasText() {
-
-        switch (getEventType()) {
-
-            case XMLStreamConstants.SPACE :
-            case XMLStreamConstants.CHARACTERS :
-            case XMLStreamConstants.COMMENT :
-            case XMLStreamConstants.CDATA :
-            case XMLStreamConstants.ENTITY_REFERENCE :
-                return true;
-
-            default :
-                return false;
-
-        }
-
-    }
-
-    public String getNamespaceURI(String prefix) {
-
-        if (prefix == null) {
-
-            throw new IllegalArgumentException("Namespace prefix was null");
-
-        }
-
-        return getNamespaceContext().getNamespaceURI(prefix);
-
-    }
-
-    public String getNamespaceURI() {
-
-        switch (getEventType()) {
-
-            case XMLStreamConstants.START_ELEMENT :
-            case XMLStreamConstants.END_ELEMENT :
-                return getName().getNamespaceURI();
-
-            default :
-                throw new IllegalStreamStateException(
-                        "Expected START_ELEMENT or END_ELEMENT state, but found "
-                                + getEventTypeName(), getStableLocation());
-
-        }
-
-    }
-
-    public String getAttributeLocalName(int index) {
-
-        return getAttributeName(index).getLocalPart();
-
-    }
-
-    public String getAttributeNamespace(int index) {
-
-        return getAttributeName(index).getNamespaceURI();
-
-    }
-
-    public String getAttributePrefix(int index) {
-
-        return getAttributeName(index).getPrefix();
-
-    }
-
-    public void require(int type, String namespaceURI, String localName)
-            throws XMLStreamException {
-
-        int currType = getEventType();
-        if (currType != type) {
-
-            throw new XMLStreamException("Expected "
-                    + XMLStreamUtils.getEventTypeName(type) + " but found "
-                    + XMLStreamUtils.getEventTypeName(currType),
-                    getStableLocation());
-
-        }
-
-    }
-
-    public String getElementText() throws XMLStreamException {
-
-        if (getEventType() != XMLStreamConstants.START_ELEMENT) {
-
-            throw new XMLStreamException("Expected START_ELEMENT but found "
-                    + getEventTypeName(), getStableLocation());
-
-        }
-
-        // save the element name and location so we can use it in the error message
-        // as needed.
-        QName elemName = getName();
-        Location elemLocation = getStableLocation();
-
-        // read text events until the end tag is reached
-        StringBuffer content = null;
-        for (int eventType = next(); eventType != END_ELEMENT; eventType = next()) {
-
-            if (hasText()) {
-
-                if (content == null) {
-
-                    content = new StringBuffer();
-
-                }
-                content.append(getText());
-
-            } else {
-
-                throw new XMLStreamException("Encountered "
-                        + getEventTypeName()
-                        + " event within text-only element " + elemName,
-                        elemLocation);
-
-            }
-
-        }
-
-        // return content
-        return (content == null ? "" : content.toString());
-
-    }
-
-    /**
-     * Constructs a new, stable {@link Location} from the current stream location.
-     * If the stream location implements {@link StaticLocation}, then the stream
-     * location will be returned directly.
-     * 
-     * @return Constructs a new, stable {@link Location} from the current stream
-     * 		location, or the current {@link Location} itself if it is already
-     * 		stable.
-     */
-    public Location getStableLocation() {
-
-        Location location = getLocation();
-        if (!(location instanceof StaticLocation)) {
-
-            // create copy
-            location = new SimpleLocation(location);
-
-        }
-
-        return location;
-
-    }
+  }
 
 }

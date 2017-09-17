@@ -58,98 +58,89 @@ import javax.xml.stream.util.XMLEventConsumer;
  */
 public abstract class BaseXMLEventAllocator implements XMLEventAllocator {
 
-    public void allocate(XMLStreamReader reader, XMLEventConsumer consumer)
-            throws XMLStreamException {
+  public void allocate(XMLStreamReader reader, XMLEventConsumer consumer) throws XMLStreamException {
 
-        consumer.add(allocate(reader));
+    consumer.add(allocate(reader));
 
-    }
+  }
 
-    /**
-     * Delegates allocation to the appropriate <code>allocateXXX</code> method.
-     */
-    public XMLEvent allocate(XMLStreamReader reader) throws XMLStreamException {
+  /**
+   * Delegates allocation to the appropriate <code>allocateXXX</code> method.
+   */
+  public XMLEvent allocate(XMLStreamReader reader) throws XMLStreamException {
 
-        int eventType = reader.getEventType();
-        switch (eventType) {
+    int eventType = reader.getEventType();
+    switch (eventType) {
 
-            case XMLEvent.START_ELEMENT :
-                return allocateStartElement(reader);
+    case XMLEvent.START_ELEMENT:
+      return allocateStartElement(reader);
 
-            case XMLEvent.END_ELEMENT :
-                return allocateEndElement(reader);
+    case XMLEvent.END_ELEMENT:
+      return allocateEndElement(reader);
 
-            case XMLEvent.CHARACTERS :
-                return allocateCharacters(reader);
+    case XMLEvent.CHARACTERS:
+      return allocateCharacters(reader);
 
-            case XMLEvent.CDATA :
-                return allocateCData(reader);
+    case XMLEvent.CDATA:
+      return allocateCData(reader);
 
-            case XMLEvent.SPACE :
-                return allocateIgnorableSpace(reader);
+    case XMLEvent.SPACE:
+      return allocateIgnorableSpace(reader);
 
-            case XMLEvent.COMMENT :
-                return allocateComment(reader);
+    case XMLEvent.COMMENT:
+      return allocateComment(reader);
 
-            case XMLEvent.DTD :
-                return allocateDTD(reader);
+    case XMLEvent.DTD:
+      return allocateDTD(reader);
 
-            case XMLEvent.ENTITY_REFERENCE :
-                return allocateEntityReference(reader);
+    case XMLEvent.ENTITY_REFERENCE:
+      return allocateEntityReference(reader);
 
-            case XMLEvent.PROCESSING_INSTRUCTION :
-                return allocateProcessingInstruction(reader);
+    case XMLEvent.PROCESSING_INSTRUCTION:
+      return allocateProcessingInstruction(reader);
 
-            case XMLEvent.START_DOCUMENT :
-                return allocateStartDocument(reader);
+    case XMLEvent.START_DOCUMENT:
+      return allocateStartDocument(reader);
 
-            case XMLEvent.END_DOCUMENT :
-                return allocateEndDocument(reader);
+    case XMLEvent.END_DOCUMENT:
+      return allocateEndDocument(reader);
 
-            default :
-                throw new XMLStreamException("Unexpected reader state: "
-                        + eventType);
-
-        }
+    default:
+      throw new XMLStreamException("Unexpected reader state: " + eventType);
 
     }
 
-    public abstract StartElement allocateStartElement(XMLStreamReader reader)
-            throws XMLStreamException;
+  }
 
-    public abstract EndElement allocateEndElement(XMLStreamReader reader)
-            throws XMLStreamException;
+  public abstract StartElement allocateStartElement(XMLStreamReader reader)
+      throws XMLStreamException;
 
-    public abstract Characters allocateCharacters(XMLStreamReader reader)
-            throws XMLStreamException;
+  public abstract EndElement allocateEndElement(XMLStreamReader reader) throws XMLStreamException;
 
-    public abstract Characters allocateCData(XMLStreamReader reader)
-            throws XMLStreamException;
+  public abstract Characters allocateCharacters(XMLStreamReader reader) throws XMLStreamException;
 
-    public abstract Characters allocateIgnorableSpace(XMLStreamReader reader)
-            throws XMLStreamException;
+  public abstract Characters allocateCData(XMLStreamReader reader) throws XMLStreamException;
 
-    public abstract EntityReference allocateEntityReference(
-            XMLStreamReader reader) throws XMLStreamException;
+  public abstract Characters allocateIgnorableSpace(XMLStreamReader reader)
+      throws XMLStreamException;
 
-    public abstract Comment allocateComment(XMLStreamReader reader)
-            throws XMLStreamException;
+  public abstract EntityReference allocateEntityReference(XMLStreamReader reader)
+      throws XMLStreamException;
 
-    public abstract DTD allocateDTD(XMLStreamReader reader)
-            throws XMLStreamException;
+  public abstract Comment allocateComment(XMLStreamReader reader) throws XMLStreamException;
 
-    public abstract StartDocument allocateStartDocument(XMLStreamReader reader)
-            throws XMLStreamException;
+  public abstract DTD allocateDTD(XMLStreamReader reader) throws XMLStreamException;
 
-    public abstract EndDocument allocateEndDocument(XMLStreamReader reader)
-            throws XMLStreamException;
+  public abstract StartDocument allocateStartDocument(XMLStreamReader reader)
+      throws XMLStreamException;
 
-    public abstract ProcessingInstruction allocateProcessingInstruction(
-            XMLStreamReader reader) throws XMLStreamException;
+  public abstract EndDocument allocateEndDocument(XMLStreamReader reader) throws XMLStreamException;
 
-    public abstract NamespaceContext createStableNamespaceContext(
-            XMLStreamReader reader);
+  public abstract ProcessingInstruction allocateProcessingInstruction(XMLStreamReader reader)
+      throws XMLStreamException;
 
-    public abstract Location createStableLocation(XMLStreamReader reader);
+  public abstract NamespaceContext createStableNamespaceContext(XMLStreamReader reader);
+
+  public abstract Location createStableLocation(XMLStreamReader reader);
 
 }

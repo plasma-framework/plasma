@@ -47,121 +47,125 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 /**
- * {@link javax.xml.stream.XMLEventWriter} that writes events to a character stream
- * using {@link XMLEvent#writeAsEncodedUnicode(Writer)}.
+ * {@link javax.xml.stream.XMLEventWriter} that writes events to a character
+ * stream using {@link XMLEvent#writeAsEncodedUnicode(Writer)}.
  * 
  * @author Christian Niles
  * @version $Revision: 1.4 $
  */
 public class StreamEventWriter extends BaseXMLEventWriter {
 
-    /** The underlying {@link Writer}. */
-    private Writer writer;
+  /** The underlying {@link Writer}. */
+  private Writer writer;
 
-    /**
-     * Constructs a new <code>StreamEventWriter</code> that writes to a file.
-     * 
-     * @param file The file to write.
-     * @throws IOException If the file couldn't be opened.
-     */
-    public StreamEventWriter(File file) throws IOException {
+  /**
+   * Constructs a new <code>StreamEventWriter</code> that writes to a file.
+   * 
+   * @param file
+   *          The file to write.
+   * @throws IOException
+   *           If the file couldn't be opened.
+   */
+  public StreamEventWriter(File file) throws IOException {
 
-        this(new FileWriter(file));
+    this(new FileWriter(file));
+
+  }
+
+  /**
+   * Constructs a new <code>StreamEventWriter</code> that writes to a binary
+   * stream.
+   * 
+   * @param os
+   *          The stream to write.
+   */
+  public StreamEventWriter(OutputStream os) {
+
+    this(new OutputStreamWriter(os));
+
+  }
+
+  /**
+   * Constructs a new <code>StreamEventWriter</code> that writes to a character
+   * stream.
+   * 
+   * @param writer
+   *          The stream to write.
+   */
+  public StreamEventWriter(Writer writer) {
+
+    this.writer = writer;
+
+  }
+
+  public synchronized void flush() throws XMLStreamException {
+
+    super.flush();
+    try {
+
+      writer.flush();
+
+    } catch (IOException e) {
+
+      throw new XMLStreamException(e);
 
     }
 
-    /**
-     * Constructs a new <code>StreamEventWriter</code> that writes to a binary
-     * stream.
-     * 
-     * @param os The stream to write.
-     */
-    public StreamEventWriter(OutputStream os) {
+  }
 
-        this(new OutputStreamWriter(os));
+  /**
+   * Saved reference to most recent start element. This is used to properly
+   * write empty elements. Each startElement event is saved here until the next
+   * event is received, at which point it will be written as a start or empty
+   * element if it is followed directly by an EndElement.
+   */
+  private StartElement savedStart;
 
-    }
+  protected void sendEvent(XMLEvent event) throws XMLStreamException {
 
-    /**
-     * Constructs a new <code>StreamEventWriter</code> that writes to a character
-     * stream.
-     * 
-     * @param writer The stream to write.
-     */
-    public StreamEventWriter(Writer writer) {
+    try {
 
-        this.writer = writer;
+      // Check if we have a cached start tag. If we do, then we should
+      // check if this event is actually an end tag, so we can properly
+      // write an empty element.
+      if (savedStart != null) {
 
-    }
+        StartElement start = savedStart;
+        savedStart = null;
 
-    public synchronized void flush() throws XMLStreamException {
+        if (event.getEventType() == XMLEvent.END_ELEMENT) {
 
-        super.flush();
-        try {
+          // this end tag directly followed a start tag, so send
+          // the underlying writer an empty start element
+          XMLWriterUtils.writeStartElement(start, true, writer);
+          writer.flush();
+          return;
 
-            writer.flush();
+        } else {
 
-        } catch (IOException e) {
-
-            throw new XMLStreamException(e);
+          // element has content, so send a regular start tag
+          XMLWriterUtils.writeStartElement(start, false, writer);
 
         }
 
-    }
+      }
 
-    /**
-     * Saved reference to most recent start element. This is used to properly
-     * write empty elements. Each startElement event is saved here until the
-     * next event is received, at which point it will be written as a start or
-     * empty element if it is followed directly by an EndElement.
-     */
-    private StartElement savedStart;
+      if (event.isStartElement()) {
 
-    protected void sendEvent(XMLEvent event) throws XMLStreamException {
+        savedStart = event.asStartElement();
 
-        try {
-            
-            // Check if we have a cached start tag. If we do, then we should
-            // check if this event is actually an end tag, so we can properly
-            // write an empty element.
-            if (savedStart != null) {
+      } else {
 
-                StartElement start = savedStart;
-                savedStart = null;
+        event.writeAsEncodedUnicode(writer);
 
-                if (event.getEventType() == XMLEvent.END_ELEMENT) {
+      }
 
-                    // this end tag directly followed a start tag, so send
-                    // the underlying writer an empty start element
-                    XMLWriterUtils.writeStartElement(start, true, writer);
-                    writer.flush();
-                    return;
+    } catch (IOException e) {
 
-                } else {
-
-                    // element has content, so send a regular start tag
-                    XMLWriterUtils.writeStartElement(start, false, writer);
-
-                }
-
-            }
-
-            if (event.isStartElement()) {
-                
-                savedStart = event.asStartElement();
-                
-            } else {
-
-                event.writeAsEncodedUnicode(writer);
-
-            }
-            
-        } catch (IOException e) {
-
-            throw new XMLStreamException(e);
-
-        }
+      throw new XMLStreamException(e);
 
     }
+
+  }
 
 }

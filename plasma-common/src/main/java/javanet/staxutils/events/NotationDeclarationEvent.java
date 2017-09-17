@@ -42,72 +42,68 @@ import javax.xml.stream.events.NotationDeclaration;
  * @author Christian Niles
  * @version $Revision: 1.2 $
  */
-public class NotationDeclarationEvent extends AbstractXMLEvent
-        implements
-            NotationDeclaration {
+public class NotationDeclarationEvent extends AbstractXMLEvent implements NotationDeclaration {
 
-    /** The notation name. */
-    protected String name;
+  /** The notation name. */
+  protected String name;
 
-    /** The public id of the notation */
-    protected String publicId;
+  /** The public id of the notation */
+  protected String publicId;
 
-    /** The system id of the notation */
-    protected String systemId;
+  /** The system id of the notation */
+  protected String systemId;
 
-    public NotationDeclarationEvent(String name, String publicId,
-            Location location) {
+  public NotationDeclarationEvent(String name, String publicId, Location location) {
 
-        super(location);
-        this.name = name;
-        this.publicId = publicId;
+    super(location);
+    this.name = name;
+    this.publicId = publicId;
 
-    }
+  }
 
-    public NotationDeclarationEvent(String name, String publicId,
-            String systemId, Location location) {
+  public NotationDeclarationEvent(String name, String publicId, String systemId, Location location) {
 
-        super(location);
-        this.name = name;
-        this.publicId = publicId;
-        this.systemId = systemId;
+    super(location);
+    this.name = name;
+    this.publicId = publicId;
+    this.systemId = systemId;
 
-    }
+  }
 
-    public NotationDeclarationEvent(NotationDeclaration that) {
+  public NotationDeclarationEvent(NotationDeclaration that) {
 
-        super(that);
-        this.name = that.getName();
-        this.publicId = that.getPublicId();
-        this.systemId = that.getSystemId();
+    super(that);
+    this.name = that.getName();
+    this.publicId = that.getPublicId();
+    this.systemId = that.getSystemId();
 
-    }
+  }
 
-    /**
-     * Returns {@link #NOTATION_DECLARATION}.
-     */
-    public int getEventType() {
+  /**
+   * Returns {@link #NOTATION_DECLARATION}.
+   */
+  public int getEventType() {
 
-        return NOTATION_DECLARATION;
+    return NOTATION_DECLARATION;
 
-    }
+  }
 
-    public String getName() {
+  public String getName() {
 
-        return this.name;
+    return this.name;
 
-    }
+  }
 
-    public String getPublicId() {
+  public String getPublicId() {
 
-        return this.publicId;
+    return this.publicId;
 
-    }
+  }
 
-    public String getSystemId() {
+  public String getSystemId() {
 
-        return this.systemId;
+    return this.systemId;
 
-    }
-    
+  }
+
 }

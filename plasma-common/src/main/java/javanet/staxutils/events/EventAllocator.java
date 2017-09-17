@@ -64,219 +64,204 @@ import javax.xml.stream.util.XMLEventAllocator;
  */
 public class EventAllocator extends BaseXMLEventAllocator {
 
-    public XMLEventAllocator newInstance() {
+  public XMLEventAllocator newInstance() {
 
-        return new EventAllocator();
+    return new EventAllocator();
 
-    }
+  }
 
-    public StartElement allocateStartElement(XMLStreamReader reader)
-            throws XMLStreamException {
+  public StartElement allocateStartElement(XMLStreamReader reader) throws XMLStreamException {
 
-        Location location = createStableLocation(reader);
-        QName name = reader.getName();
-        List attributes = allocateAttributes(location, reader);
-        List namespaces = allocateNamespaces(location, reader);
-        NamespaceContext nsCtx = createStableNamespaceContext(reader);
-        QName schemaType = determineSchemaType(reader);
+    Location location = createStableLocation(reader);
+    QName name = reader.getName();
+    List attributes = allocateAttributes(location, reader);
+    List namespaces = allocateNamespaces(location, reader);
+    NamespaceContext nsCtx = createStableNamespaceContext(reader);
+    QName schemaType = determineSchemaType(reader);
 
-        return new StartElementEvent(name, attributes.iterator(),
-                namespaces.iterator(), nsCtx, location, schemaType);
+    return new StartElementEvent(name, attributes.iterator(), namespaces.iterator(), nsCtx,
+        location, schemaType);
 
-    }
+  }
 
-    public EndElement allocateEndElement(XMLStreamReader reader)
-            throws XMLStreamException {
+  public EndElement allocateEndElement(XMLStreamReader reader) throws XMLStreamException {
 
-        Location location = createStableLocation(reader);
-        QName name = reader.getName();
-        List namespaces = allocateNamespaces(location, reader);
-        QName schemaType = determineSchemaType(reader);
+    Location location = createStableLocation(reader);
+    QName name = reader.getName();
+    List namespaces = allocateNamespaces(location, reader);
+    QName schemaType = determineSchemaType(reader);
 
-        return new EndElementEvent(name, namespaces.iterator(), location,
-                schemaType);
+    return new EndElementEvent(name, namespaces.iterator(), location, schemaType);
 
-    }
+  }
 
-    public List allocateAttributes(Location location, XMLStreamReader reader)
-            throws XMLStreamException {
+  public List allocateAttributes(Location location, XMLStreamReader reader)
+      throws XMLStreamException {
 
-        List attributes = null;
-        for (int i = 0, s = reader.getAttributeCount(); i < s; i++) {
+    List attributes = null;
+    for (int i = 0, s = reader.getAttributeCount(); i < s; i++) {
 
-            QName name = reader.getAttributeName(i);
-            String value = reader.getAttributeValue(i);
-            String dtdType = reader.getAttributeType(i);
-            boolean specified = reader.isAttributeSpecified(i);
-            QName schemaType = determineAttributeSchemaType(reader, i);
+      QName name = reader.getAttributeName(i);
+      String value = reader.getAttributeValue(i);
+      String dtdType = reader.getAttributeType(i);
+      boolean specified = reader.isAttributeSpecified(i);
+      QName schemaType = determineAttributeSchemaType(reader, i);
 
-            Attribute attr = new AttributeEvent(name, value, specified,
-                    dtdType, location, schemaType);
-            if (attributes == null) {
+      Attribute attr = new AttributeEvent(name, value, specified, dtdType, location, schemaType);
+      if (attributes == null) {
 
-                attributes = new ArrayList();
+        attributes = new ArrayList();
 
-            }
-            attributes.add(attr);
-
-        }
-
-        return (attributes != null) ? attributes : Collections.EMPTY_LIST;
+      }
+      attributes.add(attr);
 
     }
 
-    public List allocateNamespaces(Location location, XMLStreamReader reader)
-            throws XMLStreamException {
+    return (attributes != null) ? attributes : Collections.EMPTY_LIST;
 
-        List namespaces = null;
-        for (int i = 0, s = reader.getNamespaceCount(); i < s; i++) {
+  }
 
-            String prefix = reader.getNamespacePrefix(i);
-            String nsURI = reader.getNamespaceURI(i);
+  public List allocateNamespaces(Location location, XMLStreamReader reader)
+      throws XMLStreamException {
 
-            Namespace ns = new NamespaceEvent(prefix, nsURI, location);
-            if (namespaces == null) {
+    List namespaces = null;
+    for (int i = 0, s = reader.getNamespaceCount(); i < s; i++) {
 
-                namespaces = new ArrayList();
+      String prefix = reader.getNamespacePrefix(i);
+      String nsURI = reader.getNamespaceURI(i);
 
-            }
-            namespaces.add(ns);
+      Namespace ns = new NamespaceEvent(prefix, nsURI, location);
+      if (namespaces == null) {
 
-        }
+        namespaces = new ArrayList();
 
-        return (namespaces != null) ? namespaces : Collections.EMPTY_LIST;
-
-    }
-
-    public Characters allocateCData(XMLStreamReader reader)
-            throws XMLStreamException {
-
-        Location location = createStableLocation(reader);
-        String text = reader.getText();
-        QName schemaType = determineSchemaType(reader);
-        return new CDataEvent(text, location, schemaType);
+      }
+      namespaces.add(ns);
 
     }
 
-    public Characters allocateCharacters(XMLStreamReader reader)
-            throws XMLStreamException {
+    return (namespaces != null) ? namespaces : Collections.EMPTY_LIST;
 
-        Location location = createStableLocation(reader);
-        String text = reader.getText();
-        QName schemaType = determineSchemaType(reader);
-        return new CharactersEvent(text, location, schemaType);
+  }
 
-    }
+  public Characters allocateCData(XMLStreamReader reader) throws XMLStreamException {
 
-    public Characters allocateIgnorableSpace(XMLStreamReader reader)
-            throws XMLStreamException {
+    Location location = createStableLocation(reader);
+    String text = reader.getText();
+    QName schemaType = determineSchemaType(reader);
+    return new CDataEvent(text, location, schemaType);
 
-        Location location = createStableLocation(reader);
-        String text = reader.getText();
-        QName schemaType = determineSchemaType(reader);
-        return new IgnorableSpaceEvent(text, location, schemaType);
+  }
 
-    }
+  public Characters allocateCharacters(XMLStreamReader reader) throws XMLStreamException {
 
-    public Comment allocateComment(XMLStreamReader reader)
-            throws XMLStreamException {
+    Location location = createStableLocation(reader);
+    String text = reader.getText();
+    QName schemaType = determineSchemaType(reader);
+    return new CharactersEvent(text, location, schemaType);
 
-        Location location = createStableLocation(reader);
-        String text = reader.getText();
-        return new CommentEvent(text, location);
+  }
 
-    }
+  public Characters allocateIgnorableSpace(XMLStreamReader reader) throws XMLStreamException {
 
-    public DTD allocateDTD(XMLStreamReader reader) throws XMLStreamException {
+    Location location = createStableLocation(reader);
+    String text = reader.getText();
+    QName schemaType = determineSchemaType(reader);
+    return new IgnorableSpaceEvent(text, location, schemaType);
 
-        Location location = createStableLocation(reader);
-        List entities = (List) reader.getProperty("javax.xml.stream.entities");
-        List notations = (List) reader.getProperty("javax.xml.stream.notations");
-        String text = reader.getText();
+  }
 
-        return new DTDEvent(text, entities, notations, location);
+  public Comment allocateComment(XMLStreamReader reader) throws XMLStreamException {
 
-    }
+    Location location = createStableLocation(reader);
+    String text = reader.getText();
+    return new CommentEvent(text, location);
 
-    public StartDocument allocateStartDocument(XMLStreamReader reader)
-            throws XMLStreamException {
+  }
 
-        Location location = createStableLocation(reader);
-        String encoding = reader.getCharacterEncodingScheme();
-        String version = reader.getVersion();
-        Boolean standalone = reader.standaloneSet()
-                ? Boolean.valueOf(reader.isStandalone())
-                : null;
-        QName schemaType = determineSchemaType(reader);
+  public DTD allocateDTD(XMLStreamReader reader) throws XMLStreamException {
 
-        return new StartDocumentEvent(encoding, standalone, version, location,
-                schemaType);
+    Location location = createStableLocation(reader);
+    List entities = (List) reader.getProperty("javax.xml.stream.entities");
+    List notations = (List) reader.getProperty("javax.xml.stream.notations");
+    String text = reader.getText();
 
-    }
+    return new DTDEvent(text, entities, notations, location);
 
-    public EndDocument allocateEndDocument(XMLStreamReader reader)
-            throws XMLStreamException {
+  }
 
-        Location location = createStableLocation(reader);
-        QName schemaType = determineSchemaType(reader);
-        return new EndDocumentEvent(location, schemaType);
+  public StartDocument allocateStartDocument(XMLStreamReader reader) throws XMLStreamException {
 
-    }
+    Location location = createStableLocation(reader);
+    String encoding = reader.getCharacterEncodingScheme();
+    String version = reader.getVersion();
+    Boolean standalone = reader.standaloneSet() ? Boolean.valueOf(reader.isStandalone()) : null;
+    QName schemaType = determineSchemaType(reader);
 
-    public EntityReference allocateEntityReference(XMLStreamReader reader)
-            throws XMLStreamException {
+    return new StartDocumentEvent(encoding, standalone, version, location, schemaType);
 
-        Location location = createStableLocation(reader);
-        String name = reader.getLocalName();
-        EntityDeclaration decl = determineEntityDeclaration(name, reader);
+  }
 
-        return new EntityReferenceEvent(name, decl, location);
+  public EndDocument allocateEndDocument(XMLStreamReader reader) throws XMLStreamException {
 
-    }
+    Location location = createStableLocation(reader);
+    QName schemaType = determineSchemaType(reader);
+    return new EndDocumentEvent(location, schemaType);
 
-    public ProcessingInstruction allocateProcessingInstruction(
-            XMLStreamReader reader) throws XMLStreamException {
+  }
 
-        Location location = createStableLocation(reader);
-        String target = reader.getPITarget();
-        String data = reader.getPIData();
+  public EntityReference allocateEntityReference(XMLStreamReader reader) throws XMLStreamException {
 
-        return new ProcessingInstructionEvent(target, data, location);
+    Location location = createStableLocation(reader);
+    String name = reader.getLocalName();
+    EntityDeclaration decl = determineEntityDeclaration(name, reader);
 
-    }
+    return new EntityReferenceEvent(name, decl, location);
 
-    public QName determineSchemaType(XMLStreamReader reader) {
+  }
 
-        // TODO look for xsi:type?
-        return null;
+  public ProcessingInstruction allocateProcessingInstruction(XMLStreamReader reader)
+      throws XMLStreamException {
 
-    }
+    Location location = createStableLocation(reader);
+    String target = reader.getPITarget();
+    String data = reader.getPIData();
 
-    public QName determineAttributeSchemaType(XMLStreamReader reader, int index) {
+    return new ProcessingInstructionEvent(target, data, location);
 
-        return null;
+  }
 
-    }
+  public QName determineSchemaType(XMLStreamReader reader) {
 
-    public EntityDeclaration determineEntityDeclaration(String name,
-            XMLStreamReader reader) {
+    // TODO look for xsi:type?
+    return null;
 
-        return new EntityDeclarationEvent(name, reader.getText(), null);
+  }
 
-    }
+  public QName determineAttributeSchemaType(XMLStreamReader reader, int index) {
 
-    public Location createStableLocation(XMLStreamReader reader) {
+    return null;
 
-        // FIXME assume location is already stable?
-        return reader.getLocation();
+  }
 
-    }
+  public EntityDeclaration determineEntityDeclaration(String name, XMLStreamReader reader) {
 
-    public NamespaceContext createStableNamespaceContext(XMLStreamReader reader) {
+    return new EntityDeclarationEvent(name, reader.getText(), null);
 
-        // FIXME assume context is already stable
-        return reader.getNamespaceContext();
+  }
 
-    }
+  public Location createStableLocation(XMLStreamReader reader) {
+
+    // FIXME assume location is already stable?
+    return reader.getLocation();
+
+  }
+
+  public NamespaceContext createStableNamespaceContext(XMLStreamReader reader) {
+
+    // FIXME assume context is already stable
+    return reader.getNamespaceContext();
+
+  }
 
 }

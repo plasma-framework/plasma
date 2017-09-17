@@ -36,8 +36,9 @@ package javanet.staxutils;
 import javax.xml.stream.XMLStreamException;
 
 /**
- * Common API's for adapting StAX events from {@link javax.xml.stream.XMLStreamReader}
- * and {@link javax.xml.stream.XMLEventReader} into SAX events on the specified
+ * Common API's for adapting StAX events from
+ * {@link javax.xml.stream.XMLStreamReader} and
+ * {@link javax.xml.stream.XMLEventReader} into SAX events on the specified
  * {@link org.xml.sax.ContentHandler}.
  *
  * @author Ryan.Shoemaker@Sun.COM
@@ -45,25 +46,26 @@ import javax.xml.stream.XMLStreamException;
  */
 public interface StAXReaderToContentHandler {
 
-    /**
-     * Perform the conversion from StAX events to SAX events.
-     *
-     * <p>
-     * The StAX parser must be pointing at the start element or the start document.
-     * The method reads the parser until it hits the corresponding end element,
-     * and turns the complete sub-tree into the equivalent of the SAX events.
-     *
-     * <p>
-     * The receiver of the SAX event will see this sub-tree as if it were
-     * a whole document.
-     *
-     * <p>
-     * When this method returns successfully, the parser is at the next token
-     * of the end element.
-     *
-     * @throws XMLStreamException
-     *                 if any errors are encountered while parsing XML from the
-     *                 XMLStreamReader or firing events on the ContentHandler.
-     */
-    public void bridge() throws XMLStreamException;
+  /**
+   * Perform the conversion from StAX events to SAX events.
+   *
+   * <p>
+   * The StAX parser must be pointing at the start element or the start
+   * document. The method reads the parser until it hits the corresponding end
+   * element, and turns the complete sub-tree into the equivalent of the SAX
+   * events.
+   *
+   * <p>
+   * The receiver of the SAX event will see this sub-tree as if it were a whole
+   * document.
+   *
+   * <p>
+   * When this method returns successfully, the parser is at the next token of
+   * the end element.
+   *
+   * @throws XMLStreamException
+   *           if any errors are encountered while parsing XML from the
+   *           XMLStreamReader or firing events on the ContentHandler.
+   */
+  public void bridge() throws XMLStreamException;
 }

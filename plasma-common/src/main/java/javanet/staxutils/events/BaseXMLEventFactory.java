@@ -54,8 +54,8 @@ import javax.xml.stream.events.StartElement;
 
 /**
  * Abstract base class for {@link XMLEventFactory} implementations. This class
- * makes it easier to implement by coalesing the various forms of each method into
- * a single creation method, such as
+ * makes it easier to implement by coalesing the various forms of each method
+ * into a single creation method, such as
  * {@link #createAttribute(QName, String, Location, QName)}.
  * 
  * @author Christian Niles
@@ -63,222 +63,204 @@ import javax.xml.stream.events.StartElement;
  */
 public abstract class BaseXMLEventFactory extends XMLEventFactory {
 
-    /** The current location registered with the factory. */
-    protected Location location;
+  /** The current location registered with the factory. */
+  protected Location location;
 
-    public void setLocation(Location location) {
+  public void setLocation(Location location) {
 
-        this.location = location;
+    this.location = location;
 
-    }
+  }
 
-    public Attribute createAttribute(QName name, String value) {
+  public Attribute createAttribute(QName name, String value) {
 
-        return createAttribute(name, value, location, null);
+    return createAttribute(name, value, location, null);
 
-    }
+  }
 
-    public Attribute createAttribute(String prefix, String namespaceURI,
-            String localName, String value) {
+  public Attribute createAttribute(String prefix, String namespaceURI, String localName,
+      String value) {
 
-        return createAttribute(new QName(namespaceURI, localName, prefix),
-                value, location, null);
+    return createAttribute(new QName(namespaceURI, localName, prefix), value, location, null);
 
-    }
+  }
 
-    public Attribute createAttribute(String localName, String value) {
+  public Attribute createAttribute(String localName, String value) {
 
-        return createAttribute(new QName(localName), value, location, null);
+    return createAttribute(new QName(localName), value, location, null);
 
-    }
+  }
 
-    public abstract Attribute createAttribute(QName name, String value,
-            Location location, QName schemaType);
+  public abstract Attribute createAttribute(QName name, String value, Location location,
+      QName schemaType);
 
-    public Characters createCData(String content) {
+  public Characters createCData(String content) {
 
-        return createCData(content, location, null);
+    return createCData(content, location, null);
 
-    }
+  }
 
-    public abstract Characters createCData(String content, Location location,
-            QName schemaType);
+  public abstract Characters createCData(String content, Location location, QName schemaType);
 
-    public Characters createCharacters(String content) {
+  public Characters createCharacters(String content) {
 
-        return createCharacters(content, location, null);
+    return createCharacters(content, location, null);
 
-    }
+  }
 
-    public abstract Characters createCharacters(String content,
-            Location location, QName schemaType);
+  public abstract Characters createCharacters(String content, Location location, QName schemaType);
 
-    public Comment createComment(String text) {
+  public Comment createComment(String text) {
 
-        return createComment(text, location);
+    return createComment(text, location);
 
-    }
+  }
 
-    public abstract Comment createComment(String text, Location location);
+  public abstract Comment createComment(String text, Location location);
 
-    public DTD createDTD(String dtd) {
+  public DTD createDTD(String dtd) {
 
-        return createDTD(dtd, location);
+    return createDTD(dtd, location);
 
-    }
+  }
 
-    public abstract DTD createDTD(String dtd, Location location);
+  public abstract DTD createDTD(String dtd, Location location);
 
-    public EndDocument createEndDocument() {
+  public EndDocument createEndDocument() {
 
-        return createEndDocument(location);
+    return createEndDocument(location);
 
-    }
+  }
 
-    public abstract EndDocument createEndDocument(Location location);
+  public abstract EndDocument createEndDocument(Location location);
 
-    public EndElement createEndElement(QName name, Iterator namespaces) {
+  public EndElement createEndElement(QName name, Iterator namespaces) {
 
-        return createEndElement(name, namespaces, location, null);
+    return createEndElement(name, namespaces, location, null);
 
-    }
+  }
 
-    public EndElement createEndElement(String prefix, String namespaceUri,
-            String localName, Iterator namespaces) {
+  public EndElement createEndElement(String prefix, String namespaceUri, String localName,
+      Iterator namespaces) {
 
-        return createEndElement(new QName(namespaceUri, localName, prefix),
-                namespaces, location, null);
+    return createEndElement(new QName(namespaceUri, localName, prefix), namespaces, location, null);
 
-    }
+  }
 
-    public EndElement createEndElement(String prefix, String namespaceUri,
-            String localName) {
+  public EndElement createEndElement(String prefix, String namespaceUri, String localName) {
 
-        return createEndElement(new QName(namespaceUri, localName, prefix),
-                null, location, null);
+    return createEndElement(new QName(namespaceUri, localName, prefix), null, location, null);
 
-    }
+  }
 
-    public abstract EndElement createEndElement(QName name,
-            Iterator namespaces, Location location, QName schemaType);
+  public abstract EndElement createEndElement(QName name, Iterator namespaces, Location location,
+      QName schemaType);
 
-    public EntityReference createEntityReference(String name,
-            EntityDeclaration declaration) {
+  public EntityReference createEntityReference(String name, EntityDeclaration declaration) {
 
-        return createEntityReference(name, declaration, location);
+    return createEntityReference(name, declaration, location);
 
-    }
+  }
 
-    public abstract EntityReference createEntityReference(String name,
-            EntityDeclaration declaration, Location location);
+  public abstract EntityReference createEntityReference(String name, EntityDeclaration declaration,
+      Location location);
 
-    public Characters createIgnorableSpace(String content) {
+  public Characters createIgnorableSpace(String content) {
 
-        return createIgnorableSpace(content, location);
+    return createIgnorableSpace(content, location);
 
-    }
+  }
 
-    public abstract Characters createIgnorableSpace(String content,
-            Location location);
+  public abstract Characters createIgnorableSpace(String content, Location location);
 
-    public Namespace createNamespace(String prefix, String namespaceUri) {
+  public Namespace createNamespace(String prefix, String namespaceUri) {
 
-        return createNamespace(prefix, namespaceUri, location);
+    return createNamespace(prefix, namespaceUri, location);
 
-    }
+  }
 
-    public Namespace createNamespace(String namespaceUri) {
+  public Namespace createNamespace(String namespaceUri) {
 
-        return createNamespace("", namespaceUri, location);
+    return createNamespace("", namespaceUri, location);
 
-    }
+  }
 
-    public abstract Namespace createNamespace(String prefix,
-            String namespaceUri, Location location);
+  public abstract Namespace createNamespace(String prefix, String namespaceUri, Location location);
 
-    public ProcessingInstruction createProcessingInstruction(String target,
-            String data) {
+  public ProcessingInstruction createProcessingInstruction(String target, String data) {
 
-        return createProcessingInstruction(target, data, location);
+    return createProcessingInstruction(target, data, location);
 
-    }
+  }
 
-    public abstract ProcessingInstruction createProcessingInstruction(
-            String target, String data, Location location);
+  public abstract ProcessingInstruction createProcessingInstruction(String target, String data,
+      Location location);
 
-    public Characters createSpace(String content) {
+  public Characters createSpace(String content) {
 
-        return createSpace(content, location);
+    return createSpace(content, location);
 
-    }
+  }
 
-    public abstract Characters createSpace(String content, Location location);
+  public abstract Characters createSpace(String content, Location location);
 
-    public StartDocument createStartDocument() {
+  public StartDocument createStartDocument() {
 
-        return createStartDocument(null, null, null, location, null);
+    return createStartDocument(null, null, null, location, null);
 
-    }
+  }
 
-    public StartDocument createStartDocument(String encoding, String version,
-            boolean standalone) {
+  public StartDocument createStartDocument(String encoding, String version, boolean standalone) {
 
-        return createStartDocument(encoding, version,
-                Boolean.valueOf(standalone), location, null);
+    return createStartDocument(encoding, version, Boolean.valueOf(standalone), location, null);
 
-    }
+  }
 
-    public StartDocument createStartDocument(String encoding, String version) {
+  public StartDocument createStartDocument(String encoding, String version) {
 
-        return createStartDocument(encoding, version, null, location, null);
+    return createStartDocument(encoding, version, null, location, null);
 
-    }
+  }
 
-    public StartDocument createStartDocument(String encoding) {
+  public StartDocument createStartDocument(String encoding) {
 
-        return createStartDocument(encoding, null, null, location, null);
+    return createStartDocument(encoding, null, null, location, null);
 
-    }
+  }
 
-    public abstract StartDocument createStartDocument(String encoding,
-            String version, Boolean standalone, Location location,
-            QName schemaType);
+  public abstract StartDocument createStartDocument(String encoding, String version,
+      Boolean standalone, Location location, QName schemaType);
 
-    public StartElement createStartElement(QName name, Iterator attributes,
-            Iterator namespaces) {
+  public StartElement createStartElement(QName name, Iterator attributes, Iterator namespaces) {
 
-        return createStartElement(name, attributes, namespaces, null, location,
-                null);
+    return createStartElement(name, attributes, namespaces, null, location, null);
 
-    }
+  }
 
-    public StartElement createStartElement(String prefix, String namespaceUri,
-            String localName, Iterator attributes, Iterator namespaces,
-            NamespaceContext context) {
+  public StartElement createStartElement(String prefix, String namespaceUri, String localName,
+      Iterator attributes, Iterator namespaces, NamespaceContext context) {
 
-        return createStartElement(new QName(namespaceUri, localName, prefix),
-                attributes, namespaces, context, location, null);
+    return createStartElement(new QName(namespaceUri, localName, prefix), attributes, namespaces,
+        context, location, null);
 
-    }
+  }
 
-    public StartElement createStartElement(String prefix, String namespaceUri,
-            String localName, Iterator attributes, Iterator namespaces) {
+  public StartElement createStartElement(String prefix, String namespaceUri, String localName,
+      Iterator attributes, Iterator namespaces) {
 
-        return createStartElement(new QName(namespaceUri, localName, prefix),
-                attributes, namespaces, null, location, null);
+    return createStartElement(new QName(namespaceUri, localName, prefix), attributes, namespaces,
+        null, location, null);
 
-    }
+  }
 
-    public StartElement createStartElement(String prefix, String namespaceUri,
-            String localName) {
+  public StartElement createStartElement(String prefix, String namespaceUri, String localName) {
 
-        return createStartElement(new QName(namespaceUri, localName, prefix),
-                null, null, null, location, null);
+    return createStartElement(new QName(namespaceUri, localName, prefix), null, null, null,
+        location, null);
 
-    }
+  }
 
-    public abstract StartElement createStartElement(QName name,
-            Iterator attributes, Iterator namespaces,
-            NamespaceContext namespaceCtx, Location location, QName schemaType);
+  public abstract StartElement createStartElement(QName name, Iterator attributes,
+      Iterator namespaces, NamespaceContext namespaceCtx, Location location, QName schemaType);
 
 }

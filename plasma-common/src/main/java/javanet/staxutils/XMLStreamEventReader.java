@@ -50,181 +50,181 @@ import javax.xml.stream.util.XMLEventAllocator;
  */
 public class XMLStreamEventReader implements XMLEventReader {
 
-    /** The underlying stream reader. */
-    private XMLStreamReader reader;
+  /** The underlying stream reader. */
+  private XMLStreamReader reader;
 
-    /** The event allocator used to create events. */
-    private XMLEventAllocator allocator;
+  /** The event allocator used to create events. */
+  private XMLEventAllocator allocator;
 
-    /** Field used to cache peek()ed events. */
-    private XMLEvent nextEvent;
+  /** Field used to cache peek()ed events. */
+  private XMLEvent nextEvent;
 
-    /** Whether the reader is closed or not. */
-    private boolean closed;
+  /** Whether the reader is closed or not. */
+  private boolean closed;
 
-    public XMLStreamEventReader(XMLStreamReader reader) {
+  public XMLStreamEventReader(XMLStreamReader reader) {
 
-        this.reader = reader;
-        this.allocator = new EventAllocator();
-    
-    }
-    
-    public XMLStreamEventReader(XMLStreamReader reader,
-            XMLEventAllocator allocator) {
+    this.reader = reader;
+    this.allocator = new EventAllocator();
 
-        this.reader = reader;
-        this.allocator = (allocator == null ? new EventAllocator() : allocator);
-        
-    }
-    
-    /**
-     * No properties are supported, so this always throws
-     * {@link IllegalArgumentException}.
-     */
-    public Object getProperty(String name) throws IllegalArgumentException {
+  }
 
-        throw new IllegalArgumentException("Unknown property: " + name);
+  public XMLStreamEventReader(XMLStreamReader reader, XMLEventAllocator allocator) {
 
-    }
+    this.reader = reader;
+    this.allocator = (allocator == null ? new EventAllocator() : allocator);
 
-    public synchronized boolean hasNext() {
+  }
 
-        if (closed) {
+  /**
+   * No properties are supported, so this always throws
+   * {@link IllegalArgumentException}.
+   */
+  public Object getProperty(String name) throws IllegalArgumentException {
 
-            return false;
+    throw new IllegalArgumentException("Unknown property: " + name);
 
-        }
+  }
 
-        try {
+  public synchronized boolean hasNext() {
 
-            return reader.hasNext();
+    if (closed) {
 
-        } catch (XMLStreamException e) {
-
-            // TODO how to handle inconsistency?
-            return false;
-
-        }
+      return false;
 
     }
 
-    public synchronized XMLEvent nextTag() throws XMLStreamException {
+    try {
 
-        if (closed) {
+      return reader.hasNext();
 
-            throw new XMLStreamException("Stream has been closed");
+    } catch (XMLStreamException e) {
 
-        }
-
-        nextEvent = null;
-        reader.nextTag();
-        return nextEvent();
+      // TODO how to handle inconsistency?
+      return false;
 
     }
 
-    public synchronized String getElementText() throws XMLStreamException {
+  }
 
-        if (closed) {
+  public synchronized XMLEvent nextTag() throws XMLStreamException {
 
-            throw new XMLStreamException("Stream has been closed");
+    if (closed) {
 
-        }
-
-        // null the peeked event
-        this.nextEvent = null;
-        return reader.getElementText();
+      throw new XMLStreamException("Stream has been closed");
 
     }
 
-    public synchronized XMLEvent nextEvent() throws XMLStreamException {
+    nextEvent = null;
+    reader.nextTag();
+    return nextEvent();
 
-        if (closed) {
+  }
 
-            throw new XMLStreamException("Stream has been closed");
+  public synchronized String getElementText() throws XMLStreamException {
 
-        }
+    if (closed) {
 
-        XMLEvent event;
-        if (nextEvent != null) {
-
-            event = nextEvent;
-            nextEvent = null;
-
-        } else {
-
-            event = allocateEvent();
-            reader.next();
-
-        }
-
-        return event;
+      throw new XMLStreamException("Stream has been closed");
 
     }
 
-    public synchronized XMLEvent peek() throws XMLStreamException {
+    // null the peeked event
+    this.nextEvent = null;
+    return reader.getElementText();
 
-        if (closed) {
+  }
 
-            throw new XMLStreamException("Stream has been closed");
+  public synchronized XMLEvent nextEvent() throws XMLStreamException {
 
-        }
+    if (closed) {
 
-        if (nextEvent == null) {
-
-            nextEvent = allocateEvent();
-            reader.next();
-
-        }
-
-        return nextEvent;
+      throw new XMLStreamException("Stream has been closed");
 
     }
 
-    public Object next() {
+    XMLEvent event;
+    if (nextEvent != null) {
 
-        try {
+      event = nextEvent;
+      nextEvent = null;
 
-            return nextEvent();
+    } else {
 
-        } catch (XMLStreamException e) {
-
-            // TODO throw a more descriptive exception?
-            throw new RuntimeException(e);
-
-        }
+      event = allocateEvent();
+      reader.next();
 
     }
 
-    public void remove() {
+    return event;
 
-        throw new UnsupportedOperationException();
+  }
 
-    }
+  public synchronized XMLEvent peek() throws XMLStreamException {
 
-    public synchronized void close() throws XMLStreamException {
+    if (closed) {
 
-        if (!closed) {
-
-            reader.close();
-            closed = true;
-            nextEvent = null;
-            reader = null;
-            allocator = null;
-
-        }
+      throw new XMLStreamException("Stream has been closed");
 
     }
 
-    /**
-     * Reads the next event from the underlying reader.
-     * 
-     * @return The allocated {@link XMLEvent}.
-     * @throws XMLStreamException If an error occurs reading the underlying stream.
-     */
-    protected XMLEvent allocateEvent() throws XMLStreamException {
+    if (nextEvent == null) {
 
-        return allocator.allocate(reader);
+      nextEvent = allocateEvent();
+      reader.next();
 
     }
+
+    return nextEvent;
+
+  }
+
+  public Object next() {
+
+    try {
+
+      return nextEvent();
+
+    } catch (XMLStreamException e) {
+
+      // TODO throw a more descriptive exception?
+      throw new RuntimeException(e);
+
+    }
+
+  }
+
+  public void remove() {
+
+    throw new UnsupportedOperationException();
+
+  }
+
+  public synchronized void close() throws XMLStreamException {
+
+    if (!closed) {
+
+      reader.close();
+      closed = true;
+      nextEvent = null;
+      reader = null;
+      allocator = null;
+
+    }
+
+  }
+
+  /**
+   * Reads the next event from the underlying reader.
+   * 
+   * @return The allocated {@link XMLEvent}.
+   * @throws XMLStreamException
+   *           If an error occurs reading the underlying stream.
+   */
+  protected XMLEvent allocateEvent() throws XMLStreamException {
+
+    return allocator.allocate(reader);
+
+  }
 
 }

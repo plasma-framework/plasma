@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.provisioning.xsd;
 
 import java.io.ByteArrayOutputStream;
@@ -45,130 +40,121 @@ import org.plasma.xml.schema.Annotated;
 import org.plasma.xml.schema.Appinfo;
 
 public abstract class AbstractAssembler {
-	private static Log log = LogFactory.getLog(
-			AbstractAssembler.class); 
-    protected String destNamespaceURI;
-    protected String destNamespacePrefix;
-    protected ConverterSupport support;
+  private static Log log = LogFactory.getLog(AbstractAssembler.class);
+  protected String destNamespaceURI;
+  protected String destNamespacePrefix;
+  protected ConverterSupport support;
 
-    @SuppressWarnings("unused")
-	private AbstractAssembler() {}
-    
-    public AbstractAssembler(String destNamespaceURI, 
-    		String destNamespacePrefix, 
-    		ConverterSupport converterSupport) {
-		super();
-		this.destNamespaceURI = destNamespaceURI;
-		this.destNamespacePrefix = destNamespacePrefix;
-		this.support = converterSupport;
-	}
+  @SuppressWarnings("unused")
+  private AbstractAssembler() {
+  }
 
-	protected Documentation createDocumentation(DocumentationType type, 
-    		String content)
-    {
-        Documentation documentation = new Documentation();
-		documentation.setType(type);
-		Body body = new Body();
-		body.setValue(content);
-		documentation.setBody(body); 
-		return documentation;
-    }
-    
-    protected String formatLocalClassName(String localName) {
-    	if (localName == null || localName.trim().length() == 0)
-    		throw new IllegalArgumentException("expected localName argument");
-    	String result = localName;
-    	result = NameUtils.firstToUpperCase(result);
-    	return result;
-    }
+  public AbstractAssembler(String destNamespaceURI, String destNamespacePrefix,
+      ConverterSupport converterSupport) {
+    super();
+    this.destNamespaceURI = destNamespaceURI;
+    this.destNamespacePrefix = destNamespacePrefix;
+    this.support = converterSupport;
+  }
 
-    protected String formatLocalPropertyName(String localName) {
-    	if (localName == null || localName.trim().length() == 0)
-    		throw new IllegalArgumentException("expected localName argument");
-    	String result = localName;
-    	result = NameUtils.firstToLowerCase(result);
-    	return result;
-    }
-    
-	protected String getDocumentationContent(Annotated annotated) {
-		StringBuilder buf = new StringBuilder();
-		if (annotated != null && annotated.getAnnotation() != null)
-			for (Object annotationObj : annotated.getAnnotation()
-					.getAppinfosAndDocumentations()) {
-				if (annotationObj instanceof org.plasma.xml.schema.Documentation) {
-					org.plasma.xml.schema.Documentation doc = (org.plasma.xml.schema.Documentation) annotationObj;
-					for (Object content : doc.getContent())
-						if (content instanceof String) {
-							buf.append(content);
-						} else if (content instanceof ElementNSImpl) {
-							ElementNSImpl nsElem = (ElementNSImpl) content;
-							buf.append(serializeElement(nsElem));
-						} else
-							throw new IllegalStateException(
-									"unexpected content class, "
-											+ annotationObj.getClass()
-													.getName());
-				} else if (annotationObj instanceof Appinfo) {
-					log.warn("ignoring app-info: "
-							+ String.valueOf(annotationObj));
-				}
-			}
-		return buf.toString();
-	}
-	
-    protected String findAppInfoValue(org.plasma.xml.schema.Enumeration schemaEnum)
-    {
-    	String result = null;
-		if (schemaEnum.getAnnotation() != null)
-	    for (Object o2 : schemaEnum.getAnnotation().getAppinfosAndDocumentations()) {
-	    	if (o2 instanceof Appinfo) {
-	    		Appinfo appinfo = (Appinfo)o2;
-	    		result = (String)appinfo.getContent().get(0);
-	    		if (result != null) {
-	    			result.trim();
-	    			if (result.length() == 0)
-	    				result = null;
-	    		}
-	    		break;
-	    	}
-	    }
-    	return result;
-    }
+  protected Documentation createDocumentation(DocumentationType type, String content) {
+    Documentation documentation = new Documentation();
+    documentation.setType(type);
+    Body body = new Body();
+    body.setValue(content);
+    documentation.setBody(body);
+    return documentation;
+  }
 
-	protected String serializeElement(ElementNSImpl nsElem)
-	{
-		String result = "";
-        TransformerFactory transFactory = TransformerFactory.newInstance();
-        log.debug("transformer factory: " + transFactory.getClass().getName());
-        //transFactory.setAttribute("indent-number", 2);
-        Transformer idTransform = null;
-        ByteArrayOutputStream stream = null;
-		try {
-			idTransform = transFactory.newTransformer();
-			idTransform.setOutputProperty(OutputKeys.METHOD, "xml");
-	        idTransform.setOutputProperty(OutputKeys.INDENT,"yes"); 
-	        idTransform.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,"yes"); 
-	        Source input = new DOMSource(nsElem.getOwnerDocument());
-	        stream = new ByteArrayOutputStream();
-	        Result output = new StreamResult(stream);
-			idTransform.transform(input, output);
-			stream.flush();
-			result = new String(stream.toByteArray());
-			return result;
-		} catch (TransformerConfigurationException e1) {
-			log.error(e1.getMessage(), e1);
-	    } catch (TransformerException e) {
-		    log.error(e.getMessage(), e);
-	    } catch (IOException e) {
-		    log.error(e.getMessage(), e);
-		} finally {
-			if (stream != null)
-				try {
-					stream.close();
-				} catch (Throwable t) {
-				}
-			
-		}
-		return result;
-	}
+  protected String formatLocalClassName(String localName) {
+    if (localName == null || localName.trim().length() == 0)
+      throw new IllegalArgumentException("expected localName argument");
+    String result = localName;
+    result = NameUtils.firstToUpperCase(result);
+    return result;
+  }
+
+  protected String formatLocalPropertyName(String localName) {
+    if (localName == null || localName.trim().length() == 0)
+      throw new IllegalArgumentException("expected localName argument");
+    String result = localName;
+    result = NameUtils.firstToLowerCase(result);
+    return result;
+  }
+
+  protected String getDocumentationContent(Annotated annotated) {
+    StringBuilder buf = new StringBuilder();
+    if (annotated != null && annotated.getAnnotation() != null)
+      for (Object annotationObj : annotated.getAnnotation().getAppinfosAndDocumentations()) {
+        if (annotationObj instanceof org.plasma.xml.schema.Documentation) {
+          org.plasma.xml.schema.Documentation doc = (org.plasma.xml.schema.Documentation) annotationObj;
+          for (Object content : doc.getContent())
+            if (content instanceof String) {
+              buf.append(content);
+            } else if (content instanceof ElementNSImpl) {
+              ElementNSImpl nsElem = (ElementNSImpl) content;
+              buf.append(serializeElement(nsElem));
+            } else
+              throw new IllegalStateException("unexpected content class, "
+                  + annotationObj.getClass().getName());
+        } else if (annotationObj instanceof Appinfo) {
+          log.warn("ignoring app-info: " + String.valueOf(annotationObj));
+        }
+      }
+    return buf.toString();
+  }
+
+  protected String findAppInfoValue(org.plasma.xml.schema.Enumeration schemaEnum) {
+    String result = null;
+    if (schemaEnum.getAnnotation() != null)
+      for (Object o2 : schemaEnum.getAnnotation().getAppinfosAndDocumentations()) {
+        if (o2 instanceof Appinfo) {
+          Appinfo appinfo = (Appinfo) o2;
+          result = (String) appinfo.getContent().get(0);
+          if (result != null) {
+            result.trim();
+            if (result.length() == 0)
+              result = null;
+          }
+          break;
+        }
+      }
+    return result;
+  }
+
+  protected String serializeElement(ElementNSImpl nsElem) {
+    String result = "";
+    TransformerFactory transFactory = TransformerFactory.newInstance();
+    log.debug("transformer factory: " + transFactory.getClass().getName());
+    // transFactory.setAttribute("indent-number", 2);
+    Transformer idTransform = null;
+    ByteArrayOutputStream stream = null;
+    try {
+      idTransform = transFactory.newTransformer();
+      idTransform.setOutputProperty(OutputKeys.METHOD, "xml");
+      idTransform.setOutputProperty(OutputKeys.INDENT, "yes");
+      idTransform.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+      Source input = new DOMSource(nsElem.getOwnerDocument());
+      stream = new ByteArrayOutputStream();
+      Result output = new StreamResult(stream);
+      idTransform.transform(input, output);
+      stream.flush();
+      result = new String(stream.toByteArray());
+      return result;
+    } catch (TransformerConfigurationException e1) {
+      log.error(e1.getMessage(), e1);
+    } catch (TransformerException e) {
+      log.error(e.getMessage(), e);
+    } catch (IOException e) {
+      log.error(e.getMessage(), e);
+    } finally {
+      if (stream != null)
+        try {
+          stream.close();
+        } catch (Throwable t) {
+        }
+
+    }
+    return result;
+  }
 }

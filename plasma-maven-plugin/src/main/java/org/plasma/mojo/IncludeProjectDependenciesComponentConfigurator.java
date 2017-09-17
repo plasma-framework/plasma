@@ -1,26 +1,20 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package org.plasma.mojo;
 
+package org.plasma.mojo;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -41,74 +35,78 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator
 import org.codehaus.plexus.configuration.PlexusConfiguration;
 
 /**
- * A custom ComponentConfigurator which adds the project's runtime classpath elements
- * to the mojo classpath. Use the configurator javadoc annotation with a value of
- * 'include-project-dependencies' on your mojo class. 
+ * A custom ComponentConfigurator which adds the project's runtime classpath
+ * elements to the mojo classpath. Use the configurator javadoc annotation with
+ * a value of 'include-project-dependencies' on your mojo class.
  *
  * @author Brian Jackson
  * @author Scott Cinnamond
  * @since 1.1.3
  *
- * @plexus.component role="org.codehaus.plexus.component.configurator.ComponentConfigurator"
+ * @plexus.component 
+ *                   role="org.codehaus.plexus.component.configurator.ComponentConfigurator"
  *                   role-hint="include-project-dependencies"
- * @plexus.requirement role="org.codehaus.plexus.component.configurator.converters.lookup.ConverterLookup"
- *                   role-hint="default"
+ * @plexus.requirement role=
+ *                     "org.codehaus.plexus.component.configurator.converters.lookup.ConverterLookup"
+ *                     role-hint="default"
  */
-public class IncludeProjectDependenciesComponentConfigurator extends AbstractComponentConfigurator { 
+public class IncludeProjectDependenciesComponentConfigurator extends AbstractComponentConfigurator {
 
-    private static Log log =LogFactory.getLog(
-    		IncludeProjectDependenciesComponentConfigurator.class); 
+  private static Log log = LogFactory.getLog(IncludeProjectDependenciesComponentConfigurator.class);
 
-    public void configureComponent( Object component, PlexusConfiguration configuration,
-                                    ExpressionEvaluator expressionEvaluator, ClassRealm containerRealm,
-                                    ConfigurationListener listener )
-        throws ComponentConfigurationException {
+  public void configureComponent(Object component, PlexusConfiguration configuration,
+      ExpressionEvaluator expressionEvaluator, ClassRealm containerRealm,
+      ConfigurationListener listener) throws ComponentConfigurationException {
 
-        addProjectDependenciesToClassRealm(expressionEvaluator, containerRealm);
+    addProjectDependenciesToClassRealm(expressionEvaluator, containerRealm);
 
-        converterLookup.registerConverter( new ClassRealmConverter( containerRealm ) );
+    converterLookup.registerConverter(new ClassRealmConverter(containerRealm));
 
-        ObjectWithFieldsConverter converter = new ObjectWithFieldsConverter();
+    ObjectWithFieldsConverter converter = new ObjectWithFieldsConverter();
 
-        converter.processConfiguration( converterLookup, component, containerRealm.getClassLoader(), configuration,
-                                        expressionEvaluator, listener );
+    converter.processConfiguration(converterLookup, component, containerRealm.getClassLoader(),
+        configuration, expressionEvaluator, listener);
+  }
+
+  private void addProjectDependenciesToClassRealm(ExpressionEvaluator expressionEvaluator,
+      ClassRealm containerRealm) throws ComponentConfigurationException {
+    List<String> runtimeClasspathElements;
+    try {
+      // noinspection unchecked
+      runtimeClasspathElements = (List<String>) expressionEvaluator
+          .evaluate("${project.runtimeClasspathElements}");
+    } catch (ExpressionEvaluationException e) {
+      throw new ComponentConfigurationException(
+          "There was a problem evaluating: ${project.runtimeClasspathElements}", e);
     }
 
-    private void addProjectDependenciesToClassRealm(ExpressionEvaluator expressionEvaluator, ClassRealm containerRealm) throws ComponentConfigurationException {
-        List<String> runtimeClasspathElements;
-        try {
-            //noinspection unchecked
-            runtimeClasspathElements = (List<String>) expressionEvaluator.evaluate("${project.runtimeClasspathElements}");
-        } catch (ExpressionEvaluationException e) {
-            throw new ComponentConfigurationException("There was a problem evaluating: ${project.runtimeClasspathElements}", e);
-        }
+    // Add the project dependencies to the ClassRealm
+    final URL[] urls = buildURLs(runtimeClasspathElements);
+    for (URL url : urls) {
+      containerRealm.addConstituent(url);
+    }
+  }
 
-        // Add the project dependencies to the ClassRealm
-        final URL[] urls = buildURLs(runtimeClasspathElements);
-        for (URL url : urls) {
-            containerRealm.addConstituent(url);
+  private URL[] buildURLs(List<String> runtimeClasspathElements)
+      throws ComponentConfigurationException {
+    // Add the projects classes and dependencies
+    List<URL> urls = new ArrayList<URL>(runtimeClasspathElements.size());
+    for (String element : runtimeClasspathElements) {
+      try {
+        final URL url = new File(element).toURI().toURL();
+        urls.add(url);
+
+        if (log.isDebugEnabled()) {
+          log.debug("added: " + url);
         }
+      } catch (MalformedURLException e) {
+        throw new ComponentConfigurationException(
+            "Unable to access project dependency: " + element, e);
+      }
     }
 
-    private URL[] buildURLs(List<String> runtimeClasspathElements) throws ComponentConfigurationException {
-        // Add the projects classes and dependencies
-        List<URL> urls = new ArrayList<URL>(runtimeClasspathElements.size());
-        for (String element : runtimeClasspathElements) {
-            try {
-                final URL url = new File(element).toURI().toURL();
-                urls.add(url);
- 
-                if (log.isDebugEnabled()) {
-                    log.debug("added: " + url);
-                }
-            } catch (MalformedURLException e) {
-                throw new ComponentConfigurationException("Unable to access project dependency: " + element, e);
-            }
-        }
-
-        // Add the plugin's dependencies (so Trove stuff works if Trove isn't on
-        return urls.toArray(new URL[urls.size()]);
-    }
+    // Add the plugin's dependencies (so Trove stuff works if Trove isn't on
+    return urls.toArray(new URL[urls.size()]);
+  }
 
 }
-

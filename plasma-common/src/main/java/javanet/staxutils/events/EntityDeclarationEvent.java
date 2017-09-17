@@ -42,119 +42,118 @@ import javax.xml.stream.events.EntityDeclaration;
  * @author Christian Niles
  * @version $Revision: 1.2 $
  */
-public class EntityDeclarationEvent extends AbstractXMLEvent
-        implements
-            EntityDeclaration {
+public class EntityDeclarationEvent extends AbstractXMLEvent implements EntityDeclaration {
 
-    /** The entity name. */
-    protected String name;
+  /** The entity name. */
+  protected String name;
 
-    /** 
-     * The replacement text, or <code>null</code> if this isn't an internal entity.
-     */
-    protected String replacementText;
+  /**
+   * The replacement text, or <code>null</code> if this isn't an internal
+   * entity.
+   */
+  protected String replacementText;
 
-    /** The entity base URI, or <code>null</code> if this isn't an external entity */
-    protected String baseURI;
+  /**
+   * The entity base URI, or <code>null</code> if this isn't an external entity
+   */
+  protected String baseURI;
 
-    /** The public id, or <code>null</code> if this isn't an external entity */
-    protected String publicId;
+  /** The public id, or <code>null</code> if this isn't an external entity */
+  protected String publicId;
 
-    /** The system id, or <code>null</code> if this isn't an external entity. */
-    protected String systemId;
+  /** The system id, or <code>null</code> if this isn't an external entity. */
+  protected String systemId;
 
-    /**
-     * The optional notation name.
-     */
-    protected String notationName;
+  /**
+   * The optional notation name.
+   */
+  protected String notationName;
 
-    public EntityDeclarationEvent(String name, String replacementText,
-            Location location) {
+  public EntityDeclarationEvent(String name, String replacementText, Location location) {
 
-        super(location);
-        this.name = name;
-        this.replacementText = replacementText;
+    super(location);
+    this.name = name;
+    this.replacementText = replacementText;
 
-    }
+  }
 
-    public EntityDeclarationEvent(String name, String replacementText,
-            String notationName, Location location) {
+  public EntityDeclarationEvent(String name, String replacementText, String notationName,
+      Location location) {
 
-        super(location);
-        this.name = name;
-        this.replacementText = replacementText;
-        this.notationName = notationName;
+    super(location);
+    this.name = name;
+    this.replacementText = replacementText;
+    this.notationName = notationName;
 
-    }
+  }
 
-    public EntityDeclarationEvent(String name, String publicId,
-            String systemId, String baseURI, String notationName,
-            Location location) {
+  public EntityDeclarationEvent(String name, String publicId, String systemId, String baseURI,
+      String notationName, Location location) {
 
-        super(location);
-        this.name = name;
-        this.publicId = publicId;
-        this.systemId = systemId;
-        this.baseURI = baseURI;
-        this.notationName = notationName;
+    super(location);
+    this.name = name;
+    this.publicId = publicId;
+    this.systemId = systemId;
+    this.baseURI = baseURI;
+    this.notationName = notationName;
 
-    }
+  }
 
-    public EntityDeclarationEvent(EntityDeclaration that) {
+  public EntityDeclarationEvent(EntityDeclaration that) {
 
-        super(that);
-        this.name = that.getName();
-        this.replacementText = that.getReplacementText();
-        this.publicId = that.getPublicId();
-        this.systemId = that.getSystemId();
-        this.baseURI = that.getBaseURI();
-        this.notationName = that.getNotationName();
+    super(that);
+    this.name = that.getName();
+    this.replacementText = that.getReplacementText();
+    this.publicId = that.getPublicId();
+    this.systemId = that.getSystemId();
+    this.baseURI = that.getBaseURI();
+    this.notationName = that.getNotationName();
 
-    }
+  }
 
-    /**
-     * Returns {@link #ENTITY_DECLARATION}.
-     */
-    public int getEventType() {
+  /**
+   * Returns {@link #ENTITY_DECLARATION}.
+   */
+  public int getEventType() {
 
-        return ENTITY_DECLARATION;
+    return ENTITY_DECLARATION;
 
-    }
+  }
 
-    public String getBaseURI() {
+  public String getBaseURI() {
 
-        return this.baseURI;
+    return this.baseURI;
 
-    }
+  }
 
-    public String getName() {
+  public String getName() {
 
-        return this.name;
+    return this.name;
 
-    }
+  }
 
-    public String getNotationName() {
+  public String getNotationName() {
 
-        return this.notationName;
+    return this.notationName;
 
-    }
+  }
 
-    public String getPublicId() {
+  public String getPublicId() {
 
-        return this.publicId;
+    return this.publicId;
 
-    }
+  }
 
-    public String getReplacementText() {
+  public String getReplacementText() {
 
-        return this.replacementText;
+    return this.replacementText;
 
-    }
+  }
 
-    public String getSystemId() {
+  public String getSystemId() {
 
-        return this.systemId;
+    return this.systemId;
 
-    }
+  }
 
 }

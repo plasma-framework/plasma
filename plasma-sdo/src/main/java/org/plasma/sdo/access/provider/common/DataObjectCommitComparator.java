@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.access.provider.common;
 
 import java.io.Serializable;
@@ -36,185 +31,168 @@ import commonj.sdo.Property;
 
 /**
  * Compares its two data-objects for order within the context of data-store
- * commit operations.     
+ * commit operations.
  * 
  */
 public class DataObjectCommitComparator implements Comparator<DataObject>, Serializable {
 
-    private static Log log = LogFactory.getFactory().getInstance(
-            DataObjectCommitComparator.class);
+  private static Log log = LogFactory.getFactory().getInstance(DataObjectCommitComparator.class);
 
-    /**
-     * Returns a negative integer, 
-     * zero, or a positive integer as the first argument is less 
-     * than, equal to, or greater than the second.
-     */
-    public int compare(DataObject target, DataObject source) {
-        
-        if (target.getDataGraph() == null)
-            throw new IllegalArgumentException("target data-object has no data-graph - "
-                    + "data-objects compared for commit operations must have a data graph");
-        if (source.getDataGraph() == null)
-            throw new IllegalArgumentException("source data-object has no data-graph - "
-                    + "data-objects compared for commit operations must have a data graph");
-        
-        PlasmaChangeSummary changeSummary = (PlasmaChangeSummary)target.getChangeSummary();
-        
-        int targetDepth = changeSummary.getPathDepth(target);
-        int sourceDepth = changeSummary.getPathDepth(source);
-        
-        int result = 0;
-        
-        if (changeSummary.isCreated(target)) { 
-            if (changeSummary.isCreated(source)) {
-                if (isChild(target, source)) {
-                    result = 1; // target is a child, create it's parent first
-                }
-                else if (isChild(source, target)) {
-                    result = -1; // source is a child, create it's parent first
-                }
-                else {
-                    if (targetDepth > sourceDepth)
-                        result = 1;
-                    else if (sourceDepth > targetDepth)
-                        result = -1;
-                    else
-                        result = 0;
-                }
-            }
-            else 
-                result = -1;
-            
+  /**
+   * Returns a negative integer, zero, or a positive integer as the first
+   * argument is less than, equal to, or greater than the second.
+   */
+  public int compare(DataObject target, DataObject source) {
+
+    if (target.getDataGraph() == null)
+      throw new IllegalArgumentException("target data-object has no data-graph - "
+          + "data-objects compared for commit operations must have a data graph");
+    if (source.getDataGraph() == null)
+      throw new IllegalArgumentException("source data-object has no data-graph - "
+          + "data-objects compared for commit operations must have a data graph");
+
+    PlasmaChangeSummary changeSummary = (PlasmaChangeSummary) target.getChangeSummary();
+
+    int targetDepth = changeSummary.getPathDepth(target);
+    int sourceDepth = changeSummary.getPathDepth(source);
+
+    int result = 0;
+
+    if (changeSummary.isCreated(target)) {
+      if (changeSummary.isCreated(source)) {
+        if (isChild(target, source)) {
+          result = 1; // target is a child, create it's parent first
+        } else if (isChild(source, target)) {
+          result = -1; // source is a child, create it's parent first
+        } else {
+          if (targetDepth > sourceDepth)
+            result = 1;
+          else if (sourceDepth > targetDepth)
+            result = -1;
+          else
+            result = 0;
         }
-        else if (changeSummary.isModified(target)) {
-            
-            if (changeSummary.isCreated(source)) {
-                result = 1;
-            }
-            else if (changeSummary.isModified(source)) {
-                if (targetDepth > sourceDepth)
-                    result = 1;
-                else if (sourceDepth > targetDepth)
-                    result = -1;
-                else
-                    result = 0;
-            }
-            else // deleted
-                result = -1;
+      } else
+        result = -1;
+
+    } else if (changeSummary.isModified(target)) {
+
+      if (changeSummary.isCreated(source)) {
+        result = 1;
+      } else if (changeSummary.isModified(source)) {
+        if (targetDepth > sourceDepth)
+          result = 1;
+        else if (sourceDepth > targetDepth)
+          result = -1;
+        else
+          result = 0;
+      } else
+        // deleted
+        result = -1;
+    } else { // deleted
+      if (changeSummary.isDeleted(source)) {
+        if (isChild(target, source)) {
+          result = -1; // target is a child, delete it first
+        } else if (isChild(source, target)) {
+          result = 1; // source is a child, delete it first
+        } else {
+          if (targetDepth > sourceDepth)
+            result = -1;
+          else if (sourceDepth > targetDepth)
+            result = 1;
+          else
+            result = 0;
         }
-        else { // deleted
-            if (changeSummary.isDeleted(source)) {                
-                if (isChild(target, source)) {
-                    result = -1; // target is a child, delete it first
-                }
-                else if (isChild(source, target)) {
-                    result = 1; // source is a child, delete it first
-                }
-                else {
-                    if (targetDepth > sourceDepth)
-                        result = -1;
-                    else if (sourceDepth > targetDepth)
-                        result = 1;
-                    else
-                        result = 0;
-                }
-            }
-            else // created or modified
-                result = 1;
-        }     
-        
-        return result;
+      } else
+        // created or modified
+        result = 1;
     }
-    
-    private boolean isChild(DataObject target, DataObject source) {
-        return hasChildProperty(target, source);
+
+    return result;
+  }
+
+  private boolean isChild(DataObject target, DataObject source) {
+    return hasChildProperty(target, source);
+  }
+
+  private boolean hasChildLink(DataObject target, DataObject source) {
+
+    if (log.isDebugEnabled())
+      log.debug("comparing " + target.getType().getName() + "/" + source.getType().getName());
+
+    // look at properties in target, check if linked to source
+    List<ChangeSummary.Setting> settings = target.getDataGraph().getChangeSummary()
+        .getOldValues(target);
+
+    for (ChangeSummary.Setting setting : settings) {
+      Property property = setting.getProperty();
+      if (property.getType().isDataType())
+        continue;
+
+      // FIXME - equality method for Type ??
+      if (!property.getType().getName().equals(source.getType().getName()))
+        continue;
+
+      if (log.isDebugEnabled())
+        log.debug("checking property " + target.getType().getName() + "." + property.getName());
+      if (isLinked(source, setting.getValue())) {
+        // singular property linked to source
+        if (!property.isMany()) {
+          if (log.isDebugEnabled())
+            log.debug("found child data link " + target.getType().getName() + "."
+                + property.getName() + "->" + source.getType().getName());
+          if (target.getType().getName().equals(source.getType().getName()))
+            throw new IllegalStateException("potential circular reference");
+          return true;
+        }
+      }
     }
-    
-    private boolean hasChildLink(DataObject target, DataObject source) {
-        
+    return false;
+  }
+
+  private boolean hasChildProperty(DataObject target, DataObject source) {
+
+    if (log.isDebugEnabled())
+      log.debug("comparing " + target.getType().getName() + "/" + source.getType().getName());
+
+    for (Property p : target.getType().getDeclaredProperties()) {
+
+      Property property = p; // so we can see it in Eclipse debugger
+      if (property.getType().isDataType())
+        continue;
+      if (!property.getType().getName().equals(source.getType().getName()))
+        continue;
+      // singular property which could be linked in the data-store but
+      // we have just not returned this property in a query
+      if (!property.isMany()) {
+        if (target.getType().getName().equals(source.getType().getName()))
+          throw new IllegalStateException("potential circular reference");
         if (log.isDebugEnabled())
-            log.debug("comparing "+ target.getType().getName() 
-                    + "/" + source.getType().getName());
-        
-        // look at properties in target, check if linked to source
-        List<ChangeSummary.Setting> settings = 
-            target.getDataGraph().getChangeSummary().getOldValues(target);
-        
-        for (ChangeSummary.Setting setting : settings) {
-            Property property = setting.getProperty();
-            if (property.getType().isDataType()) 
-                continue;               
-            
-            // FIXME - equality method for Type ??
-            if (!property.getType().getName().equals(source.getType().getName()))
-                continue;
-                                   
-            if (log.isDebugEnabled())
-                log.debug("checking property " + target.getType().getName()
-                        + "." + property.getName());
-            if (isLinked(source, setting.getValue()))
-            {
-                // singular property linked to source
-                if (!property.isMany()) {
-                    if (log.isDebugEnabled())
-                        log.debug("found child data link " + target.getType().getName()
-                                + "." + property.getName()
-                                + "->" + source.getType().getName());
-                    if (target.getType().getName().equals(source.getType().getName()))
-                        throw new IllegalStateException("potential circular reference");
-                    return true; 
-                }    
-            }           
-        } 
-        return false;
+          log.debug("found child link property " + target.getType().getName() + "."
+              + property.getName() + "->" + source.getType().getName());
+        return true;
+      }
     }
- 
-    private boolean hasChildProperty(DataObject target, DataObject source) {
-        
-        if (log.isDebugEnabled())
-            log.debug("comparing "+ target.getType().getName() 
-                    + "/" + source.getType().getName());
-                
-        for (Property p : target.getType().getDeclaredProperties()) {
-            
-            Property property = p; // so we can see it in Eclipse debugger
-            if (property.getType().isDataType()) 
-                continue;               
-            if (!property.getType().getName().equals(source.getType().getName()))
-                continue;
-            // singular property which could be linked in the data-store but
-            // we have just not returned this property in a query
-            if (!property.isMany()) {
-                if (target.getType().getName().equals(source.getType().getName()))
-                    throw new IllegalStateException("potential circular reference");
-                if (log.isDebugEnabled())
-                    log.debug("found child link property " + target.getType().getName()
-                            + "." + property.getName()
-                            + "->" + source.getType().getName());
-                return true; 
-            }    
+
+    return false;
+  }
+
+  private boolean isLinked(DataObject other, Object value) {
+    if (value instanceof List) {
+      List<DataObject> list = (List<DataObject>) value;
+      for (DataObject dataObject : list) {
+        PlasmaNode dataNode = (PlasmaNode) dataObject;
+        if (dataNode.getUUIDAsString().equals(((PlasmaNode) other).getUUIDAsString())) {
+          return true;
         }
-        
-        return false;
+      }
+    } else {
+      DataObject dataObject = (DataObject) value;
+      PlasmaNode dataNode = (PlasmaNode) dataObject;
+      if (dataNode.getUUIDAsString().equals(((PlasmaNode) other).getUUIDAsString())) {
+        return true;
+      }
     }
-    
-    private boolean isLinked(DataObject other, Object value) {
-        if (value instanceof List) {
-            List<DataObject> list = (List<DataObject>)value;
-            for (DataObject dataObject : list) {
-                PlasmaNode dataNode = (PlasmaNode)dataObject;
-                if (dataNode.getUUIDAsString().equals(((PlasmaNode)other).getUUIDAsString())) {
-                    return true;        
-                }
-            }
-        }
-        else {
-            DataObject dataObject = (DataObject)value;
-            PlasmaNode dataNode = (PlasmaNode)dataObject;
-            if (dataNode.getUUIDAsString().equals(((PlasmaNode)other).getUUIDAsString())) {
-                return true;
-            }
-        }
-        return false;
-    }
+    return false;
+  }
 }

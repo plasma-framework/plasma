@@ -45,33 +45,33 @@ import javax.xml.stream.events.EndDocument;
  */
 public class EndDocumentEvent extends AbstractXMLEvent implements EndDocument {
 
-    public EndDocumentEvent() {
+  public EndDocumentEvent() {
 
-    }
+  }
 
-    public EndDocumentEvent(Location location) {
+  public EndDocumentEvent(Location location) {
 
-        super(location);
+    super(location);
 
-    }
+  }
 
-    public EndDocumentEvent(Location location, QName schemaType) {
+  public EndDocumentEvent(Location location, QName schemaType) {
 
-        super(location, schemaType);
+    super(location, schemaType);
 
-    }
+  }
 
-    public EndDocumentEvent(EndDocument that) {
+  public EndDocumentEvent(EndDocument that) {
 
-        super(that);
+    super(that);
 
-    }
+  }
 
-    /** Returns {@link #END_DOCUMENT}. */
-    public int getEventType() {
+  /** Returns {@link #END_DOCUMENT}. */
+  public int getEventType() {
 
-        return END_DOCUMENT;
+    return END_DOCUMENT;
 
-    }
+  }
 
 }

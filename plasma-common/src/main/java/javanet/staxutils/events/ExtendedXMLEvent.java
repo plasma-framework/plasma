@@ -45,23 +45,25 @@ import javax.xml.stream.events.XMLEvent;
  */
 public interface ExtendedXMLEvent extends XMLEvent {
 
-    /**
-     * Determines if this event matches another event, irrespective of document
-     * location.
-     * 
-     * @param event The event to match against.
-     * @return <code>true</code> if the two events match, <code>false</code>
-     * 		otherwise.
-     */
-    public boolean matches(XMLEvent event);
+  /**
+   * Determines if this event matches another event, irrespective of document
+   * location.
+   * 
+   * @param event
+   *          The event to match against.
+   * @return <code>true</code> if the two events match, <code>false</code>
+   *         otherwise.
+   */
+  public boolean matches(XMLEvent event);
 
-    /**
-     * Writes the event to the provided {@link XMLStreamWriter}.
-     * 
-     * @param writer The destination stream.
-     * @throws XMLStreamException If an error occurs writing to the destination
-     * 		stream.
-     */
-    public void writeEvent(XMLStreamWriter writer) throws XMLStreamException;
-        
+  /**
+   * Writes the event to the provided {@link XMLStreamWriter}.
+   * 
+   * @param writer
+   *          The destination stream.
+   * @throws XMLStreamException
+   *           If an error occurs writing to the destination stream.
+   */
+  public void writeEvent(XMLStreamWriter writer) throws XMLStreamException;
+
 }

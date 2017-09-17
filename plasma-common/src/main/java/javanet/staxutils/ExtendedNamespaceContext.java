@@ -38,46 +38,46 @@ import java.util.Iterator;
 import javax.xml.namespace.NamespaceContext;
 
 /**
- * Extended namespace context interface that allows the context tree to be navigated
- * and to list all known prefixes.
+ * Extended namespace context interface that allows the context tree to be
+ * navigated and to list all known prefixes.
  * 
  * @author Christian Niles
  * @version $Revision: 1.1 $
  */
 public interface ExtendedNamespaceContext extends NamespaceContext {
 
-	/**
-	 * Returns a reference to the parent of this context.
-	 * 
-	 * @return The parent context, or <code>null</code> if this is a root
-	 * 		context.
-	 */
-    public NamespaceContext getParent();
+  /**
+   * Returns a reference to the parent of this context.
+   * 
+   * @return The parent context, or <code>null</code> if this is a root context.
+   */
+  public NamespaceContext getParent();
 
-	/**
-	 * Determines if the specified prefix is declared within this context,
-	 * irrespective of any ancestor contexts.
-	 * 
-	 * @param prefix The prefix to check.
-	 * @return <code>true</code> if the prefix is declared in this context,
-	 * 		<code>false</code> otherwise.
-	 */
-    public boolean isPrefixDeclared(String prefix);
+  /**
+   * Determines if the specified prefix is declared within this context,
+   * irrespective of any ancestor contexts.
+   * 
+   * @param prefix
+   *          The prefix to check.
+   * @return <code>true</code> if the prefix is declared in this context,
+   *         <code>false</code> otherwise.
+   */
+  public boolean isPrefixDeclared(String prefix);
 
-	/**
-	 * Returns an {@link Iterator} of all namespace prefixes in scope within this
-	 * context, including those inherited from ancestor contexts.
-	 * 
-	 * @return An {@link Iterator} of prefix {@link String}s.
-	 */
-    public Iterator getPrefixes();
+  /**
+   * Returns an {@link Iterator} of all namespace prefixes in scope within this
+   * context, including those inherited from ancestor contexts.
+   * 
+   * @return An {@link Iterator} of prefix {@link String}s.
+   */
+  public Iterator getPrefixes();
 
-	/**
-	 * Returns an {@link Iterator} of all namespace prefixes declared within
-	 * this context, irrespective of any ancestor contexts.
-	 * 
-	 * @return An {@link Iterator} of prefix {@link String}s.
-	 */
-    public Iterator getDeclaredPrefixes();
-    
+  /**
+   * Returns an {@link Iterator} of all namespace prefixes declared within this
+   * context, irrespective of any ancestor contexts.
+   * 
+   * @return An {@link Iterator} of prefix {@link String}s.
+   */
+  public Iterator getDeclaredPrefixes();
+
 }

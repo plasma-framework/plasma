@@ -43,89 +43,88 @@ import javax.xml.transform.Result;
  * An output factory that transforms each writer from a contained factory.
  * Subclasses are required to implement the transformation.
  */
-public abstract class FilterXMLOutputFactory extends XMLOutputFactory
-{
-    public FilterXMLOutputFactory() {
-        this(XMLOutputFactory.newInstance());
-    }
+public abstract class FilterXMLOutputFactory extends XMLOutputFactory {
+  public FilterXMLOutputFactory() {
+    this(XMLOutputFactory.newInstance());
+  }
 
-    public FilterXMLOutputFactory(XMLOutputFactory source) {
-        this.source = source;
-    }
+  public FilterXMLOutputFactory(XMLOutputFactory source) {
+    this.source = source;
+  }
 
-    protected XMLOutputFactory source;
+  protected XMLOutputFactory source;
 
-    /** Transform the given writer. */
-    protected abstract XMLEventWriter filter(XMLEventWriter writer);
+  /** Transform the given writer. */
+  protected abstract XMLEventWriter filter(XMLEventWriter writer);
 
-    protected abstract XMLStreamWriter filter(XMLStreamWriter writer);
+  protected abstract XMLStreamWriter filter(XMLStreamWriter writer);
 
-    /** Delegates to source. */
-    public boolean isPropertySupported(String name) {
-        return source.isPropertySupported(name);
-    }
+  /** Delegates to source. */
+  public boolean isPropertySupported(String name) {
+    return source.isPropertySupported(name);
+  }
 
-    /** Delegates to source. */
-    public void setProperty(String name, Object value) throws IllegalArgumentException {
-        source.setProperty(name, value);
-    }
+  /** Delegates to source. */
+  public void setProperty(String name, Object value) throws IllegalArgumentException {
+    source.setProperty(name, value);
+  }
 
-    /** Delegates to source. */
-    public Object getProperty(String name) throws IllegalArgumentException {
-        return source.getProperty(name);
-    }
+  /** Delegates to source. */
+  public Object getProperty(String name) throws IllegalArgumentException {
+    return source.getProperty(name);
+  }
 
-    public XMLEventWriter createXMLEventWriter(Result result) throws XMLStreamException {
-        return filter(source.createXMLEventWriter(result));
-    }
+  public XMLEventWriter createXMLEventWriter(Result result) throws XMLStreamException {
+    return filter(source.createXMLEventWriter(result));
+  }
 
-    public XMLEventWriter createXMLEventWriter(Writer writer) throws XMLStreamException {
-        return filter(source.createXMLEventWriter(writer));
-    }
+  public XMLEventWriter createXMLEventWriter(Writer writer) throws XMLStreamException {
+    return filter(source.createXMLEventWriter(writer));
+  }
 
-    public XMLEventWriter createXMLEventWriter(OutputStream stream) throws XMLStreamException {
-        return filter(source.createXMLEventWriter(stream));
-    }
+  public XMLEventWriter createXMLEventWriter(OutputStream stream) throws XMLStreamException {
+    return filter(source.createXMLEventWriter(stream));
+  }
 
-    public XMLEventWriter createXMLEventWriter(OutputStream stream, String encoding)
-            throws XMLStreamException {
-        return filter(source.createXMLEventWriter(stream, encoding));
-    }
+  public XMLEventWriter createXMLEventWriter(OutputStream stream, String encoding)
+      throws XMLStreamException {
+    return filter(source.createXMLEventWriter(stream, encoding));
+  }
 
-    public XMLStreamWriter createXMLStreamWriter(Result result) throws XMLStreamException {
-        return filter(source.createXMLStreamWriter(result));
-    }
+  public XMLStreamWriter createXMLStreamWriter(Result result) throws XMLStreamException {
+    return filter(source.createXMLStreamWriter(result));
+  }
 
-    public XMLStreamWriter createXMLStreamWriter(Writer writer) throws XMLStreamException {
-        return filter(source.createXMLStreamWriter(writer));
-    }
+  public XMLStreamWriter createXMLStreamWriter(Writer writer) throws XMLStreamException {
+    return filter(source.createXMLStreamWriter(writer));
+  }
 
-    public XMLStreamWriter createXMLStreamWriter(OutputStream stream) throws XMLStreamException {
-        return filter(source.createXMLStreamWriter(stream));
-    }
+  public XMLStreamWriter createXMLStreamWriter(OutputStream stream) throws XMLStreamException {
+    return filter(source.createXMLStreamWriter(stream));
+  }
 
-    public XMLStreamWriter createXMLStreamWriter(OutputStream stream, String encoding)
-            throws XMLStreamException {
-        return filter(source.createXMLStreamWriter(stream, encoding));
-    }
+  public XMLStreamWriter createXMLStreamWriter(OutputStream stream, String encoding)
+      throws XMLStreamException {
+    return filter(source.createXMLStreamWriter(stream, encoding));
+  }
 
-    public int hashCode() {
-        return hashCode(source);
-    }
+  public int hashCode() {
+    return hashCode(source);
+  }
 
-    protected static int hashCode(Object o) {
-        return (o == null) ? 0 : o.hashCode();
-    }
+  protected static int hashCode(Object o) {
+    return (o == null) ? 0 : o.hashCode();
+  }
 
-    public boolean equals(Object o) {
-        if (!(o instanceof FilterXMLOutputFactory))
-            return false;
-        FilterXMLOutputFactory that = (FilterXMLOutputFactory) o;
-        return equals(source, that.source);
-    }
+  public boolean equals(Object o) {
+    if (!(o instanceof FilterXMLOutputFactory))
+      return false;
+    FilterXMLOutputFactory that = (FilterXMLOutputFactory) o;
+    return equals(source, that.source);
+  }
 
-    protected static boolean equals(Object x, Object y) {
-        return (x == null) ? (y == null) : x.equals(y);
-    }
+  protected static boolean equals(Object x, Object y) {
+    return (x == null) ? (y == null) : x.equals(y);
+  }
 
 }

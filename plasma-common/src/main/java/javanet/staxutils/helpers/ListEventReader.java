@@ -50,58 +50,59 @@ import javax.xml.stream.events.XMLEvent;
  */
 public class ListEventReader extends BaseXMLEventReader {
 
-    /** The index of the next event. */
-    private int nextEvent = 0;
+  /** The index of the next event. */
+  private int nextEvent = 0;
 
-    /** The {@link List} from which events are read. */
-    private List events;
+  /** The {@link List} from which events are read. */
+  private List events;
 
-    /**
-     * Constructs a <code>ListEventReader</code> that reads events from the
-     * provided {@link List}.
-     * 
-     * @param events The {@link List} of events to read.
-     */
-    public ListEventReader(List events) {
+  /**
+   * Constructs a <code>ListEventReader</code> that reads events from the
+   * provided {@link List}.
+   * 
+   * @param events
+   *          The {@link List} of events to read.
+   */
+  public ListEventReader(List events) {
 
-        this.events = events;
+    this.events = events;
 
-    }
+  }
 
-    public XMLEvent nextEvent() throws XMLStreamException {
+  public XMLEvent nextEvent() throws XMLStreamException {
 
-        if (hasNext()) {
+    if (hasNext()) {
 
-            XMLEvent event = (XMLEvent) events.get(nextEvent);
-            nextEvent++;
-            return event;
+      XMLEvent event = (XMLEvent) events.get(nextEvent);
+      nextEvent++;
+      return event;
 
-        } else {
+    } else {
 
-            throw new NoSuchElementException("End of stream reached");
-
-        }
-
-    }
-
-    public boolean hasNext() {
-
-        return (nextEvent < events.size());
+      throw new NoSuchElementException("End of stream reached");
 
     }
 
-    public XMLEvent peek() throws XMLStreamException {
+  }
 
-        if (hasNext()) {
+  public boolean hasNext() {
 
-            return (XMLEvent) events.get(nextEvent);
+    return (nextEvent < events.size());
 
-        } else {
+  }
 
-            return null;
+  public XMLEvent peek() throws XMLStreamException {
 
-        }
+    if (hasNext()) {
+
+      return (XMLEvent) events.get(nextEvent);
+
+    } else {
+
+      return null;
 
     }
+
+  }
 
 }

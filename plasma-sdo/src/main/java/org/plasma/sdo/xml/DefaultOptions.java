@@ -1,125 +1,120 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.xml;
 
 import org.apache.commons.logging.Log;
 import org.xml.sax.ErrorHandler;
 
 public class DefaultOptions implements XMLOptions {
-	private boolean failOnValidationError; 
-	private String rootElementName;
-	private String rootElementNamespaceURI;
-	private String rootNamespacePrefix = "tns";
-	private Log validationLog;
-	private boolean validate = true;
-	private ErrorHandler errorHandler;
-	private String encoding;
-	private boolean prettyPrint = true;
-	
-	public DefaultOptions(String rootElementNamespaceURI) {
-		super();
-		this.rootElementNamespaceURI = rootElementNamespaceURI;
-	}
- 
-	public DefaultOptions(String rootElementNamespaceURI, String rootElementName) {
-		super();
-		this.rootElementName = rootElementName;
-		this.rootElementNamespaceURI = rootElementNamespaceURI;
-	}
+  private boolean failOnValidationError;
+  private String rootElementName;
+  private String rootElementNamespaceURI;
+  private String rootNamespacePrefix = "tns";
+  private Log validationLog;
+  private boolean validate = true;
+  private ErrorHandler errorHandler;
+  private String encoding;
+  private boolean prettyPrint = true;
 
-	public boolean isFailOnValidationError() {
-		return failOnValidationError;
-	}
+  public DefaultOptions(String rootElementNamespaceURI) {
+    super();
+    this.rootElementNamespaceURI = rootElementNamespaceURI;
+  }
 
-	public void setFailOnValidationError(boolean failOnValidationError) {
-		this.failOnValidationError = failOnValidationError;
-		if (this.failOnValidationError)
-			this.validate = true;
-	}
+  public DefaultOptions(String rootElementNamespaceURI, String rootElementName) {
+    super();
+    this.rootElementName = rootElementName;
+    this.rootElementNamespaceURI = rootElementNamespaceURI;
+  }
 
-	public boolean isValidate() {
-		return validate;
-	}
+  public boolean isFailOnValidationError() {
+    return failOnValidationError;
+  }
 
-	public void setValidate(boolean validate) {
-		this.validate = validate;
-	}
+  public void setFailOnValidationError(boolean failOnValidationError) {
+    this.failOnValidationError = failOnValidationError;
+    if (this.failOnValidationError)
+      this.validate = true;
+  }
 
-	public void setRootElementName(String rootElementName) {
-		this.rootElementName = rootElementName;
-	}
+  public boolean isValidate() {
+    return validate;
+  }
 
-	public void setRootElementNamespaceURI(String rootElementNamespaceURI) {
-		this.rootElementNamespaceURI = rootElementNamespaceURI;
-	}
+  public void setValidate(boolean validate) {
+    this.validate = validate;
+  }
 
-	public void setRootNamespacePrefix(String rootNamespacePrefix) {
-		this.rootNamespacePrefix = rootNamespacePrefix;
-	}
+  public void setRootElementName(String rootElementName) {
+    this.rootElementName = rootElementName;
+  }
 
-	public void setValidationLog(Log validationLog) {
-		this.validationLog = validationLog;
-	}
+  public void setRootElementNamespaceURI(String rootElementNamespaceURI) {
+    this.rootElementNamespaceURI = rootElementNamespaceURI;
+  }
 
-	public String getRootElementName() {
-		return rootElementName;
-	}
+  public void setRootNamespacePrefix(String rootNamespacePrefix) {
+    this.rootNamespacePrefix = rootNamespacePrefix;
+  }
 
-	public String getRootElementNamespaceURI() {
-		return rootElementNamespaceURI;
-	}
+  public void setValidationLog(Log validationLog) {
+    this.validationLog = validationLog;
+  }
 
-	public String getRootNamespacePrefix() {
-		return rootNamespacePrefix;
-	}
+  public String getRootElementName() {
+    return rootElementName;
+  }
 
-	public Log getValidationLog() {
-		return validationLog;
-	}
+  public String getRootElementNamespaceURI() {
+    return rootElementNamespaceURI;
+  }
 
-	public ErrorHandler getErrorHandler() {
-		return errorHandler;
-	}
+  public String getRootNamespacePrefix() {
+    return rootNamespacePrefix;
+  }
 
-	public void setErrorHandler(ErrorHandler handler) {
-		this.errorHandler = handler;		
-	}
+  public Log getValidationLog() {
+    return validationLog;
+  }
 
-	public String getEncoding() {
-		return encoding;
-	}
+  public ErrorHandler getErrorHandler() {
+    return errorHandler;
+  }
 
-	public void setEncoding(String encoding) {
-		this.encoding = encoding;
-	}
+  public void setErrorHandler(ErrorHandler handler) {
+    this.errorHandler = handler;
+  }
 
-	@Override
-	public boolean isPrettyPrint() {
-		return prettyPrint;
-	}
+  public String getEncoding() {
+    return encoding;
+  }
 
-	@Override
-	public void setPrettyPrint(boolean prettyPrint) {
-		this.prettyPrint = prettyPrint;		
-	}
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
+  }
+
+  @Override
+  public boolean isPrettyPrint() {
+    return prettyPrint;
+  }
+
+  @Override
+  public void setPrettyPrint(boolean prettyPrint) {
+    this.prettyPrint = prettyPrint;
+  }
 
 }

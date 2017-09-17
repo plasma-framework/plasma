@@ -38,8 +38,8 @@ import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.sax.SAXResult;
 
 /**
- * A JAXP {@link javax.xml.transform.Result} implementation that produces
- * a result on the specified {@link javax.xml.stream.XMLStreamWriter} or
+ * A JAXP {@link javax.xml.transform.Result} implementation that produces a
+ * result on the specified {@link javax.xml.stream.XMLStreamWriter} or
  * {@link javax.xml.stream.XMLEventWriter}.
  *
  * <p>
@@ -47,33 +47,33 @@ import javax.xml.transform.sax.SAXResult;
  * XMLStreamWriter or XMLEventWriter after the transform is complete.
  * <p>
  * 
- * The fact that JAXBResult derives from SAXResult is an implementation
- * detail. Thus in general applications are strongly discouraged from
- * accessing methods defined on SAXResult.
+ * The fact that JAXBResult derives from SAXResult is an implementation detail.
+ * Thus in general applications are strongly discouraged from accessing methods
+ * defined on SAXResult.
  *
  * <p>
  * In particular it shall never attempt to call the following methods:
  *
  * <ul>
- *    <li>setHandler</li>
- *    <li>setLexicalHandler</li>
- *    <li>setSystemId</li>
+ * <li>setHandler</li>
+ * <li>setLexicalHandler</li>
+ * <li>setSystemId</li>
  * </ul>
  *
  * <p>
  * Example:
  *
  * <pre>
-    // create a DOMSource
-    Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(...);
-    Source domSource = new DOMSource(doc);
-
-    // create a StAXResult
-    XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(System.out);
-    Result staxResult = new StAXResult(writer);
-
-    // run the transform
-    TransformerFactory.newInstance().newTransformer().transform(domSource, staxResult);
+ *     // create a DOMSource
+ *     Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(...);
+ *     Source domSource = new DOMSource(doc);
+ * 
+ *     // create a StAXResult
+ *     XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(System.out);
+ *     Result staxResult = new StAXResult(writer);
+ * 
+ *     // run the transform
+ *     TransformerFactory.newInstance().newTransformer().transform(domSource, staxResult);
  * </pre>
  *
  * @author Ryan.Shoemaker@Sun.COM
@@ -81,33 +81,37 @@ import javax.xml.transform.sax.SAXResult;
  */
 public class StAXResult extends SAXResult {
 
-    /**
-     * Create a new {@link javax.xml.transform.Result} that produces
-     * a result on the specified {@link javax.xml.stream.XMLStreamWriter}
-     *
-     * @param writer the XMLStreamWriter
-     * @throws IllegalArgumentException iff the writer is null
-     */
-    public StAXResult(XMLStreamWriter writer) {
-        if( writer == null ) {
-            throw new IllegalArgumentException();
-        }
-
-        super.setHandler(new ContentHandlerToXMLStreamWriter( writer ));
+  /**
+   * Create a new {@link javax.xml.transform.Result} that produces a result on
+   * the specified {@link javax.xml.stream.XMLStreamWriter}
+   *
+   * @param writer
+   *          the XMLStreamWriter
+   * @throws IllegalArgumentException
+   *           iff the writer is null
+   */
+  public StAXResult(XMLStreamWriter writer) {
+    if (writer == null) {
+      throw new IllegalArgumentException();
     }
 
-    /**
-     * Create a new {@link javax.xml.transform.Result} that produces
-     * a result on the specified {@link javax.xml.stream.XMLEventWriter}
-     *
-     * @param writer the XMLEventWriter
-     * @throws IllegalArgumentException iff the writer is null
-     */
-    public StAXResult(XMLEventWriter writer) {
-        if( writer == null ) {
-            throw new IllegalArgumentException();
-        }
+    super.setHandler(new ContentHandlerToXMLStreamWriter(writer));
+  }
 
-        super.setHandler(new ContentHandlerToXMLEventWriter( writer ));
+  /**
+   * Create a new {@link javax.xml.transform.Result} that produces a result on
+   * the specified {@link javax.xml.stream.XMLEventWriter}
+   *
+   * @param writer
+   *          the XMLEventWriter
+   * @throws IllegalArgumentException
+   *           iff the writer is null
+   */
+  public StAXResult(XMLEventWriter writer) {
+    if (writer == null) {
+      throw new IllegalArgumentException();
     }
+
+    super.setHandler(new ContentHandlerToXMLEventWriter(writer));
+  }
 }

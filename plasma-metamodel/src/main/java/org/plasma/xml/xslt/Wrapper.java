@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.xml.xslt;
 
 import java.math.BigDecimal;
@@ -41,11 +36,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.w3c.dom.Element;
 
-
 /**
- * <p>Java class for wrapper complex type.
+ * <p>
+ * Java class for wrapper complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="wrapper">
@@ -72,235 +69,220 @@ import org.w3c.dom.Element;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wrapper", propOrder = {
-    "imports",
-    "topLevelElementsAndVariablesAndAnies"
-})
-public class Wrapper
-    extends AnyType
-{
+@XmlType(name = "wrapper", propOrder = { "imports", "topLevelElementsAndVariablesAndAnies" })
+public class Wrapper extends AnyType {
 
-    @XmlElement(name = "import")
-    protected List<CombineStylesheets> imports;
-    @XmlElementRefs({
-        @XmlElementRef(name = "top-level-element", namespace = "http://www.w3.org/1999/XSL/Transform", type = JAXBElement.class),
-        @XmlElementRef(name = "variable", namespace = "http://www.w3.org/1999/XSL/Transform", type = JAXBElement.class)
-    })
-    @XmlAnyElement
-    protected List<Object> topLevelElementsAndVariablesAndAnies;
-    @XmlAttribute
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlID
-    @XmlSchemaType(name = "ID")
-    protected String id;
-    @XmlAttribute(name = "extension-element-prefixes")
-    protected List<String> extensionElementPrefixes;
-    @XmlAttribute(name = "exclude-result-prefixes")
-    protected List<String> excludeResultPrefixes;
-    @XmlAttribute(required = true)
-    protected BigDecimal version;
-    @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String space;
+  @XmlElement(name = "import")
+  protected List<CombineStylesheets> imports;
+  @XmlElementRefs({
+      @XmlElementRef(name = "top-level-element", namespace = "http://www.w3.org/1999/XSL/Transform", type = JAXBElement.class),
+      @XmlElementRef(name = "variable", namespace = "http://www.w3.org/1999/XSL/Transform", type = JAXBElement.class) })
+  @XmlAnyElement
+  protected List<Object> topLevelElementsAndVariablesAndAnies;
+  @XmlAttribute
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlID
+  @XmlSchemaType(name = "ID")
+  protected String id;
+  @XmlAttribute(name = "extension-element-prefixes")
+  protected List<String> extensionElementPrefixes;
+  @XmlAttribute(name = "exclude-result-prefixes")
+  protected List<String> excludeResultPrefixes;
+  @XmlAttribute(required = true)
+  protected BigDecimal version;
+  @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String space;
 
-    /**
-     * Gets the value of the imports property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the imports property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getImports().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link CombineStylesheets }
-     * 
-     * 
-     */
-    public List<CombineStylesheets> getImports() {
-        if (imports == null) {
-            imports = new ArrayList<CombineStylesheets>();
-        }
-        return this.imports;
+  /**
+   * Gets the value of the imports property.
+   * 
+   * <p>
+   * This accessor method returns a reference to the live list, not a snapshot.
+   * Therefore any modification you make to the returned list will be present
+   * inside the JAXB object. This is why there is not a <CODE>set</CODE> method
+   * for the imports property.
+   * 
+   * <p>
+   * For example, to add a new item, do as follows:
+   * 
+   * <pre>
+   * getImports().add(newItem);
+   * </pre>
+   * 
+   * 
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link CombineStylesheets }
+   * 
+   * 
+   */
+  public List<CombineStylesheets> getImports() {
+    if (imports == null) {
+      imports = new ArrayList<CombineStylesheets>();
     }
+    return this.imports;
+  }
 
-    /**
-     * Gets the value of the topLevelElementsAndVariablesAndAnies property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the topLevelElementsAndVariablesAndAnies property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getTopLevelElementsAndVariablesAndAnies().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link Output }{@code >}
-     * {@link JAXBElement }{@code <}{@link AttributeSet }{@code >}
-     * {@link JAXBElement }{@code <}{@link Variable }{@code >}
-     * {@link JAXBElement }{@code <}{@link DecimalFormat }{@code >}
-     * {@link JAXBElement }{@code <}{@link Key }{@code >}
-     * {@link JAXBElement }{@code <}{@link PreserveSpace }{@code >}
-     * {@link JAXBElement }{@code <}{@link Template }{@code >}
-     * {@link JAXBElement }{@code <}{@link PreserveSpace }{@code >}
-     * {@link JAXBElement }{@code <}{@link AnyType }{@code >}
-     * {@link Element }
-     * {@link JAXBElement }{@code <}{@link NamespaceAlias }{@code >}
-     * {@link JAXBElement }{@code <}{@link Variable }{@code >}
-     * {@link JAXBElement }{@code <}{@link CombineStylesheets }{@code >}
-     * 
-     * 
-     */
-    public List<Object> getTopLevelElementsAndVariablesAndAnies() {
-        if (topLevelElementsAndVariablesAndAnies == null) {
-            topLevelElementsAndVariablesAndAnies = new ArrayList<Object>();
-        }
-        return this.topLevelElementsAndVariablesAndAnies;
+  /**
+   * Gets the value of the topLevelElementsAndVariablesAndAnies property.
+   * 
+   * <p>
+   * This accessor method returns a reference to the live list, not a snapshot.
+   * Therefore any modification you make to the returned list will be present
+   * inside the JAXB object. This is why there is not a <CODE>set</CODE> method
+   * for the topLevelElementsAndVariablesAndAnies property.
+   * 
+   * <p>
+   * For example, to add a new item, do as follows:
+   * 
+   * <pre>
+   * getTopLevelElementsAndVariablesAndAnies().add(newItem);
+   * </pre>
+   * 
+   * 
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link JAXBElement }{@code <}{@link Output }{@code >} {@link JAXBElement }
+   * {@code <}{@link AttributeSet }{@code >} {@link JAXBElement }{@code <}
+   * {@link Variable }{@code >} {@link JAXBElement }{@code <}{@link DecimalFormat }
+   * {@code >} {@link JAXBElement }{@code <}{@link Key }{@code >}
+   * {@link JAXBElement }{@code <}{@link PreserveSpace }{@code >}
+   * {@link JAXBElement }{@code <}{@link Template }{@code >} {@link JAXBElement }
+   * {@code <}{@link PreserveSpace }{@code >} {@link JAXBElement }{@code <}
+   * {@link AnyType }{@code >} {@link Element } {@link JAXBElement }{@code <}
+   * {@link NamespaceAlias }{@code >} {@link JAXBElement }{@code <}
+   * {@link Variable }{@code >} {@link JAXBElement }{@code <}
+   * {@link CombineStylesheets }{@code >}
+   * 
+   * 
+   */
+  public List<Object> getTopLevelElementsAndVariablesAndAnies() {
+    if (topLevelElementsAndVariablesAndAnies == null) {
+      topLevelElementsAndVariablesAndAnies = new ArrayList<Object>();
     }
+    return this.topLevelElementsAndVariablesAndAnies;
+  }
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   * Gets the value of the id property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
+  /**
+   * Sets the value of the id property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setId(String value) {
+    this.id = value;
+  }
 
-    /**
-     * Gets the value of the extensionElementPrefixes property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the extensionElementPrefixes property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getExtensionElementPrefixes().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getExtensionElementPrefixes() {
-        if (extensionElementPrefixes == null) {
-            extensionElementPrefixes = new ArrayList<String>();
-        }
-        return this.extensionElementPrefixes;
+  /**
+   * Gets the value of the extensionElementPrefixes property.
+   * 
+   * <p>
+   * This accessor method returns a reference to the live list, not a snapshot.
+   * Therefore any modification you make to the returned list will be present
+   * inside the JAXB object. This is why there is not a <CODE>set</CODE> method
+   * for the extensionElementPrefixes property.
+   * 
+   * <p>
+   * For example, to add a new item, do as follows:
+   * 
+   * <pre>
+   * getExtensionElementPrefixes().add(newItem);
+   * </pre>
+   * 
+   * 
+   * <p>
+   * Objects of the following type(s) are allowed in the list {@link String }
+   * 
+   * 
+   */
+  public List<String> getExtensionElementPrefixes() {
+    if (extensionElementPrefixes == null) {
+      extensionElementPrefixes = new ArrayList<String>();
     }
+    return this.extensionElementPrefixes;
+  }
 
-    /**
-     * Gets the value of the excludeResultPrefixes property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the excludeResultPrefixes property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getExcludeResultPrefixes().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getExcludeResultPrefixes() {
-        if (excludeResultPrefixes == null) {
-            excludeResultPrefixes = new ArrayList<String>();
-        }
-        return this.excludeResultPrefixes;
+  /**
+   * Gets the value of the excludeResultPrefixes property.
+   * 
+   * <p>
+   * This accessor method returns a reference to the live list, not a snapshot.
+   * Therefore any modification you make to the returned list will be present
+   * inside the JAXB object. This is why there is not a <CODE>set</CODE> method
+   * for the excludeResultPrefixes property.
+   * 
+   * <p>
+   * For example, to add a new item, do as follows:
+   * 
+   * <pre>
+   * getExcludeResultPrefixes().add(newItem);
+   * </pre>
+   * 
+   * 
+   * <p>
+   * Objects of the following type(s) are allowed in the list {@link String }
+   * 
+   * 
+   */
+  public List<String> getExcludeResultPrefixes() {
+    if (excludeResultPrefixes == null) {
+      excludeResultPrefixes = new ArrayList<String>();
     }
+    return this.excludeResultPrefixes;
+  }
 
-    /**
-     * Gets the value of the version property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public BigDecimal getVersion() {
-        return version;
-    }
+  /**
+   * Gets the value of the version property.
+   * 
+   * @return possible object is {@link BigDecimal }
+   * 
+   */
+  public BigDecimal getVersion() {
+    return version;
+  }
 
-    /**
-     * Sets the value of the version property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public void setVersion(BigDecimal value) {
-        this.version = value;
-    }
+  /**
+   * Sets the value of the version property.
+   * 
+   * @param value
+   *          allowed object is {@link BigDecimal }
+   * 
+   */
+  public void setVersion(BigDecimal value) {
+    this.version = value;
+  }
 
-    /**
-     * Gets the value of the space property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSpace() {
-        return space;
-    }
+  /**
+   * Gets the value of the space property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getSpace() {
+    return space;
+  }
 
-    /**
-     * Sets the value of the space property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSpace(String value) {
-        this.space = value;
-    }
+  /**
+   * Sets the value of the space property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setSpace(String value) {
+    this.space = value;
+  }
 
 }

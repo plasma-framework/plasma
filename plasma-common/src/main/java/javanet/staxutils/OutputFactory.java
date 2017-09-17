@@ -47,11 +47,10 @@ import javax.xml.stream.XMLStreamWriter;
  */
 public class OutputFactory extends BaseXMLOutputFactory {
 
-    public XMLStreamWriter createXMLStreamWriter(Writer stream)
-            throws XMLStreamException {
+  public XMLStreamWriter createXMLStreamWriter(Writer stream) throws XMLStreamException {
 
-        return new StAXStreamWriter(stream);
+    return new StAXStreamWriter(stream);
 
-    }
+  }
 
 }

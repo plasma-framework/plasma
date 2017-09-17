@@ -40,99 +40,98 @@ import javax.xml.stream.XMLStreamWriter;
  * An output factory that optionally wraps a filter around each writer. The
  * property {@link #INDENTING} controls indentation of output.
  */
-public class StaxUtilsXMLOutputFactory extends FilterXMLOutputFactory
-{
-    /**
-     * A Boolean property controlling whether to indent output. If true, output
-     * is indented by {@link IndentingXMLEventWriter} or
-     * {@link IndentingXMLStreamWriter}. The default is false.
-     */
-    public static final String INDENTING = "net.java.staxutils.indenting";
+public class StaxUtilsXMLOutputFactory extends FilterXMLOutputFactory {
+  /**
+   * A Boolean property controlling whether to indent output. If true, output is
+   * indented by {@link IndentingXMLEventWriter} or
+   * {@link IndentingXMLStreamWriter}. The default is false.
+   */
+  public static final String INDENTING = "net.java.staxutils.indenting";
 
-    /**
-     * A String property whose value indents one level. The default is
-     * {@link Indentation#DEFAULT_INDENT}.
-     */
-    public static final String INDENT = "net.java.staxutils.indent";
+  /**
+   * A String property whose value indents one level. The default is
+   * {@link Indentation#DEFAULT_INDENT}.
+   */
+  public static final String INDENT = "net.java.staxutils.indent";
 
-    /**
-     * A String property whose value introduces a new line for indentation. The
-     * default is {@link Indentation#NORMAL_END_OF_LINE}.
-     */
-    public static final String NEW_LINE = "net.java.staxutils.newLine";
+  /**
+   * A String property whose value introduces a new line for indentation. The
+   * default is {@link Indentation#NORMAL_END_OF_LINE}.
+   */
+  public static final String NEW_LINE = "net.java.staxutils.newLine";
 
-    public StaxUtilsXMLOutputFactory() {
+  public StaxUtilsXMLOutputFactory() {
+  }
+
+  public StaxUtilsXMLOutputFactory(XMLOutputFactory source) {
+    super(source);
+  }
+
+  private boolean indenting = false;
+
+  private String indent = Indentation.DEFAULT_INDENT;
+
+  private String newLine = Indentation.NORMAL_END_OF_LINE;
+
+  protected XMLEventWriter filter(XMLEventWriter writer) {
+    if (indenting) {
+      IndentingXMLEventWriter indenter = new IndentingXMLEventWriter(writer);
+      indenter.setNewLine(newLine);
+      indenter.setIndent(indent);
+      writer = indenter;
     }
+    return writer;
+  }
 
-    public StaxUtilsXMLOutputFactory(XMLOutputFactory source) {
-        super(source);
+  protected XMLStreamWriter filter(XMLStreamWriter writer) {
+    if (indenting) {
+      IndentingXMLStreamWriter indenter = new IndentingXMLStreamWriter(writer);
+      indenter.setNewLine(newLine);
+      indenter.setIndent(indent);
+      writer = indenter;
     }
+    return writer;
+  }
 
-    private boolean indenting = false;
+  public boolean isPropertySupported(String name) {
+    return INDENTING.equals(name) || INDENT.equals(name) || NEW_LINE.equals(name) //
+        || super.isPropertySupported(name);
+  }
 
-    private String indent = Indentation.DEFAULT_INDENT;
-
-    private String newLine = Indentation.NORMAL_END_OF_LINE;
-
-    protected XMLEventWriter filter(XMLEventWriter writer) {
-        if (indenting) {
-            IndentingXMLEventWriter indenter = new IndentingXMLEventWriter(writer);
-            indenter.setNewLine(newLine);
-            indenter.setIndent(indent);
-            writer = indenter;
-        }
-        return writer;
+  public void setProperty(String name, Object value) throws IllegalArgumentException {
+    if (INDENTING.equals(name)) {
+      indenting = ((Boolean) value).booleanValue();
+    } else if (INDENT.equals(name)) {
+      indent = (String) value;
+    } else if (NEW_LINE.equals(name)) {
+      newLine = (String) value;
+    } else {
+      super.setProperty(name, value);
     }
+  }
 
-    protected XMLStreamWriter filter(XMLStreamWriter writer) {
-        if (indenting) {
-            IndentingXMLStreamWriter indenter = new IndentingXMLStreamWriter(writer);
-            indenter.setNewLine(newLine);
-            indenter.setIndent(indent);
-            writer = indenter;
-        }
-        return writer;
+  public Object getProperty(String name) throws IllegalArgumentException {
+    if (INDENTING.equals(name)) {
+      return indenting ? Boolean.TRUE : Boolean.FALSE;
+    } else if (INDENT.equals(name)) {
+      return indent;
+    } else if (NEW_LINE.equals(name)) {
+      return newLine;
+    } else {
+      return super.getProperty(name);
     }
+  }
 
-    public boolean isPropertySupported(String name) {
-        return INDENTING.equals(name) || INDENT.equals(name) || NEW_LINE.equals(name) //
-                || super.isPropertySupported(name);
-    }
+  public int hashCode() {
+    return super.hashCode() + (indenting ? 1 : 0) + hashCode(indent) + hashCode(newLine);
+  }
 
-    public void setProperty(String name, Object value) throws IllegalArgumentException {
-        if (INDENTING.equals(name)) {
-            indenting = ((Boolean) value).booleanValue();
-        } else if (INDENT.equals(name)) {
-            indent = (String) value;
-        } else if (NEW_LINE.equals(name)) {
-            newLine = (String) value;
-        } else {
-            super.setProperty(name, value);
-        }
-    }
-
-    public Object getProperty(String name) throws IllegalArgumentException {
-        if (INDENTING.equals(name)) {
-            return indenting ? Boolean.TRUE : Boolean.FALSE;
-        } else if (INDENT.equals(name)) {
-            return indent;
-        } else if (NEW_LINE.equals(name)) {
-            return newLine;
-        } else {
-            return super.getProperty(name);
-        }
-    }
-
-    public int hashCode() {
-        return super.hashCode() + (indenting ? 1 : 0) + hashCode(indent) + hashCode(newLine);
-    }
-
-    public boolean equals(Object o) {
-        if (!(o instanceof StaxUtilsXMLOutputFactory))
-            return false;
-        StaxUtilsXMLOutputFactory that = (StaxUtilsXMLOutputFactory) o;
-        return super.equals(that) && (indenting == that.indenting) && equals(indent, that.indent)
-                && equals(newLine, that.newLine);
-    }
+  public boolean equals(Object o) {
+    if (!(o instanceof StaxUtilsXMLOutputFactory))
+      return false;
+    StaxUtilsXMLOutputFactory that = (StaxUtilsXMLOutputFactory) o;
+    return super.equals(that) && (indenting == that.indenting) && equals(indent, that.indent)
+        && equals(newLine, that.newLine);
+  }
 
 }

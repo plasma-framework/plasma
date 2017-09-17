@@ -43,70 +43,72 @@ import javax.xml.stream.events.EntityDeclaration;
 /**
  * Implementation of {@link javax.xml.stream.events.EntityDeclaration}.
  *
- * The only reason this class exists is because {@link javax.xml.stream.XMLEventFactory}
- * doesn't have a factory for this event type and the {@link ContentHandlerToXMLEventWriter}
- * needs to create one of these event types to handle skippedEntity events.
+ * The only reason this class exists is because
+ * {@link javax.xml.stream.XMLEventFactory} doesn't have a factory for this
+ * event type and the {@link ContentHandlerToXMLEventWriter} needs to create one
+ * of these event types to handle skippedEntity events.
  *
  * @author Ryan.Shoemaker@Sun.COM
  * @version 1.0
  */
 class EntityDeclarationImpl extends EventHelper implements EntityDeclaration {
 
-    private final String entityName;
-    private final String publicId;
-    private final String systemId;
-    private final String notationName;
-    private final String replacementText;
+  private final String entityName;
+  private final String publicId;
+  private final String systemId;
+  private final String notationName;
+  private final String replacementText;
 
-    public EntityDeclarationImpl(Location location, String entityName, String publicId, String systemId, String notationName, String replacementText) {
-        super(location);
-        this.entityName = entityName;
-        this.publicId = publicId;
-        this.systemId = systemId;
-        this.notationName = notationName;
-        this.replacementText = replacementText;
-    }
+  public EntityDeclarationImpl(Location location, String entityName, String publicId,
+      String systemId, String notationName, String replacementText) {
+    super(location);
+    this.entityName = entityName;
+    this.publicId = publicId;
+    this.systemId = systemId;
+    this.notationName = notationName;
+    this.replacementText = replacementText;
+  }
 
-    public String getBaseURI() {
-        // TODO: ??
-        return null;
-    }
+  public String getBaseURI() {
+    // TODO: ??
+    return null;
+  }
 
-    public String getName() {
-        return entityName;
-    }
+  public String getName() {
+    return entityName;
+  }
 
-    public String getNotationName() {
-        return notationName;
-    }
+  public String getNotationName() {
+    return notationName;
+  }
 
-    public String getPublicId() {
-        return publicId;
-    }
+  public String getPublicId() {
+    return publicId;
+  }
 
-    public String getReplacementText() {
-        return replacementText;
-    }
+  public String getReplacementText() {
+    return replacementText;
+  }
 
-    public String getSystemId() {
-        return systemId;
-    }
+  public String getSystemId() {
+    return systemId;
+  }
 
-    public int getEventType() {
-        return ENTITY_DECLARATION;
-    }
+  public int getEventType() {
+    return ENTITY_DECLARATION;
+  }
 
-    public boolean isEntityReference() {
-        return true;
-    }
+  public boolean isEntityReference() {
+    return true;
+  }
 
-    public void writeAsEncodedUnicode(Writer w) throws XMLStreamException {
-        try {
-            w.write('&');
-            w.write(entityName);
-            w.write(';');
-        } catch (IOException ie) {
-            throw new XMLStreamException(ie);
-        }
+  public void writeAsEncodedUnicode(Writer w) throws XMLStreamException {
+    try {
+      w.write('&');
+      w.write(entityName);
+      w.write(';');
+    } catch (IOException ie) {
+      throw new XMLStreamException(ie);
     }
+  }
 }

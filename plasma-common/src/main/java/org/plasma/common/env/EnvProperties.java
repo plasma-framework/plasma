@@ -1,130 +1,110 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package org.plasma.common.env;
 
+package org.plasma.common.env;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 
-
-
 /**
- * Singleton class for critical deployment property management and
- * error handling. 
+ * Singleton class for critical deployment property management and error
+ * handling.
  */
-public class EnvProperties
-{
-    private static EnvProperties instance;
-    private Properties props = new Properties();
-    private EnvName env;
-    private String fileName = "";
+public class EnvProperties {
+  private static EnvProperties instance;
+  private Properties props = new Properties();
+  private EnvName env;
+  private String fileName = "";
 
-    private EnvProperties()
-    {      	
-        fileName = System.getProperty(EnvConstants.PROPERTY_NAME_ENV_PROPERTIES,
-        		EnvConstants.PROPERTY_NAME_DEFAULT_ENV_PROPERTIES);
-         
-        try {
-        	FileInputStream fis = new FileInputStream(fileName);        	
-        	props.load(fis);            
-        }
-        catch (IOException  e) {
-            System.out.println("\n\nNo properties file found. Using only system properties.\n\n");
-        }
-        // add/override with system properties
-    	props.putAll(System.getProperties());
+  private EnvProperties() {
+    fileName = System.getProperty(EnvConstants.PROPERTY_NAME_ENV_PROPERTIES,
+        EnvConstants.PROPERTY_NAME_DEFAULT_ENV_PROPERTIES);
 
-    	//trim values...in case spaces were inadvertently added in properties file.
-    	Iterator keys = props.keySet().iterator();
-		while(keys.hasNext()) {
-			String key = (String)keys.next();
-			props.setProperty(key, props.getProperty(key).trim());
-		}   	
+    try {
+      FileInputStream fis = new FileInputStream(fileName);
+      props.load(fis);
+    } catch (IOException e) {
+      System.out.println("\n\nNo properties file found. Using only system properties.\n\n");
+    }
+    // add/override with system properties
+    props.putAll(System.getProperties());
 
-    	try {
-        	String envName = props.getProperty(EnvConstants.PROPERTY_NAME_ENV_NAME);
-        	if (envName != null) {
-        		envName = envName.toUpperCase();
-        		env = EnvName.valueOf(envName);
-        	}
-        	else
-        		env = EnvName.DEV;
-        }
-        catch (IllegalArgumentException e) {
-            env = EnvName.DEV;
-        }
+    // trim values...in case spaces were inadvertently added in properties
+    // file.
+    Iterator keys = props.keySet().iterator();
+    while (keys.hasNext()) {
+      String key = (String) keys.next();
+      props.setProperty(key, props.getProperty(key).trim());
     }
 
-    public String dumpProperties(String separator)
-    {
-        StringBuffer buf = new StringBuffer();
+    try {
+      String envName = props.getProperty(EnvConstants.PROPERTY_NAME_ENV_NAME);
+      if (envName != null) {
+        envName = envName.toUpperCase();
+        env = EnvName.valueOf(envName);
+      } else
+        env = EnvName.DEV;
+    } catch (IllegalArgumentException e) {
+      env = EnvName.DEV;
+    }
+  }
 
-        Iterator itr = props.keySet().iterator();
-        while (itr.hasNext()) {
-            String key = (String) itr.next();
-            String value = props.getProperty(key);
-            buf.append(separator + key + "='" + value + "'");
-        }
+  public String dumpProperties(String separator) {
+    StringBuffer buf = new StringBuffer();
 
-        return buf.toString();
+    Iterator itr = props.keySet().iterator();
+    while (itr.hasNext()) {
+      String key = (String) itr.next();
+      String value = props.getProperty(key);
+      buf.append(separator + key + "='" + value + "'");
     }
 
-    public static EnvProperties instance()
-    {
-        if (instance == null)
-            initInstance(); // double-checked locking pattern 
-        return instance;     
-    }
+    return buf.toString();
+  }
 
-    private static synchronized void initInstance()
-    {
-        if (instance == null)
-            instance = new EnvProperties();
-    }
+  public static EnvProperties instance() {
+    if (instance == null)
+      initInstance(); // double-checked locking pattern
+    return instance;
+  }
 
-    public Properties getProperties()
-    {
-		return props;                          
-    } 
+  private static synchronized void initInstance() {
+    if (instance == null)
+      instance = new EnvProperties();
+  }
 
-    public String getProperty(String name)
-    {
-		return props.getProperty(name);                          
-    } 
+  public Properties getProperties() {
+    return props;
+  }
 
-    public String getProperty(String name, String defaultValue)
-    {
-		return props.getProperty(name, defaultValue);                          
-    } 
-    
-    public String getPropertiesFileName()
-    {
-		return fileName;                          
-    } 
-    
-    public EnvName getEnv()
-    {
-        return env;
-    } 
+  public String getProperty(String name) {
+    return props.getProperty(name);
+  }
+
+  public String getProperty(String name, String defaultValue) {
+    return props.getProperty(name, defaultValue);
+  }
+
+  public String getPropertiesFileName() {
+    return fileName;
+  }
+
+  public EnvName getEnv() {
+    return env;
+  }
 }

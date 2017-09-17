@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.core;
 
 import org.plasma.sdo.xml.XMLOptions;
@@ -28,136 +23,135 @@ import commonj.sdo.helper.XMLDocument;
 
 public class CoreXMLDocument implements XMLDocument {
 
-	private String encoding;
-	private boolean isSetXmlDeclaration = true;
-	private String xmlVersion = "1.0";
-	private DataObject rootDataObject;
-	private String rootElementURI;
-	private String rootElementName;
-	private String schemaLocation;
-	private String noNamespaceSchemaLocation;
+  private String encoding;
+  private boolean isSetXmlDeclaration = true;
+  private String xmlVersion = "1.0";
+  private DataObject rootDataObject;
+  private String rootElementURI;
+  private String rootElementName;
+  private String schemaLocation;
+  private String noNamespaceSchemaLocation;
 
-	@SuppressWarnings("unused")
-	private CoreXMLDocument() {
-	}
+  @SuppressWarnings("unused")
+  private CoreXMLDocument() {
+  }
 
-	public CoreXMLDocument(DataObject rootDataObject) {
-		this.rootDataObject = rootDataObject;
-    	if (this.rootDataObject == null)
-    		throw new IllegalArgumentException("expected 'rootDataObject' argument");
-	}
-	
-	public CoreXMLDocument(DataObject rootDataObject, XMLOptions xmlOptions) {
-		this.rootDataObject = rootDataObject;
-    	if (this.rootDataObject == null)
-    		throw new IllegalArgumentException("expected 'rootDataObject' argument");
-    	this.rootElementURI = xmlOptions.getRootElementNamespaceURI();
-    	this.rootElementName = xmlOptions.getRootElementName();
-	}
-	
-	public CoreXMLDocument(DataObject rootDataObject, 
-			String rootElementURI, String rootElementName) {
-		this.rootDataObject = rootDataObject;
-		this.rootElementURI = rootElementURI;
-		this.rootElementName = rootElementName;
-    	if (this.rootDataObject == null)
-    		throw new IllegalArgumentException("expected 'rootDataObject' argument");
-    	if (this.rootElementURI == null)
-    		throw new IllegalArgumentException("expected 'rootElementURI' argument");
-	    // rootElementName name optional
-	}
+  public CoreXMLDocument(DataObject rootDataObject) {
+    this.rootDataObject = rootDataObject;
+    if (this.rootDataObject == null)
+      throw new IllegalArgumentException("expected 'rootDataObject' argument");
+  }
 
-	/**
-	 * Return the XML encoding of the document, or null if not specified. The
-	 * default value is "UTF-8". Specification of other values is
-	 * implementation-dependent.
-	 * 
-	 * @return the XML encoding of the document, or null if not specified.
-	 */
-	public String getEncoding() {
-		return this.encoding;
-	}
+  public CoreXMLDocument(DataObject rootDataObject, XMLOptions xmlOptions) {
+    this.rootDataObject = rootDataObject;
+    if (this.rootDataObject == null)
+      throw new IllegalArgumentException("expected 'rootDataObject' argument");
+    this.rootElementURI = xmlOptions.getRootElementNamespaceURI();
+    this.rootElementName = xmlOptions.getRootElementName();
+  }
 
-	/**
-	 * Return the value of the noNamespaceSchemaLocation declaration for the
-	 * http://www.w3.org/2001/XMLSchema-instance namespace in the root element,
-	 * or null if not present.
-	 * 
-	 * @return the value of the noNamespaceSchemaLocation declaration, or null
-	 *         if not present.
-	 */
-	public String getNoNamespaceSchemaLocation() {
-		return this.noNamespaceSchemaLocation;
-	}
+  public CoreXMLDocument(DataObject rootDataObject, String rootElementURI, String rootElementName) {
+    this.rootDataObject = rootDataObject;
+    this.rootElementURI = rootElementURI;
+    this.rootElementName = rootElementName;
+    if (this.rootDataObject == null)
+      throw new IllegalArgumentException("expected 'rootDataObject' argument");
+    if (this.rootElementURI == null)
+      throw new IllegalArgumentException("expected 'rootElementURI' argument");
+    // rootElementName name optional
+  }
 
-	/**
-	 * Return the name of the root element. The root element is a global element
-	 * of the XML Schema with a type compatible to the DataObject.
-	 * 
-	 * @return the name of the root element.
-	 */
-	public String getRootElementName() {
-		return this.rootElementName;
-	}
+  /**
+   * Return the XML encoding of the document, or null if not specified. The
+   * default value is "UTF-8". Specification of other values is
+   * implementation-dependent.
+   * 
+   * @return the XML encoding of the document, or null if not specified.
+   */
+  public String getEncoding() {
+    return this.encoding;
+  }
 
-	/**
-	 * Return the targetNamespace URI for the root element. If there is no
-	 * targetNamespace URI, the value is null. The root element is a global
-	 * element of the XML Schema with a type compatible to the DataObject.
-	 * 
-	 * @return the targetNamespace URI for the root element.
-	 */
-	public String getRootElementURI() {
-		return this.rootElementURI;
-	}
+  /**
+   * Return the value of the noNamespaceSchemaLocation declaration for the
+   * http://www.w3.org/2001/XMLSchema-instance namespace in the root element, or
+   * null if not present.
+   * 
+   * @return the value of the noNamespaceSchemaLocation declaration, or null if
+   *         not present.
+   */
+  public String getNoNamespaceSchemaLocation() {
+    return this.noNamespaceSchemaLocation;
+  }
 
-	/**
-	 * Return the root DataObject for the XMLDocument.
-	 * 
-	 * @return root DataObject for the XMLDocument.
-	 */
-	public DataObject getRootObject() {
-		return this.rootDataObject;
-	}
+  /**
+   * Return the name of the root element. The root element is a global element
+   * of the XML Schema with a type compatible to the DataObject.
+   * 
+   * @return the name of the root element.
+   */
+  public String getRootElementName() {
+    return this.rootElementName;
+  }
 
-	/**
-	 * Return the value of the schemaLocation declaration for the
-	 * http://www.w3.org/2001/XMLSchema-instance namespace in the root element,
-	 * or null if not present.
-	 * 
-	 * @return the value of the schemaLocation declaration, or null if not
-	 *         present.
-	 */
-	public String getSchemaLocation() {
-		return this.schemaLocation;
-	}
+  /**
+   * Return the targetNamespace URI for the root element. If there is no
+   * targetNamespace URI, the value is null. The root element is a global
+   * element of the XML Schema with a type compatible to the DataObject.
+   * 
+   * @return the targetNamespace URI for the root element.
+   */
+  public String getRootElementURI() {
+    return this.rootElementURI;
+  }
 
-	public String getXMLVersion() {
-		return this.xmlVersion;
-	}
+  /**
+   * Return the root DataObject for the XMLDocument.
+   * 
+   * @return root DataObject for the XMLDocument.
+   */
+  public DataObject getRootObject() {
+    return this.rootDataObject;
+  }
 
-	public boolean isXMLDeclaration() {
-		return this.isSetXmlDeclaration;
-	}
+  /**
+   * Return the value of the schemaLocation declaration for the
+   * http://www.w3.org/2001/XMLSchema-instance namespace in the root element, or
+   * null if not present.
+   * 
+   * @return the value of the schemaLocation declaration, or null if not
+   *         present.
+   */
+  public String getSchemaLocation() {
+    return this.schemaLocation;
+  }
 
-	public void setEncoding(String encoding) {
-		this.encoding = encoding;
-	}
+  public String getXMLVersion() {
+    return this.xmlVersion;
+  }
 
-	public void setNoNamespaceSchemaLocation(String schemaLocation) {
-		this.noNamespaceSchemaLocation = schemaLocation;
-	}
+  public boolean isXMLDeclaration() {
+    return this.isSetXmlDeclaration;
+  }
 
-	public void setSchemaLocation(String schemaLocation) {
-		this.schemaLocation = schemaLocation;
-	}
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
+  }
 
-	public void setXMLDeclaration(boolean xmlDeclaration) {
-		this.isSetXmlDeclaration = xmlDeclaration;
-	}
+  public void setNoNamespaceSchemaLocation(String schemaLocation) {
+    this.noNamespaceSchemaLocation = schemaLocation;
+  }
 
-	public void setXMLVersion(String xmlVersion) {
-		this.xmlVersion = xmlVersion;
-	}
+  public void setSchemaLocation(String schemaLocation) {
+    this.schemaLocation = schemaLocation;
+  }
+
+  public void setXMLDeclaration(boolean xmlDeclaration) {
+    this.isSetXmlDeclaration = xmlDeclaration;
+  }
+
+  public void setXMLVersion(String xmlVersion) {
+    this.xmlVersion = xmlVersion;
+  }
 
 }

@@ -1,24 +1,4 @@
-/**
- *         PlasmaSDO™ License
- * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
- * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
- * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
- */
+/** * Copyright 2017 TerraMeta Software, Inc. * * Licensed under the Apache License, Version 2.0 (the "License"); * you may not use this file except in compliance with the License. * You may obtain a copy of the License at * *     http://www.apache.org/licenses/LICENSE-2.0 * * Unless required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language governing permissions and * limitations under the License. */
 package org.plasma.xml.schema;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -30,11 +10,13 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
 
-
 /**
- * <p>Java class for attribute complex type.
+ * <p>
+ * Java class for attribute complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="attribute">
@@ -65,226 +47,198 @@ import javax.xml.namespace.QName;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "attribute", propOrder = {
-    "simpleType"
-})
-public class Attribute
-    extends Annotated
-{
+@XmlType(name = "attribute", propOrder = { "simpleType" })
+public class Attribute extends Annotated {
 
-    protected LocalSimpleType simpleType;
-    @XmlAttribute
-    protected QName type;
-    @XmlAttribute
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String use;
-    @XmlAttribute(name = "default")
-    protected String _default;
-    @XmlAttribute
-    protected String fixed;
-    @XmlAttribute
-    protected FormChoice form;
-    @XmlAttribute
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NCName")
-    protected String name;
-    @XmlAttribute
-    protected QName ref;
+  protected LocalSimpleType simpleType;
+  @XmlAttribute
+  protected QName type;
+  @XmlAttribute
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  protected String use;
+  @XmlAttribute(name = "default")
+  protected String _default;
+  @XmlAttribute
+  protected String fixed;
+  @XmlAttribute
+  protected FormChoice form;
+  @XmlAttribute
+  @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+  @XmlSchemaType(name = "NCName")
+  protected String name;
+  @XmlAttribute
+  protected QName ref;
 
-    /**
-     * Gets the value of the simpleType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link LocalSimpleType }
-     *     
-     */
-    public LocalSimpleType getSimpleType() {
-        return simpleType;
+  /**
+   * Gets the value of the simpleType property.
+   * 
+   * @return possible object is {@link LocalSimpleType }
+   * 
+   */
+  public LocalSimpleType getSimpleType() {
+    return simpleType;
+  }
+
+  /**
+   * Sets the value of the simpleType property.
+   * 
+   * @param value
+   *          allowed object is {@link LocalSimpleType }
+   * 
+   */
+  public void setSimpleType(LocalSimpleType value) {
+    this.simpleType = value;
+  }
+
+  /**
+   * Gets the value of the type property.
+   * 
+   * @return possible object is {@link QName }
+   * 
+   */
+  public QName getType() {
+    return type;
+  }
+
+  /**
+   * Sets the value of the type property.
+   * 
+   * @param value
+   *          allowed object is {@link QName }
+   * 
+   */
+  public void setType(QName value) {
+    this.type = value;
+  }
+
+  /**
+   * Gets the value of the use property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getUse() {
+    if (use == null) {
+      return "optional";
+    } else {
+      return use;
     }
+  }
 
-    /**
-     * Sets the value of the simpleType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link LocalSimpleType }
-     *     
-     */
-    public void setSimpleType(LocalSimpleType value) {
-        this.simpleType = value;
-    }
+  /**
+   * Sets the value of the use property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setUse(String value) {
+    this.use = value;
+  }
 
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getType() {
-        return type;
-    }
+  /**
+   * Gets the value of the default property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getDefault() {
+    return _default;
+  }
 
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setType(QName value) {
-        this.type = value;
-    }
+  /**
+   * Sets the value of the default property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setDefault(String value) {
+    this._default = value;
+  }
 
-    /**
-     * Gets the value of the use property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getUse() {
-        if (use == null) {
-            return "optional";
-        } else {
-            return use;
-        }
-    }
+  /**
+   * Gets the value of the fixed property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getFixed() {
+    return fixed;
+  }
 
-    /**
-     * Sets the value of the use property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUse(String value) {
-        this.use = value;
-    }
+  /**
+   * Sets the value of the fixed property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setFixed(String value) {
+    this.fixed = value;
+  }
 
-    /**
-     * Gets the value of the default property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefault() {
-        return _default;
-    }
+  /**
+   * Gets the value of the form property.
+   * 
+   * @return possible object is {@link FormChoice }
+   * 
+   */
+  public FormChoice getForm() {
+    return form;
+  }
 
-    /**
-     * Sets the value of the default property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefault(String value) {
-        this._default = value;
-    }
+  /**
+   * Sets the value of the form property.
+   * 
+   * @param value
+   *          allowed object is {@link FormChoice }
+   * 
+   */
+  public void setForm(FormChoice value) {
+    this.form = value;
+  }
 
-    /**
-     * Gets the value of the fixed property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFixed() {
-        return fixed;
-    }
+  /**
+   * Gets the value of the name property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the fixed property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFixed(String value) {
-        this.fixed = value;
-    }
+  /**
+   * Sets the value of the name property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setName(String value) {
+    this.name = value;
+  }
 
-    /**
-     * Gets the value of the form property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link FormChoice }
-     *     
-     */
-    public FormChoice getForm() {
-        return form;
-    }
+  /**
+   * Gets the value of the ref property.
+   * 
+   * @return possible object is {@link QName }
+   * 
+   */
+  public QName getRef() {
+    return ref;
+  }
 
-    /**
-     * Sets the value of the form property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link FormChoice }
-     *     
-     */
-    public void setForm(FormChoice value) {
-        this.form = value;
-    }
-
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the ref property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link QName }
-     *     
-     */
-    public QName getRef() {
-        return ref;
-    }
-
-    /**
-     * Sets the value of the ref property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link QName }
-     *     
-     */
-    public void setRef(QName value) {
-        this.ref = value;
-    }
+  /**
+   * Sets the value of the ref property.
+   * 
+   * @param value
+   *          allowed object is {@link QName }
+   * 
+   */
+  public void setRef(QName value) {
+    this.ref = value;
+  }
 
 }

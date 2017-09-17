@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.core;
 
 // java imports
@@ -36,79 +31,70 @@ import org.plasma.sdo.access.provider.common.PropertyPair;
 
 import commonj.sdo.Property;
 
-
 /**
- * Holds internally managed concurrency property values and data 
- * store generated keys, for return back to clients, resulting 
- * from insert, update or delete operations, in association with
- * a single time stamp value. The time stamp holds the time
- * value used for all relevant concurrency operations, e.g. last-modified
- * optimistic concurrency dates or time stamps.   
+ * Holds internally managed concurrency property values and data store generated
+ * keys, for return back to clients, resulting from insert, update or delete
+ * operations, in association with a single time stamp value. The time stamp
+ * holds the time value used for all relevant concurrency operations, e.g.
+ * last-modified optimistic concurrency dates or time stamps.
  */
-public class SnapshotMap
-    implements Serializable
-{
-	private static final long serialVersionUID = 1L;
-	private Map<UUID, List<PropertyPair>> values = new HashMap<UUID, List<PropertyPair>>();
-    private Timestamp snapshotDate;
-    private Long snapshotNannoTime;
+public class SnapshotMap implements Serializable {
+  private static final long serialVersionUID = 1L;
+  private Map<UUID, List<PropertyPair>> values = new HashMap<UUID, List<PropertyPair>>();
+  private Timestamp snapshotDate;
+  private Long snapshotNannoTime;
 
-    public SnapshotMap() {
-    	this.snapshotDate = new Timestamp((new Date()).getTime());
-    	this.snapshotNannoTime = System.nanoTime();
+  public SnapshotMap() {
+    this.snapshotDate = new Timestamp((new Date()).getTime());
+    this.snapshotNannoTime = System.nanoTime();
+  }
+
+  public SnapshotMap(Timestamp snapshotDate) {
+    this.snapshotDate = snapshotDate;
+    this.snapshotNannoTime = System.nanoTime();
+  }
+
+  public Timestamp getSnapshotDate() {
+    return snapshotDate;
+  }
+
+  public Long getSnapshotNannoTime() {
+    return snapshotNannoTime;
+  }
+
+  public UUID[] getKeys() {
+    Set<UUID> keys = values.keySet();
+    UUID[] result = new UUID[keys.size()];
+    keys.toArray(result);
+    return result;
+  }
+
+  public void put(UUID key, PropertyPair value) {
+    List<PropertyPair> list = values.get(key);
+    if (list == null) {
+      list = new ArrayList<PropertyPair>();
+      values.put(key, list);
     }
-    
-    public SnapshotMap(Timestamp snapshotDate)
-    {
-        this.snapshotDate = snapshotDate;
-    	this.snapshotNannoTime = System.nanoTime();
+    list.add(value);
+  }
+
+  public List<PropertyPair> get(UUID key) {
+    return values.get(key);
+  }
+
+  public PropertyPair get(UUID key, Property prop) {
+    List<PropertyPair> list = values.get(key);
+    if (list != null) {
+      for (PropertyPair pair : list) {
+        if (pair.getProp().getName().equals(prop.getName()))
+          return pair;
+      }
     }
-    
-    public Timestamp getSnapshotDate() { return snapshotDate; }
+    return null;
+  }
 
-    public Long getSnapshotNannoTime() {
-		return snapshotNannoTime;
-	}
+  public List<PropertyPair> remove(UUID key) {
+    return values.remove(key);
+  }
 
-	public UUID[] getKeys() 
-    {
-        Set<UUID> keys = values.keySet();
-        UUID[] result = new UUID[keys.size()];
-        keys.toArray(result); 
-        return result; 
-    }
-
-    public void put(UUID key, PropertyPair value)
-    {
-    	List<PropertyPair> list = values.get(key);
-    	if (list == null) {
-    		list = new ArrayList<PropertyPair>();
-    		values.put(key, list);
-    	}
-    	list.add(value);
-    }
-
-    public List<PropertyPair> get(UUID key)
-    {
-        return values.get(key);
-    } 
-    
-    public PropertyPair get(UUID key, Property prop)
-    {
-    	List<PropertyPair> list = values.get(key);
-    	if (list != null) {
-    		for (PropertyPair pair : list) {
-    			if (pair.getProp().getName().equals(prop.getName()))
-    				return pair;
-    		}
-    	}
-        return null;
-    }  
-
-    public List<PropertyPair> remove(UUID key)
-    {
-        return values.remove(key);
-    } 
-    
-     
 }

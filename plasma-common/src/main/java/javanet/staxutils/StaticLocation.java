@@ -6,9 +6,9 @@ package javanet.staxutils;
 import javax.xml.stream.Location;
 
 /**
- * Marker interface used to denote {@link Location} implementations whose state is
- * not transient or dependent on external objects/events and will remain stable
- * unless explicitly updated.
+ * Marker interface used to denote {@link Location} implementations whose state
+ * is not transient or dependent on external objects/events and will remain
+ * stable unless explicitly updated.
  * 
  * @author Christian Niles
  * @version $Revision: 1.1 $

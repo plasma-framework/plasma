@@ -12,15 +12,13 @@ import org.plasma.sdo.annotation.ValueConstraint;
 @Type(name = "Organization")
 @Alias(physicalName = "O")
 public enum Organization {
-	@ValueConstraint(maxLength = "12")
-	@Alias(physicalName = "N")
-	@DataProperty(dataType = DataType.String, isNullable = false)
-    name,
-    @EnumConstraint(targetEnum = OrgType.class)
-	@Alias(physicalName = "T")
-	@DataProperty(dataType = DataType.String, isNullable = false)
-    type,
-	@Alias(physicalName = "P")
-	@ReferenceProperty(isNullable = false, isMany = true, targetClass = Person.class, targetProperty = "org")
-    employees;
+  @ValueConstraint(maxLength = "12")
+  @Alias(physicalName = "N")
+  @DataProperty(dataType = DataType.String, isNullable = false)
+  name, @EnumConstraint(targetEnum = OrgType.class)
+  @Alias(physicalName = "T")
+  @DataProperty(dataType = DataType.String, isNullable = false)
+  type, @Alias(physicalName = "P")
+  @ReferenceProperty(isNullable = false, isMany = true, targetClass = Person.class, targetProperty = "org")
+  employees;
 }

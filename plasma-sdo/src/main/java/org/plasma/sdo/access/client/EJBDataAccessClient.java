@@ -1,24 +1,19 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.plasma.sdo.access.client;
 
 import java.util.List;
@@ -37,126 +32,114 @@ import commonj.sdo.DataObject;
 
 /**
  */
-public class EJBDataAccessClient implements DataAccessClient
-{
-    private static Log log = LogFactory.getLog(EJBDataAccessClient.class);  
-    
-    private static DataAccessService service;
-    
-    public DataGraph[] find(Query query)
-    {
-        try {
-            log.debug("calling local persistence service..."); 
-            DataAccessService service = locateService();
-            DataGraph[] results = service.find(query.getModel());  
-            if (log.isDebugEnabled()) {
-                log.debug("returned " + String.valueOf(results.length) + " results roots");      
-            }
-            return results;                                                                 
-        }
-        catch (Exception e) {
-            throw new DataAccessException(e);
-        }       
-    }
+public class EJBDataAccessClient implements DataAccessClient {
+  private static Log log = LogFactory.getLog(EJBDataAccessClient.class);
 
-    public DataGraph[] find(Query query, int maxResults)
-    {
-        try {
-            log.debug("calling persistence service..."); 
-            DataAccessService service = locateService();
-            DataGraph[] results = service.find(query.getModel(), maxResults);                                    
-            if (log.isDebugEnabled()) {
-                log.debug("returned " + String.valueOf(results.length) + " results roots");      
-            }
-            return results;                                                                 
-        }
-        catch (Exception e) {
-            throw new DataAccessException(e);
-        }       
-    }
+  private static DataAccessService service;
 
-    public List find(Query[] queries)
-    {
-        try {
-            log.debug("calling persistence service...");                                    
-            org.plasma.query.model.Query[] queryModels = new org.plasma.query.model.Query[queries.length];
-            for (int i = 0; i < queries.length; i++)
-            	queryModels[i] = (org.plasma.query.model.Query)queries[i].getModel();
-            DataAccessService service = locateService();
-            List results = service.find(queryModels);                                          
-            if (log.isDebugEnabled()) {
-                log.debug("returned " + String.valueOf(results.size()) + " results roots");     
-            }
-            return results;  
-        }                                                              
-        catch (Exception e) {
-            throw new DataAccessException(e);
-        }       
+  public DataGraph[] find(Query query) {
+    try {
+      log.debug("calling local persistence service...");
+      DataAccessService service = locateService();
+      DataGraph[] results = service.find(query.getModel());
+      if (log.isDebugEnabled()) {
+        log.debug("returned " + String.valueOf(results.length) + " results roots");
+      }
+      return results;
+    } catch (Exception e) {
+      throw new DataAccessException(e);
     }
+  }
 
-    public int count(Query query)
-    {
-        try {
-            log.debug("calling persistence service...");                                     
-            DataAccessService service = locateService();
-            return service.count(query.getModel());                                   
-        }
-        catch (Exception e) {
-            throw new DataAccessException(e);
-        }        
+  public DataGraph[] find(Query query, int maxResults) {
+    try {
+      log.debug("calling persistence service...");
+      DataAccessService service = locateService();
+      DataGraph[] results = service.find(query.getModel(), maxResults);
+      if (log.isDebugEnabled()) {
+        log.debug("returned " + String.valueOf(results.length) + " results roots");
+      }
+      return results;
+    } catch (Exception e) {
+      throw new DataAccessException(e);
     }
+  }
 
-    public int[] count(Query[] queries)
-    {
-        try {
-            log.debug("calling persistence service...");                                     
-            DataAccessService service = locateService();
-            org.plasma.query.model.Query[] queryModels = new org.plasma.query.model.Query[queries.length];
-            for (int i = 0; i < queries.length; i++)
-            	queryModels[i] = (org.plasma.query.model.Query)queries[i].getModel();
-            return service.count(queryModels);                                   
-        }
-        catch (Exception e) {
-            log.info("caught4: " + e.getClass().getName());
-            throw new DataAccessException(e);
-        }     
+  public List find(Query[] queries) {
+    try {
+      log.debug("calling persistence service...");
+      org.plasma.query.model.Query[] queryModels = new org.plasma.query.model.Query[queries.length];
+      for (int i = 0; i < queries.length; i++)
+        queryModels[i] = (org.plasma.query.model.Query) queries[i].getModel();
+      DataAccessService service = locateService();
+      List results = service.find(queryModels);
+      if (log.isDebugEnabled()) {
+        log.debug("returned " + String.valueOf(results.size()) + " results roots");
+      }
+      return results;
+    } catch (Exception e) {
+      throw new DataAccessException(e);
     }
+  }
 
-    public void commit(DataGraph dataGraph, String username) {
-        SnapshotMap idMap = service.commit(dataGraph, username);  
-        List<DataObject> changedObjects = dataGraph.getChangeSummary().getChangedDataObjects();
-        for (DataObject dataObject : changedObjects)
-            if (!dataGraph.getChangeSummary().isDeleted(dataObject))
-                ((PlasmaNode)dataObject).getDataObject().reset(idMap, username);
-        dataGraph.getChangeSummary().endLogging();
-        dataGraph.getChangeSummary().beginLogging();
-        if (log.isDebugEnabled()) {
-            log.debug("committed 1 data-graph");                                
-        }
-    }   
-
-    public void commit(DataGraph[] dataGraphs, String username) {
-        SnapshotMap idMap = service.commit(dataGraphs, username);  
-        for (int i = 0; i < dataGraphs.length; i++) {
-            DataGraph dataGraph = dataGraphs[i];
-            List<DataObject> changedObjects = dataGraph.getChangeSummary().getChangedDataObjects();
-            for (DataObject dataObject : changedObjects)
-                if (!dataGraph.getChangeSummary().isDeleted(dataObject))
-                    ((PlasmaNode)dataObject).getDataObject().reset(idMap, username);
-            dataGraph.getChangeSummary().endLogging();
-            dataGraph.getChangeSummary().beginLogging();
-        }        
-        if (log.isDebugEnabled()) {
-            log.debug("committed 1 data-graph");                                
-        }
-    }   
-    
-    private DataAccessService locateService() throws Exception
-    {
-    	if (service == null) {
-    	    service = (DataAccessService)ServiceLocator.getInstance().getStub(DataAccessService.class);
-    	}
-        return service;
+  public int count(Query query) {
+    try {
+      log.debug("calling persistence service...");
+      DataAccessService service = locateService();
+      return service.count(query.getModel());
+    } catch (Exception e) {
+      throw new DataAccessException(e);
     }
+  }
+
+  public int[] count(Query[] queries) {
+    try {
+      log.debug("calling persistence service...");
+      DataAccessService service = locateService();
+      org.plasma.query.model.Query[] queryModels = new org.plasma.query.model.Query[queries.length];
+      for (int i = 0; i < queries.length; i++)
+        queryModels[i] = (org.plasma.query.model.Query) queries[i].getModel();
+      return service.count(queryModels);
+    } catch (Exception e) {
+      log.info("caught4: " + e.getClass().getName());
+      throw new DataAccessException(e);
+    }
+  }
+
+  public void commit(DataGraph dataGraph, String username) {
+    SnapshotMap idMap = service.commit(dataGraph, username);
+    List<DataObject> changedObjects = dataGraph.getChangeSummary().getChangedDataObjects();
+    for (DataObject dataObject : changedObjects)
+      if (!dataGraph.getChangeSummary().isDeleted(dataObject))
+        ((PlasmaNode) dataObject).getDataObject().reset(idMap, username);
+    dataGraph.getChangeSummary().endLogging();
+    dataGraph.getChangeSummary().beginLogging();
+    if (log.isDebugEnabled()) {
+      log.debug("committed 1 data-graph");
+    }
+  }
+
+  public void commit(DataGraph[] dataGraphs, String username) {
+    SnapshotMap idMap = service.commit(dataGraphs, username);
+    for (int i = 0; i < dataGraphs.length; i++) {
+      DataGraph dataGraph = dataGraphs[i];
+      List<DataObject> changedObjects = dataGraph.getChangeSummary().getChangedDataObjects();
+      for (DataObject dataObject : changedObjects)
+        if (!dataGraph.getChangeSummary().isDeleted(dataObject))
+          ((PlasmaNode) dataObject).getDataObject().reset(idMap, username);
+      dataGraph.getChangeSummary().endLogging();
+      dataGraph.getChangeSummary().beginLogging();
+    }
+    if (log.isDebugEnabled()) {
+      log.debug("committed 1 data-graph");
+    }
+  }
+
+  private DataAccessService locateService() throws Exception {
+    if (service == null) {
+      service = (DataAccessService) ServiceLocator.getInstance().getStub(DataAccessService.class);
+    }
+    return service;
+  }
 
 }

@@ -43,149 +43,145 @@ import javax.xml.stream.events.StartDocument;
  * @author Christian Niles
  * @version $Revision: 1.2 $
  */
-public class StartDocumentEvent extends AbstractXMLEvent
-        implements
-            StartDocument {
+public class StartDocumentEvent extends AbstractXMLEvent implements StartDocument {
 
-    /** Default XML version returned by {@link #getVersion()}. */
-    public static final String DEFAULT_VERSION = "1.0";
+  /** Default XML version returned by {@link #getVersion()}. */
+  public static final String DEFAULT_VERSION = "1.0";
 
-    /** Default system id returned by {@link #getSystemId()}. */
-    public static final String DEFAULT_SYSTEM_ID = "";
+  /** Default system id returned by {@link #getSystemId()}. */
+  public static final String DEFAULT_SYSTEM_ID = "";
 
-    /** Default encoding returned by {@link #getCharacterEncodingScheme()}. */
-    public static final String DEFAULT_ENCODING = "UTF-8";
+  /** Default encoding returned by {@link #getCharacterEncodingScheme()}. */
+  public static final String DEFAULT_ENCODING = "UTF-8";
 
-    /** The document encoding, or <code>null</code> if none was specified. */
-    protected String encoding;
+  /** The document encoding, or <code>null</code> if none was specified. */
+  protected String encoding;
 
-    /** The document standalone value, or <code>null</code> if none was specified. */
-    protected Boolean standalone;
+  /**
+   * The document standalone value, or <code>null</code> if none was specified.
+   */
+  protected Boolean standalone;
 
-    /** The XML version, or <code>null</code> if none was specified. */
-    protected String version;
+  /** The XML version, or <code>null</code> if none was specified. */
+  protected String version;
 
-    public StartDocumentEvent() {
+  public StartDocumentEvent() {
 
-    }
+  }
 
-    public StartDocumentEvent(Location location) {
+  public StartDocumentEvent(Location location) {
 
-        super(location);
+    super(location);
 
-    }
+  }
 
-    public StartDocumentEvent(String encoding, Location location) {
+  public StartDocumentEvent(String encoding, Location location) {
 
-        super(location);
-        this.encoding = encoding;
+    super(location);
+    this.encoding = encoding;
 
-    }
+  }
 
-    public StartDocumentEvent(String encoding, Boolean standalone,
-            String version, Location location) {
+  public StartDocumentEvent(String encoding, Boolean standalone, String version, Location location) {
 
-        super(location);
-        this.encoding = encoding;
-        this.standalone = standalone;
-        this.version = version;
+    super(location);
+    this.encoding = encoding;
+    this.standalone = standalone;
+    this.version = version;
 
-    }
+  }
 
-    public StartDocumentEvent(String encoding, Boolean standalone,
-            String version, Location location, QName schemaType) {
+  public StartDocumentEvent(String encoding, Boolean standalone, String version, Location location,
+      QName schemaType) {
 
-        super(location, schemaType);
-        this.encoding = encoding;
-        this.standalone = standalone;
-        this.version = version;
+    super(location, schemaType);
+    this.encoding = encoding;
+    this.standalone = standalone;
+    this.version = version;
 
-    }
+  }
 
-    /**
-     * Copy constructor.
-     * 
-     * @param that The {@link StartDocument} event to copy.
-     */
-    public StartDocumentEvent(StartDocument that) {
+  /**
+   * Copy constructor.
+   * 
+   * @param that
+   *          The {@link StartDocument} event to copy.
+   */
+  public StartDocumentEvent(StartDocument that) {
 
-        super(that);
+    super(that);
 
-        // copy encoding
-        if (that.encodingSet()) {
+    // copy encoding
+    if (that.encodingSet()) {
 
-            this.encoding = that.getCharacterEncodingScheme();
-
-        }
-
-        // copy standalone
-        if (standaloneSet()) {
-
-            this.standalone = that.isStandalone()
-                    ? Boolean.TRUE
-                    : Boolean.FALSE;
-
-        }
-
-        this.version = DEFAULT_VERSION.equals(that.getVersion())
-                ? null
-                : that.getVersion();
+      this.encoding = that.getCharacterEncodingScheme();
 
     }
 
-    /** Returns {@link #START_DOCUMENT}. */
-    public int getEventType() {
+    // copy standalone
+    if (standaloneSet()) {
 
-        return START_DOCUMENT;
-
-    }
-
-    public boolean encodingSet() {
-
-        return encoding != null;
+      this.standalone = that.isStandalone() ? Boolean.TRUE : Boolean.FALSE;
 
     }
 
-    public String getCharacterEncodingScheme() {
+    this.version = DEFAULT_VERSION.equals(that.getVersion()) ? null : that.getVersion();
 
-        return (encoding == null ? DEFAULT_ENCODING : encoding);
+  }
 
-    }
+  /** Returns {@link #START_DOCUMENT}. */
+  public int getEventType() {
 
-    public String getSystemId() {
+    return START_DOCUMENT;
 
-        Location location = getLocation();
-        if (location != null) {
+  }
 
-            String systemId = location.getSystemId();
-            if (systemId != null) {
+  public boolean encodingSet() {
 
-                return systemId;
+    return encoding != null;
 
-            }
+  }
 
-        }
+  public String getCharacterEncodingScheme() {
 
-        return DEFAULT_SYSTEM_ID;
+    return (encoding == null ? DEFAULT_ENCODING : encoding);
 
-    }
+  }
 
-    public String getVersion() {
+  public String getSystemId() {
 
-        return (version == null ? DEFAULT_VERSION : version);
+    Location location = getLocation();
+    if (location != null) {
 
-    }
+      String systemId = location.getSystemId();
+      if (systemId != null) {
 
-    public boolean isStandalone() {
+        return systemId;
 
-        return (standalone == null ? false : standalone.booleanValue());
-
-    }
-
-    public boolean standaloneSet() {
-
-        return standalone != null;
+      }
 
     }
+
+    return DEFAULT_SYSTEM_ID;
+
+  }
+
+  public String getVersion() {
+
+    return (version == null ? DEFAULT_VERSION : version);
+
+  }
+
+  public boolean isStandalone() {
+
+    return (standalone == null ? false : standalone.booleanValue());
+
+  }
+
+  public boolean standaloneSet() {
+
+    return standalone != null;
+
+  }
 
 }

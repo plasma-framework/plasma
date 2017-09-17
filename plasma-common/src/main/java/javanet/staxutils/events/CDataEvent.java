@@ -45,47 +45,47 @@ import javax.xml.stream.events.Characters;
  */
 public class CDataEvent extends AbstractCharactersEvent {
 
-    public CDataEvent(String data) {
+  public CDataEvent(String data) {
 
-        super(data);
+    super(data);
 
-    }
+  }
 
-    public CDataEvent(String data, Location location) {
+  public CDataEvent(String data, Location location) {
 
-        super(data, location);
+    super(data, location);
 
-    }
+  }
 
-    public CDataEvent(String data, Location location, QName schemaType) {
+  public CDataEvent(String data, Location location, QName schemaType) {
 
-        super(data, location, schemaType);
+    super(data, location, schemaType);
 
-    }
+  }
 
-    public CDataEvent(Characters that) {
+  public CDataEvent(Characters that) {
 
-        super(that);
+    super(that);
 
-    }
+  }
 
-    public boolean isCData() {
+  public boolean isCData() {
 
-        return true;
+    return true;
 
-    }
+  }
 
-    /** Returns {@link #CDATA}. */
-    public int getEventType() {
+  /** Returns {@link #CDATA}. */
+  public int getEventType() {
 
-        return CDATA;
+    return CDATA;
 
-    }
+  }
 
-    public boolean isIgnorableWhiteSpace() {
+  public boolean isIgnorableWhiteSpace() {
 
-        return false;
+    return false;
 
-    }
+  }
 
 }

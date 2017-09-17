@@ -1,26 +1,20 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package org.plasma.provisioning.ant;
 
+package org.plasma.provisioning.ant;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,93 +22,85 @@ import org.apache.tools.ant.BuildException;
 import org.plasma.provisioning.cli.QueryTool;
 
 public class QueryTask extends ProvisioningTask {
-    private static Log log =LogFactory.getLog(
-            QueryTask.class); 
-   
-    private String sourceDir;
-    private String classesDir;
-    private String file;
-    private String destFile;
-    private String destFileType;
-    private String destNamespaceURI;
-    private String destNamespacePrefix = "tns";
-    private String dialect;
-    private String dest;
+  private static Log log = LogFactory.getLog(QueryTask.class);
 
-    // The method executing the task
-    public void execute() throws BuildException {
-        
-        log.info("execute");
-        getCommandLine().setClassname(QueryTool.class.getName()); 
-        getCommandLine().getJavaCommand().addArguments(new String[] {
-            COMMAND_PREFIX + command,
-            file,
-            destFile,
-            destFileType,
-            destNamespaceURI,
-            destNamespacePrefix,
-            sourceDir,
-            classesDir});
-        //setFork(true);  
-        //setNewenvironment(true);            
-        super.execute();
-    }
+  private String sourceDir;
+  private String classesDir;
+  private String file;
+  private String destFile;
+  private String destFileType;
+  private String destNamespaceURI;
+  private String destNamespacePrefix = "tns";
+  private String dialect;
+  private String dest;
 
-    public String getFile() {
-        return file;
-    }
+  // The method executing the task
+  public void execute() throws BuildException {
 
-    public void setFile(String queryFile) {
-        this.file = queryFile;
-    }
+    log.info("execute");
+    getCommandLine().setClassname(QueryTool.class.getName());
+    getCommandLine().getJavaCommand().addArguments(
+        new String[] { COMMAND_PREFIX + command, file, destFile, destFileType, destNamespaceURI,
+            destNamespacePrefix, sourceDir, classesDir });
+    // setFork(true);
+    // setNewenvironment(true);
+    super.execute();
+  }
 
-    public String getDestFile() {
-        return destFile;
-    }
+  public String getFile() {
+    return file;
+  }
 
-    public void setDestFile(String destFile) {
-        this.destFile = destFile;
-    }
+  public void setFile(String queryFile) {
+    this.file = queryFile;
+  }
 
-    public String getDestNamespaceURI() {
-        return destNamespaceURI;
-    }
+  public String getDestFile() {
+    return destFile;
+  }
 
-    public void setDestNamespaceURI(String destNamespaceURI) {
-        this.destNamespaceURI = destNamespaceURI;
-    }
+  public void setDestFile(String destFile) {
+    this.destFile = destFile;
+  }
 
-    public String getDestNamespacePrefix() {
-		return destNamespacePrefix;
-	}
+  public String getDestNamespaceURI() {
+    return destNamespaceURI;
+  }
 
-	public void setDestNamespacePrefix(String destNamespacePrefix) {
-		this.destNamespacePrefix = destNamespacePrefix;
-	}
+  public void setDestNamespaceURI(String destNamespaceURI) {
+    this.destNamespaceURI = destNamespaceURI;
+  }
 
-	public String getSourceDir() {
-        return sourceDir;
-    }
+  public String getDestNamespacePrefix() {
+    return destNamespacePrefix;
+  }
 
-    public void setSourceDir(String sourceDir) {
-        this.sourceDir = sourceDir;
-    }
+  public void setDestNamespacePrefix(String destNamespacePrefix) {
+    this.destNamespacePrefix = destNamespacePrefix;
+  }
 
-    public String getClassesDir() {
-        return classesDir;
-    }
+  public String getSourceDir() {
+    return sourceDir;
+  }
 
-    public void setClassesDir(String classesDir) {
-        this.classesDir = classesDir;
-    }
+  public void setSourceDir(String sourceDir) {
+    this.sourceDir = sourceDir;
+  }
 
-	public String getDestFileType() {
-		return destFileType;
-	}
+  public String getClassesDir() {
+    return classesDir;
+  }
 
-	public void setDestFileType(String destFileType) {
-		this.destFileType = destFileType;
-	}
+  public void setClassesDir(String classesDir) {
+    this.classesDir = classesDir;
+  }
 
+  public String getDestFileType() {
+    return destFileType;
+  }
+
+  public void setDestFileType(String destFileType) {
+    this.destFileType = destFileType;
+  }
 
 }

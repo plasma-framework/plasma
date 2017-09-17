@@ -1,26 +1,20 @@
 /**
- *         PlasmaSDO™ License
+ * Copyright 2017 TerraMeta Software, Inc.
  * 
- * This is a community release of PlasmaSDO™, a dual-license 
- * Service Data Object (SDO) 2.1 implementation. 
- * This particular copy of the software is released under the 
- * version 2 of the GNU General Public License. PlasmaSDO™ was developed by 
- * TerraMeta Software, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Copyright (c) 2013, TerraMeta Software, Inc. All rights reserved.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * General License information can be found below.
- * 
- * This distribution may include materials developed by third
- * parties. For license and attribution notices for these
- * materials, please refer to the documentation that accompanies
- * this distribution (see the "Licenses for Third-Party Components"
- * appendix) or view the online documentation at 
- * <http://plasma-sdo.org/licenses/>.
- *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package org.plasma.sdo.xml;
 
+package org.plasma.sdo.xml;
 
 import org.plasma.sdo.helper.DataConverter;
 
@@ -30,88 +24,85 @@ import commonj.sdo.Type;
 import commonj.sdo.helper.XMLDocument;
 
 /**
- * An data-graph traversal based assembler/builder 
- * abstract superclass.
+ * An data-graph traversal based assembler/builder abstract superclass.
  */
 public abstract class Marshaller extends XMLProcessor {
 
-    protected XMLDocument document;
-    protected MarshallerFlavor flavor;
-    
+  protected XMLDocument document;
+  protected MarshallerFlavor flavor;
+
+  @SuppressWarnings("unused")
+  private Marshaller() {
+  }
+
+  protected Marshaller(MarshallerFlavor flavor, XMLDocument document) {
+    super();
+    this.flavor = flavor;
+    this.document = document;
+    if (this.document == null)
+      throw new IllegalArgumentException("expected 'document' argument");
+  }
+
+  protected Marshaller(XMLDocument document, XMLOptions options) {
+    super(options);
+    this.document = document;
+    if (this.document == null)
+      throw new IllegalArgumentException("expected 'document' argument");
+  }
+
+  protected String fromObject(Type sourceType, Object value) {
+    return DataConverter.INSTANCE.toString(sourceType, value);
+  }
+
+  protected class PathNode {
+
+    private DataObject target;
+    private DataObject source;
+    private Property sourceProperty;
+    private Object userObject;
+    private boolean terminated;
+
     @SuppressWarnings("unused")
-	private Marshaller() {}
-	
-    protected Marshaller(MarshallerFlavor flavor, XMLDocument document) {
-    	super();
-    	this.flavor = flavor;
-    	this.document = document;
-    	if (this.document == null)
-    		throw new IllegalArgumentException("expected 'document' argument");
+    private PathNode() {
     }
 
-    protected Marshaller(XMLDocument document, XMLOptions options) {
-    	super(options);
-    	this.document = document;
-    	if (this.document == null)
-    		throw new IllegalArgumentException("expected 'document' argument");
+    public PathNode(DataObject target, Object userObject, DataObject source, Property sourceProperty) {
+      this.target = target;
+      this.userObject = userObject;
+      this.source = source;
+      this.sourceProperty = sourceProperty;
     }
-    
-    protected String fromObject(Type sourceType, Object value) {
-		return DataConverter.INSTANCE.toString(sourceType, value);
-	}	
-		
-    protected class PathNode {
-        
-        private DataObject target;
-        private DataObject source;
-        private Property sourceProperty;
-        private Object userObject;
-        private boolean terminated;
-        
-        
-        @SuppressWarnings("unused")
-        private PathNode() {}
-        
-        public PathNode(DataObject target, Object userObject, 
-                DataObject source, Property sourceProperty) {
-            this.target = target;
-            this.userObject = userObject;
-            this.source = source;
-            this.sourceProperty = sourceProperty;
-        }
-        
-        public PathNode(DataObject target,  
-                DataObject source, Property sourceProperty) {
-            this.target = target;
-            this.source = source;
-            this.sourceProperty = sourceProperty;
-        }
 
-        public DataObject getTarget() {
-            return target;
-        }
-
-        public DataObject getSource() {
-            return source;
-        }
-
-        public Property getSourceProperty() {
-            return sourceProperty;
-        }
-
-        public Object getUserObject() {
-            return userObject;
-        }
-
-		public boolean isTerminated() {
-			return terminated;
-		}
-
-		public void setTerminated(boolean terminated) {
-			this.terminated = terminated;
-		}
-        
-        
+    public PathNode(DataObject target, DataObject source, Property sourceProperty) {
+      this.target = target;
+      this.source = source;
+      this.sourceProperty = sourceProperty;
     }
-	
+
+    public DataObject getTarget() {
+      return target;
+    }
+
+    public DataObject getSource() {
+      return source;
+    }
+
+    public Property getSourceProperty() {
+      return sourceProperty;
+    }
+
+    public Object getUserObject() {
+      return userObject;
+    }
+
+    public boolean isTerminated() {
+      return terminated;
+    }
+
+    public void setTerminated(boolean terminated) {
+      this.terminated = terminated;
+    }
+
+  }
+
 }
