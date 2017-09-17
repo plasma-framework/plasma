@@ -61,10 +61,10 @@ For the Plasma SDO library use the following artifact.
 **Detailed Documentation**
 ==========================
 
-| [**Plasma Architecture Overview**](http://terrameta.github.io/plasma/arch_overview/Plasma-Architecture-Overview) |
+| [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) |
 |------------------------------------------------------------------------------------------------------------------|
-| [**Plasma UML Profile Specification**](http://terrameta.github.io/plasma/uml-profile/Plasma-UML-Profile)         |
-| [**Plasma API DOCS**](http://terrameta.github.io/plasma/apidocs/index.html)                                      |
+| [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         |
+| [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      |
 
 [1] http://www.oodesign.com/visitor-pattern.html
 
