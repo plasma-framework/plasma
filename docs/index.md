@@ -1,4 +1,4 @@
-<img src="images/media/plasma_32_transp.png" alt="big-icon" width="32" height="32" />**Plasma**
+<img src="images/media/plasma_32_transp.png" alt="big-icon" width="64" height="64" />**Plasma**
 ======================================================================================
 
 **TerraMeta Software, Inc.**
