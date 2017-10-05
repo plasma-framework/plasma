@@ -13,8 +13,9 @@ Plasma is a data store agnostic, object mapping and object query framework writt
 **Detailed Documentation**
 ==========================
 
+| [**Document Links**] |
+|  ------------------------------------------------------------------------------------------------ |
 | [**Plasma Quickstart Pojo**](http://plasma-framework.github.io/plasma/Plasma-Quickstart-Pojo.pdf) |
------------------------------------------------------------------------------------------------------
 | [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) |
 | [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         |
 | [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      |
@@ -60,10 +61,10 @@ For the Plasma library use the following artifact.
 **Detailed Documentation**
 ==========================
 
+| [**Document Links**] |
+|  ------------------------------------------------------------------------------------------------ |
 | [**Plasma Quickstart Pojo**](http://plasma-framework.github.io/plasma/Plasma-Quickstart-Pojo.pdf) |
------------------------------------------------------------------------------------------------------
 | [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) |
 | [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         |
 | [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      |
-
 
