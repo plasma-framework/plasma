@@ -2,10 +2,10 @@
 
 TerraMeta Software, Inc.
 
-<span id="_Toc494955158" class="anchor"></span>Plasma Quick Start (POJO)
+***<span id="_Toc494955158" class="anchor"></span>Plasma Quick Start (POJO)***
+=============================
 
 PlasmaSDO® and PlasmaQuery® are registered
-
 Trademarks of TerraMeta Software
 
 <span id="_Toc135028939" class="anchor"><span id="_Toc495460092" class="anchor"><span id="_Toc498843305" class="anchor"><span id="_Toc24906349" class="anchor"></span></span></span></span>
@@ -35,7 +35,7 @@ Add the following dependencies to your Maven project, including plasma, an RDBMS
 </dependency>
 ```
 
-**Create POJOs **
+**Create POJOs**
 -----------------
 
 Create 3 java enumeration classes annotated with Plasma annotations. Enumerations rather than Java classes are annotated to facilitate reuse across multiple code generation and metadata integration contexts. The annotations capture structural metadata elements, as below.
@@ -110,7 +110,7 @@ employee;
 }
 ```
 
-**Create Namespace **
+**Create Namespace**
 ---------------------
 
 In the same package as the above POJOs, create a file called package\_info.java with the below annotated package.
