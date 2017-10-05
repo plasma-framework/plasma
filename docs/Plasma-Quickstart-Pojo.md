@@ -29,9 +29,9 @@ Add the following dependencies to your Maven project, including plasma, an RDBMS
 
 ```xml
 <dependency>
-<groupId>org.terrameta</groupId>
-<artifactId>plasma-core</artifactId>
-<version>2.0.0</version>
+  <groupId>org.terrameta</groupId>
+  <artifactId>plasma-core</artifactId>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -52,9 +52,9 @@ The below example enumerations which create a classic data model “Person-Organ
 ```java
 @Type(name = "Party", isAbstract = true)
 public enum Party {
-@Alias(physicalName = "CRTD_DT")
-@DataProperty(dataType = DataType.Date, isNullable = false)
-createdDate
+  @Alias(physicalName = "CRTD_DT")
+  @DataProperty(dataType = DataType.Date, isNullable = false)
+  **createdDate**
 }
 ```
 
@@ -62,26 +62,26 @@ createdDate
 @Alias(physicalName = "PERSON")
 @Type(superTypes = { Party.class })
 public enum Person {
-@Key(type = KeyType.primary)
-@ValueConstraint(maxLength = "36")
-@Alias(physicalName = "FN")
-@DataProperty(dataType = DataType.String, isNullable = false)
-firstName,
-@Key(type = KeyType.primary)
-@ValueConstraint(maxLength = "36")
-@Alias(physicalName = "LN")
-@DataProperty(dataType = DataType.String, isNullable = false)
-lastName,
-@ValueConstraint(totalDigits = "3")
-@Alias(physicalName = "AGE")
-@DataProperty(dataType = DataType.Int)
-age,
-@Alias(physicalName = "DOB")
-@DataProperty(dataType = DataType.Date)
-dateOfBirth,
-@Alias(physicalName = "EMP")
-@ReferenceProperty(targetClass = Organization.class, targetProperty = "employee")
-employer;
+  @Key(type = KeyType.primary)
+  @ValueConstraint(maxLength = "36")
+  @Alias(physicalName = "FN")
+  @DataProperty(dataType = DataType.String, isNullable = false)
+  **firstName**,
+  @Key(type = KeyType.primary)
+  @ValueConstraint(maxLength = "36")
+  @Alias(physicalName = "LN")
+  @DataProperty(dataType = DataType.String, isNullable = false)
+  **lastName**,
+  @ValueConstraint(totalDigits = "3")
+  @Alias(physicalName = "AGE")
+  @DataProperty(dataType = DataType.Int)
+  **age**,
+  @Alias(physicalName = "DOB")
+  @DataProperty(dataType = DataType.Date)
+  **dateOfBirth**,
+  @Alias(physicalName = "EMP")
+  @ReferenceProperty(targetClass = Organization.class, targetProperty = "employee")
+  **employer**;
 }
 ```
 
@@ -89,24 +89,24 @@ employer;
 @Alias(physicalName = "ORG")
 @Type(superTypes = { Party.class })
 public enum Organization {
-@Key(type = KeyType.primary)
-@ValueConstraint(maxLength = "36")
-@Alias(physicalName = "NAME")
-@DataProperty(dataType = DataType.String, isNullable = false)
-name,
-@EnumConstraint(targetEnum = OrgCat.class)
-@Alias(physicalName = "ORG\_CAT")
-@DataProperty(dataType = DataType.String, isNullable = false)
-category,
-@Alias(physicalName = "PARENT")
-@ReferenceProperty(isNullable = true, isMany = false, targetClass = Organization.class, targetProperty = "child")
-parent,
-@Alias(physicalName = "CHILD")
-@ReferenceProperty(isNullable = true, isMany = true, targetClass = Organization.class, targetProperty = "parent")
-child,
-@Alias(physicalName = "EMPLOYEE")
-@ReferenceProperty(isNullable = true, isMany = true, targetClass = Person.class, targetProperty = "employer")
-employee;
+  @Key(type = KeyType.primary)
+  @ValueConstraint(maxLength = "36")
+  @Alias(physicalName = "NAME")
+  @DataProperty(dataType = DataType.String, isNullable = false)
+  name,
+  @EnumConstraint(targetEnum = OrgCat.class)
+  @Alias(physicalName = "ORG\_CAT")
+  @DataProperty(dataType = DataType.String, isNullable = false)
+  category,
+  @Alias(physicalName = "PARENT")
+  @ReferenceProperty(isNullable = true, isMany = false, targetClass = Organization.class, targetProperty = "child")
+  parent,
+  @Alias(physicalName = "CHILD")
+  @ReferenceProperty(isNullable = true, isMany = true, targetClass = Organization.class, targetProperty = "parent")
+  child,
+  @Alias(physicalName = "EMPLOYEE")
+  @ReferenceProperty(isNullable = true, isMany = true, targetClass = Person.class, targetProperty = "employer")
+  employee;
 }
 ```
 
@@ -120,22 +120,22 @@ In the same package as the above POJOs, create a file called package\_info.java 
 @Namespace(uri = "http://plasma-quickstart-pojo/humanresources")
 @NamespaceProvisioning(rootPackageName = "quickstart.pojo.model")
 @NamespaceService(storeType = DataStoreType.RDBMS,
-providerName = DataAccessProviderName.JDBC,
-properties = {
-"org.plasma.sdo.access.provider.jdbc.ConnectionURL=jdbc:mysql://localhost:3306/hr?autoReconnect=true",
-"org.plasma.sdo.access.provider.jdbc.ConnectionUserName=root",
-"org.plasma.sdo.access.provider.jdbc.ConnectionPassword=yourpassword",
-"org.plasma.sdo.access.provider.jdbc.ConnectionDriverName=com.mysql.jdbc.Driver",
-"org.plasma.sdo.access.provider.jdbc.ConnectionProviderName=examples.quickstart.connect.DBCPConnectionPoolProvider",
-"org.plasma.sdo.access.provider.jdbc.ConnectionPoolMinSize=1",
-"org.plasma.sdo.access.provider.jdbc.ConnectionPoolMaxSize=10",
-"org.apache.commons.dbcp.validationQuery=SELECT COUNT(\) FROM person",
-"org.apache.commons.dbcp.testOnBorrow=false",
-"org.apache.commons.dbcp.testOnReturn=false",
-"org.apache.commons.dbcp.maxWait=30000",
-"org.apache.commons.dbcp.testWhileIdle=false",
-"org.apache.commons.dbcp.timeBetweenEvictionRunsMillis=30000",
-"org.apache.commons.dbcp.minEvictableIdleTimeMillis=40000"
+  providerName = DataAccessProviderName.JDBC,
+  properties = {
+	"org.plasma.sdo.access.provider.jdbc.ConnectionURL=jdbc:mysql://localhost:3306/hr?autoReconnect=true",
+	"org.plasma.sdo.access.provider.jdbc.ConnectionUserName=root",
+	"org.plasma.sdo.access.provider.jdbc.ConnectionPassword=yourpassword",
+	"org.plasma.sdo.access.provider.jdbc.ConnectionDriverName=com.mysql.jdbc.Driver",
+	"org.plasma.sdo.access.provider.jdbc.ConnectionProviderName=examples.quickstart.connect.DBCPConnectionPoolProvider",
+	"org.plasma.sdo.access.provider.jdbc.ConnectionPoolMinSize=1",
+	"org.plasma.sdo.access.provider.jdbc.ConnectionPoolMaxSize=10",
+	"org.apache.commons.dbcp.validationQuery=SELECT COUNT(\) FROM person",
+	"org.apache.commons.dbcp.testOnBorrow=false",
+	"org.apache.commons.dbcp.testOnReturn=false",
+	"org.apache.commons.dbcp.maxWait=30000",
+	"org.apache.commons.dbcp.testWhileIdle=false",
+	"org.apache.commons.dbcp.timeBetweenEvictionRunsMillis=30000",
+	"org.apache.commons.dbcp.minEvictableIdleTimeMillis=40000"
 })
 package examples.quickstart.pojo;
 import org.plasma.config.annotation.NamespaceService;
@@ -163,19 +163,19 @@ Add the following dependencies to your Maven project, including an RDBMS service
 
 ```xml
 <dependency>
-<groupId>org.cloudgraph</groupId>
-<artifactId>*cloudgraph*-*rdb*</artifactId>
-<version>1.0.7</version>
+	<groupId>org.cloudgraph</groupId>
+	<artifactId>*cloudgraph*-*rdb*</artifactId>
+	<version>1.0.7</version>
 </dependency>
 <dependency>
-<groupId>*mysql*</groupId>
-<artifactId>*mysql*-connector-java</artifactId>
-<version>5.1.23</version>
+	<groupId>*mysql*</groupId>
+	<artifactId>*mysql*-connector-java</artifactId>
+	<version>5.1.23</version>
 </dependency>
 <dependency>
-<groupId>commons-*dbcp*</groupId>
-<artifactId>commons-*dbcp*</artifactId>
-<version>1.4</version>
+	<groupId>commons-*dbcp*</groupId>
+	<artifactId>commons-*dbcp*</artifactId>
+	<version>1.4</version>
 </dependency>
 ```
 
