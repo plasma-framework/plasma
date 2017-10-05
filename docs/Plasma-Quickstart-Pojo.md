@@ -58,107 +58,62 @@ The below example enumerations which create a classic data model “Person-Organ
 
 ```java
 @Type(name = "Party", isAbstract = true)
-
 public enum Party {
-
 @Alias(physicalName = "CRTD\_DT")
-
 @DataProperty(dataType = DataType.Date, isNullable = false)
-
 createdDate
-
 }
+```
 
+```java
 @Alias(physicalName = "PERSON")
-
 @Type(superTypes = { Party.class })
-
 public enum Person {
-
 @Key(type = KeyType.primary)
-
 @ValueConstraint(maxLength = "36")
-
 @Alias(physicalName = "FN")
-
 @DataProperty(dataType = DataType.String, isNullable = false)
-
 firstName,
-
 @Key(type = KeyType.primary)
-
 @ValueConstraint(maxLength = "36")
-
 @Alias(physicalName = "LN")
-
 @DataProperty(dataType = DataType.String, isNullable = false)
-
 lastName,
-
 @ValueConstraint(totalDigits = "3")
-
 @Alias(physicalName = "AGE")
-
 @DataProperty(dataType = DataType.Int)
-
 age,
-
 @Alias(physicalName = "DOB")
-
 @DataProperty(dataType = DataType.Date)
-
 dateOfBirth,
-
 @Alias(physicalName = "EMP")
-
 @ReferenceProperty(targetClass = Organization.class, targetProperty = "employee")
-
 employer;
-
 }
+```
 
+```java
 @Alias(physicalName = "ORG")
-
 @Type(superTypes = { Party.class })
-
 public enum Organization {
-
 @Key(type = KeyType.primary)
-
 @ValueConstraint(maxLength = "36")
-
 @Alias(physicalName = "NAME")
-
 @DataProperty(dataType = DataType.String, isNullable = false)
-
 name,
-
 @EnumConstraint(targetEnum = OrgCat.class)
-
 @Alias(physicalName = "ORG\_CAT")
-
 @DataProperty(dataType = DataType.String, isNullable = false)
-
 category,
-
 @Alias(physicalName = "PARENT")
-
 @ReferenceProperty(isNullable = true, isMany = false, targetClass = Organization.class, targetProperty = "child")
-
 parent,
-
 @Alias(physicalName = "CHILD")
-
 @ReferenceProperty(isNullable = true, isMany = true, targetClass = Organization.class, targetProperty = "parent")
-
 child,
-
 @Alias(physicalName = "EMPLOYEE")
-
 @ReferenceProperty(isNullable = true, isMany = true, targetClass = Person.class, targetProperty = "employer")
-
 employee;
-
 }
 ```
 
