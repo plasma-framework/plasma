@@ -2,9 +2,7 @@
 ======================================================================================
 
 **TerraMeta Software, Inc.**
-
 PlasmaSDO<sup>®</sup> and PlasmaQuery<sup>®</sup> are registered
-
 Trademarks of TerraMeta Software
 
 Overview
@@ -48,24 +46,20 @@ Add the following dependencies to any Apache Maven POM files (or your build syst
 
 For the Plasma SDO library use the following artifact.
 
-&lt;dependency&gt;
-
-&lt;groupId&gt;org.plasma&lt;/groupId&gt;
-
-&lt;artifactId&gt;plasma-sdo&lt;/artifactId&gt;
-
-&lt;version&gt;1.2.4&lt;/version&gt;
-
-&lt;/dependency&gt;
+```xml
+<dependency&gt;
+<groupId&gt;org.plasma</groupId&gt;
+<artifactId&gt;plasma-sdo</artifactId&gt;
+<version&gt;1.2.4</version&gt;
+</dependency&gt;
+```
 
 **Detailed Documentation**
 ==========================
 
+| [**Plasma Quickstart Pojo**](http://plasma-framework.github.io/plasma/Plasma-Quickstart-Pojo.pdf) |
 | [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) |
-|------------------------------------------------------------------------------------------------------------------|
 | [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         |
 | [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      |
 
-[1] http://www.oodesign.com/visitor-pattern.html
 
-[2] http://en.wikipedia.org/wiki/XML\_Metadata\_Interchange
