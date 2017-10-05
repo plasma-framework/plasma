@@ -56,109 +56,111 @@ Create 3 java enumeration classes annotated with Plasma annotations. Enumeration
 
 The below example enumerations which create a classic data model “Person-Organization” with a common superclass entity “Party”. It is intended to illustrate several of the available Plasma annotations, but the model may be easily simplified, for example use just a single entity.
 
-@Type(name = "Party", isAbstract = **true**)
+```java
+@Type(name = "Party", isAbstract = true)
 
-**public** **enum** Party {
+public enum Party {
 
 @Alias(physicalName = "CRTD\_DT")
 
-@DataProperty(dataType = DataType.***Date***, isNullable = **false**)
+@DataProperty(dataType = DataType.Date, isNullable = false)
 
-***createdDate***
+createdDate
 
 }
 
 @Alias(physicalName = "PERSON")
 
-@Type(superTypes = { Party.**class** })
+@Type(superTypes = { Party.class })
 
-**public** **enum** Person {
+public enum Person {
 
-@Key(type = KeyType.***primary***)
+@Key(type = KeyType.primary)
 
 @ValueConstraint(maxLength = "36")
 
 @Alias(physicalName = "FN")
 
-@DataProperty(dataType = DataType.***String***, isNullable = **false**)
+@DataProperty(dataType = DataType.String, isNullable = false)
 
-***firstName***,
+firstName,
 
-@Key(type = KeyType.***primary***)
+@Key(type = KeyType.primary)
 
 @ValueConstraint(maxLength = "36")
 
 @Alias(physicalName = "LN")
 
-@DataProperty(dataType = DataType.***String***, isNullable = **false**)
+@DataProperty(dataType = DataType.String, isNullable = false)
 
-***lastName***,
+lastName,
 
 @ValueConstraint(totalDigits = "3")
 
 @Alias(physicalName = "AGE")
 
-@DataProperty(dataType = DataType.***Int***)
+@DataProperty(dataType = DataType.Int)
 
-***age***,
+age,
 
 @Alias(physicalName = "DOB")
 
-@DataProperty(dataType = DataType.***Date***)
+@DataProperty(dataType = DataType.Date)
 
-***dateOfBirth***,
+dateOfBirth,
 
 @Alias(physicalName = "EMP")
 
-@ReferenceProperty(targetClass = Organization.**class**, targetProperty = "employee")
+@ReferenceProperty(targetClass = Organization.class, targetProperty = "employee")
 
-***employer***;
+employer;
 
 }
 
 @Alias(physicalName = "ORG")
 
-@Type(superTypes = { Party.**class** })
+@Type(superTypes = { Party.class })
 
-**public** **enum** Organization {
+public enum Organization {
 
-@Key(type = KeyType.***primary***)
+@Key(type = KeyType.primary)
 
 @ValueConstraint(maxLength = "36")
 
 @Alias(physicalName = "NAME")
 
-@DataProperty(dataType = DataType.***String***, isNullable = **false**)
+@DataProperty(dataType = DataType.String, isNullable = false)
 
-***name***,
+name,
 
-@EnumConstraint(targetEnum = OrgCat.**class**)
+@EnumConstraint(targetEnum = OrgCat.class)
 
 @Alias(physicalName = "ORG\_CAT")
 
-@DataProperty(dataType = DataType.***String***, isNullable = **false**)
+@DataProperty(dataType = DataType.String, isNullable = false)
 
-***category***,
+category,
 
 @Alias(physicalName = "PARENT")
 
-@ReferenceProperty(isNullable = **true**, isMany = **false**, targetClass = Organization.**class**, targetProperty = "child")
+@ReferenceProperty(isNullable = true, isMany = false, targetClass = Organization.class, targetProperty = "child")
 
-***parent***,
+parent,
 
 @Alias(physicalName = "CHILD")
 
-@ReferenceProperty(isNullable = **true**, isMany = **true**, targetClass = Organization.**class**, targetProperty = "parent")
+@ReferenceProperty(isNullable = true, isMany = true, targetClass = Organization.class, targetProperty = "parent")
 
-***child***,
+child,
 
 @Alias(physicalName = "EMPLOYEE")
 
-@ReferenceProperty(isNullable = **true**, isMany = **true**, targetClass = Person.**class**, targetProperty = "employer")
+@ReferenceProperty(isNullable = true, isMany = true, targetClass = Person.class, targetProperty = "employer")
 
-***employee***;
+employee;
 
 }
+```
 
 **Create Namespace **
 ---------------------
