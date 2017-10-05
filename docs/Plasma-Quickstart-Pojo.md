@@ -27,15 +27,13 @@ This step-by-step guide shows how to build a Maven project which generates a sim
 
 Add the following dependencies to your Maven project, including plasma, an RDBMS provider, MySql client and a connection pooling library, DBCP.
 
+```xml
 &lt;dependency&gt;
-
 &lt;groupId&gt;org.terrameta&lt;/groupId&gt;
-
 &lt;artifactId&gt;plasma-core&lt;/artifactId&gt;
-
 &lt;version&gt;2.0.0&lt;/version&gt;
-
 &lt;/dependency&gt;
+```
 
 **Create POJOs **
 -----------------
@@ -43,15 +41,10 @@ Add the following dependencies to your Maven project, including plasma, an RDBMS
 Create 3 java enumeration classes annotated with Plasma annotations. Enumerations rather than Java classes are annotated to facilitate reuse across multiple code generation and metadata integration contexts. The annotations capture structural metadata elements, as below.
 
 -   Entity Type and Property Names and Aliases. See [Type](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/Type.html), [Alias](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/Alias.html).
-
 -   Data Types. See [DataProperty](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/DataProperty.html), [ReferenceProperty](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/ReferenceProperty.html).
-
 -   Cardinalities, Nullability and Visibility. See [DataProperty](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/DataProperty.html), [ReferenceProperty](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/ReferenceProperty.html).
-
 -   Constraints. See [ValueConstraint](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/ValueConstraint.html), [EnumerationConstraint](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/EnumerationConstraint.html).
-
 -   Inheritance Relationships (multiple inheritance is supported). See [Type](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/Type.html).
-
 -   Associations Between Entities. See [ReferenceProperty](http://plasma-framework.github.io/plasma/apidocs/org/plasma/sdo/annotation/ReferenceProperty.html).
 
 The below example enumerations which create a classic data model “Person-Organization” with a common superclass entity “Party”. It is intended to illustrate several of the available Plasma annotations, but the model may be easily simplified, for example use just a single entity.
@@ -59,7 +52,7 @@ The below example enumerations which create a classic data model “Person-Organ
 ```java
 @Type(name = "Party", isAbstract = true)
 public enum Party {
-@Alias(physicalName = "CRTD\_DT")
+@Alias(physicalName = "CRTD_DT")
 @DataProperty(dataType = DataType.Date, isNullable = false)
 createdDate
 }
@@ -122,61 +115,37 @@ employee;
 
 In the same package as the above POJOs, create a file called package\_info.java with the below annotated package.
 
+```java
 @Alias(physicalName = "HR")
-
 @Namespace(uri = "http://plasma-quickstart-pojo/humanresources")
-
 @NamespaceProvisioning(rootPackageName = "quickstart.pojo.model")
-
 @NamespaceService(storeType = DataStoreType.RDBMS,
-
 providerName = DataAccessProviderName.JDBC,
-
 properties = {
-
 "org.plasma.sdo.access.provider.jdbc.ConnectionURL=jdbc:mysql://localhost:3306/hr?autoReconnect=true",
-
 "org.plasma.sdo.access.provider.jdbc.ConnectionUserName=root",
-
 "org.plasma.sdo.access.provider.jdbc.ConnectionPassword=yourpassword",
-
 "org.plasma.sdo.access.provider.jdbc.ConnectionDriverName=com.mysql.jdbc.Driver",
-
 "org.plasma.sdo.access.provider.jdbc.ConnectionProviderName=examples.quickstart.connect.DBCPConnectionPoolProvider",
-
 "org.plasma.sdo.access.provider.jdbc.ConnectionPoolMinSize=1",
-
 "org.plasma.sdo.access.provider.jdbc.ConnectionPoolMaxSize=10",
-
-"org.apache.commons.dbcp.validationQuery=SELECT COUNT(\*) FROM person",
-
+"org.apache.commons.dbcp.validationQuery=SELECT COUNT(\) FROM person",
 "org.apache.commons.dbcp.testOnBorrow=false",
-
 "org.apache.commons.dbcp.testOnReturn=false",
-
 "org.apache.commons.dbcp.maxWait=30000",
-
 "org.apache.commons.dbcp.testWhileIdle=false",
-
 "org.apache.commons.dbcp.timeBetweenEvictionRunsMillis=30000",
-
 "org.apache.commons.dbcp.minEvictableIdleTimeMillis=40000"
-
 })
+package examples.quickstart.pojo;
+import org.plasma.config.annotation.NamespaceService;
+import org.plasma.config.annotation.NamespaceProvisioning;
+import org.plasma.sdo.annotation.Namespace;
+import org.plasma.sdo.annotation.Alias;
+import org.plasma.config.DataAccessProviderName;
+import org.plasma.config.DataStoreType;
+```
 
-**package** *examples.quickstart.pojo*;
-
-**import** org.plasma.config.annotation.NamespaceService;
-
-**import** org.plasma.config.annotation.NamespaceProvisioning;
-
-**import** org.plasma.sdo.annotation.Namespace;
-
-**import** org.plasma.sdo.annotation.Alias;
-
-**import** org.plasma.config.DataAccessProviderName;
-
-**import** org.plasma.config.DataStoreType;
 
 **Add Plasma Maven Plugin**
 ---------------------------
@@ -192,35 +161,23 @@ The source code and MySql DDL should appear under target/generated-sources.
 
 Add the following dependencies to your Maven project, including an RDBMS service provider Cloudgraph RDB, MySql client and a connection pooling library, DBCP.
 
+```xml
 &lt;dependency&gt;
-
 &lt;groupId&gt;org.cloudgraph&lt;/groupId&gt;
-
 &lt;artifactId&gt;*cloudgraph*-*rdb*&lt;/artifactId&gt;
-
 &lt;version&gt;1.0.7&lt;/version&gt;
-
 &lt;/dependency&gt;
-
 &lt;dependency&gt;
-
 &lt;groupId&gt;*mysql*&lt;/groupId&gt;
-
 &lt;artifactId&gt;*mysql*-connector-java&lt;/artifactId&gt;
-
 &lt;version&gt;5.1.23&lt;/version&gt;
-
 &lt;/dependency&gt;
-
 &lt;dependency&gt;
-
 &lt;groupId&gt;commons-*dbcp*&lt;/groupId&gt;
-
 &lt;artifactId&gt;commons-*dbcp*&lt;/artifactId&gt;
-
 &lt;version&gt;1.4&lt;/version&gt;
-
 &lt;/dependency&gt;
+```
 
 Plasma Maven Plugin Configuration
 =================================
