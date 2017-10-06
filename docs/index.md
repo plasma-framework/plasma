@@ -1,9 +1,9 @@
 <img src="images/media/plasma_32_transp.png" alt="icon2" width="32" height="32"/>**PLASMA** 
 ======================================================================================
 
-**TerraMeta Software, Inc.**
+**TerraMeta Software, Inc.**  
 PlasmaSDO<sup>®</sup> and PlasmaQuery<sup>®</sup> are registered
-Trademarks of TerraMeta Software
+Trademarks of TerraMeta Software, Inc.
 
 Overview
 ========
@@ -13,12 +13,11 @@ Plasma is a data store agnostic, object mapping and object query framework writt
 **Detailed Documentation**
 ==========================
 
-| [**Document Links**] |
-|  ------------------------------------------------------------------------------------------------ |
-| [**Plasma Quickstart Pojo**](http://plasma-framework.github.io/plasma/Plasma-Quickstart-Pojo.pdf) |
-| [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) |
-| [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         |
-| [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      |
+| **Document** | **Description** |
+|  --------------------- | --------------------- |
+| [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) | General technical background plus architecture components with examples |
+| [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         | Specification for the UML profile used for annotating UML models for use with Plasma |
+| [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      | Generated javadoc API documentation tree |
 
 
 **How It Works**
@@ -44,7 +43,8 @@ Once you have installed the JDK, you'll need to set the JAVA\_HOME environment v
 **Getting Started**
 ===================
 
-Add the following dependencies to any Apache Maven POM files (or your build system's equivalent configuration), in order to make use of Plasma classes.
+Add the following dependencies to any Apache Maven POM files (or your build system's equivalent configuration), in order to make use of Plasma classes.  
+All versions of Plasma can be found on Maven Central.
 
 **Plasma SDO**
 
@@ -52,19 +52,18 @@ For the Plasma library use the following artifact.
 
 ```xml
 <dependency>
-  <groupId&gt;org.plasma</groupId>
-  <artifactId&gt;plasma-sdo</artifactId>
-  <version&gt;1.2.4</version>
+  <groupId>org.plasma</groupId>
+  <artifactId>plasma-sdo</artifactId>
+  <version>1.2.4</version>
 </dependency>
 ```
 
 **Detailed Documentation**
 ==========================
 
-| [**Document Links**] |
-|  ------------------------------------------------------------------------------------------------ |
-| [**Plasma Quickstart Pojo**](http://plasma-framework.github.io/plasma/Plasma-Quickstart-Pojo.pdf) |
-| [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) |
-| [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         |
-| [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      |
+| **Document** | **Description** |
+|  --------------------- | --------------------- |
+| [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) | General technical background plus architecture components with examples |
+| [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         | Specification for the UML profile used for annotating UML models for use with Plasma |
+| [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      | Generated javadoc API documentation tree |
 
