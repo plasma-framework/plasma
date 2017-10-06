@@ -1,0 +1,337 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.terrameta</groupId>
+		<artifactId>plasma</artifactId>
+		<version>2.0.0</version>
+	</parent>
+	<groupId>org.terrameta</groupId>
+	<artifactId>plasma-runtime</artifactId>
+	<version>2.0.0</version>
+	<packaging>jar</packaging>
+	<name>Plasma Runtime</name>
+	<description>The Plasma Runtime Module</description>
+	<licenses>
+		<license>
+			<name>Plasma License</name>
+			<url>https://github.com/plasma-framework/plasma/LICENSE</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://github.com/plasma-framework/plasma</url>
+		<connection></connection>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+	</repositories>
+	<pluginRepositories>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.9</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<artifactId>xalan</artifactId>
+			<groupId>xalan</groupId>
+			<version>2.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.atteo.classindex</groupId>
+			<artifactId>classindex</artifactId>
+			<version>3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.modeldriven</groupId>
+			<artifactId>fuml</artifactId>
+			<version>1.1.0c</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-api</artifactId>
+					<groupId>javax.xml.bind</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-xjc</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-impl</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
+				</exclusion>
+				<!-- needs to be excluded for XJC in later JDK 6 and 7, yet required 
+					for XSLT - break out modules -->
+				<exclusion>
+					<artifactId>xalan</artifactId>
+					<groupId>xalan</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xerces</artifactId>
+					<groupId>xerces</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.terrameta</groupId>
+			<artifactId>plasma-common</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.terrameta</groupId>
+			<artifactId>plasma-metamodel</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>plasma-runtime</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${basedir}/target/generated-sources/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			 
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.12.3</version>
+				<executions>
+					<execution>
+						<id>plasma-runtime</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+				        <configuration>
+				            <generateDirectory>${basedir}/target/generated-sources/java</generateDirectory>
+							<clearOutputDir>false</clearOutputDir>
+							<extensions>true</extensions>
+							<bindingDirectory>${basedir}/src/main/resources</bindingDirectory>
+							<target>2.0</target>
+							<encoding>cp1252</encoding>
+				        </configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<dependencies>
+				    <!-- 
+					<dependency>
+						<groupId>com.sun</groupId>
+						<artifactId>tools</artifactId>
+						<version>1.5.0</version>
+						<scope>system</scope>
+						<systemPath>${java.home}/../lib/tools.jar</systemPath>
+					</dependency>
+					 -->
+				</dependencies>
+
+				<executions>
+                      
+					<execution>
+						<id>gen_profile_annotations</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<echo message="####Generate profile annotations####" />
+								<property name="compile_classpath" refid="maven.compile.classpath" />
+								<property name="release_suffix" value="2.0.0" />
+								<path id="cp">
+									<pathelement path="${compile_classpath}" />
+								</path>
+								<java failonerror="yes" fork="yes"
+									classname="org.plasma.common.xslt.XSLTUtils">
+									<classpath refid="cp" />
+									<arg value="${basedir}/dummy.out" />
+									<arg
+										value="${basedir}/src/main/resources/uml/Plasma_SDO_Profile.mdxml" />
+									<arg
+										value="${basedir}/src/main/resources/xsl/profile/ProfileToJavaAnnotationMetamodel.xsl" />
+									<arg
+										value="basedir=${basedir}/target/generated-sources/java pkg=org.plasma.sdo.annotation implpkg=org.plasma.sdo.profile author=Plasma-Team version=${release_suffix} separator=${file.separator}" />
+								</java>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+                      
+					<execution>
+						<id>gen_profile_classes</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<echo message="####Generate profile classes####" />
+								<property name="compile_classpath" refid="maven.compile.classpath" />
+								<property name="release_suffix" value="2.0.0" />
+
+								<path id="cp">
+									<pathelement path="${compile_classpath}" />
+								</path>
+								<java failonerror="yes" fork="yes"
+									classname="org.plasma.common.xslt.XSLTUtils">
+									<classpath refid="cp" />
+									<arg value="${basedir}/dummy.out" />
+									<arg
+										value="${basedir}/src/main/resources/uml/Plasma_SDO_Profile.mdxml" />
+									<arg
+										value="${basedir}/src/main/resources/xsl/profile/ProfileToJavaClassMetamodel.xsl" />
+									<arg
+										value="basedir=${basedir}/target/generated-sources/java pkg=org.plasma.sdo.profile interfacepkg=org.plasma.sdo author=Plasma-Team version=${release_suffix} separator=${file.separator}" />
+								</java>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>gen_profile_interfaces</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<echo message="####Generate profile interfaces####" />
+								<property name="compile_classpath" refid="maven.compile.classpath" />
+								<property name="release_suffix" value="2.0.0" />
+								<path id="cp">
+									<pathelement path="${compile_classpath}" />
+								</path>
+								<java failonerror="yes" fork="yes"
+									classname="org.plasma.common.xslt.XSLTUtils">
+									<classpath refid="cp" />
+									<arg value="${basedir}/dummy.out" />
+									<arg
+										value="${basedir}/src/main/resources/uml/Plasma_SDO_Profile.mdxml" />
+									<arg
+										value="${basedir}/src/main/resources/xsl/profile/ProfileToJavaInterfaceMetamodel.xsl" />
+									<arg
+										value="basedir=${basedir}/target/generated-sources/java pkg=org.plasma.sdo implpkg=org.plasma.sdo.profile author=Plasma-Team version=${release_suffix} separator=${file.separator}" />
+								</java>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					 
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											build-helper-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.7,)
+										</versionRange>
+										<goals>
+											<goal>add-source</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-antrun-plugin
+										</artifactId>
+										<versionRange>
+											[1.8,)
+										</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

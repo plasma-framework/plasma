@@ -1,0 +1,324 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+      <groupId>org.terrameta</groupId>
+      <artifactId>plasma</artifactId>
+      <version>2.0.0</version>
+  </parent>
+  <groupId>org.terrameta</groupId>
+  <artifactId>plasma-provisioning</artifactId>
+  <version>2.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>Plasma Provisioning</name>
+	<description>The Plasma Provisioning Module</description>
+	<licenses>
+		<license>
+			<name>Plasma License</name>
+			<url>https://github.com/plasma-framework/plasma/LICENSE</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://github.com/plasma-framework/plasma</url>
+		<connection></connection>
+	</scm>
+  <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <repositories>
+	  <repository>
+		  <id>maven2-repository.dev.java.net</id>
+		  <name>Java.net Maven 2 Repository</name>
+		  <url>http://download.java.net/maven/2</url>
+	  </repository>
+  </repositories>
+  <pluginRepositories>                                  
+		<pluginRepository>                                
+			<id>maven2-repository.dev.java.net</id>       
+			<name>Java.net Maven 2 Repository</name>      
+			<url>http://download.java.net/maven/2</url>   
+		</pluginRepository>                               
+  </pluginRepositories>                                 
+  
+  <dependencies>     
+    
+    <!--
+        Dependencies for Plasma provisioning 
+    -->  
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>3.8.1</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.ant</groupId>
+		<artifactId>ant</artifactId>
+		<version>1.9.0</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>commons-logging</groupId>
+		<artifactId>commons-logging</artifactId>
+		<version>1.1.1</version>
+	</dependency>
+	<dependency>
+	    <groupId>net.sf.jopt-simple</groupId>
+	    <artifactId>jopt-simple</artifactId>
+	    <version>4.8</version>
+	</dependency>    
+    <dependency>
+      <groupId>org.terrameta</groupId>
+      <artifactId>plasma-core</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+  </dependencies>
+	<build>
+		<finalName>plasma-provisioning</finalName>
+		<plugins>
+ 		    <!--         
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.12.3</version>
+				<executions>
+					<execution>
+					    <id>query-model</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+				        <configuration>
+				            <generateDirectory>${basedir}/target/generated-sources/java</generateDirectory>
+							<clearOutputDir>false</clearOutputDir>
+							<extensions>true</extensions>
+							<bindingDirectory>${basedir}/src/main/resources</bindingDirectory>
+							<target>2.0</target>
+							<encoding>cp1252</encoding>
+				        </configuration>
+					</execution>
+				</executions>
+			</plugin>
+			  -->       
+           <plugin>                                                         
+              <artifactId>maven-antrun-plugin</artifactId>                   
+              <version>1.7</version>  
+              <dependencies>
+                <!-- 
+                <dependency>
+                  <groupId>com.sun</groupId>
+                  <artifactId>tools</artifactId>
+				  <version>1.5.0</version>
+				  <scope>system</scope>
+                  <systemPath>${java.home}/../lib/tools.jar</systemPath>
+                </dependency>
+                 -->
+              </dependencies>              
+              <executions>                                                  
+                                                     
+               <!-- Generated SDO classes used by RDB service checked in as
+                    would cause circular depency - uncomment to re-generate --> 
+                <!--          
+                          <jvmarg value="-Xdebug" /> 
+                          <jvmarg value="-Xnoagent" /> 
+                          <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8002,server=y,suspend=y" />  
+                -->   
+                 <!--                                                                             
+                <execution>    
+                  <id>gen_rdb_sdo</id>                                              
+                  <phase>generate-sources</phase>                
+                  <configuration>                                            
+                     <systemProperties>
+                                <property><name>log4j.configuration</name><value>log4j.properties</value></property>
+                                <property><name>fuml.configuration</name><value>fuml-config.xml</value></property> 
+                                <property><name>plasma.configuration</name><value>plasma-config.xml</value></property>
+                     </systemProperties>
+                    <target>                                                 
+                      <echo message="####Generate RDB SDO####"/>                                              
+                      <property name="compile_classpath" refid="maven.compile.classpath"/>
+                      <path id="cp">                                                                                                                                                                                                                             
+                         <pathelement path="${compile_classpath}"/>                                                                                                                                                                                                  
+                      </path>                                                                                                                                                                                                                                          
+                      <java failonerror="yes" fork="yes"                                                                                                                                                                                                                                 
+                          classname="org.plasma.provisioning.cli.SDOTool">                                                                                                                                                                                              
+                          <classpath refid="cp"/> 
+                          <jvmarg value="-Dfuml.configuration=fuml-config.xml" /> 
+                             
+                                                                                                                                                                                                                                      
+                          <arg value="-create" />                                                                                                                                                                 
+                          <arg value="java" />                                                                                                                                                                 
+                          <arg value="${basedir}/target/generated-sources/java" />                                                                                                                                                                 
+                      </java>                                                                                                                                                                                                                                        
+                      <java failonerror="yes" fork="yes"                                                                                                                                                                                                                                 
+                          classname="org.plasma.provisioning.cli.DSLTool">                                                                                                                                                                                              
+                          <classpath refid="cp"/> 
+                          <jvmarg value="-Dfuml.configuration=fuml-config.xml" />                                                                                                                                                                                                               
+                          <arg value="-create" />                                                                                                                                                                 
+                          <arg value="java" />                                                                                                                                                                 
+                          <arg value="${basedir}/target/generated-sources/java" />                                                                                                                                                                 
+                      </java>                                                                                                                                                                                                                                        
+			          <javac destdir="${basedir}/target/classes" 
+			              debug="on"> 
+			              <classpath refid="cp" /> 
+			              <src path="${basedir}/src/main/java"/>
+			              <src path="${basedir}/target/generated-sources/java"/>
+			          </javac>                          
+                    </target>                                                
+                  </configuration>                                           
+                  <goals>                                                    
+                    <goal>run</goal>                                         
+                  </goals>                                                   
+                </execution> 
+                    -->                                                          
+              </executions>                                                  
+            </plugin>
+            <!-- 	
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                  <execution>
+                    <id>add-source</id>
+                    <phase>generate-sources</phase>
+                    <goals>
+                      <goal>add-source</goal>
+                    </goals>
+                    <configuration>
+                      <sources>
+                        <source>${basedir}/target/generated-sources/java</source>
+                      </sources>
+                    </configuration>
+                  </execution>
+                </executions>
+            </plugin>
+             -->
+      		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3</version>
+				<!-- <configuration> <webXml>target/web.xml</webXml> </configuration> -->
+				<configuration>
+					<excludes>
+						<exclude>**/plasma-config.xml</exclude>
+                        <exclude>**/test-plasma-fuml-config.xml</exclude>
+						<exclude>**/*.properties</exclude>
+						<exclude>uml/*</exclude>
+                        <exclude>xsl/**/*.xsl</exclude>
+						<exclude>com/*</exclude>
+						<exclude>**/test/*</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.10</version>
+				 
+				<configuration>
+					<additionalClasspathElements>
+						<additionalClasspathElement>${basedir}/src/main/resources</additionalClasspathElement>
+						<additionalClasspathElement>${basedir}/src/test/resources</additionalClasspathElement>
+					</additionalClasspathElements>
+
+
+					<forkMode>pertest</forkMode>
+					
+					<argLine>-Dlog4j.configuration=log4j.properties
+					    -Dfuml.configuration=test-plasma-fuml-config.xml
+						-Dplasma.configuration=test-plasma-config.xml</argLine>
+					 
+					 <!--	
+                    <argLine>-Dlog4j.configuration=log4j.properties -Dfuml.configuration=test-plasma-fuml-config.xml -Dplasma.configuration=plasma-config.xml -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address=8001,server=y,suspend=y</argLine>
+                     -->
+                     <includes>     
+                           <include>**/AnnotationConverterTest*</include>     
+                     </includes>
+                      
+				</configuration>
+			</plugin>
+		    <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-source-plugin</artifactId>
+		        <executions>
+		            <execution>
+		                <id>attach-sources</id>
+		                <goals>
+		                    <goal>jar</goal>
+		                </goals>
+		            </execution>
+		        </executions>
+		    </plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-antrun-plugin
+										</artifactId>
+										<versionRange>
+											[1.7,)
+										</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											build-helper-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.7,)
+										</versionRange>
+										<goals>
+											<goal>add-source</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+  
+
+  
+</project>

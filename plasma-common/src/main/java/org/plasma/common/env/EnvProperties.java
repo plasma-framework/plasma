@@ -39,7 +39,6 @@ public class EnvProperties {
       FileInputStream fis = new FileInputStream(fileName);
       props.load(fis);
     } catch (IOException e) {
-      System.out.println("\n\nNo properties file found. Using only system properties.\n\n");
     }
     // add/override with system properties
     props.putAll(System.getProperties());

@@ -88,9 +88,7 @@ public class RDBMojo extends ClassRealmMojo {
       if (this.schemaNames == null) {
         String[] args = { "-" + ProvisioningToolOption.command.name(), this.action,
             "-" + ProvisioningToolOption.dialect.name(), this.dialect,
-            "-" + ProvisioningToolOption.dest.name(), this.outputDirectory + "/" + outputFile,
-            "-" + ProvisioningToolOption.namespaces.name(),
-            this.namespaces != null ? this.namespaces : "http://" + outputFile, };
+            "-" + ProvisioningToolOption.dest.name(), this.outputDirectory + "/" + outputFile };
         RDBTool.main(args);
       } else {
         String[] args = { "-" + ProvisioningToolOption.command.name(), this.action,
