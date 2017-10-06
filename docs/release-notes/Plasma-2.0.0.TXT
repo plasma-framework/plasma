@@ -1,0 +1,25 @@
+Release Notes
+
+Plasma 2.0.0 Release Notes
+Plasma 2.0.0 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/plasma-framework/plasma/issues.
+
+
+Major Changes
+[Issue #86] - New Metadata Runtime Derived from Annotations 
+ 
+Bugs
+[Issue #79] - UML Converter Ignores Abstract Flag
+[Issue #60] - Property isAbstract Getting Ignored in Provisioning of Older MDXML Models 
+
+
+Improvements
+
+New Features
+Tasks
+Wish
+
+
