@@ -16,7 +16,7 @@
 
 package org.plasma.sdo.access.client;
 
-import org.plasma.config.DataAccessProviderName;
+import org.plasma.runtime.DataAccessProviderName;
 import org.plasma.runtime.PlasmaRuntime;
 
 public class JDBCPojoDataAccessClient extends PojoDataAccessClient {

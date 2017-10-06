@@ -25,7 +25,7 @@ import java.util.UUID;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.exception.PlasmaRuntimeException;
-import org.plasma.config.Namespace;
+import org.plasma.runtime.Namespace;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.PlasmaDataGraph;
 import org.plasma.sdo.core.CoreDataGraph;

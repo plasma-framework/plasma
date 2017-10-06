@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.plasma.config.Namespace;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
 import org.plasma.metamodel.DataTypeRef;
@@ -31,6 +30,7 @@ import org.plasma.metamodel.Package;
 import org.plasma.metamodel.Property;
 import org.plasma.metamodel.TypeRef;
 import org.plasma.metamodel.adapter.FieldAdapter;
+import org.plasma.runtime.Namespace;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.core.CoreDataObject;

@@ -16,10 +16,10 @@
 
 package org.plasma.text.lang3gl.java;
 
-import org.plasma.config.Namespace;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
 import org.plasma.metamodel.Package;
+import org.plasma.runtime.Namespace;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.text.lang3gl.ClassNameResolver;
 

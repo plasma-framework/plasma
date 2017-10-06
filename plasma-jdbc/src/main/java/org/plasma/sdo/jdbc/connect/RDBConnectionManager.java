@@ -38,9 +38,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.plasma.config.DataAccessProviderName;
-import org.plasma.config.Property;
+import org.plasma.runtime.DataAccessProviderName;
 import org.plasma.runtime.PlasmaRuntime;
+import org.plasma.runtime.Property;
 import org.plasma.sdo.jdbc.service.JDBCServiceException;
 
 /**

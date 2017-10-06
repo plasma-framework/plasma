@@ -22,8 +22,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.config.DataAccessProviderName;
 import org.plasma.query.Query;
+import org.plasma.runtime.DataAccessProviderName;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.PlasmaNode;
 import org.plasma.sdo.access.PlasmaDataAccessService;

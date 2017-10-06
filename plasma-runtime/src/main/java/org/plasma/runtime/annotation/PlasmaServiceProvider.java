@@ -21,9 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.atteo.classindex.IndexAnnotated;
-import org.plasma.config.DataAccessProviderName;
-import org.plasma.config.DataAccessService;
-import org.plasma.config.DataStoreType;
+import org.plasma.runtime.DataAccessProviderName;
+import org.plasma.runtime.DataAccessService;
+import org.plasma.runtime.DataStoreType;
 
 /**
  * Tagging annotation applied to {@link DataAccessService data access service }

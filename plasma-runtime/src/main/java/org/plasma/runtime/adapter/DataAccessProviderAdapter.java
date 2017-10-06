@@ -16,7 +16,7 @@
 
 package org.plasma.runtime.adapter;
 
-import org.plasma.config.DataAccessProvider;
+import org.plasma.runtime.DataAccessProvider;
 
 public class DataAccessProviderAdapter {
   private DataAccessProvider provider;

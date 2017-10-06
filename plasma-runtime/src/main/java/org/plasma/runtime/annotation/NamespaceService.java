@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.atteo.classindex.IndexAnnotated;
-import org.plasma.config.DataAccessProviderName;
-import org.plasma.config.DataStoreType;
+import org.plasma.runtime.DataAccessProviderName;
+import org.plasma.runtime.DataStoreType;
 
 /**
  * Provides hints enabling discovery of a service provider to associate with the

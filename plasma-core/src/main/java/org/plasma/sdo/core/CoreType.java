@@ -30,7 +30,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.config.Namespace;
+import org.plasma.runtime.Namespace;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.runtime.adapter.TypeBindingAdapter;
 import org.plasma.sdo.Alias;

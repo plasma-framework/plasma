@@ -21,8 +21,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.plasma.config.EnumSource;
-import org.plasma.config.PropertyNameStyle;
+import org.plasma.runtime.EnumSource;
+import org.plasma.runtime.PropertyNameStyle;
 
 /**
  * Specifies various provisioning properties within the context of a namespace.

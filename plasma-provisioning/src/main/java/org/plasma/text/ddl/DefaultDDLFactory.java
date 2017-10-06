@@ -16,10 +16,10 @@
 
 package org.plasma.text.ddl;
 
-import org.plasma.config.DataAccessProvider;
-import org.plasma.config.DataAccessProviderName;
-import org.plasma.config.SequenceConfiguration;
+import org.plasma.runtime.DataAccessProvider;
+import org.plasma.runtime.DataAccessProviderName;
 import org.plasma.runtime.PlasmaRuntime;
+import org.plasma.runtime.SequenceConfiguration;
 
 public abstract class DefaultDDLFactory {
 

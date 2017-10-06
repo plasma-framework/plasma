@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.plasma.config.DataAccessProviderName;
+import org.plasma.runtime.DataAccessProviderName;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.access.DataAccessException;
 import org.plasma.sdo.helper.PlasmaTypeHelper;

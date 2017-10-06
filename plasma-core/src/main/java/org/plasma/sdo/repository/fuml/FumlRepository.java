@@ -30,7 +30,7 @@ import org.modeldriven.fuml.repository.NamedElement;
 import org.modeldriven.fuml.repository.RepositorylException;
 import org.modeldriven.fuml.repository.Stereotype;
 import org.plasma.common.exception.PlasmaRuntimeException;
-import org.plasma.config.Artifact;
+import org.plasma.runtime.Artifact;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.profile.SDONamespace;
 import org.plasma.sdo.repository.Class_;
@@ -69,7 +69,7 @@ public class FumlRepository implements Repository {
   private static synchronized void initializeInstance() throws RepositorylException {
     if (instance == null) {
 
-      for (org.plasma.config.Repository repo : PlasmaRuntime.getInstance().getRepositories()) {
+      for (org.plasma.runtime.Repository repo : PlasmaRuntime.getInstance().getRepositories()) {
         for (Artifact artifact : repo.getArtifacts()) {
           InputStream stream = PlasmaRuntime.class.getResourceAsStream(artifact.getUrn());
           if (stream == null)

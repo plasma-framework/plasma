@@ -16,7 +16,7 @@
 
 package org.plasma.runtime.adapter;
 
-import org.plasma.config.PropertyBinding;
+import org.plasma.runtime.PropertyBinding;
 
 public class PropertyBindingAdapter {
 

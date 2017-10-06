@@ -49,26 +49,6 @@ import org.plasma.common.bind.DefaultValidationEventHandler;
 import org.plasma.common.env.EnvConstants;
 import org.plasma.common.env.EnvProperties;
 import org.plasma.common.exception.PlasmaRuntimeException;
-import org.plasma.config.Artifact;
-import org.plasma.config.DataAccessProvider;
-import org.plasma.config.DataAccessProviderName;
-import org.plasma.config.DataAccessService;
-import org.plasma.config.DataStoreType;
-import org.plasma.config.EnumSource;
-import org.plasma.config.GlobalProvisioning;
-import org.plasma.config.ImplementationProvisioning;
-import org.plasma.config.InterfaceProvisioning;
-import org.plasma.config.Namespace;
-import org.plasma.config.NamespaceLink;
-import org.plasma.config.NamespaceProvisioning;
-import org.plasma.config.PlasmaConfiguration;
-import org.plasma.config.Property;
-import org.plasma.config.PropertyNameStyle;
-import org.plasma.config.QueryDSLProvisioning;
-import org.plasma.config.RDBMSVendorName;
-import org.plasma.config.Repository;
-import org.plasma.config.SDO;
-import org.plasma.config.TypeBinding;
 import org.plasma.metamodel.Model;
 import org.plasma.metamodel.adapter.ModelAdapter;
 import org.plasma.metamodel.adapter.ProvisioningModel;
@@ -77,6 +57,26 @@ import org.plasma.profile.ProfileConfig;
 import org.plasma.profile.ProfileURN;
 import org.plasma.profile.adapter.ProfileArtifactAdapter;
 import org.plasma.provisioning.AnnotationMetamodelAssembler;
+import org.plasma.runtime.Artifact;
+import org.plasma.runtime.DataAccessProvider;
+import org.plasma.runtime.DataAccessProviderName;
+import org.plasma.runtime.DataAccessService;
+import org.plasma.runtime.DataStoreType;
+import org.plasma.runtime.EnumSource;
+import org.plasma.runtime.GlobalProvisioning;
+import org.plasma.runtime.ImplementationProvisioning;
+import org.plasma.runtime.InterfaceProvisioning;
+import org.plasma.runtime.Namespace;
+import org.plasma.runtime.NamespaceLink;
+import org.plasma.runtime.NamespaceProvisioning;
+import org.plasma.runtime.PlasmaConfiguration;
+import org.plasma.runtime.Property;
+import org.plasma.runtime.PropertyNameStyle;
+import org.plasma.runtime.QueryDSLProvisioning;
+import org.plasma.runtime.RDBMSVendorName;
+import org.plasma.runtime.Repository;
+import org.plasma.runtime.SDO;
+import org.plasma.runtime.TypeBinding;
 import org.plasma.runtime.adapter.NamespaceAdapter;
 import org.plasma.runtime.adapter.PropertyBindingAdapter;
 import org.plasma.runtime.adapter.TypeBindingAdapter;
@@ -1045,7 +1045,7 @@ public class PlasmaRuntime {
    *         provider, or null if not exists.
    */
   public Property findProviderProperty(DataAccessProvider provider, String name) {
-    for (org.plasma.config.Property property : provider.getProperties()) {
+    for (org.plasma.runtime.Property property : provider.getProperties()) {
       if (property.getName().equals(name))
         return property;
     }

@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.plasma.config.Namespace;
-import org.plasma.config.NamespaceProvisioning;
-import org.plasma.config.Property;
-import org.plasma.config.TypeBinding;
 import org.plasma.runtime.ConfigurationException;
+import org.plasma.runtime.Namespace;
+import org.plasma.runtime.NamespaceProvisioning;
+import org.plasma.runtime.Property;
+import org.plasma.runtime.TypeBinding;
 
 public class NamespaceAdapter {
 

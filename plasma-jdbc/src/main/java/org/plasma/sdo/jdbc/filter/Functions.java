@@ -2,10 +2,10 @@ package org.plasma.sdo.jdbc.filter;
 
 import java.util.List;
 
-import org.plasma.config.DataAccessProviderName;
-import org.plasma.config.RDBMSVendorName;
 import org.plasma.query.model.Function;
+import org.plasma.runtime.DataAccessProviderName;
 import org.plasma.runtime.PlasmaRuntime;
+import org.plasma.runtime.RDBMSVendorName;
 import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.access.DataAccessException;

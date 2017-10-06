@@ -19,12 +19,12 @@ package org.plasma.text.lang3gl.java;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.plasma.config.InterfaceProvisioning;
-import org.plasma.config.Namespace;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
 import org.plasma.metamodel.Package;
 import org.plasma.metamodel.Property;
+import org.plasma.runtime.InterfaceProvisioning;
+import org.plasma.runtime.Namespace;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.PlasmaDataObject;
 import org.plasma.text.TextBuilder;

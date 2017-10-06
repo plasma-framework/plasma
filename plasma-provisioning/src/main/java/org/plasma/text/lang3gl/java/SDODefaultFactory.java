@@ -20,13 +20,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.plasma.config.EnumSource;
-import org.plasma.config.InterfaceProvisioning;
-import org.plasma.config.PropertyNameStyle;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.Package;
 import org.plasma.metamodel.Property;
+import org.plasma.runtime.EnumSource;
+import org.plasma.runtime.InterfaceProvisioning;
 import org.plasma.runtime.PlasmaRuntime;
+import org.plasma.runtime.PropertyNameStyle;
 import org.plasma.text.TextBuilder;
 import org.plasma.text.TextProvisioningException;
 import org.plasma.text.lang3gl.ClassNameResolver;

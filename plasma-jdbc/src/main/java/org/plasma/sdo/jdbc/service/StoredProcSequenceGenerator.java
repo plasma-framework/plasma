@@ -28,9 +28,9 @@ import java.sql.Types;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.config.DataAccessProviderName;
-import org.plasma.config.SequenceConfiguration;
+import org.plasma.runtime.DataAccessProviderName;
 import org.plasma.runtime.PlasmaRuntime;
+import org.plasma.runtime.SequenceConfiguration;
 import org.plasma.sdo.Alias;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.access.DataAccessException;

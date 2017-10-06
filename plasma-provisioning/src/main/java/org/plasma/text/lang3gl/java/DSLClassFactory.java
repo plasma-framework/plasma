@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.plasma.config.Namespace;
 import org.plasma.metamodel.Class;
 import org.plasma.metamodel.ClassRef;
 import org.plasma.metamodel.DataTypeRef;
@@ -38,6 +37,7 @@ import org.plasma.query.TemporalDataProperty;
 import org.plasma.query.dsl.DataNode;
 import org.plasma.query.dsl.DomainRoot;
 import org.plasma.query.dsl.PathNode;
+import org.plasma.runtime.Namespace;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.helper.PlasmaTypeHelper;

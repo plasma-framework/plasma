@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.plasma.config.DataStoreType;
+import org.plasma.runtime.DataStoreType;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.PlasmaProperty;

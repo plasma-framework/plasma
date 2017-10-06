@@ -42,7 +42,7 @@ public class PlasmaConfigDataBinding implements DataBinding {
 
   private ValidatingUnmarshaler validatingUnmarshaler;
 
-  public static Class<?>[] FACTORIES = { org.plasma.config.ObjectFactory.class, };
+  public static Class<?>[] FACTORIES = { org.plasma.runtime.ObjectFactory.class, };
 
   @SuppressWarnings("unused")
   private PlasmaConfigDataBinding() {

@@ -36,7 +36,7 @@ public class PlasmaRepository implements Repository {
   private List<Repository> delegates = new ArrayList<>();
 
   private PlasmaRepository() {
-    for (org.plasma.config.Repository repoConfig : PlasmaRuntime.getInstance().getRepositories()) {
+    for (org.plasma.runtime.Repository repoConfig : PlasmaRuntime.getInstance().getRepositories()) {
       if (repoConfig.getRepositoryClassName() != null) {
         try {
           Class<?> interfaceImplClass = Class.forName(repoConfig.getRepositoryClassName());

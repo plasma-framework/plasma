@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.plasma.config.PropertyBinding;
-import org.plasma.config.TypeBinding;
 import org.plasma.runtime.ConfigurationException;
+import org.plasma.runtime.PropertyBinding;
+import org.plasma.runtime.TypeBinding;
 
 public class TypeBindingAdapter {
 
