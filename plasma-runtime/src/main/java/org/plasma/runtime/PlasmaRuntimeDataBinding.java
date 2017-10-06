@@ -31,24 +31,24 @@ import org.plasma.common.bind.DataBinding;
 import org.plasma.common.bind.ValidatingUnmarshaler;
 import org.xml.sax.SAXException;
 
-public class PlasmaConfigDataBinding implements DataBinding {
+public class PlasmaRuntimeDataBinding implements DataBinding {
 
-  private static Log log = LogFactory.getLog(PlasmaConfigDataBinding.class);
-  public static String FILENAME_SCHEMA_CHAIN_ROOT = "plasma-config.xsd";
+  private static Log log = LogFactory.getLog(PlasmaRuntimeDataBinding.class);
+  public static String FILENAME_SCHEMA_CHAIN_ROOT = "plasma-runtime.xsd";
 
   // just classes in the same package where can find the above respective
   // schema files via Class.getResource*
-  public static Class<?> RESOURCE_CLASS = PlasmaConfigDataBinding.class;
+  public static Class<?> RESOURCE_CLASS = PlasmaRuntimeDataBinding.class;
 
   private ValidatingUnmarshaler validatingUnmarshaler;
 
   public static Class<?>[] FACTORIES = { org.plasma.runtime.ObjectFactory.class, };
 
   @SuppressWarnings("unused")
-  private PlasmaConfigDataBinding() {
+  private PlasmaRuntimeDataBinding() {
   }
 
-  public PlasmaConfigDataBinding(BindingValidationEventHandler validationEventHandler)
+  public PlasmaRuntimeDataBinding(BindingValidationEventHandler validationEventHandler)
       throws JAXBException, SAXException {
     log.debug("loading schema chain...");
     URL url = RESOURCE_CLASS.getResource(FILENAME_SCHEMA_CHAIN_ROOT);

@@ -69,7 +69,6 @@ import org.plasma.runtime.InterfaceProvisioning;
 import org.plasma.runtime.Namespace;
 import org.plasma.runtime.NamespaceLink;
 import org.plasma.runtime.NamespaceProvisioning;
-import org.plasma.runtime.PlasmaConfiguration;
 import org.plasma.runtime.Property;
 import org.plasma.runtime.PropertyNameStyle;
 import org.plasma.runtime.QueryDSLProvisioning;
@@ -98,7 +97,7 @@ public class PlasmaRuntime {
   private String configFileNameOrURIString;
   private URI configURI;
   private long configFileLastModifiedDate = System.currentTimeMillis();
-  private PlasmaConfiguration config;
+  private RuntimeConfiguration config;
   private Map<String, Artifact> artifactMap = new HashMap<String, Artifact>();
   private Map<String, NamespaceAdapter> sdoNamespaceMap = new HashMap<String, NamespaceAdapter>();
   private DataAccessProviderName defaultProviderName;
@@ -132,8 +131,8 @@ public class PlasmaRuntime {
       for (Class<?> c : ClassIndex.getAnnotated(org.plasma.sdo.annotation.Type.class))
         metadataClasses.add(c);
 
-      PlasmaConfigDataBinding configBinding = new PlasmaConfigDataBinding(
-          new PlasmaConfigValidationEventHandler());
+      PlasmaRuntimeDataBinding configBinding = new PlasmaRuntimeDataBinding(
+          new PlasmaRuntimeValidationEventHandler());
 
       InputStream stream = this.findConfigStream(this.configFileNameOrURIString);
       if (stream != null) {
@@ -197,8 +196,8 @@ public class PlasmaRuntime {
     return derivedModel;
   }
 
-  private PlasmaConfiguration deriveConfig(Model derivedModel) {
-    PlasmaConfiguration config = new PlasmaConfiguration();
+  private RuntimeConfiguration deriveConfig(Model derivedModel) {
+    RuntimeConfiguration config = new RuntimeConfiguration();
     log.debug("deriving configuration");
     SDO sdo = new SDO();
     config.setSDO(sdo);
@@ -836,10 +835,10 @@ public class PlasmaRuntime {
   }
 
   @SuppressWarnings("unchecked")
-  private PlasmaConfiguration unmarshalConfig(String configFileURI, InputStream stream,
-      PlasmaConfigDataBinding binding) {
+  private RuntimeConfiguration unmarshalConfig(String configFileURI, InputStream stream,
+      PlasmaRuntimeDataBinding binding) {
     try {
-      PlasmaConfiguration result = (PlasmaConfiguration) binding.validate(stream);
+      RuntimeConfiguration result = (RuntimeConfiguration) binding.validate(stream);
       URL url = PlasmaRuntime.class.getResource(configFileURI);
       if (url == null)
         url = PlasmaRuntime.class.getClassLoader().getResource(configFileURI);
@@ -859,7 +858,7 @@ public class PlasmaRuntime {
 
   public void marshal(OutputStream stream) {
     try {
-      PlasmaConfigDataBinding configBinding = new PlasmaConfigDataBinding(
+      PlasmaRuntimeDataBinding configBinding = new PlasmaRuntimeDataBinding(
           new DefaultValidationEventHandler());
       configBinding.marshal(this.config, stream);
     } catch (JAXBException e1) {
@@ -880,7 +879,7 @@ public class PlasmaRuntime {
       instance = new PlasmaRuntime();
   }
 
-  public PlasmaConfiguration getConfig() {
+  public RuntimeConfiguration getConfig() {
     return config;
   }
 

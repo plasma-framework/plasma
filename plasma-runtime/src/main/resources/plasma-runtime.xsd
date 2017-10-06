@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.plasma.org/config" 
-  xmlns:cfg="http://www.plasma.org/config"
+<xsd:schema targetNamespace="http://www.plasma.org/runtime" 
+  xmlns:cfg="http://www.plasma.org/runtime"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-     <xsd:complexType name="PlasmaConfiguration">
+     <xsd:complexType name="RuntimeConfiguration">
         <xsd:annotation>
             <xsd:documentation></xsd:documentation>
         </xsd:annotation>
@@ -26,7 +26,7 @@
          
     </xsd:complexType>
 
-    <xsd:element name="PlasmaConfiguration" type="cfg:PlasmaConfiguration">
+    <xsd:element name="RuntimeConfiguration" type="cfg:RuntimeConfiguration">
         <xsd:annotation>
             <xsd:documentation></xsd:documentation>
         </xsd:annotation>

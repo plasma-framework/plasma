@@ -23,9 +23,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.plasma.common.bind.BindingValidationEventHandler;
 
-public class PlasmaConfigValidationEventHandler implements BindingValidationEventHandler {
+public class PlasmaRuntimeValidationEventHandler implements BindingValidationEventHandler {
 
-  private static Log log = LogFactory.getLog(PlasmaConfigValidationEventHandler.class);
+  private static Log log = LogFactory.getLog(PlasmaRuntimeValidationEventHandler.class);
   private int errorCount;
   private boolean cumulative = true;
 
@@ -33,10 +33,10 @@ public class PlasmaConfigValidationEventHandler implements BindingValidationEven
     return errorCount;
   }
 
-  public PlasmaConfigValidationEventHandler() {
+  public PlasmaRuntimeValidationEventHandler() {
   }
 
-  public PlasmaConfigValidationEventHandler(boolean cumulative) {
+  public PlasmaRuntimeValidationEventHandler(boolean cumulative) {
     this.cumulative = cumulative;
   }
 

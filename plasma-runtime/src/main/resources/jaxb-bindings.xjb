@@ -8,7 +8,7 @@
          <xjc:simple />
     </jxb:globalBindings>
 
-	<jxb:bindings schemaLocation="plasma-config.xsd" node="/xsd:schema">
+	<jxb:bindings schemaLocation="plasma-runtime.xsd" node="/xsd:schema">
 	    <jxb:schemaBindings>
 	        <jxb:package name="org.plasma.runtime">
 	            <jxb:javadoc><![CDATA[<body>Package level documentation for package org.plasma.config.</body>]]></jxb:javadoc>
