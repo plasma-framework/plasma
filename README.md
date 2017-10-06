@@ -1,21 +1,24 @@
 <img src="images/media/image2.jpeg" alt="big-icon" width="64" height="64" />**Plasma**
 ======================================================================================
 
-**TerraMeta Software, Inc.**
-
+**TerraMeta Software, Inc.**  
 PlasmaSDO<sup>®</sup> and PlasmaQuery<sup>®</sup> are registered
-
-Trademarks of TerraMeta Software
+Trademarks of TerraMeta Software, Inc.
 
 Overview
 ========
-
 <span id="_Toc135028939" class="anchor"><span id="_Toc495460092" class="anchor"><span id="_Toc498843305" class="anchor"><span id="_Toc24906349" class="anchor"></span></span></span></span>
-
-**Introduction**
-================
-
 Plasma is a data store agnostic, object mapping and object query framework written in a Java™ with Maven tools for metadata ingestion and conversion.
+
+**Detailed Documentation**
+==========================
+
+| **Document** | **Description** |
+|  --------------------- | --------------------- |
+| [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) | General technical background plus architecture components with examples |
+| [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         | Specification for the UML profile used for annotating UML models for use with Plasma |
+| [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      | Generated javadoc API documentation tree |
+
 
 **How It Works**
 ================
@@ -30,42 +33,37 @@ At its core, the Plasma implementation contains a directed graph or digraph mode
 **Java Runtime**
 
 The latest [JDK or JRE version 1.7.xx or 1.8.xx](http://www.java.com/en/download/manual.jsp) for Linux, Windows, or Mac OS X must be installed in your environment; we recommend the Oracle JDK.
-
 To check the Java version installed, run the command:
 
 $ java -version
 
 Plasma is tested with the Oracle JDKs; it may work with other JDKs such as Open JDK, but it has not been tested with them.
-
 Once you have installed the JDK, you'll need to set the JAVA\_HOME environment variable.
 
 **Getting Started**
 ===================
 
-Add the following dependencies to any Apache Maven POM files (or your build system's equivalent configuration), in order to make use of Plasma classes.
+Add the following dependencies to any Apache Maven POM files (or your build system's equivalent configuration), in order to make use of Plasma classes.  
+All versions of Plasma can be found on Maven Central.
 
 **Plasma SDO**
 
-For the Plasma SDO library use the following artifact.
+For the Plasma library use the following artifact.
 
-&lt;dependency&gt;
-
-&lt;groupId&gt;org.plasma&lt;/groupId&gt;
-
-&lt;artifactId&gt;plasma-sdo&lt;/artifactId&gt;
-
-&lt;version&gt;1.2.4&lt;/version&gt;
-
-&lt;/dependency&gt;
+```xml
+<dependency>
+  <groupId>org.plasma</groupId>
+  <artifactId>plasma-sdo</artifactId>
+  <version>1.2.4</version>
+</dependency>
+```
 
 **Detailed Documentation**
 ==========================
 
-| [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) |
-|------------------------------------------------------------------------------------------------------------------|
-| [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         |
-| [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      |
+| **Document** | **Description** |
+|  --------------------- | --------------------- |
+| [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) | General technical background plus architecture components with examples |
+| [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         | Specification for the UML profile used for annotating UML models for use with Plasma |
+| [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      | Generated javadoc API documentation tree |
 
-[1] http://www.oodesign.com/visitor-pattern.html
-
-[2] http://en.wikipedia.org/wiki/XML\_Metadata\_Interchange
