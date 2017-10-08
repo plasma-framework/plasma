@@ -15,6 +15,7 @@ Plasma is a data store agnostic, object mapping and object query framework writt
 
 | **Document** | **Description** |
 |  --------------------- | --------------------- |
+| [**Plasma Quickstart MySql (POJO)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo) | Step by step guide using annotated Java POJO's as sole metadata source |
 | [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) | General technical background plus architecture components with examples |
 | [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         | Specification for the UML profile used for annotating UML models for use with Plasma |
 | [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      | Generated javadoc API documentation tree |
@@ -46,15 +47,15 @@ Once you have installed the JDK, you'll need to set the JAVA\_HOME environment v
 Add the following dependencies to any Apache Maven POM files (or your build system's equivalent configuration), in order to make use of Plasma classes.  
 All versions of Plasma can be found on Maven Central.
 
-**Plasma SDO**
+**Plasma**
 
 For the Plasma library use the following artifact.
 
 ```xml
 <dependency>
   <groupId>org.plasma</groupId>
-  <artifactId>plasma-sdo</artifactId>
-  <version>1.2.4</version>
+  <artifactId>plasma-core</artifactId>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -63,6 +64,7 @@ For the Plasma library use the following artifact.
 
 | **Document** | **Description** |
 |  --------------------- | --------------------- |
+| [**Plasma Quickstart MySql (POJO)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo) | Step by step guide using annotated Java POJO's as sole metadata source |
 | [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) | General technical background plus architecture components with examples |
 | [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         | Specification for the UML profile used for annotating UML models for use with Plasma |
 | [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      | Generated javadoc API documentation tree |
