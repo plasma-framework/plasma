@@ -1,5 +1,5 @@
 ﻿![icon](media/5cabe8ecef07e1b4c1f972e2fe29b2c8.png)
-**Plasma**
+**Plasma** 
 ========== 
 TerraMeta Software, Inc.
 
@@ -13,7 +13,7 @@ PlasmaSDO® and PlasmaQuery® are registered of Trademarks of TerraMeta Software
 This step-by-step guide uses only annotated Java (POJO) objects as the source of
 schema or metadata. It shows how to build a Maven project which generates a
 simple MySql data model with 2 tables which inserts, queries and prints test
-data from MySql. It requires basic knowledge of the Java programing language,
+data from MySql. It requires basic knowledge of the Java programming language,
 Apache Maven, MySql Server administration and assumes the following software
 install prerequisites.
 
@@ -22,7 +22,7 @@ install prerequisites.
 -   MySql Server 5.5 or Above
 
 See <https://github.com/plasma-framework/plasma-examples-quickstart> for working
-examples which accomplany this guide.
+examples which accompany this guide.
 
 **Plasma Quick Start MySql (POJO)**
 ===================================
@@ -208,7 +208,7 @@ query (DSL) classes as well as a schema for MySql. See below Plasma Maven Plugin
 Configuration for complete listing.
 
 See <https://github.com/plasma-framework/plasma-examples-quickstart> for working
-examples which accomplany this guide.
+examples which accompany this guide.
 
 **Generate Source and DDL**
 ---------------------------
@@ -279,7 +279,7 @@ the employer organization and then the parent organization. Then final y the
 example prints the serialized result graph as formatted XML for easy
 visualization and debugging. The final output should look like the below XML
 example. See <https://github.com/plasma-framework/plasma-examples-quickstart>
-for working examples which accomplany this guide.
+for working examples which accompany this guide.
 
 **Figure 3 – Result Graph, Serialized as XML**
 
@@ -358,7 +358,7 @@ public class ExampleRunner {
 ```
 
 See <https://github.com/plasma-framework/plasma-examples-quickstart> for working
-examples which accomplany this guide.
+examples which accompany this guide.
 
 Plasma Maven Plugin Configuration
 =================================
@@ -366,7 +366,7 @@ Plasma Maven Plugin Configuration
 Below is the Maven plugin listing referenced about which is needed for
 generation of data access source code and DDL. See
 <https://github.com/plasma-framework/plasma-examples-quickstart> for working
-examples which accomplany this guide.
+examples which accompany this guide.
 
 ```xml
 <plugin>
