@@ -1,6 +1,5 @@
-﻿![icon](media/5cabe8ecef07e1b4c1f972e2fe29b2c8.png)
-**Plasma** 
-========== 
+﻿![icon](media/5cabe8ecef07e1b4c1f972e2fe29b2c8.png)**Plasma** 
+=============================================================  
 TerraMeta Software, Inc.
 
 **Plasma Quick Start MySql (POJO)**
