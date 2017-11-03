@@ -725,9 +725,11 @@
             <xsd:enumeration value="timezoneFromDate"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             
             <!-- full text -->
-            <xsd:enumeration value="offsets"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
-            <xsd:enumeration value="relevance"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
-            <xsd:enumeration value="score"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="offsets"><xsd:annotation><xsd:documentation>returns search term word or character offsets into the given body of text or document</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="relevance"><xsd:annotation><xsd:documentation>returns the search relevance value for a given document</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="score"><xsd:annotation><xsd:documentation>returns the final composite score for a given document or body of text</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="terms"><xsd:annotation><xsd:documentation>returns the current search terms for a given search</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="ngrams"><xsd:annotation><xsd:documentation>returns the current ngrams for a given search</xsd:documentation></xsd:annotation></xsd:enumeration>
             
             
 		</xsd:restriction>

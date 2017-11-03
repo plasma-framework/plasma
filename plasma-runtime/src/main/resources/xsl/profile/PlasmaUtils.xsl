@@ -9,10 +9,10 @@
 
 <xsl:template name="emitHeader">
 	<xsl:text>//==============================================================================</xsl:text>
-	<xsl:text>&#13;//                                                          </xsl:text>
-	<xsl:text>&#13;// This software artifact was generated using PlasmaSDO    </xsl:text>
-	<xsl:text>&#13;// provisioning tools.                                      </xsl:text>
-	<xsl:text>&#13;//                                                          </xsl:text>
+	<xsl:text>&#13;//                                                                         </xsl:text>
+	<xsl:text>&#13;// This software artifact was generated using Plasma                       </xsl:text>
+	<xsl:text>&#13;// provisioning tools. Do not modify.                                      </xsl:text>
+	<xsl:text>&#13;//                                                                         </xsl:text>
 	<xsl:text>&#13;//==============================================================================</xsl:text>
 </xsl:template>
 
