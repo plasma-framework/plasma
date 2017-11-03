@@ -606,23 +606,23 @@ public class PlasmaRuntime {
           + "of the PlasmaSDO UML Profile");
     }
 
-    // If Plasma SDO Papyrus profile 1.0 is required and not already a defined
-    // artifact,
-    // load it and the separate data types modules
+    // If Plasma SDO Papyrus profiles 1.1 or 1.2 are required and not already a defined
+    // artifact, load it and the separate data types modules
     if (this.profileNamespace == null) {
-      ProfileArtifactAdapter papyrusProfile = ProfileConfig.getInstance().findArtifactByUrn(
-          ProfileURN.PLASMA_SDO_PROFILE_V_1_1_UML);
-      if (versions.get(papyrusProfile.getNamespaceUri()) != null) {
-        if (this.artifactMap.get(papyrusProfile.getNamespaceUri()) == null) {
-          NamespaceAdapter namespaceAdapter = loadSystemArtifact(papyrusProfile.getUrn().value(),
-              papyrusProfile.getNamespaceUri());
+
+      ProfileArtifactAdapter papyrusProfile1_2 = ProfileConfig.getInstance().findArtifactByUrn(
+          ProfileURN.PLASMA_SDO_PROFILE_V_1_2_UML);
+      if (versions.get(papyrusProfile1_2.getNamespaceUri()) != null) {
+        if (this.artifactMap.get(papyrusProfile1_2.getNamespaceUri()) == null) {
+          NamespaceAdapter namespaceAdapter = loadSystemArtifact(
+              papyrusProfile1_2.getUrn().value(), papyrusProfile1_2.getNamespaceUri());
           if (namespaceAdapter != null) {
             this.profileNamespace = namespaceAdapter;
           } else
-            log.debug("no resource found for, " + papyrusProfile.getUrn().value());
+            log.debug("no resource found for, " + papyrusProfile1_2.getUrn().value());
         }
         ProfileArtifactAdapter papyrusProfileDatatypes = ProfileConfig.getInstance()
-            .findArtifactByUrn(ProfileURN.PLASMA_SDO_DATA_TYPES_V_1_1_UML);
+            .findArtifactByUrn(ProfileURN.PLASMA_SDO_DATA_TYPES_V_1_2_UML);
         if (this.artifactMap.get(papyrusProfileDatatypes.getNamespaceUri()) == null) {
           NamespaceAdapter namespaceAdapter = loadSystemArtifact(papyrusProfileDatatypes.getUrn()
               .value(), papyrusProfileDatatypes.getNamespaceUri());
@@ -630,6 +630,31 @@ public class PlasmaRuntime {
             this.dataTypesNamespace = namespaceAdapter;
           } else
             log.debug("no resource found for, " + papyrusProfileDatatypes.getUrn().value());
+        }
+      }
+
+      if (this.profileNamespace == null) {
+        ProfileArtifactAdapter papyrusProfile1_1 = ProfileConfig.getInstance().findArtifactByUrn(
+            ProfileURN.PLASMA_SDO_PROFILE_V_1_1_UML);
+        if (versions.get(papyrusProfile1_1.getNamespaceUri()) != null) {
+          if (this.artifactMap.get(papyrusProfile1_1.getNamespaceUri()) == null) {
+            NamespaceAdapter namespaceAdapter = loadSystemArtifact(papyrusProfile1_1.getUrn()
+                .value(), papyrusProfile1_1.getNamespaceUri());
+            if (namespaceAdapter != null) {
+              this.profileNamespace = namespaceAdapter;
+            } else
+              log.debug("no resource found for, " + papyrusProfile1_1.getUrn().value());
+          }
+          ProfileArtifactAdapter papyrusProfileDatatypes = ProfileConfig.getInstance()
+              .findArtifactByUrn(ProfileURN.PLASMA_SDO_DATA_TYPES_V_1_1_UML);
+          if (this.artifactMap.get(papyrusProfileDatatypes.getNamespaceUri()) == null) {
+            NamespaceAdapter namespaceAdapter = loadSystemArtifact(papyrusProfileDatatypes.getUrn()
+                .value(), papyrusProfileDatatypes.getNamespaceUri());
+            if (namespaceAdapter != null) {
+              this.dataTypesNamespace = namespaceAdapter;
+            } else
+              log.debug("no resource found for, " + papyrusProfileDatatypes.getUrn().value());
+          }
         }
       }
     }

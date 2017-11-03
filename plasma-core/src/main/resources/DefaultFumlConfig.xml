@@ -36,11 +36,10 @@
     <!--
     Note: The id suffix for the target href is the XMI ID of
      the eAnnotations contents block id the profile artifact
-    -->             
+    -->                  
     <NamespaceMapping pathmap="pathmap://PLASMA_PROFILES/PlasmaSDO.profile_v1_1.uml" 
         domain="ecore" uri="http:///schemas/PlasmaSDOProfile" 
-        target="http:///schemas/PlasmaSDOProfile/_1OeaAJctEee5huZM-G1W5Q" /> 
-    
+        target="http:///schemas/PlasmaSDOProfile/_1OeaAJctEee5huZM-G1W5Q" />       
     <NamespaceMapping pathmap="pathmap://PLASMA_PROFILES/PlasmaSDO.profile_v1_2.uml" 
         domain="ecore" uri="http:///schemas/PlasmaSDOProfile" 
         target="http:///schemas/PlasmaSDOProfile/_HeBRQLa3EeeGwOelpq04nA" /> 
