@@ -1,4 +1,4 @@
-﻿![icon](media/5cabe8ecef07e1b4c1f972e2fe29b2c8.png)**Plasma** 
+﻿<sup><img src="media/5cabe8ecef07e1b4c1f972e2fe29b2c8.png" alt="big-icon" width="24" height="24" /></sup>**Plasma**
 =============================================================  
 TerraMeta Software, Inc.
 
