@@ -606,7 +606,8 @@ public class PlasmaRuntime {
           + "of the PlasmaSDO UML Profile");
     }
 
-    // If Plasma SDO Papyrus profiles 1.1 or 1.2 are required and not already a defined
+    // If Plasma SDO Papyrus profiles 1.1 or 1.2 are required and not already a
+    // defined
     // artifact, load it and the separate data types modules
     if (this.profileNamespace == null) {
 

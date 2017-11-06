@@ -372,7 +372,7 @@ public class Query implements org.plasma.query.Query {
       if (join != null) {
         if (result == null)
           result = new ArrayList<>();
-        result.add(join);
+        result.add((org.plasma.query.Join) join);
       }
     }
     if (result != null)

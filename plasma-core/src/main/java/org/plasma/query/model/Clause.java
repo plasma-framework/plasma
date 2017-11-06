@@ -20,6 +20,9 @@ package org.plasma.query.model;
 //- Imported classes and packages -/
 //---------------------------------/
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -30,27 +33,28 @@ import org.plasma.query.visitor.QueryVisitor;
 import org.plasma.query.visitor.Traversal;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Clause", propOrder = { "select", "update", "delete", "from", "join", "where",
-    "orderBy", "groupBy" })
-@XmlRootElement(name = "Clause")
+@XmlType(name = "Clause", propOrder = { "select", "update", "delete", "from", "where", "orderBy",
+    "groupBy", "join", "configurationProperty" })
 public class Clause {
 
-  @XmlElement(name = "Join")
-  protected Join join;
-  @XmlElement(name = "GroupBy")
-  protected GroupBy groupBy;
-  @XmlElement(name = "OrderBy")
-  protected OrderBy orderBy;
-  @XmlElement(name = "Where")
-  protected Where where;
-  @XmlElement(name = "From")
-  protected From from;
   @XmlElement(name = "Select")
   protected Select select;
   @XmlElement(name = "Update")
   protected Update update;
   @XmlElement(name = "Delete")
   protected Delete delete;
+  @XmlElement(name = "From")
+  protected From from;
+  @XmlElement(name = "Where")
+  protected Where where;
+  @XmlElement(name = "OrderBy")
+  protected OrderBy orderBy;
+  @XmlElement(name = "GroupBy")
+  protected GroupBy groupBy;
+  @XmlElement(name = "Join")
+  protected Join join;
+  @XmlElement(name = "ConfigurationProperty")
+  protected List<ConfigurationProperty> configurationProperty;
 
   // ----------------/
   // - Constructors -/
@@ -240,6 +244,13 @@ public class Clause {
 
   public void setDelete(Delete delete) {
     this.delete = delete;
+  }
+
+  public List<ConfigurationProperty> getConfigurationProperty() {
+    if (configurationProperty == null) {
+      configurationProperty = new ArrayList<ConfigurationProperty>();
+    }
+    return this.configurationProperty;
   }
 
   public void accept(QueryVisitor visitor) {

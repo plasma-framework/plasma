@@ -63,7 +63,7 @@ import org.plasma.query.visitor.Traversal;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Expression", propOrder = { "terms" })
+@XmlType(name = "Expression", propOrder = { "term", "configurationProperty" })
 @XmlRootElement(name = "Expression")
 public class Expression implements org.plasma.query.Expression {
 
@@ -73,6 +73,11 @@ public class Expression implements org.plasma.query.Expression {
   protected transient Expression parent;
   @XmlAttribute
   protected String id;
+
+  @XmlElement(name = "Term")
+  protected List<Term> term;
+  @XmlElement(name = "ConfigurationProperty")
+  protected List<ConfigurationProperty> configurationProperty;
 
   public Expression getParent() {
     return this.parent;
@@ -1121,30 +1126,19 @@ public class Expression implements org.plasma.query.Expression {
   /**
    * Gets the value of the terms property.
    * 
-   * <p>
-   * This accessor method returns a reference to the live list, not a snapshot.
-   * Therefore any modification you make to the returned list will be present
-   * inside the JAXB object. This is why there is not a <CODE>set</CODE> method
-   * for the terms property.
-   * 
-   * <p>
-   * For example, to add a new item, do as follows:
-   * 
-   * <pre>
-   * getTerms().add(newItem);
-   * </pre>
-   * 
-   * 
-   * <p>
-   * Objects of the following type(s) are allowed in the list {@link Term }
-   * 
-   * 
    */
   public List<Term> getTerms() {
     if (terms == null) {
       terms = new ArrayList<Term>();
     }
     return this.terms;
+  }
+
+  public List<ConfigurationProperty> getConfigurationProperty() {
+    if (configurationProperty == null) {
+      configurationProperty = new ArrayList<ConfigurationProperty>();
+    }
+    return this.configurationProperty;
   }
 
   public void accept(QueryVisitor visitor) {

@@ -16,6 +16,8 @@
 
 package org.plasma.query.model;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -51,14 +53,15 @@ import org.plasma.query.visitor.Traversal;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Join", propOrder = { "entity", "on" })
-@XmlRootElement(name = "Join")
-public class Join implements org.plasma.query.Join {
+@XmlType(name = "Join", propOrder = { "entity", "on", "configurationProperty" })
+public class Join {
 
   @XmlElement(name = "Entity", required = true)
   protected Entity entity;
   @XmlElement(name = "On", required = true)
   protected On on;
+  @XmlElement(name = "ConfigurationProperty")
+  protected List<ConfigurationProperty> configurationProperty;
   @XmlAttribute(name = "type", required = true)
   protected JoinType type;
 
@@ -105,6 +108,9 @@ public class Join implements org.plasma.query.Join {
   }
 
   /**
+   * public List<ConfigurationProperty> getConfigurationProperty() { if
+   * (configurationProperty == null) { configurationProperty = new
+   * ArrayList<ConfigurationProperty>(); } return this.configurationProperty; }
    * Gets the value of the type property.
    * 
    * @return possible object is {@link JoinType }
