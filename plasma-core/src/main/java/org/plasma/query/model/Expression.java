@@ -63,7 +63,7 @@ import org.plasma.query.visitor.Traversal;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Expression", propOrder = { "term", "configurationProperty" })
+@XmlType(name = "Expression", propOrder = { "terms", "configurationProperty" })
 @XmlRootElement(name = "Expression")
 public class Expression implements org.plasma.query.Expression {
 
@@ -75,7 +75,7 @@ public class Expression implements org.plasma.query.Expression {
   protected String id;
 
   @XmlElement(name = "Term")
-  protected List<Term> term;
+  protected List<Term> terms;
   @XmlElement(name = "ConfigurationProperty")
   protected List<ConfigurationProperty> configurationProperty;
 
@@ -158,9 +158,6 @@ public class Expression implements org.plasma.query.Expression {
     this.accept(finder);
     return finder.getResult();
   }
-
-  @XmlElement(name = "Term")
-  protected List<Term> terms;
 
   public Expression() {
     super();

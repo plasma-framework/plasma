@@ -733,6 +733,8 @@
             <xsd:enumeration value="score"><xsd:annotation><xsd:documentation>returns the final composite score for a given document or body of text</xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="terms"><xsd:annotation><xsd:documentation>returns the current search terms for a given search</xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="ngrams"><xsd:annotation><xsd:documentation>returns the current ngrams for a given search</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="weight"><xsd:annotation><xsd:documentation>returns the vector space weight for a given search</xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="proximity"><xsd:annotation><xsd:documentation>returns the current query term proximity weight for a given search</xsd:documentation></xsd:annotation></xsd:enumeration>
             
             
 		</xsd:restriction>

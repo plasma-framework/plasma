@@ -101,7 +101,7 @@ public class PlasmaRuntime {
   private Map<String, Artifact> artifactMap = new HashMap<String, Artifact>();
   private Map<String, NamespaceAdapter> sdoNamespaceMap = new HashMap<String, NamespaceAdapter>();
   private DataAccessProviderName defaultProviderName;
-  private List<Class<?>> metadataClasses = new ArrayList<Class<?>>();
+  private List<Class<?>> typeAnnotatedClasses = new ArrayList<Class<?>>();
 
   /** maps data store types to maps of namespace links */
   private Map<DataStoreType, Map<String, NamespaceLink>> dataStoreNamespaceLinkMap = new HashMap<DataStoreType, Map<String, NamespaceLink>>();
@@ -129,7 +129,7 @@ public class PlasmaRuntime {
         this.configFileNameOrURIString = defaultConfigFileName;
 
       for (Class<?> c : ClassIndex.getAnnotated(org.plasma.sdo.annotation.Type.class))
-        metadataClasses.add(c);
+        typeAnnotatedClasses.add(c);
 
       PlasmaRuntimeDataBinding configBinding = new PlasmaRuntimeDataBinding(
           new PlasmaRuntimeValidationEventHandler());
@@ -137,16 +137,16 @@ public class PlasmaRuntime {
       InputStream stream = this.findConfigStream(this.configFileNameOrURIString);
       if (stream != null) {
         config = unmarshalConfig(this.configFileNameOrURIString, stream, configBinding);
-        if (metadataClasses.size() > 0) {
+        if (typeAnnotatedClasses.size() > 0) {
           log.warn("found config file '" + this.configFileNameOrURIString + "' - ignoring "
-              + metadataClasses.size() + " annotated classes ");
+              + typeAnnotatedClasses.size() + " annotated classes ");
         }
         constructArtifactAndNamespaceMappings();
         constructKnownArtifacts();
         constructDataAccessServiceMappings();
         validateNamespaceToDataStoreMappings();
       } else {
-        if (metadataClasses.size() > 0) {
+        if (typeAnnotatedClasses.size() > 0) {
           this.derivedModel = this.deriveModel();
           this.config = this.deriveConfig(derivedModel);
           constructArtifactAndNamespaceMappings(true);
@@ -198,7 +198,7 @@ public class PlasmaRuntime {
 
   private RuntimeConfiguration deriveConfig(Model derivedModel) {
     RuntimeConfiguration config = new RuntimeConfiguration();
-    log.debug("deriving configuration");
+    log.info("deriving configuration");
     SDO sdo = new SDO();
     config.setSDO(sdo);
     GlobalProvisioning gp = deriveGlobalProvisioning();
@@ -208,11 +208,11 @@ public class PlasmaRuntime {
 
     // discover data access services from annotated classes
     for (Class<?> c : ClassIndex.getAnnotated(PlasmaServiceProvider.class)) {
+      // for (Class<?> c : typeAnnotatedClasses) {
       PlasmaServiceProvider service = c.getAnnotation(PlasmaServiceProvider.class);
-      log.debug("discovered " + service.storeType() + ":" + service.providerName() + " provider");
+      log.info("discovered " + service.storeType() + ":" + service.providerName() + " provider");
       DataAccessService das = new DataAccessService();
       sdo.getDataAccessServices().add(das);
-
       das.setDataStoreType(service.storeType());
 
       DataAccessProvider provider = new DataAccessProvider();
@@ -334,7 +334,7 @@ public class PlasmaRuntime {
   private List<Namespace> deriveNamespaces(String derivedArtifactNamespace) {
 
     Set<java.lang.Package> leafPackages = new HashSet<java.lang.Package>();
-    for (Class<?> c : metadataClasses) {
+    for (Class<?> c : typeAnnotatedClasses) {
       leafPackages.add(c.getPackage());
     }
 
@@ -411,7 +411,7 @@ public class PlasmaRuntime {
   private List<NamespaceService> deriveNamespaceSerivces() {
 
     Set<java.lang.Package> leafPackages = new HashSet<java.lang.Package>();
-    for (Class<?> c : metadataClasses) {
+    for (Class<?> c : typeAnnotatedClasses) {
       leafPackages.add(c.getPackage());
     }
 

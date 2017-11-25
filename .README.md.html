@@ -653,33 +653,37 @@ function setDocumentScrollTop(ypos)
  </thead> 
  <tbody> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo"><strong>Plasma Quickstart MySql (POJO)</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-HBase-Pojo" rel="nofollow"><strong>Plasma Quickstart HBase (POJO)</strong></a></td> 
+   <td>Step by step guide for end-to-end HBase persistence with code samples using Plasma annotated Java POJO's as sole metadata source</td> 
+  </tr> 
+  <tr> 
+   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo" rel="nofollow"><strong>Plasma Quickstart MySql (POJO)</strong></a></td> 
    <td>Step by step guide for end-to-end MySql persistence with code samples using Plasma annotated Java POJO's as sole metadata source</td> 
   </tr> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-UML"><strong>Plasma Quickstart MySql (UML)</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-UML" rel="nofollow"><strong>Plasma Quickstart MySql (UML)</strong></a></td> 
    <td>Step by step guide for end-to-end MySql persistence with code samples using Plasma annotated UML as metadata source</td> 
   </tr> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview"><strong>Plasma Architecture Overview</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview" rel="nofollow"><strong>Plasma Architecture Overview</strong></a></td> 
    <td>General technical background plus architecture components with examples</td> 
   </tr> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile"><strong>Plasma UML Profile Specification</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile" rel="nofollow"><strong>Plasma UML Profile Specification</strong></a></td> 
    <td>Specification for the UML profile used for annotating UML models for use with Plasma</td> 
   </tr> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/apidocs/index.html"><strong>Plasma API DOCS</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/apidocs/index.html" rel="nofollow"><strong>Plasma API DOCS</strong></a></td> 
    <td>Generated javadoc API documentation tree</td> 
   </tr> 
  </tbody> 
 </table> 
 <h1> <a id="how-it-works" class="anchor" href="#how-it-works" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><strong>How It Works</strong> </h1> 
 <p>At its core, the Plasma implementation contains a directed graph or digraph model and a set of metadata driven graph traversal algorithms. Data Objects under Plasma form a digraph transparently as a client manipulates the SDO API, graph edges or links being automatically created and used internally to manage associations between Data Object nodes. Clients can assemble a Data Graph ad-hoc or query for a graph. Several API implementing the Visitor pattern[1] are then available to facilitate custom traversal operations on a graph.</p> 
-<p><strong>Code Generation.</strong> The build-time code generation (provisioning) tools are compatible-with but not dependent upon any Integrated Development Environment (IDE), but are rather are geared for larger scale enterprise projects needing support for <a href="http://maven.apache.org/"><strong>Maven</strong></a> and continuous integration build environments such as <a href="http://hudson-ci.org"><strong>Hudson</strong></a>. Build files typically access a set of command-line provisioning tools using <strong>the Plasma Maven Plugin</strong> triggering a variety of operations. In general, application UML model artifacts in XMI format[2] annotated with the <strong>Plasma UML Profile</strong> are first loaded and merged using the <a href="http://portal.modeldriven.org/project/foundationalUML"><strong>FUML</strong></a> runtime, then projected as a whole or in part onto an intermediate provisioning model, typically in-memory. The provisioning model is then merged with configuration information and transformed into one of several available target outputs, comprised of source code or models specific to a particular context or technology platform. Where a particular technology target is not provided, the intermediate provisioning model can be marshaled as XML, custom transformations using XSLT for instance converting the provisioning XML document into almost any target format.</p> 
+<p><strong>Code Generation.</strong> The build-time code generation (provisioning) tools are compatible-with but not dependent upon any Integrated Development Environment (IDE), but are rather are geared for larger scale enterprise projects needing support for <a href="http://maven.apache.org/" rel="nofollow"><strong>Maven</strong></a> and continuous integration build environments such as <a href="http://hudson-ci.org" rel="nofollow"><strong>Hudson</strong></a>. Build files typically access a set of command-line provisioning tools using <strong>the Plasma Maven Plugin</strong> triggering a variety of operations. In general, application UML model artifacts in XMI format[2] annotated with the <strong>Plasma UML Profile</strong> are first loaded and merged using the <a href="http://portal.modeldriven.org/project/foundationalUML" rel="nofollow"><strong>FUML</strong></a> runtime, then projected as a whole or in part onto an intermediate provisioning model, typically in-memory. The provisioning model is then merged with configuration information and transformed into one of several available target outputs, comprised of source code or models specific to a particular context or technology platform. Where a particular technology target is not provided, the intermediate provisioning model can be marshaled as XML, custom transformations using XSLT for instance converting the provisioning XML document into almost any target format.</p> 
 <h1> <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><strong>Requirements</strong> </h1> 
 <p><strong>Java Runtime</strong></p> 
-<p>The latest <a href="http://www.java.com/en/download/manual.jsp">JDK or JRE version 1.7.xx or 1.8.xx</a> for Linux, Windows, or Mac OS X must be installed in your environment; we recommend the Oracle JDK. To check the Java version installed, run the command:</p> 
+<p>The latest <a href="http://www.java.com/en/download/manual.jsp" rel="nofollow">JDK or JRE version 1.7.xx or 1.8.xx</a> for Linux, Windows, or Mac OS X must be installed in your environment; we recommend the Oracle JDK. To check the Java version installed, run the command:</p> 
 <p>$ java -version</p> 
 <p>Plasma is tested with the Oracle JDKs; it may work with other JDKs such as Open JDK, but it has not been tested with them. Once you have installed the JDK, you'll need to set the JAVA_HOME environment variable.</p> 
 <h1> <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><strong>Getting Started</strong> </h1> 
@@ -690,7 +694,7 @@ function setDocumentScrollTop(ypos)
  <pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;org.plasma&lt;/<span class="pl-ent">groupId</span>&gt;
   &lt;<span class="pl-ent">artifactId</span>&gt;plasma-core&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;2.0.0&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;x.y.z&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre>
 </div> 
 <h1> <a id="detailed-documentation-1" class="anchor" href="#detailed-documentation-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><strong>Detailed Documentation</strong> </h1> 
@@ -703,23 +707,27 @@ function setDocumentScrollTop(ypos)
  </thead> 
  <tbody> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo"><strong>Plasma Quickstart MySql (POJO)</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-HBase-Pojo" rel="nofollow"><strong>Plasma Quickstart HBase (POJO)</strong></a></td> 
+   <td>Step by step guide for end-to-end HBase persistence with code samples using Plasma annotated Java POJO's as sole metadata source</td> 
+  </tr> 
+  <tr> 
+   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo" rel="nofollow"><strong>Plasma Quickstart MySql (POJO)</strong></a></td> 
    <td>Step by step guide for end-to-end MySql persistence with code samples using Plasma annotated Java POJO's as sole metadata source</td> 
   </tr> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-UML"><strong>Plasma Quickstart MySql (UML)</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-UML" rel="nofollow"><strong>Plasma Quickstart MySql (UML)</strong></a></td> 
    <td>Step by step guide for end-to-end MySql persistence with code samples using Plasma annotated UML as metadata source</td> 
   </tr> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview"><strong>Plasma Architecture Overview</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview" rel="nofollow"><strong>Plasma Architecture Overview</strong></a></td> 
    <td>General technical background plus architecture components with examples</td> 
   </tr> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile"><strong>Plasma UML Profile Specification</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile" rel="nofollow"><strong>Plasma UML Profile Specification</strong></a></td> 
    <td>Specification for the UML profile used for annotating UML models for use with Plasma</td> 
   </tr> 
   <tr> 
-   <td><a href="http://plasma-framework.github.io/plasma/apidocs/index.html"><strong>Plasma API DOCS</strong></a></td> 
+   <td><a href="http://plasma-framework.github.io/plasma/apidocs/index.html" rel="nofollow"><strong>Plasma API DOCS</strong></a></td> 
    <td>Generated javadoc API documentation tree</td> 
   </tr> 
  </tbody> 

@@ -1,0 +1,24 @@
+Release Notes
+
+Plasma 2.0.1 Release Notes
+Plasma 2.0.1 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/plasma-framework/plasma/issues.
+
+
+Major Changes
+[Issue #89] - Update Profile Version 
+[Issue #88] - Use Papyrus Profile for Annotation Generation 
+ 
+Bugs
+
+
+Improvements
+
+New Features
+Tasks
+Wish
+
+

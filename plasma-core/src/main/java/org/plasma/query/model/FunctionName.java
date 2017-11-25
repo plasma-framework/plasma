@@ -399,7 +399,22 @@ public enum FunctionName {
    * 
    */
   @XmlEnumValue("ngrams")
-  NGRAMS("ngrams");
+  NGRAMS("ngrams"),
+
+  /**
+   * returns the current query term proximity weight for a given search
+   * 
+   */
+  @XmlEnumValue("proximity")
+  PROXIMITY("proximity"),
+
+  /**
+   * returns the vector space weight for a given search
+   * 
+   */
+  @XmlEnumValue("weight")
+  WEIGHT("weight");
+
   private final String value;
 
   FunctionName(String v) {

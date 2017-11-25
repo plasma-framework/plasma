@@ -187,6 +187,17 @@ public class SDOTool extends ProvisioningTool {
       // initiates annotation discovery
       if (PlasmaRuntime.getInstance().isDerived()) {
         model = PlasmaRuntime.getInstance().getDerivedModel();
+        binding = new MetamodelDataBinding(new DefaultValidationEventHandler());
+        xml = binding.marshal(model);
+        if (log.isDebugEnabled()) {
+          File outFile = new File(destDir, "technical-model.xml");
+          stream = new FileOutputStream(outFile);
+          stream.write(xml.getBytes());
+          stream.flush();
+          stream.close();
+          if (!options.has(silentOpt))
+            log.debug("wrote merged model file to: " + outFile.getAbsoluteFile());
+        }
       } else {
         // Create models from config and UML for the entire provisioning
         // context,

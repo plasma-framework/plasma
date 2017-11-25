@@ -161,13 +161,13 @@
 
   </MappingConfiguration>
 
-<!--
   <LibraryConfiguration>
+<!--
     <LibraryImport name="fUML_Library.xmi" 
         urn="fUML-Library.mdzip" 
         namespaceURI="http://www.modeldriven.org/fuml/library"
         delimiter="#"/>
-  </LibraryConfiguration>
 --> 
+  </LibraryConfiguration>
   
 </cfg:Configuration>   
