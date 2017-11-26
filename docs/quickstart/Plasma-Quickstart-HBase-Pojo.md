@@ -283,7 +283,7 @@ Figure 3 – Result Graph, Serialized as XML
 ```
 
 
-Figure 4 – Inser/Query HBase Data
+Figure 4 – Insert/Query HBase Data
 
 ```java
 package examples.quickstart;

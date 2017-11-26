@@ -291,7 +291,7 @@ for working examples which accompany this guide.
 </ns1:Person>
 ```
 
-**Figure 4 – Inser/Query MySql Data**
+**Figure 4 – Insert/Query MySql Data**
 
 ```java
 package examples.quickstart;

@@ -1,0 +1,33 @@
+06 Nov 2017 10:50:02,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing
+06 Nov 2017 10:50:02,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered 3 annotated enums
+06 Nov 2017 10:50:02,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.common
+06 Nov 2017 10:50:02,548 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing tokens [Ljava.lang.String;@262b2c86
+06 Nov 2017 10:50:02,673 DEBUG [main] provisioning.AnnotationMetamodelAssembler setting originating package org.plasma.provisioning.example.common
+06 Nov 2017 10:50:02,673 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.common as http://org.plasma.provisioning.example.common
+06 Nov 2017 10:50:02,673 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.pers
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing tokens [Ljava.lang.String;@64f6106c
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler setting originating package org.plasma.provisioning.example.pers
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.pers as http://plasma-example/person
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing package org.plasma.provisioning.example.org
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing tokens [Ljava.lang.String;@7a30d1e6
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler setting originating package org.plasma.provisioning.example.org
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler created leaf package org.plasma.provisioning.example.org as http://plasma-example/organization
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.common.Party
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://org.plasma.provisioning.example.common#Party
+06 Nov 2017 10:50:02,688 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.pers.Person
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://plasma-example/person#Person
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler discovered org.plasma.provisioning.example.org.Organization
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler initializing class: http://plasma-example/organization#Organization
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://org.plasma.provisioning.example.common#Party
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Party.createdDate
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Party.lastUpdatedBy
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://org.plasma.provisioning.example.common#Party.lastUpdatedDate
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://plasma-example/person#Person
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://plasma-example/person#Person.name
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://plasma-example/person#Person.age
+06 Nov 2017 10:50:02,704 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://plasma-example/person#Person.dateOfBirth
+06 Nov 2017 10:50:02,720 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://plasma-example/person#Person.org
+06 Nov 2017 10:50:02,720 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing class: http://plasma-example/organization#Organization
+06 Nov 2017 10:50:02,720 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://plasma-example/organization#Organization.name
+06 Nov 2017 10:50:02,720 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing data field: http://plasma-example/organization#Organization.type
+06 Nov 2017 10:50:02,735 DEBUG [main] provisioning.AnnotationMetamodelAssembler processing reference field: http://plasma-example/organization#Organization.person
