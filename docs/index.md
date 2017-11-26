@@ -1,4 +1,4 @@
-<img src="images/media/plasma_32_transp.png" alt="icon2" width="24" height="24"/>**PLASMA** 
+<sup><img src="images/media/image2.jpeg" alt="big-icon" width="24" height="24" /></sup>**Plasma**
 ======================================================================================
 
 **TerraMeta Software, Inc.**  
@@ -15,7 +15,9 @@ Plasma is a data store agnostic, object mapping and object query framework writt
 
 | **Document** | **Description** |
 |  --------------------- | --------------------- |
-| [**Plasma Quickstart MySql (POJO)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo) | Step by step guide using annotated Java POJO's as sole metadata source |
+| [**Plasma Quickstart HBase (POJO)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-HBase-Pojo) | Step by step guide for end-to-end HBase persistence with code samples using Plasma annotated Java POJO's as sole metadata source |
+| [**Plasma Quickstart MySql (POJO)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo) | Step by step guide for end-to-end MySql persistence with code samples using Plasma annotated Java POJO's as sole metadata source |
+| [**Plasma Quickstart MySql (UML)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-UML) | Step by step guide for end-to-end MySql persistence with code samples using Plasma annotated UML as metadata source |
 | [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) | General technical background plus architecture components with examples |
 | [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         | Specification for the UML profile used for annotating UML models for use with Plasma |
 | [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      | Generated javadoc API documentation tree |
@@ -55,7 +57,7 @@ For the Plasma library use the following artifact.
 <dependency>
   <groupId>org.plasma</groupId>
   <artifactId>plasma-core</artifactId>
-  <version>2.0.0</version>
+  <version>x.y.z</version>
 </dependency>
 ```
 
@@ -64,7 +66,9 @@ For the Plasma library use the following artifact.
 
 | **Document** | **Description** |
 |  --------------------- | --------------------- |
-| [**Plasma Quickstart MySql (POJO)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo) | Step by step guide using annotated Java POJO's as sole metadata source |
+| [**Plasma Quickstart HBase (POJO)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-HBase-Pojo) | Step by step guide for end-to-end HBase persistence with code samples using Plasma annotated Java POJO's as sole metadata source |
+| [**Plasma Quickstart MySql (POJO)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-Pojo) | Step by step guide for end-to-end MySql persistence with code samples using Plasma annotated Java POJO's as sole metadata source |
+| [**Plasma Quickstart MySql (UML)**](http://plasma-framework.github.io/plasma/quickstart/Plasma-Quickstart-MySql-UML) | Step by step guide for end-to-end MySql persistence with code samples using Plasma annotated UML as metadata source |
 | [**Plasma Architecture Overview**](http://plasma-framework.github.io/plasma/arch_overview/Plasma-Architecture-Overview) | General technical background plus architecture components with examples |
 | [**Plasma UML Profile Specification**](http://plasma-framework.github.io/plasma/uml-profile/Plasma-UML-Profile)         | Specification for the UML profile used for annotating UML models for use with Plasma |
 | [**Plasma API DOCS**](http://plasma-framework.github.io/plasma/apidocs/index.html)                                      | Generated javadoc API documentation tree |
