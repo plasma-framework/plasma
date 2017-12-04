@@ -459,6 +459,30 @@ public abstract class DefaultFactory {
     buf.append(" value)");
   }
 
+  protected void createSingularIncrementerDeclaration(Package pkg, Class clss, Property field,
+      MetaClassInfo typeClassName, TextBuilder buf) {
+
+    buf.appendln(1, "/**"); // begin javadoc
+    buf.appendln(1, " * Increments the value of the <b>");
+    buf.append(field.getName());
+    buf.append("</b> property by the given value. ");
+
+    String definition = this.getWrappedDocmentations(field.getDocumentations(), 1);
+    if (definition != null && definition.length() > 0) {
+      buf.appendln(1, " * <p></p>");
+      buf.appendln(1, " * <b>Property Definition: </b>");
+      buf.append(definition);
+    }
+
+    buf.appendln(1, " */"); // end javadoc
+
+    buf.appendln(1, "public void increment");
+    buf.append(toMethodFieldName(field.getName()));
+    buf.append("(");
+    buf.append(typeClassName.getSimpleName());
+    buf.append(" value)");
+  }
+
   protected void createUnsetterDeclaration(Package pkg, Class clss, Property field,
       MetaClassInfo typeClassName, TextBuilder buf) {
 

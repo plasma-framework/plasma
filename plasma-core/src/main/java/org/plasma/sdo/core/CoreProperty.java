@@ -29,11 +29,13 @@ import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.runtime.adapter.PropertyBindingAdapter;
 import org.plasma.runtime.adapter.TypeBindingAdapter;
 import org.plasma.sdo.Alias;
+import org.plasma.sdo.Compression;
 import org.plasma.sdo.Concurrent;
 import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.Derivation;
 import org.plasma.sdo.EnumerationConstraint;
+import org.plasma.sdo.Increment;
 import org.plasma.sdo.Key;
 import org.plasma.sdo.PlasmaDataObjectException;
 import org.plasma.sdo.PlasmaProperty;
@@ -426,6 +428,27 @@ public class CoreProperty implements PlasmaProperty {
 
   public UniqueConstraint getUniqueConstraint() {
     return this.property.findUniqueConstraint();
+  }
+
+  @Override
+  public Compression getCompression() {
+    if (!property.isDataType())
+      throw new IllegalArgumentException("property " + this.getType().getURI() + "#"
+          + this.getType().getName() + "." + this.getName() + " is not a datatype property");
+    return this.property.findCompression();
+  }
+
+  @Override
+  public Increment getIncrement() {
+    if (!property.isDataType())
+      throw new IllegalArgumentException("property " + this.getType().getURI() + "#"
+          + this.getType().getName() + "." + this.getName() + " is not a datatype property");
+    return this.property.findIncrement();
+  }
+
+  @Override
+  public boolean isIncrement() {
+    return getIncrement() != null;
   }
 
   public XmlProperty getXmlProperty() {

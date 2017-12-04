@@ -390,6 +390,32 @@ public interface PlasmaProperty extends Property {
   public PlasmaProperty getDerivationSupplier();
 
   /**
+   * Returns the compression information for this property if exists, or null if
+   * not exists
+   * 
+   * @return the compression information, or null if not exists
+   * @see Compression
+   */
+  public Compression getCompression();
+
+  /**
+   * Returns the increment information for this property if exists, or null if
+   * not exists
+   * 
+   * @return the increment information, or null if not exists
+   * @see Increment
+   */
+  public Increment getIncrement();
+
+  /**
+   * Returns true if the increment information for this property exists.
+   * 
+   * @return true if the increment information for this property exists
+   * @see Increment
+   */
+  public boolean isIncrement();
+
+  /**
    * Returns the unique id for the element within its meta data repository.
    * 
    * @return the unique id for the element within its meta data repository.

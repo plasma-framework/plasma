@@ -43,6 +43,7 @@ import org.plasma.metamodel.Enumeration;
 import org.plasma.metamodel.EnumerationConstraint;
 import org.plasma.metamodel.EnumerationLiteral;
 import org.plasma.metamodel.EnumerationRef;
+import org.plasma.metamodel.Increment;
 import org.plasma.metamodel.Key;
 import org.plasma.metamodel.KeyType;
 import org.plasma.metamodel.Model;
@@ -408,6 +409,13 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
       property.setXmlProperty(xmlProp);
     }
 
+    org.plasma.sdo.annotation.Increment srcIncrement = javaField
+        .getAnnotation(org.plasma.sdo.annotation.Increment.class);
+    if (srcIncrement != null) {
+      Increment increment = new Increment();
+      property.setIncrement(increment);
+    }
+
     org.plasma.sdo.annotation.ValueConstraint srcValueConstraint = javaField
         .getAnnotation(org.plasma.sdo.annotation.ValueConstraint.class);
     if (srcValueConstraint != null) {
@@ -522,9 +530,16 @@ public class AnnotationMetamodelAssembler implements AnnotationConverter {
     org.plasma.sdo.annotation.Sort srcSort = javaField
         .getAnnotation(org.plasma.sdo.annotation.Sort.class);
     if (srcSort != null) {
-      Sort sequence = new Sort();
-      sequence.setKey(srcSort.key());
-      property.setSort(sequence);
+      Sort sort = new Sort();
+      sort.setKey(srcSort.key());
+      property.setSort(sort);
+    }
+
+    org.plasma.sdo.annotation.Increment srcIncrement = javaField
+        .getAnnotation(org.plasma.sdo.annotation.Increment.class);
+    if (srcIncrement != null) {
+      Increment increment = new Increment();
+      property.setIncrement(increment);
     }
 
     org.plasma.sdo.annotation.Comment srcComment = javaField

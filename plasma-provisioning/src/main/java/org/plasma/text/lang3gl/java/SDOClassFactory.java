@@ -341,8 +341,13 @@ public class SDOClassFactory extends SDODefaultFactory implements ClassFactory {
 
   private void createSingularSetter(Package pkg, Class clss, Property field,
       MetaClassInfo typeClassName, TextBuilder buf) {
-    createSingularSetterDeclaration(pkg, clss, field, typeClassName, buf);
-    createSingularSetterBody(pkg, clss, field, typeClassName, buf);
+    if (field.getIncrement() == null) {
+      createSingularSetterDeclaration(pkg, clss, field, typeClassName, buf);
+      createSingularSetterBody(pkg, clss, field, typeClassName, buf);
+    } else {
+      createSingularIncrementerDeclaration(pkg, clss, field, typeClassName, buf);
+      createSingularSetterBody(pkg, clss, field, typeClassName, buf);
+    }
   }
 
   private void createSingularSetterBody(Package pkg, Class clss, Property field,

@@ -262,6 +262,7 @@
 		            <xs:element ref="prov:ValueSetConstraint" minOccurs="0" maxOccurs="1"/>
 		            <xs:element ref="prov:Sort" minOccurs="0" maxOccurs="1"/>
 		            <xs:element ref="prov:XmlProperty" minOccurs="0" maxOccurs="1"/>		            
+		            <xs:element ref="prov:Increment" minOccurs="0" maxOccurs="1"/>		            
 		        </xs:sequence>
 		        <xs:attribute name="visibility" type="prov:VisibilityType" use="required"/>
 		        <xs:attribute name="nullable" type="xs:boolean" use="required"/>
@@ -885,6 +886,14 @@
     </xs:complexType>
 
     <xs:element type="prov:UniqueConstraint" name="UniqueConstraint" />
+
+    <xs:complexType name="Increment">
+        <xs:annotation>
+            <xs:documentation>Indicates that a property utilizes the atomic increment operation or capability of the underlying data store</xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+
+    <xs:element type="prov:Increment" name="Increment" />
 
     <xs:complexType name="Derivation">
         <xs:annotation>

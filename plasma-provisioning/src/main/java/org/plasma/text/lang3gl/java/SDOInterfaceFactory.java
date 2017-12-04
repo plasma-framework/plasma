@@ -338,7 +338,11 @@ public class SDOInterfaceFactory extends SDODefaultFactory implements InterfaceF
       buf.append(";");
 
       buf.append(LINE_SEP);
-      createSingularSetterDeclaration(null, clss, field, typeClassName, buf);
+      if (field.getIncrement() == null) {
+        createSingularSetterDeclaration(null, clss, field, typeClassName, buf);
+      } else {
+        createSingularIncrementerDeclaration(null, clss, field, typeClassName, buf);
+      }
       buf.append(";");
     } else {
       buf.append(LINE_SEP);

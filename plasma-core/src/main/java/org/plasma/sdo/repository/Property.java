@@ -19,9 +19,11 @@ package org.plasma.sdo.repository;
 import java.util.List;
 
 import org.plasma.sdo.Alias;
+import org.plasma.sdo.Compression;
 import org.plasma.sdo.Concurrent;
 import org.plasma.sdo.Derivation;
 import org.plasma.sdo.EnumerationConstraint;
+import org.plasma.sdo.Increment;
 import org.plasma.sdo.Key;
 import org.plasma.sdo.Sort;
 import org.plasma.sdo.Temporal;
@@ -85,6 +87,10 @@ public interface Property extends Element {
   Sort findSort();
 
   UniqueConstraint findUniqueConstraint();
+
+  Increment findIncrement();
+
+  Compression findCompression();
 
   Property findDerivationSupplier();
 

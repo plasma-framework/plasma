@@ -40,6 +40,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jaxen.JaxenException;
 import org.plasma.sdo.DataFlavor;
+import org.plasma.sdo.DataType;
+import org.plasma.sdo.Increment;
 import org.plasma.sdo.PlasmaChangeSummary;
 import org.plasma.sdo.PlasmaDataGraph;
 import org.plasma.sdo.PlasmaDataGraphEventVisitor;
@@ -67,6 +69,7 @@ import org.plasma.sdo.xpath.DataGraphNodeAdapter;
 import org.plasma.sdo.xpath.DataGraphXPath;
 import org.plasma.sdo.xpath.InvalidEndpointException;
 import org.plasma.sdo.xpath.InvalidMultiplicityException;
+import org.plasma.sdo.xpath.XPathDataObject;
 import org.plasma.sdo.xpath.XPathDataProperty;
 
 import commonj.sdo.ChangeSummary;
@@ -874,7 +877,8 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
         PlasmaDataLink link = createLink(property, targetNode);
         propertyValue = link; // set the link into this node below
       } else { // data property
-        DataFlavor flavor = ((PlasmaProperty) property).getDataFlavor();
+        PlasmaProperty plasmaProperty = (PlasmaProperty) property;
+        DataFlavor flavor = plasmaProperty.getDataFlavor();
         // attempt a conversion as a validation check
         if (flavor.ordinal() == DataFlavor.temporal.ordinal())
           try {
@@ -883,13 +887,21 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
             throw new PlasmaDataObjectException("property, " + property.toString(), dfe);
           }
 
-        Object existingValue = this.get(property);
-        if (existingValue != null && existingValue.equals(propertyValue)) {
-          if (log.isDebugEnabled())
-            log.debug("detected 'set' operation with identical "
-                + existingValue.getClass().getSimpleName() + " object ("
-                + String.valueOf(existingValue) + ") for property " + property + " - ignoring");
-          return null;
+        Increment increment = plasmaProperty.getIncrement();
+        if (increment == null) { // else allow duplicate set
+          Object existingValue = this.get(property);
+          if (existingValue != null && existingValue.equals(propertyValue)) {
+            if (log.isDebugEnabled())
+              log.debug("detected 'set' operation with identical "
+                  + existingValue.getClass().getSimpleName() + " object ("
+                  + String.valueOf(existingValue) + ") for property " + property + " - ignoring");
+            return null;
+          }
+        } else {
+          if (flavor.ordinal() != DataFlavor.integral.ordinal())
+            throw new IllegalArgumentException(
+                "detected 'increment' operation with non-integral datatype property, "
+                    + plasmaProperty);
         }
       }
     } else {
@@ -2270,10 +2282,24 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
   private PathEndpoint findEndpoint(String path) {
     try {
       DataGraphXPath xpath = new DataGraphXPath(path);
-      XPathDataProperty adapter = xpath.findProperty(this);
+      XPathDataProperty adapter = xpath.findDataProperty(this);
       if (adapter == null)
         return null;
       return new PathEndpoint(adapter.getProperty(), adapter.getSource());
+    } catch (JaxenException e) {
+      throw new IllegalArgumentException(e);
+    } catch (InvalidEndpointException e) {
+      throw new IllegalArgumentException(e);
+    }
+  }
+
+  private DataObject findDataObject(String path) {
+    try {
+      DataGraphXPath xpath = new DataGraphXPath(path);
+      XPathDataObject adapter = xpath.findDataObject(this);
+      if (adapter == null)
+        return null;
+      return adapter.getDataObject();
     } catch (JaxenException e) {
       throw new IllegalArgumentException(e);
     } catch (InvalidEndpointException e) {
@@ -2305,11 +2331,7 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
     if (!DataGraphXPath.isXPath(path)) {
       return this.getDataObject(this.getType().getProperty(path));
     } else {
-      PathEndpoint endpoint = findEndpoint(path);
-      if (endpoint != null)
-        return endpoint.getSource().getDataObject(endpoint.getProperty());
-      else
-        return null;
+      return findDataObject(path);
     }
   }
 
@@ -2531,6 +2553,15 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
       }
 
       valueObject.put(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, idMap.getSnapshotDate());
+
+      // now look for any resets for this DO
+      List<PropertyPair> pairs = idMap.get(this.getUUID());
+      if (pairs != null) {
+        for (PropertyPair pair : pairs) {
+          valueObject.put(pair.getProp().getName(), pair.getValue());
+        }
+      }
+
     } else if (this.getDataGraph().getChangeSummary().isDeleted(this)) {
       valueObject.put(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, idMap.getSnapshotDate());
     }

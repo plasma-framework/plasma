@@ -41,6 +41,7 @@ import org.plasma.metamodel.Enumeration;
 import org.plasma.metamodel.EnumerationConstraint;
 import org.plasma.metamodel.EnumerationLiteral;
 import org.plasma.metamodel.EnumerationRef;
+import org.plasma.metamodel.Increment;
 import org.plasma.metamodel.Key;
 import org.plasma.metamodel.KeyType;
 import org.plasma.metamodel.Model;
@@ -348,6 +349,11 @@ public class MetamodelAssembler {
       property.setXmlProperty(xmlProp);
     }
 
+    if (sourceProperty.getIncrement() != null) {
+      Increment increment = new Increment();
+      property.setIncrement(increment);
+    }
+
     if (sourceProperty.getValueConstraint() != null) {
       org.plasma.sdo.ValueConstraint sdoValConst = sourceProperty.getValueConstraint();
 
@@ -441,9 +447,9 @@ public class MetamodelAssembler {
 
     if (sourceProperty.getSort() != null) {
       org.plasma.sdo.Sort sdoSort = sourceProperty.getSort();
-      Sort sequence = new Sort();
-      sequence.setKey(sdoSort.getKey());
-      property.setSort(sequence);
+      Sort sort = new Sort();
+      sort.setKey(sdoSort.getKey());
+      property.setSort(sort);
     }
 
     if (sourceProperty.getDescription() != null && sourceProperty.getDescription().size() > 0) {
@@ -614,9 +620,9 @@ public class MetamodelAssembler {
         if (list.contains(plasmaProperty.getName())) {
 
           Property field = createDataProperty(this.model, clss, plasmaProperty);
-          Sort sequence = new Sort();
-          sequence.setKey(String.valueOf(list.indexOf(plasmaProperty.getName())));
-          field.setSort(sequence);
+          Sort sort = new Sort();
+          sort.setKey(String.valueOf(list.indexOf(plasmaProperty.getName())));
+          field.setSort(sort);
 
           clss.getProperties().add(field);
         }

@@ -131,14 +131,14 @@ public class DataGraphXPath extends DefaultXPath {
   /**
    * Returns a single Property result or null if no Property results are found.
    * 
-   * @return an array of Property results or null if no results are found.
+   * @return a single Property results or null if no results are found.
    * @throws JaxenException
    *           as required by the Jaxen API
    * @throws InvalidEndpointException
    *           when the result or terminating node or nodes are not Property
    *           nodes
    */
-  public XPathDataProperty findProperty(DataObject root) throws JaxenException,
+  public XPathDataProperty findDataProperty(DataObject root) throws JaxenException,
       InvalidEndpointException {
     Object node = this.selectSingleNode(root);
     if (node == null)
@@ -156,6 +156,36 @@ public class DataGraphXPath extends DefaultXPath {
             + this.toString() + "'");
     }
     return (XPathDataProperty) node;
+  }
+
+  /**
+   * Returns a single object result or null if no object results are found.
+   * 
+   * @return a single object result or null if no results are found.
+   * @throws JaxenException
+   *           as required by the Jaxen API
+   * @throws InvalidEndpointException
+   *           when the result or terminating node or nodes are not Property
+   *           nodes
+   */
+  public XPathDataObject findDataObject(DataObject root) throws JaxenException,
+      InvalidEndpointException {
+    Object node = this.selectSingleNode(root);
+    if (node == null)
+      return null;
+
+    if (!(node instanceof XPathDataObject)) {
+      if (node instanceof XPathDataProperty)
+        throw new InvalidEndpointException("expected Data Object results rather than "
+            + "Property results for the given XPATH '" + this.toString() + "'");
+      else if (node instanceof XPathDataValue)
+        throw new InvalidEndpointException("expected Data Object results rather than "
+            + "value results for the given XPATH '" + this.toString() + "'");
+      else
+        throw new InvalidEndpointException("expected Data Object results "
+            + "for the given XPATH '" + this.toString() + "'");
+    }
+    return (XPathDataObject) node;
   }
 
   /**
@@ -197,8 +227,8 @@ public class DataGraphXPath extends DefaultXPath {
           throw new InvalidEndpointException("expected Data Object results rather than "
               + "value results for the given XPATH '" + this.toString() + "'");
         else
-          throw new InvalidEndpointException("expected Property results " + "for the given XPATH '"
-              + this.toString() + "'");
+          throw new InvalidEndpointException("expected Data Object results "
+              + "for the given XPATH '" + this.toString() + "'");
       }
       adapters[i] = (XPathDataObject) node;
       if (nodes.size() > 1)

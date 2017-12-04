@@ -22,9 +22,11 @@ import java.util.List;
 import org.modeldriven.fuml.repository.Stereotype;
 import org.plasma.common.exception.PlasmaRuntimeException;
 import org.plasma.sdo.Alias;
+import org.plasma.sdo.Compression;
 import org.plasma.sdo.Concurrent;
 import org.plasma.sdo.Derivation;
 import org.plasma.sdo.EnumerationConstraint;
+import org.plasma.sdo.Increment;
 import org.plasma.sdo.Key;
 import org.plasma.sdo.Sort;
 import org.plasma.sdo.Temporal;
@@ -36,9 +38,11 @@ import org.plasma.sdo.profile.ConcurrencyType;
 import org.plasma.sdo.profile.ConcurrentDataFlavor;
 import org.plasma.sdo.profile.KeyType;
 import org.plasma.sdo.profile.SDOAlias;
+import org.plasma.sdo.profile.SDOCompression;
 import org.plasma.sdo.profile.SDOConcurrent;
 import org.plasma.sdo.profile.SDODerivation;
 import org.plasma.sdo.profile.SDOEnumerationConstraint;
+import org.plasma.sdo.profile.SDOIncrement;
 import org.plasma.sdo.profile.SDOKey;
 import org.plasma.sdo.profile.SDOSort;
 import org.plasma.sdo.profile.SDOTemporal;
@@ -533,6 +537,32 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
       for (Stereotype stereotype : stereotypes)
         if (stereotype.getDelegate() instanceof SDOXmlProperty) {
           return (SDOXmlProperty) stereotype.getDelegate();
+        }
+    }
+    return null;
+  }
+
+  @Override
+  public Increment findIncrement() {
+    List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(
+        element);
+    if (stereotypes != null) {
+      for (Stereotype stereotype : stereotypes)
+        if (stereotype.getDelegate() instanceof SDOIncrement) {
+          return (SDOIncrement) stereotype.getDelegate();
+        }
+    }
+    return null;
+  }
+
+  @Override
+  public Compression findCompression() {
+    List<Stereotype> stereotypes = FumlRepository.getFumlRepositoryInstance().getStereotypes(
+        element);
+    if (stereotypes != null) {
+      for (Stereotype stereotype : stereotypes)
+        if (stereotype.getDelegate() instanceof SDOCompression) {
+          return (SDOCompression) stereotype.getDelegate();
         }
     }
     return null;

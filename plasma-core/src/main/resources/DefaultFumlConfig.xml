@@ -42,7 +42,7 @@
         target="http:///schemas/PlasmaSDOProfile/_1OeaAJctEee5huZM-G1W5Q" />       
     <NamespaceMapping pathmap="pathmap://PLASMA_PROFILES/PlasmaSDO.profile_v1_2.uml" 
         domain="ecore" uri="http:///schemas/PlasmaSDOProfile" 
-        target="http:///schemas/PlasmaSDOProfile/_HeBRQLa3EeeGwOelpq04nA" /> 
+        target="http:///schemas/PlasmaSDOProfile/_8izAcdhNEeeROooqUVImmw" /> 
 
     <NamespaceMapping pathmap="pathmap://PLASMA_LIBRARIES/PlasmaSDODataTypes.uml" 
         domain="ecore" uri="http:///schemas/PlasmaSDODataTypes" 
