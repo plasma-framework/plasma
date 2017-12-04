@@ -34,8 +34,8 @@
         ecoreNamespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
     
     <Artifact urn="PlasmaSDO.profile_v1_2.uml" 
-        id="_NlmngCJUEeSXvPZh3aumVA" ecoreId="_8izAcdhNEeeROooqUVImmw" version="1.2"
-        namespaceUri="http:///schemas/PlasmaSDOProfile/_8izAcNhNEeeROooqUVImmw/9"
+        id="_NlmngCJUEeSXvPZh3aumVA" ecoreId="_p4v-cNlFEeezoeMa0nl5yg" version="1.2"
+        namespaceUri="http:///schemas/PlasmaSDOProfile/_p4p30NlFEeezoeMa0nl5yg/0"
         umlNamespaceUri="http://www.eclipse.org/uml2/5.0.0/UML" umlVersion="5.0.0" 
         xmiNamespaceUri="http://www.omg.org/spec/XMI/20131001" xmiVersion="20131001"
         ecoreNamespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
