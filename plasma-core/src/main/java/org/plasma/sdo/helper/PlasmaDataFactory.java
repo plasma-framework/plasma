@@ -80,17 +80,48 @@ public class PlasmaDataFactory implements DataFactory {
     Class<?> interfaceImplClass = interfaceImplClassMap.get(qualifiedName);
     if (interfaceImplClass == null) {
       try {
-        interfaceImplClass = Class.forName(qualifiedName); // expensive under
-                                                           // load
+        // expensive under load
+        interfaceImplClass = Class.forName(qualifiedName);
       } catch (ClassNotFoundException e) {
-        if (log.isDebugEnabled())
-          log.debug("no interface class found for qualified name '" + qualifiedName
-              + "' - using generic DataObject");
-        interfaceImplClass = CoreDataObject.class;
+        interfaceImplClass = findBaseInterfaceClass(type);
+        if (interfaceImplClass == null) {
+          if (log.isDebugEnabled())
+            log.debug("no interface class found for qualified name '" + qualifiedName
+                + "' - using generic DataObject");
+          interfaceImplClass = CoreDataObject.class;
+        }
       }
       interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
     }
-    return this.create(interfaceImplClass, type);
+    return this.createDataObject(interfaceImplClass, type);
+  }
+
+  /**
+   * Traverses the non-abstract ancestry for an interface class which can be
+   * instantiated, ignoring instances of multiple inheritance in the ancestry.
+   * 
+   * @param type
+   *          the type
+   * @return the interface class or null if none found
+   */
+  private Class<?> findBaseInterfaceClass(Type type) {
+    if (type.getBaseTypes().size() == 1) {
+      Type baseType = type.getBaseTypes().get(0);
+      if (!baseType.isAbstract()) {
+        String qualifiedName = createPackageQualifiedClassName(baseType);
+        Class<?> interfaceImplClass = this.interfaceImplClassMap.get(qualifiedName);
+        if (interfaceImplClass == null) {
+          try {
+            interfaceImplClass = Class.forName(qualifiedName);
+            this.interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
+            return interfaceImplClass;
+          } catch (ClassNotFoundException e) {
+            return findBaseInterfaceClass(baseType);
+          }
+        }
+      }
+    }
+    return null;
   }
 
   private String createPackageQualifiedClassName(Type type) {
@@ -99,6 +130,33 @@ public class PlasmaDataFactory implements DataFactory {
         type.getName());
     String qualifiedName = packageName + "." + className;
     return qualifiedName;
+  }
+
+  @SuppressWarnings("rawtypes")
+  public DataObject create(Class interfaceClass, Type type) {
+    CoreDataObject result = null;
+    Namespace sdoNamespace = PlasmaRuntime.getInstance().getSDONamespaceByInterfacePackage(
+        interfaceClass.getPackage().getName());
+
+    String packageName = PlasmaRuntime.getInstance().getSDOImplementationPackageName(
+        sdoNamespace.getUri());
+    String className = PlasmaRuntime.getInstance().getSDOImplementationClassName(
+        sdoNamespace.getUri(), interfaceClass.getSimpleName());
+    String qualifiedName = packageName + "." + className;
+
+    try {
+      Class<?> interfaceImplClass = interfaceImplClassMap.get(qualifiedName);
+      if (interfaceImplClass == null) {
+        interfaceImplClass = Class.forName(qualifiedName); // expensive under
+                                                           // load
+        interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
+        log.warn("cache miss: " + interfaceImplClass.getName());
+      }
+      result = createDataObject(interfaceImplClass, type);
+    } catch (ClassNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+    return result;
   }
 
   @SuppressWarnings("rawtypes")
@@ -123,28 +181,28 @@ public class PlasmaDataFactory implements DataFactory {
         interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
         log.warn("cache miss: " + interfaceImplClass.getName());
       }
-      result = create(interfaceImplClass, types, args);
+      result = createDataObject(interfaceImplClass, types, args);
     } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);
     }
     return result;
   }
 
-  private DataObject create(Class<?> interfaceClass, Type type) {
+  private CoreDataObject createDataObject(Class<?> interfaceClass, Type type) {
     Class<?>[] types = { Type.class };
     Object[] args = { type };
-    CoreDataObject result = create(interfaceClass, types, args);
+    CoreDataObject result = createDataObject(interfaceClass, types, args);
     return result;
   }
 
-  private DataObject create(Class<?> interfaceClass, Type type, UUID uuid) {
+  private CoreDataObject createDataObject(Class<?> interfaceClass, Type type, UUID uuid) {
     Class<?>[] types = { Type.class, UUID.class };
     Object[] args = { type, uuid };
-    CoreDataObject result = create(interfaceClass, types, args);
+    CoreDataObject result = createDataObject(interfaceClass, types, args);
     return result;
   }
 
-  private CoreDataObject create(Class<?> interfaceClass, Class<?>[] types, Object[] args) {
+  private CoreDataObject createDataObject(Class<?> interfaceClass, Class<?>[] types, Object[] args) {
     CoreDataObject result = null;
     try {
       Constructor<?> constructor = interfaceClass.getConstructor(types);

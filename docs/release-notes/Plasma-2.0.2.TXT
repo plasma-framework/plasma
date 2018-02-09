@@ -1,0 +1,25 @@
+Release Notes
+
+Plasma 2.0.2 Release Notes
+Plasma 2.0.2 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/plasma-framework/plasma/issues.
+
+
+Major Changes
+[Issue #92] - Add an Increment Annotation and Stereotype 
+ 
+Bugs
+
+
+Improvements
+[Issue #94] - Traverse Type Ancestry for Interface Class 
+
+
+New Features
+Tasks
+Wish
+
+

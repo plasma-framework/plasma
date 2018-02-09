@@ -61,7 +61,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.modeldriven</groupId>
-			<artifactId>fuml</artifactId>
+			<artifactId>fuml</artifactId>			
 			<version>1.1.0c</version>
 			<exclusions>
 				<exclusion>
