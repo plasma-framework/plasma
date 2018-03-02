@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:PlasmaSDOProfile="http:///schemas/PlasmaSDOProfile/_S-dOMBWkEei92ZhmTudv_w/1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/PlasmaSDOProfile/_S-hfoBWkEei92ZhmTudv_w/1 pathmap://PLASMA_PROFILES/PlasmaSDO.profile_v1_3.uml#_S-hfoBWkEei92ZhmTudv_w">
+  <uml:Model xmi:id="8f07a441-7327-4bf7-aff4-cd60402bf83a" name="test">
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="__RIADbhxEeempbWo52e7Lg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AQET4dlIEeepqvc1YGOOyg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="pathmap://PLASMA_PROFILES/PlasmaSDO.profile_v1_3.uml#_S-hfoBWkEei92ZhmTudv_w"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://PLASMA_PROFILES/PlasmaSDO.profile_v1_3.uml#_NlmngCJUEeSXvPZh3aumVA"/>
+    </profileApplication>
+  </uml:Model>
+</xmi:XMI>

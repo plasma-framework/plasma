@@ -159,6 +159,8 @@
 			<xsd:enumeration value="Plasma_SDO_Profile_v1_2.mdxml" />
 			<xsd:enumeration value="PlasmaSDO.profile_v1_2.uml" />
 			<xsd:enumeration value="PlasmaSDODataTypes_v1_2.uml" />
+			<xsd:enumeration value="PlasmaSDO.profile_v1_3.uml" />
+			<xsd:enumeration value="PlasmaSDODataTypes_v1_3.uml" />
 		</xsd:restriction>
 	</xsd:simpleType>
 

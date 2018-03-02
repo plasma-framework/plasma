@@ -16,29 +16,15 @@
                         
         </GlobalProvisioning>            
     
-        <!-- default namespace used for SDO infra itself, such as SDO datatypes -->
-           <!-- 
-        <DefaultNamespace uri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"
-            artifact="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi">
-            <Provisioning packageName="org.plasma.platform.sdo"/>
-  		</DefaultNamespace>
-  		  --> 
   	      	
     </SDO>
     
     <Repository> 
-        <!-- Would like to use our own namespace here (say 'http://www.terrameta.org/plasma/sdo/profile') but MagicDraw
-            unfortunately bakes this namespace e.g. 'http://www.magicdraw.com/schemas/*'  
-            into any and every model that references a profile. You can change
-            the namespace declaration by hand in the XMI but next time the
-            model is changed, MD will change it back !!
-        -->
-        <!--      
-        <Artifact name="Plasma_SDO_Profile.mdxml"
-            urn="Plasma_SDO_Profile.mdxml" 
-            namespaceUri="http://www.magicdraw.com/schemas/Plasma_SDO_Profile.xmi"/>
+        <!-- no-content artifact annotated with Papyrus Plasma Profile 1.3 for testing -->
+        <Artifact name="test-model.uml"
+            urn="test-model.uml" 
+            namespaceUri="http://plasma.org/test-model.uml"/>  
           
-         -->
     </Repository>
     
   

@@ -43,6 +43,10 @@ import org.joda.time.format.PeriodFormatter;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.PlasmaDataObjectException;
 
+import com.google.common.primitives.UnsignedInteger;
+import com.google.common.primitives.UnsignedInts;
+import com.google.common.primitives.UnsignedLong;
+
 import commonj.sdo.Property;
 import commonj.sdo.Type;
 
@@ -128,12 +132,18 @@ public class DataConverter {
         map.put(int.class, method);
         map.put(Integer.class, method);
 
+        method = this.getClass().getMethod("fromUnsignedInt", Type.class, UnsignedInteger.class);
+        map.put(UnsignedInteger.class, method);
+
         method = this.getClass().getMethod("fromInteger", Type.class, BigInteger.class);
         map.put(BigInteger.class, method);
 
         method = this.getClass().getMethod("fromLong", Type.class, long.class);
         map.put(Long.class, method);
         map.put(long.class, method);
+
+        method = this.getClass().getMethod("fromUnsignedLong", Type.class, UnsignedLong.class);
+        map.put(UnsignedLong.class, method);
 
         method = this.getClass().getMethod("fromShort", Type.class, short.class);
         map.put(Short.class, method);
@@ -306,10 +316,14 @@ public class DataConverter {
       return toFloat(sourceType, value);
     case Int:
       return toInt(sourceType, value);
+    case UnsignedInt:
+      return toUnsignedInt(sourceType, value);
     case Integer:
       return toInteger(sourceType, value);
     case Long:
       return toLong(sourceType, value);
+    case UnsignedLong:
+      return toUnsignedLong(sourceType, value);
     case Short:
       return toShort(sourceType, value);
     case String:
@@ -370,8 +384,12 @@ public class DataConverter {
       return ((Float) value).byteValue();
     case Int:
       return ((Integer) value).byteValue();
+    case UnsignedInt:
+      return ((UnsignedInteger) value).byteValue();
     case Long:
       return ((Long) value).byteValue();
+    case UnsignedLong:
+      return ((UnsignedLong) value).byteValue();
     case Short:
       return ((Short) value).byteValue();
     case String:
@@ -394,8 +412,12 @@ public class DataConverter {
       return Float.valueOf((int) value & 0xFF);
     case Int:
       return Integer.valueOf((int) value & 0xFF);
+    case UnsignedInt:
+      return UnsignedInteger.valueOf(Long.valueOf((int) value & 0xFF));
     case Long:
       return Long.valueOf((int) value & 0xFF);
+    case UnsignedLong:
+      return UnsignedLong.valueOf(Long.valueOf((int) value & 0xFF));
     case Short:
       return new Short(Integer.valueOf((int) value & 0xFF).shortValue());
     case String:
@@ -466,7 +488,9 @@ public class DataConverter {
     case Double:
     case Float:
     case Int:
+    case UnsignedInt:
     case Long:
+    case UnsignedLong:
     case Integer:
       return new BigDecimal(((Number) value).doubleValue());
     case String:
@@ -484,11 +508,25 @@ public class DataConverter {
     case Double:
       return new Double(value.doubleValue());
     case Float:
+      if (value.doubleValue() > Float.MAX_VALUE || value.doubleValue() < Float.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Float, value);
       return new Float(value.floatValue());
     case Int:
+      if (value.longValue() > Integer.MAX_VALUE || value.longValue() < Integer.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Int, value);
       return new Integer(value.intValue());
+    case UnsignedInt:
+      if (value.longValue() > UnsignedInteger.MAX_VALUE.longValue())
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      if (value.longValue() < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return UnsignedInteger.valueOf(value.longValue());
     case Long:
       return new Long(value.longValue());
+    case UnsignedLong:
+      if (value.longValue() < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedLong, value);
+      return UnsignedLong.valueOf(value.longValue());
     case Integer:
       return value.toBigInteger();
     case String:
@@ -516,8 +554,12 @@ public class DataConverter {
       return ((Float) value).doubleValue();
     case Int:
       return ((Integer) value).doubleValue();
+    case UnsignedInt:
+      return ((UnsignedInteger) value).doubleValue();
     case Long:
       return ((Long) value).doubleValue();
+    case UnsignedLong:
+      return ((UnsignedLong) value).doubleValue();
     case Short:
       return ((Short) value).doubleValue();
     case Integer:
@@ -538,14 +580,32 @@ public class DataConverter {
     case Double:
       return Double.valueOf(value);
     case Byte:
+      if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Byte, value);
       return new Byte(Double.valueOf(value).byteValue());
     case Float:
+      if (value > Float.MAX_VALUE || value < Float.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Float, value);
       return new Float(Double.valueOf(value).floatValue());
     case Int:
+      if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Int, value);
       return new Integer(Double.valueOf(value).intValue());
+    case UnsignedInt:
+      if (value < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      if (value > UnsignedInteger.MAX_VALUE.doubleValue())
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return UnsignedInteger.valueOf(Double.valueOf(value).longValue());
     case Long:
       return new Long(Double.valueOf(value).longValue());
+    case UnsignedLong:
+      if (value < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedLong, value);
+      return UnsignedLong.valueOf(Double.valueOf(value).longValue());
     case Short:
+      if (value > Short.MAX_VALUE || value < Short.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Short, value);
       return new Short(Double.valueOf(value).shortValue());
     case Integer:
       return BigInteger.valueOf(Double.valueOf(value).longValue());
@@ -570,8 +630,12 @@ public class DataConverter {
       return ((Double) value).floatValue();
     case Int:
       return ((Integer) value).floatValue();
+    case UnsignedInt:
+      return ((UnsignedInteger) value).floatValue();
     case Long:
       return ((Long) value).floatValue();
+    case UnsignedLong:
+      return ((UnsignedLong) value).floatValue();
     case Short:
       return ((Short) value).floatValue();
     case Decimal:
@@ -591,14 +655,28 @@ public class DataConverter {
     case Float:
       return Float.valueOf(value);
     case Byte:
+      if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Byte, value);
       return new Byte(Float.valueOf(value).byteValue());
     case Double:
       return new Double(Float.valueOf(value).doubleValue());
     case Int:
       return new Integer(Float.valueOf(value).intValue());
+    case UnsignedInt:
+      if (value < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      if (value > UnsignedInteger.MAX_VALUE.floatValue())
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return UnsignedInteger.valueOf(Float.valueOf(value).intValue());
     case Long:
       return new Long(Float.valueOf(value).longValue());
+    case UnsignedLong:
+      if (value < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedLong, value);
+      return UnsignedLong.valueOf(Float.valueOf(value).longValue());
     case Short:
+      if (value > Short.MAX_VALUE || value < Short.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Short, value);
       return new Short(Float.valueOf(value).shortValue());
     case Decimal:
       return BigDecimal.valueOf(value);
@@ -617,6 +695,8 @@ public class DataConverter {
     switch (sourceDataType) {
     case Int:
       return ((Integer) value).intValue();
+    case UnsignedInt:
+      return ((UnsignedInteger) value).intValue();
     case Byte:
       return ((Byte) value).intValue();
     case Double:
@@ -625,6 +705,8 @@ public class DataConverter {
       return ((Float) value).intValue();
     case Long:
       return ((Long) value).intValue();
+    case UnsignedLong:
+      return ((UnsignedLong) value).intValue();
     case Short:
       return ((Short) value).intValue();
     case Decimal:
@@ -643,15 +725,29 @@ public class DataConverter {
     switch (targetDataType) {
     case Int:
       return Integer.valueOf(value);
+    case UnsignedInt:
+      if (value < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return UnsignedInteger.valueOf(value);
     case Byte:
+      if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Byte, value);
       return new Byte(Integer.valueOf(value).byteValue());
     case Double:
       return new Double(Integer.valueOf(value).doubleValue());
     case Float:
+      if (value > Float.MAX_VALUE || value < Float.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Float, value);
       return new Float(Integer.valueOf(value).floatValue());
     case Long:
       return new Long(Integer.valueOf(value).longValue());
+    case UnsignedLong:
+      if (value < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedLong, value);
+      return UnsignedLong.valueOf(value);
     case Short:
+      if (value > Short.MAX_VALUE || value < Short.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Short, value);
       return new Short(Integer.valueOf(value).shortValue());
     case Decimal:
       return BigDecimal.valueOf(value);
@@ -661,6 +757,76 @@ public class DataConverter {
       return Integer.toString(value);
     default:
       throw new InvalidDataConversionException(targetDataType, DataType.Int, value);
+    }
+  }
+
+  public UnsignedInteger toUnsignedInt(Type sourceType, Object value) {
+    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    switch (sourceDataType) {
+    case Int:
+      return UnsignedInteger.valueOf(((Integer) value).longValue());
+    case UnsignedInt:
+      return (UnsignedInteger) value;
+    case Byte:
+      return UnsignedInteger.valueOf(((Byte) value).longValue());
+    case Double:
+      return UnsignedInteger.valueOf(((Double) value).longValue());
+    case Float:
+      return UnsignedInteger.valueOf(((Float) value).longValue());
+    case Long:
+      return UnsignedInteger.valueOf(((Long) value).longValue());
+    case UnsignedLong:
+      return UnsignedInteger.valueOf(((UnsignedLong) value).longValue());
+    case Short:
+      return UnsignedInteger.valueOf(((Short) value).longValue());
+    case Decimal:
+      return UnsignedInteger.valueOf(((BigDecimal) value).longValue());
+    case Integer:
+      return UnsignedInteger.valueOf(((BigInteger) value).longValue());
+    case String:
+      return UnsignedInteger.valueOf((String) value);
+    default:
+      throw new InvalidDataConversionException(DataType.UnsignedInt, sourceDataType, value);
+    }
+  }
+
+  public Object fromUnsignedInt(Type targetType, UnsignedInteger value) {
+    DataType targetDataType = DataType.valueOf(targetType.getName());
+    switch (targetDataType) {
+    case Int:
+      if (value.longValue() > Integer.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return new Integer(value.intValue());
+    case UnsignedInt:
+      return value;
+    case Byte:
+      if (value.longValue() > Byte.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return new Byte(Integer.valueOf(value.intValue()).byteValue());
+    case Double:
+      if (value.longValue() > Double.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return new Double(Long.valueOf(value.longValue()).doubleValue());
+    case Float:
+      if (value.longValue() > Float.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return new Float(Long.valueOf(value.longValue()).floatValue());
+    case Long:
+      return new Long(value.longValue());
+    case UnsignedLong:
+      return UnsignedLong.valueOf(value.longValue());
+    case Short:
+      if (value.longValue() > Short.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return new Short(Long.valueOf(value.longValue()).shortValue());
+    case Decimal:
+      return BigDecimal.valueOf(value.longValue());
+    case Integer:
+      return BigInteger.valueOf(value.longValue());
+    case String:
+      return value.toString();
+    default:
+      throw new InvalidDataConversionException(targetDataType, DataType.UnsignedInt, value);
     }
   }
 
@@ -675,8 +841,12 @@ public class DataConverter {
       return BigInteger.valueOf(((Float) value).longValue());
     case Int:
       return BigInteger.valueOf(((Integer) value).longValue());
+    case UnsignedInt:
+      return BigInteger.valueOf(((UnsignedInteger) value).longValue());
     case Long:
       return BigInteger.valueOf(((Long) value).longValue());
+    case UnsignedLong:
+      return BigInteger.valueOf(((UnsignedLong) value).longValue());
     case Decimal:
       return BigInteger.valueOf(((BigDecimal) value).longValue());
     case Bytes:
@@ -696,11 +866,23 @@ public class DataConverter {
     case Double:
       return new Double(value.doubleValue());
     case Float:
+      if (value.doubleValue() > Float.MAX_VALUE || value.doubleValue() < Float.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Float, value);
       return new Float(value.floatValue());
     case Int:
+      if (value.longValue() > Integer.MAX_VALUE || value.longValue() < Integer.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Int, value);
       return new Integer(value.intValue());
+    case UnsignedInt:
+      if (value.longValue() < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      if (value.longValue() > UnsignedInteger.MAX_VALUE.longValue())
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return UnsignedInteger.valueOf(value.longValue());
     case Long:
       return new Long(value.longValue());
+    case UnsignedLong:
+      return UnsignedLong.valueOf(value.longValue());
     case Decimal:
       return new BigDecimal(value.doubleValue());
     case Bytes:
@@ -718,6 +900,8 @@ public class DataConverter {
     switch (sourceDataType) {
     case Long:
       return ((Long) value).longValue();
+    case UnsignedLong:
+      return ((UnsignedLong) value).longValue();
     case Byte:
       return ((Byte) value).longValue();
     case Double:
@@ -726,6 +910,8 @@ public class DataConverter {
       return ((Float) value).longValue();
     case Int:
       return ((Integer) value).longValue();
+    case UnsignedInt:
+      return ((UnsignedInteger) value).longValue();
     case Short:
       return ((Short) value).longValue();
     case Decimal:
@@ -746,15 +932,33 @@ public class DataConverter {
     switch (targetDataType) {
     case Long:
       return Long.valueOf(value);
+    case UnsignedLong:
+      if (value < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedLong, value);
+      return UnsignedLong.valueOf(value);
     case Byte:
+      if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Byte, value);
       return new Byte(Long.valueOf(value).byteValue());
     case Double:
       return new Double(Long.valueOf(value).doubleValue());
     case Float:
+      if (value > Float.MAX_VALUE || value < Float.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Float, value);
       return new Float(Long.valueOf(value).floatValue());
     case Int:
+      if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Int, value);
       return new Integer(Long.valueOf(value).intValue());
+    case UnsignedInt:
+      if (value < 0)
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      if (value > UnsignedInteger.MAX_VALUE.longValue())
+        throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
+      return UnsignedInteger.valueOf(value);
     case Short:
+      if (value > Short.MAX_VALUE || value < Short.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Short, value);
       return new Short(Long.valueOf(value).shortValue());
     case Decimal:
       return new BigDecimal(Long.valueOf(value).longValue());
@@ -764,6 +968,80 @@ public class DataConverter {
       return new Date(value);
     case String:
       return Long.toString(value);
+    default:
+      throw new InvalidDataConversionException(targetDataType, DataType.Long, value);
+    }
+  }
+
+  public UnsignedLong toUnsignedLong(Type sourceType, Object value) {
+    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    switch (sourceDataType) {
+    case Long:
+      return UnsignedLong.valueOf(((Long) value).longValue());
+    case UnsignedLong:
+      return ((UnsignedLong) value);
+    case Byte:
+      return UnsignedLong.valueOf(((Byte) value).longValue());
+    case Double:
+      return UnsignedLong.valueOf(((Double) value).longValue());
+    case Float:
+      return UnsignedLong.valueOf(((Float) value).longValue());
+    case Int:
+      return UnsignedLong.valueOf(((Integer) value).longValue());
+    case UnsignedInt:
+      return UnsignedLong.valueOf(((UnsignedInteger) value).longValue());
+    case Short:
+      return UnsignedLong.valueOf(((Short) value).longValue());
+    case Decimal:
+      return UnsignedLong.valueOf(((BigDecimal) value).longValue());
+    case Integer:
+      return UnsignedLong.valueOf(((BigInteger) value).longValue());
+    case Date:
+      return UnsignedLong.valueOf(((Date) value).getTime());
+    case String:
+      return UnsignedLong.valueOf((String) value);
+    default:
+      throw new InvalidDataConversionException(DataType.Long, sourceDataType, value);
+    }
+  }
+
+  public Object fromUnsignedLong(Type targetType, UnsignedLong value) {
+    DataType targetDataType = DataType.valueOf(targetType.getName());
+    switch (targetDataType) {
+    case Long:
+      return Long.valueOf(value.longValue());
+    case UnsignedLong:
+      return UnsignedLong.valueOf(value.longValue());
+    case Byte:
+      if (value.longValue() > Byte.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Byte, value);
+      return new Byte(value.byteValue());
+    case Double:
+      if (value.longValue() > Double.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Double, value);
+      return new Double(value.doubleValue());
+    case Float:
+      if (value.longValue() > Float.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Float, value);
+      return new Float(value.floatValue());
+    case Int:
+      if (value.longValue() > Integer.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Int, value);
+      return new Integer(value.intValue());
+    case UnsignedInt:
+      return UnsignedInteger.valueOf(value.intValue());
+    case Short:
+      if (value.longValue() > Short.MAX_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Short, value);
+      return new Short(value.shortValue());
+    case Decimal:
+      return new BigDecimal(value.longValue());
+    case Integer:
+      return BigInteger.valueOf(value.longValue());
+    case Date:
+      return new Date(value.longValue());
+    case String:
+      return Long.toString(value.longValue());
     default:
       throw new InvalidDataConversionException(targetDataType, DataType.Long, value);
     }
@@ -782,8 +1060,12 @@ public class DataConverter {
       return ((Float) value).shortValue();
     case Int:
       return ((Integer) value).shortValue();
+    case UnsignedInt:
+      return ((UnsignedInteger) value).shortValue();
     case Long:
       return ((Long) value).shortValue();
+    case UnsignedLong:
+      return ((UnsignedLong) value).shortValue();
     case String:
       return Short.parseShort((String) value);
     default:
@@ -797,6 +1079,8 @@ public class DataConverter {
     case Short:
       return Short.valueOf(value);
     case Byte:
+      if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE)
+        throw new DataOverflowException(targetDataType, DataType.Byte, value);
       return new Byte(Short.valueOf(value).byteValue());
     case Double:
       return new Double(Short.valueOf(value).doubleValue());
@@ -804,8 +1088,12 @@ public class DataConverter {
       return new Float(Short.valueOf(value).floatValue());
     case Int:
       return new Integer(Short.valueOf(value).intValue());
+    case UnsignedInt:
+      return UnsignedInteger.valueOf(Short.valueOf(value).intValue());
     case Long:
       return new Long(Short.valueOf(value).longValue());
+    case UnsignedLong:
+      return UnsignedLong.valueOf(Short.valueOf(value).longValue());
     case String:
       return Short.valueOf(value).toString();
     default:
@@ -916,10 +1204,14 @@ public class DataConverter {
       return toString(sourceDataType, Float.class, value);
     case Int:
       return toString(sourceDataType, Integer.class, value);
+    case UnsignedInt:
+      return toString(sourceDataType, UnsignedInteger.class, value);
     case Integer:
       return toString(sourceDataType, BigInteger.class, value);
     case Long:
       return toString(sourceDataType, Long.class, value);
+    case UnsignedLong:
+      return toString(sourceDataType, UnsignedLong.class, value);
     case Short:
       return toString(sourceDataType, Short.class, value);
     case Strings:
@@ -1105,10 +1397,14 @@ public class DataConverter {
       return toString(property, Float.class, value);
     case Int:
       return toString(property, Integer.class, value);
+    case UnsignedInt:
+      return toString(property, UnsignedInteger.class, value);
     case Integer:
       return toString(property, BigInteger.class, value);
     case Long:
       return toString(property, Long.class, value);
+    case UnsignedLong:
+      return toString(property, UnsignedLong.class, value);
     case Short:
       return toString(property, Short.class, value);
     case Strings:
@@ -1298,6 +1594,16 @@ public class DataConverter {
           list.add(Integer.valueOf(arrayValue));
         return list;
       }
+    case UnsignedInt:
+      if (!value.startsWith("[")) {
+        return UnsignedInteger.valueOf(value);
+      } else {
+        String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+        List<UnsignedInteger> list = new ArrayList<UnsignedInteger>();
+        for (String arrayValue : strings)
+          list.add(UnsignedInteger.valueOf(arrayValue));
+        return list;
+      }
     case Integer:
       if (!value.startsWith("[")) {
         return new BigInteger(value);
@@ -1316,6 +1622,16 @@ public class DataConverter {
         List<Long> list = new ArrayList<Long>();
         for (String arrayValue : strings)
           list.add(Long.valueOf(arrayValue));
+        return list;
+      }
+    case UnsignedLong:
+      if (!value.startsWith("[")) {
+        return UnsignedLong.valueOf(value);
+      } else {
+        String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+        List<UnsignedLong> list = new ArrayList<UnsignedLong>();
+        for (String arrayValue : strings)
+          list.add(UnsignedLong.valueOf(arrayValue));
         return list;
       }
     case Short:
@@ -1362,7 +1678,7 @@ public class DataConverter {
           return list;
         }
       } catch (ParseException e) {
-        throw new PlasmaDataObjectException(e);
+        throw new PlasmaDataObjectException("pattern: " + FORMAT_PATTERN_DATE, e);
       }
     case DateTime:
     case Month:
@@ -1591,6 +1907,28 @@ public class DataConverter {
                   + targetProperty.toString());
         }
       }
+    case UnsignedInt:
+      if (!targetProperty.isMany()) {
+        if (!value.startsWith("[")) {
+          return UnsignedInteger.valueOf(value);
+        } else {
+          throw new IllegalArgumentException(
+              "no java.util.Arrays formatting expected for the given value, for the given singular property, "
+                  + targetProperty.toString());
+        }
+      } else {
+        if (value.startsWith("[")) {
+          String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+          List<UnsignedInteger> list = new ArrayList<UnsignedInteger>();
+          for (String arrayValue : strings)
+            list.add(UnsignedInteger.valueOf(arrayValue));
+          return list;
+        } else {
+          throw new IllegalArgumentException(
+              "no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+                  + targetProperty.toString());
+        }
+      }
     case Integer:
       if (!targetProperty.isMany()) {
         if (!value.startsWith("[")) {
@@ -1628,6 +1966,28 @@ public class DataConverter {
           List<Long> list = new ArrayList<Long>();
           for (String arrayValue : strings)
             list.add(Long.valueOf(arrayValue));
+          return list;
+        } else {
+          throw new IllegalArgumentException(
+              "no java.util.Arrays formatting detected for the given value, for the given 'many' property, "
+                  + targetProperty.toString());
+        }
+      }
+    case UnsignedLong:
+      if (!targetProperty.isMany()) {
+        if (!value.startsWith("[")) {
+          return UnsignedLong.valueOf(value);
+        } else {
+          throw new IllegalArgumentException(
+              "no java.util.Arrays formatting expected for the given value, for the given singular property, "
+                  + targetProperty.toString());
+        }
+      } else {
+        if (value.startsWith("[")) {
+          String[] strings = value.replaceAll("[\\[\\]\\s]", "").split(",");
+          List<UnsignedLong> list = new ArrayList<UnsignedLong>();
+          for (String arrayValue : strings)
+            list.add(UnsignedLong.valueOf(arrayValue));
           return list;
         } else {
           throw new IllegalArgumentException(
@@ -1786,6 +2146,8 @@ public class DataConverter {
       return (Date) value;
     case Long:
       return new Date(((Long) value).longValue());
+    case UnsignedLong:
+      return new Date(((UnsignedLong) value).longValue());
     case Day:
       format = getDayFormat();
       break;
@@ -1807,7 +2169,6 @@ public class DataConverter {
     case YearMonthDay:
       format = getYearMonthDayFormat();
       break;
-    case Duration: // FIXME use correct parse
     case DateTime:
     case String:
       format = getDateTimeFormat();
@@ -1821,7 +2182,8 @@ public class DataConverter {
     } catch (ParseException e) {
       if (format instanceof SimpleDateFormat)
         throw new InvalidDataFormatException("expected " + sourceDataType.toString() + " pattern '"
-            + ((SimpleDateFormat) format).toPattern() + "' for value '" + value.toString() + "'", e);
+            + ((SimpleDateFormat) format).toPattern() + "' for value '" + value.toString()
+            + "' of data type, " + sourceDataType, e);
       else
         throw new InvalidDataFormatException("expected " + sourceDataType.toString() + " pattern '"
             + "unknown" + "' for value '" + value.toString() + "'", e);
@@ -1851,10 +2213,10 @@ public class DataConverter {
       return this.getYearMonthDayFormat().format(value);
     case Long:
       return new Long(value.getTime());
+    case UnsignedLong:
+      return UnsignedLong.valueOf(value.getTime());
     case String: // use format with max precision
       return this.getDateTimeFormat().format(value);
-    case Duration:
-      return new Duration(value.getTime());
     default:
       throw new InvalidDataConversionException(targetDataType, DataType.Date, value);
     }
@@ -1917,10 +2279,14 @@ public class DataConverter {
       return float.class;
     case Int:
       return int.class;
+    case UnsignedInt:
+      return UnsignedInteger.class;
     case Integer:
       return java.math.BigInteger.class;
     case Long:
       return long.class;
+    case UnsignedLong:
+      return UnsignedLong.class;
     case Month:
       return String.class;
     case MonthDay:
@@ -1985,10 +2351,14 @@ public class DataConverter {
       return Float.class;
     case Int:
       return Integer.class;
+    case UnsignedInt:
+      return UnsignedInteger.class;
     case Integer:
       return java.math.BigInteger.class;
     case Long:
       return Long.class;
+    case UnsignedLong:
+      return UnsignedLong.class;
     case Month:
       return String.class;
     case MonthDay:
@@ -2029,7 +2399,9 @@ public class DataConverter {
       result.add(DataType.Double);
       result.add(DataType.Float);
       result.add(DataType.Int);
+      result.add(DataType.UnsignedInt);
       result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
       result.add(DataType.Short);
       result.add(DataType.String);
       break;
@@ -2047,7 +2419,9 @@ public class DataConverter {
       result.add(DataType.Double);
       result.add(DataType.Float);
       result.add(DataType.Int);
+      result.add(DataType.UnsignedInt);
       result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
       result.add(DataType.Integer);
       result.add(DataType.String);
       break;
@@ -2056,7 +2430,9 @@ public class DataConverter {
       result.add(DataType.Byte);
       result.add(DataType.Float);
       result.add(DataType.Int);
+      result.add(DataType.UnsignedInt);
       result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
       result.add(DataType.Short);
       result.add(DataType.Decimal);
       result.add(DataType.Integer);
@@ -2067,7 +2443,9 @@ public class DataConverter {
       result.add(DataType.Byte);
       result.add(DataType.Double);
       result.add(DataType.Int);
+      result.add(DataType.UnsignedInt);
       result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
       result.add(DataType.Short);
       result.add(DataType.Decimal);
       result.add(DataType.Integer);
@@ -2078,7 +2456,22 @@ public class DataConverter {
       result.add(DataType.Byte);
       result.add(DataType.Double);
       result.add(DataType.Float);
+      result.add(DataType.UnsignedInt);
       result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
+      result.add(DataType.Short);
+      result.add(DataType.Decimal);
+      result.add(DataType.Integer);
+      result.add(DataType.String);
+      break;
+    case UnsignedInt:
+      result.add(DataType.Int);
+      result.add(DataType.Byte);
+      result.add(DataType.Double);
+      result.add(DataType.Float);
+      result.add(DataType.UnsignedInt);
+      result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
       result.add(DataType.Short);
       result.add(DataType.Decimal);
       result.add(DataType.Integer);
@@ -2089,7 +2482,9 @@ public class DataConverter {
       result.add(DataType.Double);
       result.add(DataType.Float);
       result.add(DataType.Int);
+      result.add(DataType.UnsignedInt);
       result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
       result.add(DataType.Bytes);
       result.add(DataType.Decimal);
       result.add(DataType.String);
@@ -2100,6 +2495,22 @@ public class DataConverter {
       result.add(DataType.Double);
       result.add(DataType.Float);
       result.add(DataType.Int);
+      result.add(DataType.UnsignedInt);
+      result.add(DataType.UnsignedLong);
+      result.add(DataType.Short);
+      result.add(DataType.Decimal);
+      result.add(DataType.Integer);
+      result.add(DataType.Date);
+      result.add(DataType.String);
+      break;
+    case UnsignedLong:
+      result.add(DataType.Long);
+      result.add(DataType.Byte);
+      result.add(DataType.Double);
+      result.add(DataType.Float);
+      result.add(DataType.Int);
+      result.add(DataType.UnsignedInt);
+      result.add(DataType.UnsignedLong);
       result.add(DataType.Short);
       result.add(DataType.Decimal);
       result.add(DataType.Integer);
@@ -2112,7 +2523,9 @@ public class DataConverter {
       result.add(DataType.Double);
       result.add(DataType.Float);
       result.add(DataType.Int);
+      result.add(DataType.UnsignedInt);
       result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
       result.add(DataType.String);
       break;
     case String:
@@ -2129,8 +2542,10 @@ public class DataConverter {
       result.add(DataType.Duration);
       result.add(DataType.Float);
       result.add(DataType.Int);
-      result.add(DataType.Integer);
+      result.add(DataType.UnsignedInt);
       result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
+      result.add(DataType.Integer);
       result.add(DataType.Month);
       result.add(DataType.MonthDay);
       result.add(DataType.Short);
@@ -2147,12 +2562,20 @@ public class DataConverter {
       break;
     case Date:
       result.add(DataType.Date);
+      result.add(DataType.DateTime);
+      result.add(DataType.Time);
+      result.add(DataType.Day);
+      result.add(DataType.Month);
+      result.add(DataType.MonthDay);
+      result.add(DataType.Year);
+      result.add(DataType.YearMonth);
+      result.add(DataType.YearMonthDay);
       result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
       result.add(DataType.String);
       break;
     case Duration:
       result.add(DataType.Duration);
-      result.add(DataType.Date);
       result.add(DataType.String);
       break;
     case DateTime:
@@ -2199,6 +2622,9 @@ public class DataConverter {
       result.add(DataType.String);
       break;
     case Object:
+      result.add(DataType.Object);
+      result.add(DataType.String);
+      break;
     default:
     }
 

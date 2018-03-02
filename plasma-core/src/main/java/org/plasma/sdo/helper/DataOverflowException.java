@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package org.plasma.sdo;
+package org.plasma.sdo.helper;
 
-/**
- * An enum listing the SDO datatypes.
- */
-public enum DataType {
+import org.plasma.sdo.DataType;
 
-  Boolean, Byte, Bytes, Character, Date, DateTime, Day, Decimal, Double, Duration, Float, Int, UnsignedInt, Integer, Long, UnsignedLong, Month, MonthDay, Object, Short, String, Strings, Time, URI, Year, YearMonth, YearMonthDay
+public class DataOverflowException extends InvalidDataConversionException {
+
+  private static final long serialVersionUID = 1L;
+
+  public DataOverflowException(DataType target, DataType source, Object value) {
+    super("data from Java class " + value.getClass().getName() + "(" + source.toString()
+        + ") exceeds capacity of target type " + target.toString());
+  }
+
+  public DataOverflowException(Throwable t) {
+    super(t.getMessage());
+  }
 
 }

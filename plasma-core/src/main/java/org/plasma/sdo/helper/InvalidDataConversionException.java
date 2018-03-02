@@ -27,6 +27,10 @@ public class InvalidDataConversionException extends ClassCastException {
         + source.toString() + ") to target type " + target.toString());
   }
 
+  public InvalidDataConversionException(String msg) {
+    super(msg);
+  }
+
   public InvalidDataConversionException(Throwable t) {
     super(t.getMessage());
   }

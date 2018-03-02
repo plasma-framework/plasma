@@ -76,22 +76,34 @@ public class PlasmaDataFactory implements DataFactory {
     if (type.isDataType())
       throw new IllegalArgumentException("attempt to create a type which is a datatype '"
           + type.getURI() + "#" + type.getName() + "'");
-    String qualifiedName = createPackageQualifiedClassName(type);
-    Class<?> interfaceImplClass = interfaceImplClassMap.get(qualifiedName);
-    if (interfaceImplClass == null) {
-      try {
-        // expensive under load
-        interfaceImplClass = Class.forName(qualifiedName);
-      } catch (ClassNotFoundException e) {
-        interfaceImplClass = findBaseInterfaceClass(type);
-        if (interfaceImplClass == null) {
-          if (log.isDebugEnabled())
-            log.debug("no interface class found for qualified name '" + qualifiedName
-                + "' - using generic DataObject");
-          interfaceImplClass = CoreDataObject.class;
+    String qualifiedName = findPackageQualifiedClassName(type);
+    Class<?> interfaceImplClass = null;
+    if (qualifiedName != null) {
+      interfaceImplClass = interfaceImplClassMap.get(qualifiedName);
+      if (interfaceImplClass == null) {
+        try {
+          interfaceImplClass = Class.forName(qualifiedName);
+          interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
+        } catch (ClassNotFoundException e) {
+          interfaceImplClass = findBaseInterfaceClass(type);
+          if (interfaceImplClass == null) {
+            if (log.isDebugEnabled())
+              log.debug("no interface class found for qualified name '" + qualifiedName
+                  + "' - using generic DataObject");
+            interfaceImplClass = CoreDataObject.class;
+            interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
+          }
         }
       }
-      interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
+    } else {
+      interfaceImplClass = findBaseInterfaceClass(type);
+      if (interfaceImplClass == null) {
+        if (log.isDebugEnabled())
+          log.debug("no interface class found for qualified name '" + qualifiedName
+              + "' - using generic DataObject");
+        interfaceImplClass = CoreDataObject.class;
+        interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
+      }
     }
     return this.createDataObject(interfaceImplClass, type);
   }
@@ -108,28 +120,50 @@ public class PlasmaDataFactory implements DataFactory {
     if (type.getBaseTypes().size() == 1) {
       Type baseType = type.getBaseTypes().get(0);
       if (!baseType.isAbstract()) {
-        String qualifiedName = createPackageQualifiedClassName(baseType);
-        Class<?> interfaceImplClass = this.interfaceImplClassMap.get(qualifiedName);
-        if (interfaceImplClass == null) {
-          try {
-            interfaceImplClass = Class.forName(qualifiedName);
-            this.interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
+        String qualifiedName = findPackageQualifiedClassName(baseType);
+        if (qualifiedName != null) {
+          Class<?> interfaceImplClass = this.interfaceImplClassMap.get(qualifiedName);
+          if (interfaceImplClass != null) {
             return interfaceImplClass;
-          } catch (ClassNotFoundException e) {
-            return findBaseInterfaceClass(baseType);
+          } else {
+            try {
+              interfaceImplClass = Class.forName(qualifiedName);
+              this.interfaceImplClassMap.put(qualifiedName, interfaceImplClass);
+              return interfaceImplClass;
+            } catch (ClassNotFoundException e) {
+              // keep searching
+              return findBaseInterfaceClass(baseType);
+            }
           }
+        } else { // keep searching
+          return findBaseInterfaceClass(baseType);
         }
       }
     }
     return null;
   }
 
-  private String createPackageQualifiedClassName(Type type) {
+  /**
+   * Returns the qualified class name if the given type has a physical package
+   * defined, otherwise returns null.
+   * 
+   * @param type
+   *          the type
+   * @return the qualified class name if the given type has a physical package
+   *         defined, otherwise returns null.
+   */
+  private String findPackageQualifiedClassName(Type type) {
     String packageName = PlasmaRuntime.getInstance().getSDOImplementationPackageName(type.getURI());
-    String className = PlasmaRuntime.getInstance().getSDOImplementationClassName(type.getURI(),
-        type.getName());
-    String qualifiedName = packageName + "." + className;
-    return qualifiedName;
+    if (packageName != null) {
+      String className = PlasmaRuntime.getInstance().getSDOImplementationClassName(type.getURI(),
+          type.getName());
+      StringBuilder buf = new StringBuilder();
+      buf.append(packageName);
+      buf.append(".");
+      buf.append(className);
+      return buf.toString();
+    }
+    return null;
   }
 
   @SuppressWarnings("rawtypes")

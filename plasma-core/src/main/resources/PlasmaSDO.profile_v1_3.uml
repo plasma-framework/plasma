@@ -1,0 +1,959 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Profile xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_NlmngCJUEeSXvPZh3aumVA" name="Plasma SDO Profile" metaclassReference="_5XSh0CJYEeSXvPZh3aumVA _LRRbICJZEeSXvPZh3aumVA _LRRbISJZEeSXvPZh3aumVA _fZ0WYCJcEeSXvPZh3aumVA _NuBtkDSFEeS0BI8SXekDLw _AR4p0DSLEeS0BI8SXekDLw">
+  <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8qdK4Nn-Eee-zcHsSRM7_A" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_S-hfoBWkEei92ZhmTudv_w" name="PlasmaSDOProfile" nsURI="http:///schemas/PlasmaSDOProfile/_S-dOMBWkEei92ZhmTudv_w/1" nsPrefix="PlasmaSDOProfile">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hfoRWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S-hfohWkEei92ZhmTudv_w" key="originalName" value="Plasma SDO Profile"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-rQoBWkEei92ZhmTudv_w" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S-rQoRWkEei92ZhmTudv_w" key="Version" value="1.1.3"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S-rQohWkEei92ZhmTudv_w" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S-rQoxWkEei92ZhmTudv_w" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S-rQpBWkEei92ZhmTudv_w" key="Date" value="2018-02-19"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S-rQpRWkEei92ZhmTudv_w" key="Author" value="Terrameta Software Inc."/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hfoxWkEei92ZhmTudv_w" name="SDONamespace">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hfpBWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_4pcrwCJVEeSXvPZh3aumVA"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hfpRWkEei92ZhmTudv_w" name="base_Package" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Package"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hfpxWkEei92ZhmTudv_w" name="uri" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hfqRWkEei92ZhmTudv_w" name="SDOAlias">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hfqhWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_LLcVYCJYEeSXvPZh3aumVA"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hfqxWkEei92ZhmTudv_w" name="base_NamedElement" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//NamedElement"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hfrRWkEei92ZhmTudv_w" name="physicalName" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hfrxWkEei92ZhmTudv_w" name="localName" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hfsRWkEei92ZhmTudv_w" name="businessName" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hfsxWkEei92ZhmTudv_w" name="SDOConcurrent">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hftBWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_e3AIEDSCEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hftRWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hftxWkEei92ZhmTudv_w" name="type" ordered="false" lowerBound="1" eType="_S-hfuxWkEei92ZhmTudv_w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hfuRWkEei92ZhmTudv_w" name="dataFlavor" ordered="false" lowerBound="1" eType="_S-hfwBWkEei92ZhmTudv_w"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EEnum" xmi:id="_S-hfuxWkEei92ZhmTudv_w" name="ConcurrencyType">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hfvBWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_16_0_1_1707042b_1320763142612_445793_1633"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hfvRWkEei92ZhmTudv_w" name="optimistic"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hfvhWkEei92ZhmTudv_w" name="pessimistic" value="1"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hfvxWkEei92ZhmTudv_w" name="origination" value="2"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EEnum" xmi:id="_S-hfwBWkEei92ZhmTudv_w" name="ConcurrentDataFlavor">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hfwRWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_16_0_1_1707042b_1320761012264_259200_1583"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hfwhWkEei92ZhmTudv_w" name="version"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hfwxWkEei92ZhmTudv_w" name="user" value="1"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hfxBWkEei92ZhmTudv_w" name="time" value="2"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EEnum" xmi:id="_S-hfxRWkEei92ZhmTudv_w" name="KeyType">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hfxhWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_16_0_1_1707042b_1320759918025_610742_1459"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hfxxWkEei92ZhmTudv_w" name="external"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hfyBWkEei92ZhmTudv_w" name="internal" value="1"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hfyRWkEei92ZhmTudv_w" name="primary" value="2"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hfyhWkEei92ZhmTudv_w" name="SDOValueConstraint">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hfyxWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_1UpkYDSDEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hfzBWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hfzhWkEei92ZhmTudv_w" name="minInclusive" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf0BWkEei92ZhmTudv_w" name="maxInclusive" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf0hWkEei92ZhmTudv_w" name="minLength" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf1BWkEei92ZhmTudv_w" name="maxLength" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf1hWkEei92ZhmTudv_w" name="totalDigits" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf2BWkEei92ZhmTudv_w" name="fractionDigits" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf2hWkEei92ZhmTudv_w" name="pattern" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf3BWkEei92ZhmTudv_w" name="minExclusive" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf3hWkEei92ZhmTudv_w" name="maxExclusive" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hf4BWkEei92ZhmTudv_w" name="SDOEnumerationConstraint">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hf4RWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_TYA04DSFEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hf4hWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hf5BWkEei92ZhmTudv_w" name="value" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Enumeration"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hf5hWkEei92ZhmTudv_w" name="SDOKey">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hf5xWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_Zrb98DSJEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hf6BWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf6hWkEei92ZhmTudv_w" name="type" ordered="false" lowerBound="1" eType="_S-hfxRWkEei92ZhmTudv_w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf7BWkEei92ZhmTudv_w" name="group" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf7hWkEei92ZhmTudv_w" name="groupSequence" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//Integer"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf8BWkEei92ZhmTudv_w" name="auto" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//Boolean"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf8hWkEei92ZhmTudv_w" name="structure" ordered="false" eType="_S-hf9hWkEei92ZhmTudv_w"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hf9BWkEei92ZhmTudv_w" name="supplier" ordered="false">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//NamedElement"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EEnum" xmi:id="_S-hf9hWkEei92ZhmTudv_w" name="KeyStructure">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hf9xWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_P6ScsJcrEee5huZM-G1W5Q"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hf-BWkEei92ZhmTudv_w" name="general"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hf-RWkEei92ZhmTudv_w" name="sequence" value="1"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hf-hWkEei92ZhmTudv_w" name="uuid" value="2"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hf-xWkEei92ZhmTudv_w" name="SDOValueSetConstraint">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hf_BWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_CkVqEDSKEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hf_RWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hf_xWkEei92ZhmTudv_w" name="id" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgARWkEei92ZhmTudv_w" name="name" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgAxWkEei92ZhmTudv_w" name="versionIdentifier" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgBRWkEei92ZhmTudv_w" name="versionDate" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgBxWkEei92ZhmTudv_w" name="versionTime" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgCRWkEei92ZhmTudv_w" name="codingStrength" ordered="false" lowerBound="1" eType="_S-hgERWkEei92ZhmTudv_w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgCxWkEei92ZhmTudv_w" name="minimumValueSetId" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgDRWkEei92ZhmTudv_w" name="ignoredValueSetId" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgDxWkEei92ZhmTudv_w" name="rootCode" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EEnum" xmi:id="_S-hgERWkEei92ZhmTudv_w" name="CodingStrength">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hgEhWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_16_0_1_1707042b_1320779888217_9505_1817"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgExWkEei92ZhmTudv_w" name="CNE"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgFBWkEei92ZhmTudv_w" name="CWE" value="1"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hgFRWkEei92ZhmTudv_w" name="SDODocumentation">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hgFhWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_4EkDEDSKEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hgFxWkEei92ZhmTudv_w" name="base_Comment" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Comment"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgGRWkEei92ZhmTudv_w" name="type" ordered="false" lowerBound="1" eType="_S-hgGxWkEei92ZhmTudv_w"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EEnum" xmi:id="_S-hgGxWkEei92ZhmTudv_w" name="DocumentationType">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hgHBWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_16_0_1_1707042b_1320784251301_832683_1938"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgHRWkEei92ZhmTudv_w" name="definition"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgHhWkEei92ZhmTudv_w" name="documentation" value="1"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgHxWkEei92ZhmTudv_w" name="appInfo" value="2"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgIBWkEei92ZhmTudv_w" name="requirements" value="3"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgIRWkEei92ZhmTudv_w" name="designComments" value="4"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgIhWkEei92ZhmTudv_w" name="appendix" value="5"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgIxWkEei92ZhmTudv_w" name="references" value="6"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgJBWkEei92ZhmTudv_w" name="rationale" value="7"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgJRWkEei92ZhmTudv_w" name="openIssues" value="8"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgJhWkEei92ZhmTudv_w" name="usageNotes" value="9"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgJxWkEei92ZhmTudv_w" name="other" value="10"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgKBWkEei92ZhmTudv_w" name="walkthrough" value="11"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EEnum" xmi:id="_S-hgKRWkEei92ZhmTudv_w" name="TemporalType">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hgKhWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_16_0_1_1707042b_1320845140470_808146_1985"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgKxWkEei92ZhmTudv_w" name="transaction"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgLBWkEei92ZhmTudv_w" name="validStart" value="1"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-hgLRWkEei92ZhmTudv_w" name="validEnd" value="2"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hgLhWkEei92ZhmTudv_w" name="SDOTemporal">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-hgLxWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_iHnOIDSLEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-hgMBWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-hgMhWkEei92ZhmTudv_w" name="type" ordered="false" lowerBound="1" eType="_S-hgKRWkEei92ZhmTudv_w"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-hgNBWkEei92ZhmTudv_w" name="SDOSemanticConstraint">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-iGsBWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_0EIBkDSMEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-iGsRWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-iGsxWkEei92ZhmTudv_w" name="conceptName" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-iGtRWkEei92ZhmTudv_w" name="conceptDomain" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-iGtxWkEei92ZhmTudv_w" name="conceptId" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-iGuRWkEei92ZhmTudv_w" name="SDOUniqueConstraint">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-iGuhWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_NDXtYDSNEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-iGuxWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-iGvRWkEei92ZhmTudv_w" name="group" ordered="false">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-iGvxWkEei92ZhmTudv_w" name="SDODerivation">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-iGwBWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_gnt2wDSNEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-iGwRWkEei92ZhmTudv_w" name="supplier" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//NamedElement"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-iGwxWkEei92ZhmTudv_w" name="base_NamedElement" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//NamedElement"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-iGxRWkEei92ZhmTudv_w" name="SDOSort">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-iGxhWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_BjVjQDSOEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-iGxxWkEei92ZhmTudv_w" name="key" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-iGyRWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-iGyxWkEei92ZhmTudv_w" name="SDOXmlProperty">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-iGzBWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_VuOIMDSOEeS0BI8SXekDLw"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-iGzRWkEei92ZhmTudv_w" name="nodeType" ordered="false" lowerBound="1" eType="_S-iG0RWkEei92ZhmTudv_w"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-iGzxWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EEnum" xmi:id="_S-iG0RWkEei92ZhmTudv_w" name="XmlNodeType">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-iG0hWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_16_0_1_1707042b_1324662064005_150179_488"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-iG0xWkEei92ZhmTudv_w" name="element"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-iG1BWkEei92ZhmTudv_w" name="attribute" value="1"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-iG1RWkEei92ZhmTudv_w" name="SDOCompression">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-iG1hWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_ef4BELKKEeeQor0EhKMw6g"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-iG1xWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_S-iG2RWkEei92ZhmTudv_w" name="compressionType" ordered="false" lowerBound="1" eType="_S-iG2xWkEei92ZhmTudv_w"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EEnum" xmi:id="_S-iG2xWkEei92ZhmTudv_w" name="CompressionType">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-iG3BWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_e2D3ALKLEeeQor0EhKMw6g"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-iG3RWkEei92ZhmTudv_w" name="lzo"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-iG3hWkEei92ZhmTudv_w" name="quicklz" value="1"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-iG3xWkEei92ZhmTudv_w" name="zlib" value="2"/>
+        <eLiterals xmi:type="ecore:EEnumLiteral" xmi:id="_S-iG4BWkEei92ZhmTudv_w" name="snappy" value="3"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_S-iG4RWkEei92ZhmTudv_w" name="SDOIncrement">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S-iG4hWkEei92ZhmTudv_w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_BxQwwNhLEeeROooqUVImmw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_S-iG4xWkEei92ZhmTudv_w" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+  </eAnnotations>
+  <elementImport xmi:type="uml:ElementImport" xmi:id="_5XSh0CJYEeSXvPZh3aumVA" alias="Property">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+  </elementImport>
+  <elementImport xmi:type="uml:ElementImport" xmi:id="_LRRbICJZEeSXvPZh3aumVA" alias="Class">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Class"/>
+  </elementImport>
+  <elementImport xmi:type="uml:ElementImport" xmi:id="_LRRbISJZEeSXvPZh3aumVA" alias="Package">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Package"/>
+  </elementImport>
+  <elementImport xmi:type="uml:ElementImport" xmi:id="_fZ0WYCJcEeSXvPZh3aumVA" alias="NamedElement">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#NamedElement"/>
+  </elementImport>
+  <elementImport xmi:type="uml:ElementImport" xmi:id="_NuBtkDSFEeS0BI8SXekDLw" alias="Enumeration">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Enumeration"/>
+  </elementImport>
+  <elementImport xmi:type="uml:ElementImport" xmi:id="_AR4p0DSLEeS0BI8SXekDLw" alias="Comment">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Comment"/>
+  </elementImport>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_4pcrwCJVEeSXvPZh3aumVA" name="SDONamespace">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321718750328_493431_1414" annotatedElement="_4pcrwCJVEeSXvPZh3aumVA">
+      <body>This stereotype tags or annotates a UML package as an SDO namespace. </body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_e-41QCJZEeSXvPZh3aumVA" name="base_Package" association="_e-5cUCJZEeSXvPZh3aumVA">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Package"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_Sii3ECJeEeSXvPZh3aumVA" name="uri">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321718864062_100727_1415" annotatedElement="_Sii3ECJeEeSXvPZh3aumVA">
+        <body>The namespace URI used to reference all SDO Types contained within the UML package, and the namespace URI used link or map this UML package to SDO namespace specific configuration information.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <icon xmi:type="uml:Image" xmi:id="_-YtiYCJaEeSXvPZh3aumVA" content="-119%80%78%71%13%10%26%10%0%0%0%13%73%72%68%82%0%0%0%16%0%0%0%16%8%6%0%0%0%31%-13%-1%97%0%0%1%39%73%68%65%84%120%-38%99%96%-96%17%96%92%-38%108%-105%124%123%125%-8%-99%-9%-5%-29%-2%61%-38%20%-7%-10%-64%76%-33%126%-96%56%23%81%-70%-41%116%56%-25%-1%57%-107%-6%-1%-1%-103%52%20%124%108%-66%-17%86%-112%-31%-124%-12%-77%61%-35%17%-11%1%93%51%8%-1%61%-99%-6%-65%-69%-62%-58%1%-81%-18%-94%56%13%53%108%-102%97%-8%-60%-4%-64%82%-100%-102%115%-20%-40%116%-113%-108%48%-51%124%58%93%-10%-1%-29%57%-102%-1%-97%111%14%-64%48%96%-17%84%-9%12%-84%-102%-69%-4%25%-68%94%119%49%124%-3%63%-109%-31%63%12%127%-98%-60%-8%-1%-2%50%123%-72%-26%-41%59%99%-65%-123%-70%72%-54%97%104%-114%74%76%116%121%-48%-58%-16%20%89%51%12%-65%-98%-64%-14%-1%-3%-34%-40%-1%31%14%-60%-2%94%-38%-20%-108%-120%-43%-10%22%63%6%19%108%-102%97%120%95%-117%-6%-58%-38%4%13%93%-100%126%-97%27%-59%-32%-120%-49%-128%61%121%12%-15%120%67%-34%64%-127%65%-32%121%55%-61%55%108%-102%63%79%100%-8%-101%105%-62%-96%78%48%-15%-84%79%99%40%-2%61%29%85%-13%-65%25%12%-1%119%-25%49%76%34%42%-11%25%27%-89%-79%46%-114%99%-120%-71%-47%-60%112%-10%126%59%-61%-25%91%-51%12%-41%-42%-89%51%-28%3%-91%-104%24%-122%55%0%0%7%92%-6%66%-119%17%120%-99%0%0%0%0%73%69%78%68%-82%66%96%-126%" format="Papyrus">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-YtiYSJaEeSXvPZh3aumVA" source="image_papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-YtiYiJaEeSXvPZh3aumVA" key="image_kind_key" value="icon"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-YtiYyJaEeSXvPZh3aumVA" key="image_name_key" value="Namespace Icon"/>
+      </eAnnotations>
+    </icon>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_e-5cUCJZEeSXvPZh3aumVA" name="E_SDONamespace_Package1" memberEnd="_e-5cUSJZEeSXvPZh3aumVA _e-41QCJZEeSXvPZh3aumVA">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_e-5cUSJZEeSXvPZh3aumVA" name="extension_SDONamespace" type="_4pcrwCJVEeSXvPZh3aumVA" aggregation="composite" association="_e-5cUCJZEeSXvPZh3aumVA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_LLcVYCJYEeSXvPZh3aumVA" name="SDOAlias">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321646204573_725431_1400" annotatedElement="_LLcVYCJYEeSXvPZh3aumVA">
+      <body>This stereotype provides modelling-context specific alternative names for UML named elements within a model. While a UML logical model often differs greatly from a physical model for example, the intent is to provide enough naming and other context specific information to make the physical model entirely reflective or derivitive of the UML logical model. In other words support the generation of multiple context-specific models from a single UML logical model. Modelling context specific names or aliases are particularly important as they often differ greatly between modelling contexts due to various standard naming conventions or technology limitations such as name length. </body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_jiajcCJcEeSXvPZh3aumVA" name="base_NamedElement" association="_jiajcSJcEeSXvPZh3aumVA">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#NamedElement"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_-Etg8CJdEeSXvPZh3aumVA" name="physicalName">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321646729359_239485_1401" annotatedElement="_-Etg8CJdEeSXvPZh3aumVA">
+        <body>Associates a given UML element with a physical data store element. Where the physical data store is a relational database, this tag contains the name of a relational database table, schema, column or other relational database element.    </body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320695288252_560829_1002" name="localName" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321712886859_227334_1402" annotatedElement="_16_0_1_1707042b_1320695288252_560829_1002">
+        <body>Associates a given UML element with a data transfer or transient storage element. Where the transfer medium is XML, this tag contains the name of an XML element or attribute. </body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320695288252_527705_1006"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320695288252_348634_1007" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320758117939_419505_1287" name="businessName" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321713145937_393221_1403" annotatedElement="_16_0_1_1707042b_1320758117939_419505_1287">
+        <body>Associates a given UML element with a business specific, human readable name.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320758144595_340139_1289"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320758144595_886613_1290" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_jiajcSJcEeSXvPZh3aumVA" name="E_SDOAlias_NamedElement1" memberEnd="_jiajciJcEeSXvPZh3aumVA _jiajcCJcEeSXvPZh3aumVA">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_jiajciJcEeSXvPZh3aumVA" name="extension_SDOAlias" type="_LLcVYCJYEeSXvPZh3aumVA" aggregation="composite" association="_jiajcSJcEeSXvPZh3aumVA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_e3AIEDSCEeS0BI8SXekDLw" name="SDOConcurrent">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1308311722810_582370_609" annotatedElement="_e3AIEDSCEeS0BI8SXekDLw">
+      <body>Annotates or tags properties as applicable for use within various operations involving concurrency control. Concurrency control deals with handling collisions and other issues which arise when allowing multiple users or processes simultaneous access to shared entities within a data store. Generic SDO Data Access Services (DAS) are faced with the problem of determining at runtime for any data-object within a modified data-graph, which properties are useful for various checks and operations under a particular concurrency control type or strategy. Properties tagged as concurrent at the model level are made available to Data Access Services within the PlasmaSDOâ„¢ runtime and build-time environments. 
+
+
+</body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_2LI88DSCEeS0BI8SXekDLw" name="base_Property" association="_2LMAQDSCEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320763293604_215590_1657" name="type" visibility="private" type="_16_0_1_1707042b_1320763142612_445793_1633">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321716682593_273953_1408" annotatedElement="_16_0_1_1707042b_1320763293604_215590_1657">
+        <body>Specifies the general category of concurrency or concurrency control under which a property participates </body>
+      </ownedComment>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320763315397_870630_1659" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320763315397_800875_1660" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320764165490_584034_1661" name="dataFlavor" visibility="private" type="_16_0_1_1707042b_1320761012264_259200_1583">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321716839187_537311_1409" annotatedElement="_16_0_1_1707042b_1320764165490_584034_1661">
+        <body>Denotes or provides a hint as to the nature of the data instructive to vaious checks and operations under a particular concurrency control type or category.</body>
+      </ownedComment>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320764179316_813006_1663" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320764179316_652824_1664" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_2LMAQDSCEeS0BI8SXekDLw" name="E_SDOConcurrent_Property1" memberEnd="_2LMAQTSCEeS0BI8SXekDLw _2LI88DSCEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_2LMAQTSCEeS0BI8SXekDLw" name="extension_SDOConcurrent" type="_e3AIEDSCEeS0BI8SXekDLw" aggregation="composite" association="_2LMAQDSCEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_16_0_1_1707042b_1320759918025_610742_1459" name="KeyType">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320760382130_551918_1483" annotatedElement="_16_0_1_1707042b_1320759918025_610742_1459">
+      <body>This enumeration specifies the set of key types possible for any UML Property tagged with the SDOKey stereotype. </body>
+    </ownedComment>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1323793013765_333104_294" name="external">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1323793083401_804915_295" annotatedElement="_16_0_1_1707042b_1323793013765_333104_294">
+        <body>Tags a property as a key used as an external identifier for a Class. An external identifier may be used by external systems and processes to uniquely idendify an object within the source system without significant central coordination. An external key is typically a universally unique identifier (UUID), globally unique identifier (GUID) or variant </body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320760477710_779738_1485" name="internal">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320760596214_625450_1487" annotatedElement="_16_0_1_1707042b_1320760477710_779738_1485">
+        <body>Tags a property as a key used as an internal identifier for a Class </body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320759936184_806336_1460" name="primary">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320760476336_507153_1484" annotatedElement="_16_0_1_1707042b_1320759936184_806336_1460">
+        <body> A key used as a primary identifier for the UML Class of the UML Property tagged with the SDOKey stereotype. </body>
+      </ownedComment>
+    </ownedLiteral>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_16_0_1_1707042b_1320761012264_259200_1583" name="ConcurrentDataFlavor">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320847595075_192882_2068" annotatedElement="_16_0_1_1707042b_1320761012264_259200_1583">
+      <body>Specifies the nature of the data with respect to concurrency for a UML Property</body>
+    </ownedComment>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320761081894_208264_1601" name="version">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320761419600_330219_1603" annotatedElement="_16_0_1_1707042b_1320761081894_208264_1601">
+        <body>Indicates the data is an integral version number, typically incremented for every successful update of the owning entity.</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320761446722_376225_1604" name="user">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320761612455_608310_1606" annotatedElement="_16_0_1_1707042b_1320761446722_376225_1604">
+        <body>Indicates the data represents a system username, typically reset to the current system user on successful update of the owning entity.</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320762088339_337963_1609" name="time">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321717611031_549596_1410" annotatedElement="_16_0_1_1707042b_1320762088339_337963_1609">
+        <body>Indicates the data is temporal in nature typically reset to the system data or time for every successful update of the owning entity.</body>
+      </ownedComment>
+    </ownedLiteral>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_16_0_1_1707042b_1320763142612_445793_1633" name="ConcurrencyType">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320847629356_437521_2069" annotatedElement="_16_0_1_1707042b_1320763142612_445793_1633">
+      <body>Indicates the category of concurrency or concurrency control strategy under which a UML Property participates. </body>
+    </ownedComment>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320763159876_864894_1651" name="optimistic">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320766228342_494288_1691" annotatedElement="_16_0_1_1707042b_1320763159876_864894_1651">
+        <body>Indicates a UML Property stores information related optimistic concurrency for its containing UML Class and participates in optimistic concurrency control operations and strategies. Informs SDO Data Access Services performing optimistic concurrency control checks and operations.</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320763166953_873303_1653" name="pessimistic">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320766247918_823904_1692" annotatedElement="_16_0_1_1707042b_1320763166953_873303_1653">
+        <body>Indicates a UML Property stores information related to a  pessimistic concurrency control strategy (often termed locking) and participates in pessimistic concurrency control operations. Informs SDO Data Access Services performing pessimistic concurrency control checks and operations.
+</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320763174233_414048_1655" name="origination">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320766474592_135679_1693" annotatedElement="_16_0_1_1707042b_1320763174233_414048_1655">
+        <body>Indicates a UML Property stores origination information for its containing UML Class. Informs Data Access Services (DAS) performing concurrent operations involving origination.</body>
+      </ownedComment>
+    </ownedLiteral>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_1UpkYDSDEeS0BI8SXekDLw" name="SDOValueConstraint">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1359046947107_21376_302" annotatedElement="_1UpkYDSDEeS0BI8SXekDLw">
+      <body>This stereotype allows a value constraint to be specified for a class attribute. </body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_5xBCADSDEeS0BI8SXekDLw" name="base_Property" association="_5xCQIDSDEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320700152459_739186_1059" name="minInclusive" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320777780572_312569_1745" annotatedElement="_16_0_1_1707042b_1320700152459_739186_1059">
+        <body>Specifies the lower bounds for numeric values (the value must be greater than or equal to this value). Note: the data type is currently string  to support bioinformatics and other scientific models, as no long or real primitive type exists in the current UML version and restrictions in these models often involves very, very large integral or real numbers.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320778796158_107867_1770"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320778796158_409608_1771" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320777499947_886169_1741" name="maxInclusive" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320777841912_879860_1746" annotatedElement="_16_0_1_1707042b_1320777499947_886169_1741">
+        <body>Specifies the upper bounds for numeric values (the value must be less than or equal to this value). Note: the data type is currently string  to support bioinformatics and other scientific models, as no long or real primitive type exists in the current UML version and restrictions in these models often involves very, very large integral or real numbers.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320778785252_397320_1766"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320778785252_881659_1767" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320778029857_102208_1747" name="minLength" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320778225943_783426_1749" annotatedElement="_16_0_1_1707042b_1320778029857_102208_1747">
+        <body>Specifies the minimum number of characters or list items allowed. Must be equal to or greater than zero. Note: the data type is currently string  to support bioinformatics and other scientific models, as no long or real primitive type exists in the current UML version and restrictions in these models often involves very, very large integral or real numbers.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320778801173_523212_1772"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320778801173_486152_1773" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320778233708_677367_1750" name="maxLength" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320778233708_326424_1751" annotatedElement="_16_0_1_1707042b_1320778233708_677367_1750">
+        <body>Specifies the maximum number of characters or list items allowed. Must be equal to or greater than zero. Note: the data type is currently string  to support bioinformatics and other scientific models, as no long or real primitive type exists in the current UML version and restrictions in these models often involves very, very large integral or real numbers.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320778792611_555024_1768"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320778792611_465092_1769" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320778468746_847593_1753" name="totalDigits" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320778468746_365359_1754" annotatedElement="_16_0_1_1707042b_1320778468746_847593_1753">
+        <body>Specifies the exact number of digits allowed. Must be greater than zero. The total number of digits for the Property value must be below or equal to the specified total. Note: the data type is currently string  to support bioinformatics and other scientific models, as no long or real primitive type exists in the current UML version and restrictions in these models often involves very, very large integral or real numbers.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320778806204_59252_1774"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320778806204_212784_1775" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320778592820_2593_1756" name="fractionDigits" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320778592820_742187_1757" annotatedElement="_16_0_1_1707042b_1320778592820_2593_1756">
+        <body>Specifies the maximum number of decimal places allowed. Must be equal to or greater than zero. Note: the data type is currently string  to support bioinformatics and other scientific models, as no long or real primitive type exists in the current UML version and restrictions in these models often involves very, very large integral or real numbers.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320778779736_637581_1764"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320778779736_141122_1765" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320778665053_48397_1759" name="pattern" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320778769159_823965_1763" annotatedElement="_16_0_1_1707042b_1320778665053_48397_1759">
+        <body>The Property value must match the specified regular expression. The regular expression follows the Java regular expression conventions. Defines the exact sequence of characters that are acceptable</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320778677896_36375_1761"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320778677896_64812_1762" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1323210962429_171036_428" name="minExclusive" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1323210962429_571230_430" annotatedElement="_16_0_1_1707042b_1323210962429_171036_428">
+        <body>Specifies the lower bounds for numeric values (the value must be greater than this value). Note: the data type is currently string  to support bioinformatics and other scientific models, as no long or real primitive type exists in the current UML version and restrictions in these models often involves very, very large integral or real numbers.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1323210962429_241122_429"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1323210962429_983877_431" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1323211002915_937844_433" name="maxExclusive" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1323211002915_160549_435" annotatedElement="_16_0_1_1707042b_1323211002915_937844_433">
+        <body>Specifies the upper bounds for numeric values (the value must be less than this value). Note: the data type is currently string  to support bioinformatics and other scientific models, as no long or real primitive type exists in the current UML version and restrictions in these models often involves very, very large integral or real numbers.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1323211002915_363079_434"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1323211002915_608523_436" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_5xCQIDSDEeS0BI8SXekDLw" name="E_SDOValueConstraint_Property1" memberEnd="_5xCQITSDEeS0BI8SXekDLw _5xBCADSDEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_5xCQITSDEeS0BI8SXekDLw" name="extension_SDOValueConstraint" type="_1UpkYDSDEeS0BI8SXekDLw" aggregation="composite" association="_5xCQIDSDEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_TYA04DSFEeS0BI8SXekDLw" name="SDOEnumerationConstraint">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320758885470_984687_1331" annotatedElement="_TYA04DSFEeS0BI8SXekDLw">
+      <body>This stereotype constrains a UML property by means of a given UML enumeration. It enables use of UML Enumerations which are &lt;b>part&lt;/b> of the UML model when specifying a constraint on class properties. UML Enumerations used with this stereotype must be tagged with the SDOEnumeration stereotype.
+      </body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_wWCqcDSFEeS0BI8SXekDLw" name="base_Property" association="_wWD4kDSFEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320705209378_452359_1092" name="value" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320705209394_839798_1108" annotatedElement="_16_0_1_1707042b_1320705209378_452359_1092">
+        <body>The UML enumeration class with which to restrict a UML property. UML Enumerations used with this stereotype must be tagged with the SDOEnumeration stereotype.</body>
+      </ownedComment>
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Enumeration"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320758934939_315250_1332" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320758934939_702495_1333" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_wWD4kDSFEeS0BI8SXekDLw" name="E_SDOEnumerationConstraint_Property1" memberEnd="_wWD4kTSFEeS0BI8SXekDLw _wWCqcDSFEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_wWD4kTSFEeS0BI8SXekDLw" name="extension_SDOEnumerationConstraint" type="_TYA04DSFEeS0BI8SXekDLw" aggregation="composite" association="_wWD4kDSFEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_Zrb98DSJEeS0BI8SXekDLw" name="SDOKey">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321554294381_304550_723" annotatedElement="_Zrb98DSJEeS0BI8SXekDLw">
+      <body>This stereotype tags or annotates a UML property as representing some type of key within a data store, data transfer or transient storage medium.</body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_h4oo4DSJEeS0BI8SXekDLw" name="base_Property" association="_h4pP8DSJEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1280154529312_185714_246" name="type" visibility="private" type="_16_0_1_1707042b_1320759918025_610742_1459">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1282681244711_764646_364" annotatedElement="_16_0_1_1707042b_1280154529312_185714_246">
+        <body>Specifies the type of key</body>
+      </ownedComment>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320760018456_883564_1479" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320760018456_972957_1480" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_-MnoUJY-EeeCQKd8aHlwaQ" name="group">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_ialkcJZBEeeUmordTzBftA">
+        <body>Used to associate one or more properties within a class under a single grouping or category.</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ygtf0JZCEeeUmordTzBftA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ygut8JZCEeeUmordTzBftA" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_ucrk8Nn7EeeC953zSSkpvw" name="groupSequence">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_AISrENn8EeeC953zSSkpvw">
+        <body>The numbered sequence of this key within a group of keys or key-group</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4Hh5oNn7EeeC953zSSkpvw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4Hju0Nn7EeeC953zSSkpvw" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_3m7w8JZCEeeUmordTzBftA" name="auto">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_FKXgwJZDEeeUmordTzBftA">
+        <body>Whether a key is automatically generated and maintained</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8SaooJZCEeeUmordTzBftA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8SdE4JZCEeeUmordTzBftA" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_QUWQkJctEee5huZM-G1W5Q" name="structure" type="_P6ScsJcrEee5huZM-G1W5Q">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_u82q8JctEee5huZM-G1W5Q">
+        <body>Indicates the key arrangement or organization</body>
+      </ownedComment>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_R-dpAJctEee5huZM-G1W5Q"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_R-gFQJctEee5huZM-G1W5Q" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_Ce1FULa1EeeGwOelpq04nA" name="supplier">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_jv-V4La1EeeGwOelpq04nA">
+        <body>Links a property element which supplies the actual data for the key where multiple possible targets exist. Where a key property is a reference SDO property and the target entity has multiple primary keys, the supplier is used by services to disambiguate which target key actually supplies the data.</body>
+      </ownedComment>
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#NamedElement"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FY7e8La1EeeGwOelpq04nA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FY97MLa1EeeGwOelpq04nA" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_h4pP8DSJEeS0BI8SXekDLw" name="E_SDOKey_Property1" memberEnd="_h4pP8TSJEeS0BI8SXekDLw _h4oo4DSJEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_h4pP8TSJEeS0BI8SXekDLw" name="extension_SDOKey" type="_Zrb98DSJEeS0BI8SXekDLw" aggregation="composite" association="_h4pP8DSJEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_CkVqEDSKEeS0BI8SXekDLw" name="SDOValueSetConstraint">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320779806547_971504_1799" annotatedElement="_CkVqEDSKEeS0BI8SXekDLw">
+      <body>This stereotype allows a value set constraint to be specified for a class attribute. Attributes that have a coded type may be constrained such that the code value in an instance should be taken from the specified value set. The coding strength determines whether exceptions are allowed.</body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_IJRSQDSKEeS0BI8SXekDLw" name="base_Property" association="_IJR5UDSKEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320779928637_913780_1835" name="id" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320779947433_676841_1839" annotatedElement="_16_0_1_1707042b_1320779928637_913780_1835">
+        <body>The globally unique identifier for the value set</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320779938637_803014_1837"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320779938637_922371_1838" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320779958917_585874_1840" name="name" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320779973995_600688_1844" annotatedElement="_16_0_1_1707042b_1320779958917_585874_1840">
+        <body>The descriptive name associated with the value set</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320779969683_494730_1842"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320779969683_686379_1843" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1321826529171_957725_689" name="versionIdentifier" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321826529171_171806_690" annotatedElement="_16_0_1_1707042b_1321826529171_957725_689">
+        <body>The value which identifies a specific version of the value set. Used when
+performing static references to a value set</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320779996869_798820_1845" name="versionDate" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320780019540_123594_1847" annotatedElement="_16_0_1_1707042b_1320779996869_798820_1845">
+        <body>The date on which a specific version of the value set was created. Used when
+performing static references to a value set</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320780033431_126639_1848" name="versionTime" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320780046024_436627_1850" annotatedElement="_16_0_1_1707042b_1320780033431_126639_1848">
+        <body>The time when a specific version of the value set was created. Used when
+performing static references to a value set</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320780050008_298411_1851"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320780050008_27872_1852" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320780075961_36145_1853" name="codingStrength" visibility="private" type="_16_0_1_1707042b_1320779888217_9505_1817">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320780101100_541078_1855" annotatedElement="_16_0_1_1707042b_1320780075961_36145_1853">
+        <body>Indicates whether or not codes are restricted to those expressed in the value set</body>
+      </ownedComment>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320780109288_983343_1856" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320780109288_203037_1857" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320780136490_866423_1858" name="minimumValueSetId" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320780158739_561777_1860" annotatedElement="_16_0_1_1707042b_1320780136490_866423_1858">
+        <body>Defines the set of codes within the overall value set that must be supported by an implementer to be considered compliant</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320780162177_249841_1861"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320780162177_87538_1862" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320780176035_667092_1863" name="ignoredValueSetId" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320780176035_375195_1865" annotatedElement="_16_0_1_1707042b_1320780176035_667092_1863">
+        <body>Defines the set of codes within the overall value set that the implementer is willing to accept without raising an error, but whose content will be ignored and not processed in any useful manner</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320780176035_185749_1864"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320780176051_676053_1866" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320780235174_515818_1868" name="rootCode" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320780285360_110798_1872" annotatedElement="_16_0_1_1707042b_1320780235174_515818_1868">
+        <body>Allows conveying the root code of the value set. Only usable for key structural attributes. </body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320780251174_911262_1870"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320780251174_343706_1871" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_IJR5UDSKEeS0BI8SXekDLw" name="E_SDOValueSetConstraint_Property1" memberEnd="_IJR5UTSKEeS0BI8SXekDLw _IJRSQDSKEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_IJR5UTSKEeS0BI8SXekDLw" name="extension_SDOValueSetConstraint" type="_CkVqEDSKEeS0BI8SXekDLw" aggregation="composite" association="_IJR5UDSKEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_16_0_1_1707042b_1320779888217_9505_1817" name="CodingStrength">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320782664786_887697_1873" annotatedElement="_16_0_1_1707042b_1320779888217_9505_1817">
+      <body>Defines whether the specified element is restricted to only using the identified coding system for the element</body>
+    </ownedComment>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320782686418_216313_1874" name="CNE">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320782707442_701744_1876" annotatedElement="_16_0_1_1707042b_1320782686418_216313_1874">
+        <body>If not null, the element must be coded and must be drawn from the value set specified in the binding</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320782730230_160467_1877" name="CWE">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320782741570_267944_1879" annotatedElement="_16_0_1_1707042b_1320782730230_160467_1877">
+        <body>If not null, the element must be coded if there is an appropriate value in the value set specified in the binding.  If no appropriate code is available, a local code may be used, or the value may be populated with only original text.</body>
+      </ownedComment>
+    </ownedLiteral>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_4EkDEDSKEeS0BI8SXekDLw" name="SDODocumentation">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320784349891_292890_1956" annotatedElement="_4EkDEDSKEeS0BI8SXekDLw">
+      <body>This stereotype annotates or tags a UML owned comment for any UML element in a model providing hints as to the nature of the comment and how it might be presented. </body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_FlRPADSLEeS0BI8SXekDLw" name="base_Comment" association="_FlR2EDSLEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Comment"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320784352531_269180_1957" name="type" visibility="private" type="_16_0_1_1707042b_1320784251301_832683_1938">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320784366921_260034_1959" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320784366921_673942_1960" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_FlR2EDSLEeS0BI8SXekDLw" name="E_SDODocumentation_Comment1" memberEnd="_FlR2ETSLEeS0BI8SXekDLw _FlRPADSLEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_FlR2ETSLEeS0BI8SXekDLw" name="extension_SDODocumentation" type="_4EkDEDSKEeS0BI8SXekDLw" aggregation="composite" association="_FlR2EDSLEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_16_0_1_1707042b_1320784251301_832683_1938" name="DocumentationType">
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784389858_611137_1961" name="definition"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784512119_669255_1963" name="documentation"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784519166_732569_1965" name="appInfo"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784573320_589821_1975" name="requirements"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784535931_25793_1967" name="designComments"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784544758_732848_1969" name="appendix"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784557492_433582_1971" name="references"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784563117_726991_1973" name="rationale"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784590522_324148_1977" name="openIssues"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784597616_76856_1979" name="usageNotes"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784611943_482007_1981" name="other"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320784616802_176303_1983" name="walkthrough"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_16_0_1_1707042b_1320845140470_808146_1985" name="TemporalType">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320845244129_976386_2009" annotatedElement="_16_0_1_1707042b_1320845140470_808146_1985">
+      <body>Specifies the various notions of time which are relevant for temporal data stores</body>
+    </ownedComment>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320845279224_514931_2010" name="transaction">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320845296052_793705_2012" annotatedElement="_16_0_1_1707042b_1320845279224_514931_2010">
+        <body>Transaction time is the time period during which a fact is stored in the database</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320845300114_811294_2013" name="validStart">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320845321287_159480_2015" annotatedElement="_16_0_1_1707042b_1320845300114_811294_2013">
+        <body>Valid start time denotes the beginning of a time period during which a fact is true with respect to the real world</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1320845461726_778188_2016" name="validEnd">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1320845487007_656977_2018" annotatedElement="_16_0_1_1707042b_1320845461726_778188_2016">
+        <body>Valid end time denotes the ending of a time period during which a fact is true with respect to the real world</body>
+      </ownedComment>
+    </ownedLiteral>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_iHnOIDSLEeS0BI8SXekDLw" name="SDOTemporal">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324047195615_45276_708" annotatedElement="_iHnOIDSLEeS0BI8SXekDLw">
+      <body>Specifies the various notions of time which are relevant for temporal data stores</body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_o8QKsDSLEeS0BI8SXekDLw" name="base_Property" association="_o8QxwDSLEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320846816423_319052_2059" name="type" visibility="private" type="_16_0_1_1707042b_1320845140470_808146_1985">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320846828970_205626_2061" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320846828970_877308_2062" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_o8QxwDSLEeS0BI8SXekDLw" name="E_SDOTemporal_Property1" memberEnd="_o8QxwTSLEeS0BI8SXekDLw _o8QKsDSLEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_o8QxwTSLEeS0BI8SXekDLw" name="extension_SDOTemporal" type="_iHnOIDSLEeS0BI8SXekDLw" aggregation="composite" association="_o8QxwDSLEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_0EIBkDSMEeS0BI8SXekDLw" name="SDOSemanticConstraint">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324591461502_446878_294" annotatedElement="_0EIBkDSMEeS0BI8SXekDLw">
+      <body>Restricts a property to a single concept or set of concepts within a knowledge domain</body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_3Fgu8DSMEeS0BI8SXekDLw" name="base_Property" association="_3FhWADSMEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320758170142_809369_1291" name="conceptName" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324591996135_597861_429" annotatedElement="_16_0_1_1707042b_1320758170142_809369_1291">
+        <body>The name of a specific term within a knowledge domain</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320760052238_221597_1481"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320760052238_102734_1482" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320758185423_430813_1293" name="conceptDomain" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324591493863_409547_295" annotatedElement="_16_0_1_1707042b_1320758185423_430813_1293">
+        <body>The root term within a knowledge domain</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320758207423_520894_1295"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320758207423_986863_1296" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1320957025587_950258_719" name="conceptId" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324591998347_344037_430" annotatedElement="_16_0_1_1707042b_1320957025587_950258_719">
+        <body>The identifier of a specific term within a knowledge domain</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1320957025587_178319_720"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1320957025587_200073_721" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_3FhWADSMEeS0BI8SXekDLw" name="E_SDOSemanticConstraint_Property1" memberEnd="_3FhWATSMEeS0BI8SXekDLw _3Fgu8DSMEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_3FhWATSMEeS0BI8SXekDLw" name="extension_SDOSemanticConstraint" type="_0EIBkDSMEeS0BI8SXekDLw" aggregation="composite" association="_3FhWADSMEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_NDXtYDSNEeS0BI8SXekDLw" name="SDOUniqueConstraint">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321557612479_983313_1344" annotatedElement="_NDXtYDSNEeS0BI8SXekDLw">
+      <body>This stereotype tags a UML property as unique within its UML class and resulting SDO Type. if the unique constraint 'name' is valued, the name is used all or in part as the final physical constraint id within a physical data store. Where multiple properties within a class are tagged with this stereotype, if the unique constraint 'name' is valued for more than one UML property, these properties will be used together in the resulting physical constraint.  </body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_QDhEoDSNEeS0BI8SXekDLw" name="base_Property" association="_QDhrsDSNEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1321557738306_344320_1345" name="group" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1321557879241_214899_1348" annotatedElement="_16_0_1_1707042b_1321557738306_344320_1345">
+        <body>Used to associate one or more UML properties within a class with a single constraint definition. </body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1321557754634_458223_1346"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1321557754634_707341_1347" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_QDhrsDSNEeS0BI8SXekDLw" name="E_SDOUniqueConstraint_Property1" memberEnd="_QDhrsTSNEeS0BI8SXekDLw _QDhEoDSNEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_QDhrsTSNEeS0BI8SXekDLw" name="extension_SDOUniqueConstraint" type="_NDXtYDSNEeS0BI8SXekDLw" aggregation="composite" association="_QDhrsDSNEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_gnt2wDSNEeS0BI8SXekDLw" name="SDODerivation">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1322078677285_829781_316" annotatedElement="_gnt2wDSNEeS0BI8SXekDLw">
+      <body>This UML stereotype is applied to a consumer UML named-element that is computed from the supplier element.</body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1322078937427_395853_318" name="supplier" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1322079077903_401170_319" annotatedElement="_16_0_1_1707042b_1322078937427_395853_318">
+        <body>The supplier element or set of supplier elements which represent the derivation source. </body>
+      </ownedComment>
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#NamedElement"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1322079870349_56392_485" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1322079870349_101251_486" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_kmsNwDSNEeS0BI8SXekDLw" name="base_NamedElement" association="_kms00DSNEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#NamedElement"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_kms00DSNEeS0BI8SXekDLw" name="E_SDODerivation_NamedElement1" memberEnd="_kms00TSNEeS0BI8SXekDLw _kmsNwDSNEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_kms00TSNEeS0BI8SXekDLw" name="extension_SDODerivation" type="_gnt2wDSNEeS0BI8SXekDLw" aggregation="composite" association="_kms00DSNEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_BjVjQDSOEeS0BI8SXekDLw" name="SDOSort">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324046621283_236348_303" annotatedElement="_BjVjQDSOEeS0BI8SXekDLw">
+      <body>Assigns ordering and other related information to properties within an entity.</body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1324326333643_6383_295" name="key" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324326409044_361365_297" annotatedElement="_16_0_1_1707042b_1324326333643_6383_295">
+        <body>A key used to determine the ordering of properties within a class or entity. </body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1324327126087_338764_655" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1324327126087_854729_656" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_F1f8ADSOEeS0BI8SXekDLw" name="base_Property" association="_F1f8ATSOEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_F1f8ATSOEeS0BI8SXekDLw" name="E_SDOSort_Property1" memberEnd="_F1f8AjSOEeS0BI8SXekDLw _F1f8ADSOEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_F1f8AjSOEeS0BI8SXekDLw" name="extension_SDOSort" type="_BjVjQDSOEeS0BI8SXekDLw" aggregation="composite" association="_F1f8ATSOEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_VuOIMDSOEeS0BI8SXekDLw" name="SDOXmlProperty">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324654350351_624312_436" annotatedElement="_VuOIMDSOEeS0BI8SXekDLw">
+      <body>This stereotype provides modelling-context specific alternative names for UML named elements within a model. While a UML logical model often differs greatly from a physical model for example, the intent is to provide enough naming and other context specific information to make the physical model entirely reflective or derivitive of the UML logical model. In other words support the generation of multiple context-specific models from a single UML logical model. Modelling context specific names or aliases are particularly important as they often differ greatly between modelling contexts due to various standard naming conventions or technology limitations such as name length. </body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_16_0_1_1707042b_1324654350320_786580_433" name="nodeType" visibility="private" type="_16_0_1_1707042b_1324662064005_150179_488">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324654350366_713391_438" annotatedElement="_16_0_1_1707042b_1324654350320_786580_433">
+        <body>Associates a given UML element with a physical data store element. Where the physical data store is a relational database, this tag contains the name of a relational database table, schema, column or other relational database element.    </body>
+      </ownedComment>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_16_0_1_1707042b_1324654603124_15656_451" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_16_0_1_1707042b_1324654603124_544000_452" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_Y-VOEDSOEeS0BI8SXekDLw" name="base_Property" association="_Y-V1IDSOEeS0BI8SXekDLw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_Y-V1IDSOEeS0BI8SXekDLw" name="E_SDOXmlProperty_Property1" memberEnd="_Y-V1ITSOEeS0BI8SXekDLw _Y-VOEDSOEeS0BI8SXekDLw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_Y-V1ITSOEeS0BI8SXekDLw" name="extension_SDOXmlProperty" type="_VuOIMDSOEeS0BI8SXekDLw" aggregation="composite" association="_Y-V1IDSOEeS0BI8SXekDLw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_16_0_1_1707042b_1324662064005_150179_488" name="XmlNodeType">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324662174367_910075_489" annotatedElement="_16_0_1_1707042b_1324662064005_150179_488">
+      <body>Qualifies an XML node</body>
+    </ownedComment>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1324662176756_97691_490" name="element">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324662207541_696275_491" annotatedElement="_16_0_1_1707042b_1324662176756_97691_490">
+        <body>An XML element</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_16_0_1_1707042b_1324662290008_183040_492" name="attribute">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_16_0_1_1707042b_1324662301472_468794_493" annotatedElement="_16_0_1_1707042b_1324662290008_183040_492">
+        <body>An XML attribute</body>
+      </ownedComment>
+    </ownedLiteral>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_P6ScsJcrEee5huZM-G1W5Q" name="KeyStructure">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_spKb8JcrEee5huZM-G1W5Q">
+      <body>Specifies the set of arrangements or organizations for any UML Property tagged with the SDOKey stereotype. </body>
+    </ownedComment>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_M4h0ELKDEeeQor0EhKMw6g" name="general">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_g7X3ULKDEeeQor0EhKMw6g">
+        <body>no specified structural organization </body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_0PYJ8JcsEee5huZM-G1W5Q" name="sequence">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_0PYJ8ZcsEee5huZM-G1W5Q">
+        <body>an integral identifier unique within a single column of an extent</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_HpvtYJcsEee5huZM-G1W5Q" name="uuid">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_HpvtYZcsEee5huZM-G1W5Q">
+        <body>a universally unique identifier as specified in ISO/IEC 11578</body>
+      </ownedComment>
+    </ownedLiteral>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_ef4BELKKEeeQor0EhKMw6g" name="SDOCompression">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_MFcvABWkEei92ZhmTudv_w">
+      <body>Indicates the data for a property is to be compressed by the implementing data access service</body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_VYsksbKLEeeQor0EhKMw6g" name="base_Property" association="_VYqvgLKLEeeQor0EhKMw6g">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_srSsALKMEeeQor0EhKMw6g" name="compressionType" type="_e2D3ALKLEeeQor0EhKMw6g">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GAfqsLa0EeeGwOelpq04nA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GA23ELa0EeeGwOelpq04nA" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_VYqvgLKLEeeQor0EhKMw6g" name="E_SDOCompression_Property1" memberEnd="_VYsksLKLEeeQor0EhKMw6g _VYsksbKLEeeQor0EhKMw6g">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_VYsksLKLEeeQor0EhKMw6g" name="extension_SDOCompression" type="_ef4BELKKEeeQor0EhKMw6g" aggregation="composite" association="_VYqvgLKLEeeQor0EhKMw6g"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_e2D3ALKLEeeQor0EhKMw6g" name="CompressionType">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_nPMFILKLEeeQor0EhKMw6g">
+      <body>a specific compression algorithm from among those either written natively in Java or with a JNI integration available</body>
+    </ownedComment>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_x83IwLKLEeeQor0EhKMw6g" name="lzo">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_x83IwbKLEeeQor0EhKMw6g">
+        <body>The Lempel–Ziv–Oberhumer (LZO) algorithm, a lossless data compression algorithm that is focused on decompression speed</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ZK65MLapEeeBE-4wOaG50w" name="quicklz">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_ZK65MbapEeeBE-4wOaG50w">
+        <body>offers compression and decompression routines using the Lempel-Ziv (LZ) algorithm</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_leMBoLapEeeBE-4wOaG50w" name="zlib">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_leMBobapEeeBE-4wOaG50w">
+        <body>lossless data-compression library for use on virtually any computer hardware and operating system. The zlib data format is itself portable across platforms</body>
+      </ownedComment>
+    </ownedLiteral>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_uSH8cLapEeeBE-4wOaG50w" name="snappy">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_uSH8cbapEeeBE-4wOaG50w">
+        <body>Java port of the snappy http://code.google.com/p/snappy/, a fast C++ compresser/decompresser developed by Google</body>
+      </ownedComment>
+    </ownedLiteral>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_BxQwwNhLEeeROooqUVImmw" name="SDOIncrement">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_v27nQNhMEeeROooqUVImmw">
+      <body>Indicates that a property utilizes the atomic increment operation or capability of the underlying data store</body>
+    </ownedComment>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_6MVU0NhMEeeROooqUVImmw" name="base_Property" association="_6MVU0dhMEeeROooqUVImmw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_6MVU0dhMEeeROooqUVImmw" name="E_SDOIncrement_Property1" memberEnd="_6MVU0thMEeeROooqUVImmw _6MVU0NhMEeeROooqUVImmw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_6MVU0thMEeeROooqUVImmw" name="extension_SDOIncrement" type="_BxQwwNhLEeeROooqUVImmw" aggregation="composite" association="_6MVU0dhMEeeROooqUVImmw"/>
+  </packagedElement>
+</uml:Profile>

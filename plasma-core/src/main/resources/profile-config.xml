@@ -45,5 +45,18 @@
         umlNamespaceUri="http://www.eclipse.org/uml2/5.0.0/UML" umlVersion="5.0.0"        
         xmiNamespaceUri="http://www.omg.org/spec/XMI/20131001" xmiVersion="20131001"
         ecoreNamespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
+ 
+    <Artifact urn="PlasmaSDO.profile_v1_3.uml" 
+        id="_NlmngCJUEeSXvPZh3aumVA" ecoreId="_S-hfoBWkEei92ZhmTudv_w" version="1.3"
+        namespaceUri="http:///schemas/PlasmaSDOProfile/_S-dOMBWkEei92ZhmTudv_w/1"
+        umlNamespaceUri="http://www.eclipse.org/uml2/5.0.0/UML" umlVersion="5.0.0" 
+        xmiNamespaceUri="http://www.omg.org/spec/XMI/20131001" xmiVersion="20131001"
+        ecoreNamespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
+    <Artifact urn="PlasmaSDODataTypes_v1_3.uml" 
+        id="_Z68-YCG2EeSfsoM4aIlAPw"  version="1.3"
+        namespaceUri="http:///schemas/PlasmaSDODataTypes/_Z68-YCG2EeSfsoM4aIlAPw"
+        umlNamespaceUri="http://www.eclipse.org/uml2/5.0.0/UML" umlVersion="5.0.0"        
+        xmiNamespaceUri="http://www.omg.org/spec/XMI/20131001" xmiVersion="20131001"
+        ecoreNamespaceUri="http://www.eclipse.org/emf/2002/Ecore"/>
    
 </cfg:ProfileConfiguration>   
