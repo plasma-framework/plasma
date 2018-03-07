@@ -39,6 +39,9 @@ import org.plasma.common.test.PlasmaTestSetup;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.helper.DataConverter;
 
+import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
+import com.google.common.primitives.Shorts;
 import com.google.common.primitives.UnsignedInteger;
 import com.google.common.primitives.UnsignedLong;
 
@@ -74,6 +77,14 @@ public class DataConverterTest extends PlasmaTest {
     // conversion should be hex values
     for (DataType dataType : DataType.values())
       testValues[DataType.Bytes.ordinal()][dataType.ordinal()] = new byte[] { 9, 10, 11, 12, 13, 14 }; // string
+
+    testValues[DataType.Bytes.ordinal()][DataType.Short.ordinal()] = Shorts.toByteArray((short) 23);
+    testValues[DataType.Bytes.ordinal()][DataType.Int.ordinal()] = Ints.toByteArray(23);
+    testValues[DataType.Bytes.ordinal()][DataType.UnsignedInt.ordinal()] = Ints.toByteArray(23);
+    testValues[DataType.Bytes.ordinal()][DataType.Long.ordinal()] = Longs.toByteArray(23L);
+    testValues[DataType.Bytes.ordinal()][DataType.UnsignedLong.ordinal()] = Longs.toByteArray(23L);
+    testValues[DataType.Bytes.ordinal()][DataType.Bytes.ordinal()] = Longs.toByteArray(23L);
+
     for (DataType dataType : DataType.values())
       testValues[DataType.Character.ordinal()][dataType.ordinal()] = (char) 3;
     for (DataType dataType : DataType.values())
@@ -95,11 +106,13 @@ public class DataConverterTest extends PlasmaTest {
         .valueOf(Integer.MAX_VALUE);
     testValues[DataType.UnsignedInt.ordinal()][DataType.Short.ordinal()] = UnsignedInteger
         .valueOf(Short.MAX_VALUE);
+    testValues[DataType.UnsignedInt.ordinal()][DataType.Bytes.ordinal()] = Ints.toByteArray(23);
 
     for (DataType dataType : DataType.values())
       testValues[DataType.Integer.ordinal()][dataType.ordinal()] = new BigInteger("23");
     for (DataType dataType : DataType.values())
       testValues[DataType.Long.ordinal()][dataType.ordinal()] = (long) 23;
+    testValues[DataType.Long.ordinal()][DataType.Bytes.ordinal()] = Longs.toByteArray(23L);
 
     // unsigned long
     for (DataType dataType : DataType.values())
@@ -113,6 +126,7 @@ public class DataConverterTest extends PlasmaTest {
         .valueOf(23L);
     testValues[DataType.UnsignedLong.ordinal()][DataType.Short.ordinal()] = UnsignedLong
         .valueOf(Short.MAX_VALUE);
+    testValues[DataType.UnsignedLong.ordinal()][DataType.Bytes.ordinal()] = Longs.toByteArray(23);
 
     for (DataType dataType : DataType.values())
       testValues[DataType.Short.ordinal()][dataType.ordinal()] = (short) 23;

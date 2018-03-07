@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,10 @@ import org.joda.time.format.PeriodFormatter;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.PlasmaDataObjectException;
 
+import com.google.common.primitives.Floats;
+import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
+import com.google.common.primitives.Shorts;
 import com.google.common.primitives.UnsignedInteger;
 import com.google.common.primitives.UnsignedInts;
 import com.google.common.primitives.UnsignedLong;
@@ -54,6 +59,7 @@ public class DataConverter {
 
   private static Log log = LogFactory.getFactory().getInstance(DataConverter.class);
   static public volatile DataConverter INSTANCE = initializeInstance();
+  private static Charset charset = Charset.forName("UTF-8");
   public static final String FORMAT_PATTERN_TIME = "HH:mm:ss'.'SSS'Z'";
   public static final String FORMAT_PATTERN_DATE = "yyyy-MM-dd'T'HH:mm:ss";
   // Note: the Java class for SDO dataTime datatype is String. This seems
@@ -428,12 +434,25 @@ public class DataConverter {
   }
 
   public byte[] toBytes(Type sourceType, Object value) {
-    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    return toBytes(DataType.valueOf(sourceType.getName()), value);
+  }
+
+  public byte[] toBytes(DataType sourceDataType, Object value) {
     switch (sourceDataType) {
     case Bytes:
       return (byte[]) value;
     case String:
-      return ((String) value).getBytes();
+      return ((String) value).getBytes(charset);
+    case Short:
+      return Shorts.toByteArray((Short) value);
+    case Int:
+      return Ints.toByteArray((Integer) value);
+    case UnsignedInt:
+      return Longs.toByteArray(((UnsignedInteger) value).longValue());
+    case Long:
+      return Longs.toByteArray((Long) value);
+    case UnsignedLong:
+      return Longs.toByteArray(((UnsignedLong) value).longValue());
     case Integer:
       return ((BigInteger) value).toByteArray();
     default:
@@ -442,13 +461,26 @@ public class DataConverter {
   }
 
   public Object fromBytes(Type targetType, byte[] value) {
-    DataType targetDataType = DataType.valueOf(targetType.getName());
+    return fromBytes(DataType.valueOf(targetType.getName()), value);
+  }
+
+  public Object fromBytes(DataType targetDataType, byte[] value) {
     switch (targetDataType) {
     case Bytes:
       return value;
     case String:
       return toHexString(value); // SDO Spec 2.1.1 Section 8.1 calls for byte
                                  // array String representation to be HEX
+    case Short:
+      return Shorts.fromByteArray(value);
+    case Int:
+      return Ints.fromByteArray(value);
+    case UnsignedInt:
+      return UnsignedInteger.valueOf(Ints.fromByteArray(value));
+    case Long:
+      return Longs.fromByteArray(value);
+    case UnsignedLong:
+      return UnsignedLong.valueOf(Longs.fromByteArray(value));
     case Integer:
       return new BigInteger(value);
     default:
@@ -691,7 +723,10 @@ public class DataConverter {
   }
 
   public int toInt(Type sourceType, Object value) {
-    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    return toInt(DataType.valueOf(sourceType.getName()), value);
+  }
+
+  public int toInt(DataType sourceDataType, Object value) {
     switch (sourceDataType) {
     case Int:
       return ((Integer) value).intValue();
@@ -699,6 +734,8 @@ public class DataConverter {
       return ((UnsignedInteger) value).intValue();
     case Byte:
       return ((Byte) value).intValue();
+    case Bytes:
+      return Ints.fromByteArray((byte[]) value);
     case Double:
       return ((Double) value).intValue();
     case Float:
@@ -733,6 +770,8 @@ public class DataConverter {
       if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE)
         throw new DataOverflowException(targetDataType, DataType.Byte, value);
       return new Byte(Integer.valueOf(value).byteValue());
+    case Bytes:
+      return Ints.toByteArray(value);
     case Double:
       return new Double(Integer.valueOf(value).doubleValue());
     case Float:
@@ -761,7 +800,10 @@ public class DataConverter {
   }
 
   public UnsignedInteger toUnsignedInt(Type sourceType, Object value) {
-    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    return toUnsignedInt(DataType.valueOf(sourceType.getName()), value);
+  }
+
+  public UnsignedInteger toUnsignedInt(DataType sourceDataType, Object value) {
     switch (sourceDataType) {
     case Int:
       return UnsignedInteger.valueOf(((Integer) value).longValue());
@@ -769,6 +811,8 @@ public class DataConverter {
       return (UnsignedInteger) value;
     case Byte:
       return UnsignedInteger.valueOf(((Byte) value).longValue());
+    case Bytes:
+      return UnsignedInteger.valueOf(Ints.fromByteArray((byte[]) value));
     case Double:
       return UnsignedInteger.valueOf(((Double) value).longValue());
     case Float:
@@ -831,7 +875,10 @@ public class DataConverter {
   }
 
   public BigInteger toInteger(Type sourceType, Object value) {
-    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    return toInteger(DataType.valueOf(sourceType.getName()), value);
+  }
+
+  public BigInteger toInteger(DataType sourceDataType, Object value) {
     switch (sourceDataType) {
     case Integer:
       return (BigInteger) value;
@@ -896,7 +943,10 @@ public class DataConverter {
   }
 
   public long toLong(Type sourceType, Object value) {
-    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    return toLong(DataType.valueOf(sourceType.getName()), value);
+  }
+
+  public long toLong(DataType sourceDataType, Object value) {
     switch (sourceDataType) {
     case Long:
       return ((Long) value).longValue();
@@ -904,6 +954,8 @@ public class DataConverter {
       return ((UnsignedLong) value).longValue();
     case Byte:
       return ((Byte) value).longValue();
+    case Bytes:
+      return Longs.fromByteArray((byte[]) value);
     case Double:
       return ((Double) value).longValue();
     case Float:
@@ -974,7 +1026,10 @@ public class DataConverter {
   }
 
   public UnsignedLong toUnsignedLong(Type sourceType, Object value) {
-    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    return toUnsignedLong(DataType.valueOf(sourceType.getName()), value);
+  }
+
+  public UnsignedLong toUnsignedLong(DataType sourceDataType, Object value) {
     switch (sourceDataType) {
     case Long:
       return UnsignedLong.valueOf(((Long) value).longValue());
@@ -982,6 +1037,8 @@ public class DataConverter {
       return ((UnsignedLong) value);
     case Byte:
       return UnsignedLong.valueOf(((Byte) value).longValue());
+    case Bytes:
+      return UnsignedLong.valueOf(Longs.fromByteArray((byte[]) value));
     case Double:
       return UnsignedLong.valueOf(((Double) value).longValue());
     case Float:
@@ -1048,12 +1105,17 @@ public class DataConverter {
   }
 
   public short toShort(Type sourceType, Object value) {
-    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    return toShort(DataType.valueOf(sourceType.getName()), value);
+  }
+
+  public short toShort(DataType sourceDataType, Object value) {
     switch (sourceDataType) {
     case Short:
       return ((Short) value).shortValue();
     case Byte:
       return ((Byte) value).shortValue();
+    case Bytes:
+      return Shorts.fromByteArray((byte[]) value);
     case Double:
       return ((Double) value).shortValue();
     case Float:
@@ -1082,6 +1144,8 @@ public class DataConverter {
       if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE)
         throw new DataOverflowException(targetDataType, DataType.Byte, value);
       return new Byte(Short.valueOf(value).byteValue());
+    case Bytes:
+      return Shorts.toByteArray(value);
     case Double:
       return new Double(Short.valueOf(value).doubleValue());
     case Float:
@@ -1117,9 +1181,28 @@ public class DataConverter {
    *           if the given value is not the expected Java type as per the SDO
    *           2.1 specification
    */
-  @SuppressWarnings("unchecked")
   public String toString(Type sourceType, Object value) {
-    DataType sourceDataType = DataType.valueOf(sourceType.getName());
+    return toString(DataType.valueOf(sourceType.getName()), value);
+  }
+
+  /**
+   * Converts the given value to a string. Uses java.util.Arrays formatting if
+   * an array of objects of the target type is detected.
+   * 
+   * @param sourceType
+   *          the target datatype
+   * @param value
+   *          the value to convert
+   * @return the string value
+   * @throws InvalidDataConversionException
+   *           if the given source type cannot be converted to string as per the
+   *           SDO 2.1 datatype conversion table.
+   * @throws IllegalArgumentException
+   *           if the given value is not the expected Java type as per the SDO
+   *           2.1 specification
+   */
+  @SuppressWarnings("unchecked")
+  public String toString(DataType sourceDataType, Object value) {
     switch (sourceDataType) {
     case String:
     case DateTime:
@@ -1498,7 +1581,22 @@ public class DataConverter {
    * @return the converted value
    */
   public Object fromString(Type targetType, String value) {
-    DataType targetDataType = DataType.valueOf(targetType.getName());
+    return fromString(DataType.valueOf(targetType.getName()), value);
+  }
+
+  /**
+   * Converts the given string value to an object appropriate for the target
+   * type. If java.util.Arrays formatting is detected for the given string
+   * value, the formatting is removed and the arrays converted into a list of
+   * elements appropriate for the target type.
+   * 
+   * @param targetType
+   *          the target data type
+   * @param value
+   *          the value
+   * @return the converted value
+   */
+  public Object fromString(DataType targetDataType, String value) {
     switch (targetDataType) {
     case String:
       if (!value.startsWith("[")) {
@@ -2409,6 +2507,11 @@ public class DataConverter {
       result.add(DataType.Bytes);
       result.add(DataType.String);
       result.add(DataType.Integer);
+      result.add(DataType.Short);
+      result.add(DataType.Int);
+      result.add(DataType.UnsignedInt);
+      result.add(DataType.Long);
+      result.add(DataType.UnsignedLong);
       break;
     case Character:
       result.add(DataType.Character);
@@ -2463,6 +2566,7 @@ public class DataConverter {
       result.add(DataType.Decimal);
       result.add(DataType.Integer);
       result.add(DataType.String);
+      result.add(DataType.Bytes);
       break;
     case UnsignedInt:
       result.add(DataType.Int);
@@ -2476,6 +2580,7 @@ public class DataConverter {
       result.add(DataType.Decimal);
       result.add(DataType.Integer);
       result.add(DataType.String);
+      result.add(DataType.Bytes);
       break;
     case Integer:
       result.add(DataType.Integer);
@@ -2502,6 +2607,7 @@ public class DataConverter {
       result.add(DataType.Integer);
       result.add(DataType.Date);
       result.add(DataType.String);
+      result.add(DataType.Bytes);
       break;
     case UnsignedLong:
       result.add(DataType.Long);
@@ -2516,6 +2622,7 @@ public class DataConverter {
       result.add(DataType.Integer);
       result.add(DataType.Date);
       result.add(DataType.String);
+      result.add(DataType.Bytes);
       break;
     case Short:
       result.add(DataType.Short);
@@ -2527,6 +2634,7 @@ public class DataConverter {
       result.add(DataType.Long);
       result.add(DataType.UnsignedLong);
       result.add(DataType.String);
+      result.add(DataType.Bytes);
       break;
     case String:
       result.add(DataType.String);
