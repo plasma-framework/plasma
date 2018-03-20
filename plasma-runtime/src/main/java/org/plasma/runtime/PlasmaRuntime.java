@@ -593,7 +593,7 @@ public class PlasmaRuntime {
     // throw an error if more than one profile used across artifacts
     if (versions.size() > 1) {
       StringBuilder buf = new StringBuilder();
-      ProfileArtifact[] versionArray = new ProfileArtifact[versions.values().size()];
+      ProfileArtifactAdapter[] versionArray = new ProfileArtifactAdapter[versions.values().size()];
       versions.values().toArray(versionArray);
       for (int i = 0; i < versionArray.length; i++) {
         if (i > 0)

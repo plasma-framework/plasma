@@ -27,8 +27,10 @@ public enum DataFlavor {
       return DataFlavor.real;
     case Boolean:
     case Int:
+    case UnsignedInt:
     case Integer:
     case Long:
+    case UnsignedLong:
     case Short:
       return DataFlavor.integral;
     case Character:

@@ -1,0 +1,24 @@
+Release Notes
+
+Plasma 2.0.3 Release Notes
+Plasma 2.0.3 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/plasma-framework/plasma/issues.
+
+
+Major Changes
+[Issue #95] - Add Support for Unsigned Integer and Unsigned Long Data Types 
+ 
+Bugs
+
+
+Improvements
+
+
+New Features
+Tasks
+Wish
+
+
