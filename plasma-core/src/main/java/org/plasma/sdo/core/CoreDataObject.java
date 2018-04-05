@@ -853,6 +853,7 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
           "unexpected null value - use DataObject.unset() to clear a property");
 
     Object propertyValue = value;
+    Object[] propertyArrayValue = null;
     Class<?> instanceClass = property.getType().getInstanceClass();
 
     if (!property.isMany()) {
@@ -905,40 +906,34 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
         }
       }
     } else {
-      if (value instanceof List) {
-        List<Object> list = (List) value;
 
-        List<PlasmaEdge> edgeList = null;
-        if (!property.getType().isDataType()) {
-          edgeList = new ArrayList<PlasmaEdge>(list.size());
-          propertyValue = edgeList; // set the link list into this node below
-          for (Object listValue : list) {
-            if (!instanceClass.isAssignableFrom(listValue.getClass()))
-              throw new ClassCastException("expected instance of "
-                  + property.getType().getInstanceClass().getName() + " as value for property "
-                  + property + " - not class, " + listValue.getClass().getName());
-            PlasmaDataLink link = createLink(property, (PlasmaNode) listValue);
-            edgeList.add(link);
-          }
-        } else { // data type property
-          DataFlavor flavor = ((PlasmaProperty) property).getDataFlavor();
-          try {
-            for (Object listValue : list) {
-              if (!instanceClass.isAssignableFrom(listValue.getClass()))
-                throw new ClassCastException("expected instance of "
-                    + property.getType().getInstanceClass().getName() + " as value for property "
-                    + property + " - not class, " + listValue.getClass().getName());
-              // attempt a conversion as a validation check
-              if (flavor.ordinal() == DataFlavor.temporal.ordinal())
-                DataConverter.INSTANCE.toDate(property.getType(), value);
-            }
-          } catch (InvalidDataFormatException dfe) {
-            throw new PlasmaDataObjectException("property, " + property.toString(), dfe);
-          }
+      List<PlasmaEdge> edgeList = null;
+      if (!property.getType().isDataType()) {
+        @SuppressWarnings("unchecked")
+        List<Object> list = (List) value;
+        edgeList = new ArrayList<PlasmaEdge>(list.size());
+        propertyValue = edgeList; // set the link list into this node below
+        for (Object listValue : list) {
+          if (!instanceClass.isAssignableFrom(listValue.getClass()))
+            throw new ClassCastException("expected instance of "
+                + property.getType().getInstanceClass().getName() + " as value for property "
+                + property + " - not class, " + listValue.getClass().getName());
+          PlasmaDataLink link = createLink(property, (PlasmaNode) listValue);
+          edgeList.add(link);
         }
-      } else
-        throw new ClassCastException("expected java.util.List Java Class for property " + property
-            + " - not class, " + value.getClass().getName());
+      } else { // data type property
+        DataFlavor flavor = ((PlasmaProperty) property).getDataFlavor();
+        if (value instanceof List) {
+          @SuppressWarnings("unchecked")
+          List<Object> list = (List) value;
+          validate(list, property, instanceClass, flavor);
+          propertyArrayValue = new Object[list.size()];
+          list.toArray(propertyArrayValue);
+        } else if (value instanceof Object[]) {
+          Object[] array = (Object[]) value;
+          validate(array, property, instanceClass, flavor);
+        }
+      }
     }
 
     if (this.getDataGraph() != null) {
@@ -950,10 +945,44 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
       changeSummary.modified(this, property, oldValue);
     }
 
+    // and finally
     super.setValue(property.getName(), propertyValue);
 
     return propertyValue;
 
+  }
+
+  private void validate(List<Object> list, Property property, Class<?> instanceClass,
+      DataFlavor flavor) {
+    try {
+      for (Object listValue : list) {
+        if (!instanceClass.isAssignableFrom(listValue.getClass()))
+          throw new ClassCastException("expected instance of "
+              + property.getType().getInstanceClass().getName() + " as value for property "
+              + property + " - not class, " + listValue.getClass().getName());
+        // attempt a conversion as a validation check
+        if (flavor.ordinal() == DataFlavor.temporal.ordinal())
+          DataConverter.INSTANCE.toDate(property.getType(), listValue);
+      }
+    } catch (InvalidDataFormatException dfe) {
+      throw new PlasmaDataObjectException("property, " + property.toString(), dfe);
+    }
+  }
+
+  private void validate(Object[] array, Property property, Class<?> instanceClass, DataFlavor flavor) {
+    try {
+      for (Object arrayValue : array) {
+        if (!instanceClass.isAssignableFrom(arrayValue.getClass()))
+          throw new ClassCastException("expected instance of "
+              + property.getType().getInstanceClass().getName() + " as value for property "
+              + property + " - not class, " + arrayValue.getClass().getName());
+        // attempt a conversion as a validation check
+        if (flavor.ordinal() == DataFlavor.temporal.ordinal())
+          DataConverter.INSTANCE.toDate(property.getType(), arrayValue);
+      }
+    } catch (InvalidDataFormatException dfe) {
+      throw new PlasmaDataObjectException("property, " + property.toString(), dfe);
+    }
   }
 
   private Map<DataObject, Object> getOppositeValues(Property property, Object value) {
@@ -1888,7 +1917,71 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
    * @see #get(Property)
    */
   public List getList(Property property) {
-    return (List) get(property);
+    if (!property.isMany())
+      throw new IllegalArgumentException("property, " + property
+          + ", is not a List (isMany()) property");
+    if (property.getType().isDataType()) {
+      Object[] array = (Object[]) get(property);
+      if (array != null) {
+        List<Object> result = new ArrayList<>(array.length);
+        // still no way to add an entire array to Java collections, wow
+        for (Object obj : array)
+          result.add(obj);
+        return result;
+      } else {
+        return Collections.emptyList();
+      }
+    } else {
+      @SuppressWarnings("unchecked")
+      List<Object> list = (List<Object>) get(property);
+      if (list != null) {
+        return list;
+      } else {
+        return Collections.emptyList();
+      }
+    }
+  }
+
+  @Override
+  public Object[] getArray(String path) {
+    if (!DataGraphXPath.isXPath(path)) {
+      return this.getArray(this.getType().getProperty(path));
+    } else {
+      PathEndpoint endpoint = findEndpoint(path);
+      if (endpoint != null)
+        return ((PlasmaDataObject) endpoint.getSource()).getArray(endpoint.getProperty());
+      else
+        return new Object[0];
+    }
+  }
+
+  @Override
+  public Object[] getArray(int propertyIndex) {
+    Property property = (Property) this.getType().getProperties().get(propertyIndex);
+    return getArray(property);
+  }
+
+  @Override
+  public Object[] getArray(Property property) {
+    if (!property.isMany())
+      throw new IllegalArgumentException("property, " + property
+          + ", is not a List (isMany()) property");
+    if (property.getType().isDataType()) {
+        Object[] array = (Object[]) get(property);
+        return array;
+    }
+    else {
+        @SuppressWarnings("unchecked")
+        List<Object> list = (List<Object>) get(property);
+        if (list != null) {
+            Object[] array = new Object[list.size()];   	
+            list.toArray(array);
+            return array;
+        }
+        else {
+        	return new Object[0];
+        }
+    }
   }
 
   public long getLong(String path) {

@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>org.terrameta</groupId>
 		<artifactId>plasma</artifactId>
-		<version>2.0.3</version>
+		<version>2.0.4</version>
 	</parent>
 	<groupId>org.terrameta</groupId>
 	<artifactId>plasma-runtime</artifactId>
-	<version>2.0.3</version>
+	<version>2.0.4</version>
 	<packaging>jar</packaging>
 	<name>Plasma Runtime</name>
 	<description>The Plasma Runtime Module</description>
@@ -95,12 +95,12 @@
 		<dependency>
 			<groupId>org.terrameta</groupId>
 			<artifactId>plasma-common</artifactId>
-			<version>2.0.3</version>
+			<version>2.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.terrameta</groupId>
 			<artifactId>plasma-metamodel</artifactId>
-			<version>2.0.3</version>
+			<version>2.0.4</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -194,7 +194,7 @@
 							<target>
 								<echo message="####Generate profile annotations####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="2.0.3" />
+								<property name="release_suffix" value="2.0.4" />
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
 								</path>
@@ -223,7 +223,7 @@
 							<target>
 								<echo message="####Generate profile classes####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="2.0.3" />
+								<property name="release_suffix" value="2.0.4" />
 
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
@@ -253,7 +253,7 @@
 							<target>
 								<echo message="####Generate profile interfaces####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="2.0.3" />
+								<property name="release_suffix" value="2.0.4" />
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
 								</path>

@@ -18,9 +18,13 @@ package org.plasma.sdo;
 
 // java imports
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import org.plasma.sdo.core.PathEndpoint;
 import org.plasma.sdo.core.SnapshotMap;
+import org.plasma.sdo.xpath.DataGraphXPath;
 
 import commonj.sdo.ChangeSummary;
 import commonj.sdo.DataGraph;
@@ -61,6 +65,42 @@ import commonj.sdo.Property;
  * BigInteger, and BigDecimal.
  */
 public interface PlasmaDataObject extends DataObject {
+
+  /**
+   * Returns the value of a <code>Array</code> property identified by the
+   * specified path.
+   * 
+   * @param path
+   *          the path to a valid object and property.
+   * @return the <code>Array</code> value of the specified property.
+   * @see #get(String)
+   */
+  public Object[] getArray(String path);
+
+  /**
+   * Returns the value of a <code>Array</code> property identified by the
+   * specified property index.
+   * 
+   * @param propertyIndex
+   *          the index of the property.
+   * @return the <code>Array</code> value of the specified property.
+   * @see #get(int)
+   */
+  public Object[] getArray(int propertyIndex);
+
+  /**
+   * Returns the value of the specified <code>Array</code> property. The Array
+   * returned contains the current values. Updates through the Array interface
+   * operate on the current values of the DataObject. Each access returns the
+   * same Array object.
+   * 
+   * @param property
+   *          the property to get.
+   * @return the <code>Array</code> value of the specified property.
+   * @see #get(Property)
+   */
+  public Object[] getArray(Property property);
+
   @Deprecated
   public void setDataGraph(DataGraph dataGraph);
 

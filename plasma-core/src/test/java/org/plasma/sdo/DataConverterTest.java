@@ -302,6 +302,8 @@ public class DataConverterTest extends PlasmaTest {
               + " from " + testDataType.toString() + " (" + String.valueOf(result) + ")");
         } catch (InvocationTargetException e) {
           throw e.getTargetException();
+        } catch (IllegalArgumentException e) {
+          throw e;
         }
       } else {
         try {

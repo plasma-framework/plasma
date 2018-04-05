@@ -4,11 +4,11 @@
   <parent>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma</artifactId>
-      <version>2.0.3</version>
+      <version>2.0.4</version>
   </parent>
   <groupId>org.terrameta</groupId>
   <artifactId>plasma-core</artifactId>
-  <version>2.0.3</version>
+  <version>2.0.4</version>
   <packaging>jar</packaging>
 
   <name>Plasma Core</name>
@@ -92,12 +92,12 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-common</artifactId>
-      <version>2.0.3</version>
+      <version>2.0.4</version>
     </dependency>
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-runtime</artifactId>
-      <version>2.0.3</version>
+      <version>2.0.4</version>
       <exclusions>
       	<exclusion>
       		<artifactId>stax-api</artifactId>
@@ -108,7 +108,7 @@
     <dependency>
       <groupId>org.terrameta</groupId>
       <artifactId>plasma-metamodel</artifactId>
-      <version>2.0.3</version>
+      <version>2.0.4</version>
     </dependency>
   </dependencies>
 	<build>
@@ -271,14 +271,14 @@
 
 
 					<forkMode>pertest</forkMode>
-					 
+					 <!--
 					<argLine>-Dlog4j.configuration=log4j.properties
 						-Dplasma.configuration=test-plasma-config.xml</argLine>
 					  
-					   	<!--
+					   	-->
                     <argLine>-Dlog4j.configuration=log4j.properties
 						-Dplasma.configuration=test-plasma-config.xml -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address=8001,server=y,suspend=y</argLine>
-                      -->
+                      
                      <includes>     
                            <include>**/DataConverterTest*</include>     
                      </includes>
