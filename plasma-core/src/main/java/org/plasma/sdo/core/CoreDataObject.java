@@ -1967,20 +1967,18 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
       throw new IllegalArgumentException("property, " + property
           + ", is not a List (isMany()) property");
     if (property.getType().isDataType()) {
-        Object[] array = (Object[]) get(property);
+      Object[] array = (Object[]) get(property);
+      return array;
+    } else {
+      @SuppressWarnings("unchecked")
+      List<Object> list = (List<Object>) get(property);
+      if (list != null) {
+        Object[] array = new Object[list.size()];
+        list.toArray(array);
         return array;
-    }
-    else {
-        @SuppressWarnings("unchecked")
-        List<Object> list = (List<Object>) get(property);
-        if (list != null) {
-            Object[] array = new Object[list.size()];   	
-            list.toArray(array);
-            return array;
-        }
-        else {
-        	return new Object[0];
-        }
+      } else {
+        return new Object[0];
+      }
     }
   }
 

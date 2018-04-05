@@ -444,33 +444,36 @@ public class SDOClassFactory extends SDODefaultFactory implements ClassFactory {
       MetaClassInfo typeClassName, TextBuilder buf) {
     buf.append(this.beginBody());
 
-    buf.appendln(2, "List<");
-    buf.append(typeClassName.getCollectionSimpleName());
-    buf.append("> list = (List<");
-    buf.append(typeClassName.getCollectionSimpleName());
-    buf.append(">)super.get(");
-    buf.append(toQualifiedPropertyNameReference(pkg, clss, field));
-    buf.append(");");
-
-    buf.appendln(2, "if (list != null) {");
-
-    buf.appendln(3, typeClassName.getSimpleName());
-    buf.append("[] array = new ");
-    buf.append(typeClassName.getSimpleName());
-    buf.append("[list.size()];");
-
-    buf.appendln(3, "for (int i = 0; i < list.size(); i++)");
-    buf.appendln(4, "array[i] = list.get(i);");
-
-    buf.appendln(3, "return array;");
-
-    buf.appendln(2, "}");
-
-    buf.appendln(2, "else");
-
-    buf.appendln(3, "return new ");
-    buf.append(typeClassName.getSimpleName());
-    buf.append("[0];");
+    if (field.getType() instanceof ClassRef) {
+      buf.appendln(2, "List<");
+      buf.append(typeClassName.getCollectionSimpleName());
+      buf.append("> list = (List<");
+      buf.append(typeClassName.getCollectionSimpleName());
+      buf.append(">)super.get(");
+      buf.append(toQualifiedPropertyNameReference(pkg, clss, field));
+      buf.append(");");
+      buf.appendln(2, "if (list != null) {");
+      buf.appendln(3, typeClassName.getSimpleName());
+      buf.append("[] array = new ");
+      buf.append(typeClassName.getSimpleName());
+      buf.append("[list.size()];");
+      buf.appendln(3, "for (int i = 0; i < list.size(); i++)");
+      buf.appendln(4, "array[i] = list.get(i);");
+      buf.appendln(3, "return array;");
+      buf.appendln(2, "}");
+      buf.appendln(2, "else");
+      buf.appendln(3, "return new ");
+      buf.append(typeClassName.getSimpleName());
+      buf.append("[0];");
+    } else {
+      buf.appendln(2, typeClassName.getCollectionSimpleName());
+      buf.append("[] array = (");
+      buf.append(typeClassName.getCollectionSimpleName());
+      buf.append("[])super.getArray(");
+      buf.append(toQualifiedPropertyNameReference(pkg, clss, field));
+      buf.append(");");
+      buf.appendln(2, "return array;");
+    }
 
     buf.appendln(1, this.endBody());
   }
