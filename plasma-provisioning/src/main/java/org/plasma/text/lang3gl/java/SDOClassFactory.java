@@ -466,9 +466,9 @@ public class SDOClassFactory extends SDODefaultFactory implements ClassFactory {
       buf.append(typeClassName.getSimpleName());
       buf.append("[0];");
     } else {
-      buf.appendln(2, typeClassName.getCollectionSimpleName());
+      buf.appendln(2, typeClassName.getSimpleName());
       buf.append("[] array = (");
-      buf.append(typeClassName.getCollectionSimpleName());
+      buf.append(typeClassName.getSimpleName());
       buf.append("[])super.getArray(");
       buf.append(toQualifiedPropertyNameReference(pkg, clss, field));
       buf.append(");");
