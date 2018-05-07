@@ -69,10 +69,11 @@
 		<artifactId>joda-time</artifactId>
 		<version>1.6.2</version>
 	</dependency>
+	<!-- use an Apache project and Apache licensed shaded Guava version to avoid the many associated Hadoop and HBase problems runtime -->
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>24.0-jre</version>
+      <groupId>org.apache.jena</groupId>
+      <artifactId>jena-shaded-guava</artifactId>
+      <version>3.7.0</version>
     </dependency>	
     <dependency>
 		<groupId>log4j</groupId>

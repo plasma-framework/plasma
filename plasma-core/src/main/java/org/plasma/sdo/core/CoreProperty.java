@@ -502,8 +502,10 @@ public class CoreProperty implements PlasmaProperty {
     case Float:
     case Double:
     case Int:
+    case UnsignedInt:
     case Integer:
     case Long:
+    case UnsignedLong:
     case Month:
     case MonthDay:
     case Short:
@@ -527,7 +529,7 @@ public class CoreProperty implements PlasmaProperty {
       else
         return false;
     default:
-      throw new IllegalArgumentException("unknown datatype, " + datatype.toString());
+      return true;
     }
   }
 

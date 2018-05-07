@@ -39,11 +39,11 @@ import org.plasma.common.test.PlasmaTestSetup;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.helper.DataConverter;
 
-import com.google.common.primitives.Ints;
-import com.google.common.primitives.Longs;
-import com.google.common.primitives.Shorts;
-import com.google.common.primitives.UnsignedInteger;
-import com.google.common.primitives.UnsignedLong;
+import org.apache.jena.ext.com.google.common.primitives.Ints;
+import org.apache.jena.ext.com.google.common.primitives.Longs;
+import org.apache.jena.ext.com.google.common.primitives.Shorts;
+import org.apache.jena.ext.com.google.common.primitives.UnsignedInteger;
+import org.apache.jena.ext.com.google.common.primitives.UnsignedLong;
 
 import commonj.sdo.Type;
 import commonj.sdo.helper.TypeHelper;
