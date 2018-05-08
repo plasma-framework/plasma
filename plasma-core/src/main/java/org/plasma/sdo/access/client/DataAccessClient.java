@@ -16,12 +16,18 @@
 
 package org.plasma.sdo.access.client;
 
+import io.reactivex.Observable;
+
 import java.util.List;
 
 import org.plasma.query.Query;
 
 import commonj.sdo.DataGraph;
 
+/**
+ * Defines a client which is the entry point for all data access operations for
+ * service providers.
+ */
 public interface DataAccessClient {
   public DataGraph[] find(Query query);
 
@@ -36,4 +42,11 @@ public interface DataAccessClient {
   public void commit(DataGraph dataGraph, String username);
 
   public void commit(DataGraph[] dataGraphs, String username);
+
+  public Observable<DataGraph> findAsStream(Query query);
+
+  public Observable<DataGraph> findAsStream(Query query, int maxResults);
+
+  public List<Observable<DataGraph>> findAsStream(Query[] queries);
+
 }

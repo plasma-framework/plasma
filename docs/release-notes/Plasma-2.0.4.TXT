@@ -9,7 +9,7 @@ See https://github.com/plasma-framework/plasma/issues.
 
 
 Major Changes
-N/A
+[Issue #98] - Provide support for streaming of graphs using reactivex for Java. 
  
 Bugs
 [Issue #97] - Use Shaded Guava

@@ -21,6 +21,8 @@
  */
 package org.plasma.sdo.jdbc.service;
 
+import io.reactivex.Observable;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -220,6 +222,21 @@ public class JDBCGraphService implements PlasmaDataAccessService {
     }
   }
 
+  @Override
+  public Observable<DataGraph> findAsStream(Query query) {
+    throw new DataAccessException("not implemented");
+  }
+
+  @Override
+  public Observable<DataGraph> findAsStream(Query query, int maxResults) {
+    throw new DataAccessException("not implemented");
+  }
+
+  @Override
+  public List<Observable<DataGraph>> findAsStream(Query[] queries) {
+    throw new DataAccessException("not implemented");
+  }
+
   private void validate(Query query) {
     From from = (From) query.getFromClause();
     Type type = PlasmaTypeHelper.INSTANCE.getType(from.getEntity().getNamespaceURI(), from
@@ -239,4 +256,5 @@ public class JDBCGraphService implements PlasmaDataAccessService {
     }
     log.debug("query: " + xml);
   }
+
 }

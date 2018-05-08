@@ -16,7 +16,8 @@
 
 package org.plasma.sdo.access.client;
 
-import java.util.ArrayList;
+import io.reactivex.Observable;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -100,8 +101,6 @@ public class PojoDataAccessClient extends ClientSupport implements DataAccessCli
     for (int i = 0; iter.hasNext(); i++) {
       DataGraph[] result = iter.next();
 
-      List<DataObject> list = new ArrayList<DataObject>(result.length);
-
       for (int j = 0; j < result.length; j++) {
         result[j].getChangeSummary().beginLogging();
       }
@@ -152,6 +151,41 @@ public class PojoDataAccessClient extends ClientSupport implements DataAccessCli
     if (log.isDebugEnabled()) {
       log.debug("committed " + dataGraphs.length + " data-graph(s)");
     }
+  }
+
+  @Override
+  public Observable<DataGraph> findAsStream(Query query) {
+    log.debug("calling stream data access service...");
+    Observable<DataGraph> dataGraphs = service.findAsStream(query.getModel());
+    if (log.isDebugEnabled()) {
+      log.debug("returned stream of results graphs");
+    }
+    return dataGraphs;
+  }
+
+  @Override
+  public Observable<DataGraph> findAsStream(Query query, int maxResults) {
+    log.debug("calling stream data access service...");
+    Observable<DataGraph> dataGraphs = service.findAsStream(query.getModel(), maxResults);
+    if (log.isDebugEnabled()) {
+      log.debug("returned stream of results graphs");
+    }
+    return dataGraphs;
+  }
+
+  @Override
+  public List<Observable<DataGraph>> findAsStream(Query[] queries) {
+    log.debug("calling data access service...");
+    org.plasma.query.model.Query[] queryModels = new org.plasma.query.model.Query[queries.length];
+    for (int i = 0; i < queries.length; i++)
+      queryModels[i] = (org.plasma.query.model.Query) queries[i].getModel();
+
+    List<Observable<DataGraph>> resultList = service.findAsStream(queryModels);
+    if (log.isDebugEnabled()) {
+      log.debug("returned " + String.valueOf(resultList.size()) + " results lists");
+    }
+
+    return resultList;
   }
 
 }

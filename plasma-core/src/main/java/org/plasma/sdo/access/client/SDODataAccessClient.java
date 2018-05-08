@@ -17,6 +17,8 @@
 package org.plasma.sdo.access.client;
 
 // java imports
+import io.reactivex.Observable;
+
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -135,6 +137,56 @@ public class SDODataAccessClient implements DataAccessClient {
               e.getUpdatedDate() },
           "invalid query snapshot - entity already updated by another user");
     }
+  }
+
+  public Observable<DataGraph> findAsStream(Query query) {
+    Observable<DataGraph> results = null;
+    try {
+      results = serviceProxy.findAsStream(query);
+    } catch (MaxResultsExceededException e) {
+      throw new UserException(ErrorConstants.ERROR_SEVERITY_FATAL,
+          ErrorConstants.ERROR_TYPE_USER_INPUT, ErrorConstants.ERROR_MESSAGE_MAX_RESULTS_EXCEEDED,
+          new Object[] { new Integer(e.getMaxResults()) }, "max results exceeded");
+    } catch (MaxWildcardsExceededException e) {
+      throw new UserException(ErrorConstants.ERROR_SEVERITY_FATAL,
+          ErrorConstants.ERROR_TYPE_USER_INPUT,
+          ErrorConstants.ERROR_MESSAGE_MAX_WILDCARDS_EXCEEDED, "max wildcards exceeded");
+    }
+    return results;
+  }
+
+  public Observable<DataGraph> findAsStream(Query query, int maxResults) {
+    Observable<DataGraph> results = null;
+    try {
+      results = serviceProxy.findAsStream(query, maxResults);
+    } catch (MaxResultsExceededException e) {
+      throw new UserException(ErrorConstants.ERROR_SEVERITY_FATAL,
+          ErrorConstants.ERROR_TYPE_USER_INPUT, ErrorConstants.ERROR_MESSAGE_MAX_RESULTS_EXCEEDED,
+          new Object[] { new Integer(e.getMaxResults()) }, "max results exceeded");
+    } catch (MaxWildcardsExceededException e) {
+      throw new UserException(ErrorConstants.ERROR_SEVERITY_FATAL,
+          ErrorConstants.ERROR_TYPE_USER_INPUT,
+          ErrorConstants.ERROR_MESSAGE_MAX_WILDCARDS_EXCEEDED, "max wildcards exceeded");
+    }
+    return results;
+  }
+
+  public List<Observable<DataGraph>> findAsStream(Query[] queries) {
+    List<Observable<DataGraph>> valueList = null;
+
+    try {
+      valueList = serviceProxy.findAsStream(queries);
+    } catch (MaxResultsExceededException e) {
+      throw new UserException(ErrorConstants.ERROR_SEVERITY_FATAL,
+          ErrorConstants.ERROR_TYPE_USER_INPUT, ErrorConstants.ERROR_MESSAGE_MAX_RESULTS_EXCEEDED,
+          new Object[] { new Integer(e.getMaxResults()) }, "max results exceeded");
+    } catch (MaxWildcardsExceededException e) {
+      throw new UserException(ErrorConstants.ERROR_SEVERITY_FATAL,
+          ErrorConstants.ERROR_TYPE_USER_INPUT,
+          ErrorConstants.ERROR_MESSAGE_MAX_WILDCARDS_EXCEEDED, "max wildcards exceeded");
+    }
+
+    return valueList;
   }
 
 }

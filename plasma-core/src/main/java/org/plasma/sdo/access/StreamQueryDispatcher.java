@@ -18,35 +18,18 @@ package org.plasma.sdo.access;
 
 import io.reactivex.Observable;
 
-import java.util.List;
+import java.sql.Timestamp;
 
 import org.plasma.query.model.Query;
-import org.plasma.sdo.core.SnapshotMap;
 
 import commonj.sdo.DataGraph;
 
-public interface DataAccessService {
-  public void initialize();
+public interface StreamQueryDispatcher {
+
+  public Observable<DataGraph> findAsStream(Query query, Timestamp snapshotDate);
+
+  public Observable<DataGraph> findAsStream(Query query, int requestMax, Timestamp snapshotDate);
 
   public void close();
 
-  public int count(Query query);
-
-  public int[] count(Query[] queries);
-
-  public DataGraph[] find(Query query);
-
-  public DataGraph[] find(Query query, int maxResults);
-
-  public List<DataGraph[]> find(Query[] queries);
-
-  public SnapshotMap commit(DataGraph dataGraph, String username);
-
-  public SnapshotMap commit(DataGraph[] dataGraphs, String username);
-
-  public Observable<DataGraph> findAsStream(Query query);
-
-  public Observable<DataGraph> findAsStream(Query query, int maxResults);
-
-  public List<Observable<DataGraph>> findAsStream(Query[] queries);
 }
