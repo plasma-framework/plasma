@@ -31,6 +31,7 @@
 				<xsd:element ref="query:Where"/>
 				<xsd:element ref="query:OrderBy"/>
 				<xsd:element ref="query:GroupBy"/>
+				<xsd:element ref="query:Having"/>
 				<xsd:element ref="query:Join"/>
 			</xsd:choice>
             <xsd:element ref="query:ConfigurationProperty" minOccurs="0" maxOccurs="unbounded"/>
@@ -298,6 +299,17 @@
 
     <xsd:element name="GroupBy" type="query:GroupBy"/>
     	
+    <xsd:complexType name="Having">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="query:Expression" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Having" type="query:Having"/>
+
     <xsd:complexType name="Expression">
         <xsd:annotation>
             <xsd:documentation></xsd:documentation>

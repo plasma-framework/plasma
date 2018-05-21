@@ -22,6 +22,7 @@ import org.plasma.query.DataProperty;
 import org.plasma.query.Expression;
 import org.plasma.query.From;
 import org.plasma.query.GroupBy;
+import org.plasma.query.Having;
 import org.plasma.query.Join;
 import org.plasma.query.OrderBy;
 import org.plasma.query.Select;
@@ -30,7 +31,11 @@ import org.plasma.query.Wildcard;
 import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.Clause;
 import org.plasma.query.model.Entity;
+import org.plasma.query.model.Function;
+import org.plasma.query.model.FunctionName;
 import org.plasma.query.model.Path;
+import org.plasma.query.model.Property;
+import org.plasma.query.model.WildcardProperty;
 
 import commonj.sdo.Type;
 
@@ -84,17 +89,7 @@ public class DomainRoot extends PathNode implements DomainQuery {
 
   @Override
   public DomainQuery select(DataProperty property) {
-    org.plasma.query.model.Select select = null;
-    for (int i = 0; i < this.query.getClauses().size(); i++) {
-      select = this.query.getClauses().get(i).getSelect();
-      if (select != null)
-        break;
-    }
-
-    if (select == null) {
-      select = new org.plasma.query.model.Select();
-      this.query.getClauses().add(new Clause(select));
-    }
+    org.plasma.query.model.Select select = getOrInitSelect();
 
     DataNode domainProperty = (DataNode) property;
     AbstractProperty prop = domainProperty.getModel();
@@ -104,7 +99,28 @@ public class DomainRoot extends PathNode implements DomainQuery {
   }
 
   @Override
+  public DomainQuery select(FunctionName func, DataProperty property) {
+    org.plasma.query.model.Select select = getOrInitSelect();
+    DataNode domainProperty = (DataNode) property;
+    Property prop = (Property) domainProperty.getModel();
+    prop.getFunctions().add(new Function(func));
+
+    select.addProperty(prop);
+    return this;
+  }
+
+  @Override
   public DomainQuery select(Wildcard property) {
+    org.plasma.query.model.Select select = getOrInitSelect();
+
+    WildcardNode domainProperty = (WildcardNode) property;
+    AbstractProperty prop = domainProperty.getModel();
+
+    select.addProperty(prop);
+    return this;
+  }
+
+  private org.plasma.query.model.Select getOrInitSelect() {
     org.plasma.query.model.Select select = null;
     for (int i = 0; i < this.query.getClauses().size(); i++) {
       select = this.query.getClauses().get(i).getSelect();
@@ -116,12 +132,7 @@ public class DomainRoot extends PathNode implements DomainQuery {
       select = new org.plasma.query.model.Select();
       this.query.getClauses().add(new Clause(select));
     }
-
-    WildcardNode domainProperty = (WildcardNode) property;
-    AbstractProperty prop = domainProperty.getModel();
-
-    select.addProperty(prop);
-    return this;
+    return select;
   }
 
   @Override
@@ -165,6 +176,27 @@ public class DomainRoot extends PathNode implements DomainQuery {
   }
 
   @Override
+  public DomainQuery having(Expression expr) {
+    org.plasma.query.model.Having having = this.query.findHavingClause();
+
+    // we may have been re-parented
+    org.plasma.query.model.Expression root = (org.plasma.query.model.Expression) expr;
+    while (root.getParent() != null) {
+      root = root.getParent();
+    }
+
+    if (having == null) {
+      having = new org.plasma.query.model.Having();
+      this.query.getClauses().add(new Clause(having));
+      having.addExpression(root);
+    } else {
+      having.addExpression(org.plasma.query.model.Expression.and());
+      having.addExpression(root);
+    }
+    return this;
+  }
+
+  @Override
   public From getFromClause() {
     return this.query.getFromClause();
   }
@@ -177,6 +209,11 @@ public class DomainRoot extends PathNode implements DomainQuery {
   @Override
   public GroupBy findGroupByClause() {
     return this.query.findGroupByClause();
+  }
+
+  @Override
+  public Having findHavingClause() {
+    return this.query.findHavingClause();
   }
 
   @Override

@@ -39,6 +39,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jaxen.JaxenException;
+import org.plasma.common.Key;
+import org.plasma.query.model.FunctionName;
 import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.DataType;
 import org.plasma.sdo.Increment;
@@ -82,7 +84,7 @@ import commonj.sdo.Type;
 /**
  * A data object is a representation of some structured data. It is the
  * fundamental component in the SDO (Service Data Objects) package. Data objects
- * support reflection, path-based accesss, convenience creation and deletion
+ * support reflection, path-based access, convenience creation and deletion
  * methods, and the ability to be part of a {@link DataGraph data graph}.
  * <p>
  * Each data object holds its data as a series of {@link Property Properties}.
@@ -2930,15 +2932,23 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
           buf.append("(" + String.valueOf(level) + ")" + target.getType().getURI() + "#"
               + target.getType().getName() + "[");
 
+        // add in some known instance properties
         String uuid = (String) ((CoreDataObject) target).getUUIDAsString();
         if (uuid != null)
           buf.append("<" + "__UUID__" + ":" + uuid + ">");
-        Timestamp snapshotDate = (Timestamp) ((CoreDataObject) target)
-            .getValue(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP);
-        if (snapshotDate != null)
-          buf.append("<" + CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP + ":" + snapshotDate
-              + ">");
 
+        // add any other instance properties which are not defined
+        PlasmaType targetType = (PlasmaType) target.getType();
+        CoreNode targetNode = (CoreNode) target;
+        for (String key : targetNode.getValueObject().getKeys()) {
+          Property definedProperty = targetType.findProperty(key);
+          if (definedProperty == null) {
+            Object value = targetNode.getValueObject().get(key);
+            buf.append("<" + key + ":" + value + ">");
+          }
+        }
+
+        // add defined properties
         List<Property> properties = target.getType().getProperties();
         for (Property property : properties) {
           if (!property.getType().isDataType())
@@ -2996,6 +3006,18 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
     PlasmaValue[] result = new PlasmaValue[list.size()];
     list.toArray(result);
     return result;
+  }
+
+  @Override
+  public Object get(FunctionName func, Property property) {
+    Key<String> key = new Key<>(func.toString(), property.getName());
+    return this.valueObject.get(key.toString());
+  }
+
+  @Override
+  public void set(FunctionName func, Property property, Object value) {
+    Key<String> key = new Key<>(func.toString(), property.getName());
+    this.valueObject.put(key.toString(), value);
   }
 
 }

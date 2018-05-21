@@ -122,6 +122,8 @@ public interface Query extends Term {
 
   public GroupBy findGroupByClause();
 
+  public Having findHavingClause();
+
   public List<Join> findJoinClauses();
 
   /**

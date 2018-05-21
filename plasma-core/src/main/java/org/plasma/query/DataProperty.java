@@ -145,6 +145,14 @@ public interface DataProperty extends Property {
   public Expression notIn(Query subquery);
 
   /**
+   * Constructs a count aggregate within this data property and returns the data
+   * property for use in subsequent operations
+   * 
+   * @return the data property
+   */
+  public DataProperty count();
+
+  /**
    * Constructs a minimum aggregate within this data property and returns the
    * data property for use in subsequent operations
    * 

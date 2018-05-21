@@ -42,7 +42,7 @@ import org.plasma.sdo.xpath.XPathDetector;
 @XmlType(name = "Where", propOrder = { "expressions", "textContent", "importDeclaration",
     "parameters", "parameterDeclaration", "variableDeclaration", "filterId" })
 @XmlRootElement(name = "Where")
-public class Where implements org.plasma.query.Where {
+public class Where implements org.plasma.query.Where, Predicates {
 
   private static Log log = LogFactory.getFactory().getInstance(Where.class);
   @XmlElement(name = "Expression", required = true)
@@ -186,6 +186,7 @@ public class Where implements org.plasma.query.Where {
     getExpressions().add(e);
   }
 
+  @Override
   public List<Expression> getExpressions() {
     if (expressions == null) {
       expressions = new ArrayList<Expression>();

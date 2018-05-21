@@ -281,6 +281,13 @@ public class Property extends AbstractProperty implements StringDataProperty, In
   }
 
   @Override
+  public DataProperty count() {
+    Function func = new Function(FunctionName.COUNT);
+    this.getFunctions().add(func);
+    return this;
+  }
+
+  @Override
   public DataProperty min() {
     Function func = new Function(FunctionName.MIN);
     this.getFunctions().add(func);

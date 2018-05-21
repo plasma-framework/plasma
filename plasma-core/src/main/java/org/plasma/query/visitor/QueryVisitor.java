@@ -18,6 +18,7 @@ package org.plasma.query.visitor;
 
 import org.plasma.query.From;
 import org.plasma.query.GroupBy;
+import org.plasma.query.Having;
 import org.plasma.query.OrderBy;
 import org.plasma.query.Query;
 import org.plasma.query.Where;
@@ -68,6 +69,8 @@ public interface QueryVisitor {
 
   public void start(GroupBy groupBy);
 
+  public void start(Having having);
+
   public void start(Join join);
 
   public void start(Expression expression);
@@ -115,6 +118,8 @@ public interface QueryVisitor {
   public void end(OrderBy orderBy);
 
   public void end(GroupBy groupBy);
+
+  public void end(Having having);
 
   public void end(Join join);
 

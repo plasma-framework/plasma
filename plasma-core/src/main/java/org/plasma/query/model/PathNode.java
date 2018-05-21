@@ -116,4 +116,8 @@ public class PathNode {
       return new WildcardPathElement(name);
   }
 
+  @Override
+  public String toString() {
+    return getPathElement().getValue();
+  }
 }

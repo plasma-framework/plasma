@@ -17,6 +17,7 @@
 package org.plasma.query.collector;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,6 +30,9 @@ import org.plasma.query.QueryException;
 import org.plasma.query.model.AbstractPathElement;
 import org.plasma.query.model.AbstractProperty;
 import org.plasma.query.model.Function;
+import org.plasma.query.model.FunctionName;
+import org.plasma.query.model.GroupBy;
+import org.plasma.query.model.Having;
 import org.plasma.query.model.OrderBy;
 import org.plasma.query.model.Path;
 import org.plasma.query.model.PathElement;
@@ -40,6 +44,7 @@ import org.plasma.query.model.WildcardPathElement;
 import org.plasma.query.model.WildcardProperty;
 import org.plasma.query.visitor.DefaultQueryVisitor;
 import org.plasma.query.visitor.QueryVisitor;
+import org.plasma.sdo.PlasmaType;
 
 import commonj.sdo.Type;
 
@@ -56,8 +61,14 @@ public class SelectionCollector extends CollectorSupport implements Selection {
   private static Set<commonj.sdo.Property> EMPTY_PROPERTY_SET = new HashSet<commonj.sdo.Property>();
   private static List<Function> EMPTY_FUNCTION_LIST = new ArrayList<Function>();
   private Select select;
+  /** Where clause - optional can be null */
   private Where where;
+  /** Order By clause - optional can be null */
   private OrderBy orderBy;
+  /** Group By clause - optional can be null */
+  private GroupBy groupBy;
+  /** Having clause - optional can be null */
+  private Having having;
 
   // FIXME: what to do with repeated/multiple predicates
   private Map<commonj.sdo.Property, Where> predicateMap;
@@ -77,37 +88,40 @@ public class SelectionCollector extends CollectorSupport implements Selection {
   private Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> singularPropertyEdgeMap;
   private Map<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>> inheritedPropertyEdgeMap;
 
-  public SelectionCollector(Select select, Type rootType) {
+  private Map<Type, Map<Path, Set<commonj.sdo.Property>>> propertyPathMap;
+  private Map<commonj.sdo.Property, Map<Path, List<Function>>> functionPathMap;
+
+  public SelectionCollector(Select select, PlasmaType rootType) {
     super(rootType);
     this.select = select;
   }
 
-  public SelectionCollector(Select select, Type rootType, boolean onlySingularProperties) {
+  public SelectionCollector(Select select, PlasmaType rootType, boolean onlySingularProperties) {
     super(rootType, onlySingularProperties);
     this.select = select;
   }
 
-  public SelectionCollector(Select select, Where where, Type rootType) {
+  public SelectionCollector(Select select, Where where, PlasmaType rootType) {
     super(rootType);
     this.select = select;
     this.where = where;
   }
 
-  public SelectionCollector(Select select, Where where, Type rootType,
+  public SelectionCollector(Select select, Where where, PlasmaType rootType,
       boolean onlySingularProperties) {
     super(rootType, onlySingularProperties);
     this.select = select;
     this.where = where;
   }
 
-  public SelectionCollector(Select select, Where where, OrderBy orderBy, Type rootType) {
+  public SelectionCollector(Select select, Where where, OrderBy orderBy, PlasmaType rootType) {
     super(rootType);
     this.select = select;
     this.where = where;
     this.orderBy = orderBy;
   }
 
-  public SelectionCollector(Select select, Where where, OrderBy orderBy, Type rootType,
+  public SelectionCollector(Select select, Where where, OrderBy orderBy, PlasmaType rootType,
       boolean onlySingularProperties) {
     super(rootType, onlySingularProperties);
     this.select = select;
@@ -115,12 +129,32 @@ public class SelectionCollector extends CollectorSupport implements Selection {
     this.orderBy = orderBy;
   }
 
-  public SelectionCollector(Where where, Type rootType) {
+  public SelectionCollector(Select select, Where where, OrderBy orderBy, GroupBy groupBy,
+      Having having, PlasmaType rootType) {
+    super(rootType);
+    this.select = select;
+    this.where = where;
+    this.orderBy = orderBy;
+    this.groupBy = groupBy;
+    this.having = having;
+  }
+
+  public SelectionCollector(Select select, Where where, OrderBy orderBy, GroupBy groupBy,
+      Having having, PlasmaType rootType, boolean onlySingularProperties) {
+    super(rootType, onlySingularProperties);
+    this.select = select;
+    this.where = where;
+    this.orderBy = orderBy;
+    this.groupBy = groupBy;
+    this.having = having;
+  }
+
+  public SelectionCollector(Where where, PlasmaType rootType) {
     super(rootType);
     this.where = where;
   }
 
-  public SelectionCollector(Where where, Type rootType, boolean onlySingularProperties) {
+  public SelectionCollector(Where where, PlasmaType rootType, boolean onlySingularProperties) {
     super(rootType, onlySingularProperties);
     this.where = where;
   }
@@ -147,6 +181,9 @@ public class SelectionCollector extends CollectorSupport implements Selection {
       this.singularPropertyEdgeMap = new HashMap<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>>();
       this.inheritedPropertyEdgeMap = new HashMap<Type, Map<commonj.sdo.Property, Set<commonj.sdo.Property>>>();
       this.predicateEdgeMap = new HashMap<commonj.sdo.Property, Map<commonj.sdo.Property, Where>>();
+
+      this.propertyPathMap = new HashMap<Type, Map<Path, Set<commonj.sdo.Property>>>();
+      this.functionPathMap = new HashMap<commonj.sdo.Property, Map<Path, List<Function>>>();
 
       if (this.select != null) {
         QueryVisitor visitor = new DefaultQueryVisitor() {
@@ -196,6 +233,38 @@ public class SelectionCollector extends CollectorSupport implements Selection {
         };
         this.orderBy.accept(visitor);
       }
+    }
+    if (this.groupBy != null) {
+      QueryVisitor visitor = new DefaultQueryVisitor() {
+        @Override
+        public void start(Property property) {
+          collect(property);
+          super.start(property);
+        }
+
+        @Override
+        public void start(WildcardProperty wildcardProperty) {
+          collect(wildcardProperty);
+          super.start(wildcardProperty);
+        }
+      };
+      this.groupBy.accept(visitor);
+    }
+    if (this.having != null) {
+      QueryVisitor visitor = new DefaultQueryVisitor() {
+        @Override
+        public void start(Property property) {
+          collect(property);
+          super.start(property);
+        }
+
+        @Override
+        public void start(WildcardProperty wildcardProperty) {
+          collect(wildcardProperty);
+          super.start(wildcardProperty);
+        }
+      };
+      this.having.accept(visitor);
     }
   }
 
@@ -508,6 +577,24 @@ public class SelectionCollector extends CollectorSupport implements Selection {
   }
 
   @Override
+  public Map<Path, List<commonj.sdo.Property>> getPropertyPaths() {
+    if (!initialized())
+      init();
+    Map<Path, List<commonj.sdo.Property>> result = new HashMap<>();
+    for (Type type : this.propertyPathMap.keySet()) {
+      Map<Path, Set<commonj.sdo.Property>> map = this.propertyPathMap.get(type);
+      for (Path path : map.keySet()) {
+        List<commonj.sdo.Property> list = result.get(path);
+        if (list == null) {
+          list = new ArrayList<>();
+          result.put(path, list);
+        }
+      }
+    }
+    return result;
+  }
+
+  @Override
   public List<Function> getFunctions(commonj.sdo.Property property) {
     if (!initialized())
       init();
@@ -516,6 +603,19 @@ public class SelectionCollector extends CollectorSupport implements Selection {
       return list;
     }
     return EMPTY_FUNCTION_LIST;
+  }
+
+  @Override
+  public boolean hasAggregateFunctions() {
+    if (!initialized())
+      init();
+    for (List<Function> functions : this.functionMap.values()) {
+      for (Function func : functions) {
+        if (func.getName().isAggreate())
+          return true;
+      }
+    }
+    return false;
   }
 
   @Override
@@ -529,6 +629,31 @@ public class SelectionCollector extends CollectorSupport implements Selection {
         return list;
     }
     return EMPTY_FUNCTION_LIST;
+  }
+
+  @Override
+  public List<FunctionPath> getAggregateFunctions() {
+    if (!initialized())
+      init();
+    List<FunctionPath> result = null;
+    for (commonj.sdo.Property property : this.functionPathMap.keySet()) {
+      Map<Path, List<Function>> pathMap = this.functionPathMap.get(property);
+      for (Path path : pathMap.keySet()) {
+        List<Function> list = pathMap.get(path);
+        if (list != null) {
+          for (Function func : list) {
+            if (func.getName().isAggreate()) {
+              if (result == null)
+                result = new ArrayList<>();
+              result.add(new FunctionPath(func, path, property));
+            }
+          }
+        }
+      }
+    }
+    if (result != null)
+      return result;
+    return Collections.emptyList();
   }
 
   private void collect(AbstractProperty abstractProperty) {
@@ -546,6 +671,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
       this.mapInheritedProperties(this.rootType, props, this.inheritedPropertyMap);
       Integer level = Integer.valueOf(0);
       this.mapProperties(this.rootType, level, props, this.propertyLevelMap);
+      this.mapProperties(this.rootType, new Path()/* empty path */, props, this.propertyPathMap);
       this.mapInheritedProperties(this.rootType, level, props, this.inheritedPropertyLevelMap);
       if (abstractProperty instanceof Property) {
         Property property = (Property) abstractProperty;
@@ -554,6 +680,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
         if (functions != null && functions.size() > 0) {
           this.mapFunctions(prop, functions, this.functionMap);
           this.mapFunctions(prop, level, functions, this.functionLevelMap);
+          this.mapFunctions(prop, new Path()/* empty path */, functions, this.functionPathMap);
         }
       }
       // no source property so don't add source property mappings
@@ -635,6 +762,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
         this.mapProperties(nextType, props, this.propertyMap);
         this.mapInheritedProperties(nextType, props, this.inheritedPropertyMap);
         this.mapProperties(nextType, level + 1, props, this.propertyLevelMap);
+        this.mapProperties(nextType, path, props, this.propertyPathMap);
         this.mapInheritedProperties(nextType, level + 1, props, this.inheritedPropertyLevelMap);
         // current property is the edge
         this.mapProperties(nextType, prop, props, this.propertyEdgeMap);
@@ -645,6 +773,7 @@ public class SelectionCollector extends CollectorSupport implements Selection {
           if (functions != null && functions.size() > 0) {
             this.mapFunctions(prop, functions, this.functionMap);
             this.mapFunctions(prop, level, functions, this.functionLevelMap);
+            this.mapFunctions(prop, path, functions, this.functionPathMap);
           }
         }
       }

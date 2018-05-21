@@ -20,6 +20,7 @@ package org.plasma.sdo;
 
 import java.util.UUID;
 
+import org.plasma.query.model.FunctionName;
 import org.plasma.sdo.core.SnapshotMap;
 
 import commonj.sdo.ChangeSummary;
@@ -257,6 +258,30 @@ public interface PlasmaDataObject extends DataObject {
    * @return the value set as an array
    */
   public PlasmaValue[] values();
+
+  /**
+   * Returns the scalar value for the given property associated with the given
+   * scalar function.
+   * 
+   * @param func
+   *          the scalar function
+   * @param property
+   *          the property
+   * @return the scalar value for the given property associated with the given
+   *         scalar function.
+   */
+  public Object get(FunctionName func, Property property);
+
+  /**
+   * Sets the scalar value for the given property associated with the given
+   * scalar function.
+   * 
+   * @param func
+   *          the scalar function
+   * @param property
+   *          the property
+   */
+  public void set(FunctionName func, Property property, Object value);
 
   /**
    * Produces a raw dump format

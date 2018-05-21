@@ -308,6 +308,13 @@ public class DataConverter {
       throw new IllegalArgumentException("type " + sourceType.getURI() + "#" + sourceType.getName()
           + " is not a data-type");
     DataType targetDataType = DataType.valueOf(targetType.getName());
+    return convert(targetDataType, sourceType, value);
+  }
+
+  public Object convert(DataType targetDataType, Type sourceType, Object value) {
+    if (!sourceType.isDataType())
+      throw new IllegalArgumentException("type " + sourceType.getURI() + "#" + sourceType.getName()
+          + " is not a data-type");
     DataType sourceDataType = DataType.valueOf(sourceType.getName());
 
     switch (targetDataType) {
@@ -352,7 +359,7 @@ public class DataConverter {
     case YearMonth:
     case YearMonthDay:
     case Time:
-      return toTemporalDataType(targetType, sourceType, value);
+      return toTemporalDataType(targetDataType, sourceType, value);
     case URI:
     case Object:
     default:
@@ -2327,6 +2334,10 @@ public class DataConverter {
 
   public String toTemporalDataType(Type targetType, Type sourceType, Object value) {
     DataType targetDataType = DataType.valueOf(targetType.getName());
+    return toTemporalDataType(targetDataType, sourceType, value);
+  }
+
+  public String toTemporalDataType(DataType targetDataType, Type sourceType, Object value) {
     DataType sourceDataType = DataType.valueOf(sourceType.getName());
     switch (sourceDataType) {
     case Date:

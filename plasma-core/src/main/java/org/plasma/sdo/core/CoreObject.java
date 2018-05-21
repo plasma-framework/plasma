@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.plasma.common.Key;
+
 /**
  * Class used to describe a value object model of arbitrary complexity. Can
  * accommodate strict hierarchical structures as well as object networks and

@@ -20,6 +20,8 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
+import org.plasma.sdo.DataType;
+
 /**
  * <p>
  * Java class for FunctionName.
@@ -434,4 +436,76 @@ public enum FunctionName {
     throw new IllegalArgumentException(v);
   }
 
+  public boolean isAggreate() {
+    switch (this) {
+    case AVG:
+    case COUNT:
+    case MAX:
+    case MIN:
+    case SUM:
+      return true;
+    default:
+      return false;
+    }
+  }
+
+  public DataType getScalarDatatype(DataType sourceDataType) {
+
+    switch (this) {
+    case COUNT:
+      return DataType.Long;
+    case AVG:
+      switch (sourceDataType) {
+      case Float:
+      case Int:
+      case Short:
+        return DataType.Float;
+      case Double:
+      case Integer:
+      case Long:
+      case UnsignedInt:
+      case UnsignedLong:
+        return DataType.Double;
+      default:
+        throw new IllegalArgumentException("illegal datatype (" + sourceDataType
+            + ") conversion for function, " + this);
+      }
+    case SUM:
+      switch (sourceDataType) {
+      case Double:
+      case Float:
+        return DataType.Double;
+      case Short:
+      case Int:
+      case Integer:
+      case Long:
+      case UnsignedInt:
+      case UnsignedLong:
+        return DataType.Long;
+      default:
+        throw new IllegalArgumentException("illegal datatype (" + sourceDataType
+            + ") conversion for function, " + this);
+      }
+    case MAX:
+    case MIN:
+      switch (sourceDataType) {
+      case Double:
+      case Float:
+      case Int:
+      case Integer:
+      case Long:
+      case Short:
+      case UnsignedInt:
+      case UnsignedLong:
+        return sourceDataType;
+      default:
+        throw new IllegalArgumentException("illegal datatype (" + sourceDataType
+            + ") conversion for function, " + this);
+      }
+    default:
+      throw new IllegalArgumentException("illegal datatype (" + sourceDataType
+          + ") conversion for function, " + this);
+
+    }
+  }
 }

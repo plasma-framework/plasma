@@ -288,6 +288,7 @@ public class Query implements org.plasma.query.Query {
    * 
    * @see org.plasma.query.model.Query2#getFromClause()
    */
+  @Override
   public From getFromClause() {
     for (int i = 0; i < this.getClauses().size(); i++) {
       From from = this.getClauses().get(i).getFrom();
@@ -302,6 +303,7 @@ public class Query implements org.plasma.query.Query {
    * 
    * @see org.plasma.query.model.Query2#getWhereClause()
    */
+  @Override
   public Where getWhereClause() {
     Where result = findWhereClause();
     if (result == null)
@@ -314,6 +316,7 @@ public class Query implements org.plasma.query.Query {
    * 
    * @see org.plasma.query.model.Query2#findWhereClause()
    */
+  @Override
   public Where findWhereClause() {
     for (int i = 0; i < this.getClauses().size(); i++) {
       Where where = this.getClauses().get(i).getWhere();
@@ -328,6 +331,7 @@ public class Query implements org.plasma.query.Query {
    * 
    * @see org.plasma.query.model.Query2#clearOrderByClause()
    */
+  @Override
   public void clearOrderByClause() {
     for (int i = 0; i < this.getClauses().size(); i++) {
       OrderBy orderBy = this.getClauses().get(i).getOrderBy();
@@ -341,6 +345,7 @@ public class Query implements org.plasma.query.Query {
    * 
    * @see org.plasma.query.model.Query2#findOrderByClause()
    */
+  @Override
   public OrderBy findOrderByClause() {
     for (int i = 0; i < this.getClauses().size(); i++) {
       OrderBy orderBy = this.getClauses().get(i).getOrderBy();
@@ -355,11 +360,22 @@ public class Query implements org.plasma.query.Query {
    * 
    * @see org.plasma.query.model.Query2#findGroupByClause()
    */
+  @Override
   public GroupBy findGroupByClause() {
     for (int i = 0; i < this.getClauses().size(); i++) {
       GroupBy groupBy = this.getClauses().get(i).getGroupBy();
       if (groupBy != null)
         return groupBy;
+    }
+    return null;
+  }
+
+  @Override
+  public Having findHavingClause() {
+    for (int i = 0; i < this.getClauses().size(); i++) {
+      Having having = this.getClauses().get(i).getHaving();
+      if (having != null)
+        return having;
     }
     return null;
   }

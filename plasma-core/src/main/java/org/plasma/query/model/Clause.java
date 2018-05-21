@@ -34,7 +34,7 @@ import org.plasma.query.visitor.Traversal;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Clause", propOrder = { "select", "update", "delete", "from", "where", "orderBy",
-    "groupBy", "join", "configurationProperty" })
+    "groupBy", "having", "join", "configurationProperty" })
 public class Clause {
 
   @XmlElement(name = "Select")
@@ -51,6 +51,8 @@ public class Clause {
   protected OrderBy orderBy;
   @XmlElement(name = "GroupBy")
   protected GroupBy groupBy;
+  @XmlElement(name = "Having")
+  protected Having having;
   @XmlElement(name = "Join")
   protected Join join;
   @XmlElement(name = "ConfigurationProperty")
@@ -97,6 +99,11 @@ public class Clause {
   public Clause(GroupBy groupBy) {
     this();
     this.groupBy = groupBy;
+  }
+
+  public Clause(Having having) {
+    this();
+    this.having = having;
   }
 
   public Clause(Join join) {
@@ -165,6 +172,27 @@ public class Clause {
    */
   public void setGroupBy(GroupBy value) {
     this.groupBy = value;
+  }
+
+  /**
+   * Gets the value of the having property.
+   * 
+   * @return possible object is {@link Having }
+   * 
+   */
+  public Having getHaving() {
+    return having;
+  }
+
+  /**
+   * Sets the value of the having property.
+   * 
+   * @param value
+   *          allowed object is {@link Having }
+   * 
+   */
+  public void setHaving(Having value) {
+    this.having = value;
   }
 
   /**
@@ -270,6 +298,8 @@ public class Clause {
         this.orderBy.accept(visitor);
       if (this.groupBy != null)
         this.groupBy.accept(visitor);
+      if (this.having != null)
+        this.having.accept(visitor);
       if (this.join != null)
         this.join.accept(visitor);
     }

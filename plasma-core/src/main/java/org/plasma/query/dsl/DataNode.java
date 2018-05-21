@@ -117,6 +117,12 @@ public class DataNode extends DomainEndpoint implements StringDataProperty, Inte
   }
 
   @Override
+  public DataProperty count() {
+    ((org.plasma.query.model.Property) this.property).count();
+    return this;
+  }
+
+  @Override
   public DataProperty min() {
     ((org.plasma.query.model.Property) this.property).min();
     return this;

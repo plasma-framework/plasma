@@ -20,6 +20,7 @@ import org.plasma.query.DataProperty;
 import org.plasma.query.Expression;
 import org.plasma.query.Query;
 import org.plasma.query.Wildcard;
+import org.plasma.query.model.FunctionName;
 
 /**
  * A domain specific query serving as the entry point for assembly of a data
@@ -36,6 +37,18 @@ public interface DomainQuery extends Query {
    * @return the query
    */
   public DomainQuery select(DataProperty property);
+
+  /**
+   * Appends the given property encapsulated by the giuven scalar function to
+   * the select clause within this query and returns the query.
+   * 
+   * @param func
+   *          the scalar function
+   * @param property
+   *          the property
+   * @return the query
+   */
+  public DomainQuery select(FunctionName func, DataProperty property);
 
   /**
    * Appends the given wildcard property to the select clause within this query
@@ -77,4 +90,13 @@ public interface DomainQuery extends Query {
    */
   public DomainQuery groupBy(DataProperty property);
 
+  /**
+   * Appends the given Expression to the having clause within this query and
+   * returns the query.
+   * 
+   * @param property
+   *          the data property
+   * @return the query
+   */
+  public DomainQuery having(Expression expr);
 }

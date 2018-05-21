@@ -36,6 +36,7 @@ public class Path {
 
   @XmlElement(name = "PathNode", required = true)
   protected List<PathNode> pathNodes;
+  private transient String pathString;
 
   public Path() {
     super();
@@ -136,6 +137,48 @@ public class Path {
       pathNodes = new ArrayList<PathNode>();
     }
     return this.pathNodes;
+  }
+
+  public int size() {
+    return getPathNodes().size();
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + toString().hashCode();
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Path other = (Path) obj;
+    if (!toString().equals(other.toString()))
+      return false;
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    if (pathString == null) {
+      StringBuilder buf = new StringBuilder();
+      int i = 0;
+      for (PathNode node : getPathNodes()) {
+        if (i > 0)
+          buf.append("/");
+        buf.append(node.toString());
+        i++;
+      }
+      this.pathString = buf.toString();
+    }
+    return this.pathString;
   }
 
 }

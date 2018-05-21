@@ -19,23 +19,18 @@ package org.plasma.sdo.access.provider.common;
 // java imports
 import java.util.Comparator;
 
-import org.plasma.query.model.GroupBy;
-import org.plasma.query.model.OrderBy;
 import org.plasma.sdo.PlasmaDataGraph;
+import org.plasma.sdo.core.CoreDataObject;
 
-import commonj.sdo.Type;
-
-public class DataGraphComparatorAssembler extends DataComparatorAssembler {
-  public DataGraphComparatorAssembler(OrderBy orderBy, Type rootType) {
-    super(orderBy, rootType, new DataGraphComparator());
+/**
+ * A graph comparator that always results in an equal comparison.
+ */
+public class NoOpDataGraphComparator extends DataComparator implements Comparator<PlasmaDataGraph> {
+  public NoOpDataGraphComparator() {
   }
 
-  public DataGraphComparatorAssembler(GroupBy groupBy, Type rootType) {
-    super(groupBy, rootType, new DataGraphComparator());
-  }
-
-  public Comparator<PlasmaDataGraph> getComparator() {
-    return (DataGraphComparator) this.dataComparator;
+  public int compare(PlasmaDataGraph o1, PlasmaDataGraph o2) {
+    return 0;
   }
 
 }

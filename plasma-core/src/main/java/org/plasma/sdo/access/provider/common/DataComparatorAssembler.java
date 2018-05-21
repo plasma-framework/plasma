@@ -16,6 +16,7 @@
 
 package org.plasma.sdo.access.provider.common;
 
+import org.plasma.query.model.GroupBy;
 import org.plasma.query.model.OrderBy;
 import org.plasma.query.model.Property;
 import org.plasma.query.model.SortDirection;
@@ -26,15 +27,19 @@ import commonj.sdo.Type;
 
 public abstract class DataComparatorAssembler extends DefaultQueryVisitor {
 
-  protected OrderBy orderby;
   protected Type rootType;
   protected DataComparator dataComparator;
 
   protected DataComparatorAssembler(OrderBy orderby, Type rootType, DataComparator dataComparator) {
-    this.orderby = orderby;
     this.rootType = rootType;
     this.dataComparator = dataComparator;
-    this.orderby.accept(this);
+    orderby.accept(this);
+  }
+
+  protected DataComparatorAssembler(GroupBy groupBy, Type rootType, DataComparator dataComparator) {
+    this.rootType = rootType;
+    this.dataComparator = dataComparator;
+    groupBy.accept(this);
   }
 
   public void start(Property property) {

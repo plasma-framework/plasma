@@ -279,6 +279,29 @@ abstract class CollectorSupport {
     }
   }
 
+  protected void mapProperties(Type type, Path path, commonj.sdo.Property[] props,
+      Map<Type, Map<Path, Set<commonj.sdo.Property>>> map) {
+    Map<Path, Set<commonj.sdo.Property>> pathMap = map.get(type);
+    if (pathMap == null) {
+      pathMap = new HashMap<Path, Set<commonj.sdo.Property>>();
+      map.put(type, pathMap);
+    }
+
+    Set<commonj.sdo.Property> set = pathMap.get(path);
+    if (set == null) {
+      set = new HashSet<commonj.sdo.Property>(props.length);
+      pathMap.put(path, set);
+      for (commonj.sdo.Property prop : props) {
+        set.add(prop);
+      }
+    } else {
+      for (commonj.sdo.Property prop : props)
+        if (!set.contains(prop)) {
+          set.add(prop);
+        }
+    }
+  }
+
   protected void mapFunctions(commonj.sdo.Property prop, Integer level, List<Function> functions,
       Map<commonj.sdo.Property, Map<Integer, List<Function>>> map) {
     Map<Integer, List<Function>> levelMap = map.get(prop);
@@ -291,6 +314,21 @@ abstract class CollectorSupport {
     if (list == null) {
       levelMap.put(level, functions);
     }
+  }
+
+  protected void mapFunctions(commonj.sdo.Property prop, Path path, List<Function> functions,
+      Map<commonj.sdo.Property, Map<Path, List<Function>>> map) {
+    Map<Path, List<Function>> pathMap = map.get(prop);
+    if (pathMap == null) {
+      pathMap = new HashMap<Path, List<Function>>();
+      map.put(prop, pathMap);
+    }
+
+    List<Function> list = pathMap.get(path);
+    if (list == null) {
+      pathMap.put(path, functions);
+    } else
+      list.addAll(functions);
   }
 
   protected void mapProperties(Type type, commonj.sdo.Property edge, commonj.sdo.Property[] props,

@@ -17,9 +17,13 @@
 package org.plasma.query.collector;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.plasma.query.model.Function;
+import org.plasma.query.model.FunctionName;
+import org.plasma.query.model.Path;
+import org.plasma.query.model.Property;
 import org.plasma.query.model.Where;
 
 import commonj.sdo.Type;
@@ -319,4 +323,16 @@ public interface Selection {
    *         functions.
    */
   public List<Function> getFunctions(commonj.sdo.Property property, int level);
+
+  /**
+   * Returns true if any aggregate functions are found in the selection
+   * 
+   * @return true if any aggregate functions are found in the selection
+   */
+  public boolean hasAggregateFunctions();
+
+  public Map<Path, List<commonj.sdo.Property>> getPropertyPaths();
+
+  public List<FunctionPath> getAggregateFunctions();
+
 }
