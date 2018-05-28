@@ -16,6 +16,8 @@
 
 package org.plasma.query.model;
 
+import java.util.HashSet;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -449,6 +451,22 @@ public enum FunctionName {
     }
   }
 
+  public boolean isFullText() {
+    switch (this) {
+    case NGRAMS:
+    case OFFSETS:
+    case PROXIMITY:
+    case RANK:
+    case RELEVANCE:
+    case SCORE:
+    case TERMS:
+    case WEIGHT:
+      return true;
+    default:
+      return false;
+    }
+  }
+
   public DataType getScalarDatatype(DataType sourceDataType) {
 
     switch (this) {
@@ -502,10 +520,35 @@ public enum FunctionName {
         throw new IllegalArgumentException("illegal datatype (" + sourceDataType
             + ") conversion for function, " + this);
       }
+    case NGRAMS:
+    case OFFSETS:
+    case PROXIMITY:
+    case RANK:
+    case RELEVANCE:
+    case SCORE:
+    case TERMS:
+    case WEIGHT:
+      switch (sourceDataType) {
+      case String:
+        return sourceDataType;
+      default:
+        throw new IllegalArgumentException("illegal datatype (" + sourceDataType
+            + ") conversion for function, " + this);
+      }
     default:
-      throw new IllegalArgumentException("illegal datatype (" + sourceDataType
-          + ") conversion for function, " + this);
+      // FIXME: not sure all this should be elaborated in Plasma
+      return sourceDataType;
 
     }
+  }
+
+  private static HashSet<String> names = new HashSet<>();
+  static {
+    for (FunctionName name : FunctionName.values())
+      names.add(name.name());
+  }
+
+  public static boolean hasName(String name) {
+    return names.contains(name);
   }
 }

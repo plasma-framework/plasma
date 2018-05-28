@@ -771,9 +771,12 @@ public class SelectionCollector extends CollectorSupport implements Selection {
           Property property = (Property) abstractProperty;
           List<Function> functions = property.getFunctions();
           if (functions != null && functions.size() > 0) {
-            this.mapFunctions(prop, functions, this.functionMap);
-            this.mapFunctions(prop, level, functions, this.functionLevelMap);
-            this.mapFunctions(prop, path, functions, this.functionPathMap);
+            commonj.sdo.Property endpoint = prop;
+            if (!endpoint.getType().isDataType())
+              endpoint = nextType.getProperty(property.getName());
+            this.mapFunctions(endpoint, functions, this.functionMap);
+            this.mapFunctions(endpoint, level + 1, functions, this.functionLevelMap);
+            this.mapFunctions(endpoint, path, functions, this.functionPathMap);
           }
         }
       }
@@ -827,8 +830,11 @@ public class SelectionCollector extends CollectorSupport implements Selection {
             Property property = (Property) abstractProperty;
             List<Function> functions = property.getFunctions();
             if (functions != null && functions.size() > 0) {
-              this.mapFunctions(prop, functions, this.functionMap);
-              this.mapFunctions(prop, level, functions, this.functionLevelMap);
+              commonj.sdo.Property endpoint = prop;
+              if (!endpoint.getType().isDataType())
+                endpoint = nextType.getProperty(property.getName());
+              this.mapFunctions(endpoint, functions, this.functionMap);
+              this.mapFunctions(endpoint, level + 1, functions, this.functionLevelMap);
             }
           }
         }

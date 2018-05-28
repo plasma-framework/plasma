@@ -16,12 +16,14 @@
 
 package org.plasma.sdo.core;
 
+import org.plasma.query.model.FunctionName;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaValue;
 
 public class CoreValue implements PlasmaValue {
   private PlasmaProperty property;
   private Object value;
+  private FunctionName[] functions;
 
   @SuppressWarnings("unused")
   private CoreValue() {
@@ -33,11 +35,26 @@ public class CoreValue implements PlasmaValue {
     this.value = value;
   }
 
+  public CoreValue(PlasmaProperty property, Object value, FunctionName function) {
+    super();
+    this.property = property;
+    this.value = value;
+    this.functions = new FunctionName[] { function };
+  }
+
+  @Override
   public PlasmaProperty getProperty() {
     return property;
   }
 
+  @Override
   public Object getValue() {
     return value;
   }
+
+  @Override
+  public FunctionName[] getFunctions() {
+    return functions;
+  }
+
 }

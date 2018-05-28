@@ -250,6 +250,8 @@ abstract class CollectorSupport {
 
   protected void mapFunctions(commonj.sdo.Property prop, List<Function> functions,
       Map<commonj.sdo.Property, List<Function>> map) {
+    if (!prop.getType().isDataType())
+      throw new IllegalArgumentException("expected datatype property not, " + prop);
     List<Function> list = map.get(prop);
     if (list == null) {
       map.put(prop, functions);
@@ -304,6 +306,8 @@ abstract class CollectorSupport {
 
   protected void mapFunctions(commonj.sdo.Property prop, Integer level, List<Function> functions,
       Map<commonj.sdo.Property, Map<Integer, List<Function>>> map) {
+    if (!prop.getType().isDataType())
+      throw new IllegalArgumentException("expected datatype property not, " + prop);
     Map<Integer, List<Function>> levelMap = map.get(prop);
     if (levelMap == null) {
       levelMap = new HashMap<Integer, List<Function>>();
@@ -318,6 +322,8 @@ abstract class CollectorSupport {
 
   protected void mapFunctions(commonj.sdo.Property prop, Path path, List<Function> functions,
       Map<commonj.sdo.Property, Map<Path, List<Function>>> map) {
+    if (!prop.getType().isDataType())
+      throw new IllegalArgumentException("expected datatype property not, " + prop);
     Map<Path, List<Function>> pathMap = map.get(prop);
     if (pathMap == null) {
       pathMap = new HashMap<Path, List<Function>>();

@@ -557,6 +557,17 @@ public class Property extends AbstractProperty implements StringDataProperty, In
   public String getQualifiedName() {
     if (qualifiedName == null) {
       StringBuilder buf = new StringBuilder();
+      if (this.alias != null) {
+        buf.append("(");
+        buf.append(this.alias);
+        buf.append(")");
+      }
+      if (this.path != null) {
+        for (PathNode node : this.path.getPathNodes()) {
+          buf.append(node.getPathElement().getValue());
+          buf.append(".");
+        }
+      }
       if (this.getFunctions().size() > 0) {
         for (Function func : this.getFunctions()) {
           buf.append(func.getName());
@@ -572,17 +583,6 @@ public class Property extends AbstractProperty implements StringDataProperty, In
             buf.append("]");
             i++;
           }
-        }
-      }
-      if (this.alias != null) {
-        buf.append("(");
-        buf.append(this.alias);
-        buf.append(")");
-      }
-      if (this.path != null) {
-        for (PathNode node : this.path.getPathNodes()) {
-          buf.append(node.getPathElement().getValue());
-          buf.append(".");
         }
       }
       buf.append(this.name);

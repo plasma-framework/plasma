@@ -16,6 +16,8 @@
 
 package org.plasma.sdo;
 
+import org.plasma.query.model.FunctionName;
+
 /**
  * A property/value pair used for value iteration from data objects.
  */
@@ -23,4 +25,6 @@ public interface PlasmaValue {
   public PlasmaProperty getProperty();
 
   public Object getValue();
+
+  public FunctionName[] getFunctions();
 }

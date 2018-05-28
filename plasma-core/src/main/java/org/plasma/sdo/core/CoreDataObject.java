@@ -3000,8 +3000,17 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
     List<CoreValue> list = new ArrayList<>();
     for (int i = 0; i < keys.length; i++) {
       PlasmaProperty property = (PlasmaProperty) type.findProperty(keys[i]);
-      if (property != null) // its not an instance property
+      if (property != null) { // its not an instance property
         list.add(new CoreValue(property, this.valueObject.get(keys[i])));
+      } else {
+        String[] tokens = Key.parse(keys[i]);
+        if (tokens.length == 2 && FunctionName.hasName(tokens[0])) {
+          property = (PlasmaProperty) type.getProperty(tokens[1]);
+          Object value = this.valueObject.get(keys[i]);
+          FunctionName func = FunctionName.valueOf(tokens[0]);
+          list.add(new CoreValue(property, value, func));
+        }
+      }
     }
     PlasmaValue[] result = new PlasmaValue[list.size()];
     list.toArray(result);
@@ -3010,13 +3019,13 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
 
   @Override
   public Object get(FunctionName func, Property property) {
-    Key<String> key = new Key<>(func.toString(), property.getName());
+    Key<String> key = new Key<>(func.name(), property.getName());
     return this.valueObject.get(key.toString());
   }
 
   @Override
   public void set(FunctionName func, Property property, Object value) {
-    Key<String> key = new Key<>(func.toString(), property.getName());
+    Key<String> key = new Key<>(func.name(), property.getName());
     this.valueObject.put(key.toString(), value);
   }
 

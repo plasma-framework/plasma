@@ -5,7 +5,8 @@ import java.util.Arrays;
 
 public class Key<T> implements Serializable {
   private static final long serialVersionUID = -4400857484478081281L;
-  private static final String DELIM = "_";
+  private static final String DELIM = "|";
+  private static final String DELIM_REGEX = "\\|";
   private T[] values;
   private int hashCode;
 
@@ -22,7 +23,7 @@ public class Key<T> implements Serializable {
   }
 
   public static String[] parse(String source) {
-    String[] tokens = source.split(DELIM);
+    String[] tokens = source.split(DELIM_REGEX);
     return tokens;
   }
 
