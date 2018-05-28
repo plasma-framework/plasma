@@ -1,0 +1,30 @@
+Release Notes
+
+Plasma 2.0.5 Release Notes
+Plasma 2.0.5 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/plasma-framework/plasma/issues.
+
+
+Major Changes
+[Issue #99] - Add Having Clause to Query Model and DSL Infra 
+ 
+Bugs
+N/A
+
+Improvements
+N/A
+
+New Features
+N/A
+
+Tasks
+N/A
+
+Wish
+N/A
+
+
+
