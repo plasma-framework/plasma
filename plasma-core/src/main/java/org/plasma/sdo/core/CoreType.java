@@ -87,13 +87,13 @@ public class CoreType implements PlasmaType {
    * Provides fast property lookup by logical name, physical name and other
    * aliases
    */
-  private Map<String, PlasmaProperty> declaredPropertiesMap;
+  private volatile Map<String, PlasmaProperty> declaredPropertiesMap;
   private Map<PlasmaProperty, Object> instancePropertiesMap;
   /**
    * Accommodates SDO API's where a unique property list is required as this is
    * not derivable from the above map which could have duplicate values.
    */
-  private volatile List<Property> declaredPropertiesList;
+  private List<Property> declaredPropertiesList;
 
   /**
    * Cache for declared and derived properties
