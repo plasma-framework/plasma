@@ -1051,14 +1051,15 @@ public class CoreType implements PlasmaType {
   }
 
   private Property findDeclaredProperty(PlasmaType currentType, String propertyName) {
-    if (currentType.getDeclaredProperties() == null)
-      ((CoreType) currentType).lazyLoadProperties();
+	  CoreType currentCoreType = (CoreType) currentType;
+	  if (currentCoreType.declaredPropertiesMap == null)
+		  currentCoreType.lazyLoadProperties();
 
-    Property result = ((CoreType) currentType).declaredPropertiesMap.get(propertyName);
+    Property result = currentCoreType.declaredPropertiesMap.get(propertyName);
     if (result != null) {
       return result;
     } else {
-      for (Type base : currentType.getBaseTypes()) {
+      for (Type base : currentCoreType.getBaseTypes()) {
         PlasmaType baseType = (PlasmaType) base;
         result = findDeclaredProperty(baseType, propertyName);
         if (result != null)
@@ -1070,8 +1071,9 @@ public class CoreType implements PlasmaType {
 
   private Property findDeclaredProperty(PlasmaType currentType, ConcurrencyType concurrencyType,
       ConcurrentDataFlavor dataFlavor) {
-    if (currentType.getDeclaredProperties() == null)
-      ((CoreType) currentType).lazyLoadProperties();
+	  CoreType currentCoreType = (CoreType) currentType;
+	  if (currentCoreType.declaredPropertiesMap == null)
+		  currentCoreType.lazyLoadProperties();
     Property result = null;
     for (Property property : getDeclaredProperties()) {
       if (((PlasmaProperty) property).isConcurrent(concurrencyType, dataFlavor)) {
@@ -1079,7 +1081,7 @@ public class CoreType implements PlasmaType {
         break;
       }
     }
-    for (Type base : currentType.getBaseTypes()) {
+    for (Type base : currentCoreType.getBaseTypes()) {
       PlasmaType baseType = (PlasmaType) base;
       result = findDeclaredProperty(baseType, concurrencyType, dataFlavor);
       if (result != null)
