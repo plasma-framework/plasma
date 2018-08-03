@@ -1,0 +1,29 @@
+Release Notes
+
+Plasma 2.0.6 Release Notes
+Plasma 2.0.6 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/plasma-framework/plasma/issues.
+
+
+Major Changes
+ 
+Bugs
+[Issue #102] - Add syncronization on CoreType getBaseTypes() and getSubTypes()  
+
+Improvements
+N/A
+
+New Features
+N/A
+
+Tasks
+N/A
+
+Wish
+N/A
+
+
+

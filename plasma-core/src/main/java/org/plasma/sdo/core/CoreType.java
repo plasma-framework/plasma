@@ -80,8 +80,8 @@ public class CoreType implements PlasmaType {
    * inherit from classifier in UML.
    */
   private Classifier classifier;
-  private List<Type> baseTypes;
-  private List<Type> subTypes;
+  private volatile List<Type> baseTypes;
+  private volatile List<Type> subTypes;
 
   /**
    * Provides fast property lookup by logical name, physical name and other
@@ -93,7 +93,7 @@ public class CoreType implements PlasmaType {
    * Accommodates SDO API's where a unique property list is required as this is
    * not derivable from the above map which could have duplicate values.
    */
-  private List<Property> declaredPropertiesList;
+  private volatile List<Property> declaredPropertiesList;
 
   /**
    * Cache for declared and derived properties
@@ -225,7 +225,7 @@ public class CoreType implements PlasmaType {
   }
 
   private void _lazyLoadProperties() {
-    this.declaredPropertiesMap = new HashMap<String, PlasmaProperty>();
+    Map<String, PlasmaProperty> declaredProperties = new HashMap<String, PlasmaProperty>();
     this.declaredPropertiesList = new ArrayList<Property>();
 
     this.instancePropertiesMap = new HashMap<PlasmaProperty, Object>();
@@ -288,16 +288,16 @@ public class CoreType implements PlasmaType {
 
       PlasmaProperty property = new CoreProperty((CoreType) propertyType, prop, this);
 
-      this.declaredPropertiesMap.put(property.getName(), property);
+      declaredProperties.put(property.getName(), property);
       PlasmaProperty existing = null;
       for (String alias : property.getAliasNames()) {
-        if ((existing = this.declaredPropertiesMap.get(alias)) != null)
+        if ((existing = declaredProperties.get(alias)) != null)
           if (!existing.getName().equals(property.getName()))
             throw new IllegalStateException("found existing property, "
                 + existing.getContainingType().toString() + "." + existing.getName()
                 + ", already mapped to alias '" + alias + "' while loading property "
                 + this.toString() + "." + property.getName());
-        this.declaredPropertiesMap.put(alias, property);
+        declaredProperties.put(alias, property);
       }
       this.declaredPropertiesList.add(property);
 
@@ -340,6 +340,8 @@ public class CoreType implements PlasmaType {
             property);
 
     }
+    // finally set the volatile variable
+    this.declaredPropertiesMap = declaredProperties;
   }
 
   /**
@@ -760,18 +762,27 @@ public class CoreType implements PlasmaType {
    */
   public List<Type> getBaseTypes() {
     if (this.baseTypes == null) {
-      this.baseTypes = new ArrayList<Type>();
+      synchronized (this) {
+        initBaseTypes();
+      }
+    }
+
+    return this.baseTypes;
+  }
+
+  private void initBaseTypes() {
+    if (this.baseTypes == null) {
+      List<Type> list = new ArrayList<Type>();
       PlasmaTypeHelper helper = PlasmaTypeHelper.INSTANCE;
       List<org.plasma.sdo.repository.Classifier> generalizations = this.classifier
           .getGeneralization();
       for (org.plasma.sdo.repository.Classifier classifier : generalizations) {
         String namespaceURI = classifier.getNamespaceURI();
         Type type = helper.getType(namespaceURI, classifier.getName());
-        this.baseTypes.add(type);
+        list.add(type);
       }
+      this.baseTypes = list;
     }
-
-    return this.baseTypes;
   }
 
   /**
@@ -802,17 +813,29 @@ public class CoreType implements PlasmaType {
    */
   public List<Type> getSubTypes() {
     if (this.subTypes == null) {
-      this.subTypes = new ArrayList<Type>();
+      synchronized (this) {
+        initSubTypes();
+      }
+    }
+
+    return this.subTypes;
+
+  }
+
+  private void initSubTypes() {
+    if (this.subTypes == null) {
+      List<Type> list = new ArrayList<Type>();
       PlasmaTypeHelper helper = PlasmaTypeHelper.INSTANCE;
       List<org.plasma.sdo.repository.Classifier> specializations = this.classifier
           .getSpecializations();
       for (org.plasma.sdo.repository.Classifier classifier : specializations) {
         String namespaceURI = classifier.getNamespaceURI();
         Type type = helper.getType(namespaceURI, classifier.getName());
-        this.subTypes.add(type);
+        list.add(type);
       }
+      this.subTypes = list;
     }
-    return this.subTypes;
+
   }
 
   /**
