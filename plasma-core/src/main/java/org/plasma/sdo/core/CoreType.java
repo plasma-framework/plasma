@@ -313,31 +313,51 @@ public class CoreType implements PlasmaType {
         }
         pkPropList.add(property);
       }
+      
+      if (property.isConcurrent()) {
+    	  // Optimization flag on type to avoid checking individual concurrent properties
+    	  // where possible
+          this.instancePropertiesMap.put(
+              PlasmaProperty.INSTANCE_PROPERTY_BOOLEAN_ISCONCURRENT, new Boolean(true));
+          
+          PlasmaProperty existingConcurr = (PlasmaProperty)this.instancePropertiesMap.get(
+                  PlasmaProperty.INSTANCE_PROPERTY_OBJECT_CONCURRENT_PROP);
+          if (existingConcurr != null)
+              throw new IllegalStateException("found existing concurrent property, "
+                      + existingConcurr
+                      + ", already found on type, " + this);
+                  
+          this.instancePropertiesMap.put(
+                  PlasmaProperty.INSTANCE_PROPERTY_OBJECT_CONCURRENT_PROP, property);
 
-      if (property.isConcurrent(ConcurrencyType.origination, ConcurrentDataFlavor.time))
-        this.instancePropertiesMap.put(
-            PlasmaProperty.INSTANCE_PROPERTY_OBJECT_ORIGINATION_TIMESTAMP, property);
-
-      if (property.isConcurrent(ConcurrencyType.origination, ConcurrentDataFlavor.user))
-        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_ORIGINATION_USER,
-            property);
-
-      if (property.isConcurrent(ConcurrencyType.pessimistic, ConcurrentDataFlavor.time))
-        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_LOCKING_TIMESTAMP,
-            property);
-
-      if (property.isConcurrent(ConcurrencyType.origination, ConcurrentDataFlavor.user))
-        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_LOCKING_USER,
-            property);
-
-      // FIXME: time, version ??
-      if (property.isConcurrent(ConcurrencyType.optimistic, ConcurrentDataFlavor.time))
-        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_CONCURRENCY_VERSION,
-            property);
-
-      if (property.isConcurrent(ConcurrencyType.optimistic, ConcurrentDataFlavor.user))
-        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_CONCURRENCY_USER,
-            property);
+	      if (property.isConcurrent(ConcurrencyType.origination, ConcurrentDataFlavor.time))
+	        this.instancePropertiesMap.put(
+	            PlasmaProperty.INSTANCE_PROPERTY_OBJECT_ORIGINATION_TIMESTAMP, property);
+	
+	      if (property.isConcurrent(ConcurrencyType.origination, ConcurrentDataFlavor.user))
+	        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_ORIGINATION_USER,
+	            property);
+	
+	      if (property.isConcurrent(ConcurrencyType.pessimistic, ConcurrentDataFlavor.time))
+	        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_LOCKING_TIMESTAMP,
+	            property);
+	
+	      if (property.isConcurrent(ConcurrencyType.origination, ConcurrentDataFlavor.user))
+	        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_LOCKING_USER,
+	            property);
+	
+	      if (property.isConcurrent(ConcurrencyType.optimistic, ConcurrentDataFlavor.time))
+	        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_CONCURRENT_TIMESTAMP,
+	            property);
+	      
+	      if (property.isConcurrent(ConcurrencyType.optimistic, ConcurrentDataFlavor.version))
+		        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_CONCURRENT_VERSION,
+		            property);
+	 
+	      if (property.isConcurrent(ConcurrencyType.optimistic, ConcurrentDataFlavor.user))
+	        this.instancePropertiesMap.put(PlasmaProperty.INSTANCE_PROPERTY_OBJECT_CONCURRENT_USER,
+	            property);
+	  }
 
     }
     // finally set the volatile variable
@@ -1011,6 +1031,22 @@ public class CoreType implements PlasmaType {
     return findDeclaredProperty(this, propertyName);
   }
 
+  public Property findProperty(ConcurrencyType concurrencyType) {
+	    List<Property> properties = new ArrayList<Property>();
+
+	    collectDeclaredProperties(this, concurrencyType, properties);
+	    if (properties.size() == 0)
+	      return null;
+	    else if (properties.size() == 1)
+	      return properties.get(0);
+	    else {
+	      log.warn("Found multiple declared properties for type " + this.getURI() + "#"
+	          + this.getName() + " tagged with " + ConcurrencyType.class.getSimpleName() + " '"
+	          + concurrencyType.name() + "'");
+	      return properties.get(0);
+	    }
+	  }
+
   public Property findProperty(ConcurrencyType concurrencyType, ConcurrentDataFlavor dataFlavor) {
     List<Property> properties = new ArrayList<Property>();
 
@@ -1051,9 +1087,9 @@ public class CoreType implements PlasmaType {
   }
 
   private Property findDeclaredProperty(PlasmaType currentType, String propertyName) {
-	  CoreType currentCoreType = (CoreType) currentType;
-	  if (currentCoreType.declaredPropertiesMap == null)
-		  currentCoreType.lazyLoadProperties();
+    CoreType currentCoreType = (CoreType) currentType;
+    if (currentCoreType.declaredPropertiesMap == null)
+      currentCoreType.lazyLoadProperties();
 
     Property result = currentCoreType.declaredPropertiesMap.get(propertyName);
     if (result != null) {
@@ -1071,9 +1107,9 @@ public class CoreType implements PlasmaType {
 
   private Property findDeclaredProperty(PlasmaType currentType, ConcurrencyType concurrencyType,
       ConcurrentDataFlavor dataFlavor) {
-	  CoreType currentCoreType = (CoreType) currentType;
-	  if (currentCoreType.declaredPropertiesMap == null)
-		  currentCoreType.lazyLoadProperties();
+    CoreType currentCoreType = (CoreType) currentType;
+    if (currentCoreType.declaredPropertiesMap == null)
+      currentCoreType.lazyLoadProperties();
     Property result = null;
     for (Property property : getDeclaredProperties()) {
       if (((PlasmaProperty) property).isConcurrent(concurrencyType, dataFlavor)) {
@@ -1098,16 +1134,28 @@ public class CoreType implements PlasmaType {
   }
 
   private void collectDeclaredProperties(PlasmaType type, ConcurrencyType concurrencyType,
-      ConcurrentDataFlavor dataFlavor, List<Property> properties) {
+      List<Property> properties) {
     for (Property p : type.getDeclaredProperties()) {
       PlasmaProperty plasmaProp = ((PlasmaProperty) p);
-      if (plasmaProp.isConcurrent(concurrencyType, dataFlavor)) {
+      if (plasmaProp.isConcurrent(concurrencyType)) {
         properties.add(p);
       }
     }
     for (Type t : type.getBaseTypes())
-      collectDeclaredProperties((PlasmaType) t, concurrencyType, dataFlavor, properties);
+      collectDeclaredProperties((PlasmaType) t, concurrencyType, properties);
   }
+  
+  private void collectDeclaredProperties(PlasmaType type, ConcurrencyType concurrencyType,
+	      ConcurrentDataFlavor dataFlavor, List<Property> properties) {
+	    for (Property p : type.getDeclaredProperties()) {
+	      PlasmaProperty plasmaProp = ((PlasmaProperty) p);
+	      if (plasmaProp.isConcurrent(concurrencyType, dataFlavor)) {
+	        properties.add(p);
+	      }
+	    }
+	    for (Type t : type.getBaseTypes())
+	      collectDeclaredProperties((PlasmaType) t, concurrencyType, dataFlavor, properties);
+	  }
 
   private void collectDeclaredProperties(PlasmaType type, KeyType keyType, List<Property> properties) {
     for (Property p : type.getDeclaredProperties()) {
@@ -1250,5 +1298,14 @@ public class CoreType implements PlasmaType {
   public String getId() {
     return this.classifier.getId();
   }
+
+@Override
+public boolean isConcurrent() {
+    Boolean result = (Boolean)this.get(PlasmaProperty.INSTANCE_PROPERTY_BOOLEAN_ISCONCURRENT);
+    if (result != null)
+    	return result.booleanValue();
+    else
+    	return false;
+}
 
 }

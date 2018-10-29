@@ -55,10 +55,16 @@ public interface PlasmaProperty extends Property {
   // instance properties on Type
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_PRIKEY_PROPERTIES = CoreProperty
       .createInstanceProperty("PriKeyProperties", DataType.Object);
-  public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENCY_USER = CoreProperty
-      .createInstanceProperty("ConcurrencyUser", DataType.Object);
-  public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENCY_VERSION = CoreProperty
-      .createInstanceProperty("ConcurrencyVersion", DataType.Object);
+  public static final PlasmaProperty INSTANCE_PROPERTY_BOOLEAN_ISCONCURRENT = CoreProperty
+	      .createInstanceProperty("IsConcurrent", DataType.Boolean);
+  public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENT_PROP = CoreProperty
+	      .createInstanceProperty("ConcurrentProp", DataType.Object);
+  public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENT_USER = CoreProperty
+      .createInstanceProperty("ConcurrentUser", DataType.Object);
+  public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENT_VERSION = CoreProperty
+      .createInstanceProperty("ConcurrentVersion", DataType.Object);
+  public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENT_TIMESTAMP = CoreProperty
+	      .createInstanceProperty("ConcurrentTimestamp", DataType.Object);
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_LOCKING_USER = CoreProperty
       .createInstanceProperty("LockingUser", DataType.Object);
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_LOCKING_TIMESTAMP = CoreProperty
@@ -269,6 +275,9 @@ public interface PlasmaProperty extends Property {
    * @return true if this property is tagged as concurrent.
    */
   public boolean isConcurrent();
+
+  
+  public boolean isConcurrent(ConcurrencyType type);
 
   /**
    * Returns true if this property is tagged as concurrent for the given
