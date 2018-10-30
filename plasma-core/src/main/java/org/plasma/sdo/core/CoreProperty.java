@@ -387,11 +387,11 @@ public class CoreProperty implements PlasmaProperty {
   }
 
   public boolean isConcurrent(ConcurrencyType type) {
-	    Concurrent concurrent = this.property.findConcurrent();
-	    if (concurrent == null)
-	      return false;
-	    return concurrent.getType().ordinal() == type.ordinal();
-	  }
+    Concurrent concurrent = this.property.findConcurrent();
+    if (concurrent == null)
+      return false;
+    return concurrent.getType().ordinal() == type.ordinal();
+  }
 
   public boolean isConcurrent(ConcurrencyType type, ConcurrentDataFlavor dataFlavor) {
     Concurrent concurrent = this.property.findConcurrent();

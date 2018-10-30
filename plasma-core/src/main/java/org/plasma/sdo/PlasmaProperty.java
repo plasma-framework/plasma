@@ -56,15 +56,15 @@ public interface PlasmaProperty extends Property {
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_PRIKEY_PROPERTIES = CoreProperty
       .createInstanceProperty("PriKeyProperties", DataType.Object);
   public static final PlasmaProperty INSTANCE_PROPERTY_BOOLEAN_ISCONCURRENT = CoreProperty
-	      .createInstanceProperty("IsConcurrent", DataType.Boolean);
+      .createInstanceProperty("IsConcurrent", DataType.Boolean);
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENT_PROP = CoreProperty
-	      .createInstanceProperty("ConcurrentProp", DataType.Object);
+      .createInstanceProperty("ConcurrentProp", DataType.Object);
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENT_USER = CoreProperty
       .createInstanceProperty("ConcurrentUser", DataType.Object);
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENT_VERSION = CoreProperty
       .createInstanceProperty("ConcurrentVersion", DataType.Object);
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_CONCURRENT_TIMESTAMP = CoreProperty
-	      .createInstanceProperty("ConcurrentTimestamp", DataType.Object);
+      .createInstanceProperty("ConcurrentTimestamp", DataType.Object);
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_LOCKING_USER = CoreProperty
       .createInstanceProperty("LockingUser", DataType.Object);
   public static final PlasmaProperty INSTANCE_PROPERTY_OBJECT_LOCKING_TIMESTAMP = CoreProperty
@@ -276,7 +276,6 @@ public interface PlasmaProperty extends Property {
    */
   public boolean isConcurrent();
 
-  
   public boolean isConcurrent(ConcurrencyType type);
 
   /**

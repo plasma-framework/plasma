@@ -343,7 +343,7 @@ public interface PlasmaType extends Type {
    *         null if not exists
    */
   public Property findProperty(ConcurrencyType concurrencyType, ConcurrentDataFlavor dataFlavor);
-  
+
   public Property findProperty(ConcurrencyType concurrencyType);
 
   // public Property findProperty(TemporalType type, TemporalState state);
@@ -432,12 +432,13 @@ public interface PlasmaType extends Type {
    * @return the unique id for the element within its meta data repository.
    */
   public String getId();
-  
+
   /**
-   * Returns true if the type contains at least one property
-   * defined as concurrent. 
-   * @return true if the type contains at least one property
-   * defined as concurrent. 
+   * Returns true if the type contains at least one property defined as
+   * concurrent.
+   * 
+   * @return true if the type contains at least one property defined as
+   *         concurrent.
    */
   public boolean isConcurrent();
 
