@@ -609,7 +609,6 @@ class FumlProperty extends FumlElement<org.modeldriven.fuml.repository.Property>
           return sdoConcurrentStereotype.getType().ordinal() == ConcurrencyType.optimistic
               .ordinal()
               && (sdoConcurrentStereotype.getDataFlavor().ordinal() == ConcurrentDataFlavor.version
-                  .ordinal() || sdoConcurrentStereotype.getDataFlavor().ordinal() == ConcurrentDataFlavor.time
                   .ordinal());
         }
     }

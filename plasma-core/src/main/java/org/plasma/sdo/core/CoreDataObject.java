@@ -2476,84 +2476,16 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
    */
   public void reset(SnapshotMap idMap, String username) {
     if (this.getDataGraph().getChangeSummary().isCreated(this)) {
-      List<PropertyPair> props = idMap.get(this.getUUID());
-      if (props != null) {
-        for (PropertyPair pair : props) {
-          if (!pair.getProp().isReadOnly()) {
-            this.set(pair.getProp(), pair.getValue());
-          } else {
-            valueObject.put(pair.getProp().getName(), pair.getValue());
-          }
-        }
-      } else if (log.isDebugEnabled())
-        log.debug("no PK value mapped to UUID '" + uuid + "' for entity '"
-            + this.getType().getName() + "' - ignoring");
-
-      // FIXME - could be a reference to a user
-      Property originationUserProperty = ((PlasmaType) this.getType()).findProperty(
-          ConcurrencyType.origination, ConcurrentDataFlavor.user);
-      if (originationUserProperty != null)
-        valueObject.put(originationUserProperty.getName(), username);
-      else if (log.isDebugEnabled())
-        log.debug("could not find origination (username) property for type, "
-            + this.getType().getURI() + "#" + this.getType().getName());
-
-      Property originationTimestampProperty = ((PlasmaType) this.getType()).findProperty(
-          ConcurrencyType.origination, ConcurrentDataFlavor.time);
-      if (originationTimestampProperty != null) {
-        // Convert to date which is convert-able to
-        // all possible SDO 2.1 temporal data-types
-        Date dateSnapshot = new Date(idMap.getSnapshotDate().getTime());
-        // convert date to the target type
-        Object snapshot = DataConverter.INSTANCE.convert(originationTimestampProperty.getType(),
-            dateSnapshot);
-        valueObject.put(originationTimestampProperty.getName(), snapshot);
-      } else if (log.isDebugEnabled())
-        log.debug("could not find origination timestamp property for type, "
-            + this.getType().getURI() + "#" + this.getType().getName());
-
       valueObject.put(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, idMap.getSnapshotDate());
-    } else if (this.getDataGraph().getChangeSummary().isModified(this)) {
-      Property concurrencyUserProperty = ((PlasmaType) this.getType()).findProperty(
-          ConcurrencyType.optimistic, ConcurrentDataFlavor.user);
-      if (concurrencyUserProperty != null)
-        valueObject.put(concurrencyUserProperty.getName(), username);
-      else if (log.isDebugEnabled())
-        log.debug("could not find optimistic concurrency (username) property for type, "
-            + this.getType().getURI() + "#" + this.getType().getName());
-
-      Property concurrencyVersionProperty = ((PlasmaType) this.getType()).findProperty(
-          ConcurrencyType.optimistic, ConcurrentDataFlavor.version);
-      if (concurrencyVersionProperty != null)
-        valueObject.put(concurrencyVersionProperty.getName(), idMap.getSnapshotDate());
-      else if (log.isDebugEnabled())
-        log.debug("could not find optimistic concurrency version property for type, "
-            + this.getType().getURI() + "#" + this.getType().getName());
-
-      // reset the locked information to match the values in the database if the
-      // object is locked
-      if (valueObject.isFlaggedLocked()) {
-        Property lockingUserProperty = (Property) this.getType().get(
-            PlasmaProperty.INSTANCE_PROPERTY_OBJECT_LOCKING_USER);
-        if (lockingUserProperty != null)
-          valueObject.put(lockingUserProperty.getName(), username);
-        else if (log.isDebugEnabled())
-          log.debug("could not find locking user property for type, " + this.getType().getURI()
-              + "#" + this.getType().getName());
-        Property lockingTimestampProperty = (Property) this.getType().get(
-            PlasmaProperty.INSTANCE_PROPERTY_OBJECT_LOCKING_TIMESTAMP);
-        if (lockingTimestampProperty != null) {
-          // Convert to date which is convert-able to
-          // all possible SDO 2.1 temporal data-types
-          Date dateSnapshot = new Date(idMap.getSnapshotDate().getTime());
-          // convert date to the target type
-          Object snapshot = DataConverter.INSTANCE.convert(lockingTimestampProperty.getType(),
-              dateSnapshot);
-          valueObject.put(lockingTimestampProperty.getName(), snapshot);
-        } else if (log.isDebugEnabled())
-          log.debug("could not find locking timestamp property for type, "
-              + this.getType().getURI() + "#" + this.getType().getName());
+      
+      // now look for any resets for this DO
+      List<PropertyPair> pairs = idMap.get(this.getUUID());
+      if (pairs != null) {
+        for (PropertyPair pair : pairs) {
+          valueObject.put(pair.getProp().getName(), pair.getValue());
+        }
       }
+    } else if (this.getDataGraph().getChangeSummary().isModified(this)) {
 
       valueObject.put(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, idMap.getSnapshotDate());
 
