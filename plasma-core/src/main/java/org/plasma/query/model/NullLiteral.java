@@ -26,14 +26,18 @@ import org.plasma.query.visitor.QueryVisitor;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NullLiteral")
 @XmlRootElement(name = "NullLiteral")
-public class NullLiteral implements org.plasma.query.Term {
-
+public class NullLiteral extends Literal implements org.plasma.query.Literal {
+  public static String TOKEN = "__NULL__";
   public NullLiteral() {
     super();
+    this.value = TOKEN;
+    this.isNullLiteral = true;
   }
 
   public void accept(QueryVisitor visitor) {
     visitor.start(this);
     visitor.end(this);
   }
+
+
 }

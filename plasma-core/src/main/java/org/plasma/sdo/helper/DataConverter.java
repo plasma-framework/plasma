@@ -286,6 +286,8 @@ public class DataConverter {
           + " is not a data-type");
 
     Method method = javaClassToConverterFromMethodMap.get(value.getClass());
+    if (method == null)
+    	throw new IllegalArgumentException("no converter found for class: " + value.getClass().getName());
     try {
       return method.invoke(this, targetType, value);
     } catch (IllegalArgumentException e) {

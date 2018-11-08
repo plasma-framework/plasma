@@ -22,6 +22,7 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
@@ -31,12 +32,14 @@ import org.plasma.query.visitor.QueryVisitor;
 import org.plasma.sdo.helper.DataConverter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Literal", propOrder = { "value" })
+@XmlType(name = "Literal", propOrder = { "value", "isNullLiteral" })
 @XmlRootElement(name = "Literal")
-public class Literal implements org.plasma.query.Term {
+public class Literal implements org.plasma.query.Literal {
 
   @XmlValue
   protected String value;
+  @XmlAttribute 
+  protected boolean isNullLiteral = false;
 
   public Literal() {
     super();
@@ -94,7 +97,10 @@ public class Literal implements org.plasma.query.Term {
   }
 
   public static Literal valueOf(String content) {
+	  if (!"null".equalsIgnoreCase(content) && !NullLiteral.TOKEN.equalsIgnoreCase(content))
     return new Literal(content);
+	  else
+		    return new NullLiteral();
   }
 
   public static Literal valueOf(Object content) {
@@ -102,7 +108,10 @@ public class Literal implements org.plasma.query.Term {
       throw new IllegalArgumentException("expected non-null argument");
 
     if (content instanceof String)
-      return new Literal((String) content);
+  	  if (!"null".equalsIgnoreCase((String)content) && !NullLiteral.TOKEN.equalsIgnoreCase((String)content))
+  	    return new Literal((String)content);
+  		  else
+  			    return new NullLiteral();
     else if (content instanceof Date)
       return new Literal((Date) content);
     else if (content instanceof Boolean)
@@ -152,5 +161,10 @@ public class Literal implements org.plasma.query.Term {
     visitor.start(this);
     visitor.end(this);
   }
+
+@Override
+public boolean isNullLiteral() {
+	return this.isNullLiteral;
+}
 
 }
