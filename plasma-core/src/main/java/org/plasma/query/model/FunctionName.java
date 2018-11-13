@@ -417,7 +417,32 @@ public enum FunctionName {
    * 
    */
   @XmlEnumValue("weight")
-  WEIGHT("weight");
+  WEIGHT("weight"),
+  
+    @XmlEnumValue("dayofmonth")
+    DAYOFMONTH("dayofmonth"),
+    @XmlEnumValue("dayofweek")
+    DAYOFWEEK("dayofweek"),
+    @XmlEnumValue("dayofyear")
+    DAYOFYEAR("dayofyear"),
+    @XmlEnumValue("day")
+    DAY("day"),
+    @XmlEnumValue("microsecond")
+    MICROSECOND("microsecond"),
+    @XmlEnumValue("minute")
+    MINUTE("minute"),
+    @XmlEnumValue("month")
+    MONTH("month"),
+    @XmlEnumValue("monthname")
+    MONTHNAME("monthname"),
+    @XmlEnumValue("week")
+    WEEK("week"),
+    @XmlEnumValue("weekday")
+    WEEKDAY("weekday"),
+    @XmlEnumValue("weekofyear")
+    WEEKOFYEAR("weekofyear"),
+    @XmlEnumValue("year")
+    YEAR("year");
 
   private final String value;
 

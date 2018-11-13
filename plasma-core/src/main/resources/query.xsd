@@ -748,6 +748,19 @@
             <xsd:enumeration value="weight"><xsd:annotation><xsd:documentation>returns the vector space weight for a given search</xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="proximity"><xsd:annotation><xsd:documentation>returns the current query term proximity weight for a given search</xsd:documentation></xsd:annotation></xsd:enumeration>
             
+            <!-- more datatime -->
+            <xsd:enumeration value="dayofmonth"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+             <xsd:enumeration value="dayofweek"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+             <xsd:enumeration value="dayofyear"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+             <xsd:enumeration value="day"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+             <xsd:enumeration value="microsecond"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+             <xsd:enumeration value="minute"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+             <xsd:enumeration value="month"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+             <xsd:enumeration value="monthname"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+             <xsd:enumeration value="week"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="weekday"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="weekofyear"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="year"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             
 		</xsd:restriction>
 	</xsd:simpleType>

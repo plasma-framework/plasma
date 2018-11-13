@@ -300,11 +300,11 @@ public class CoreType implements PlasmaType {
         declaredProperties.put(alias, property);
       }
       if ((existing = declaredProperties.get(property.getId())) != null)
-            throw new IllegalStateException("found existing property, "
-                + existing.getContainingType().toString() + "." + existing.getName()
-                + ", already mapped to id '" + property.getId() + "' while loading property "
-                + this.toString() + "." + property.getName());
-        declaredProperties.put(property.getId(), property);
+        throw new IllegalStateException("found existing property, "
+            + existing.getContainingType().toString() + "." + existing.getName()
+            + ", already mapped to id '" + property.getId() + "' while loading property "
+            + this.toString() + "." + property.getName());
+      declaredProperties.put(property.getId(), property);
       this.declaredPropertiesList.add(property);
 
       // Cache operational (meta) properties/tags/facets as instance properties
@@ -1307,8 +1307,8 @@ public class CoreType implements PlasmaType {
 
   @Override
   public boolean isConcurrent() {
-	Boolean result = (Boolean) this.findInstancePropertyValue(this, 
-			 PlasmaProperty.INSTANCE_PROPERTY_BOOLEAN_ISCONCURRENT);  
+    Boolean result = (Boolean) this.findInstancePropertyValue(this,
+        PlasmaProperty.INSTANCE_PROPERTY_BOOLEAN_ISCONCURRENT);
     if (result != null)
       return result.booleanValue();
     else

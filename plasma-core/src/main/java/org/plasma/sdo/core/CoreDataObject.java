@@ -2477,7 +2477,7 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
   public void reset(SnapshotMap idMap, String username) {
     if (this.getDataGraph().getChangeSummary().isCreated(this)) {
       valueObject.put(CoreConstants.PROPERTY_NAME_SNAPSHOT_TIMESTAMP, idMap.getSnapshotDate());
-      
+
       // now look for any resets for this DO
       List<PropertyPair> pairs = idMap.get(this.getUUID());
       if (pairs != null) {

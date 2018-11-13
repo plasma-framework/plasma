@@ -17,8 +17,8 @@
 package org.plasma.query;
 
 /**
- *  A literal term
+ * A literal term
  */
 public interface Literal extends Term {
-	boolean isNullLiteral();
+  boolean isNullLiteral();
 }

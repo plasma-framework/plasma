@@ -28,6 +28,7 @@ import org.plasma.query.visitor.QueryVisitor;
 @XmlRootElement(name = "NullLiteral")
 public class NullLiteral extends Literal implements org.plasma.query.Literal {
   public static String TOKEN = "__NULL__";
+
   public NullLiteral() {
     super();
     this.value = TOKEN;
@@ -38,6 +39,5 @@ public class NullLiteral extends Literal implements org.plasma.query.Literal {
     visitor.start(this);
     visitor.end(this);
   }
-
 
 }

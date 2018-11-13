@@ -38,7 +38,7 @@ public class Literal implements org.plasma.query.Literal {
 
   @XmlValue
   protected String value;
-  @XmlAttribute 
+  @XmlAttribute
   protected boolean isNullLiteral = false;
 
   public Literal() {
@@ -97,10 +97,10 @@ public class Literal implements org.plasma.query.Literal {
   }
 
   public static Literal valueOf(String content) {
-	  if (!"null".equalsIgnoreCase(content) && !NullLiteral.TOKEN.equalsIgnoreCase(content))
-    return new Literal(content);
-	  else
-		    return new NullLiteral();
+    if (!"null".equalsIgnoreCase(content) && !NullLiteral.TOKEN.equalsIgnoreCase(content))
+      return new Literal(content);
+    else
+      return new NullLiteral();
   }
 
   public static Literal valueOf(Object content) {
@@ -108,10 +108,11 @@ public class Literal implements org.plasma.query.Literal {
       throw new IllegalArgumentException("expected non-null argument");
 
     if (content instanceof String)
-  	  if (!"null".equalsIgnoreCase((String)content) && !NullLiteral.TOKEN.equalsIgnoreCase((String)content))
-  	    return new Literal((String)content);
-  		  else
-  			    return new NullLiteral();
+      if (!"null".equalsIgnoreCase((String) content)
+          && !NullLiteral.TOKEN.equalsIgnoreCase((String) content))
+        return new Literal((String) content);
+      else
+        return new NullLiteral();
     else if (content instanceof Date)
       return new Literal((Date) content);
     else if (content instanceof Boolean)
@@ -162,9 +163,9 @@ public class Literal implements org.plasma.query.Literal {
     visitor.end(this);
   }
 
-@Override
-public boolean isNullLiteral() {
-	return this.isNullLiteral;
-}
+  @Override
+  public boolean isNullLiteral() {
+    return this.isNullLiteral;
+  }
 
 }
