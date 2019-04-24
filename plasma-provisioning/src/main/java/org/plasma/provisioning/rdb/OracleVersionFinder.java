@@ -21,13 +21,15 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.common.exception.ProvisioningException;
 import org.plasma.provisioning.rdb.oracle.any.sys.Version;
 import org.plasma.provisioning.rdb.oracle.any.sys.query.QVersion;
+import org.plasma.sdo.access.client.DefaultServiceContext;
 import org.plasma.sdo.access.client.JDBCPojoDataAccessClient;
 
 import commonj.sdo.DataGraph;
 
 public class OracleVersionFinder {
   private static Log log = LogFactory.getLog(OracleVersionFinder.class);
-  protected JDBCPojoDataAccessClient client = new JDBCPojoDataAccessClient();
+  protected JDBCPojoDataAccessClient client = new JDBCPojoDataAccessClient(
+      new DefaultServiceContext());
 
   public OracleVersion findVersion() {
     QVersion version = QVersion.newQuery();

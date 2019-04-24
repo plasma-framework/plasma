@@ -17,10 +17,11 @@
 package org.plasma.sdo.access.client;
 
 import org.plasma.runtime.DataAccessProviderName;
+import org.plasma.sdo.access.AccessServiceContext;
 
 public class HBasePojoDataAccessClient extends PojoDataAccessClient {
 
-  public HBasePojoDataAccessClient() {
-    super(DataAccessProviderName.HBASE);
+  public HBasePojoDataAccessClient(AccessServiceContext context) {
+    super(DataAccessProviderName.HBASE, context);
   }
 }

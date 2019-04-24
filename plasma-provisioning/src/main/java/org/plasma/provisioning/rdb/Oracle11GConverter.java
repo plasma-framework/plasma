@@ -66,6 +66,7 @@ import org.plasma.provisioning.rdb.oracle.g11.sys.query.QTable;
 import org.plasma.provisioning.rdb.oracle.g11.sys.query.QView;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.DataType;
+import org.plasma.sdo.access.client.DefaultServiceContext;
 import org.plasma.sdo.access.client.JDBCPojoDataAccessClient;
 import org.plasma.sdo.helper.PlasmaXMLHelper;
 import org.plasma.sdo.xml.DefaultOptions;
@@ -88,7 +89,8 @@ public class Oracle11GConverter extends ConverterSupport implements SchemaConver
   /** maps classes to properties */
   protected Map<Class, Map<String, Property>> classPropertyMap = new HashMap<Class, Map<String, Property>>();
   /** maps properties to physical constraints */
-  protected JDBCPojoDataAccessClient client = new JDBCPojoDataAccessClient();
+  protected JDBCPojoDataAccessClient client = new JDBCPojoDataAccessClient(
+      new DefaultServiceContext());
   protected Map<Property, ConstraintInfo[]> constraintMap = new HashMap<Property, ConstraintInfo[]>();
 
   public Oracle11GConverter(String[] schemaNames, String[] namespaces) {

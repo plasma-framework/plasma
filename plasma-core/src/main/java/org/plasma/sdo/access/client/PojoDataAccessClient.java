@@ -27,6 +27,7 @@ import org.plasma.query.Query;
 import org.plasma.runtime.DataAccessProviderName;
 import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.PlasmaNode;
+import org.plasma.sdo.access.AccessServiceContext;
 import org.plasma.sdo.access.PlasmaDataAccessService;
 import org.plasma.sdo.core.SnapshotMap;
 
@@ -40,16 +41,16 @@ public class PojoDataAccessClient extends ClientSupport implements DataAccessCli
 
   protected PlasmaDataAccessService service;
 
-  public PojoDataAccessClient() {
+  public PojoDataAccessClient(AccessServiceContext context) {
     PlasmaRuntime config = PlasmaRuntime.getInstance();
     if (config.getDefaultProviderName() != null)
       this.service = createProvider(config.getDataAccessProvider(config.getDefaultProviderName())
-          .getClassName());
+          .getClassName(), context);
   }
 
-  public PojoDataAccessClient(DataAccessProviderName providerName) {
+  public PojoDataAccessClient(DataAccessProviderName providerName, AccessServiceContext context) {
     this.service = createProvider(PlasmaRuntime.getInstance().getDataAccessProvider(providerName)
-        .getClassName());
+        .getClassName(), context);
   }
 
   public PojoDataAccessClient(PlasmaDataAccessService provider) {

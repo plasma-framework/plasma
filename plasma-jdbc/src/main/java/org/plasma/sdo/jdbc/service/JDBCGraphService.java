@@ -39,6 +39,7 @@ import org.plasma.query.bind.PlasmaQueryDataBinding;
 import org.plasma.query.model.From;
 import org.plasma.query.model.Query;
 import org.plasma.query.model.QueryValidator;
+import org.plasma.sdo.access.AccessServiceContext;
 import org.plasma.sdo.access.DataAccessException;
 import org.plasma.sdo.access.DataGraphDispatcher;
 import org.plasma.sdo.access.PlasmaDataAccessService;
@@ -53,11 +54,13 @@ import commonj.sdo.Type;
 public class JDBCGraphService implements PlasmaDataAccessService {
 
   private static Log log = LogFactory.getLog(JDBCGraphService.class);
+  private AccessServiceContext context;
 
   public JDBCGraphService() {
   }
 
-  public void initialize() {
+  public void initialize(AccessServiceContext context) {
+    this.context = context;
   }
 
   public void close() {

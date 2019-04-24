@@ -26,7 +26,8 @@ import org.plasma.sdo.core.SnapshotMap;
 import commonj.sdo.DataGraph;
 
 public interface DataAccessService {
-  public void initialize();
+
+  public void initialize(AccessServiceContext context);
 
   public void close();
 

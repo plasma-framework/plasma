@@ -21,13 +21,15 @@ import org.apache.commons.logging.LogFactory;
 import org.plasma.common.exception.ProvisioningException;
 import org.plasma.provisioning.rdb.mysql.any.GlobalVariable;
 import org.plasma.provisioning.rdb.mysql.any.query.QGlobalVariable;
+import org.plasma.sdo.access.client.DefaultServiceContext;
 import org.plasma.sdo.access.client.JDBCPojoDataAccessClient;
 
 import commonj.sdo.DataGraph;
 
 public class MySqlVersionFinder {
   private static Log log = LogFactory.getLog(MySqlVersionFinder.class);
-  protected JDBCPojoDataAccessClient client = new JDBCPojoDataAccessClient();
+  protected JDBCPojoDataAccessClient client = new JDBCPojoDataAccessClient(
+      new DefaultServiceContext());
 
   public MySqlVersion findVersion() {
     QGlobalVariable variable = QGlobalVariable.newQuery();

@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.plasma.sdo.access;
 
-package org.plasma.sdo.access.client;
+import java.util.Properties;
 
-import org.plasma.runtime.DataAccessProviderName;
-import org.plasma.runtime.PlasmaRuntime;
-import org.plasma.sdo.access.AccessServiceContext;
+/**
+ * Holds temporary state information for use within services held for the
+ * duration of a service call.
+ * 
+ * @author Scott Cinnamond
+ * @since 2.0.8
+ */
+public interface AccessServiceContext {
+  /**
+   * Frees any resources associated with this context.
+   */
+  public void close();
 
-public class JDBCPojoDataAccessClient extends PojoDataAccessClient {
-
-  public JDBCPojoDataAccessClient(AccessServiceContext context) {
-    super(context);
-    this.service = createProvider(
-        PlasmaRuntime.getInstance().getDataAccessProvider(DataAccessProviderName.JDBC)
-            .getClassName(), context);
-  }
+  public Properties getProperties();
 }

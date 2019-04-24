@@ -27,6 +27,7 @@ import org.plasma.common.exception.ErrorConstants;
 import org.plasma.common.exception.UserException;
 import org.plasma.query.MaxWildcardsExceededException;
 import org.plasma.query.Query;
+import org.plasma.sdo.access.AccessServiceContext;
 import org.plasma.sdo.access.InvalidSnapshotException;
 import org.plasma.sdo.access.LockedEntityException;
 import org.plasma.sdo.access.MaxResultsExceededException;
@@ -40,8 +41,12 @@ public class SDODataAccessClient implements DataAccessClient {
 
   private DataAccessClient serviceProxy;
 
-  public SDODataAccessClient() {
-    serviceProxy = new PojoDataAccessClient();
+  @SuppressWarnings("unused")
+  private SDODataAccessClient() {
+  }
+
+  public SDODataAccessClient(AccessServiceContext context) {
+    this.serviceProxy = new PojoDataAccessClient(context);
   }
 
   public SDODataAccessClient(DataAccessClient proxy) {

@@ -18,19 +18,25 @@ package org.plasma.sdo.access.client;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
+import org.plasma.sdo.access.AccessServiceContext;
 import org.plasma.sdo.access.DataAccessException;
 import org.plasma.sdo.access.PlasmaDataAccessService;
 
 public abstract class ClientSupport {
 
-  protected PlasmaDataAccessService createProvider(String qualifiedName) {
+  protected PlasmaDataAccessService createProvider(String qualifiedName,
+      AccessServiceContext context) {
     try {
       Class<?> providerClass = Class.forName(qualifiedName);
-      Class<?>[] argClasses = {};
-      Object[] args = {};
-      Constructor<?> constructor = providerClass.getConstructor(argClasses);
-      return (PlasmaDataAccessService) constructor.newInstance(args);
+      Class<?>[] constructorArgClasses = {};
+      Object[] constructorArgs = {};
+      Constructor<?> constructor = providerClass.getConstructor(constructorArgClasses);
+      PlasmaDataAccessService result = (PlasmaDataAccessService) constructor
+          .newInstance(constructorArgs);
+      result.initialize(context);
+      return result;
     } catch (ClassNotFoundException e) {
       throw new DataAccessException(e);
     } catch (NoSuchMethodException e) {

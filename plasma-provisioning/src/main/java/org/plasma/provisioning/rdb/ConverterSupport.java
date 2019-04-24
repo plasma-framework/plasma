@@ -26,6 +26,7 @@ import org.plasma.metamodel.Class;
 import org.plasma.metamodel.Enumeration;
 import org.plasma.metamodel.Model;
 import org.plasma.metamodel.Property;
+import org.plasma.sdo.access.client.DefaultServiceContext;
 import org.plasma.sdo.access.client.JDBCPojoDataAccessClient;
 
 public class ConverterSupport {
@@ -45,7 +46,8 @@ public class ConverterSupport {
   /** maps classes to properties */
   protected Map<Class, Map<String, Property>> classPropertyMap = new HashMap<Class, Map<String, Property>>();
 
-  protected JDBCPojoDataAccessClient client = new JDBCPojoDataAccessClient();
+  protected JDBCPojoDataAccessClient client = new JDBCPojoDataAccessClient(
+      new DefaultServiceContext());
 
   /**
    * Getting bad unicode characters in DB comments which cause sax to barf.
