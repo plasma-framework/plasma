@@ -240,11 +240,14 @@ public class PlasmaTypeHelper implements TypeHelper {
         List<PlasmaType> namespaceTypes = namespaceToTypesMap.get(uri);
         if (namespaceTypes != null) {
           if (!namespaceTypes.remove(removed))
-            log.warn("could not remove type from namespace mapping, " + qualifiedName);
+        	  if (log.isDebugEnabled())
+        	      log.debug("could not remove type from namespace mapping, " + qualifiedName);
         } else
-          log.warn("could not remove type from namespace mapping, " + qualifiedName);
+        	if (log.isDebugEnabled())
+        	      log.debug("could not remove type from namespace mapping, " + qualifiedName);
       } else
-        log.warn("could not remove type, " + qualifiedName);
+    	  if (log.isDebugEnabled())
+    	      log.debug("could not remove type, " + qualifiedName);
     } finally {
       rwl.writeLock().unlock();
     }
