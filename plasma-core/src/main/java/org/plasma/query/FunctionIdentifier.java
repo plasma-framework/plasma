@@ -13,18 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.plasma.sdo;
-
-import org.plasma.query.FunctionIdentifier;
+package org.plasma.query;
 
 /**
- * A property/value pair used for value iteration from data objects.
+ * Immutable identifier for a function within a particular application context.
+ * 
+ * @author scinnamond
+ * @since 2.0.9
  */
-public interface PlasmaValue {
-  public PlasmaProperty getProperty();
+public class FunctionIdentifier {
+  public String identifier;
 
-  public Object getValue();
+  @SuppressWarnings("unused")
+  private FunctionIdentifier() {
+  }
 
-  public FunctionIdentifier[] getFunctions();
+  public FunctionIdentifier(String identifier) {
+    super();
+    this.identifier = identifier;
+  }
+
+  public String getIdentifier() {
+    return identifier;
+  }
+
 }

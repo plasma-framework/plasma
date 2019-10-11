@@ -16,6 +16,7 @@
 
 package org.plasma.sdo.core;
 
+import org.plasma.query.FunctionIdentifier;
 import org.plasma.query.model.FunctionName;
 import org.plasma.sdo.PlasmaProperty;
 import org.plasma.sdo.PlasmaValue;
@@ -23,7 +24,7 @@ import org.plasma.sdo.PlasmaValue;
 public class CoreValue implements PlasmaValue {
   private PlasmaProperty property;
   private Object value;
-  private FunctionName[] functions;
+  private FunctionIdentifier[] functions;
 
   @SuppressWarnings("unused")
   private CoreValue() {
@@ -35,11 +36,11 @@ public class CoreValue implements PlasmaValue {
     this.value = value;
   }
 
-  public CoreValue(PlasmaProperty property, Object value, FunctionName function) {
+  public CoreValue(PlasmaProperty property, Object value, FunctionIdentifier function) {
     super();
     this.property = property;
     this.value = value;
-    this.functions = new FunctionName[] { function };
+    this.functions = new FunctionIdentifier[] { function };
   }
 
   @Override
@@ -53,7 +54,7 @@ public class CoreValue implements PlasmaValue {
   }
 
   @Override
-  public FunctionName[] getFunctions() {
+  public FunctionIdentifier[] getFunctions() {
     return functions;
   }
 

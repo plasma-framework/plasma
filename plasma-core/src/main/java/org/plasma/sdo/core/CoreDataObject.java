@@ -40,6 +40,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jaxen.JaxenException;
 import org.plasma.common.Key;
+import org.plasma.query.FunctionIdentifier;
 import org.plasma.query.model.FunctionName;
 import org.plasma.sdo.DataFlavor;
 import org.plasma.sdo.DataType;
@@ -2939,7 +2940,7 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
         if (tokens.length == 2 && FunctionName.hasName(tokens[0])) {
           property = (PlasmaProperty) type.getProperty(tokens[1]);
           Object value = this.valueObject.get(keys[i]);
-          FunctionName func = FunctionName.valueOf(tokens[0]);
+          FunctionIdentifier func = new FunctionIdentifier(tokens[0]);
           list.add(new CoreValue(property, value, func));
         }
       }
