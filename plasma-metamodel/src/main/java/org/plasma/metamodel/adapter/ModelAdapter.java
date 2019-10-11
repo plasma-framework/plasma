@@ -150,16 +150,19 @@ public class ModelAdapter implements ProvisioningModel {
       String key = pkg.getName();
       if (packageMap.containsKey(key))
         throw new PackageNameCollisionException("detected multiple (leaf) packages named '" + key
-            + "' withing the same provisioning context");
+            + "' within the same provisioning context");
       packageMap.put(key, pkg);
+    }
+    Map<String, Package> packagePhysicalMap = new HashMap<>();
+    for (Package pkg : this.leafPackages) {
       if (pkg.getAlias() != null && pkg.getAlias().getPhysicalName() != null) {
         String physicalName = pkg.getAlias().getPhysicalName();
-        key = physicalName;
-        if (packageMap.containsKey(key))
+        String key = physicalName;
+        if (packagePhysicalMap.containsKey(key))
           throw new PackageNameCollisionException(
               "detected multiple (leaf) packages with physical name '" + key
-                  + "' withing the same provisioning context");
-        packageMap.put(key, pkg);
+                  + "' within the same provisioning context");
+        packagePhysicalMap.put(key, pkg);
       }
     }
 

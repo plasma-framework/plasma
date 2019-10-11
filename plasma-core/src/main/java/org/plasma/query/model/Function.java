@@ -65,6 +65,8 @@ public class Function {
   protected List<FunctionArg> functionArgs;
   @XmlAttribute(name = "name", required = true)
   protected FunctionName name;
+  @XmlAttribute(name = "appFunctionName")
+  protected String appFunctionName;
 
   /**
    * Gets the value of the functionArgs property.
@@ -117,4 +119,24 @@ public class Function {
     this.name = value;
   }
 
+  /**
+   * Gets the value of the appFunctionName property.
+   * 
+   * @return possible object is {@link String }
+   * 
+   */
+  public String getAppFunctionName() {
+    return appFunctionName;
+  }
+
+  /**
+   * Sets the value of the appFunctionName property.
+   * 
+   * @param value
+   *          allowed object is {@link String }
+   * 
+   */
+  public void setAppFunctionName(String value) {
+    this.appFunctionName = value;
+  }
 }

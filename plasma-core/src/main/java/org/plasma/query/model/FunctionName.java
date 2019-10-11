@@ -86,6 +86,7 @@ import org.plasma.sdo.DataType;
  *     &lt;enumeration value="score"/&gt;
  *     &lt;enumeration value="terms"/&gt;
  *     &lt;enumeration value="ngrams"/&gt;
+ *     &lt;enumeration value="app_function"/&gt;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
@@ -431,7 +432,8 @@ public enum FunctionName {
   WEEK("week"), @XmlEnumValue("weekday")
   WEEKDAY("weekday"), @XmlEnumValue("weekofyear")
   WEEKOFYEAR("weekofyear"), @XmlEnumValue("year")
-  YEAR("year");
+  YEAR("year"), @XmlEnumValue("app_function")
+  APP_FUNCTION("app_function");
 
   private final String value;
 

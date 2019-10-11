@@ -546,6 +546,7 @@
             <xsd:element ref="query:FunctionArg" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="name" type="query:FunctionName" use="required" />
+        <xsd:attribute name="appFunctionName" type="xsd:string" use="optional" />
     </xsd:complexType>
 
     <xsd:element name="Function" type="query:Function"/>
@@ -762,6 +763,7 @@
             <xsd:enumeration value="weekofyear"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="year"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             
+			<xsd:enumeration value="app_function"><xsd:annotation><xsd:documentation>A catchall function name which indicates applications should refer elsewhere for the specific function name</xsd:documentation></xsd:annotation></xsd:enumeration>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="QueryLanguageValues">

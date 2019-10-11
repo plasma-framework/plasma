@@ -131,23 +131,37 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
             Class targetClass = this.classQualifiedPropertyPhysicalNameMap.get(qualifiedName);
             if (targetClass == null)
               throw new ProvisioningException("no target class found for, " + qualifiedName);
-            // not that we know its a reference prop, tweak
-            // its name and type
-            String name = NameUtils.firstToLowerCase(targetClass.getName());
-            int count = countPropertiesByLogicalNamePrefix(clss, name);
-            if (count > 0)
-              name += String.valueOf(count);
-            prop.setName(name);
+            // now that we know its a reference prop, tweak
+            // its name and type if necessary
+            if (info.getConstraint().getName() != null) {
+              String propName = NameUtils.toCamelCase(info.getConstraint().getName());
+              propName = NameUtils.firstToLowerCase(propName);
+              int count = countPropertiesByLogicalNamePrefix(clss, propName);
+              if (count > 0) {
+                propName += String.valueOf(count);
+                prop.setName(propName);
+              } else {
+                prop.setName(propName);
+              }
+            } else {
+              String propName = NameUtils.firstToLowerCase(targetClass.getName());
+              int count = countPropertiesByLogicalNamePrefix(clss, propName);
+              if (count > 0)
+                propName += String.valueOf(count);
+              prop.setName(propName);
+            }
             TypeRef typeRef = new ClassRef();
             typeRef.setName(targetClass.getName());
             typeRef.setUri(targetClass.getUri());
             prop.setType(typeRef);
+            if (log.isDebugEnabled())
+              log.debug("created (FK) reference " + clss.getName() + "." + prop.getName());
 
             Property targetPkProp = this.propertyQualifiedPriKeyConstrainatNameMap
                 .get(qualifiedName);
 
             String oppositeName = NameUtils.firstToLowerCase(clss.getName());
-            count = countPropertiesByLogicalNamePrefix(targetClass, oppositeName);
+            int count = countPropertiesByLogicalNamePrefix(targetClass, oppositeName);
             if (count > 0)
               oppositeName += String.valueOf(count);
 
@@ -171,7 +185,7 @@ public class MySql55Converter extends ConverterSupport implements SchemaConverte
   private int countPropertiesByLogicalNamePrefix(Class clss, String namePrefix) {
     int result = 0;
     for (Property prop : clss.getProperties())
-      if (prop.getName().endsWith(namePrefix))
+      if (prop.getName().startsWith(namePrefix))
         result++;
     return result;
   }
