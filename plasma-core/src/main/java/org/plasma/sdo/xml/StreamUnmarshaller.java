@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import javanet.staxutils.events.EventAllocator;
+import javanet.staxutils.events.NamespaceEvent;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
@@ -90,6 +91,7 @@ public class StreamUnmarshaller extends Unmarshaller {
   private String locationURI;
   private Timestamp snapshotDate = new Timestamp((new Date()).getTime());
   private StringBuilder charbuf = new StringBuilder();
+  private Map<String, String> nsMap;
 
   public StreamUnmarshaller(XMLOptions options, String locationURI) {
     super(UnmarshallerFlavor.STAX);
@@ -223,7 +225,11 @@ public class StreamUnmarshaller extends Unmarshaller {
           dataObject = (PlasmaDataObject) dataGraph.createRootObject(target.getType());
         } else {
           PlasmaDataObject parent = source.getDataObject();
+          if (target.getType().equals(target.getSource().getType()))
           dataObject = (PlasmaDataObject) parent.createDataObject(target.getSource());
+          else
+        	  dataObject = (PlasmaDataObject) parent.createDataObject(target.getSource(), target.getSource().getType());
+        	  
         }
         target.setDataObject(dataObject);
 
@@ -324,6 +330,13 @@ public class StreamUnmarshaller extends Unmarshaller {
             log.debug("unmarshaling root: " + type.getURI() + "#" + type.getName());
           root = new StreamObject(type, name, event.getLocation());
           stack.push(root);
+          Iterator<?> nsIter = event.asStartElement().getNamespaces();
+          while (nsIter.hasNext()) {
+        	  NamespaceEvent nsEvent = (NamespaceEvent)nsIter.next();
+        	  if (this.nsMap == null)
+        		  this.nsMap = new HashMap<>();
+        	  this.nsMap.put(nsEvent.getName().getLocalPart(), nsEvent.getValue());
+          }
         } else {
           StreamObject sreamObject = (StreamObject) stack.peek();
           PlasmaType type = sreamObject.getType();
@@ -344,9 +357,13 @@ public class StreamUnmarshaller extends Unmarshaller {
             // The source is a reference property but we don't know at this
             // point
             // whether its a reference object.
+            PlasmaType streamType = (PlasmaType)property.getType();
+            PlasmaType subType = this.findXsiType(event);
+            if (subType != null)
+            	streamType = subType;
 
             // Push the new DO so we can value its contents on subsequent events
-            stack.push(new StreamObject((PlasmaType) property.getType(), property, name, event
+            stack.push(new StreamObject(streamType, property, name, event
                 .getLocation()));
           }
         }
@@ -566,6 +583,26 @@ public class StreamUnmarshaller extends Unmarshaller {
           + "' for type " + type.getURI() + "#" + type.getName();
       throw new UnmarshallerException(msg);
     }
+  }
+  
+  @SuppressWarnings("unchecked")
+  private PlasmaType findXsiType(XMLEvent event)  {
+     Iterator<Attribute> iter = event.asStartElement().getAttributes();
+    while (iter.hasNext()) {
+      Attribute attrib = (Attribute) iter.next();
+      QName attribName = attrib.getName();
+      String localPart = attribName.getLocalPart();
+      if (XMLConstants.XMLSCHEMA_INSTANCE_NAMESPACE_URI.equals(attribName.getNamespaceURI())) {
+    	  if ("type".equals(localPart) && attrib.getValue() != null) {
+ 			  String[] tokens = attrib.getValue().split(":");
+			  if (tokens != null && tokens.length == 2) {
+			      String uri = this.nsMap.get(tokens[0]);
+			      return (PlasmaType)PlasmaTypeHelper.INSTANCE.getType(uri, tokens[1]);
+			  }
+     	  }
+      }
+    }
+    return null;
   }
 
   private PlasmaProperty getPropertyByLocalName(XMLEvent event, PlasmaType type, String localName)

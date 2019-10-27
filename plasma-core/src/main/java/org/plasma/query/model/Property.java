@@ -571,6 +571,10 @@ public class Property extends AbstractProperty implements StringDataProperty, In
       if (this.getFunctions().size() > 0) {
         for (Function func : this.getFunctions()) {
           buf.append(func.getName());
+          if (func.getAppFunctionName() != null) {
+        	  buf.append(".");
+        	  buf.append(func.getAppFunctionName());
+          }
           buf.append("(");
           int i = 0;
           for (FunctionArg arg : func.getFunctionArgs()) {
