@@ -228,7 +228,7 @@ public class StreamUnmarshaller extends Unmarshaller {
           if (target.getType().equals(target.getSource().getType()))
           dataObject = (PlasmaDataObject) parent.createDataObject(target.getSource());
           else
-        	  dataObject = (PlasmaDataObject) parent.createDataObject(target.getSource(), target.getSource().getType());
+        	  dataObject = (PlasmaDataObject) parent.createDataObject(target.getSource(), target.getType());
         	  
         }
         target.setDataObject(dataObject);
