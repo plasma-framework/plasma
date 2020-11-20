@@ -647,8 +647,8 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
   @Override
   public void detach() {
 
-	if (this.dataGraph == null)
-		throw new IllegalStateException("this data object alrteady detached");
+    if (this.dataGraph == null)
+      throw new IllegalStateException("this data object alrteady detached");
     // collect the containment graph in a flat list and just
     // remove data graph of entire containment hierarchy,
     // not the containment property etc... as this is

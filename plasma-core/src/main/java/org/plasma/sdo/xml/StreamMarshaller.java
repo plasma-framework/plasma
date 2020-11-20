@@ -178,13 +178,13 @@ public class StreamMarshaller extends Marshaller {
       writer.writeAttribute("xsi", XMLConstants.XMLSCHEMA_INSTANCE_NAMESPACE_URI, "schemaLocation",
           this.document.getSchemaLocation());
     if (this.namespaceMap != null) {
-    	Iterator<String> iter = this.namespaceMap.keySet().iterator();
-    	while (iter.hasNext()) {
-    		String prefix = iter.next();
-    		String namespace = this.namespaceMap.get(prefix);
-    		writer.writeAttribute("xmlns", namespace, prefix, namespace);
-    	}
-    }    	
+      Iterator<String> iter = this.namespaceMap.keySet().iterator();
+      while (iter.hasNext()) {
+        String prefix = iter.next();
+        String namespace = this.namespaceMap.get(prefix);
+        writer.writeAttribute("xmlns", namespace, prefix, namespace);
+      }
+    }
   }
 
   private String findEncoding() {
@@ -213,7 +213,7 @@ public class StreamMarshaller extends Marshaller {
       else
         writer.writeStartDocument(this.document.getXMLVersion());
     }
-    
+
     NamespaceVisitor nsVis = new NamespaceVisitor();
     ((PlasmaDataObject) this.document.getRootObject()).accept(nsVis);
     this.namespaceMap = nsVis.getResult();
@@ -242,19 +242,20 @@ public class StreamMarshaller extends Marshaller {
   protected String fromObject(Type sourceType, Object value) {
     return DataConverter.INSTANCE.toString(sourceType, value);
   }
-  
+
   class NamespaceVisitor implements PlasmaDataGraphVisitor {
-	  private Map<String, String> result = new HashMap<>();
-	@Override
-	public void visit(DataObject target, DataObject source,
-			String sourcePropertyName, int level) {
-		PlasmaType type = (PlasmaType)target.getType();
-		String packageName = type.getPackageName().toLowerCase();
-		result.put(packageName, type.getURI());
- 	}
-	public Map<String, String> getResult() {
-		return result;
-	}	
+    private Map<String, String> result = new HashMap<>();
+
+    @Override
+    public void visit(DataObject target, DataObject source, String sourcePropertyName, int level) {
+      PlasmaType type = (PlasmaType) target.getType();
+      String packageName = type.getPackageName().toLowerCase();
+      result.put(packageName, type.getURI());
+    }
+
+    public Map<String, String> getResult() {
+      return result;
+    }
   }
 
   class EventVisitor implements PlasmaDataGraphEventVisitor {
@@ -365,17 +366,18 @@ public class StreamMarshaller extends Marshaller {
     }
 
     // create XSI type on demand for containment refs
-    // FIXME: 
-    if (externKeyCount > 0 || (sourceProperty != null && !targetType.equals(sourceProperty.getType()))) {
-    	// SDO namespaces are necessary in some cases
-        // to determine exact XSI type to unmarshal. Can't determine
-        // this from the property type on unmarshalling.
-    	String packageName = targetType.getPackageName().toLowerCase();
-    	//FIXME: use package local name if exists
-        writer.writeAttribute("xsi", XMLConstants.XMLSCHEMA_INSTANCE_NAMESPACE_URI, "type",
-        		packageName + ":" + targetType.getName());
+    // FIXME:
+    if (externKeyCount > 0
+        || (sourceProperty != null && !targetType.equals(sourceProperty.getType()))) {
+      // SDO namespaces are necessary in some cases
+      // to determine exact XSI type to unmarshal. Can't determine
+      // this from the property type on unmarshalling.
+      String packageName = targetType.getPackageName().toLowerCase();
+      // FIXME: use package local name if exists
+      writer.writeAttribute("xsi", XMLConstants.XMLSCHEMA_INSTANCE_NAMESPACE_URI, "type",
+          packageName + ":" + targetType.getName());
     }
-    
+
     writer.writeAttribute(SchemaUtil.getSerializationAttributeName(),
         ((PlasmaDataObject) dataObject).getUUIDAsString());
 
