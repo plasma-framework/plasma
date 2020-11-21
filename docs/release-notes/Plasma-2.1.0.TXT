@@ -1,7 +1,7 @@
 Release Notes
 
-Plasma 2.0.9 Release Notes
-Plasma 2.0.9 is a production release of Plasma.
+Plasma 2.1.0 Release Notes
+Plasma 2.1.0 is a production release of Plasma.
 
 The full list of changes can be found in our issue management system github, and is reproduced below.
 
