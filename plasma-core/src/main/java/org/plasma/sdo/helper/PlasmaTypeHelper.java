@@ -21,16 +21,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jena.ext.com.google.common.cache.CacheBuilder;
+import org.apache.jena.ext.com.google.common.cache.CacheLoader;
+import org.apache.jena.ext.com.google.common.cache.LoadingCache;
+import org.apache.jena.ext.com.google.common.cache.RemovalListener;
+import org.apache.jena.ext.com.google.common.cache.RemovalNotification;
+import org.plasma.runtime.ConfigurationException;
+import org.plasma.runtime.PlasmaRuntime;
 import org.plasma.sdo.PlasmaDataObjectConstants;
 import org.plasma.sdo.PlasmaDataObjectException;
 import org.plasma.sdo.PlasmaType;
 import org.plasma.sdo.core.CoreType;
 import org.plasma.sdo.repository.Classifier;
-import org.plasma.sdo.repository.InvalidClassifierNameException;
 import org.plasma.sdo.repository.PlasmaRepository;
 import org.plasma.sdo.repository.Stereotype;
 
@@ -47,13 +54,82 @@ import commonj.sdo.helper.TypeHelper;
 public class PlasmaTypeHelper implements TypeHelper {
 
   private static Log log = LogFactory.getLog(PlasmaTypeHelper.class);
-  static public volatile PlasmaTypeHelper INSTANCE = initializeInstance();
+  private static volatile PlasmaTypeHelper INSTANCE = initializeInstance();
 
-  private Map<String, PlasmaType> namespaceQualifiedNameToTypeMap = new HashMap<String, PlasmaType>();
-  private Map<String, List<PlasmaType>> namespaceToTypesMap = new HashMap<String, List<PlasmaType>>();
-  private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-
+  private LoadingCache<String, Type> namespaceQualifiedNameToTypeCache;
+  private LoadingCache<String, List<Type>> namespaceToTypesCache;
+  private Map<String, String> qualifiedAliasToLogicalNameMap = new HashMap<>();
+  
   private PlasmaTypeHelper() {
+	  int max = 3000;
+	  int timeout = 30;
+	  List<org.plasma.runtime.Property> configProps = 
+			  PlasmaRuntime.getInstance().getSDO().getProperties();
+	  if (configProps != null)
+		  for (org.plasma.runtime.Property prop : configProps) {
+			  if (prop.getName().equals("org.plasma.sdo.type.cache.max"))
+				  try {
+					  max = Integer.parseInt(prop.getValue());
+				  }
+			      catch (NumberFormatException e) {
+			    	  throw new ConfigurationException(e);
+			      }
+			  if (prop.getName().equals("org.plasma.sdo.type.cache.timeout"))
+				  try {
+					  timeout = Integer.parseInt(prop.getValue());
+				  }
+			      catch (NumberFormatException e) {
+			    	  throw new ConfigurationException(e);
+			      }
+		  }
+	  this.namespaceQualifiedNameToTypeCache = CacheBuilder.newBuilder().maximumSize(max)
+	     .removalListener(new RemovalListener<String, Type>() {
+			@Override
+			public void onRemoval(RemovalNotification<String, Type> notification) {
+				if (log.isDebugEnabled())
+					log.debug("removed: " + notification.getKey() + " reason: " + notification.getCause());
+ 			}	    	 
+	     }).expireAfterAccess(timeout, TimeUnit.SECONDS).build(new CacheLoader<String, Type>(){
+			@Override
+			public Type load(String namespaceQualifiedName) throws Exception {
+				String qualifiedLogicalName = namespaceQualifiedName;
+				if (qualifiedAliasToLogicalNameMap.containsKey(qualifiedLogicalName))
+					qualifiedLogicalName = qualifiedAliasToLogicalNameMap.get(qualifiedLogicalName);
+				String[] tokens = qualifiedLogicalName.split("#");
+				CoreType result = new CoreType(tokens[0], tokens[1]);
+				if (!result.getName().equals(tokens[1])) {
+					String aliasQualifiedName = tokens[0] + "#" + result.getName();
+					qualifiedAliasToLogicalNameMap.put(aliasQualifiedName, qualifiedLogicalName);
+				}
+				String qualifiedPhysicalName = findQualifiedPhysicalName(result);
+				if (qualifiedPhysicalName != null) {
+					qualifiedAliasToLogicalNameMap.put(qualifiedPhysicalName, qualifiedLogicalName);
+				}
+				return result;
+			}});
+	  this.namespaceToTypesCache = CacheBuilder.newBuilder().maximumSize(max)
+	     .removalListener(new RemovalListener<String, List<Type>>() {
+			@Override
+			public void onRemoval(RemovalNotification<String, List<Type>> notification) {
+				if (log.isDebugEnabled())
+					log.debug("removed: " + notification.getKey() + " reason: " + notification.getCause());
+ 			}	    	 
+	     }).expireAfterAccess(timeout, TimeUnit.SECONDS).build(new CacheLoader<String, List<Type>>(){
+			@Override
+			public List<Type> load(String uri) throws Exception {
+			    List<Type> result = new ArrayList<Type>();
+			    List<Classifier> list = PlasmaRepository.getInstance().getClassifiers(uri);
+			    for (Classifier classifier : list) {
+			      if (classifier instanceof Stereotype) {
+			        log.warn("ignoring stereotype: " + classifier.getName());
+			        continue;
+			      }
+			      Type type = getType(uri, classifier.getName());
+			      result.add(type);
+			    }
+			    return result;
+			}});
+
   }
 
   private static synchronized PlasmaTypeHelper initializeInstance() {
@@ -139,49 +215,13 @@ public class PlasmaTypeHelper implements TypeHelper {
    *         found.
    */
   public Type getType(String uri, String typeName) {
-    String qualifiedName = uri + "#" + typeName;
-    // rwl.readLock().lock();
-    PlasmaType result = namespaceQualifiedNameToTypeMap.get(qualifiedName);
-    if (result == null) {
-      // if (log.isDebugEnabled())
-      // log.debug("cache miss: " + qualifiedName);
-      // rwl.readLock().unlock();
-      rwl.writeLock().lock();
-      try {
-        result = namespaceQualifiedNameToTypeMap.get(qualifiedName);
-        if (result == null) {
-          try {
-            result = new CoreType(uri, typeName);
-          } catch (InvalidClassifierNameException e) {
-            log.warn(e.getMessage(), e);
-            return null;
-          }
-
-          namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
-          // New type could have a name based on config type-binding
-          // also map by new logical name if exists
-          if (!result.getName().equals(typeName)) {
-            qualifiedName = uri + "#" + result.getName();
-            namespaceQualifiedNameToTypeMap.put(qualifiedName, result);
-          }
-
-          String qualifiedPhysicalName = getQualifiedPhysicalName(result);
-          if (qualifiedPhysicalName != null)
-            namespaceQualifiedNameToTypeMap.put(qualifiedPhysicalName, result);
-
-          List<PlasmaType> namespaceTypes = namespaceToTypesMap.get(uri);
-          if (namespaceTypes == null)
-            namespaceTypes = new ArrayList<PlasmaType>();
-          namespaceTypes.add(result);
-
-          // rwl.readLock().lock(); // downgrade to read
-        }
-      } finally {
-        rwl.writeLock().unlock(); // Unlock write, still hold read
-      }
-    }
-    return result;
-  }
+	  String qualifiedName = uri + "#" + typeName;
+	  try {
+		return namespaceQualifiedNameToTypeCache.get(qualifiedName);
+	} catch (ExecutionException e) {
+		throw new PlasmaDataObjectException(e);
+ 	}
+   }
 
   /**
    * Return the Type specified by physical typeName with the given physical uri,
@@ -198,12 +238,11 @@ public class PlasmaTypeHelper implements TypeHelper {
    */
   public Type findTypeByPhysicalName(String uriPhisicalName, String typePhysicalName) {
     String qualifiedPhysicalName = uriPhisicalName + "#" + typePhysicalName;
-    rwl.readLock().lock();
-    try {
-      return namespaceQualifiedNameToTypeMap.get(qualifiedPhysicalName);
-    } finally {
-      rwl.readLock().unlock(); // Unlock read
-    }
+	  try {
+		return namespaceQualifiedNameToTypeCache.get(qualifiedPhysicalName);
+	} catch (ExecutionException e) {
+		throw new PlasmaDataObjectException(e);
+	}
   }
 
   /**
@@ -230,25 +269,7 @@ public class PlasmaTypeHelper implements TypeHelper {
     String qualifiedName = uri + "#" + typeName;
     if (log.isDebugEnabled())
       log.debug("releasing type: " + qualifiedName);
-    rwl.writeLock().lock();
-    try {
-      PlasmaType removed = namespaceQualifiedNameToTypeMap.remove(qualifiedName);
-      if (removed != null) {
-        String physicalName = getQualifiedPhysicalName(removed);
-        if (physicalName != null)
-          namespaceQualifiedNameToTypeMap.remove(physicalName);
-        List<PlasmaType> namespaceTypes = namespaceToTypesMap.get(uri);
-        if (namespaceTypes != null) {
-          if (!namespaceTypes.remove(removed))
-            if (log.isDebugEnabled())
-              log.debug("could not remove type from namespace mapping, " + qualifiedName);
-        } else if (log.isDebugEnabled())
-          log.debug("could not remove type from namespace mapping, " + qualifiedName);
-      } else if (log.isDebugEnabled())
-        log.debug("could not remove type, " + qualifiedName);
-    } finally {
-      rwl.writeLock().unlock();
-    }
+    namespaceQualifiedNameToTypeCache.invalidate(qualifiedName);
   }
 
   /**
@@ -289,18 +310,11 @@ public class PlasmaTypeHelper implements TypeHelper {
    * @return the Type instances specified by the given uri.
    */
   public List<Type> getTypes(String uri) {
-    List<Type> result = new ArrayList<Type>();
-    List<Classifier> list = PlasmaRepository.getInstance().getClassifiers(uri);
-    for (Classifier classifier : list) {
-      if (classifier instanceof Stereotype) {
-        log.warn("ignoring stereotype: " + classifier.getName());
-        continue;
-      }
-
-      Type type = getType(uri, classifier.getName());
-      result.add(type);
-    }
-    return result;
+	try {
+	    return namespaceToTypesCache.get(uri);
+	} catch (ExecutionException e) {
+		throw new PlasmaDataObjectException(e);
+ 	}
   }
 
   private String getQualifiedName(PlasmaType type) {
@@ -316,7 +330,7 @@ public class PlasmaTypeHelper implements TypeHelper {
    * @return the qualified physical name for the given type or null if either
    *         the namespace physical name OR type physical name are not found.
    */
-  private String getQualifiedPhysicalName(PlasmaType type) {
+  private String findQualifiedPhysicalName(PlasmaType type) {
     String uriPhysicalName = type.getURIPhysicalName();
     if (uriPhysicalName == null)
       return null;

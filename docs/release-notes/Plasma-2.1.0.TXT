@@ -12,12 +12,11 @@ Major Changes
 N/A
  
 Bugs
-[Issue #111] - Check for already detached in CoreDataObject.detach() 
-
+N/A
+ 
 Improvements
-[Issue #112] - Add Catch all Function Name to Query Model 
-[Issue #113] - Support Multiple Namespaces for Stream Marshaling/Unmarshaling
-
+[Issue #127] - Add Guava Caching to PlasmaTypeHelper 
+ 
 New Features
 N/A
 
