@@ -32,7 +32,7 @@ import org.plasma.query.visitor.QueryVisitor;
 import org.plasma.sdo.helper.DataConverter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Literal", propOrder = { "value", "isNullLiteral" })
+@XmlType(name = "Literal", propOrder = { "value", "isNullLiteral", "delimiter" })
 @XmlRootElement(name = "Literal")
 public class Literal implements org.plasma.query.Literal {
 
@@ -40,6 +40,8 @@ public class Literal implements org.plasma.query.Literal {
   protected String value;
   @XmlAttribute
   protected boolean isNullLiteral = false;
+  @XmlAttribute
+  protected String delimiter;
 
   public Literal() {
     super();
@@ -166,6 +168,16 @@ public class Literal implements org.plasma.query.Literal {
   @Override
   public boolean isNullLiteral() {
     return this.isNullLiteral;
+  }
+
+  @Override
+  public String getDelimiter() {
+    return delimiter;
+  }
+
+  @Override
+  public void setDelimiter(String delimiter) {
+    this.delimiter = delimiter;
   }
 
 }

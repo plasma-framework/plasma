@@ -21,4 +21,8 @@ package org.plasma.query;
  */
 public interface Literal extends Term {
   boolean isNullLiteral();
+
+  String getDelimiter();
+
+  void setDelimiter(String delimiter);
 }
