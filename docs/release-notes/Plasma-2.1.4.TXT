@@ -15,7 +15,7 @@ Bugs
 N/A
  
 Improvements
-[Issue #133] - Integrate EHCache for Type Cache
+[Issue #136] - Bump Version to 2.1.4
  
 New Features
 N/A
