@@ -19,6 +19,7 @@ package org.plasma.sdo.core;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -94,11 +95,6 @@ public class CoreType implements PlasmaType {
    * not derivable from the above map which could have duplicate values.
    */
   private List<Property> declaredPropertiesList;
-
-  /**
-   * Cache for declared and derived properties
-   */
-  private List<Property> allPropertiesList;
 
   private String artifactURI;
   private String namespaceURI;
@@ -216,16 +212,23 @@ public class CoreType implements PlasmaType {
     return this.qname.toString();
   }
 
+  private boolean propertiesLoaded() {
+    return this.declaredPropertiesMap != null;
+  }
+
   private void lazyLoadProperties() {
     synchronized (this) {
-      if (this.declaredPropertiesMap == null) {
+      if (!propertiesLoaded()) {
         _lazyLoadProperties();
       }
     }
   }
 
   private void _lazyLoadProperties() {
-    Map<String, PlasmaProperty> declaredProperties = new HashMap<String, PlasmaProperty>();
+    if (log.isDebugEnabled())
+      log.debug(this + " start lazy load");
+    Map<String, PlasmaProperty> tempDeclaredPropertiesMap = new HashMap<String, PlasmaProperty>();
+    List<Property> tempDeclaredPropertiesList = new ArrayList<>();
     this.declaredPropertiesList = new ArrayList<Property>();
 
     this.instancePropertiesMap = new HashMap<PlasmaProperty, Object>();
@@ -288,24 +291,26 @@ public class CoreType implements PlasmaType {
 
       PlasmaProperty property = new CoreProperty((CoreType) propertyType, prop, this);
 
-      declaredProperties.put(property.getName(), property);
+      tempDeclaredPropertiesMap.put(property.getName(), property);
       PlasmaProperty existing = null;
       for (String alias : property.getAliasNames()) {
-        if ((existing = declaredProperties.get(alias)) != null)
+        if ((existing = tempDeclaredPropertiesMap.get(alias)) != null)
           if (!existing.getName().equals(property.getName()))
             throw new IllegalStateException("found existing property, "
                 + existing.getContainingType().toString() + "." + existing.getName()
                 + ", already mapped to alias '" + alias + "' while loading property "
                 + this.toString() + "." + property.getName());
-        declaredProperties.put(alias, property);
+        tempDeclaredPropertiesMap.put(alias, property);
       }
-      if ((existing = declaredProperties.get(property.getId())) != null)
+      if ((existing = tempDeclaredPropertiesMap.get(property.getId())) != null)
         throw new IllegalStateException("found existing property, "
             + existing.getContainingType().toString() + "." + existing.getName()
             + ", already mapped to id '" + property.getId() + "' while loading property "
             + this.toString() + "." + property.getName());
-      declaredProperties.put(property.getId(), property);
-      this.declaredPropertiesList.add(property);
+      tempDeclaredPropertiesMap.put(property.getId(), property);
+      tempDeclaredPropertiesList.add(property);
+      if (log.isDebugEnabled())
+        log.debug(this + " lazy loaded " + property);
 
       // Cache operational (meta) properties/tags/facets as instance properties
       // on Type for quick access
@@ -366,8 +371,11 @@ public class CoreType implements PlasmaType {
       }
 
     }
+    this.declaredPropertiesList = tempDeclaredPropertiesList;
     // finally set the volatile variable
-    this.declaredPropertiesMap = declaredProperties;
+    this.declaredPropertiesMap = tempDeclaredPropertiesMap;
+    if (log.isDebugEnabled())
+      log.debug(this + " end lazy load");
   }
 
   /**
@@ -793,7 +801,7 @@ public class CoreType implements PlasmaType {
       }
     }
 
-    return this.baseTypes;
+    return Collections.unmodifiableList(this.baseTypes);
   }
 
   private void initBaseTypes() {
@@ -844,7 +852,7 @@ public class CoreType implements PlasmaType {
       }
     }
 
-    return this.subTypes;
+    return Collections.unmodifiableList(this.subTypes);
 
   }
 
@@ -891,9 +899,9 @@ public class CoreType implements PlasmaType {
    * @return the Properties declared in this Type.
    */
   public List<Property> getDeclaredProperties() {
-    if (this.declaredPropertiesList == null)
+    if (!this.propertiesLoaded())
       lazyLoadProperties();
-    return this.declaredPropertiesList;
+    return Collections.unmodifiableList(this.declaredPropertiesList);
   }
 
   /**
@@ -919,7 +927,7 @@ public class CoreType implements PlasmaType {
   }
 
   public List<Property> getInstanceProperties() {
-    if (this.declaredPropertiesMap == null)
+    if (!this.propertiesLoaded())
       lazyLoadProperties();
 
     Iterator<PlasmaProperty> iter = this.instancePropertiesMap.keySet().iterator();
@@ -953,16 +961,12 @@ public class CoreType implements PlasmaType {
    * @see Property#getContainingType
    */
   public List<Property> getProperties() {
-    if (this.allPropertiesList == null) {
-      synchronized (this) {
-        if (this.allPropertiesList == null) {
-          this.allPropertiesList = new ArrayList<>();
-          collectDeclaredProperties(this, this.allPropertiesList);
-        }
-      }
-    }
+    if (!this.propertiesLoaded())
+      lazyLoadProperties();
+    List<Property> result = new ArrayList<>();
+    collectDeclaredProperties(this, result);
 
-    return this.allPropertiesList;
+    return result;
   }
 
   /**
@@ -975,13 +979,13 @@ public class CoreType implements PlasmaType {
    * @see DataObject#get(Property)
    */
   public Object get(Property property) {
-    if (this.declaredPropertiesMap == null)
+    if (!this.propertiesLoaded())
       lazyLoadProperties();
     return this.instancePropertiesMap.get(property);
   }
 
   public List<Object> search(Property property) {
-    if (this.declaredPropertiesMap == null)
+    if (!this.propertiesLoaded())
       lazyLoadProperties();
     List<Object> result = new ArrayList<Object>();
     this.collectInstancePropertyValues(this, property, result);
@@ -1094,7 +1098,7 @@ public class CoreType implements PlasmaType {
 
   private Property findDeclaredProperty(PlasmaType currentType, String propertyName) {
     CoreType currentCoreType = (CoreType) currentType;
-    if (currentCoreType.declaredPropertiesMap == null)
+    if (currentCoreType.propertiesLoaded())
       currentCoreType.lazyLoadProperties();
 
     Property result = currentCoreType.declaredPropertiesMap.get(propertyName);
@@ -1114,7 +1118,7 @@ public class CoreType implements PlasmaType {
   private Property findDeclaredProperty(PlasmaType currentType, ConcurrencyType concurrencyType,
       ConcurrentDataFlavor dataFlavor) {
     CoreType currentCoreType = (CoreType) currentType;
-    if (currentCoreType.declaredPropertiesMap == null)
+    if (currentCoreType.propertiesLoaded())
       currentCoreType.lazyLoadProperties();
     Property result = null;
     for (Property property : getDeclaredProperties()) {
@@ -1317,7 +1321,7 @@ public class CoreType implements PlasmaType {
 
   private Object findInstancePropertyValue(PlasmaType currentType, PlasmaProperty instanceProp) {
     CoreType currentCoreType = (CoreType) currentType;
-    if (currentCoreType.declaredPropertiesMap == null)
+    if (currentCoreType.propertiesLoaded())
       currentCoreType.lazyLoadProperties();
 
     Object result = currentCoreType.get(instanceProp);

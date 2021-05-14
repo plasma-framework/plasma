@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,6 +50,7 @@ public class PlasmaTypeHelper implements TypeHelper {
 
   private static Log log = LogFactory.getLog(PlasmaTypeHelper.class);
   public static volatile PlasmaTypeHelper INSTANCE = initializeInstance();
+  private ReadWriteLock lock = new ReentrantReadWriteLock();
 
   private PlasmaCacheDelegate<PlasmaType> namespaceQualifiedNameToTypeCache;
 
@@ -105,30 +108,56 @@ public class PlasmaTypeHelper implements TypeHelper {
   }
 
   private Type getType(String qualifiedName) {
+    lock.readLock().lock();
     PlasmaType result = null;
-    if (namespaceQualifiedNameToTypeCache != null)
+    if (namespaceQualifiedNameToTypeCache != null) {
       result = namespaceQualifiedNameToTypeCache.getObject(qualifiedName);
+    }
     if (result == null) {
-      String qualifiedLogicalName = qualifiedName;
-      if (qualifiedAliasToLogicalNameMap.containsKey(qualifiedLogicalName))
-        qualifiedLogicalName = qualifiedAliasToLogicalNameMap.get(qualifiedLogicalName);
-      String[] tokens = qualifiedLogicalName.split("#");
+      lock.readLock().unlock();
+      lock.writeLock().lock();
       try {
-        result = new CoreType(tokens[0], tokens[1]);
-      } catch (InvalidClassifierNameException e) {
-        log.warn(e.getMessage(), e);
-        return null;
+        if (namespaceQualifiedNameToTypeCache != null) {
+          result = namespaceQualifiedNameToTypeCache.getObject(qualifiedName);
+        }
+        if (result == null) { // recheck
+          result = createAndCacheType(qualifiedName);
+        }
+        lock.readLock().lock(); // downgrade
+      } finally {
+        lock.writeLock().unlock(); // still holds read
       }
-      if (namespaceQualifiedNameToTypeCache != null)
-        namespaceQualifiedNameToTypeCache.putObject(qualifiedName, result);
-      if (!result.getName().equals(tokens[1])) {
-        String aliasQualifiedName = tokens[0] + "#" + result.getName();
-        qualifiedAliasToLogicalNameMap.put(aliasQualifiedName, qualifiedLogicalName);
-      }
-      String qualifiedPhysicalName = findQualifiedPhysicalName(result);
-      if (qualifiedPhysicalName != null) {
-        qualifiedAliasToLogicalNameMap.put(qualifiedPhysicalName, qualifiedLogicalName);
-      }
+    }
+    try {
+      // noop
+    } finally {
+      lock.readLock().unlock();
+    }
+    return result;
+  }
+
+  private PlasmaType createAndCacheType(String qualifiedName) {
+    PlasmaType result = null;
+    String qualifiedLogicalName = qualifiedName;
+    if (qualifiedAliasToLogicalNameMap.containsKey(qualifiedLogicalName))
+      qualifiedLogicalName = qualifiedAliasToLogicalNameMap.get(qualifiedLogicalName);
+    String[] tokens = qualifiedLogicalName.split("#");
+    try {
+      result = new CoreType(tokens[0], tokens[1]);
+    } catch (InvalidClassifierNameException e) {
+      log.warn(e.getMessage(), e);
+      return null;
+    }
+    if (namespaceQualifiedNameToTypeCache != null) {
+      namespaceQualifiedNameToTypeCache.putObject(qualifiedName, result);
+    }
+    if (!result.getName().equals(tokens[1])) {
+      String aliasQualifiedName = tokens[0] + "#" + result.getName();
+      qualifiedAliasToLogicalNameMap.put(aliasQualifiedName, qualifiedLogicalName);
+    }
+    String qualifiedPhysicalName = findQualifiedPhysicalName(result);
+    if (qualifiedPhysicalName != null) {
+      qualifiedAliasToLogicalNameMap.put(qualifiedPhysicalName, qualifiedLogicalName);
     }
     return result;
   }

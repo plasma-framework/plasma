@@ -93,13 +93,13 @@
     <dependency>                                 
         <groupId>com.oracle</groupId>          
         <artifactId>ojdbc6</artifactId>    
-        <version>11.2.1.4</version>                   
+        <version>11.2.1.5</version>                   
     </dependency> 
     --> 
     <!--
     Note: for Oracle JDBC driver use e.g. : 
-    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc5 -Dversion=11.2.1.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc5.jar -DgeneratePom=true
-    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.1.4 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc6.jar -DgeneratePom=true 
+    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc5 -Dversion=11.2.1.5 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc5.jar -DgeneratePom=true
+    mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.1.5 -Dpackaging=jar -Dfile=E:\download\jdbc\ojdbc6.jar -DgeneratePom=true 
     -->
     
     <!-- plasma sub-projects -->
