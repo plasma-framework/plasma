@@ -1098,7 +1098,7 @@ public class CoreType implements PlasmaType {
 
   private Property findDeclaredProperty(PlasmaType currentType, String propertyName) {
     CoreType currentCoreType = (CoreType) currentType;
-    if (currentCoreType.propertiesLoaded())
+    if (!currentCoreType.propertiesLoaded())
       currentCoreType.lazyLoadProperties();
 
     Property result = currentCoreType.declaredPropertiesMap.get(propertyName);
@@ -1118,7 +1118,7 @@ public class CoreType implements PlasmaType {
   private Property findDeclaredProperty(PlasmaType currentType, ConcurrencyType concurrencyType,
       ConcurrentDataFlavor dataFlavor) {
     CoreType currentCoreType = (CoreType) currentType;
-    if (currentCoreType.propertiesLoaded())
+    if (!currentCoreType.propertiesLoaded())
       currentCoreType.lazyLoadProperties();
     Property result = null;
     for (Property property : getDeclaredProperties()) {
@@ -1321,7 +1321,7 @@ public class CoreType implements PlasmaType {
 
   private Object findInstancePropertyValue(PlasmaType currentType, PlasmaProperty instanceProp) {
     CoreType currentCoreType = (CoreType) currentType;
-    if (currentCoreType.propertiesLoaded())
+    if (!currentCoreType.propertiesLoaded())
       currentCoreType.lazyLoadProperties();
 
     Object result = currentCoreType.get(instanceProp);
