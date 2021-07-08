@@ -16,6 +16,7 @@ Bugs
  
 Improvements
 [Issue #138] - Remove ThreadLocal from TypeCache
+[Issue #139] - Check Identity Of Target Link Before Fatal Error On Set
  
 New Features
 N/A

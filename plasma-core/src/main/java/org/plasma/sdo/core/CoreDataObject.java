@@ -1245,13 +1245,27 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
         oppositeList.add(link);
         ((CoreDataObject) target).setValue(opposite.getName(), oppositeList);
       } else {
-        if (target.isSet(opposite))
-          throw new IllegalArgumentException("cannot link this " + this.getType().getURI() + "#"
-              + this.getType().getName() + " object to singular opposite property "
-              + target.getType().getURI() + "#" + target.getType().getName() + "."
-              + opposite.getName() + " because a value is already set "
+        if (target.isSet(opposite)) {
+          PlasmaDataLink targetOppositeLink = (PlasmaDataLink)((CoreDataObject) target).getValue(opposite.getName());
+          DataObject targetOpposite = targetOppositeLink.getLeft().getDataObject();       	
+          if (!targetOpposite.equals(this)) {
+            throw new IllegalArgumentException("cannot link this " 
+              + this.getType() + " object to singular opposite property "
+              + target.getType() + "."
+              + opposite.getName() + " because another value is already set "
               + "- consider making this property a 'many' property");
-        ((CoreDataObject) target).setValue(opposite.getName(), link);
+          }
+          else {
+        	  log.warn("cannot link this " 
+                      + this.getType() + " object to singular opposite property "
+                      + target.getType() + "."
+                      + opposite.getName() + " because this value is already set "
+                      + "- ignoring");
+          }
+        }  
+        else {  
+          ((CoreDataObject) target).setValue(opposite.getName(), link);
+        }
       }
     }
 
