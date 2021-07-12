@@ -1246,24 +1246,20 @@ public class CoreDataObject extends CoreNode implements PlasmaDataObject {
         ((CoreDataObject) target).setValue(opposite.getName(), oppositeList);
       } else {
         if (target.isSet(opposite)) {
-          PlasmaDataLink targetOppositeLink = (PlasmaDataLink)((CoreDataObject) target).getValue(opposite.getName());
-          DataObject targetOpposite = targetOppositeLink.getLeft().getDataObject();       	
+          PlasmaDataLink targetOppositeLink = (PlasmaDataLink) ((CoreDataObject) target)
+              .getValue(opposite.getName());
+          DataObject targetOpposite = targetOppositeLink.getLeft().getDataObject();
           if (!targetOpposite.equals(this)) {
-            throw new IllegalArgumentException("cannot link this " 
-              + this.getType() + " object to singular opposite property "
-              + target.getType() + "."
-              + opposite.getName() + " because another value is already set "
-              + "- consider making this property a 'many' property");
+            throw new IllegalArgumentException("cannot link this " + this.getType()
+                + " object to singular opposite property " + target.getType() + "."
+                + opposite.getName() + " because another value is already set "
+                + "- consider making this property a 'many' property");
+          } else {
+            log.warn("cannot link this " + this.getType()
+                + " object to singular opposite property " + target.getType() + "."
+                + opposite.getName() + " because this value is already set " + "- ignoring");
           }
-          else {
-        	  log.warn("cannot link this " 
-                      + this.getType() + " object to singular opposite property "
-                      + target.getType() + "."
-                      + opposite.getName() + " because this value is already set "
-                      + "- ignoring");
-          }
-        }  
-        else {  
+        } else {
           ((CoreDataObject) target).setValue(opposite.getName(), link);
         }
       }
