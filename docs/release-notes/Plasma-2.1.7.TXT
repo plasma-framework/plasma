@@ -15,7 +15,7 @@ Bugs
 N/A
  
 Improvements
-N/A
+[Issue #140] -  Add Enumeration Accessor to Repository API #140 
   
 New Features
 N/A
