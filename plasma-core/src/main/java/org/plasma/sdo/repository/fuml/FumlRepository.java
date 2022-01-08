@@ -18,6 +18,7 @@ package org.plasma.sdo.repository.fuml;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -50,6 +51,7 @@ public class FumlRepository implements Repository {
   private static volatile FumlRepository instance;
   private static org.modeldriven.fuml.repository.Repository delegate;
   private RelationCache relationCache = new FumlRelationCache();
+  private static List<org.plasma.sdo.repository.Classifier> EMPTY_CLASSIFIER_LIST = new ArrayList<>();
 
   private FumlRepository() {
   }
@@ -86,11 +88,6 @@ public class FumlRepository implements Repository {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.plasma.sdo.repository.fuml.Repository#getAllNamespaceUris()
-   */
   @Override
   public List<String> getAllNamespaceUris() {
     List<String> result = new ArrayList<String>();
@@ -102,11 +99,6 @@ public class FumlRepository implements Repository {
     return result;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.plasma.sdo.repository.fuml.Repository#getAllNamespaces()
-   */
   @Override
   public List<Namespace> getAllNamespaces() {
     List<Namespace> result = new ArrayList<Namespace>();
@@ -121,13 +113,6 @@ public class FumlRepository implements Repository {
     return result;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
-   * org.plasma.sdo.repository.fuml.Repository#getNamespaceForUri(java.lang.
-   * String)
-   */
   @Override
   public FumlNamespace getNamespaceForUri(String uri) {
     List<Stereotype> list = delegate.getStereotypes(SDONamespace.class);
@@ -147,31 +132,44 @@ public class FumlRepository implements Repository {
     return result;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
-   * org.plasma.sdo.repository.fuml.Repository#getClassifiers(java.lang.String)
-   */
   @Override
   public List<org.plasma.sdo.repository.Classifier> getClassifiers(String uri) {
-    List<org.plasma.sdo.repository.Classifier> result = new ArrayList<>();
+    fUML.Syntax.Classes.Kernel.Package nsPackage = findPackage(uri);
+    if (nsPackage != null) {
+      List<org.plasma.sdo.repository.Classifier> result = new ArrayList<>();
+      addClasses(nsPackage, result);
+      return result;
+    } else
+      return EMPTY_CLASSIFIER_LIST;
+  }
+
+  @Override
+  public List<org.plasma.sdo.repository.Classifier> getEnumerations(String uri) {
+    fUML.Syntax.Classes.Kernel.Package nsPackage = findPackage(uri);
+    if (nsPackage != null) {
+      List<org.plasma.sdo.repository.Classifier> result = new ArrayList<>();
+      addEnumerations(nsPackage, result);
+      return result;
+    } else
+      return EMPTY_CLASSIFIER_LIST;
+  }
+
+  private fUML.Syntax.Classes.Kernel.Package findPackage(String uri) {
     List<Stereotype> list = delegate.getStereotypes(SDONamespace.class);
     for (Stereotype s : list) {
       SDONamespace namespace = (SDONamespace) s.getDelegate();
       if (uri.equals(namespace.getUri())) {
-        addClassifiers(namespace.getBase_Package(), result);
-        return result;
+        return namespace.getBase_Package();
       }
     }
-    return result;
+    return null;
   }
 
-  private void addClassifiers(fUML.Syntax.Classes.Kernel.Package pkg,
+  private void addClasses(fUML.Syntax.Classes.Kernel.Package pkg,
       List<org.plasma.sdo.repository.Classifier> result) {
     for (PackageableElement pe : pkg.packagedElement) {
       if (pe instanceof fUML.Syntax.Classes.Kernel.Package) {
-        addClassifiers((fUML.Syntax.Classes.Kernel.Package) pe, result);
+        addClasses((fUML.Syntax.Classes.Kernel.Package) pe, result);
       } else if (pe instanceof fUML.Syntax.Classes.Kernel.Class_) {
         org.plasma.sdo.repository.Classifier classifier = this.getClassifierById(pe.getXmiId());
         result.add(classifier);
@@ -179,12 +177,18 @@ public class FumlRepository implements Repository {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
-   * org.plasma.sdo.repository.fuml.Repository#getElementById(java.lang.String)
-   */
+  private void addEnumerations(fUML.Syntax.Classes.Kernel.Package pkg,
+      List<org.plasma.sdo.repository.Classifier> result) {
+    for (PackageableElement pe : pkg.packagedElement) {
+      if (pe instanceof fUML.Syntax.Classes.Kernel.Package) {
+        addEnumerations((fUML.Syntax.Classes.Kernel.Package) pe, result);
+      } else if (pe instanceof fUML.Syntax.Classes.Kernel.Enumeration) {
+        org.plasma.sdo.repository.Classifier classifier = this.getClassifierById(pe.getXmiId());
+        result.add(classifier);
+      }
+    }
+  }
+
   // @Override
   public org.plasma.sdo.repository.Element getElementById(String id) {
     NamedElement e = (NamedElement) delegate.getElementById(id);

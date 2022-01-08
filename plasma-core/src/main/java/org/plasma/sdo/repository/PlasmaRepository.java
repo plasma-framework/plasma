@@ -115,6 +115,14 @@ public class PlasmaRepository implements Repository {
     return results;
   }
 
+  public List<Classifier> getEnumerations(String uri) {
+    List<Classifier> results = new ArrayList<Classifier>();
+    for (Repository repo : this.delegates) {
+      results.addAll(repo.getEnumerations(uri));
+    }
+    return results;
+  }
+
   public Classifier getClassifier(String name) {
     Classifier result = null;
     for (Repository repo : this.delegates) {

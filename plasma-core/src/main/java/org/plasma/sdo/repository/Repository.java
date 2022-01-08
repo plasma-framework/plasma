@@ -32,18 +32,36 @@ public interface Repository {
   Namespace getNamespaceForUri(String uri);
 
   /**
-   * Returns a list of classifiers contained by the package, as well as all
-   * classifiers within its contained packages, linked/stereotyped through an
-   * SDONamespace stereotype where the stereotype uri matches the given uri.
+   * Returns a list of (non enumeration) classifiers contained by the package,
+   * as well as all classifiers within its contained packages,
+   * linked/stereotyped through an SDONamespace stereotype where the stereotype
+   * uri matches the given uri.
    * 
    * @see org.plasma.sdo.profile.SDONamespace
    * @param uri
    *          the SDO namespace URI
-   * @return a list of classifiers contained by the package, as wells as all
-   *         classifiers within its contained packages, linked through an
-   *         SDONamespace stereotype where the uri which matches the given uri.
+   * @return a list of (non enumeration)classifiers contained by the package, as
+   *         wells as all classifiers within its contained packages, linked
+   *         through an SDONamespace stereotype where the uri which matches the
+   *         given uri.
    */
   List<Classifier> getClassifiers(String uri);
+
+  /**
+   * Returns a list of enumeration classifiers contained by the package, as well
+   * as all classifiers within its contained packages, linked/stereotyped
+   * through an SDONamespace stereotype where the stereotype uri matches the
+   * given uri.
+   * 
+   * @see org.plasma.sdo.profile.SDONamespace
+   * @param uri
+   *          the SDO namespace URI
+   * @return a list of enumeration classifiers contained by the package, as
+   *         wells as all enumeration classifiers within its contained packages,
+   *         linked through an SDONamespace stereotype where the uri which
+   *         matches the given uri.
+   */
+  List<Classifier> getEnumerations(String uri);
 
   /**
    * Fetches a classifier using the given artifact, package or namespace
