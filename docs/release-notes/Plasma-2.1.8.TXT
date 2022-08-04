@@ -1,0 +1,30 @@
+Release Notes
+
+Plasma 2.1.8 Release Notes
+Plasma 2.1.8 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/plasma-framework/plasma/issues.
+
+
+Major Changes
+N/A
+ 
+Bugs
+[Issue #143] - Uplift Log4J Deps
+ 
+Improvements
+N/A
+  
+New Features
+N/A
+
+Tasks
+N/A
+
+Wish
+N/A
+
+
+
