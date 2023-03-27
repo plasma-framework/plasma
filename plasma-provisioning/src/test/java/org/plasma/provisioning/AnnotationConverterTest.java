@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
@@ -39,7 +39,7 @@ public class AnnotationConverterTest extends PlasmaTest {
     assertTrue(model != null);
     ProvisioningModel validator = new ModelAdapter(model);
     MetamodelDataBinding binding = new MetamodelDataBinding(new DefaultValidationEventHandler());
-    javax.xml.bind.JAXBElement<Model> element = new JAXBElement<Model>(new QName("root"),
+    jakarta.xml.bind.JAXBElement<Model> element = new JAXBElement<Model>(new QName("root"),
         Model.class, model);
 
     String xml = binding.marshal(element);

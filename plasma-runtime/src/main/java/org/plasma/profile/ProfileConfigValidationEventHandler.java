@@ -16,8 +16,8 @@
 
 package org.plasma.profile;
 
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventLocator;
+import jakarta.xml.bind.ValidationEvent;
+import jakarta.xml.bind.ValidationEventLocator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

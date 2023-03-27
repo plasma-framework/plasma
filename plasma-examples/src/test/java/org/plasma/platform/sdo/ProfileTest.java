@@ -24,7 +24,7 @@ package org.plasma.platform.sdo;
 
 
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 import junit.framework.Test;
 

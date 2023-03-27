@@ -20,9 +20,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.UnmarshalException;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.UnmarshalException;
 import javax.xml.transform.Source;
 
 import org.apache.commons.logging.Log;

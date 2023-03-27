@@ -28,7 +28,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 import joptsimple.BuiltinHelpFormatter;
 import joptsimple.HelpFormatter;

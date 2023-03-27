@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>org.terrameta</groupId>
 		<artifactId>plasma</artifactId>
-		<version>2.1.8</version>
+		<version>2.1.9</version>
 	</parent>
 	<groupId>org.terrameta</groupId>
 	<artifactId>plasma-runtime</artifactId>
-	<version>2.1.8</version>
+	<version>2.1.9</version>
 	<packaging>jar</packaging>
 	<name>Plasma Runtime</name>
 	<description>The Plasma Runtime Module</description>
@@ -26,6 +26,11 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <version.maven.jakartaee>9.0.0</version.maven.jakartaee>
+		<version.maven.jakarta.xml.bind-api>3.0.0</version.maven.jakarta.xml.bind-api>
+		<version.maven.jakarta.activation.api>2.0.0</version.maven.jakarta.activation.api>
+		<version.maven.jaxb.impl>3.0.0</version.maven.jaxb.impl>
+		<version.maven.jaxb.xjc>3.0.0</version.maven.jaxb.xjc>
 	</properties>
 
 	<repositories>
@@ -104,12 +109,12 @@
 		<dependency>
 			<groupId>org.terrameta</groupId>
 			<artifactId>plasma-common</artifactId>
-			<version>2.1.8</version>
+			<version>2.1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.terrameta</groupId>
 			<artifactId>plasma-metamodel</artifactId>
-			<version>2.1.8</version>
+			<version>2.1.9</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -156,7 +161,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			 
+			 <!-- 
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
@@ -179,6 +184,53 @@
 					</execution>
 				</executions>
 			</plugin>
+			 -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>2.5.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.glassfish.jaxb</groupId>
+						<artifactId>jaxb-xjc</artifactId>
+						<version>${version.maven.jaxb.xjc}</version>
+					</dependency>
+					<dependency>
+						<groupId>jakarta.activation</groupId>
+						<artifactId>jakarta.activation-api</artifactId>
+						<version>${version.maven.jakarta.activation.api}</version>
+					</dependency>
+					<dependency>
+						<groupId>jakarta.xml.bind</groupId>
+						<artifactId>jakarta.xml.bind-api</artifactId>
+						<version>${version.maven.jakarta.xml.bind-api}</version>
+					</dependency>
+					<dependency>
+						<groupId>com.sun.xml.bind</groupId>
+						<artifactId>jaxb-impl</artifactId>
+						<version>${version.maven.jaxb.impl}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>plasma-runtime</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<xjbSources>
+								<xjbSource>${basedir}/src/main/resources/jaxb-bindings.xjb</xjbSource>
+							</xjbSources>
+							<sources>
+								<source>${basedir}/src/main/resources/plasma-runtime.xsd</source>
+								<source>${basedir}/src/main/resources/profile-config.xsd</source>
+							</sources>
+							<outputDirectory>${basedir}/target/generated-sources/java</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+ 			
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.8</version>
@@ -203,7 +255,7 @@
 							<target>
 								<echo message="####Generate profile annotations####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="2.1.8" />
+								<property name="release_suffix" value="2.1.9" />
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
 								</path>
@@ -232,7 +284,7 @@
 							<target>
 								<echo message="####Generate profile classes####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="2.1.8" />
+								<property name="release_suffix" value="2.1.9" />
 
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
@@ -262,7 +314,7 @@
 							<target>
 								<echo message="####Generate profile interfaces####" />
 								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<property name="release_suffix" value="2.1.8" />
+								<property name="release_suffix" value="2.1.9" />
 								<path id="cp">
 									<pathelement path="${compile_classpath}" />
 								</path>
