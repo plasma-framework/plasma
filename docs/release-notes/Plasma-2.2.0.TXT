@@ -1,0 +1,30 @@
+Release Notes
+
+Plasma 2.2.0 Release Notes
+Plasma 2.2.0 is a production release of Plasma.
+
+The full list of changes can be found in our issue management system github, and is reproduced below.
+
+See https://github.com/plasma-framework/plasma/issues.
+
+
+Major Changes
+N/A
+ 
+Bugs
+[Issue #145] - Add BIGTABLE and ROCKSDB Provider Names
+ 
+Improvements
+N/A
+  
+New Features
+N/A
+
+Tasks
+N/A
+
+Wish
+N/A
+
+
+

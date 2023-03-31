@@ -697,6 +697,7 @@
             <xsd:enumeration value="CASSANDRA"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="HBASE"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="HYPERTABLE"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
+            <xsd:enumeration value="BIGTABLE"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             <!-- Document Stores -->
             <xsd:enumeration value="MONGODB"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="COUCHBASE"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
@@ -704,6 +705,7 @@
             <xsd:enumeration value="DYNAMODB"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="RIAK"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="REDIS"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>        
+            <xsd:enumeration value="ROCKSDB"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>        
         </xsd:restriction>
     </xsd:simpleType>
  
