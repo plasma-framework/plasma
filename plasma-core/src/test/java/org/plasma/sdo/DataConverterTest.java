@@ -54,7 +54,7 @@ import commonj.sdo.helper.TypeHelper;
 public class DataConverterTest extends PlasmaTest {
   private static Log log = LogFactory.getLog(DataConverterTest.class);
 
-  private Object[][] testValues = new Object[27][27];
+  private Object[][] testValues = new Object[DataType.values().length][DataType.values().length];
 
   public static Test suite() {
     return PlasmaTestSetup.newTestSetup(DataConverterTest.class);
@@ -106,13 +106,13 @@ public class DataConverterTest extends PlasmaTest {
         .valueOf(Integer.MAX_VALUE);
     testValues[DataType.UnsignedInt.ordinal()][DataType.Short.ordinal()] = UnsignedInteger
         .valueOf(Short.MAX_VALUE);
-    testValues[DataType.UnsignedInt.ordinal()][DataType.Bytes.ordinal()] = Ints.toByteArray(23);
+    // testValues[DataType.UnsignedInt.ordinal()][DataType.Bytes.ordinal()] =
+    // Ints.toByteArray(23);
 
     for (DataType dataType : DataType.values())
       testValues[DataType.Integer.ordinal()][dataType.ordinal()] = new BigInteger("23");
     for (DataType dataType : DataType.values())
       testValues[DataType.Long.ordinal()][dataType.ordinal()] = (long) 23;
-    testValues[DataType.Long.ordinal()][DataType.Bytes.ordinal()] = Longs.toByteArray(23L);
 
     // unsigned long
     for (DataType dataType : DataType.values())
@@ -126,7 +126,8 @@ public class DataConverterTest extends PlasmaTest {
         .valueOf(23L);
     testValues[DataType.UnsignedLong.ordinal()][DataType.Short.ordinal()] = UnsignedLong
         .valueOf(Short.MAX_VALUE);
-    testValues[DataType.UnsignedLong.ordinal()][DataType.Bytes.ordinal()] = Longs.toByteArray(23);
+    // testValues[DataType.UnsignedLong.ordinal()][DataType.Bytes.ordinal()] =
+    // Longs.toByteArray(23);
 
     for (DataType dataType : DataType.values())
       testValues[DataType.Short.ordinal()][dataType.ordinal()] = (short) 23;
@@ -185,98 +186,98 @@ public class DataConverterTest extends PlasmaTest {
   }
 
   public void testBoolean() throws Throwable {
-    checkAsSource(DataType.Boolean);
-    checkAsTarget(DataType.Boolean);
+    checkConvertTo(DataType.Boolean);
+    checkConvertFrom(DataType.Boolean);
   }
 
   public void testByte() throws Throwable {
 
-    checkAsSource(DataType.Byte);
-    checkAsTarget(DataType.Byte);
+    checkConvertTo(DataType.Byte);
+    checkConvertFrom(DataType.Byte);
   }
 
   public void testBytes() throws Throwable {
 
-    checkAsSource(DataType.Bytes);
-    checkAsTarget(DataType.Bytes);
+    checkConvertTo(DataType.Bytes);
+    checkConvertFrom(DataType.Bytes);
   }
 
   public void testCharacter() throws Throwable {
 
-    checkAsSource(DataType.Character);
-    checkAsTarget(DataType.Character);
+    checkConvertTo(DataType.Character);
+    checkConvertFrom(DataType.Character);
   }
 
   public void testDecimal() throws Throwable {
 
-    checkAsSource(DataType.Decimal);
-    checkAsTarget(DataType.Decimal);
+    checkConvertTo(DataType.Decimal);
+    checkConvertFrom(DataType.Decimal);
   }
 
   public void testDouble() throws Throwable {
-    checkAsSource(DataType.Double);
-    checkAsTarget(DataType.Double);
+    checkConvertTo(DataType.Double);
+    checkConvertFrom(DataType.Double);
   }
 
   public void testFloat() throws Throwable {
-    checkAsSource(DataType.Float);
-    checkAsTarget(DataType.Float);
+    checkConvertTo(DataType.Float);
+    checkConvertFrom(DataType.Float);
   }
 
   public void testInt() throws Throwable {
-    checkAsSource(DataType.Int);
-    checkAsTarget(DataType.Int);
+    checkConvertTo(DataType.Int);
+    checkConvertFrom(DataType.Int);
   }
 
   public void testUnsignedInt() throws Throwable {
-    checkAsSource(DataType.UnsignedInt);
-    checkAsTarget(DataType.UnsignedInt);
+    checkConvertTo(DataType.UnsignedInt);
+    checkConvertFrom(DataType.UnsignedInt);
   }
 
   public void testInteger() throws Throwable {
-    checkAsSource(DataType.Integer);
-    checkAsTarget(DataType.Integer);
+    checkConvertTo(DataType.Integer);
+    checkConvertFrom(DataType.Integer);
   }
 
   public void testLong() throws Throwable {
-    checkAsSource(DataType.Long);
-    checkAsTarget(DataType.Long);
+    checkConvertTo(DataType.Long);
+    checkConvertFrom(DataType.Long);
   }
 
   public void testUnsignedLong() throws Throwable {
-    checkAsSource(DataType.UnsignedLong);
-    checkAsTarget(DataType.UnsignedLong);
+    checkConvertTo(DataType.UnsignedLong);
+    checkConvertFrom(DataType.UnsignedLong);
   }
 
   public void testShort() throws Throwable {
-    checkAsSource(DataType.Short);
-    checkAsTarget(DataType.Short);
+    checkConvertTo(DataType.Short);
+    checkConvertFrom(DataType.Short);
   }
 
   public void testString() throws Throwable {
-    checkAsSource(DataType.String);
-    checkAsTarget(DataType.String);
+    checkConvertTo(DataType.String);
+    checkConvertFrom(DataType.String);
   }
 
   public void testStrings() throws Throwable {
-    checkAsSource(DataType.Strings);
-    checkAsTarget(DataType.Strings);
+    checkConvertTo(DataType.Strings);
+    checkConvertFrom(DataType.Strings);
   }
 
   public void testDate() throws Throwable {
-    // checkAsSource(DataType.Date);
-    checkAsTarget(DataType.Date);
+    // checkConvertTo(DataType.Date);
+    checkConvertFrom(DataType.Date);
   }
 
   /**
-   * Checks the given data type as a target for all other SDO datatypes,
-   * expecting conversion errors thrown from the DataConverter based on the
-   * DataConverter.getAllowableTargetTypes() method.
+   * Checks the given data type as a source (argument) for all other SDO
+   * datatypes, expecting conversion errors thrown from the DataConverter based
+   * on the DataConverter.getAllowableTargetTypes() method.
    * 
    * @param testDataType
    * @throws Throwable
    */
-  private void checkAsTarget(DataType testDataType) throws Throwable {
+  private void checkConvertFrom(DataType testDataType) throws Throwable {
     DataType[] allTypes = DataType.values();
     for (int i = 0; i < allTypes.length; i++) {
       DataType currentDataType = allTypes[i];
@@ -322,14 +323,14 @@ public class DataConverterTest extends PlasmaTest {
   }
 
   /**
-   * Checks the given data type as a source for conversion to all other SDO
-   * specified datatypes, expecting conversion errors thrown from the
+   * Checks the given data type as a target (result) for conversion to all other
+   * SDO specified datatypes, expecting conversion errors thrown from the
    * DataConverter based on the DataConverter.getAllowableTargetTypes() method.
    * 
    * @param testDataType
    * @throws Throwable
    */
-  private void checkAsSource(DataType testDataType) throws Throwable {
+  private void checkConvertTo(DataType testDataType) throws Throwable {
     DataType[] allTypes = DataType.values();
     for (int i = 0; i < allTypes.length; i++) {
       DataType currentDataType = allTypes[i];

@@ -862,6 +862,8 @@ public class DataConverter {
       if (value.longValue() > Byte.MAX_VALUE)
         throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
       return new Byte(Integer.valueOf(value.intValue()).byteValue());
+    case Bytes:
+      return Ints.toByteArray(value.intValue());
     case Double:
       if (value.longValue() > Double.MAX_VALUE)
         throw new DataOverflowException(targetDataType, DataType.UnsignedInt, value);
@@ -1007,6 +1009,8 @@ public class DataConverter {
       if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE)
         throw new DataOverflowException(targetDataType, DataType.Byte, value);
       return new Byte(Long.valueOf(value).byteValue());
+    case Bytes:
+      return Longs.toByteArray(value);
     case Double:
       return new Double(Long.valueOf(value).doubleValue());
     case Float:
@@ -1088,6 +1092,8 @@ public class DataConverter {
       if (value.longValue() > Byte.MAX_VALUE)
         throw new DataOverflowException(targetDataType, DataType.Byte, value);
       return new Byte(value.byteValue());
+    case Bytes:
+      return Longs.toByteArray(value.longValue());
     case Double:
       if (value.longValue() > Double.MAX_VALUE)
         throw new DataOverflowException(targetDataType, DataType.Double, value);

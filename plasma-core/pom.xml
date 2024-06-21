@@ -269,8 +269,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
@@ -291,10 +291,11 @@
 					<argLine>-Dlog4j.configuration=log4j.properties
 						-Dplasma.configuration=test-plasma-config.xml</argLine>
 					  
-					<!--     	 
+					   <!--  	 
                     <argLine>-Dlog4j.configuration=log4j.properties
 						-Dplasma.configuration=test-plasma-config.xml -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address=8001,server=y,suspend=y</argLine>
-                     --> 
+                       -->
+                      
                      <includes>     
                            <include>**/DataConverterTest*</include>     
                      </includes>

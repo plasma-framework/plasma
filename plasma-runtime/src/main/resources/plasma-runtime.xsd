@@ -706,6 +706,8 @@
             <xsd:enumeration value="RIAK"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>
             <xsd:enumeration value="REDIS"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>        
             <xsd:enumeration value="ROCKSDB"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>        
+            <!-- Unit and Integration Testing -->
+            <xsd:enumeration value="NOOP"><xsd:annotation><xsd:documentation></xsd:documentation></xsd:annotation></xsd:enumeration>        
         </xsd:restriction>
     </xsd:simpleType>
  

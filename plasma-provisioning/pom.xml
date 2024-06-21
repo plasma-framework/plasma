@@ -246,7 +246,7 @@
                      -->
                      <includes>     
                            <include>**/AnnotationConverterTest*</include>     
-                     </includes>
+                      </includes>
                       
 				</configuration>
 			</plugin>

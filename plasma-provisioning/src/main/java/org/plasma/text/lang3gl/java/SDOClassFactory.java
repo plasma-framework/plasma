@@ -537,7 +537,6 @@ public class SDOClassFactory extends SDODefaultFactory implements ClassFactory {
     buf.appendln(3, "return list.size();");
 
     buf.appendln(2, "}");
-
     buf.appendln(2, "else");
 
     buf.appendln(3, "return 0;");
@@ -560,32 +559,20 @@ public class SDOClassFactory extends SDODefaultFactory implements ClassFactory {
       MetaClassInfo typeClassName, TextBuilder buf) {
     buf.append(this.beginBody());
 
-    // get existing property not necessary
-    // as setter just replaces existing
-    // buf.appendln(2, "List<");
-    // buf.append(typeClassName.getCollectionSimpleName());
-    // buf.append("> list = (List<");
-    // buf.append(typeClassName.getCollectionSimpleName());
-    // buf.append(">)super.get(");
-    // buf.append(toQualifiedPropertyNameReference(pkg, clss, field));
-    // buf.append(");");
-
     buf.appendln(2, "if (value != null && value.length > 0) {");
 
     buf.appendln(3, "List<");
     buf.append(typeClassName.getCollectionSimpleName());
-    buf.append("> list = Arrays.asList(value);");
-    //
-    // buf.appendln(3, "for (int i = 0; i < value.length; i++)");
-    //
-    // buf.appendln(4, "list.add(value[i]);");
+    buf.append("> list = new ArrayList<>(value.length);");
+    buf.appendln(3, "for (int i = 0; i < value.length; i++)");
+
+    buf.appendln(4, "list.add(value[i]);");
 
     buf.appendln(3, "super.set(");
     buf.append(toQualifiedPropertyNameReference(pkg, clss, field));
     buf.append(", list);");
 
     buf.appendln(2, "}");
-
     buf.appendln(2, "else");
 
     buf.appendln(

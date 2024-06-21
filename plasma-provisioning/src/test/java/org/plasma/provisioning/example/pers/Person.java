@@ -18,6 +18,6 @@ public enum Person {
   age, @Alias(physicalName = "DOB")
   @DataProperty(dataType = DataType.Date)
   dateOfBirth, @Alias(physicalName = "O")
-  @ReferenceProperty(targetClass = Organization.class, targetProperty = "pers")
+  @ReferenceProperty(targetClass = Organization.class, targetProperty = "person")
   org;
 }

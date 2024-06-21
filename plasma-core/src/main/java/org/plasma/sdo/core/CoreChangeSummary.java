@@ -51,6 +51,8 @@ public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
 
   private static Log log = LogFactory.getFactory().getInstance(CoreChangeSummary.class);
 
+  private static final boolean DEBUG_ENABLED = log.isDebugEnabled();
+
   private Map<UUID, CoreChange> changedDataObjects;
 
   private PlasmaDataGraph dataGraph;
@@ -73,14 +75,18 @@ public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
     if (changedDataObjects == null) {
       changedDataObjects = new HashMap<UUID, CoreChange>();
     }
+    long start = 0;
+    if (DEBUG_ENABLED)
+      start = System.currentTimeMillis();
 
     PlasmaNode dataNode = (PlasmaNode) dataObject;
     UUID hashKey = dataNode.getUUID();
     CoreChange dataObjectSettings = changedDataObjects.get(hashKey);
     if (dataObjectSettings == null) {
-      if (log.isDebugEnabled())
+      if (DEBUG_ENABLED)
         log.debug("created: " + dataObject.getType().getURI() + "#"
-            + dataObject.getType().getName() + "(" + hashKey + ")");
+            + dataObject.getType().getName() + "(" + hashKey + ") in "
+            + String.valueOf(System.currentTimeMillis() - start));
       dataObjectSettings = new CoreChange(dataObject, ChangeType.CREATED, changedDataObjects);
       changedDataObjects.put(hashKey, dataObjectSettings);
     } else
@@ -95,12 +101,15 @@ public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
     if (changedDataObjects == null) {
       changedDataObjects = new HashMap<UUID, CoreChange>();
     }
+    long start = 0;
+    if (DEBUG_ENABLED)
+      start = System.currentTimeMillis();
 
     PlasmaNode dataNode = (PlasmaNode) dataObject;
     UUID hashKey = dataNode.getUUID();
     CoreChange dataObjectSettings = changedDataObjects.get(dataNode.getUUID());
     if (dataObjectSettings == null) {
-      if (log.isDebugEnabled())
+      if (DEBUG_ENABLED)
         log.debug("deleted: " + dataObject.getType().getURI() + "#"
             + dataObject.getType().getName() + "(" + hashKey + ")");
       dataObjectSettings = new CoreChange(dataObject, ChangeType.DELETED, changedDataObjects);
@@ -119,9 +128,10 @@ public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
                 + dataObject.getType().getName());
 
         // overwrite any modified ref property settings
-        if (log.isDebugEnabled())
+        if (DEBUG_ENABLED)
           log.debug("deleted: " + dataObject.getType().getURI() + "#"
-              + dataObject.getType().getName() + "(" + hashKey + ")");
+              + dataObject.getType().getName() + "(" + hashKey + ") in "
+              + String.valueOf(System.currentTimeMillis() - start));
         dataObjectSettings = new CoreChange(dataObject, ChangeType.DELETED, changedDataObjects);
         changedDataObjects.put(hashKey, dataObjectSettings);
       } else
@@ -139,6 +149,9 @@ public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
     if (changedDataObjects == null) {
       changedDataObjects = new HashMap<UUID, CoreChange>();
     }
+    long start = 0;
+    if (DEBUG_ENABLED)
+      start = System.currentTimeMillis();
 
     PlasmaNode dataNode = (PlasmaNode) dataObject;
     UUID hashKey = dataNode.getUUID();
@@ -155,9 +168,10 @@ public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
       dataObjectSettings = new CoreChange(dataObject, ChangeType.MODIFIED, changedDataObjects);
       changedDataObjects.put(hashKey, dataObjectSettings);
     }
-    if (log.isDebugEnabled())
+    if (DEBUG_ENABLED)
       log.debug("modified: " + dataObject.getType().getURI() + "#" + dataObject.getType().getName()
-          + "." + property.getName() + "(" + hashKey + ")");
+          + "." + property.getName() + "(" + hashKey + ") in "
+          + String.valueOf(System.currentTimeMillis() - start));
     dataObjectSettings.add(property, value);
   }
 
@@ -173,7 +187,7 @@ public class CoreChangeSummary implements PlasmaChangeSummary, Serializable {
     PlasmaNode dataNode = (PlasmaNode) dataObject;
     UUID hashKey = dataNode.getUUID();
     changedDataObjects.remove(hashKey);
-    if (log.isDebugEnabled())
+    if (DEBUG_ENABLED)
       log.debug("clear: " + dataObject.getType().getURI() + "#" + dataObject.getType().getName()
           + "(" + hashKey + ")");
   }
